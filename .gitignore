@@ -6,15 +6,15 @@ node_modules/
 .vscode/
 
 # GraphRAG generated artifacts
-parquet/output/
-parquet/cache/
-parquet/logs/
-parquet/update_output/
-parquet/output.lancedb/
-parquet/output/lancedb/
-parquet/**/*.parquet
+src/parquet/output/
+src/parquet/cache/
+src/parquet/logs/
+src/parquet/update_output/
+src/parquet/output.lancedb/
+src/parquet/output/lancedb/
+src/parquet/**/*.parquet
 
 # 개인정보 보호
-parquet/input/
+src/parquet/input/
 
 
