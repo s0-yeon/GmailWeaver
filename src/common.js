@@ -11,6 +11,7 @@ function onHomepage(e) {
       CardService.newTextParagraph().setText(i + 1 + ". " + threadSubject)
     );
   }
+  exportAllInboxAndSentIntoOneTxt();
 
   var driveSection =
     CardService.newCardSection().setHeader("📁 드라이브 파일 2개");

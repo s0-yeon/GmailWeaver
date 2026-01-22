@@ -103,6 +103,14 @@ def run_query():
     #text_to_speech(answer)
     return jsonify({'result': answer})
 
+@app.route("/upload", methods=["POST"])
+def upload():
+    data = request.json
+    with open(f"src/parquet/input/{data['filename']}", "w", encoding="utf-8") as f:
+        f.write(data["content"])
+    return {"ok": True}
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
     # app.run(host='0.0.0.0', port=5000, debug=True) # local 환경설정

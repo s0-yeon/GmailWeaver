@@ -1,0 +1,80 @@
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <graph edgedefault="undirected">
+    <node id="&#47928;&#51064;&#49440;" />
+    <node id="DDYR1554@GMAIL.COM" />
+    <node id="STIRLING&#49341;&#51077;.JPG" />
+    <node id="&#51648;&#44552;&#48512;&#53552; LLM&#50640; &#45824;&#54644;&#49436; &#49444;&#47749;&#51012; &#49884;&#51089;&#54616;&#44192;&#49845;&#45768;&#45796;.HWPX" />
+    <node id="01.PDF" />
+    <node id="GOOGLE" />
+    <node id="SUNTEST225@GMAIL.COM" />
+    <node id="GOOGLE LLC" />
+    <node id="MOUNTAIN VIEW" />
+    <node id="CA" />
+    <node id="USA" />
+    <node id="NEO4J" />
+    <node id="AURADB TEAM" />
+    <node id="ADAM" />
+    <node id="KOREAN STANDARD TIME" />
+    <node id="PDF EDITOR OPENSOURCE" />
+    <node id="KAGGLE" />
+    <node id="GITHUB" />
+    <node id="CONCAR DR, SAN MATEO, CA 94402" />
+    <node id="AURA@NEO4J.COM" />
+    <node id="GRAPHACADEMY" />
+    <node id="DEVELOPER RELATIONS TEAM" />
+    <node id="BEGINNERS COURSES" />
+    <node id="DATA SCIENTIST" />
+    <node id="DEVELOPER" />
+    <node id="DISCORD" />
+    <node id="SAN MATEO" />
+    <node id="NGROK INC." />
+    <node id="SAN FRANCISCO" />
+    <node id="CALIFORNIA" />
+    <node id="UNITED STATES" />
+    <node id="TEAM @ NGROK" />
+    <node id="CLASP - THE APPS SCRIPT CLI" />
+    <node id="GMAIL DRIVE CATS" />
+    <node id="APPS SCRIPT CLI" />
+    <node id="PARKWAY" />
+    <node id="94043" />
+    <edge source="&#47928;&#51064;&#49440;" target="DDYR1554@GMAIL.COM" />
+    <edge source="&#47928;&#51064;&#49440;" target="STIRLING&#49341;&#51077;.JPG" />
+    <edge source="&#47928;&#51064;&#49440;" target="&#51648;&#44552;&#48512;&#53552; LLM&#50640; &#45824;&#54644;&#49436; &#49444;&#47749;&#51012; &#49884;&#51089;&#54616;&#44192;&#49845;&#45768;&#45796;.HWPX" />
+    <edge source="&#47928;&#51064;&#49440;" target="01.PDF" />
+    <edge source="GOOGLE" target="SUNTEST225@GMAIL.COM" />
+    <edge source="GOOGLE" target="CLASP - THE APPS SCRIPT CLI" />
+    <edge source="GOOGLE" target="GMAIL DRIVE CATS" />
+    <edge source="GOOGLE" target="APPS SCRIPT CLI" />
+    <edge source="SUNTEST225@GMAIL.COM" target="NEO4J" />
+    <edge source="SUNTEST225@GMAIL.COM" target="KOREAN STANDARD TIME" />
+    <edge source="GOOGLE LLC" target="MOUNTAIN VIEW" />
+    <edge source="GOOGLE LLC" target="CA" />
+    <edge source="GOOGLE LLC" target="USA" />
+    <edge source="MOUNTAIN VIEW" target="PARKWAY" />
+    <edge source="MOUNTAIN VIEW" target="CA" />
+    <edge source="MOUNTAIN VIEW" target="USA" />
+    <edge source="CA" target="USA" />
+    <edge source="USA" target="PARKWAY" />
+    <edge source="NEO4J" target="AURADB TEAM" />
+    <edge source="NEO4J" target="ADAM" />
+    <edge source="NEO4J" target="KOREAN STANDARD TIME" />
+    <edge source="NEO4J" target="PDF EDITOR OPENSOURCE" />
+    <edge source="NEO4J" target="KAGGLE" />
+    <edge source="NEO4J" target="GITHUB" />
+    <edge source="NEO4J" target="CONCAR DR, SAN MATEO, CA 94402" />
+    <edge source="NEO4J" target="AURA@NEO4J.COM" />
+    <edge source="NEO4J" target="GRAPHACADEMY" />
+    <edge source="NEO4J" target="DEVELOPER RELATIONS TEAM" />
+    <edge source="NEO4J" target="BEGINNERS COURSES" />
+    <edge source="AURADB TEAM" target="ADAM" />
+    <edge source="AURADB TEAM" target="SAN MATEO" />
+    <edge source="GRAPHACADEMY" target="DATA SCIENTIST" />
+    <edge source="GRAPHACADEMY" target="DEVELOPER" />
+    <edge source="GRAPHACADEMY" target="DISCORD" />
+    <edge source="NGROK INC." target="SAN FRANCISCO" />
+    <edge source="NGROK INC." target="CALIFORNIA" />
+    <edge source="NGROK INC." target="UNITED STATES" />
+    <edge source="NGROK INC." target="TEAM @ NGROK" />
+    <edge source="PARKWAY" target="94043" />
+  </graph>
+</graphml>

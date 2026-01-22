@@ -3,6 +3,7 @@
 dist
 node_modules/
 .env
+.vscode/
 
 # GraphRAG generated artifacts
 parquet/output/
@@ -13,7 +14,7 @@ parquet/output.lancedb/
 parquet/output/lancedb/
 parquet/**/*.parquet
 
-# If input contains private data, ignore it too
-#parquet/input/
+# 개인정보 보호
+parquet/input/
 
 
