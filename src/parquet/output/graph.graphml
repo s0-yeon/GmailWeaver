@@ -1,0 +1,102 @@
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <graph edgedefault="undirected">
+    <node id="&#44608; &#52392;&#51648;" />
+    <node id="&#50500;&#45236;" />
+    <node id="&#50868;&#49688; &#51339;&#51008; &#45216;" />
+    <node id="&#46041;&#44305;&#54617;&#44368;" />
+    <node id="&#48337;" />
+    <node id="&#51312;&#48165;" />
+    <node id="&#52404;&#54620;" />
+    <node id="&#49444;&#47105;&#53461;" />
+    <node id="&#44060;&#46629;&#51060;" />
+    <node id="&#45224;&#45824;&#47928; &#51221;&#44144;&#51109;" />
+    <node id="&#54617;&#44368;" />
+    <node id="&#48337;&#51088;" />
+    <node id="&#51064;&#52380; &#52264;" />
+    <node id="&#52264;&#48512;" />
+    <node id="&#51664;" />
+    <node id="&#51221;&#44144;&#51109;" />
+    <node id="&#51064;&#47141;&#44144;" />
+    <node id="&#50612;&#47536; &#49552;&#45784;" />
+    <node id="&#48708;" />
+    <node id="&#44600;" />
+    <node id="&#54665;&#50868;" />
+    <node id="&#51064;&#49324;&#46041;" />
+    <node id="&#52285;&#44221;&#50896;" />
+    <node id="&#50668;&#54617;&#49373;" />
+    <node id="&#44592;&#52264;" />
+    <node id="&#48260;&#46308;&#44256;&#47532;&#51677;" />
+    <node id="&#52824;&#49340;&#51060;" />
+    <node id="&#49440;&#49696;&#51665;" />
+    <node id="&#52628;&#50612;&#53461;" />
+    <node id="&#44608; &#52392;&#51648;&#51032; &#51665;" />
+    <node id="&#52824;&#49340;" />
+    <node id="&#51473;&#45824;&#44032;&#47532;" />
+    <node id="&#48712;&#45824;&#46497;" />
+    <node id="&#46024;" />
+    <node id="&#49324;&#49901; &#51204;" />
+    <node id="&#49340;&#49901; &#50896;" />
+    <node id="&#47560;&#45572;&#46972;" />
+    <node id="KIM CHEOMJI" />
+    <node id="CHISAM" />
+    <node id="HOUSE" />
+    <node id="SULRONGTANG" />
+    <node id="SILENCE" />
+    <node id="CRYING" />
+    <node id="HUSBAND" />
+    <node id="DECEASED" />
+    <node id="SULLEONGTANG" />
+    <node id="DEATH" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#50500;&#45236;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#50868;&#49688; &#51339;&#51008; &#45216;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#46041;&#44305;&#54617;&#44368;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#48337;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#51312;&#48165;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#49444;&#47105;&#53461;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#44060;&#46629;&#51060;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#45224;&#45824;&#47928; &#51221;&#44144;&#51109;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#54617;&#44368;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#48337;&#51088;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#51064;&#52380; &#52264;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#52264;&#48512;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#51664;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#51221;&#44144;&#51109;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#51064;&#47141;&#44144;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#50612;&#47536; &#49552;&#45784;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#48708;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#44600;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#54665;&#50868;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#51064;&#49324;&#46041;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#52285;&#44221;&#50896;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#50668;&#54617;&#49373;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#52824;&#49340;&#51060;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#49440;&#49696;&#51665;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#52628;&#50612;&#53461;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#44608; &#52392;&#51648;&#51032; &#51665;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#52824;&#49340;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#51473;&#45824;&#44032;&#47532;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#48712;&#45824;&#46497;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#46024;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#49324;&#49901; &#51204;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#49340;&#49901; &#50896;" />
+    <edge source="&#44608; &#52392;&#51648;" target="&#47560;&#45572;&#46972;" />
+    <edge source="&#50500;&#45236;" target="&#52404;&#54620;" />
+    <edge source="&#49444;&#47105;&#53461;" target="&#44060;&#46629;&#51060;" />
+    <edge source="&#45224;&#45824;&#47928; &#51221;&#44144;&#51109;" target="&#48337;&#51088;" />
+    <edge source="&#51221;&#44144;&#51109;" target="&#44592;&#52264;" />
+    <edge source="&#50668;&#54617;&#49373;" target="&#48260;&#46308;&#44256;&#47532;&#51677;" />
+    <edge source="&#52824;&#49340;&#51060;" target="&#49440;&#49696;&#51665;" />
+    <edge source="&#52824;&#49340;&#51060;" target="&#44608; &#52392;&#51648;&#51032; &#51665;" />
+    <edge source="KIM CHEOMJI" target="CHISAM" />
+    <edge source="KIM CHEOMJI" target="HOUSE" />
+    <edge source="KIM CHEOMJI" target="SULRONGTANG" />
+    <edge source="KIM CHEOMJI" target="SILENCE" />
+    <edge source="KIM CHEOMJI" target="CRYING" />
+    <edge source="KIM CHEOMJI" target="HUSBAND" />
+    <edge source="KIM CHEOMJI" target="DECEASED" />
+    <edge source="KIM CHEOMJI" target="SULLEONGTANG" />
+    <edge source="KIM CHEOMJI" target="DEATH" />
+    <edge source="HUSBAND" target="DECEASED" />
+    <edge source="HUSBAND" target="DEATH" />
+  </graph>
+</graphml>
