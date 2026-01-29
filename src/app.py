@@ -2,11 +2,18 @@ import os
 import re
 import subprocess
 import time
+import sys
 from flask import Flask, request, jsonify
 # jsonify는 파이썬 객체(dict, list 등)를
 #HTTP 응답으로 쓸 수 있는 “JSON 형식 + 헤더”로 자동 변환해주는 Flask 도구
 from flask_cors import CORS
-# from gmail import getFirstMail   
+# from gmail import getFirstMail  
+# 
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace") 
 app = Flask(__name__);
 CORS(app)
 
@@ -44,7 +51,7 @@ def run_query():
         'graphrag',
         'query',
         '--root',
-        './parquet',
+        './src/parquet',
         '--response-type',
         resType,
         '--method',
