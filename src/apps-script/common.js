@@ -2,31 +2,8 @@ var MAX_MESSAGE_LENGTH = 40;
 var TunnelURL = "https://interatrial-tana-wishfully.ngrok-free.dev"; // 테스트 할때 마다 수시로 변경
 
 function onHomepage(e) {
-  var emailSection = CardService.newCardSection().setHeader("📧 최근 메일 5개");
-  sendFirstMail();
-  var threads = GmailApp.getInboxThreads(0, 5);
-  for (var i = 0; i < threads.length; i++) {
-    var threadSubject = threads[i].getFirstMessageSubject();
-    emailSection.addWidget(
-      CardService.newTextParagraph().setText(i + 1 + ". " + threadSubject)
-    );
-  }
-  exportAllInboxAndSentIntoOneTxt();
 
-  var driveSection =
-    CardService.newCardSection().setHeader("📁 드라이브 파일 2개");
-
-  var files = DriveApp.getFiles();
-  var fileCount = 0;
-  while (files.hasNext() && fileCount < 2) {
-    var file = files.next();
-    driveSection.addWidget(
-      CardService.newTextParagraph().setText(
-        fileCount + 1 + ". " + file.getName()
-      )
-    );
-    fileCount++;
-  }
+  sendFirstMail();   // 서버 통신 확인용
 
   var inputSection = CardService.newCardSection().setHeader("💬 서버 질의");
   var input = CardService.newTextInput()
@@ -35,18 +12,23 @@ function onHomepage(e) {
     .setHint("메시지를 입력하세요")
     .setMultiline(true);
 
-  var action = CardService.newAction().setFunctionName("sendMessageToServer");
+  var sendMessageToServerAction = CardService.newAction().setFunctionName("sendMessageToServer");
+  var extractGmailAction = CardService.newAction().setFunctionName("exportAllInboxAndSentIntoOneTxt");
   
-  var button = CardService.newTextButton()
-    .setText("서버로 전송")
-    .setOnClickAction(action);
+  var querySendButton = CardService.newTextButton()
+    .setText("서버로 질의전송")
+    .setOnClickAction(sendMessageToServerAction);
+
+  var extractGmailButton = CardService.newTextButton()
+    .setText("서버로 Gmail 내역 전송")
+    .setOnClickAction(extractGmailAction);  
+
 
   inputSection.addWidget(input);
-  inputSection.addWidget(button);
+  inputSection.addWidget(querySendButton);
+  inputSection.addWidget(extractGmailButton);
 
   return CardService.newCardBuilder()
-    .addSection(emailSection)
-    .addSection(driveSection)
     .addSection(inputSection)
     .build();
 }
