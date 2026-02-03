@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Graph Visualization - GraphRAG</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- D3.js 라이브러리 -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Knowledge Graph Visualization</h1>
+        <p class="subtitle">GraphRAG 데이터 시각화</p>
+        
+        <div class="controls">
+            <button onclick="loadSampleData()" class="btn btn-primary">샘플 데이터 로드</button>
+            <button onclick="loadGraphRagData()" class="btn btn-secondary">GraphRAG 데이터 로드</button>
+            <span id="status" class="status-text"></span>
+        </div>
+
+        <div class="card">
+            <h2>📈 그래프 시각화</h2>
+            <div class="graph-info" id="graphInfo" style="display: none;">
+                <span id="nodeCount">노드: 0</span> | 
+                <span id="edgeCount">엣지: 0</span>
+            </div>
+            <svg id="graph-container" class="graph-svg"></svg>
+        </div>
+    </div>
+
+    <!-- 스크립트 로드 순서 중요! -->
+    <script src="{{ url_for('static', filename='js/d3js.js') }}"></script>
+    
+    <script>
+        // 샘플 데이터
+        const sampleData = {
+            nodes: [
+                { id: "Neo4j", description: "그래프 데이터베이스", degree: 5, type: "technology" },
+                { id: "GraphAcademy", description: "교육 플랫폼", degree: 4, type: "platform" },
+                { id: "AuraDB", description: "클라우드 데이터베이스", degree: 3, type: "service" },
+                { id: "Developer", description: "개발자", degree: 2, type: "role" }
+            ],
+            edges: [
+                { source: "Neo4j", target: "GraphAcademy", relationship: "제공" },
+                { source: "Neo4j", target: "AuraDB", relationship: "관련" },
+                { source: "GraphAcademy", target: "Developer", relationship: "교육" }
+            ]
+        };
+
+        // 샘플 데이터 로드
+        function loadSampleData() {
+            console.log('📊 샘플 데이터 로드 중...');
+            document.getElementById('status').textContent = '샘플 데이터 렌더링 중...';
+            renderNetworkChart(sampleData);
+            document.getElementById('status').textContent = '✅ 샘플 데이터 렌더링 완료!';
+        }
+
+        // GraphRAG 데이터 로드
+        async function loadGraphRagData() {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = '🔄 GraphRAG 데이터 로딩 중...';
+            
+            try {
+                const response = await fetch('/api/graph-data');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: 서버 응답 실패`);
+                }
+
+                const data = await response.json();
+                
+                if (!data.nodes || data.nodes.length === 0) {
+                    throw new Error("노드 데이터가 비어있습니다");
+                }
+
+                console.log('📊 GraphRAG 데이터 로드 성공:', data);
+                renderNetworkChart(data);
+                statusEl.textContent = '✅ GraphRAG 데이터 렌더링 완료!';
+                
+            } catch (error) {
+                console.error('❌ 데이터 로드 실패:', error);
+                statusEl.textContent = `❌ 오류: ${error.message}`;
+                
+                // 에러 메시지 표시
+                const svg = d3.select('#graph-container');
+                svg.selectAll("*").remove();
+                svg.append("text")
+                    .attr("x", "50%")
+                    .attr("y", "40%")
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#ff6b6b")
+                    .attr("font-size", "18px")
+                    .attr("font-weight", "bold")
+                    .text("❌ 데이터 로드 실패");
+                
+                svg.append("text")
+                    .attr("x", "50%")
+                    .attr("y", "50%")
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#999")
+                    .attr("font-size", "14px")
+                    .text(error.message);
+                    
+                svg.append("text")
+                    .attr("x", "50%")
+                    .attr("y", "60%")
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#666")
+                    .attr("font-size", "12px")
+                    .text("Flask 서버가 실행 중인지 확인하세요");
+                    
+                svg.append("text")
+                    .attr("x", "50%")
+                    .attr("y", "70%")
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#666")
+                    .attr("font-size", "12px")
+                    .text("JSON 파일 경로: ./output/graph.json");
+            }
+        }
+
+        // 페이지 로드 시 샘플 데이터로 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ 페이지 로드 완료');
+            loadSampleData();
+        });
+    </script>
+</body>
+</html>

@@ -1,6 +1,5 @@
 {
   "timeZone": "Asia/Seoul",
-  "runtimeVersion": "V8",
   "oauthScopes": [
     "https://www.googleapis.com/auth/gmail.addons.current.message.readonly",
     "https://www.googleapis.com/auth/gmail.addons.current.action.compose",
@@ -21,16 +20,12 @@
       }
     },
     "gmail": {
-      "contextualTriggers": [{
-        "unconditional": {},
-        "onTriggerFunction": "onGmailMessage"
-      }],
-      "composeTrigger": {
-        "selectActions": [{
-          "text": "Insert cat",
-          "runFunction": "onGmailCompose"
-        }]
-      }
+      "contextualTriggers": [
+        {
+          "unconditional": {},
+          "onTriggerFunction": "onGmailMessage"
+        }
+      ]
     },
     "drive": {
       "onItemsSelectedTrigger": {
