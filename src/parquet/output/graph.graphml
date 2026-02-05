@@ -1,574 +1,1121 @@
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
   <graph edgedefault="undirected">
-    <node id="ALIBABA" />
-    <node id="ALIEXPRESS" />
-    <node id="KOREA" />
-    <node id="AE-BEST-CARE-MARKET" />
-    <node id="EMAIL" />
-    <node id="DISCOUNT" />
-    <node id="ROWAN" />
-    <node id="GMWH4TCKDT" />
-    <node id="EDM" />
-    <node id="AEUG_EDM_103704" />
-    <node id="1005003148064684" />
-    <node id="1005009667275521" />
-    <node id="1005009770058280" />
-    <node id="GMOOD" />
-    <node id="E-COMMERCE" />
-    <node id="PRODUCT LISTING" />
-    <node id="ELECTRONICS" />
-    <node id="MOBILE PHONES" />
-    <node id="BEAUTY" />
-    <node id="SPORTS" />
-    <node id="TOYS" />
-    <node id="ELECTRONIC PRODUCTS" />
-    <node id="BEAUTY PRODUCTS" />
-    <node id="SPORTING GOODS" />
-    <node id="TOYS AND GAMES" />
-    <node id="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
-    <node id="ALIEKSPRESS KOREA CO., LTD." />
+    <node id="GOOGLE" />
+    <node id="INHIST33@GMAIL.COM" />
+    <node id="MOUNTAIN VIEW" />
+    <node id="SECURITY ALERT" />
+    <node id="CLASP" />
+    <node id="GMAILWEAVER_VER3.5" />
+    <node id="IPHONE" />
+    <node id="GOOGLE ACCOUNT" />
     <node id="GMAIL" />
-    <node id="ALIBABA GROUP" />
-    <node id="OPEN MARKET" />
-    <node id="PROMOTIONAL EMAIL" />
-    <node id="LAZADA ONE" />
-    <node id="NGROK" />
-    <node id="CSI10186@GMAIL.COM" />
-    <node id="TRAFFIC POLICY" />
-    <node id="OAUTH" />
-    <node id="IP RESTRICTIONS" />
-    <node id="HUBSPOT" />
-    <node id="API" />
-    <node id="DOCUMENTATION" />
-    <node id="STATIC DOMAIN" />
-    <node id="D2V8TF04" />
-    <node id="W6NXQWY4VWJWC" />
-    <node id="TEAM" />
-    <node id="DISCORD" />
-    <node id="GITHUB" />
-    <node id="BROWSER" />
-    <node id="LINKEDIN" />
-    <node id="X" />
-    <node id="YOUTUBE" />
-    <node id="NGROK INC." />
-    <node id="SAN FRANCISCO" />
+    <node id="SECURE ACCOUNT" />
+    <node id="ACCOUNT RECOVERY" />
+    <node id="APPLE IPHONE 17" />
+    <node id="WINDOWS" />
+    <node id="NO-REPLY@ACCOUNTS.GOOGLE.COM" />
+    <node id="JANUARY 22 2026" />
+    <node id="INHIST33" />
+    <node id="APPLE" />
+    <node id="PASSWORD CHANGE" />
+    <node id="APPLE IPHONE" />
+    <node id="SECURITY NOTIFICATION" />
+    <node id="JANUARY 14 2026" />
+    <node id="2-STEP VERIFICATION" />
+    <node id="2-STEP AUTHENTICATION" />
+    <node id="GOOGLE PLAY" />
+    <node id="TWO-STEP VERIFICATION" />
+    <node id="EMAIL NOTIFICATION" />
+    <node id="BACKUP PHONE NUMBER" />
+    <node id="2-FA" />
+    <node id="GEMINI" />
     <node id="CALIFORNIA" />
-    <node id="UNITED STATES" />
-    <node id="SEOUL" />
-    <node id="SEOUL CITY HALL" />
-    <node id="JANUARY 29, 2026" />
-    <node id="SEOUL LOVE COUPON" />
-    <node id="INEWS SEOUL" />
-    <node id="SEOUL LOVE GIFT CERTIFICATE" />
-    <node id="SEOUL CITY" />
-    <node id="FEBRUARY 3" />
-    <node id="DELIVERY-ONLY GIFT CERTIFICATE" />
-    <node id="PAYBACK BENEFITS" />
-    <node id="SEOUL CITY TECHNICAL TRAINING CENTER" />
-    <node id="SENIOR CITIZENS" />
-    <node id="TECHNOLOGY EDUCATION PROGRAM" />
-    <node id="DRIVER'S LICENSE RETURN PROGRAM" />
-    <node id="TRANSPORTATION CARD" />
-    <node id="KANGBUK YOUTH CENTER" />
-    <node id="ALL-AGE PLAYGROUND" />
-    <node id="KANGBUK" />
-    <node id="YOUTH ACTIVITIES" />
-    <node id="MOBILITY CARD" />
-    <node id="&#49888;&#48337;&#51452;" />
-    <node id="&#50612;&#47536;&#51060;&#51105;&#51648;" />
-    <node id="&#50500;&#44592;&#44277;&#47329;&#46168;&#47532;" />
-    <node id="&#51312;&#49440;" />
-    <node id="&#49340;&#44053;&#54665;&#49892;&#46020;" />
-    <node id="&#51060;&#51221;&#48124;" />
-    <node id="&#50668;&#51032;&#52380; &#49548;&#50896;&#52852;&#54168;" />
-    <node id="&#44200;&#50872; &#51221;&#50896; &#50668;&#54665;" />
-    <node id="&#49688;&#48320;&#54876;&#47141;&#44144;&#51216; 17&#54840;" />
-    <node id="&#54861;&#54812;&#49688;" />
-    <node id="&#49436;&#50872;&#52397;&#45380;&#49468;&#53552;" />
-    <node id="&#52397;&#45380;&#51068;&#51088;&#47532;&#49468;&#53552;" />
-    <node id="&#51109;&#52649;&#45800;&#44277;&#50896;" />
-    <node id="&#49436;&#50872;" />
-    <node id="&#50948;&#47168;&#49440; &#53944;&#47016;" />
-    <node id="&#50577;&#51221;&#54868;" />
-    <node id="SEOUL INTERNATIONAL GARDEN EXPO" />
-    <node id="SEOUL FASHION WEEK" />
-    <node id="DDP" />
-    <node id="AI SEOUL 2026" />
-    <node id="&#45572;&#44396;&#45208; &#52397;&#52632;&#47924;&#45824;" />
-    <node id="&#49884;&#48124;&#44592;&#51088;" />
-    <node id="SEOUL METROPOLITAN GOVERNMENT" />
-    <node id="BONGEUNSA TEMPLE" />
-    <node id="NAMSAN TOWER" />
-    <node id="HAN RIVER" />
-    <node id="GYEONGBOKGUNG PALACE" />
-    <node id="KOREAN WAR VETERANS MEMORIAL" />
-    <node id="KOREAN CULTURAL CENTER" />
-    <node id="ESEOUL" />
-    <node id="NATIONAL GOVERNMENT" />
-    <node id="CITIZENS OF SEOUL" />
-    <node id="FACEBOOK" />
-    <node id="TWITTER" />
-    <node id="LIVE SEOUL" />
-    <node id="SEOUL CITY BLOG" />
-    <node id="INSTAGRAM" />
-    <node id="COUPANG" />
-    <node id="&#52572;*&#50672;" />
-    <node id="CUPANG INC." />
-    <node id="&#44272;&#44272; &#54616;&#54532;&#50532;&#54616;&#54532;&#54635;&#46020;&#44536;" />
-    <node id="&#44272;&#44272; &#49888;&#49440;&#54620; 1A &#50864;&#50976;" />
-    <node id="ORDER" />
-    <node id="&#48176;&#49569;&#49345;&#53468;" />
-    <node id="&#53216;&#54049;" />
-    <node id="&#52572;&#50672;" />
-    <node id="&#45453;&#54801;&#51008;&#54665;" />
-    <node id="1A &#50864;&#50976;" />
-    <node id="&#55152;&#48165;" />
-    <node id="&#51452;&#47928;&#44552;&#50529;" />
-    <node id="&#44208;&#51228;&#44552;&#50529;" />
-    <node id="&#52292;&#47924; &#51648;&#44553;&#48372;&#51613; &#49436;&#48708;&#49828;" />
-    <node id="&#44368;&#54872;/&#48152;&#54408; &#50504;&#45236;" />
-    <node id="&#49436;&#50872;&#53945;&#48324;&#49884;" />
-    <node id="&#49345;&#54408;" />
-    <node id="&#44256;&#44061;" />
-    <node id="&#54032;&#47588;&#51088;" />
-    <node id="&#44368;&#54872;" />
-    <node id="&#48152;&#54408;" />
-    <node id="&#45800;&#49692;&#48320;&#49900;" />
-    <node id="&#44396;&#49457;&#54408;" />
-    <node id="&#49548;&#48708;" />
-    <node id="&#44368;&#54872;/&#48152;&#54408;" />
-    <node id="&#47749;&#54408;" />
-    <node id="&#44032;&#51204; &#48143; &#49444;&#52824; &#49345;&#54408;" />
-    <node id="&#49345;&#54408; &#49688;&#47161;" />
-    <node id="A/S" />
-    <node id="&#53469;" />
-    <node id="&#47196;&#51200;&#49828; &#54644;&#47204;&#46300; &#47536;" />
-    <node id="&#44256;&#44061;&#49468;&#53552;" />
-    <node id="&#44277;&#51221;&#44144;&#47000;&#50948;&#50896;&#54924;" />
-    <node id="&#49324;&#51060;&#48260;&#47792;" />
-    <node id="&#47560;&#53011;&#54540;&#47112;&#51060;&#49828;" />
-    <node id="&#49548;&#48708;&#51088;" />
-    <node id="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396;" />
-    <node id="NODE.JS" />
-    <node id="UMC-ALBALOG" />
-    <node id="CODERABBITAI" />
-    <node id="CODERABBIT" />
-    <node id="S0-YEON" />
-    <node id="WORKLOGWITHPOSTING" />
-    <node id="USERALBASETTLEMENT" />
-    <node id="USERINCOMEGOL" />
-    <node id="ALBA" />
+    <node id="AI ASSISTANT" />
+    <node id="CUSTOMER SERVICE" />
+    <node id="GEMINI LIVE" />
+    <node id="GEMINI APP" />
+    <node id="SERVICE PROVIDER" />
+    <node id="ACTIVITY RECORD" />
     <node id="USER" />
-    <node id="PRISMA" />
-    <node id="REVIEW_SERVICE" />
-    <node id="REVIEW_SERVICE_TS" />
-    <node id="REVIEWRESPONSEDTO" />
-    <node id="STOREREVIEWRESPONSEDTO" />
-    <node id="SETTLEMENT_STATUS" />
-    <node id="NULLABLE_TIMESTAMP" />
-    <node id="EMPTY_STRING" />
-    <node id="ISO_8601_DATE" />
-    <node id="INCOME_DASHBOARD_SERVICE" />
-    <node id="USER_ALBA_SETTLEMENT_STATUS" />
-    <node id="SETTLEMENTMAP" />
-    <node id="GETMONTHRANGE" />
-    <node id="ALBA_ID" />
-    <node id="MC-ALBALOG" />
-    <node id="USER_ALBA_SCHEDULE_SERVICE" />
-    <node id="ERROR_MIDDLEWARE" />
-    <node id="MONTH_VALIDATION" />
-    <node id="CUSTOMERROR" />
-    <node id="ERROR" />
-    <node id="MIDDLEWARE" />
-    <node id="SRC" />
-    <node id="SERVICE" />
-    <node id="VALIDATION_PATTERNS" />
-    <node id="JINACKER" />
-    <node id="JWT" />
-    <node id="PR#38" />
-    <node id="PULL REQUEST #38" />
-    <node id="PATCH LINKS" />
-    <node id="REVIEW REQUIREMENTS" />
-    <node id="EXTERNAL API" />
-    <node id="TEST RESULTS" />
-    <node id="CODE REFACTORING" />
-    <node id="COMMIT SUMMARY" />
-    <node id="FILE CHANGES" />
-    <node id="JUDGE" />
-    <node id="REVIEW IN PROGRESS" />
-    <node id="CHANGSIK88" />
-    <node id="PULL REQUEST 38" />
-    <node id="KIM YOUNG-HAN" />
-    <node id="INFLEARN" />
-    <node id="DATABASE DESIGN PART 2" />
-    <node id="&#44053;&#51032;" />
-    <node id="&#44277;&#53685; &#53076;&#46300; &#49444;&#44228;" />
-    <node id="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" />
-    <node id="&#45936;&#51060;&#53552; &#48320;&#44221; &#52628;&#51201;" />
-    <node id="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141;" />
-    <node id="SOFT DELETE" />
-    <node id="&#53685;&#44228; &#53580;&#51060;&#48660; &#49444;&#44228;" />
-    <node id="&#49345;&#49549; &#44288;&#44228; &#49444;&#44228;" />
-    <node id="&#46041;&#51201; &#49444;&#44228; (EAV)" />
-    <node id="JSON &#45936;&#51060;&#53552; &#49444;&#44228;" />
-    <node id="&#49884;&#49828;&#53596;" />
-    <node id="&#54532;&#47196;&#51229;&#53944;" />
-    <node id="&#49892;&#51204; &#49444;&#44228; &#45432;&#54616;&#50864;" />
-    <node id="&#49457;&#45733; &#52572;&#51201;&#54868; &#44592;&#48277;" />
-    <node id="&#49345;&#54889;&#50640; &#47582;&#45716; &#52572;&#49440;&#51032; &#53944;&#47112;&#51060;&#46300;&#50724;&#54532;" />
-    <node id="&#44277;&#53685; &#53076;&#46300;" />
-    <node id="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" />
-    <node id="CTE" />
-    <node id="&#54224;&#49604; &#53580;&#51060;&#48660; &#47784;&#45944;" />
-    <node id="&#48320;&#44221; &#52628;&#51201; &#52972;&#47100;" />
-    <node id="&#44048;&#49324;(AUDIT) &#52972;&#47100;" />
-    <node id="&#51204;&#52404; &#54665; &#49828;&#45253;&#49399; &#51060;&#47141; &#53580;&#51060;&#48660;" />
-    <node id="&#52972;&#47100; &#45800;&#50948; &#48320;&#44221; &#47196;&#44536; &#53580;&#51060;&#48660;" />
-    <node id="&#44277;&#53685; &#51060;&#47141; &#53580;&#51060;&#48660;" />
-    <node id="JSON &#49444;&#44228;" />
-    <node id="&#46041;&#51201; &#49444;&#44228; - EAV" />
-    <node id="&#50528;&#54540;&#47532;&#52992;&#51060;&#49496; ENUM" />
-    <node id="&#44277;&#53685; &#53076;&#46300;&#51032; &#45800;&#51216;" />
-    <node id="INF LAB" />
-    <node id="ROBOTAXI" />
-    <node id="NEWSLETTER" />
-    <node id="CITIZENS" />
-    <node id="DOBONG" />
-    <node id="YEONGDEUNGPO" />
-    <node id="LEVEL 4 DRIVERLESS ROBOTAXI" />
-    <node id="AUTONOMOUS BUS" />
-    <node id="URBAN RAIL NETWORK" />
-    <node id="&#49436;&#50872;&#49714;" />
-    <node id="&#54620;&#50577;&#45824;" />
-    <node id="&#44148;&#45824;&#51077;&#44396;&#50669;" />
-    <node id="&#52397;&#45380; &#47560;&#51020;&#44148;&#44053;&#51648;&#50896;" />
-    <node id="SEOUL FOREST" />
-    <node id="2026 SEOUL INTERNATIONAL GARDEN EXPO" />
-    <node id="ANYONE YOUTH STAGE" />
-    <node id="GONDANG-DAE STATION" />
-    <node id="HANYANG UNIVERSITY" />
-    <node id="GUNJA STATION" />
-    <node id="&#44508;&#51228;&#54785;&#49888; &#50500;&#51060;&#46356;&#50612; &#44277;&#47784;&#51204;" />
-    <node id="&#50500;&#51060;&#46356;&#50612; &#44277;&#47784;" />
-    <node id="&#45432;&#50980;&#51648;" />
-    <node id="&#50668;&#51032;&#45208;&#47336;&#50669;" />
-    <node id="&#51076;&#49688;&#50689;" />
-    <node id="&#49436;&#50872;&#49884; &#44277;&#44277;&#49900;&#50556;&#50557;&#44397;" />
-    <node id="&#54620;&#44053;" />
-    <node id="SEOUL FOREIGN HONORARY MAYOR" />
-    <node id="SEOUL HANBANG PROMOTION CENTER" />
-    <node id="AI &#49436;&#50872; 2026" />
-    <node id="&#54588;&#51648;&#52972; AI" />
-    <node id="DUST MANAGEMENT SEASONAL POLICY" />
-    <node id="DASAN CALL CENTER" />
-    <node id="NPCRM" />
+    <node id="YOUTUBE" />
+    <node id="CHAT SERVICE PROVIDER" />
+    <node id="PRIVACY POLICY" />
+    <node id="USER SETTINGS" />
     <node id="SOUTH KOREA" />
-    <node id="MASSMAIL" />
-    <node id="FIGMA" />
-    <node id="VIOLIN" />
-    <node id="SLACK" />
-    <node id="HANGGEUM OLIVE" />
-    <node id="HANGGI TAE" />
-    <node id="CLEANING TEAM" />
-    <node id="PROJECT-GMAILWEAVER" />
-    <node id="EMAIL SETTINGS" />
+    <node id="PERSONAL DATA" />
+    <node id="TERMS OF SERVICE" />
+    <node id="LOCATION SERVICES" />
+    <node id="GOOGLE LLC" />
+    <node id="SOJEONG" />
+    <node id="ANDROID" />
+    <node id="EMAIL" />
+    <node id="PERSONAL INFORMATION USAGE NOTIFICATION" />
+    <node id="GOOGLE ACCOUNTS" />
+    <node id="SECURITY PARTNERS" />
+    <node id="PHOTOS AND VIDEOS" />
+    <node id="DOCUMENTS AND SPREADSHEETS" />
+    <node id="SERVICE UPDATES" />
+    <node id="GOOGLE PAYMENTS KOREA" />
+    <node id="KOREA" />
+    <node id="PERSONAL INFORMATION" />
+    <node id="ACTIVITY" />
+    <node id="GOOGLE DASHBOARD" />
+    <node id="PRIVACY CHECKUP" />
+    <node id="GOOGLE PAY" />
+    <node id="GOOGLE CLOUD" />
+    <node id="AMERICAN" />
+    <node id="GOOGLE SERVICES" />
+    <node id="GOOGLE PAYMENT KOREA LLC" />
+    <node id="MY ACTIVITY" />
+    <node id="PERSONAL INFO" />
+    <node id="INFORMATION" />
+    <node id="TERMS" />
+    <node id="VIDEOS" />
+    <node id="GOOGLE TAKEOUT" />
+    <node id="CUSTOMIZATION OPTIONS" />
+    <node id="PLAY STORE" />
+    <node id="DATA MANAGEMENT" />
+    <node id="CUSTOMIZATION PREFERENCES" />
+    <node id="2024" />
+    <node id="PARK SO JEONG" />
+    <node id="SERVICE TERMS UPDATE" />
+    <node id="SAN BRUNO" />
+    <node id="GOOGLE WORKSPACE" />
+    <node id="EUROPEAN ECONOMIC AREA" />
+    <node id="GENERATIVE AI" />
+    <node id="PERSONAL DATA USAGE NOTIFICATION" />
+    <node id="MOBILE NETWORK" />
+    <node id="PHOTOS" />
+    <node id="DOCUMENTS" />
+    <node id="SPREADSHEETS" />
+    <node id="COMMENTS" />
+    <node id="GOOGLE PAYMENTS KOREA CO., LTD." />
+    <node id="USER DATA" />
+    <node id="DATA DOWNLOAD" />
+    <node id="INFORMATION SHARING" />
+    <node id="1600 AMPHITHEATRE PARKWAY, MOUNTAIN VIEW, CA 94043, USA" />
+    <node id="GOOGLE ACCOUNTS TEAM" />
+    <node id="INACTIVE ACCOUNT POLICY" />
+    <node id="THIRD-PARTY APPS" />
+    <node id="DECEMBER 1, 2023" />
+    <node id="GOOGLE DRIVE" />
+    <node id="GOOGLE PLAY STORE" />
+    <node id="DORMANT ACCOUNT POLICY" />
+    <node id="RECOVERY EMAIL" />
+    <node id="EMAIL ADDRESS" />
+    <node id="PHONE NUMBER" />
+    <node id="DEVICE" />
+    <node id="BROWSER" />
+    <node id="LOCATION" />
+    <node id="DATA SHARING" />
+    <node id="USER CONSENT" />
+    <node id="AMPHITHEATRE PARKWAY" />
+    <node id="PUBLICLY ACCESSIBLE SOURCES" />
+    <node id="TRUSTED PARTNERS" />
+    <node id="GOOGLE PRIVACY NOTICE" />
+    <node id="LOCATION DATA" />
+    <node id="APPLICATION" />
+    <node id="GOOGLE PAYMENT KOREA" />
+    <node id="GOOGLE PRIVACY POLICY" />
+    <node id="GOOGLE PAYMENTS" />
+    <node id="AMERICAN PRIVACY POLICY" />
+    <node id="CREATOR" />
+    <node id="PAID SERVICES" />
     <node id="NOTIFICATIONS" />
-    <node id="ALERTS" />
-    <node id="SLACK APP" />
-    <edge source="ALIBABA" target="ALIEXPRESS" />
-    <edge source="ALIBABA" target="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
-    <edge source="ALIEXPRESS" target="KOREA" />
-    <edge source="ALIEXPRESS" target="AE-BEST-CARE-MARKET" />
-    <edge source="ALIEXPRESS" target="EMAIL" />
-    <edge source="ALIEXPRESS" target="DISCOUNT" />
-    <edge source="ALIEXPRESS" target="ALIEXPRESS" />
-    <edge source="ALIEXPRESS" target="ROWAN" />
-    <edge source="ALIEXPRESS" target="GMWH4TCKDT" />
-    <edge source="ALIEXPRESS" target="EDM" />
-    <edge source="ALIEXPRESS" target="AEUG_EDM_103704" />
-    <edge source="ALIEXPRESS" target="1005003148064684" />
-    <edge source="ALIEXPRESS" target="1005009667275521" />
-    <edge source="ALIEXPRESS" target="1005009770058280" />
-    <edge source="ALIEXPRESS" target="GMOOD" />
-    <edge source="ALIEXPRESS" target="E-COMMERCE" />
-    <edge source="ALIEXPRESS" target="PRODUCT LISTING" />
-    <edge source="ALIEXPRESS" target="ELECTRONICS" />
-    <edge source="ALIEXPRESS" target="MOBILE PHONES" />
-    <edge source="ALIEXPRESS" target="BEAUTY" />
-    <edge source="ALIEXPRESS" target="SPORTS" />
-    <edge source="ALIEXPRESS" target="TOYS" />
-    <edge source="ALIEXPRESS" target="ELECTRONIC PRODUCTS" />
-    <edge source="ALIEXPRESS" target="BEAUTY PRODUCTS" />
-    <edge source="ALIEXPRESS" target="SPORTING GOODS" />
-    <edge source="ALIEXPRESS" target="TOYS AND GAMES" />
-    <edge source="ALIEXPRESS" target="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
-    <edge source="ALIEXPRESS" target="ALIEKSPRESS KOREA CO., LTD." />
-    <edge source="ALIEXPRESS" target="GMAIL" />
-    <edge source="ALIEXPRESS" target="ALIBABA GROUP" />
-    <edge source="ALIEXPRESS" target="OPEN MARKET" />
-    <edge source="EMAIL" target="CSI10186@GMAIL.COM" />
-    <edge source="ROWAN" target="GMOOD" />
-    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="ALIEKSPRESS KOREA CO., LTD." />
-    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="LAZADA ONE" />
-    <edge source="GMAIL" target="PROMOTIONAL EMAIL" />
-    <edge source="NGROK" target="CSI10186@GMAIL.COM" />
-    <edge source="NGROK" target="TRAFFIC POLICY" />
-    <edge source="NGROK" target="OAUTH" />
-    <edge source="NGROK" target="IP RESTRICTIONS" />
-    <edge source="NGROK" target="TEAM" />
-    <edge source="NGROK" target="DISCORD" />
-    <edge source="NGROK" target="GITHUB" />
-    <edge source="NGROK" target="BROWSER" />
-    <edge source="HUBSPOT" target="API" />
-    <edge source="HUBSPOT" target="DOCUMENTATION" />
-    <edge source="HUBSPOT" target="STATIC DOMAIN" />
-    <edge source="API" target="D2V8TF04" />
-    <edge source="API" target="EXTERNAL API" />
-    <edge source="DOCUMENTATION" target="D2V8TF04" />
-    <edge source="D2V8TF04" target="W6NXQWY4VWJWC" />
-    <edge source="TEAM" target="GITHUB" />
-    <edge source="GITHUB" target="CODERABBIT" />
-    <edge source="GITHUB" target="UMC-ALBALOG" />
-    <edge source="GITHUB" target="NODE.JS" />
-    <edge source="LINKEDIN" target="X" />
-    <edge source="LINKEDIN" target="YOUTUBE" />
-    <edge source="LINKEDIN" target="CODERABBIT" />
-    <edge source="X" target="YOUTUBE" />
-    <edge source="YOUTUBE" target="SEOUL CITY" />
-    <edge source="NGROK INC." target="SAN FRANCISCO" />
-    <edge source="NGROK INC." target="CALIFORNIA" />
-    <edge source="SAN FRANCISCO" target="CALIFORNIA" />
-    <edge source="SAN FRANCISCO" target="UNITED STATES" />
+    <node id="CHANNEL HANDLE" />
+    <node id="GOOGLE LOCATION HISTORY" />
+    <node id="LOCATION HISTORY" />
+    <node id="ACTIVITY CONTROLS" />
+    <node id="TIMELINE" />
+    <node id="LOCATION-BASED SERVICES" />
+    <node id="PRIVACY" />
+    <node id="PERSON" />
+    <node id="ACCOUNT" />
+    <node id="CONTENT" />
+    <node id="POLICIES" />
+    <node id="SECURITY PARTNER" />
+    <node id="USER LOCATION" />
+    <node id="USER ACTIVITY" />
+    <node id="DOMAIN ADMINISTRATOR" />
+    <node id="GOOGLE'S PRIVACY POLICY" />
+    <node id="USER CHOICES" />
+    <node id="DOCS AND SPREADSHEETS" />
+    <node id="INFORMATION COLLECT" />
+    <node id="DATA COLLECTION" />
+    <node id="BROWSER TYPE" />
+    <node id="DEVICE TYPE" />
+    <node id="OPERATING SYSTEM" />
+    <node id="APPLICATION VERSION" />
+    <node id="AFFILIATES" />
+    <node id="EXTERNAL PROCESSING" />
+    <node id="CONSENT" />
+    <node id="LEGAL REASONS" />
+    <node id="PRIVACY CONTROLS" />
+    <node id="DATA" />
+    <node id="SERVICE TERMS" />
+    <node id="EMAIL UPDATES" />
+    <node id="PRIVACY NOTICE" />
+    <node id="YOUTUBE KIDS" />
+    <node id="FAMILY LINK" />
+    <node id="COMMUNITY GUIDELINES" />
+    <node id="FACE RECOGNITION" />
+    <node id="REVENUE GENERATION RIGHTS" />
+    <node id="ROYALTY PAYMENTS" />
+    <node id="EMAIL OPTIONS" />
+    <node id="SEARCH ENGINE" />
+    <node id="THIRD PARTIES" />
+    <node id="EXTERNAL PROCESSORS" />
+    <node id="BROWSERS" />
+    <node id="DEVICES" />
+    <node id="PAYMENT INFORMATION" />
+    <node id="POLICY" />
+    <node id="CONTRACTUAL RELATIONSHIP" />
+    <node id="GOOGLE PAYMENTS PRIVACY NOTICE" />
+    <node id="DRIVE" />
+    <node id="GOOGLE ONE" />
+    <node id="NEW STORAGE POLICY" />
+    <node id="INACTIVITY POLICY" />
+    <node id="STORAGE POLICY" />
+    <node id="G SUITE FOR EDUCATION" />
+    <node id="NONPROFIT G SUITE" />
+    <node id="INACTIVE ACCOUNT MANAGER" />
+    <node id="INACTIVE ACCOUNT" />
+    <node id="GOOGLE PHOTOS" />
+    <node id="QUOTA EXCEEDANCE" />
+    <node id="STORAGE MANAGEMENT" />
+    <node id="GOOGLE TERMS OF SERVICE" />
+    <node id="GOOGLE DRIVES" />
+    <node id="CHROME" />
+    <node id="CHROME OS" />
+    <node id="UNITED STATES" />
+    <node id="GOOGLE PRIVACY" />
+    <node id="FRIDAY, JANUARY 17, 2020" />
+    <node id="SEARCH TERM" />
+    <node id="SERVICE" />
+    <node id="CONTENT AND ADVERTISING" />
+    <node id="TRANS COSMOS KOREA" />
+    <node id="LG" />
+    <node id="&#53944;&#47004;&#49828;&#53076;&#49828;&#47784;&#49828;&#53076;&#47532;&#50500;" />
+    <node id="&#54620;&#44397;&#47784;&#48148;&#51068;&#51064;&#51613;" />
+    <node id="LG&#50976;&#54540;&#47084;&#49828;" />
+    <node id="&#46356;&#50640;&#51060;&#51204;&#53944;" />
+    <node id="ACCENTURE" />
+    <node id="EPAM SYSTEMS JAPAN G.K." />
+    <node id="SELLBYTEL MALAYSIA SERVICES SDN BHD" />
+    <node id="INFORMATION COLLECTION" />
+    <node id="UNIQUE IDENTIFIERS" />
+    <node id="BROWSER TYPE AND SETTINGS" />
+    <node id="DEVICE TYPE AND SETTINGS" />
+    <node id="MOBILE NETWORK INFORMATION" />
+    <node id="APPLICATION VERSION NUMBER" />
+    <node id="TRANSCOSMOS KOREA INC." />
+    <node id="KOREA MOBILE CERTIFICATION CO., LTD." />
+    <node id="LG UPLUS CORPORATION" />
+    <node id="D AGENT" />
+    <node id="ACCENTURE (MALAYSIA)" />
+    <node id="PRIVACY SETTINGS" />
+    <node id="APP" />
+    <node id="LOCATION INFORMATION" />
+    <node id="SEARCH TERMS" />
+    <node id="SERVICE PROVISION" />
+    <node id="DATA PROCESSING" />
+    <node id="CUSTOMER SUPPORT" />
+    <node id="INTERNET-RELATED SERVICES" />
+    <node id="PLUS CORPORATION" />
+    <node id="EUROPEAN UNION" />
+    <node id="DATA PROTECTION REGULATIONS" />
+    <node id="GOOGLE PROFILE" />
+    <node id="COOKIES" />
+    <node id="THIRD-PARTY APPLICATIONS" />
+    <node id="GOOGLE ANALYTICS" />
+    <node id="USER CONTENT" />
+    <node id="PIXEL TAGS" />
+    <node id="SENSITIVE CATEGORIES" />
+    <node id="AUTOMATED SYSTEMS" />
+    <node id="GOOGLE INC." />
+    <node id="1600 AMPHITHEATRE PARKWAY" />
+    <node id="USER ACCOUNT" />
+    <node id="GOOGLE ADVERTISING SERVICES" />
+    <node id="ADVERTISING" />
+    <node id="SPAM" />
+    <node id="GOOGLE PAYMENT KOREA CO., LTD." />
+    <node id="SERVICES" />
+    <node id="ADVERTISING SERVICES" />
+    <node id="PARTNERS" />
+    <node id="PROFILE NAME" />
+    <node id="PROFILE PHOTO" />
+    <node id="KOREAN AIR" />
+    <node id="MAIA LEGAZPI" />
+    <node id="THANH TRAN" />
+    <node id="1THEK" />
+    <node id="CRAYON POP" />
+    <node id="GOOGLE WALLET" />
+    <node id="LG OPTIMUS G PRO" />
+    <node id="SOJUNG" />
+    <node id="GOOGLE HELP CENTER" />
+    <node id="GOOGLE ACCOUNT TEAM" />
+    <node id="EMAIL NOTIFICATION ON USAGE OF PERSONAL INFORMATION" />
+    <node id="GOOGLE &#54532;&#47196;&#54596;" />
+    <node id="GOOGLE &#44228;&#51221;" />
+    <node id="&#53216;&#53412;" />
+    <node id="GOOGLE &#50528;&#45328;&#47532;&#54001;&#49828;" />
+    <node id="&#44060;&#51064;&#51221;&#48372;" />
+    <node id="&#49324;&#50857;&#51088;" />
+    <node id="SUMMONER'S WAR: SKY ARENA" />
+    <node id="CRUSADERS QUEST" />
+    <node id="ANGRY BIRDS TRANSFORMERS" />
+    <node id="FROZEN FREE FALL" />
+    <node id="DIVERGENT" />
+    <node id="NEED FOR SPEED" />
+    <node id="EXPENDABLES 3" />
+    <node id="DEAD POETS SOCIETY" />
+    <node id="YOU HAVE TIME LEFT TO LOVE" />
+    <node id="LIFE LESSONS" />
+    <node id="MARSHMALLOW STORY" />
+    <node id="TIME TO READ THE ANALECTS" />
+    <node id="ERIC EMERSON SCHMIDT" />
+    <node id="NEWSSTAND" />
+    <node id="EBOOK" />
+    <node id="SMARTSTUDY" />
+    <node id="UANGEL" />
+    <node id="WINTER'S FROZEN" />
+    <node id="TRANSFORMERS 4" />
+    <node id="SUMMONER'S WAR" />
+    <node id="CLASH OF CLANS" />
+    <node id="WATCHA" />
+    <node id="POLARIS OFFICE" />
+    <node id="KBO" />
+    <node id="2014" />
+    <node id="NINJA TURTLE" />
+    <node id="EXPEDIA" />
+    <node id="KAYAK" />
+    <node id="AIRBNB" />
+    <node id="COOKUN GAMES" />
+    <node id="AGE OF WARING EMPIRE 2" />
+    <node id="ELECTRONIC ARTS" />
+    <node id="HEROES OF DRAGON AGE" />
+    <node id="NEXUS 9" />
+    <node id="G-STAR" />
+    <node id="30 DAYS TO FIND MY PERSON" />
+    <node id="DEVIL'S LOVE ART 2" />
+    <node id="PICKUP ARTIST, THE ART OF LOVE" />
+    <node id="SOLO ESCAPE DATING RULES" />
+    <node id="COLOPL, INC." />
+    <node id="SUPERCELL" />
+    <node id="COM2US" />
+    <node id="JAPANESE LANGUAGE" />
+    <node id="ENGLISH LANGUAGE" />
+    <node id="GAMEVIL" />
+    <node id="TREE PLANET 3" />
+    <node id="&#44536;&#47536;&#54044; 3" />
+    <node id="&#53944;&#47004;&#49828;&#54252;&#47672; 4 - &#49324;&#46972;&#51652; &#49884;&#45824;" />
+    <node id="&#50659;&#51648; &#50724;&#48652; &#53804;&#47784;&#47196;&#50864;" />
+    <node id="&#53440;&#51676;: &#49888;&#51032; &#49552;" />
+    <node id="&#50980;&#45824;&#54788;" />
+    <node id="&#44053;&#50896;&#44397;" />
+    <node id="&#45824;&#54788;" />
+    <node id="&#49888;&#51221;&#44540;" />
+    <node id="CLEAN MASTER" />
+    <node id="PIKICAST" />
+    <node id="BEAT" />
+    <node id="&#53440;&#51060;&#45768;&#54044;: &#49884;&#51596;2" />
+    <node id="&#47700;&#51060;&#51592; &#47084;&#45320;" />
+    <node id="&#51228;&#48372;&#51088;" />
+    <node id="&#49828;&#53668;" />
+    <node id="&#44536;&#45448; &#47785;&#49548;&#47532;" />
+    <node id="&#49464;&#48656; &#45936;&#51060;&#51592;" />
+    <node id="&#54749;&#44144;&#44172;&#51076;" />
+    <node id="VEGA CONFLICT" />
+    <node id="SUZANNE COLLINS" />
+    <node id="LEAN IN" />
+    <node id="SHERYL SANDBERG" />
+    <node id="MONTHLY YOON JONG-SIN" />
+    <node id="GRAY CITY 2" />
+    <node id="FIFA 15 ULTIMATE TEAM" />
+    <node id="SHADOW FIGHT 2" />
+    <node id="FISHING GOD" />
+    <node id="CARRIBEAN PIRATES" />
+    <node id="CAPTAIN PHILLIPS" />
+    <node id="COOKING ENCYCLOPEDIA" />
+    <node id="DELIVERY OF THE NATION" />
+    <node id="YOGIYO" />
+    <node id="&#48176;&#45804;&#51032;&#48124;&#51313;" />
+    <node id="&#50836;&#47532;&#48177;&#44284;" />
+    <node id="&#48148;&#45208;&#46748;&#47112;" />
+    <node id="&#44396;&#44544;" />
+    <node id="&#44396;&#44544; &#54540;&#47112;&#51060;" />
+    <node id="JACA GAMES" />
+    <node id="JACA JUMP" />
+    <node id="NORA CO. LTD." />
+    <node id="&#51648;&#53328;&#48652; &#53356;&#47084;&#49772;" />
+    <node id="APPCROSS" />
+    <node id="&#47560;&#52852;&#47217;&#49800;&#53552;" />
+    <node id="I3UT SOFT" />
+    <node id="&#48260;&#48660; &#54616;&#47784;&#45768;" />
+    <node id="&#50836;&#44592;&#50836;" />
+    <node id="&#49828;&#54028;&#51060;&#45908;&#47592; &#50616;&#47532;&#48120;&#54000;&#46300;" />
+    <node id="&#50641;&#49828;&#47592;: &#45936;&#51060;&#51592; &#50724;&#48652; &#54504;&#52376; &#54056;&#49828;&#53944;" />
+    <node id="CAPTAIN AMERICA: WINTER SOLDIER" />
+    <node id="AMAZING SPIDER-MAN 2" />
+    <node id="IRON MAN 3" />
+    <node id="NEXON COMPANY" />
+    <node id="SUPER CELL" />
+    <node id="ROVIO MOBILE LTD." />
+    <node id="&#50952;&#53552; &#49556;&#51256;" />
+    <node id="&#52897;&#54004; &#50500;&#47700;&#47532;&#52852;" />
+    <node id="&#50500;&#51060;&#50616;&#47592; 3" />
+    <node id="&#53664;&#47476;: &#45796;&#53356; &#50900;&#46300;" />
+    <node id="&#50612;&#47700;&#51060;&#51669; &#49828;&#54028;&#51060;&#45908;&#47592; 2" />
+    <node id="&#46300;&#47000;&#44260; &#44600;&#46308;&#51060;&#44592;2" />
+    <node id="KUNDO: AGE OF THE RAMPANT" />
+    <node id="&#49324;&#46993;&#51008; &#53440;&#51060;&#48141;&#51060;&#45796;" />
+    <node id="&#51064;&#46356;&#44172;&#51076;" />
+    <node id="&#45824;&#54620;&#48124;&#44397;" />
+    <node id="REBISSEARCH INC." />
+    <node id="TODOIST" />
+    <node id="POLICE AGENCY" />
+    <node id="GAMES AND APPS" />
+    <node id="KOREA TOURISM ORGANIZATION" />
+    <node id="CHUSEOK" />
+    <node id="FIFA ONLINE 3 M" />
+    <node id="ANGRY BIRDS STELLA" />
+    <node id="ORDER AND CHAOS ONLINE" />
+    <node id="SUMMONERS WAR: SKY ARENA" />
+    <node id="PUZZLE AND DRAGONS" />
+    <node id="GOOGLE TRANSLATE" />
+    <node id="DICTIONARY.COM" />
+    <node id="HACKERS EDUCATION GROUP" />
+    <node id="TED" />
+    <node id="JAY PARK" />
+    <node id="LOS ANGELES" />
+    <node id="WINTER SOLDIER" />
+    <node id="E-MAIL" />
+    <node id="RE-VOLT 2: MULTIPLAYER" />
+    <node id="ZEN GARDEN -SUMMER-" />
+    <node id="MARSIMELLO STORY" />
+    <node id="PEOPLE'S HEART" />
+    <node id="TRAVELING" />
+    <node id="ONCE IN A LIFETIME MEET PRAGUE" />
+    <node id="SUNNY" />
+    <node id="WISH" />
+    <node id="SECRETLY GREATLY" />
+    <node id="8 BALL POOL" />
+    <node id="PLANTS VS. ZOMBIES 2" />
+    <node id="DRAGON CITY" />
+    <node id="TETRIS(R) BLITZ" />
+    <node id="KAKAO TALK" />
+    <node id="MOLDIV" />
+    <node id="KIM GISA" />
+    <node id="BUSINESS ENGLISH CONVERSATION &amp; EMAIL KEY PATTERNS 233" />
+    <node id="SPEAKING MATRIX" />
+    <node id="THE WEBTOON: PREVIEW MURDER" />
+    <node id="TRAIN TO BUSAN" />
+    <node id="THE INHERITANCE" />
+    <node id="THE DANGEROUS RUMOR" />
+    <node id="SUMMER" />
+    <node id="JULY" />
+    <node id="KOREAN MOVIES" />
+    <node id="KOREAN DRAMA" />
+    <node id="NOOM" />
+    <node id="SUMMER BODY PROJECT" />
+    <node id="NAGUMO YOSHINORI" />
+    <node id="SHUNRI" />
+    <node id="RYU SEUNG-YONG" />
+    <node id="ANDROID WEAR" />
+    <node id="LG G WATCH" />
+    <node id="ANGRY BIRDS EPIC" />
+    <node id="2014 FIFA WORLD CUP" />
+    <node id="FIFA" />
+    <node id="ALVIN AND THE CHIPMUNKS" />
+    <node id="BISCUIT LOVES THE LIBRARY" />
+    <node id="CHARLIE THE RANCH DOG" />
+    <node id="AIR HORN" />
+    <node id="THE INTERVIEW" />
+    <node id="CHROMECAST" />
+    <node id="REAL STEEL" />
+    <node id="WOLF CHILDREN" />
+    <node id="WE BOUGHT A ZOO" />
+    <node id="THE FLOWER WE SAW THAT DAY" />
+    <node id="MOBILE SYSTEMS, INC." />
+    <node id="OFFICESUITE PRO 7" />
+    <node id="RELAX MELODY PREMIUM" />
+    <node id="IPNOS SOFTWARE" />
+    <node id="PAPER CAMERA" />
+    <node id="JFDP LABS" />
+    <node id="FXGURU" />
+    <node id="PICADELIC" />
+    <node id="GLACEAUVITAMINWATER" />
+    <node id="CJENMMUSIC" />
+    <node id="HOBBIT: THE DESOLATION OF SMAUG" />
+    <node id="LORD OF THE RINGS: RETURN OF THE KING" />
+    <node id="BADLAND" />
+    <node id="MALCOLM GLADWELL" />
+    <node id="SENDAEIN" />
+    <node id="GOOGLE+" />
+    <node id="GMAIL TEAM" />
+    <node id="NOREPLY-DAA26FEF@PLUS.GOOGLE.COM" />
+    <node id="SOJUNG PARK" />
+    <node id="GMAIL APP" />
+    <node id="PARKWAY, MOUNTAIN VIEW, CA" />
+    <node id="NEXUS 4" />
+    <node id="HANGOUTS" />
+    <edge source="GOOGLE" target="INHIST33@GMAIL.COM" />
+    <edge source="GOOGLE" target="MOUNTAIN VIEW" />
+    <edge source="GOOGLE" target="APPLE IPHONE 17" />
+    <edge source="GOOGLE" target="WINDOWS" />
+    <edge source="GOOGLE" target="INHIST33" />
+    <edge source="GOOGLE" target="SECURITY ALERT" />
+    <edge source="GOOGLE" target="CLASP" />
+    <edge source="GOOGLE" target="GOOGLE PLAY" />
+    <edge source="GOOGLE" target="GEMINI" />
+    <edge source="GOOGLE" target="CALIFORNIA" />
+    <edge source="GOOGLE" target="GMAIL" />
+    <edge source="GOOGLE" target="AI ASSISTANT" />
+    <edge source="GOOGLE" target="SERVICE PROVIDER" />
+    <edge source="GOOGLE" target="SOJEONG" />
+    <edge source="GOOGLE" target="EMAIL" />
+    <edge source="GOOGLE" target="PERSONAL INFORMATION USAGE NOTIFICATION" />
+    <edge source="GOOGLE" target="USER" />
+    <edge source="GOOGLE" target="YOUTUBE" />
+    <edge source="GOOGLE" target="SECURITY PARTNERS" />
+    <edge source="GOOGLE" target="GOOGLE PAYMENTS KOREA" />
+    <edge source="GOOGLE" target="KOREA" />
+    <edge source="GOOGLE" target="PRIVACY POLICY" />
+    <edge source="GOOGLE" target="GOOGLE PAYMENT KOREA LLC" />
+    <edge source="GOOGLE" target="MY ACTIVITY" />
+    <edge source="GOOGLE" target="GOOGLE DASHBOARD" />
+    <edge source="GOOGLE" target="PRIVACY CHECKUP" />
+    <edge source="GOOGLE" target="PERSONAL INFO" />
+    <edge source="GOOGLE" target="INFORMATION" />
+    <edge source="GOOGLE" target="TERMS" />
+    <edge source="GOOGLE" target="VIDEOS" />
+    <edge source="GOOGLE" target="2024" />
+    <edge source="GOOGLE" target="CUSTOMER SERVICE" />
+    <edge source="GOOGLE" target="SERVICE TERMS UPDATE" />
+    <edge source="GOOGLE" target="SAN BRUNO" />
+    <edge source="GOOGLE" target="GOOGLE WORKSPACE" />
+    <edge source="GOOGLE" target="EUROPEAN ECONOMIC AREA" />
+    <edge source="GOOGLE" target="GENERATIVE AI" />
+    <edge source="GOOGLE" target="GOOGLE LLC" />
+    <edge source="GOOGLE" target="MOBILE NETWORK" />
+    <edge source="GOOGLE" target="GOOGLE PAY" />
+    <edge source="GOOGLE" target="GOOGLE ACCOUNT" />
+    <edge source="GOOGLE" target="GOOGLE CLOUD" />
+    <edge source="GOOGLE" target="INFORMATION SHARING" />
+    <edge source="GOOGLE" target="PERSONAL INFORMATION" />
+    <edge source="GOOGLE" target="1600 AMPHITHEATRE PARKWAY, MOUNTAIN VIEW, CA 94043, USA" />
+    <edge source="GOOGLE" target="GOOGLE ACCOUNTS TEAM" />
+    <edge source="GOOGLE" target="INACTIVE ACCOUNT POLICY" />
+    <edge source="GOOGLE" target="GOOGLE SERVICES" />
+    <edge source="GOOGLE" target="GOOGLE PLAY STORE" />
+    <edge source="GOOGLE" target="GOOGLE TAKEOUT" />
+    <edge source="GOOGLE" target="DORMANT ACCOUNT POLICY" />
+    <edge source="GOOGLE" target="NO-REPLY@ACCOUNTS.GOOGLE.COM" />
+    <edge source="GOOGLE" target="DATA SHARING" />
+    <edge source="GOOGLE" target="PUBLICLY ACCESSIBLE SOURCES" />
+    <edge source="GOOGLE" target="TRUSTED PARTNERS" />
+    <edge source="GOOGLE" target="GOOGLE PAYMENT KOREA" />
+    <edge source="GOOGLE" target="GOOGLE PAYMENTS" />
+    <edge source="GOOGLE" target="AMERICAN PRIVACY POLICY" />
+    <edge source="GOOGLE" target="GOOGLE LOCATION HISTORY" />
+    <edge source="GOOGLE" target="PRIVACY" />
+    <edge source="GOOGLE" target="PERSON" />
+    <edge source="GOOGLE" target="POLICIES" />
+    <edge source="GOOGLE" target="SECURITY PARTNER" />
+    <edge source="GOOGLE" target="GOOGLE" />
+    <edge source="GOOGLE" target="DOMAIN ADMINISTRATOR" />
+    <edge source="GOOGLE" target="GOOGLE'S PRIVACY POLICY" />
+    <edge source="GOOGLE" target="INFORMATION COLLECT" />
+    <edge source="GOOGLE" target="DATA COLLECTION" />
+    <edge source="GOOGLE" target="AFFILIATES" />
+    <edge source="GOOGLE" target="EXTERNAL PROCESSING" />
+    <edge source="GOOGLE" target="CONSENT" />
+    <edge source="GOOGLE" target="LEGAL REASONS" />
+    <edge source="GOOGLE" target="PRIVACY CONTROLS" />
+    <edge source="GOOGLE" target="NOTIFICATIONS" />
+    <edge source="GOOGLE" target="DATA" />
+    <edge source="GOOGLE" target="TERMS OF SERVICE" />
+    <edge source="GOOGLE" target="USER DATA" />
+    <edge source="GOOGLE" target="CONTENT" />
+    <edge source="GOOGLE" target="DEVICE" />
+    <edge source="GOOGLE" target="SEARCH ENGINE" />
+    <edge source="GOOGLE" target="APPLICATION" />
+    <edge source="GOOGLE" target="THIRD PARTIES" />
+    <edge source="GOOGLE" target="EXTERNAL PROCESSORS" />
+    <edge source="GOOGLE" target="PERSONAL DATA" />
+    <edge source="GOOGLE" target="ACTIVITY" />
+    <edge source="GOOGLE" target="GOOGLE PAYMENTS KOREA CO., LTD." />
+    <edge source="GOOGLE" target="EMAIL NOTIFICATION" />
+    <edge source="GOOGLE" target="LOCATION" />
+    <edge source="GOOGLE" target="BROWSERS" />
+    <edge source="GOOGLE" target="DEVICES" />
+    <edge source="GOOGLE" target="APPLICATION VERSION" />
+    <edge source="GOOGLE" target="POLICY" />
+    <edge source="GOOGLE" target="CONTRACTUAL RELATIONSHIP" />
+    <edge source="GOOGLE" target="GOOGLE DRIVE" />
+    <edge source="GOOGLE" target="DRIVE" />
+    <edge source="GOOGLE" target="PHOTOS" />
+    <edge source="GOOGLE" target="GOOGLE ONE" />
+    <edge source="GOOGLE" target="NEW STORAGE POLICY" />
+    <edge source="GOOGLE" target="STORAGE POLICY" />
+    <edge source="GOOGLE" target="G SUITE FOR EDUCATION" />
+    <edge source="GOOGLE" target="NONPROFIT G SUITE" />
+    <edge source="GOOGLE" target="INACTIVE ACCOUNT MANAGER" />
+    <edge source="GOOGLE" target="SERVICE TERMS" />
+    <edge source="GOOGLE" target="GOOGLE PHOTOS" />
+    <edge source="GOOGLE" target="QUOTA EXCEEDANCE" />
+    <edge source="GOOGLE" target="GOOGLE TERMS OF SERVICE" />
+    <edge source="GOOGLE" target="GOOGLE DRIVES" />
+    <edge source="GOOGLE" target="CHROME" />
+    <edge source="GOOGLE" target="CHROME OS" />
+    <edge source="GOOGLE" target="FAMILY LINK" />
+    <edge source="GOOGLE" target="UNITED STATES" />
+    <edge source="GOOGLE" target="GOOGLE PRIVACY" />
+    <edge source="GOOGLE" target="SERVICE" />
+    <edge source="GOOGLE" target="CONTENT AND ADVERTISING" />
+    <edge source="GOOGLE" target="TRANS COSMOS KOREA" />
+    <edge source="GOOGLE" target="LG" />
+    <edge source="GOOGLE" target="&#53944;&#47004;&#49828;&#53076;&#49828;&#47784;&#49828;&#53076;&#47532;&#50500;" />
+    <edge source="GOOGLE" target="&#54620;&#44397;&#47784;&#48148;&#51068;&#51064;&#51613;" />
+    <edge source="GOOGLE" target="LG&#50976;&#54540;&#47084;&#49828;" />
+    <edge source="GOOGLE" target="&#46356;&#50640;&#51060;&#51204;&#53944;" />
+    <edge source="GOOGLE" target="ACCENTURE" />
+    <edge source="GOOGLE" target="EPAM SYSTEMS JAPAN G.K." />
+    <edge source="GOOGLE" target="SELLBYTEL MALAYSIA SERVICES SDN BHD" />
+    <edge source="GOOGLE" target="UNIQUE IDENTIFIERS" />
+    <edge source="GOOGLE" target="BROWSER TYPE AND SETTINGS" />
+    <edge source="GOOGLE" target="DEVICE TYPE AND SETTINGS" />
+    <edge source="GOOGLE" target="OPERATING SYSTEM" />
+    <edge source="GOOGLE" target="MOBILE NETWORK INFORMATION" />
+    <edge source="GOOGLE" target="APPLICATION VERSION NUMBER" />
+    <edge source="GOOGLE" target="TRANSCOSMOS KOREA INC." />
+    <edge source="GOOGLE" target="KOREA MOBILE CERTIFICATION CO., LTD." />
+    <edge source="GOOGLE" target="LG UPLUS CORPORATION" />
+    <edge source="GOOGLE" target="D AGENT" />
+    <edge source="GOOGLE" target="ACCENTURE (MALAYSIA)" />
+    <edge source="GOOGLE" target="INFORMATION COLLECTION" />
+    <edge source="GOOGLE" target="SERVICE PROVISION" />
+    <edge source="GOOGLE" target="DATA PROCESSING" />
+    <edge source="GOOGLE" target="CUSTOMER SUPPORT" />
+    <edge source="GOOGLE" target="BROWSER TYPE" />
+    <edge source="GOOGLE" target="DEVICE TYPE" />
+    <edge source="GOOGLE" target="PLUS CORPORATION" />
+    <edge source="GOOGLE" target="EUROPEAN UNION" />
+    <edge source="GOOGLE" target="GOOGLE PROFILE" />
+    <edge source="GOOGLE" target="COOKIES" />
+    <edge source="GOOGLE" target="GOOGLE ANALYTICS" />
+    <edge source="GOOGLE" target="USER CONTENT" />
+    <edge source="GOOGLE" target="SENSITIVE CATEGORIES" />
+    <edge source="GOOGLE" target="GOOGLE INC." />
+    <edge source="GOOGLE" target="1600 AMPHITHEATRE PARKWAY" />
+    <edge source="GOOGLE" target="GOOGLE ADVERTISING SERVICES" />
+    <edge source="GOOGLE" target="PIXEL TAGS" />
+    <edge source="GOOGLE" target="ADVERTISING" />
+    <edge source="GOOGLE" target="SPAM" />
+    <edge source="GOOGLE" target="SERVICES" />
+    <edge source="GOOGLE" target="ADVERTISING SERVICES" />
+    <edge source="GOOGLE" target="PARTNERS" />
+    <edge source="GOOGLE" target="GOOGLE WALLET" />
+    <edge source="GOOGLE" target="AMPHITHEATRE PARKWAY" />
+    <edge source="GOOGLE" target="PRIVACY NOTICE" />
+    <edge source="GOOGLE" target="LG OPTIMUS G PRO" />
+    <edge source="GOOGLE" target="SOJUNG" />
+    <edge source="GOOGLE" target="GOOGLE HELP CENTER" />
+    <edge source="GOOGLE" target="GOOGLE &#54532;&#47196;&#54596;" />
+    <edge source="GOOGLE" target="GOOGLE &#44228;&#51221;" />
+    <edge source="GOOGLE" target="&#53216;&#53412;" />
+    <edge source="GOOGLE" target="GOOGLE &#50528;&#45328;&#47532;&#54001;&#49828;" />
+    <edge source="GOOGLE" target="&#44060;&#51064;&#51221;&#48372;" />
+    <edge source="GOOGLE" target="&#49324;&#50857;&#51088;" />
+    <edge source="INHIST33@GMAIL.COM" target="SECURITY ALERT" />
+    <edge source="INHIST33@GMAIL.COM" target="CLASP" />
+    <edge source="INHIST33@GMAIL.COM" target="GMAILWEAVER_VER3.5" />
+    <edge source="INHIST33@GMAIL.COM" target="IPHONE" />
+    <edge source="INHIST33@GMAIL.COM" target="GOOGLE ACCOUNT" />
+    <edge source="INHIST33@GMAIL.COM" target="GMAIL" />
+    <edge source="INHIST33@GMAIL.COM" target="NO-REPLY@ACCOUNTS.GOOGLE.COM" />
+    <edge source="INHIST33@GMAIL.COM" target="APPLE IPHONE" />
+    <edge source="INHIST33@GMAIL.COM" target="SECURITY NOTIFICATION" />
+    <edge source="INHIST33@GMAIL.COM" target="TWO-STEP VERIFICATION" />
+    <edge source="INHIST33@GMAIL.COM" target="EMAIL NOTIFICATION" />
+    <edge source="INHIST33@GMAIL.COM" target="BACKUP PHONE NUMBER" />
+    <edge source="INHIST33@GMAIL.COM" target="2-FA" />
+    <edge source="INHIST33@GMAIL.COM" target="SOJEONG" />
+    <edge source="INHIST33@GMAIL.COM" target="ACCOUNT RECOVERY" />
+    <edge source="INHIST33@GMAIL.COM" target="GOOGLE ACCOUNTS" />
+    <edge source="INHIST33@GMAIL.COM" target="GOOGLE PAY" />
+    <edge source="INHIST33@GMAIL.COM" target="GOOGLE CLOUD" />
+    <edge source="INHIST33@GMAIL.COM" target="GOOGLE TAKEOUT" />
+    <edge source="INHIST33@GMAIL.COM" target="GOOGLE PLAY" />
+    <edge source="INHIST33@GMAIL.COM" target="RECOVERY EMAIL" />
+    <edge source="INHIST33@GMAIL.COM" target="GOOGLE LLC" />
+    <edge source="INHIST33@GMAIL.COM" target="YOUTUBE" />
+    <edge source="INHIST33@GMAIL.COM" target="EMAIL UPDATES" />
+    <edge source="INHIST33@GMAIL.COM" target="EMAIL" />
+    <edge source="INHIST33@GMAIL.COM" target="GOOGLE INC." />
+    <edge source="INHIST33@GMAIL.COM" target="SOJUNG" />
+    <edge source="MOUNTAIN VIEW" target="GOOGLE LLC" />
+    <edge source="MOUNTAIN VIEW" target="CALIFORNIA" />
+    <edge source="MOUNTAIN VIEW" target="GOOGLE INC." />
+    <edge source="MOUNTAIN VIEW" target="GOOGLE PLAY" />
+    <edge source="SECURITY ALERT" target="JANUARY 22 2026" />
+    <edge source="SECURITY ALERT" target="INHIST33" />
+    <edge source="GOOGLE ACCOUNT" target="SECURE ACCOUNT" />
+    <edge source="GOOGLE ACCOUNT" target="ACCOUNT RECOVERY" />
+    <edge source="GOOGLE ACCOUNT" target="INHIST33" />
+    <edge source="GOOGLE ACCOUNT" target="GOOGLE SERVICES" />
+    <edge source="GOOGLE ACCOUNT" target="GOOGLE LLC" />
+    <edge source="GOOGLE ACCOUNT" target="USER" />
+    <edge source="GOOGLE ACCOUNT" target="EMAIL" />
+    <edge source="GOOGLE ACCOUNT" target="PHOTOS AND VIDEOS" />
+    <edge source="GOOGLE ACCOUNT" target="DOCS AND SPREADSHEETS" />
+    <edge source="GOOGLE ACCOUNT" target="PERSONAL INFORMATION" />
+    <edge source="GOOGLE ACCOUNT" target="PAYMENT INFORMATION" />
+    <edge source="GOOGLE ACCOUNT" target="PRIVACY POLICY" />
+    <edge source="GOOGLE ACCOUNT" target="GOOGLE PROFILE" />
+    <edge source="GOOGLE ACCOUNT" target="THIRD-PARTY APPLICATIONS" />
+    <edge source="GOOGLE ACCOUNT" target="COOKIES" />
+    <edge source="GOOGLE ACCOUNT" target="PIXEL TAGS" />
+    <edge source="GOOGLE ACCOUNT" target="GOOGLE INC." />
+    <edge source="GOOGLE ACCOUNT" target="PROFILE NAME" />
+    <edge source="GOOGLE ACCOUNT" target="PROFILE PHOTO" />
+    <edge source="GOOGLE ACCOUNT" target="GOOGLE ANALYTICS" />
+    <edge source="GOOGLE ACCOUNT" target="NO-REPLY@ACCOUNTS.GOOGLE.COM" />
+    <edge source="GMAIL" target="GOOGLE LLC" />
+    <edge source="GMAIL" target="GOOGLE SERVICES" />
+    <edge source="GMAIL" target="NEW STORAGE POLICY" />
+    <edge source="GMAIL" target="INACTIVE ACCOUNT" />
+    <edge source="GMAIL" target="STORAGE POLICY" />
+    <edge source="GMAIL" target="GOOGLE INC." />
+    <edge source="GMAIL" target="SOJUNG PARK" />
+    <edge source="GMAIL" target="GMAIL TEAM" />
+    <edge source="GMAIL" target="GMAIL APP" />
+    <edge source="ACCOUNT RECOVERY" target="INHIST33" />
+    <edge source="WINDOWS" target="INHIST33" />
+    <edge source="NO-REPLY@ACCOUNTS.GOOGLE.COM" target="EMAIL NOTIFICATION" />
+    <edge source="INHIST33" target="APPLE" />
+    <edge source="INHIST33" target="PASSWORD CHANGE" />
+    <edge source="INHIST33" target="2-STEP VERIFICATION" />
+    <edge source="INHIST33" target="2-STEP AUTHENTICATION" />
+    <edge source="INHIST33" target="APPLE IPHONE" />
+    <edge source="INHIST33" target="ANDROID" />
+    <edge source="INHIST33" target="SERVICE TERMS UPDATE" />
+    <edge source="INHIST33" target="EMAIL NOTIFICATION" />
+    <edge source="INHIST33" target="GOOGLE LLC" />
+    <edge source="INHIST33" target="EMAIL" />
+    <edge source="INHIST33" target="SECURITY NOTIFICATION" />
+    <edge source="APPLE" target="SOJEONG" />
+    <edge source="APPLE" target="HANGOUTS" />
+    <edge source="SECURITY NOTIFICATION" target="JANUARY 14 2026" />
+    <edge source="GOOGLE PLAY" target="GEMINI" />
+    <edge source="GOOGLE PLAY" target="CUSTOMER SERVICE" />
+    <edge source="GOOGLE PLAY" target="CUSTOMIZATION OPTIONS" />
+    <edge source="GOOGLE PLAY" target="PARK SO JEONG" />
+    <edge source="GOOGLE PLAY" target="SUMMONER'S WAR: SKY ARENA" />
+    <edge source="GOOGLE PLAY" target="CRUSADERS QUEST" />
+    <edge source="GOOGLE PLAY" target="ANGRY BIRDS TRANSFORMERS" />
+    <edge source="GOOGLE PLAY" target="FROZEN FREE FALL" />
+    <edge source="GOOGLE PLAY" target="DIVERGENT" />
+    <edge source="GOOGLE PLAY" target="NEED FOR SPEED" />
+    <edge source="GOOGLE PLAY" target="EXPENDABLES 3" />
+    <edge source="GOOGLE PLAY" target="DEAD POETS SOCIETY" />
+    <edge source="GOOGLE PLAY" target="YOU HAVE TIME LEFT TO LOVE" />
+    <edge source="GOOGLE PLAY" target="LIFE LESSONS" />
+    <edge source="GOOGLE PLAY" target="MARSHMALLOW STORY" />
+    <edge source="GOOGLE PLAY" target="TIME TO READ THE ANALECTS" />
+    <edge source="GOOGLE PLAY" target="GOOGLE INC." />
+    <edge source="GOOGLE PLAY" target="NEWSSTAND" />
+    <edge source="GOOGLE PLAY" target="EBOOK" />
+    <edge source="GOOGLE PLAY" target="NINJA TURTLE" />
+    <edge source="GOOGLE PLAY" target="NEXUS 9" />
+    <edge source="GOOGLE PLAY" target="G-STAR" />
+    <edge source="GOOGLE PLAY" target="30 DAYS TO FIND MY PERSON" />
+    <edge source="GOOGLE PLAY" target="DEVIL'S LOVE ART 2" />
+    <edge source="GOOGLE PLAY" target="PICKUP ARTIST, THE ART OF LOVE" />
+    <edge source="GOOGLE PLAY" target="SOLO ESCAPE DATING RULES" />
+    <edge source="GOOGLE PLAY" target="COLOPL, INC." />
+    <edge source="GOOGLE PLAY" target="SUPERCELL" />
+    <edge source="GOOGLE PLAY" target="COM2US" />
+    <edge source="GOOGLE PLAY" target="JAPANESE LANGUAGE" />
+    <edge source="GOOGLE PLAY" target="ENGLISH LANGUAGE" />
+    <edge source="GOOGLE PLAY" target="TREE PLANET 3" />
+    <edge source="GOOGLE PLAY" target="&#44536;&#47536;&#54044; 3" />
+    <edge source="GOOGLE PLAY" target="&#53944;&#47004;&#49828;&#54252;&#47672; 4 - &#49324;&#46972;&#51652; &#49884;&#45824;" />
+    <edge source="GOOGLE PLAY" target="&#50659;&#51648; &#50724;&#48652; &#53804;&#47784;&#47196;&#50864;" />
+    <edge source="GOOGLE PLAY" target="&#53440;&#51676;: &#49888;&#51032; &#49552;" />
+    <edge source="GOOGLE PLAY" target="&#50980;&#45824;&#54788;" />
+    <edge source="GOOGLE PLAY" target="&#44053;&#50896;&#44397;" />
+    <edge source="GOOGLE PLAY" target="&#45824;&#54788;" />
+    <edge source="GOOGLE PLAY" target="&#49888;&#51221;&#44540;" />
+    <edge source="GOOGLE PLAY" target="CLEAN MASTER" />
+    <edge source="GOOGLE PLAY" target="PIKICAST" />
+    <edge source="GOOGLE PLAY" target="BEAT" />
+    <edge source="GOOGLE PLAY" target="&#53440;&#51060;&#45768;&#54044;: &#49884;&#51596;2" />
+    <edge source="GOOGLE PLAY" target="&#47700;&#51060;&#51592; &#47084;&#45320;" />
+    <edge source="GOOGLE PLAY" target="&#51228;&#48372;&#51088;" />
+    <edge source="GOOGLE PLAY" target="&#49828;&#53668;" />
+    <edge source="GOOGLE PLAY" target="&#44536;&#45448; &#47785;&#49548;&#47532;" />
+    <edge source="GOOGLE PLAY" target="&#49464;&#48656; &#45936;&#51060;&#51592;" />
+    <edge source="GOOGLE PLAY" target="&#54749;&#44144;&#44172;&#51076;" />
+    <edge source="GOOGLE PLAY" target="VEGA CONFLICT" />
+    <edge source="GOOGLE PLAY" target="FIFA 15 ULTIMATE TEAM" />
+    <edge source="GOOGLE PLAY" target="CLASH OF CLANS" />
+    <edge source="GOOGLE PLAY" target="SHADOW FIGHT 2" />
+    <edge source="GOOGLE PLAY" target="FISHING GOD" />
+    <edge source="GOOGLE PLAY" target="CARRIBEAN PIRATES" />
+    <edge source="GOOGLE PLAY" target="CAPTAIN PHILLIPS" />
+    <edge source="GOOGLE PLAY" target="COOKING ENCYCLOPEDIA" />
+    <edge source="GOOGLE PLAY" target="DELIVERY OF THE NATION" />
+    <edge source="GOOGLE PLAY" target="YOGIYO" />
+    <edge source="GOOGLE PLAY" target="&#48176;&#45804;&#51032;&#48124;&#51313;" />
+    <edge source="GOOGLE PLAY" target="&#50836;&#47532;&#48177;&#44284;" />
+    <edge source="GOOGLE PLAY" target="&#48148;&#45208;&#46748;&#47112;" />
+    <edge source="GOOGLE PLAY" target="&#44396;&#44544;" />
+    <edge source="GOOGLE PLAY" target="&#51064;&#46356;&#44172;&#51076;" />
+    <edge source="GOOGLE PLAY" target="&#45824;&#54620;&#48124;&#44397;" />
+    <edge source="GOOGLE PLAY" target="FIFA ONLINE 3 M" />
+    <edge source="GOOGLE PLAY" target="ANGRY BIRDS STELLA" />
+    <edge source="GOOGLE PLAY" target="ORDER AND CHAOS ONLINE" />
+    <edge source="GOOGLE PLAY" target="SUMMONERS WAR: SKY ARENA" />
+    <edge source="GOOGLE PLAY" target="PUZZLE AND DRAGONS" />
+    <edge source="GOOGLE PLAY" target="GOOGLE TRANSLATE" />
+    <edge source="GOOGLE PLAY" target="DICTIONARY.COM" />
+    <edge source="GOOGLE PLAY" target="JAY PARK" />
+    <edge source="GOOGLE PLAY" target="WINTER SOLDIER" />
+    <edge source="GOOGLE PLAY" target="E-MAIL" />
+    <edge source="GOOGLE PLAY" target="RE-VOLT 2: MULTIPLAYER" />
+    <edge source="GOOGLE PLAY" target="ZEN GARDEN -SUMMER-" />
+    <edge source="GOOGLE PLAY" target="MARSIMELLO STORY" />
+    <edge source="GOOGLE PLAY" target="PEOPLE'S HEART" />
+    <edge source="GOOGLE PLAY" target="TRAVELING" />
+    <edge source="GOOGLE PLAY" target="ONCE IN A LIFETIME MEET PRAGUE" />
+    <edge source="GOOGLE PLAY" target="SUNNY" />
+    <edge source="GOOGLE PLAY" target="WISH" />
+    <edge source="GOOGLE PLAY" target="SECRETLY GREATLY" />
+    <edge source="GOOGLE PLAY" target="ERIC EMERSON SCHMIDT" />
+    <edge source="GOOGLE PLAY" target="8 BALL POOL" />
+    <edge source="GOOGLE PLAY" target="PLANTS VS. ZOMBIES 2" />
+    <edge source="GOOGLE PLAY" target="DRAGON CITY" />
+    <edge source="GOOGLE PLAY" target="TETRIS(R) BLITZ" />
+    <edge source="GOOGLE PLAY" target="KAKAO TALK" />
+    <edge source="GOOGLE PLAY" target="MOLDIV" />
+    <edge source="GOOGLE PLAY" target="KIM GISA" />
+    <edge source="GOOGLE PLAY" target="BUSINESS ENGLISH CONVERSATION &amp; EMAIL KEY PATTERNS 233" />
+    <edge source="GOOGLE PLAY" target="SPEAKING MATRIX" />
+    <edge source="GOOGLE PLAY" target="THE WEBTOON: PREVIEW MURDER" />
+    <edge source="GOOGLE PLAY" target="TRAIN TO BUSAN" />
+    <edge source="GOOGLE PLAY" target="THE INHERITANCE" />
+    <edge source="GOOGLE PLAY" target="THE DANGEROUS RUMOR" />
+    <edge source="GOOGLE PLAY" target="SUMMER" />
+    <edge source="GOOGLE PLAY" target="JULY" />
+    <edge source="GOOGLE PLAY" target="KOREA" />
+    <edge source="GOOGLE PLAY" target="KOREAN MOVIES" />
+    <edge source="GOOGLE PLAY" target="KOREAN DRAMA" />
+    <edge source="GOOGLE PLAY" target="ANDROID WEAR" />
+    <edge source="GOOGLE PLAY" target="ANGRY BIRDS EPIC" />
+    <edge source="GOOGLE PLAY" target="FIFA" />
+    <edge source="GOOGLE PLAY" target="ALVIN AND THE CHIPMUNKS" />
+    <edge source="GOOGLE PLAY" target="BISCUIT LOVES THE LIBRARY" />
+    <edge source="GOOGLE PLAY" target="CHARLIE THE RANCH DOG" />
+    <edge source="GOOGLE PLAY" target="AIR HORN" />
+    <edge source="GOOGLE PLAY" target="THE INTERVIEW" />
+    <edge source="GOOGLE PLAY" target="EMAIL" />
+    <edge source="GOOGLE PLAY" target="REAL STEEL" />
+    <edge source="GOOGLE PLAY" target="WOLF CHILDREN" />
+    <edge source="GOOGLE PLAY" target="WE BOUGHT A ZOO" />
+    <edge source="GOOGLE PLAY" target="THE FLOWER WE SAW THAT DAY" />
+    <edge source="GOOGLE PLAY" target="GLACEAUVITAMINWATER" />
+    <edge source="GOOGLE PLAY" target="HOBBIT: THE DESOLATION OF SMAUG" />
+    <edge source="GOOGLE PLAY" target="LORD OF THE RINGS: RETURN OF THE KING" />
+    <edge source="GOOGLE PLAY" target="BADLAND" />
+    <edge source="EMAIL NOTIFICATION" target="SOJEONG" />
+    <edge source="EMAIL NOTIFICATION" target="GOOGLE LLC" />
+    <edge source="EMAIL NOTIFICATION" target="KOREA" />
+    <edge source="EMAIL NOTIFICATION" target="PERSONAL INFORMATION" />
+    <edge source="EMAIL NOTIFICATION" target="USER" />
+    <edge source="EMAIL NOTIFICATION" target="GOOGLE PAYMENTS KOREA" />
+    <edge source="GEMINI" target="GEMINI LIVE" />
+    <edge source="GEMINI" target="GEMINI APP" />
+    <edge source="GEMINI" target="YOUTUBE" />
+    <edge source="GEMINI" target="CHAT SERVICE PROVIDER" />
+    <edge source="GEMINI" target="PRIVACY POLICY" />
+    <edge source="GEMINI" target="USER SETTINGS" />
+    <edge source="GEMINI" target="SOUTH KOREA" />
+    <edge source="GEMINI" target="PERSONAL DATA" />
+    <edge source="GEMINI" target="TERMS OF SERVICE" />
+    <edge source="GEMINI" target="LOCATION SERVICES" />
+    <edge source="CALIFORNIA" target="YOUTUBE" />
+    <edge source="CALIFORNIA" target="GOOGLE LLC" />
     <edge source="CALIFORNIA" target="UNITED STATES" />
-    <edge source="SEOUL" target="SEOUL CITY HALL" />
-    <edge source="SEOUL" target="JANUARY 29, 2026" />
-    <edge source="SEOUL" target="SEOUL LOVE GIFT CERTIFICATE" />
-    <edge source="SEOUL" target="SEOUL CITY TECHNICAL TRAINING CENTER" />
-    <edge source="SEOUL" target="SENIOR CITIZENS" />
-    <edge source="SEOUL" target="KANGBUK YOUTH CENTER" />
-    <edge source="SEOUL" target="SEOUL INTERNATIONAL GARDEN EXPO" />
-    <edge source="SEOUL" target="SEOUL FASHION WEEK" />
-    <edge source="SEOUL" target="DDP" />
-    <edge source="SEOUL" target="AI SEOUL 2026" />
-    <edge source="SEOUL" target="&#45572;&#44396;&#45208; &#52397;&#52632;&#47924;&#45824;" />
-    <edge source="SEOUL" target="&#49884;&#48124;&#44592;&#51088;" />
-    <edge source="SEOUL" target="SEOUL METROPOLITAN GOVERNMENT" />
-    <edge source="SEOUL" target="BONGEUNSA TEMPLE" />
-    <edge source="SEOUL" target="NAMSAN TOWER" />
-    <edge source="SEOUL" target="HAN RIVER" />
-    <edge source="SEOUL" target="GYEONGBOKGUNG PALACE" />
-    <edge source="SEOUL" target="KOREAN WAR VETERANS MEMORIAL" />
-    <edge source="SEOUL" target="KOREAN CULTURAL CENTER" />
-    <edge source="SEOUL" target="ESEOUL" />
-    <edge source="SEOUL" target="NATIONAL GOVERNMENT" />
-    <edge source="SEOUL" target="CITIZENS OF SEOUL" />
-    <edge source="SEOUL" target="SEOUL CITY" />
-    <edge source="SEOUL" target="LIVE SEOUL" />
-    <edge source="SEOUL" target="SEOUL CITY BLOG" />
-    <edge source="SEOUL" target="INSTAGRAM" />
-    <edge source="SEOUL" target="INF LAB" />
-    <edge source="SEOUL" target="ROBOTAXI" />
-    <edge source="SEOUL" target="KANGBUK" />
-    <edge source="SEOUL" target="DOBONG" />
-    <edge source="SEOUL" target="YEONGDEUNGPO" />
-    <edge source="SEOUL" target="LEVEL 4 DRIVERLESS ROBOTAXI" />
-    <edge source="SEOUL" target="AUTONOMOUS BUS" />
-    <edge source="SEOUL" target="URBAN RAIL NETWORK" />
-    <edge source="SEOUL" target="SEOUL FOREIGN HONORARY MAYOR" />
-    <edge source="SEOUL" target="SEOUL HANBANG PROMOTION CENTER" />
-    <edge source="SEOUL" target="DUST MANAGEMENT SEASONAL POLICY" />
-    <edge source="SEOUL" target="DASAN CALL CENTER" />
-    <edge source="SEOUL" target="NPCRM" />
-    <edge source="SEOUL" target="SOUTH KOREA" />
-    <edge source="SEOUL CITY HALL" target="SEOUL LOVE COUPON" />
-    <edge source="SEOUL CITY HALL" target="INEWS SEOUL" />
-    <edge source="SEOUL CITY HALL" target="INF LAB" />
-    <edge source="SEOUL CITY HALL" target="NEWSLETTER" />
-    <edge source="SEOUL LOVE GIFT CERTIFICATE" target="SEOUL CITY" />
-    <edge source="SEOUL LOVE GIFT CERTIFICATE" target="DELIVERY-ONLY GIFT CERTIFICATE" />
-    <edge source="SEOUL LOVE GIFT CERTIFICATE" target="PAYBACK BENEFITS" />
-    <edge source="SEOUL CITY" target="FEBRUARY 3" />
-    <edge source="SEOUL CITY" target="FACEBOOK" />
-    <edge source="SEOUL CITY" target="TWITTER" />
-    <edge source="SEOUL CITY TECHNICAL TRAINING CENTER" target="TECHNOLOGY EDUCATION PROGRAM" />
-    <edge source="SENIOR CITIZENS" target="DRIVER'S LICENSE RETURN PROGRAM" />
-    <edge source="SENIOR CITIZENS" target="TRANSPORTATION CARD" />
-    <edge source="SENIOR CITIZENS" target="MOBILITY CARD" />
-    <edge source="KANGBUK YOUTH CENTER" target="ALL-AGE PLAYGROUND" />
-    <edge source="KANGBUK YOUTH CENTER" target="KANGBUK" />
-    <edge source="KANGBUK YOUTH CENTER" target="YOUTH ACTIVITIES" />
-    <edge source="KANGBUK" target="URBAN RAIL NETWORK" />
-    <edge source="&#49888;&#48337;&#51452;" target="&#50612;&#47536;&#51060;&#51105;&#51648;" />
-    <edge source="&#49888;&#48337;&#51452;" target="&#50500;&#44592;&#44277;&#47329;&#46168;&#47532;" />
-    <edge source="&#49888;&#48337;&#51452;" target="&#51312;&#49440;" />
-    <edge source="&#50612;&#47536;&#51060;&#51105;&#51648;" target="&#49340;&#44053;&#54665;&#49892;&#46020;" />
-    <edge source="&#51060;&#51221;&#48124;" target="&#50668;&#51032;&#52380; &#49548;&#50896;&#52852;&#54168;" />
-    <edge source="&#51060;&#51221;&#48124;" target="&#44200;&#50872; &#51221;&#50896; &#50668;&#54665;" />
-    <edge source="&#51060;&#51221;&#48124;" target="&#49688;&#48320;&#54876;&#47141;&#44144;&#51216; 17&#54840;" />
-    <edge source="&#54861;&#54812;&#49688;" target="&#49436;&#50872;&#52397;&#45380;&#49468;&#53552;" />
-    <edge source="&#54861;&#54812;&#49688;" target="&#52397;&#45380;&#51068;&#51088;&#47532;&#49468;&#53552;" />
-    <edge source="&#49436;&#50872;&#52397;&#45380;&#49468;&#53552;" target="&#52397;&#45380;&#51068;&#51088;&#47532;&#49468;&#53552;" />
-    <edge source="&#49436;&#50872;&#52397;&#45380;&#49468;&#53552;" target="&#51109;&#52649;&#45800;&#44277;&#50896;" />
-    <edge source="&#49436;&#50872;&#52397;&#45380;&#49468;&#53552;" target="&#49436;&#50872;" />
-    <edge source="&#52397;&#45380;&#51068;&#51088;&#47532;&#49468;&#53552;" target="&#51109;&#52649;&#45800;&#44277;&#50896;" />
-    <edge source="&#52397;&#45380;&#51068;&#51088;&#47532;&#49468;&#53552;" target="&#49436;&#50872;" />
-    <edge source="&#51109;&#52649;&#45800;&#44277;&#50896;" target="&#50948;&#47168;&#49440; &#53944;&#47016;" />
-    <edge source="&#51109;&#52649;&#45800;&#44277;&#50896;" target="&#50577;&#51221;&#54868;" />
-    <edge source="&#51109;&#52649;&#45800;&#44277;&#50896;" target="&#49436;&#50872;" />
-    <edge source="&#49436;&#50872;" target="&#49436;&#50872;&#49714;" />
-    <edge source="&#49436;&#50872;" target="&#54620;&#50577;&#45824;" />
-    <edge source="&#49436;&#50872;" target="&#44148;&#45824;&#51077;&#44396;&#50669;" />
-    <edge source="&#49436;&#50872;" target="&#45572;&#44396;&#45208; &#52397;&#52632;&#47924;&#45824;" />
-    <edge source="&#49436;&#50872;" target="&#44508;&#51228;&#54785;&#49888; &#50500;&#51060;&#46356;&#50612; &#44277;&#47784;&#51204;" />
-    <edge source="&#49436;&#50872;" target="AI &#49436;&#50872; 2026" />
-    <edge source="&#45572;&#44396;&#45208; &#52397;&#52632;&#47924;&#45824;" target="&#44508;&#51228;&#54785;&#49888; &#50500;&#51060;&#46356;&#50612; &#44277;&#47784;&#51204;" />
-    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="DASAN CALL CENTER" />
-    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="FIGMA" />
-    <edge source="NATIONAL GOVERNMENT" target="CITIZENS OF SEOUL" />
-    <edge source="LIVE SEOUL" target="SEOUL CITY BLOG" />
-    <edge source="LIVE SEOUL" target="INSTAGRAM" />
-    <edge source="SEOUL CITY BLOG" target="INSTAGRAM" />
-    <edge source="COUPANG" target="&#52572;*&#50672;" />
-    <edge source="COUPANG" target="CUPANG INC." />
-    <edge source="&#52572;*&#50672;" target="&#44272;&#44272; &#54616;&#54532;&#50532;&#54616;&#54532;&#54635;&#46020;&#44536;" />
-    <edge source="&#52572;*&#50672;" target="&#44272;&#44272; &#49888;&#49440;&#54620; 1A &#50864;&#50976;" />
-    <edge source="&#52572;*&#50672;" target="ORDER" />
-    <edge source="&#52572;*&#50672;" target="&#48176;&#49569;&#49345;&#53468;" />
-    <edge source="&#44272;&#44272; &#54616;&#54532;&#50532;&#54616;&#54532;&#54635;&#46020;&#44536;" target="ORDER" />
-    <edge source="&#44272;&#44272; &#49888;&#49440;&#54620; 1A &#50864;&#50976;" target="ORDER" />
-    <edge source="&#53216;&#54049;" target="&#52572;&#50672;" />
-    <edge source="&#53216;&#54049;" target="&#45453;&#54801;&#51008;&#54665;" />
-    <edge source="&#53216;&#54049;" target="1A &#50864;&#50976;" />
-    <edge source="&#53216;&#54049;" target="&#55152;&#48165;" />
-    <edge source="&#53216;&#54049;" target="&#51452;&#47928;&#44552;&#50529;" />
-    <edge source="&#53216;&#54049;" target="&#44208;&#51228;&#44552;&#50529;" />
-    <edge source="&#53216;&#54049;" target="&#52292;&#47924; &#51648;&#44553;&#48372;&#51613; &#49436;&#48708;&#49828;" />
-    <edge source="&#53216;&#54049;" target="&#44368;&#54872;/&#48152;&#54408; &#50504;&#45236;" />
-    <edge source="&#53216;&#54049;" target="&#47196;&#51200;&#49828; &#54644;&#47204;&#46300; &#47536;" />
-    <edge source="&#53216;&#54049;" target="&#44256;&#44061;&#49468;&#53552;" />
-    <edge source="&#53216;&#54049;" target="&#44277;&#51221;&#44144;&#47000;&#50948;&#50896;&#54924;" />
-    <edge source="&#53216;&#54049;" target="&#49324;&#51060;&#48260;&#47792;" />
-    <edge source="&#53216;&#54049;" target="&#47560;&#53011;&#54540;&#47112;&#51060;&#49828;" />
-    <edge source="&#53216;&#54049;" target="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396;" />
-    <edge source="&#52572;&#50672;" target="&#49436;&#50872;&#53945;&#48324;&#49884;" />
-    <edge source="&#49345;&#54408;" target="&#44256;&#44061;" />
-    <edge source="&#49345;&#54408;" target="&#54032;&#47588;&#51088;" />
-    <edge source="&#49345;&#54408;" target="&#44368;&#54872;" />
-    <edge source="&#49345;&#54408;" target="&#48152;&#54408;" />
-    <edge source="&#49345;&#54408;" target="&#45800;&#49692;&#48320;&#49900;" />
-    <edge source="&#49345;&#54408;" target="&#44396;&#49457;&#54408;" />
-    <edge source="&#49345;&#54408;" target="&#49548;&#48708;" />
-    <edge source="&#44256;&#44061;" target="&#54032;&#47588;&#51088;" />
-    <edge source="&#44256;&#44061;" target="&#44368;&#54872;/&#48152;&#54408;" />
-    <edge source="&#44256;&#44061;" target="&#47749;&#54408;" />
-    <edge source="&#44256;&#44061;" target="&#44032;&#51204; &#48143; &#49444;&#52824; &#49345;&#54408;" />
-    <edge source="&#44256;&#44061;" target="&#49345;&#54408; &#49688;&#47161;" />
-    <edge source="&#44256;&#44061;" target="A/S" />
-    <edge source="&#47749;&#54408;" target="&#53469;" />
-    <edge source="&#44256;&#44061;&#49468;&#53552;" target="&#49548;&#48708;&#51088;" />
-    <edge source="NODE.JS" target="UMC-ALBALOG" />
-    <edge source="NODE.JS" target="MC-ALBALOG" />
-    <edge source="NODE.JS" target="JINACKER" />
-    <edge source="NODE.JS" target="PULL REQUEST #38" />
-    <edge source="UMC-ALBALOG" target="CODERABBITAI" />
-    <edge source="UMC-ALBALOG" target="S0-YEON" />
-    <edge source="UMC-ALBALOG" target="REVIEW_SERVICE" />
-    <edge source="UMC-ALBALOG" target="REVIEW_SERVICE_TS" />
-    <edge source="UMC-ALBALOG" target="INCOME_DASHBOARD_SERVICE" />
-    <edge source="UMC-ALBALOG" target="JINACKER" />
-    <edge source="UMC-ALBALOG" target="JWT" />
-    <edge source="UMC-ALBALOG" target="PR#38" />
-    <edge source="UMC-ALBALOG" target="CHANGSIK88" />
-    <edge source="UMC-ALBALOG" target="PULL REQUEST 38" />
-    <edge source="CODERABBITAI" target="PULL REQUEST #38" />
-    <edge source="S0-YEON" target="JINACKER" />
-    <edge source="S0-YEON" target="PR#38" />
-    <edge source="WORKLOGWITHPOSTING" target="USERALBASETTLEMENT" />
-    <edge source="USERALBASETTLEMENT" target="USERINCOMEGOL" />
-    <edge source="ALBA" target="USER" />
-    <edge source="USER" target="PRISMA" />
-    <edge source="PRISMA" target="REVIEW_SERVICE" />
-    <edge source="REVIEW_SERVICE" target="REVIEWRESPONSEDTO" />
-    <edge source="REVIEW_SERVICE" target="STOREREVIEWRESPONSEDTO" />
-    <edge source="REVIEW_SERVICE" target="SETTLEMENT_STATUS" />
-    <edge source="REVIEW_SERVICE_TS" target="NULLABLE_TIMESTAMP" />
-    <edge source="REVIEW_SERVICE_TS" target="EMPTY_STRING" />
-    <edge source="REVIEW_SERVICE_TS" target="ISO_8601_DATE" />
-    <edge source="INCOME_DASHBOARD_SERVICE" target="USER_ALBA_SETTLEMENT_STATUS" />
-    <edge source="INCOME_DASHBOARD_SERVICE" target="GETMONTHRANGE" />
-    <edge source="USER_ALBA_SETTLEMENT_STATUS" target="SETTLEMENTMAP" />
-    <edge source="SETTLEMENTMAP" target="ALBA_ID" />
-    <edge source="USER_ALBA_SCHEDULE_SERVICE" target="ERROR_MIDDLEWARE" />
-    <edge source="USER_ALBA_SCHEDULE_SERVICE" target="MONTH_VALIDATION" />
-    <edge source="ERROR_MIDDLEWARE" target="CUSTOMERROR" />
-    <edge source="ERROR_MIDDLEWARE" target="ERROR" />
-    <edge source="MIDDLEWARE" target="SRC" />
-    <edge source="MIDDLEWARE" target="SERVICE" />
-    <edge source="SERVICE" target="VALIDATION_PATTERNS" />
-    <edge source="JINACKER" target="PR#38" />
-    <edge source="PULL REQUEST #38" target="PATCH LINKS" />
-    <edge source="PULL REQUEST #38" target="REVIEW REQUIREMENTS" />
-    <edge source="TEST RESULTS" target="CODE REFACTORING" />
-    <edge source="COMMIT SUMMARY" target="FILE CHANGES" />
-    <edge source="JUDGE" target="REVIEW IN PROGRESS" />
-    <edge source="CHANGSIK88" target="PULL REQUEST 38" />
-    <edge source="KIM YOUNG-HAN" target="INFLEARN" />
-    <edge source="KIM YOUNG-HAN" target="DATABASE DESIGN PART 2" />
-    <edge source="&#44053;&#51032;" target="&#44277;&#53685; &#53076;&#46300; &#49444;&#44228;" />
-    <edge source="&#44053;&#51032;" target="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" />
-    <edge source="&#44053;&#51032;" target="&#45936;&#51060;&#53552; &#48320;&#44221; &#52628;&#51201;" />
-    <edge source="&#44053;&#51032;" target="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141;" />
-    <edge source="&#44053;&#51032;" target="SOFT DELETE" />
-    <edge source="&#44053;&#51032;" target="&#53685;&#44228; &#53580;&#51060;&#48660; &#49444;&#44228;" />
-    <edge source="&#44053;&#51032;" target="&#49345;&#49549; &#44288;&#44228; &#49444;&#44228;" />
-    <edge source="&#44053;&#51032;" target="&#46041;&#51201; &#49444;&#44228; (EAV)" />
-    <edge source="&#44053;&#51032;" target="JSON &#45936;&#51060;&#53552; &#49444;&#44228;" />
-    <edge source="&#44053;&#51032;" target="&#49884;&#49828;&#53596;" />
-    <edge source="&#44053;&#51032;" target="&#54532;&#47196;&#51229;&#53944;" />
-    <edge source="&#44053;&#51032;" target="&#49892;&#51204; &#49444;&#44228; &#45432;&#54616;&#50864;" />
-    <edge source="&#44053;&#51032;" target="&#49457;&#45733; &#52572;&#51201;&#54868; &#44592;&#48277;" />
-    <edge source="&#44053;&#51032;" target="&#49345;&#54889;&#50640; &#47582;&#45716; &#52572;&#49440;&#51032; &#53944;&#47112;&#51060;&#46300;&#50724;&#54532;" />
-    <edge source="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" target="&#44277;&#53685; &#53076;&#46300;" />
-    <edge source="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" target="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" />
-    <edge source="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" target="&#49345;&#49549; &#44288;&#44228; &#49444;&#44228;" />
-    <edge source="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" target="CTE" />
-    <edge source="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" target="&#54224;&#49604; &#53580;&#51060;&#48660; &#47784;&#45944;" />
-    <edge source="SOFT DELETE" target="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" />
-    <edge source="&#53685;&#44228; &#53580;&#51060;&#48660; &#49444;&#44228;" target="JSON &#49444;&#44228;" />
-    <edge source="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" target="&#48320;&#44221; &#52628;&#51201; &#52972;&#47100;" />
-    <edge source="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" target="&#44048;&#49324;(AUDIT) &#52972;&#47100;" />
-    <edge source="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" target="&#51204;&#52404; &#54665; &#49828;&#45253;&#49399; &#51060;&#47141; &#53580;&#51060;&#48660;" />
-    <edge source="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" target="&#52972;&#47100; &#45800;&#50948; &#48320;&#44221; &#47196;&#44536; &#53580;&#51060;&#48660;" />
-    <edge source="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" target="&#44277;&#53685; &#51060;&#47141; &#53580;&#51060;&#48660;" />
-    <edge source="JSON &#49444;&#44228;" target="&#46041;&#51201; &#49444;&#44228; - EAV" />
-    <edge source="&#50528;&#54540;&#47532;&#52992;&#51060;&#49496; ENUM" target="&#44277;&#53685; &#53076;&#46300;&#51032; &#45800;&#51216;" />
-    <edge source="NEWSLETTER" target="CITIZENS" />
-    <edge source="NEWSLETTER" target="MASSMAIL" />
-    <edge source="DOBONG" target="YEONGDEUNGPO" />
-    <edge source="DOBONG" target="URBAN RAIL NETWORK" />
-    <edge source="&#49436;&#50872;&#49714;" target="&#54620;&#50577;&#45824;" />
-    <edge source="&#49436;&#50872;&#49714;" target="&#44148;&#45824;&#51077;&#44396;&#50669;" />
-    <edge source="&#49436;&#50872;&#49714;" target="&#52397;&#45380; &#47560;&#51020;&#44148;&#44053;&#51648;&#50896;" />
-    <edge source="&#54620;&#50577;&#45824;" target="&#52397;&#45380; &#47560;&#51020;&#44148;&#44053;&#51648;&#50896;" />
-    <edge source="SEOUL FOREST" target="2026 SEOUL INTERNATIONAL GARDEN EXPO" />
-    <edge source="SEOUL FOREST" target="ANYONE YOUTH STAGE" />
-    <edge source="GONDANG-DAE STATION" target="HANYANG UNIVERSITY" />
-    <edge source="GONDANG-DAE STATION" target="GUNJA STATION" />
-    <edge source="&#44508;&#51228;&#54785;&#49888; &#50500;&#51060;&#46356;&#50612; &#44277;&#47784;&#51204;" target="&#50500;&#51060;&#46356;&#50612; &#44277;&#47784;" />
-    <edge source="&#45432;&#50980;&#51648;" target="&#50668;&#51032;&#45208;&#47336;&#50669;" />
-    <edge source="&#50668;&#51032;&#45208;&#47336;&#50669;" target="&#54620;&#44053;" />
-    <edge source="&#51076;&#49688;&#50689;" target="&#49436;&#50872;&#49884; &#44277;&#44277;&#49900;&#50556;&#50557;&#44397;" />
-    <edge source="AI &#49436;&#50872; 2026" target="&#54588;&#51648;&#52972; AI" />
-    <edge source="NPCRM" target="SOUTH KOREA" />
-    <edge source="FIGMA" target="VIOLIN" />
-    <edge source="SLACK" target="HANGGEUM OLIVE" />
-    <edge source="SLACK" target="HANGGI TAE" />
-    <edge source="SLACK" target="CLEANING TEAM" />
-    <edge source="SLACK" target="PROJECT-GMAILWEAVER" />
-    <edge source="SLACK" target="SLACK" />
-    <edge source="SLACK" target="EMAIL SETTINGS" />
-    <edge source="SLACK" target="NOTIFICATIONS" />
-    <edge source="SLACK" target="ALERTS" />
-    <edge source="SLACK" target="SLACK APP" />
+    <edge source="CALIFORNIA" target="GOOGLE INC." />
+    <edge source="CUSTOMER SERVICE" target="GOOGLE LLC" />
+    <edge source="CUSTOMER SERVICE" target="YOUTUBE" />
+    <edge source="GEMINI APP" target="USER" />
+    <edge source="ACTIVITY RECORD" target="USER" />
+    <edge source="USER" target="EMAIL" />
+    <edge source="USER" target="PHOTOS AND VIDEOS" />
+    <edge source="USER" target="DOCUMENTS AND SPREADSHEETS" />
+    <edge source="USER" target="SERVICE UPDATES" />
+    <edge source="USER" target="GOOGLE PAYMENTS KOREA" />
+    <edge source="USER" target="PERSONAL INFORMATION" />
+    <edge source="USER" target="PRIVACY POLICY" />
+    <edge source="USER" target="ACTIVITY" />
+    <edge source="USER" target="GOOGLE DASHBOARD" />
+    <edge source="USER" target="PRIVACY CHECKUP" />
+    <edge source="USER" target="PLAY STORE" />
+    <edge source="USER" target="DATA MANAGEMENT" />
+    <edge source="USER" target="CUSTOMIZATION PREFERENCES" />
+    <edge source="USER" target="PHOTOS" />
+    <edge source="USER" target="VIDEOS" />
+    <edge source="USER" target="DOCUMENTS" />
+    <edge source="USER" target="SPREADSHEETS" />
+    <edge source="USER" target="COMMENTS" />
+    <edge source="USER" target="GOOGLE PAYMENTS KOREA CO., LTD." />
+    <edge source="USER" target="USER DATA" />
+    <edge source="USER" target="GOOGLE TAKEOUT" />
+    <edge source="USER" target="YOUTUBE" />
+    <edge source="USER" target="EMAIL ADDRESS" />
+    <edge source="USER" target="PHONE NUMBER" />
+    <edge source="USER" target="DEVICE" />
+    <edge source="USER" target="BROWSER" />
+    <edge source="USER" target="LOCATION" />
+    <edge source="USER" target="USER CONSENT" />
+    <edge source="USER" target="PERSONAL DATA" />
+    <edge source="USER" target="LOCATION DATA" />
+    <edge source="USER" target="APPLICATION" />
+    <edge source="USER" target="GOOGLE PRIVACY POLICY" />
+    <edge source="USER" target="MY ACTIVITY" />
+    <edge source="USER" target="GOOGLE LLC" />
+    <edge source="USER" target="ACCOUNT" />
+    <edge source="USER" target="CONTENT" />
+    <edge source="USER" target="MOBILE NETWORK" />
+    <edge source="USER" target="USER LOCATION" />
+    <edge source="USER" target="USER ACTIVITY" />
+    <edge source="USER" target="GOOGLE SERVICES" />
+    <edge source="USER" target="INFORMATION" />
+    <edge source="USER" target="DOCS AND SPREADSHEETS" />
+    <edge source="USER" target="INFORMATION COLLECT" />
+    <edge source="USER" target="DATA COLLECTION" />
+    <edge source="USER" target="BROWSER TYPE" />
+    <edge source="USER" target="DEVICE TYPE" />
+    <edge source="USER" target="OPERATING SYSTEM" />
+    <edge source="USER" target="APPLICATION VERSION" />
+    <edge source="USER" target="DOMAIN ADMINISTRATOR" />
+    <edge source="USER" target="CONSENT" />
+    <edge source="USER" target="SEARCH TERM" />
+    <edge source="USER" target="INFORMATION COLLECTION" />
+    <edge source="USER" target="APP" />
+    <edge source="USER" target="LOCATION INFORMATION" />
+    <edge source="USER" target="SEARCH TERMS" />
+    <edge source="USER" target="GOOGLE ANALYTICS" />
+    <edge source="USER" target="GOOGLE PROFILE" />
+    <edge source="YOUTUBE" target="PARK SO JEONG" />
+    <edge source="YOUTUBE" target="GOOGLE SERVICES" />
+    <edge source="YOUTUBE" target="GOOGLE LLC" />
+    <edge source="YOUTUBE" target="CREATOR" />
+    <edge source="YOUTUBE" target="PAID SERVICES" />
+    <edge source="YOUTUBE" target="NOTIFICATIONS" />
+    <edge source="YOUTUBE" target="EMAIL" />
+    <edge source="YOUTUBE" target="SERVICE TERMS" />
+    <edge source="YOUTUBE" target="YOUTUBE KIDS" />
+    <edge source="YOUTUBE" target="FAMILY LINK" />
+    <edge source="YOUTUBE" target="COMMUNITY GUIDELINES" />
+    <edge source="YOUTUBE" target="TERMS OF SERVICE" />
+    <edge source="YOUTUBE" target="FACE RECOGNITION" />
+    <edge source="YOUTUBE" target="REVENUE GENERATION RIGHTS" />
+    <edge source="YOUTUBE" target="ROYALTY PAYMENTS" />
+    <edge source="YOUTUBE" target="EMAIL OPTIONS" />
+    <edge source="YOUTUBE" target="CONTENT" />
+    <edge source="YOUTUBE" target="PRIVACY POLICY" />
+    <edge source="YOUTUBE" target="PRIVACY SETTINGS" />
+    <edge source="YOUTUBE" target="PERSONAL INFORMATION" />
+    <edge source="YOUTUBE" target="GOOGLE INC." />
+    <edge source="PRIVACY POLICY" target="GOOGLE LLC" />
+    <edge source="GOOGLE LLC" target="SOJEONG" />
+    <edge source="GOOGLE LLC" target="GOOGLE PAY" />
+    <edge source="GOOGLE LLC" target="GOOGLE CLOUD" />
+    <edge source="GOOGLE LLC" target="KOREA" />
+    <edge source="GOOGLE LLC" target="AMERICAN" />
+    <edge source="GOOGLE LLC" target="GOOGLE SERVICES" />
+    <edge source="GOOGLE LLC" target="PERSONAL INFORMATION" />
+    <edge source="GOOGLE LLC" target="DATA DOWNLOAD" />
+    <edge source="GOOGLE LLC" target="GOOGLE PAYMENTS KOREA CO., LTD." />
+    <edge source="GOOGLE LLC" target="AMPHITHEATRE PARKWAY" />
+    <edge source="GOOGLE LLC" target="GOOGLE TAKEOUT" />
+    <edge source="GOOGLE LLC" target="PERSONAL INFORMATION USAGE NOTIFICATION" />
+    <edge source="GOOGLE LLC" target="GOOGLE PRIVACY NOTICE" />
+    <edge source="GOOGLE LLC" target="ACTIVITY CONTROLS" />
+    <edge source="GOOGLE LLC" target="LOCATION HISTORY" />
+    <edge source="GOOGLE LLC" target="EMAIL" />
+    <edge source="GOOGLE LLC" target="GOOGLE PAYMENTS KOREA" />
+    <edge source="GOOGLE LLC" target="SERVICE TERMS" />
+    <edge source="GOOGLE LLC" target="GOOGLE PAYMENTS" />
+    <edge source="GOOGLE LLC" target="PRIVACY CONTROLS" />
+    <edge source="GOOGLE LLC" target="PRIVACY CHECKUP" />
+    <edge source="GOOGLE LLC" target="INTERNET-RELATED SERVICES" />
+    <edge source="GOOGLE LLC" target="DOCS AND SPREADSHEETS" />
+    <edge source="GOOGLE LLC" target="PHOTOS AND VIDEOS" />
+    <edge source="GOOGLE LLC" target="GOOGLE PROFILE" />
+    <edge source="GOOGLE LLC" target="INFORMATION COLLECTION" />
+    <edge source="SOJEONG" target="ANDROID" />
+    <edge source="SOJEONG" target="LOCATION HISTORY" />
+    <edge source="ANDROID" target="HANGOUTS" />
+    <edge source="EMAIL" target="GOOGLE SERVICES" />
+    <edge source="EMAIL" target="PARK SO JEONG" />
+    <edge source="EMAIL" target="PERSONAL DATA USAGE NOTIFICATION" />
+    <edge source="EMAIL" target="INACTIVE ACCOUNT POLICY" />
+    <edge source="EMAIL" target="PERSONAL INFORMATION" />
+    <edge source="EMAIL" target="CONTENT" />
+    <edge source="EMAIL" target="SERVICE TERMS" />
+    <edge source="EMAIL" target="FRIDAY, JANUARY 17, 2020" />
+    <edge source="PERSONAL INFORMATION USAGE NOTIFICATION" target="GOOGLE INC." />
+    <edge source="GOOGLE PAYMENTS KOREA" target="KOREA" />
+    <edge source="GOOGLE PAYMENTS KOREA" target="GOOGLE SERVICES" />
+    <edge source="GOOGLE PAYMENTS KOREA" target="PERSONAL INFORMATION" />
+    <edge source="GOOGLE PAYMENTS KOREA" target="GOOGLE INC." />
+    <edge source="KOREA" target="GOOGLE CLOUD" />
+    <edge source="KOREA" target="GOOGLE PAYMENTS KOREA CO., LTD." />
+    <edge source="KOREA" target="&#53944;&#47004;&#49828;&#53076;&#49828;&#47784;&#49828;&#53076;&#47532;&#50500;" />
+    <edge source="KOREA" target="&#54620;&#44397;&#47784;&#48148;&#51068;&#51064;&#51613;" />
+    <edge source="KOREA" target="LG&#50976;&#54540;&#47084;&#49828;" />
+    <edge source="KOREA" target="GOOGLE INC." />
+    <edge source="KOREA" target="GOOGLE PAYMENT KOREA CO., LTD." />
+    <edge source="PERSONAL INFORMATION" target="USER CHOICES" />
+    <edge source="PERSONAL INFORMATION" target="GOOGLE SERVICES" />
+    <edge source="PERSONAL INFORMATION" target="GOOGLE PAYMENTS KOREA CO., LTD." />
+    <edge source="PERSONAL INFORMATION" target="GOOGLE PAYMENTS" />
+    <edge source="PERSONAL INFORMATION" target="INFORMATION COLLECTION" />
+    <edge source="PERSONAL INFORMATION" target="USER ACCOUNT" />
+    <edge source="PERSONAL INFORMATION" target="GOOGLE ADVERTISING SERVICES" />
+    <edge source="PERSONAL INFORMATION" target="GOOGLE INC." />
+    <edge source="GOOGLE PAY" target="GOOGLE CLOUD" />
+    <edge source="GOOGLE CLOUD" target="GOOGLE SERVICES" />
+    <edge source="GOOGLE CLOUD" target="PRIVACY NOTICE" />
+    <edge source="GOOGLE SERVICES" target="GOOGLE DRIVE" />
+    <edge source="GOOGLE SERVICES" target="MY ACTIVITY" />
+    <edge source="GOOGLE SERVICES" target="INFORMATION COLLECTION" />
+    <edge source="GOOGLE SERVICES" target="GOOGLE ANALYTICS" />
+    <edge source="GOOGLE PAYMENT KOREA LLC" target="GOOGLE PAYMENTS PRIVACY NOTICE" />
+    <edge source="GOOGLE PAYMENT KOREA LLC" target="PLUS CORPORATION" />
+    <edge source="INFORMATION" target="ACCOUNT" />
+    <edge source="CUSTOMIZATION OPTIONS" target="PLAY STORE" />
+    <edge source="PLAY STORE" target="GOOGLE INC." />
+    <edge source="PLAY STORE" target="CHUSEOK" />
+    <edge source="PHOTOS" target="NEW STORAGE POLICY" />
+    <edge source="PHOTOS" target="INACTIVE ACCOUNT" />
+    <edge source="PHOTOS" target="STORAGE POLICY" />
+    <edge source="GOOGLE PAYMENTS KOREA CO., LTD." target="GOOGLE INC." />
+    <edge source="GOOGLE PAYMENTS KOREA CO., LTD." target="GOOGLE WALLET" />
+    <edge source="GOOGLE ACCOUNTS TEAM" target="INACTIVE ACCOUNT POLICY" />
+    <edge source="GOOGLE ACCOUNTS TEAM" target="THIRD-PARTY APPS" />
+    <edge source="INACTIVE ACCOUNT POLICY" target="DECEMBER 1, 2023" />
+    <edge source="EMAIL ADDRESS" target="PERSON" />
+    <edge source="PHONE NUMBER" target="PERSON" />
+    <edge source="GOOGLE PAYMENT KOREA" target="GOOGLE WALLET" />
+    <edge source="CREATOR" target="CHANNEL HANDLE" />
+    <edge source="LOCATION HISTORY" target="TIMELINE" />
+    <edge source="LOCATION HISTORY" target="LOCATION-BASED SERVICES" />
+    <edge source="DOMAIN ADMINISTRATOR" target="THIRD PARTIES" />
+    <edge source="SERVICE TERMS" target="EMAIL UPDATES" />
+    <edge source="YOUTUBE KIDS" target="COMMUNITY GUIDELINES" />
+    <edge source="DRIVE" target="NEW STORAGE POLICY" />
+    <edge source="DRIVE" target="INACTIVE ACCOUNT" />
+    <edge source="DRIVE" target="STORAGE POLICY" />
+    <edge source="GOOGLE ONE" target="NEW STORAGE POLICY" />
+    <edge source="GOOGLE ONE" target="STORAGE MANAGEMENT" />
+    <edge source="NEW STORAGE POLICY" target="INACTIVITY POLICY" />
+    <edge source="UNITED STATES" target="GOOGLE INC." />
+    <edge source="EUROPEAN UNION" target="DATA PROTECTION REGULATIONS" />
+    <edge source="GOOGLE ANALYTICS" target="AUTOMATED SYSTEMS" />
+    <edge source="GOOGLE ANALYTICS" target="GOOGLE INC." />
+    <edge source="GOOGLE INC." target="GOOGLE PAYMENT KOREA CO., LTD." />
+    <edge source="GOOGLE INC." target="KOREAN AIR" />
+    <edge source="GOOGLE INC." target="MAIA LEGAZPI" />
+    <edge source="GOOGLE INC." target="THANH TRAN" />
+    <edge source="GOOGLE INC." target="1THEK" />
+    <edge source="GOOGLE INC." target="CRAYON POP" />
+    <edge source="GOOGLE INC." target="GOOGLE ACCOUNT TEAM" />
+    <edge source="GOOGLE INC." target="EMAIL NOTIFICATION ON USAGE OF PERSONAL INFORMATION" />
+    <edge source="GOOGLE INC." target="GOOGLE WALLET" />
+    <edge source="GOOGLE INC." target="ERIC EMERSON SCHMIDT" />
+    <edge source="GOOGLE INC." target="WINTER'S FROZEN" />
+    <edge source="GOOGLE INC." target="TRANSFORMERS 4" />
+    <edge source="GOOGLE INC." target="SUMMONER'S WAR" />
+    <edge source="GOOGLE INC." target="CLASH OF CLANS" />
+    <edge source="GOOGLE INC." target="WATCHA" />
+    <edge source="GOOGLE INC." target="POLARIS OFFICE" />
+    <edge source="GOOGLE INC." target="KBO" />
+    <edge source="GOOGLE INC." target="&#52897;&#54004; &#50500;&#47700;&#47532;&#52852;" />
+    <edge source="GOOGLE INC." target="POLICE AGENCY" />
+    <edge source="GOOGLE INC." target="GAMES AND APPS" />
+    <edge source="GOOGLE INC." target="GOOGLE TRANSLATE" />
+    <edge source="GOOGLE INC." target="DICTIONARY.COM" />
+    <edge source="GOOGLE INC." target="HACKERS EDUCATION GROUP" />
+    <edge source="GOOGLE INC." target="TED" />
+    <edge source="GOOGLE INC." target="2014 FIFA WORLD CUP" />
+    <edge source="GOOGLE INC." target="CHROMECAST" />
+    <edge source="GOOGLE INC." target="GOOGLE+" />
+    <edge source="GOOGLE INC." target="GMAIL TEAM" />
+    <edge source="GOOGLE INC." target="PARKWAY, MOUNTAIN VIEW, CA" />
+    <edge source="CRAYON POP" target="CJENMMUSIC" />
+    <edge source="LG OPTIMUS G PRO" target="SOJUNG" />
+    <edge source="ERIC EMERSON SCHMIDT" target="&#44396;&#44544;" />
+    <edge source="SMARTSTUDY" target="UANGEL" />
+    <edge source="UANGEL" target="TODOIST" />
+    <edge source="WINTER'S FROZEN" target="2014" />
+    <edge source="TRANSFORMERS 4" target="2014" />
+    <edge source="KBO" target="GAMEVIL" />
+    <edge source="KBO" target="&#44396;&#44544;" />
+    <edge source="EXPEDIA" target="KAYAK" />
+    <edge source="EXPEDIA" target="AIRBNB" />
+    <edge source="COOKUN GAMES" target="AGE OF WARING EMPIRE 2" />
+    <edge source="ELECTRONIC ARTS" target="HEROES OF DRAGON AGE" />
+    <edge source="COM2US" target="&#44396;&#44544;" />
+    <edge source="&#53944;&#47004;&#49828;&#54252;&#47672; 4 - &#49324;&#46972;&#51652; &#49884;&#45824;" target="&#44396;&#44544;" />
+    <edge source="&#50659;&#51648; &#50724;&#48652; &#53804;&#47784;&#47196;&#50864;" target="&#44396;&#44544;" />
+    <edge source="&#50659;&#51648; &#50724;&#48652; &#53804;&#47784;&#47196;&#50864;" target="&#52897;&#54004; &#50500;&#47700;&#47532;&#52852;" />
+    <edge source="VEGA CONFLICT" target="SUZANNE COLLINS" />
+    <edge source="LEAN IN" target="SHERYL SANDBERG" />
+    <edge source="MONTHLY YOON JONG-SIN" target="GRAY CITY 2" />
+    <edge source="&#44396;&#44544;" target="&#44396;&#44544; &#54540;&#47112;&#51060;" />
+    <edge source="&#44396;&#44544;" target="&#50836;&#44592;&#50836;" />
+    <edge source="&#44396;&#44544;" target="&#49828;&#54028;&#51060;&#45908;&#47592; &#50616;&#47532;&#48120;&#54000;&#46300;" />
+    <edge source="&#44396;&#44544;" target="&#50641;&#49828;&#47592;: &#45936;&#51060;&#51592; &#50724;&#48652; &#54504;&#52376; &#54056;&#49828;&#53944;" />
+    <edge source="&#44396;&#44544;" target="NEXON COMPANY" />
+    <edge source="&#44396;&#44544;" target="SUPER CELL" />
+    <edge source="&#44396;&#44544;" target="ROVIO MOBILE LTD." />
+    <edge source="JACA GAMES" target="JACA JUMP" />
+    <edge source="NORA CO. LTD." target="&#51648;&#53328;&#48652; &#53356;&#47084;&#49772;" />
+    <edge source="APPCROSS" target="&#47560;&#52852;&#47217;&#49800;&#53552;" />
+    <edge source="I3UT SOFT" target="&#48260;&#48660; &#54616;&#47784;&#45768;" />
+    <edge source="&#50641;&#49828;&#47592;: &#45936;&#51060;&#51592; &#50724;&#48652; &#54504;&#52376; &#54056;&#49828;&#53944;" target="CAPTAIN AMERICA: WINTER SOLDIER" />
+    <edge source="&#50641;&#49828;&#47592;: &#45936;&#51060;&#51592; &#50724;&#48652; &#54504;&#52376; &#54056;&#49828;&#53944;" target="AMAZING SPIDER-MAN 2" />
+    <edge source="&#50641;&#49828;&#47592;: &#45936;&#51060;&#51592; &#50724;&#48652; &#54504;&#52376; &#54056;&#49828;&#53944;" target="IRON MAN 3" />
+    <edge source="&#50641;&#49828;&#47592;: &#45936;&#51060;&#51592; &#50724;&#48652; &#54504;&#52376; &#54056;&#49828;&#53944;" target="&#52897;&#54004; &#50500;&#47700;&#47532;&#52852;" />
+    <edge source="&#50952;&#53552; &#49556;&#51256;" target="&#52897;&#54004; &#50500;&#47700;&#47532;&#52852;" />
+    <edge source="&#52897;&#54004; &#50500;&#47700;&#47532;&#52852;" target="&#50500;&#51060;&#50616;&#47592; 3" />
+    <edge source="&#52897;&#54004; &#50500;&#47700;&#47532;&#52852;" target="&#53664;&#47476;: &#45796;&#53356; &#50900;&#46300;" />
+    <edge source="&#52897;&#54004; &#50500;&#47700;&#47532;&#52852;" target="&#50612;&#47700;&#51060;&#51669; &#49828;&#54028;&#51060;&#45908;&#47592; 2" />
+    <edge source="&#52897;&#54004; &#50500;&#47700;&#47532;&#52852;" target="&#46300;&#47000;&#44260; &#44600;&#46308;&#51060;&#44592;2" />
+    <edge source="&#52897;&#54004; &#50500;&#47700;&#47532;&#52852;" target="KUNDO: AGE OF THE RAMPANT" />
+    <edge source="&#52897;&#54004; &#50500;&#47700;&#47532;&#52852;" target="&#49324;&#46993;&#51008; &#53440;&#51060;&#48141;&#51060;&#45796;" />
+    <edge source="&#51064;&#46356;&#44172;&#51076;" target="&#45824;&#54620;&#48124;&#44397;" />
+    <edge source="REBISSEARCH INC." target="TODOIST" />
+    <edge source="POLICE AGENCY" target="KOREA TOURISM ORGANIZATION" />
+    <edge source="JAY PARK" target="LOS ANGELES" />
+    <edge source="NOOM" target="SUMMER BODY PROJECT" />
+    <edge source="SUMMER BODY PROJECT" target="NAGUMO YOSHINORI" />
+    <edge source="SUMMER BODY PROJECT" target="SHUNRI" />
+    <edge source="SUMMER BODY PROJECT" target="RYU SEUNG-YONG" />
+    <edge source="ANDROID WEAR" target="LG G WATCH" />
+    <edge source="MOBILE SYSTEMS, INC." target="OFFICESUITE PRO 7" />
+    <edge source="RELAX MELODY PREMIUM" target="IPNOS SOFTWARE" />
+    <edge source="PAPER CAMERA" target="JFDP LABS" />
+    <edge source="FXGURU" target="PICADELIC" />
+    <edge source="MALCOLM GLADWELL" target="SENDAEIN" />
+    <edge source="GOOGLE+" target="NOREPLY-DAA26FEF@PLUS.GOOGLE.COM" />
+    <edge source="GMAIL TEAM" target="SOJUNG PARK" />
+    <edge source="GMAIL TEAM" target="HANGOUTS" />
+    <edge source="GMAIL APP" target="NEXUS 4" />
   </graph>
 </graphml>
