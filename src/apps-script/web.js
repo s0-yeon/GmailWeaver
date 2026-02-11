@@ -13,16 +13,20 @@ function getInboxTopSubjects(limit) {
   return threads.map(t => t.getFirstMessageSubject());
 }
 
-/**
- * ✅ 그래프 데이터 반환
- * - Drive 업로드 없이, Apps Script 프로젝트에 포함된 파일에서 읽어옴
- * - 아래 파일을 Apps Script 프로젝트에 추가해야 함:
- *   src/apps-script/graphml_data_json.html  (내용은 JSON 텍스트만: {"nodes":[...],"edges":[...]})
- */
-function getGraphData() {
-  const jsonText = HtmlService
-    .createHtmlOutputFromFile("graphml_data_json")
-    .getContent();
 
-  return JSON.parse(jsonText); // { nodes: [...], edges: [...] }
+function getGraphData() {
+  const files = DriveApp.getFilesByName("graphml_data.json");
+  if (!files.hasNext()) {
+    throw new Error("Drive에서 graphml_data.json 파일을 찾을 수 없습니다.");
+  }
+
+  const file = files.next();
+  const text = file.getBlob().getDataAsString("UTF-8");
+  const data = JSON.parse(text);
+
+  // 기대 형태: { nodes: [...], edges: [...] }
+  if (!data || !Array.isArray(data.nodes) || !Array.isArray(data.edges)) {
+    throw new Error("graphml_data.json 형식이 올바르지 않습니다. {nodes, edges}가 필요합니다.");
+  }
+  return data;
 }

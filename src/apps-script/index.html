@@ -77,17 +77,17 @@
 
         google.script.run
           .withSuccessHandler(function(data) {
-            const n = (data && data.nodes) ? data.nodes.length : 0;
-            const e = (data && data.edges) ? data.edges.length : 0;
-            document.getElementById("out").textContent = `그래프 로드 완료: nodes=${n}, edges=${e}`;
+            document.getElementById("out").textContent =
+              `그래프 로드 완료: nodes=${data.nodes.length}, edges=${data.edges.length}`;
             renderNetworkChart(data);
           })
           .withFailureHandler(function(err) {
             document.getElementById("out").textContent =
               "ERROR: " + (err && err.message ? err.message : String(err));
           })
-          .getGraphData(); // ✅ web.js에 추가한 함수
+          .getGraphData();
       }
+
 
       // =========================
       // ✅ (추가) D3 렌더 (React 없이)
