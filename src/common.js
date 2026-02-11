@@ -1,5 +1,5 @@
 var MAX_MESSAGE_LENGTH = 40;
-var TunnelURL = "https://interatrial-tana-wishfully.ngrok-free.dev"; // 테스트 할때 마다 수시로 변경
+var TunnelURL = "https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev"; // 테스트 할때 마다 수시로 변경
 
 function onHomepage(e) {
   var emailSection = CardService.newCardSection().setHeader("📧 최근 메일 5개");

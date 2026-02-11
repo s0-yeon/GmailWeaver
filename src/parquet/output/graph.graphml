@@ -1,574 +1,163 @@
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
   <graph edgedefault="undirected">
-    <node id="ALIBABA" />
-    <node id="ALIEXPRESS" />
-    <node id="KOREA" />
-    <node id="AE-BEST-CARE-MARKET" />
-    <node id="EMAIL" />
-    <node id="DISCOUNT" />
-    <node id="ROWAN" />
-    <node id="GMWH4TCKDT" />
-    <node id="EDM" />
-    <node id="AEUG_EDM_103704" />
-    <node id="1005003148064684" />
-    <node id="1005009667275521" />
-    <node id="1005009770058280" />
-    <node id="GMOOD" />
-    <node id="E-COMMERCE" />
-    <node id="PRODUCT LISTING" />
-    <node id="ELECTRONICS" />
-    <node id="MOBILE PHONES" />
-    <node id="BEAUTY" />
-    <node id="SPORTS" />
-    <node id="TOYS" />
-    <node id="ELECTRONIC PRODUCTS" />
-    <node id="BEAUTY PRODUCTS" />
-    <node id="SPORTING GOODS" />
-    <node id="TOYS AND GAMES" />
-    <node id="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
-    <node id="ALIEKSPRESS KOREA CO., LTD." />
-    <node id="GMAIL" />
-    <node id="ALIBABA GROUP" />
-    <node id="OPEN MARKET" />
-    <node id="PROMOTIONAL EMAIL" />
-    <node id="LAZADA ONE" />
+    <node id="GOOGLE" />
+    <node id="SUNTEST225" />
+    <node id="ADDONTEST" />
+    <node id="GOOGLE LLC" />
     <node id="NGROK" />
-    <node id="CSI10186@GMAIL.COM" />
-    <node id="TRAFFIC POLICY" />
-    <node id="OAUTH" />
-    <node id="IP RESTRICTIONS" />
-    <node id="HUBSPOT" />
-    <node id="API" />
-    <node id="DOCUMENTATION" />
-    <node id="STATIC DOMAIN" />
-    <node id="D2V8TF04" />
-    <node id="W6NXQWY4VWJWC" />
-    <node id="TEAM" />
-    <node id="DISCORD" />
+    <node id="MOUNTAIN VIEW" />
+    <node id="SUNTTEST225" />
     <node id="GITHUB" />
-    <node id="BROWSER" />
     <node id="LINKEDIN" />
     <node id="X" />
-    <node id="YOUTUBE" />
     <node id="NGROK INC." />
     <node id="SAN FRANCISCO" />
     <node id="CALIFORNIA" />
-    <node id="UNITED STATES" />
-    <node id="SEOUL" />
-    <node id="SEOUL CITY HALL" />
-    <node id="JANUARY 29, 2026" />
-    <node id="SEOUL LOVE COUPON" />
-    <node id="INEWS SEOUL" />
-    <node id="SEOUL LOVE GIFT CERTIFICATE" />
-    <node id="SEOUL CITY" />
-    <node id="FEBRUARY 3" />
-    <node id="DELIVERY-ONLY GIFT CERTIFICATE" />
-    <node id="PAYBACK BENEFITS" />
-    <node id="SEOUL CITY TECHNICAL TRAINING CENTER" />
-    <node id="SENIOR CITIZENS" />
-    <node id="TECHNOLOGY EDUCATION PROGRAM" />
-    <node id="DRIVER'S LICENSE RETURN PROGRAM" />
-    <node id="TRANSPORTATION CARD" />
-    <node id="KANGBUK YOUTH CENTER" />
-    <node id="ALL-AGE PLAYGROUND" />
-    <node id="KANGBUK" />
-    <node id="YOUTH ACTIVITIES" />
-    <node id="MOBILITY CARD" />
-    <node id="&#49888;&#48337;&#51452;" />
-    <node id="&#50612;&#47536;&#51060;&#51105;&#51648;" />
-    <node id="&#50500;&#44592;&#44277;&#47329;&#46168;&#47532;" />
-    <node id="&#51312;&#49440;" />
-    <node id="&#49340;&#44053;&#54665;&#49892;&#46020;" />
-    <node id="&#51060;&#51221;&#48124;" />
-    <node id="&#50668;&#51032;&#52380; &#49548;&#50896;&#52852;&#54168;" />
-    <node id="&#44200;&#50872; &#51221;&#50896; &#50668;&#54665;" />
-    <node id="&#49688;&#48320;&#54876;&#47141;&#44144;&#51216; 17&#54840;" />
-    <node id="&#54861;&#54812;&#49688;" />
-    <node id="&#49436;&#50872;&#52397;&#45380;&#49468;&#53552;" />
-    <node id="&#52397;&#45380;&#51068;&#51088;&#47532;&#49468;&#53552;" />
-    <node id="&#51109;&#52649;&#45800;&#44277;&#50896;" />
-    <node id="&#49436;&#50872;" />
-    <node id="&#50948;&#47168;&#49440; &#53944;&#47016;" />
-    <node id="&#50577;&#51221;&#54868;" />
-    <node id="SEOUL INTERNATIONAL GARDEN EXPO" />
-    <node id="SEOUL FASHION WEEK" />
-    <node id="DDP" />
-    <node id="AI SEOUL 2026" />
-    <node id="&#45572;&#44396;&#45208; &#52397;&#52632;&#47924;&#45824;" />
-    <node id="&#49884;&#48124;&#44592;&#51088;" />
-    <node id="SEOUL METROPOLITAN GOVERNMENT" />
-    <node id="BONGEUNSA TEMPLE" />
-    <node id="NAMSAN TOWER" />
-    <node id="HAN RIVER" />
-    <node id="GYEONGBOKGUNG PALACE" />
-    <node id="KOREAN WAR VETERANS MEMORIAL" />
-    <node id="KOREAN CULTURAL CENTER" />
-    <node id="ESEOUL" />
-    <node id="NATIONAL GOVERNMENT" />
-    <node id="CITIZENS OF SEOUL" />
-    <node id="FACEBOOK" />
-    <node id="TWITTER" />
-    <node id="LIVE SEOUL" />
-    <node id="SEOUL CITY BLOG" />
+    <node id="WEAVER" />
+    <node id="SUNTEST225@GMAIL.COM" />
+    <node id="CLASP" />
+    <node id="WINDOWS" />
+    <node id="GEMINI" />
+    <node id="NANO BANANA PRO" />
+    <node id="ICELAND" />
+    <node id="SUMMER" />
+    <node id="FIRUZABAD" />
+    <node id="AURELIA" />
+    <node id="QUINTARA" />
+    <node id="SAMUEL NAMARA" />
+    <node id="MEGGIE TAZBAH" />
+    <node id="DURKE BATAGLANI" />
+    <node id="ALHAMIA PRISON" />
+    <node id="NEO4J AURA" />
+    <node id="NEO4J" />
+    <node id="DISCORD" />
     <node id="INSTAGRAM" />
-    <node id="COUPANG" />
-    <node id="&#52572;*&#50672;" />
-    <node id="CUPANG INC." />
-    <node id="&#44272;&#44272; &#54616;&#54532;&#50532;&#54616;&#54532;&#54635;&#46020;&#44536;" />
-    <node id="&#44272;&#44272; &#49888;&#49440;&#54620; 1A &#50864;&#50976;" />
-    <node id="ORDER" />
-    <node id="&#48176;&#49569;&#49345;&#53468;" />
-    <node id="&#53216;&#54049;" />
-    <node id="&#52572;&#50672;" />
-    <node id="&#45453;&#54801;&#51008;&#54665;" />
-    <node id="1A &#50864;&#50976;" />
-    <node id="&#55152;&#48165;" />
-    <node id="&#51452;&#47928;&#44552;&#50529;" />
-    <node id="&#44208;&#51228;&#44552;&#50529;" />
-    <node id="&#52292;&#47924; &#51648;&#44553;&#48372;&#51613; &#49436;&#48708;&#49828;" />
-    <node id="&#44368;&#54872;/&#48152;&#54408; &#50504;&#45236;" />
-    <node id="&#49436;&#50872;&#53945;&#48324;&#49884;" />
-    <node id="&#49345;&#54408;" />
-    <node id="&#44256;&#44061;" />
-    <node id="&#54032;&#47588;&#51088;" />
-    <node id="&#44368;&#54872;" />
-    <node id="&#48152;&#54408;" />
-    <node id="&#45800;&#49692;&#48320;&#49900;" />
-    <node id="&#44396;&#49457;&#54408;" />
-    <node id="&#49548;&#48708;" />
-    <node id="&#44368;&#54872;/&#48152;&#54408;" />
-    <node id="&#47749;&#54408;" />
-    <node id="&#44032;&#51204; &#48143; &#49444;&#52824; &#49345;&#54408;" />
-    <node id="&#49345;&#54408; &#49688;&#47161;" />
-    <node id="A/S" />
-    <node id="&#53469;" />
-    <node id="&#47196;&#51200;&#49828; &#54644;&#47204;&#46300; &#47536;" />
-    <node id="&#44256;&#44061;&#49468;&#53552;" />
-    <node id="&#44277;&#51221;&#44144;&#47000;&#50948;&#50896;&#54924;" />
-    <node id="&#49324;&#51060;&#48260;&#47792;" />
-    <node id="&#47560;&#53011;&#54540;&#47112;&#51060;&#49828;" />
-    <node id="&#49548;&#48708;&#51088;" />
-    <node id="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396;" />
-    <node id="NODE.JS" />
-    <node id="UMC-ALBALOG" />
-    <node id="CODERABBITAI" />
-    <node id="CODERABBIT" />
-    <node id="S0-YEON" />
-    <node id="WORKLOGWITHPOSTING" />
-    <node id="USERALBASETTLEMENT" />
-    <node id="USERINCOMEGOL" />
-    <node id="ALBA" />
-    <node id="USER" />
-    <node id="PRISMA" />
-    <node id="REVIEW_SERVICE" />
-    <node id="REVIEW_SERVICE_TS" />
-    <node id="REVIEWRESPONSEDTO" />
-    <node id="STOREREVIEWRESPONSEDTO" />
-    <node id="SETTLEMENT_STATUS" />
-    <node id="NULLABLE_TIMESTAMP" />
-    <node id="EMPTY_STRING" />
-    <node id="ISO_8601_DATE" />
-    <node id="INCOME_DASHBOARD_SERVICE" />
-    <node id="USER_ALBA_SETTLEMENT_STATUS" />
-    <node id="SETTLEMENTMAP" />
-    <node id="GETMONTHRANGE" />
-    <node id="ALBA_ID" />
-    <node id="MC-ALBALOG" />
-    <node id="USER_ALBA_SCHEDULE_SERVICE" />
-    <node id="ERROR_MIDDLEWARE" />
-    <node id="MONTH_VALIDATION" />
-    <node id="CUSTOMERROR" />
-    <node id="ERROR" />
-    <node id="MIDDLEWARE" />
-    <node id="SRC" />
-    <node id="SERVICE" />
-    <node id="VALIDATION_PATTERNS" />
-    <node id="JINACKER" />
-    <node id="JWT" />
-    <node id="PR#38" />
-    <node id="PULL REQUEST #38" />
-    <node id="PATCH LINKS" />
-    <node id="REVIEW REQUIREMENTS" />
-    <node id="EXTERNAL API" />
-    <node id="TEST RESULTS" />
-    <node id="CODE REFACTORING" />
-    <node id="COMMIT SUMMARY" />
-    <node id="FILE CHANGES" />
-    <node id="JUDGE" />
-    <node id="REVIEW IN PROGRESS" />
-    <node id="CHANGSIK88" />
-    <node id="PULL REQUEST 38" />
-    <node id="KIM YOUNG-HAN" />
-    <node id="INFLEARN" />
-    <node id="DATABASE DESIGN PART 2" />
-    <node id="&#44053;&#51032;" />
-    <node id="&#44277;&#53685; &#53076;&#46300; &#49444;&#44228;" />
-    <node id="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" />
-    <node id="&#45936;&#51060;&#53552; &#48320;&#44221; &#52628;&#51201;" />
-    <node id="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141;" />
-    <node id="SOFT DELETE" />
-    <node id="&#53685;&#44228; &#53580;&#51060;&#48660; &#49444;&#44228;" />
-    <node id="&#49345;&#49549; &#44288;&#44228; &#49444;&#44228;" />
-    <node id="&#46041;&#51201; &#49444;&#44228; (EAV)" />
-    <node id="JSON &#45936;&#51060;&#53552; &#49444;&#44228;" />
-    <node id="&#49884;&#49828;&#53596;" />
-    <node id="&#54532;&#47196;&#51229;&#53944;" />
-    <node id="&#49892;&#51204; &#49444;&#44228; &#45432;&#54616;&#50864;" />
-    <node id="&#49457;&#45733; &#52572;&#51201;&#54868; &#44592;&#48277;" />
-    <node id="&#49345;&#54889;&#50640; &#47582;&#45716; &#52572;&#49440;&#51032; &#53944;&#47112;&#51060;&#46300;&#50724;&#54532;" />
-    <node id="&#44277;&#53685; &#53076;&#46300;" />
-    <node id="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" />
-    <node id="CTE" />
-    <node id="&#54224;&#49604; &#53580;&#51060;&#48660; &#47784;&#45944;" />
-    <node id="&#48320;&#44221; &#52628;&#51201; &#52972;&#47100;" />
-    <node id="&#44048;&#49324;(AUDIT) &#52972;&#47100;" />
-    <node id="&#51204;&#52404; &#54665; &#49828;&#45253;&#49399; &#51060;&#47141; &#53580;&#51060;&#48660;" />
-    <node id="&#52972;&#47100; &#45800;&#50948; &#48320;&#44221; &#47196;&#44536; &#53580;&#51060;&#48660;" />
-    <node id="&#44277;&#53685; &#51060;&#47141; &#53580;&#51060;&#48660;" />
-    <node id="JSON &#49444;&#44228;" />
-    <node id="&#46041;&#51201; &#49444;&#44228; - EAV" />
-    <node id="&#50528;&#54540;&#47532;&#52992;&#51060;&#49496; ENUM" />
-    <node id="&#44277;&#53685; &#53076;&#46300;&#51032; &#45800;&#51216;" />
-    <node id="INF LAB" />
-    <node id="ROBOTAXI" />
-    <node id="NEWSLETTER" />
-    <node id="CITIZENS" />
-    <node id="DOBONG" />
-    <node id="YEONGDEUNGPO" />
-    <node id="LEVEL 4 DRIVERLESS ROBOTAXI" />
-    <node id="AUTONOMOUS BUS" />
-    <node id="URBAN RAIL NETWORK" />
-    <node id="&#49436;&#50872;&#49714;" />
-    <node id="&#54620;&#50577;&#45824;" />
-    <node id="&#44148;&#45824;&#51077;&#44396;&#50669;" />
-    <node id="&#52397;&#45380; &#47560;&#51020;&#44148;&#44053;&#51648;&#50896;" />
-    <node id="SEOUL FOREST" />
-    <node id="2026 SEOUL INTERNATIONAL GARDEN EXPO" />
-    <node id="ANYONE YOUTH STAGE" />
-    <node id="GONDANG-DAE STATION" />
-    <node id="HANYANG UNIVERSITY" />
-    <node id="GUNJA STATION" />
-    <node id="&#44508;&#51228;&#54785;&#49888; &#50500;&#51060;&#46356;&#50612; &#44277;&#47784;&#51204;" />
-    <node id="&#50500;&#51060;&#46356;&#50612; &#44277;&#47784;" />
-    <node id="&#45432;&#50980;&#51648;" />
-    <node id="&#50668;&#51032;&#45208;&#47336;&#50669;" />
-    <node id="&#51076;&#49688;&#50689;" />
-    <node id="&#49436;&#50872;&#49884; &#44277;&#44277;&#49900;&#50556;&#50557;&#44397;" />
-    <node id="&#54620;&#44053;" />
-    <node id="SEOUL FOREIGN HONORARY MAYOR" />
-    <node id="SEOUL HANBANG PROMOTION CENTER" />
-    <node id="AI &#49436;&#50872; 2026" />
-    <node id="&#54588;&#51648;&#52972; AI" />
-    <node id="DUST MANAGEMENT SEASONAL POLICY" />
-    <node id="DASAN CALL CENTER" />
-    <node id="NPCRM" />
+    <node id="EMAIL" />
+    <node id="GEMINI WEB APP" />
+    <node id="SAN MATEO" />
     <node id="SOUTH KOREA" />
-    <node id="MASSMAIL" />
-    <node id="FIGMA" />
-    <node id="VIOLIN" />
-    <node id="SLACK" />
-    <node id="HANGGEUM OLIVE" />
-    <node id="HANGGI TAE" />
-    <node id="CLEANING TEAM" />
-    <node id="PROJECT-GMAILWEAVER" />
-    <node id="EMAIL SETTINGS" />
-    <node id="NOTIFICATIONS" />
-    <node id="ALERTS" />
-    <node id="SLACK APP" />
-    <edge source="ALIBABA" target="ALIEXPRESS" />
-    <edge source="ALIBABA" target="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
-    <edge source="ALIEXPRESS" target="KOREA" />
-    <edge source="ALIEXPRESS" target="AE-BEST-CARE-MARKET" />
-    <edge source="ALIEXPRESS" target="EMAIL" />
-    <edge source="ALIEXPRESS" target="DISCOUNT" />
-    <edge source="ALIEXPRESS" target="ALIEXPRESS" />
-    <edge source="ALIEXPRESS" target="ROWAN" />
-    <edge source="ALIEXPRESS" target="GMWH4TCKDT" />
-    <edge source="ALIEXPRESS" target="EDM" />
-    <edge source="ALIEXPRESS" target="AEUG_EDM_103704" />
-    <edge source="ALIEXPRESS" target="1005003148064684" />
-    <edge source="ALIEXPRESS" target="1005009667275521" />
-    <edge source="ALIEXPRESS" target="1005009770058280" />
-    <edge source="ALIEXPRESS" target="GMOOD" />
-    <edge source="ALIEXPRESS" target="E-COMMERCE" />
-    <edge source="ALIEXPRESS" target="PRODUCT LISTING" />
-    <edge source="ALIEXPRESS" target="ELECTRONICS" />
-    <edge source="ALIEXPRESS" target="MOBILE PHONES" />
-    <edge source="ALIEXPRESS" target="BEAUTY" />
-    <edge source="ALIEXPRESS" target="SPORTS" />
-    <edge source="ALIEXPRESS" target="TOYS" />
-    <edge source="ALIEXPRESS" target="ELECTRONIC PRODUCTS" />
-    <edge source="ALIEXPRESS" target="BEAUTY PRODUCTS" />
-    <edge source="ALIEXPRESS" target="SPORTING GOODS" />
-    <edge source="ALIEXPRESS" target="TOYS AND GAMES" />
-    <edge source="ALIEXPRESS" target="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
-    <edge source="ALIEXPRESS" target="ALIEKSPRESS KOREA CO., LTD." />
-    <edge source="ALIEXPRESS" target="GMAIL" />
-    <edge source="ALIEXPRESS" target="ALIBABA GROUP" />
-    <edge source="ALIEXPRESS" target="OPEN MARKET" />
-    <edge source="EMAIL" target="CSI10186@GMAIL.COM" />
-    <edge source="ROWAN" target="GMOOD" />
-    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="ALIEKSPRESS KOREA CO., LTD." />
-    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="LAZADA ONE" />
-    <edge source="GMAIL" target="PROMOTIONAL EMAIL" />
-    <edge source="NGROK" target="CSI10186@GMAIL.COM" />
-    <edge source="NGROK" target="TRAFFIC POLICY" />
+    <node id="ANDREAS KOLLEGGER" />
+    <node id="WEBINAR: BUILD SMARTER GENAI APPS WITH NEO4J" />
+    <node id="GENAI APPS" />
+    <node id="AWS" />
+    <node id="NEO4J TEAM" />
+    <node id="AURADB TEAM" />
+    <node id="THREATMAPPER" />
+    <node id="KUBERNETES" />
+    <node id="EC2 SERVERS" />
+    <node id="AURA DB TEAM" />
+    <node id="GRAPH ACADEMY" />
+    <node id="SUNTTEST225@GMAIL.COM" />
+    <node id="HUBSPOT" />
+    <node id="OAUTH" />
+    <node id="IP RESTRICTIONS" />
+    <node id="RATE LIMITS" />
+    <node id="YOUTUBE" />
+    <node id="AURADB" />
+    <node id="DATA IMPORT GUIDE" />
+    <node id="KIM YEEUN" />
+    <node id="INSEON" />
+    <node id="&#47928;&#51064;&#49440;" />
+    <node id="GMAIL TO TXT" />
+    <node id="MUN IN SUN" />
+    <node id="KAGGLE" />
+    <node id="AURA" />
+    <node id="ADAM" />
+    <node id="GRAPHACADEMY" />
+    <node id="NEO4J CERTIFICATION" />
+    <node id="COMMUNITY FORUMS" />
+    <node id="RASPBERRY PI" />
+    <node id="AGENT" />
+    <node id="TRAFFIC POLICY" />
+    <node id="GMAIL DRIVE CATS" />
+    <edge source="GOOGLE" target="SUNTEST225" />
+    <edge source="GOOGLE" target="ADDONTEST" />
+    <edge source="GOOGLE" target="WEAVER" />
+    <edge source="GOOGLE" target="SUNTEST225@GMAIL.COM" />
+    <edge source="GOOGLE" target="CLASP" />
+    <edge source="GOOGLE" target="MOUNTAIN VIEW" />
+    <edge source="GOOGLE" target="GEMINI" />
+    <edge source="GOOGLE" target="SUNTTEST225@GMAIL.COM" />
+    <edge source="GOOGLE" target="&#47928;&#51064;&#49440;" />
+    <edge source="GOOGLE" target="GMAIL TO TXT" />
+    <edge source="GOOGLE" target="GMAIL DRIVE CATS" />
+    <edge source="SUNTEST225" target="ADDONTEST" />
+    <edge source="SUNTEST225" target="WEAVER" />
+    <edge source="SUNTEST225" target="GMAIL DRIVE CATS" />
+    <edge source="GOOGLE LLC" target="NGROK" />
+    <edge source="GOOGLE LLC" target="MOUNTAIN VIEW" />
+    <edge source="GOOGLE LLC" target="MUN IN SUN" />
+    <edge source="GOOGLE LLC" target="GMAIL DRIVE CATS" />
+    <edge source="NGROK" target="SUNTTEST225" />
+    <edge source="NGROK" target="SUNTTEST225@GMAIL.COM" />
+    <edge source="NGROK" target="HUBSPOT" />
     <edge source="NGROK" target="OAUTH" />
-    <edge source="NGROK" target="IP RESTRICTIONS" />
-    <edge source="NGROK" target="TEAM" />
     <edge source="NGROK" target="DISCORD" />
-    <edge source="NGROK" target="GITHUB" />
-    <edge source="NGROK" target="BROWSER" />
-    <edge source="HUBSPOT" target="API" />
-    <edge source="HUBSPOT" target="DOCUMENTATION" />
-    <edge source="HUBSPOT" target="STATIC DOMAIN" />
-    <edge source="API" target="D2V8TF04" />
-    <edge source="API" target="EXTERNAL API" />
-    <edge source="DOCUMENTATION" target="D2V8TF04" />
-    <edge source="D2V8TF04" target="W6NXQWY4VWJWC" />
-    <edge source="TEAM" target="GITHUB" />
-    <edge source="GITHUB" target="CODERABBIT" />
-    <edge source="GITHUB" target="UMC-ALBALOG" />
-    <edge source="GITHUB" target="NODE.JS" />
+    <edge source="NGROK" target="TRAFFIC POLICY" />
+    <edge source="MOUNTAIN VIEW" target="CALIFORNIA" />
+    <edge source="GITHUB" target="LINKEDIN" />
+    <edge source="GITHUB" target="X" />
+    <edge source="GITHUB" target="YOUTUBE" />
     <edge source="LINKEDIN" target="X" />
     <edge source="LINKEDIN" target="YOUTUBE" />
-    <edge source="LINKEDIN" target="CODERABBIT" />
     <edge source="X" target="YOUTUBE" />
-    <edge source="YOUTUBE" target="SEOUL CITY" />
     <edge source="NGROK INC." target="SAN FRANCISCO" />
     <edge source="NGROK INC." target="CALIFORNIA" />
-    <edge source="SAN FRANCISCO" target="CALIFORNIA" />
-    <edge source="SAN FRANCISCO" target="UNITED STATES" />
-    <edge source="CALIFORNIA" target="UNITED STATES" />
-    <edge source="SEOUL" target="SEOUL CITY HALL" />
-    <edge source="SEOUL" target="JANUARY 29, 2026" />
-    <edge source="SEOUL" target="SEOUL LOVE GIFT CERTIFICATE" />
-    <edge source="SEOUL" target="SEOUL CITY TECHNICAL TRAINING CENTER" />
-    <edge source="SEOUL" target="SENIOR CITIZENS" />
-    <edge source="SEOUL" target="KANGBUK YOUTH CENTER" />
-    <edge source="SEOUL" target="SEOUL INTERNATIONAL GARDEN EXPO" />
-    <edge source="SEOUL" target="SEOUL FASHION WEEK" />
-    <edge source="SEOUL" target="DDP" />
-    <edge source="SEOUL" target="AI SEOUL 2026" />
-    <edge source="SEOUL" target="&#45572;&#44396;&#45208; &#52397;&#52632;&#47924;&#45824;" />
-    <edge source="SEOUL" target="&#49884;&#48124;&#44592;&#51088;" />
-    <edge source="SEOUL" target="SEOUL METROPOLITAN GOVERNMENT" />
-    <edge source="SEOUL" target="BONGEUNSA TEMPLE" />
-    <edge source="SEOUL" target="NAMSAN TOWER" />
-    <edge source="SEOUL" target="HAN RIVER" />
-    <edge source="SEOUL" target="GYEONGBOKGUNG PALACE" />
-    <edge source="SEOUL" target="KOREAN WAR VETERANS MEMORIAL" />
-    <edge source="SEOUL" target="KOREAN CULTURAL CENTER" />
-    <edge source="SEOUL" target="ESEOUL" />
-    <edge source="SEOUL" target="NATIONAL GOVERNMENT" />
-    <edge source="SEOUL" target="CITIZENS OF SEOUL" />
-    <edge source="SEOUL" target="SEOUL CITY" />
-    <edge source="SEOUL" target="LIVE SEOUL" />
-    <edge source="SEOUL" target="SEOUL CITY BLOG" />
-    <edge source="SEOUL" target="INSTAGRAM" />
-    <edge source="SEOUL" target="INF LAB" />
-    <edge source="SEOUL" target="ROBOTAXI" />
-    <edge source="SEOUL" target="KANGBUK" />
-    <edge source="SEOUL" target="DOBONG" />
-    <edge source="SEOUL" target="YEONGDEUNGPO" />
-    <edge source="SEOUL" target="LEVEL 4 DRIVERLESS ROBOTAXI" />
-    <edge source="SEOUL" target="AUTONOMOUS BUS" />
-    <edge source="SEOUL" target="URBAN RAIL NETWORK" />
-    <edge source="SEOUL" target="SEOUL FOREIGN HONORARY MAYOR" />
-    <edge source="SEOUL" target="SEOUL HANBANG PROMOTION CENTER" />
-    <edge source="SEOUL" target="DUST MANAGEMENT SEASONAL POLICY" />
-    <edge source="SEOUL" target="DASAN CALL CENTER" />
-    <edge source="SEOUL" target="NPCRM" />
-    <edge source="SEOUL" target="SOUTH KOREA" />
-    <edge source="SEOUL CITY HALL" target="SEOUL LOVE COUPON" />
-    <edge source="SEOUL CITY HALL" target="INEWS SEOUL" />
-    <edge source="SEOUL CITY HALL" target="INF LAB" />
-    <edge source="SEOUL CITY HALL" target="NEWSLETTER" />
-    <edge source="SEOUL LOVE GIFT CERTIFICATE" target="SEOUL CITY" />
-    <edge source="SEOUL LOVE GIFT CERTIFICATE" target="DELIVERY-ONLY GIFT CERTIFICATE" />
-    <edge source="SEOUL LOVE GIFT CERTIFICATE" target="PAYBACK BENEFITS" />
-    <edge source="SEOUL CITY" target="FEBRUARY 3" />
-    <edge source="SEOUL CITY" target="FACEBOOK" />
-    <edge source="SEOUL CITY" target="TWITTER" />
-    <edge source="SEOUL CITY TECHNICAL TRAINING CENTER" target="TECHNOLOGY EDUCATION PROGRAM" />
-    <edge source="SENIOR CITIZENS" target="DRIVER'S LICENSE RETURN PROGRAM" />
-    <edge source="SENIOR CITIZENS" target="TRANSPORTATION CARD" />
-    <edge source="SENIOR CITIZENS" target="MOBILITY CARD" />
-    <edge source="KANGBUK YOUTH CENTER" target="ALL-AGE PLAYGROUND" />
-    <edge source="KANGBUK YOUTH CENTER" target="KANGBUK" />
-    <edge source="KANGBUK YOUTH CENTER" target="YOUTH ACTIVITIES" />
-    <edge source="KANGBUK" target="URBAN RAIL NETWORK" />
-    <edge source="&#49888;&#48337;&#51452;" target="&#50612;&#47536;&#51060;&#51105;&#51648;" />
-    <edge source="&#49888;&#48337;&#51452;" target="&#50500;&#44592;&#44277;&#47329;&#46168;&#47532;" />
-    <edge source="&#49888;&#48337;&#51452;" target="&#51312;&#49440;" />
-    <edge source="&#50612;&#47536;&#51060;&#51105;&#51648;" target="&#49340;&#44053;&#54665;&#49892;&#46020;" />
-    <edge source="&#51060;&#51221;&#48124;" target="&#50668;&#51032;&#52380; &#49548;&#50896;&#52852;&#54168;" />
-    <edge source="&#51060;&#51221;&#48124;" target="&#44200;&#50872; &#51221;&#50896; &#50668;&#54665;" />
-    <edge source="&#51060;&#51221;&#48124;" target="&#49688;&#48320;&#54876;&#47141;&#44144;&#51216; 17&#54840;" />
-    <edge source="&#54861;&#54812;&#49688;" target="&#49436;&#50872;&#52397;&#45380;&#49468;&#53552;" />
-    <edge source="&#54861;&#54812;&#49688;" target="&#52397;&#45380;&#51068;&#51088;&#47532;&#49468;&#53552;" />
-    <edge source="&#49436;&#50872;&#52397;&#45380;&#49468;&#53552;" target="&#52397;&#45380;&#51068;&#51088;&#47532;&#49468;&#53552;" />
-    <edge source="&#49436;&#50872;&#52397;&#45380;&#49468;&#53552;" target="&#51109;&#52649;&#45800;&#44277;&#50896;" />
-    <edge source="&#49436;&#50872;&#52397;&#45380;&#49468;&#53552;" target="&#49436;&#50872;" />
-    <edge source="&#52397;&#45380;&#51068;&#51088;&#47532;&#49468;&#53552;" target="&#51109;&#52649;&#45800;&#44277;&#50896;" />
-    <edge source="&#52397;&#45380;&#51068;&#51088;&#47532;&#49468;&#53552;" target="&#49436;&#50872;" />
-    <edge source="&#51109;&#52649;&#45800;&#44277;&#50896;" target="&#50948;&#47168;&#49440; &#53944;&#47016;" />
-    <edge source="&#51109;&#52649;&#45800;&#44277;&#50896;" target="&#50577;&#51221;&#54868;" />
-    <edge source="&#51109;&#52649;&#45800;&#44277;&#50896;" target="&#49436;&#50872;" />
-    <edge source="&#49436;&#50872;" target="&#49436;&#50872;&#49714;" />
-    <edge source="&#49436;&#50872;" target="&#54620;&#50577;&#45824;" />
-    <edge source="&#49436;&#50872;" target="&#44148;&#45824;&#51077;&#44396;&#50669;" />
-    <edge source="&#49436;&#50872;" target="&#45572;&#44396;&#45208; &#52397;&#52632;&#47924;&#45824;" />
-    <edge source="&#49436;&#50872;" target="&#44508;&#51228;&#54785;&#49888; &#50500;&#51060;&#46356;&#50612; &#44277;&#47784;&#51204;" />
-    <edge source="&#49436;&#50872;" target="AI &#49436;&#50872; 2026" />
-    <edge source="&#45572;&#44396;&#45208; &#52397;&#52632;&#47924;&#45824;" target="&#44508;&#51228;&#54785;&#49888; &#50500;&#51060;&#46356;&#50612; &#44277;&#47784;&#51204;" />
-    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="DASAN CALL CENTER" />
-    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="FIGMA" />
-    <edge source="NATIONAL GOVERNMENT" target="CITIZENS OF SEOUL" />
-    <edge source="LIVE SEOUL" target="SEOUL CITY BLOG" />
-    <edge source="LIVE SEOUL" target="INSTAGRAM" />
-    <edge source="SEOUL CITY BLOG" target="INSTAGRAM" />
-    <edge source="COUPANG" target="&#52572;*&#50672;" />
-    <edge source="COUPANG" target="CUPANG INC." />
-    <edge source="&#52572;*&#50672;" target="&#44272;&#44272; &#54616;&#54532;&#50532;&#54616;&#54532;&#54635;&#46020;&#44536;" />
-    <edge source="&#52572;*&#50672;" target="&#44272;&#44272; &#49888;&#49440;&#54620; 1A &#50864;&#50976;" />
-    <edge source="&#52572;*&#50672;" target="ORDER" />
-    <edge source="&#52572;*&#50672;" target="&#48176;&#49569;&#49345;&#53468;" />
-    <edge source="&#44272;&#44272; &#54616;&#54532;&#50532;&#54616;&#54532;&#54635;&#46020;&#44536;" target="ORDER" />
-    <edge source="&#44272;&#44272; &#49888;&#49440;&#54620; 1A &#50864;&#50976;" target="ORDER" />
-    <edge source="&#53216;&#54049;" target="&#52572;&#50672;" />
-    <edge source="&#53216;&#54049;" target="&#45453;&#54801;&#51008;&#54665;" />
-    <edge source="&#53216;&#54049;" target="1A &#50864;&#50976;" />
-    <edge source="&#53216;&#54049;" target="&#55152;&#48165;" />
-    <edge source="&#53216;&#54049;" target="&#51452;&#47928;&#44552;&#50529;" />
-    <edge source="&#53216;&#54049;" target="&#44208;&#51228;&#44552;&#50529;" />
-    <edge source="&#53216;&#54049;" target="&#52292;&#47924; &#51648;&#44553;&#48372;&#51613; &#49436;&#48708;&#49828;" />
-    <edge source="&#53216;&#54049;" target="&#44368;&#54872;/&#48152;&#54408; &#50504;&#45236;" />
-    <edge source="&#53216;&#54049;" target="&#47196;&#51200;&#49828; &#54644;&#47204;&#46300; &#47536;" />
-    <edge source="&#53216;&#54049;" target="&#44256;&#44061;&#49468;&#53552;" />
-    <edge source="&#53216;&#54049;" target="&#44277;&#51221;&#44144;&#47000;&#50948;&#50896;&#54924;" />
-    <edge source="&#53216;&#54049;" target="&#49324;&#51060;&#48260;&#47792;" />
-    <edge source="&#53216;&#54049;" target="&#47560;&#53011;&#54540;&#47112;&#51060;&#49828;" />
-    <edge source="&#53216;&#54049;" target="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396;" />
-    <edge source="&#52572;&#50672;" target="&#49436;&#50872;&#53945;&#48324;&#49884;" />
-    <edge source="&#49345;&#54408;" target="&#44256;&#44061;" />
-    <edge source="&#49345;&#54408;" target="&#54032;&#47588;&#51088;" />
-    <edge source="&#49345;&#54408;" target="&#44368;&#54872;" />
-    <edge source="&#49345;&#54408;" target="&#48152;&#54408;" />
-    <edge source="&#49345;&#54408;" target="&#45800;&#49692;&#48320;&#49900;" />
-    <edge source="&#49345;&#54408;" target="&#44396;&#49457;&#54408;" />
-    <edge source="&#49345;&#54408;" target="&#49548;&#48708;" />
-    <edge source="&#44256;&#44061;" target="&#54032;&#47588;&#51088;" />
-    <edge source="&#44256;&#44061;" target="&#44368;&#54872;/&#48152;&#54408;" />
-    <edge source="&#44256;&#44061;" target="&#47749;&#54408;" />
-    <edge source="&#44256;&#44061;" target="&#44032;&#51204; &#48143; &#49444;&#52824; &#49345;&#54408;" />
-    <edge source="&#44256;&#44061;" target="&#49345;&#54408; &#49688;&#47161;" />
-    <edge source="&#44256;&#44061;" target="A/S" />
-    <edge source="&#47749;&#54408;" target="&#53469;" />
-    <edge source="&#44256;&#44061;&#49468;&#53552;" target="&#49548;&#48708;&#51088;" />
-    <edge source="NODE.JS" target="UMC-ALBALOG" />
-    <edge source="NODE.JS" target="MC-ALBALOG" />
-    <edge source="NODE.JS" target="JINACKER" />
-    <edge source="NODE.JS" target="PULL REQUEST #38" />
-    <edge source="UMC-ALBALOG" target="CODERABBITAI" />
-    <edge source="UMC-ALBALOG" target="S0-YEON" />
-    <edge source="UMC-ALBALOG" target="REVIEW_SERVICE" />
-    <edge source="UMC-ALBALOG" target="REVIEW_SERVICE_TS" />
-    <edge source="UMC-ALBALOG" target="INCOME_DASHBOARD_SERVICE" />
-    <edge source="UMC-ALBALOG" target="JINACKER" />
-    <edge source="UMC-ALBALOG" target="JWT" />
-    <edge source="UMC-ALBALOG" target="PR#38" />
-    <edge source="UMC-ALBALOG" target="CHANGSIK88" />
-    <edge source="UMC-ALBALOG" target="PULL REQUEST 38" />
-    <edge source="CODERABBITAI" target="PULL REQUEST #38" />
-    <edge source="S0-YEON" target="JINACKER" />
-    <edge source="S0-YEON" target="PR#38" />
-    <edge source="WORKLOGWITHPOSTING" target="USERALBASETTLEMENT" />
-    <edge source="USERALBASETTLEMENT" target="USERINCOMEGOL" />
-    <edge source="ALBA" target="USER" />
-    <edge source="USER" target="PRISMA" />
-    <edge source="PRISMA" target="REVIEW_SERVICE" />
-    <edge source="REVIEW_SERVICE" target="REVIEWRESPONSEDTO" />
-    <edge source="REVIEW_SERVICE" target="STOREREVIEWRESPONSEDTO" />
-    <edge source="REVIEW_SERVICE" target="SETTLEMENT_STATUS" />
-    <edge source="REVIEW_SERVICE_TS" target="NULLABLE_TIMESTAMP" />
-    <edge source="REVIEW_SERVICE_TS" target="EMPTY_STRING" />
-    <edge source="REVIEW_SERVICE_TS" target="ISO_8601_DATE" />
-    <edge source="INCOME_DASHBOARD_SERVICE" target="USER_ALBA_SETTLEMENT_STATUS" />
-    <edge source="INCOME_DASHBOARD_SERVICE" target="GETMONTHRANGE" />
-    <edge source="USER_ALBA_SETTLEMENT_STATUS" target="SETTLEMENTMAP" />
-    <edge source="SETTLEMENTMAP" target="ALBA_ID" />
-    <edge source="USER_ALBA_SCHEDULE_SERVICE" target="ERROR_MIDDLEWARE" />
-    <edge source="USER_ALBA_SCHEDULE_SERVICE" target="MONTH_VALIDATION" />
-    <edge source="ERROR_MIDDLEWARE" target="CUSTOMERROR" />
-    <edge source="ERROR_MIDDLEWARE" target="ERROR" />
-    <edge source="MIDDLEWARE" target="SRC" />
-    <edge source="MIDDLEWARE" target="SERVICE" />
-    <edge source="SERVICE" target="VALIDATION_PATTERNS" />
-    <edge source="JINACKER" target="PR#38" />
-    <edge source="PULL REQUEST #38" target="PATCH LINKS" />
-    <edge source="PULL REQUEST #38" target="REVIEW REQUIREMENTS" />
-    <edge source="TEST RESULTS" target="CODE REFACTORING" />
-    <edge source="COMMIT SUMMARY" target="FILE CHANGES" />
-    <edge source="JUDGE" target="REVIEW IN PROGRESS" />
-    <edge source="CHANGSIK88" target="PULL REQUEST 38" />
-    <edge source="KIM YOUNG-HAN" target="INFLEARN" />
-    <edge source="KIM YOUNG-HAN" target="DATABASE DESIGN PART 2" />
-    <edge source="&#44053;&#51032;" target="&#44277;&#53685; &#53076;&#46300; &#49444;&#44228;" />
-    <edge source="&#44053;&#51032;" target="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" />
-    <edge source="&#44053;&#51032;" target="&#45936;&#51060;&#53552; &#48320;&#44221; &#52628;&#51201;" />
-    <edge source="&#44053;&#51032;" target="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141;" />
-    <edge source="&#44053;&#51032;" target="SOFT DELETE" />
-    <edge source="&#44053;&#51032;" target="&#53685;&#44228; &#53580;&#51060;&#48660; &#49444;&#44228;" />
-    <edge source="&#44053;&#51032;" target="&#49345;&#49549; &#44288;&#44228; &#49444;&#44228;" />
-    <edge source="&#44053;&#51032;" target="&#46041;&#51201; &#49444;&#44228; (EAV)" />
-    <edge source="&#44053;&#51032;" target="JSON &#45936;&#51060;&#53552; &#49444;&#44228;" />
-    <edge source="&#44053;&#51032;" target="&#49884;&#49828;&#53596;" />
-    <edge source="&#44053;&#51032;" target="&#54532;&#47196;&#51229;&#53944;" />
-    <edge source="&#44053;&#51032;" target="&#49892;&#51204; &#49444;&#44228; &#45432;&#54616;&#50864;" />
-    <edge source="&#44053;&#51032;" target="&#49457;&#45733; &#52572;&#51201;&#54868; &#44592;&#48277;" />
-    <edge source="&#44053;&#51032;" target="&#49345;&#54889;&#50640; &#47582;&#45716; &#52572;&#49440;&#51032; &#53944;&#47112;&#51060;&#46300;&#50724;&#54532;" />
-    <edge source="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" target="&#44277;&#53685; &#53076;&#46300;" />
-    <edge source="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" target="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" />
-    <edge source="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" target="&#49345;&#49549; &#44288;&#44228; &#49444;&#44228;" />
-    <edge source="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" target="CTE" />
-    <edge source="&#44228;&#52789; &#44396;&#51312; &#49444;&#44228;" target="&#54224;&#49604; &#53580;&#51060;&#48660; &#47784;&#45944;" />
-    <edge source="SOFT DELETE" target="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" />
-    <edge source="&#53685;&#44228; &#53580;&#51060;&#48660; &#49444;&#44228;" target="JSON &#49444;&#44228;" />
-    <edge source="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" target="&#48320;&#44221; &#52628;&#51201; &#52972;&#47100;" />
-    <edge source="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" target="&#44048;&#49324;(AUDIT) &#52972;&#47100;" />
-    <edge source="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" target="&#51204;&#52404; &#54665; &#49828;&#45253;&#49399; &#51060;&#47141; &#53580;&#51060;&#48660;" />
-    <edge source="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" target="&#52972;&#47100; &#45800;&#50948; &#48320;&#44221; &#47196;&#44536; &#53580;&#51060;&#48660;" />
-    <edge source="&#45936;&#51060;&#53552; &#48320;&#44221; &#51060;&#47141; &#49444;&#44228;" target="&#44277;&#53685; &#51060;&#47141; &#53580;&#51060;&#48660;" />
-    <edge source="JSON &#49444;&#44228;" target="&#46041;&#51201; &#49444;&#44228; - EAV" />
-    <edge source="&#50528;&#54540;&#47532;&#52992;&#51060;&#49496; ENUM" target="&#44277;&#53685; &#53076;&#46300;&#51032; &#45800;&#51216;" />
-    <edge source="NEWSLETTER" target="CITIZENS" />
-    <edge source="NEWSLETTER" target="MASSMAIL" />
-    <edge source="DOBONG" target="YEONGDEUNGPO" />
-    <edge source="DOBONG" target="URBAN RAIL NETWORK" />
-    <edge source="&#49436;&#50872;&#49714;" target="&#54620;&#50577;&#45824;" />
-    <edge source="&#49436;&#50872;&#49714;" target="&#44148;&#45824;&#51077;&#44396;&#50669;" />
-    <edge source="&#49436;&#50872;&#49714;" target="&#52397;&#45380; &#47560;&#51020;&#44148;&#44053;&#51648;&#50896;" />
-    <edge source="&#54620;&#50577;&#45824;" target="&#52397;&#45380; &#47560;&#51020;&#44148;&#44053;&#51648;&#50896;" />
-    <edge source="SEOUL FOREST" target="2026 SEOUL INTERNATIONAL GARDEN EXPO" />
-    <edge source="SEOUL FOREST" target="ANYONE YOUTH STAGE" />
-    <edge source="GONDANG-DAE STATION" target="HANYANG UNIVERSITY" />
-    <edge source="GONDANG-DAE STATION" target="GUNJA STATION" />
-    <edge source="&#44508;&#51228;&#54785;&#49888; &#50500;&#51060;&#46356;&#50612; &#44277;&#47784;&#51204;" target="&#50500;&#51060;&#46356;&#50612; &#44277;&#47784;" />
-    <edge source="&#45432;&#50980;&#51648;" target="&#50668;&#51032;&#45208;&#47336;&#50669;" />
-    <edge source="&#50668;&#51032;&#45208;&#47336;&#50669;" target="&#54620;&#44053;" />
-    <edge source="&#51076;&#49688;&#50689;" target="&#49436;&#50872;&#49884; &#44277;&#44277;&#49900;&#50556;&#50557;&#44397;" />
-    <edge source="AI &#49436;&#50872; 2026" target="&#54588;&#51648;&#52972; AI" />
-    <edge source="NPCRM" target="SOUTH KOREA" />
-    <edge source="FIGMA" target="VIOLIN" />
-    <edge source="SLACK" target="HANGGEUM OLIVE" />
-    <edge source="SLACK" target="HANGGI TAE" />
-    <edge source="SLACK" target="CLEANING TEAM" />
-    <edge source="SLACK" target="PROJECT-GMAILWEAVER" />
-    <edge source="SLACK" target="SLACK" />
-    <edge source="SLACK" target="EMAIL SETTINGS" />
-    <edge source="SLACK" target="NOTIFICATIONS" />
-    <edge source="SLACK" target="ALERTS" />
-    <edge source="SLACK" target="SLACK APP" />
+    <edge source="SUNTEST225@GMAIL.COM" target="CLASP" />
+    <edge source="SUNTEST225@GMAIL.COM" target="WINDOWS" />
+    <edge source="SUNTEST225@GMAIL.COM" target="&#47928;&#51064;&#49440;" />
+    <edge source="GEMINI" target="NANO BANANA PRO" />
+    <edge source="GEMINI" target="ICELAND" />
+    <edge source="GEMINI" target="SUMMER" />
+    <edge source="GEMINI" target="NEO4J AURA" />
+    <edge source="GEMINI" target="GEMINI WEB APP" />
+    <edge source="GEMINI" target="NEO4J" />
+    <edge source="GEMINI" target="SOUTH KOREA" />
+    <edge source="FIRUZABAD" target="AURELIA" />
+    <edge source="FIRUZABAD" target="QUINTARA" />
+    <edge source="FIRUZABAD" target="SAMUEL NAMARA" />
+    <edge source="FIRUZABAD" target="MEGGIE TAZBAH" />
+    <edge source="FIRUZABAD" target="DURKE BATAGLANI" />
+    <edge source="AURELIA" target="QUINTARA" />
+    <edge source="SAMUEL NAMARA" target="ALHAMIA PRISON" />
+    <edge source="SAMUEL NAMARA" target="MEGGIE TAZBAH" />
+    <edge source="SAMUEL NAMARA" target="DURKE BATAGLANI" />
+    <edge source="MEGGIE TAZBAH" target="DURKE BATAGLANI" />
+    <edge source="NEO4J AURA" target="NEO4J" />
+    <edge source="NEO4J AURA" target="DISCORD" />
+    <edge source="NEO4J AURA" target="INSTAGRAM" />
+    <edge source="NEO4J AURA" target="EMAIL" />
+    <edge source="NEO4J" target="SAN MATEO" />
+    <edge source="NEO4J" target="ANDREAS KOLLEGGER" />
+    <edge source="NEO4J" target="WEBINAR: BUILD SMARTER GENAI APPS WITH NEO4J" />
+    <edge source="NEO4J" target="GENAI APPS" />
+    <edge source="NEO4J" target="AURA DB TEAM" />
+    <edge source="NEO4J" target="GRAPH ACADEMY" />
+    <edge source="NEO4J" target="AURADB" />
+    <edge source="NEO4J" target="ADAM" />
+    <edge source="NEO4J" target="GRAPHACADEMY" />
+    <edge source="NEO4J" target="DISCORD" />
+    <edge source="NEO4J" target="COMMUNITY FORUMS" />
+    <edge source="DISCORD" target="COMMUNITY FORUMS" />
+    <edge source="SAN MATEO" target="NEO4J TEAM" />
+    <edge source="GENAI APPS" target="AWS" />
+    <edge source="NEO4J TEAM" target="AURADB TEAM" />
+    <edge source="NEO4J TEAM" target="THREATMAPPER" />
+    <edge source="NEO4J TEAM" target="MUN IN SUN" />
+    <edge source="NEO4J TEAM" target="KAGGLE" />
+    <edge source="NEO4J TEAM" target="AURA" />
+    <edge source="THREATMAPPER" target="KUBERNETES" />
+    <edge source="THREATMAPPER" target="EC2 SERVERS" />
+    <edge source="AURA DB TEAM" target="SUNTTEST225@GMAIL.COM" />
+    <edge source="GRAPH ACADEMY" target="SUNTTEST225@GMAIL.COM" />
+    <edge source="HUBSPOT" target="IP RESTRICTIONS" />
+    <edge source="HUBSPOT" target="RATE LIMITS" />
+    <edge source="AURADB" target="DATA IMPORT GUIDE" />
+    <edge source="AURADB" target="GRAPHACADEMY" />
+    <edge source="AURADB" target="ADAM" />
+    <edge source="KIM YEEUN" target="INSEON" />
+    <edge source="&#47928;&#51064;&#49440;" target="GMAIL TO TXT" />
+    <edge source="GRAPHACADEMY" target="NEO4J CERTIFICATION" />
+    <edge source="RASPBERRY PI" target="AGENT" />
   </graph>
 </graphml>
