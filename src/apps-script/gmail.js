@@ -1,93 +1,49 @@
 function onGmailMessage(e) {
-  var emailSection = CardService.newCardSection().setHeader("📧 최근 메일 5개");
-
-  var threads = GmailApp.getInboxThreads(0, 5);
-  for (var i = 0; i < threads.length; i++) {
-    var threadSubject = threads[i].getFirstMessageSubject();
-    emailSection.addWidget(
-      CardService.newTextParagraph().setText(i + 1 + ". " + threadSubject)
-    );
-  }
-
-  return CardService.newCardBuilder().addSection(emailSection).build();
+  return onHomepage(e);
 }
 
 function onGmailCompose(e) {
-  var header = CardService.newCardHeader()
-    .setTitle("Insert cat")
-    .setSubtitle("Add a custom cat image to your email message.");
-  var input = CardService.newTextInput()
-    .setFieldName("text")
-    .setTitle("Caption")
-    .setHint("What do you want the cat to say?");
-  var action = CardService.newAction().setFunctionName("onGmailInsertCat");
-  var button = CardService.newTextButton()
-    .setText("Insert cat")
-    .setOnClickAction(action)
-    .setTextButtonStyle(CardService.TextButtonStyle.FILLED);
-  var buttonSet = CardService.newButtonSet().addButton(button);
-  var section = CardService.newCardSection()
-    .addWidget(input)
-    .addWidget(buttonSet);
-  var card = CardService.newCardBuilder().setHeader(header).addSection(section);
-  return card.build();
+  return onHomepage(e);
 }
 
-function onGmailInsertCat(e) {
-  var text = e.formInput.text;
-  var now = new Date();
-  var imageUrl = "https://cataas.com/cat";
-  if (text) {
-    var caption = text.replace(/\//g, " ");
-    imageUrl += Utilities.formatString(
-      "/says/%s?time=%s",
-      encodeURIComponent(caption),
-      now.getTime()
-    );
+function applyLabelToRecentInboxThreads_(labelName, n) {
+  labelName = (labelName || "").trim();
+  n = Number(n || 5);
+
+  if (!labelName) {
+    return { ok: false, msg: "라벨 이름을 입력해줘." };
   }
-  var imageHtmlContent =
-    '<img style="display: block; max-height: 300px;" src="' + imageUrl + '"/>';
-  var response = CardService.newUpdateDraftActionResponseBuilder()
-    .setUpdateDraftBodyAction(
-      CardService.newUpdateDraftBodyAction()
-        .addUpdateContent(
-          imageHtmlContent,
-          CardService.ContentType.MUTABLE_HTML
-        )
-        .setUpdateType(CardService.UpdateDraftBodyType.IN_PLACE_INSERT)
-    )
-    .build();
-  return response;
+  if (!Number.isFinite(n) || n <= 0) {
+    return { ok: false, msg: "최근 개수(N)는 1 이상 숫자여야 해." };
+  }
+
+  let label = GmailApp.getUserLabelByName(labelName);
+  if (!label) label = GmailApp.createLabel(labelName);
+
+  const threads = GmailApp.getInboxThreads(0, n);
+
+  threads.forEach(t => t.addLabel(label));
+
+  return {
+    ok: true,
+    msg: `✅ 최근 Inbox 스레드 ${threads.length}개에 "${labelName}" 라벨 적용 완료`
+  };
 }
 
-function sendFirstMail() {
-  // 1) 최근 메일 1개 제목 가져오기
-  var threads = GmailApp.getInboxThreads(0, 1);
-  var subject = threads[0].getMessages()[0].getSubject();
+function onClickApplyLabelRecent_(e) {
+  const inputs = (e && e.commonEventObject && e.commonEventObject.formInputs) || {};
 
-  // 2) 제목은 값만 인코딩
-  var encodedSubject = encodeURIComponent(subject);
+  const labelName = (inputs.labelName && inputs.labelName.stringInputs)
+    ? inputs.labelName.stringInputs.value[0]
+    : "";
 
-  // 3) "진짜 URL" 만들기 (ngrok 주소 + 엔드포인트 + 쿼리)
-  var requestUrl = TunnelURL + "/mails?title=" + encodedSubject;
+  const n = (inputs.n && inputs.n.stringInputs)
+    ? inputs.n.stringInputs.value[0]
+    : "5";
 
-  // 4) ngrok 경고 페이지 우회 헤더 + 응답 확인용 로그
-  var res = UrlFetchApp.fetch(requestUrl, {
-    method: "get",
-    muteHttpExceptions: true,
-    headers: {
-      "ngrok-skip-browser-warning": "1",
-    },
-  });
+  const res = applyLabelToRecentInboxThreads_(labelName, n);
 
-  var status = res.getResponseCode();
-  var body = res.getContentText();
-
-  Logger.log("HTTP status: " + status);
-  Logger.log("Response body: " + body);
-
-  // 5) 디버깅 로그 (실행 기록에서 확인)
-  Logger.log("requestUrl: " + requestUrl);
-  Logger.log("status: " + res.getResponseCode());
-  Logger.log("body(head): " + res.getContentText().slice(0, 200));
+  return CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification().setText(res.msg))
+    .build();
 }
