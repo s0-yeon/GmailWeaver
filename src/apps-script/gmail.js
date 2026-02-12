@@ -12,53 +12,7 @@ function onGmailMessage(e) {
   return CardService.newCardBuilder().addSection(emailSection).build();
 }
 
-function onGmailCompose(e) {
-  var header = CardService.newCardHeader()
-    .setTitle("Insert cat")
-    .setSubtitle("Add a custom cat image to your email message.");
-  var input = CardService.newTextInput()
-    .setFieldName("text")
-    .setTitle("Caption")
-    .setHint("What do you want the cat to say?");
-  var action = CardService.newAction().setFunctionName("onGmailInsertCat");
-  var button = CardService.newTextButton()
-    .setText("Insert cat")
-    .setOnClickAction(action)
-    .setTextButtonStyle(CardService.TextButtonStyle.FILLED);
-  var buttonSet = CardService.newButtonSet().addButton(button);
-  var section = CardService.newCardSection()
-    .addWidget(input)
-    .addWidget(buttonSet);
-  var card = CardService.newCardBuilder().setHeader(header).addSection(section);
-  return card.build();
-}
 
-function onGmailInsertCat(e) {
-  var text = e.formInput.text;
-  var now = new Date();
-  var imageUrl = "https://cataas.com/cat";
-  if (text) {
-    var caption = text.replace(/\//g, " ");
-    imageUrl += Utilities.formatString(
-      "/says/%s?time=%s",
-      encodeURIComponent(caption),
-      now.getTime()
-    );
-  }
-  var imageHtmlContent =
-    '<img style="display: block; max-height: 300px;" src="' + imageUrl + '"/>';
-  var response = CardService.newUpdateDraftActionResponseBuilder()
-    .setUpdateDraftBodyAction(
-      CardService.newUpdateDraftBodyAction()
-        .addUpdateContent(
-          imageHtmlContent,
-          CardService.ContentType.MUTABLE_HTML
-        )
-        .setUpdateType(CardService.UpdateDraftBodyType.IN_PLACE_INSERT)
-    )
-    .build();
-  return response;
-}
 
 function sendFirstMail() {
   // 1) 최근 메일 1개 제목 가져오기
