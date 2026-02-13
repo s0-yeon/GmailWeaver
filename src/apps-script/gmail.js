@@ -1,10 +1,3 @@
-function onGmailMessage(e) {
-  return onHomepage(e);
-}
-
-function onGmailCompose(e) {
-  return onHomepage(e);
-}
 
 function applyLabelToRecentInboxThreads_(labelName, n) {
   labelName = (labelName || "").trim();
