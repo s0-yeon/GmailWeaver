@@ -34,20 +34,44 @@ function labelRecentInboxThreads(labelName, n) {
   };
 }
 
+const TUNNEL_URL = "https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev";
 
 function getGraphData() {
-  const files = DriveApp.getFilesByName("graphml_data.json");
-  if (!files.hasNext()) {
-    throw new Error("Drive에서 graphml_data.json 파일을 찾을 수 없습니다.");
+  const url = TUNNEL_URL + "/graph-data";
+
+  const res = UrlFetchApp.fetch(url, {
+    method: "get",
+    headers: {
+      "ngrok-skip-browser-warning": "1",
+      "User-Agent": "AppsScript/1.0"
+    },
+    followRedirects: true,
+    muteHttpExceptions: true,
+  });
+
+  const code = res.getResponseCode();
+  const text = res.getContentText();
+
+  // 디버그 로그
+  Logger.log("[getGraphData] url=" + url);
+  Logger.log("[getGraphData] status=" + code);
+  Logger.log("[getGraphData] body_head=" + text.slice(0, 200));
+
+  if (code !== 200) {
+    throw new Error("graph-data fetch failed: " + code + " / " + text.slice(0, 200));
   }
 
-  const file = files.next();
-  const text = file.getBlob().getDataAsString("UTF-8");
-  const data = JSON.parse(text);
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch (e) {
+    throw new Error("graph-data JSON parse failed. head=" + text.slice(0, 200));
+  }
 
   // 기대 형태: { nodes: [...], edges: [...] }
   if (!data || !Array.isArray(data.nodes) || !Array.isArray(data.edges)) {
-    throw new Error("graphml_data.json 형식이 올바르지 않습니다. {nodes, edges}가 필요합니다.");
+    throw new Error("graph-data 형식이 올바르지 않습니다. {nodes, edges} 필요. body_head=" + text.slice(0, 200));
   }
+
   return data;
 }

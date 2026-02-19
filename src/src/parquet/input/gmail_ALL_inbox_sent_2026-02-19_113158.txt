@@ -1,0 +1,391 @@
+============================================================
+[메일 1]
+ID: 19c6ab907a6a1263
+구분: 수신
+제목: Reminder Notice : Your paused Aura Free Instance has been deleted
+보낸 사람: The Aura Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Tue Feb 17 2026 17:30:36 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+Hi there,
+
+
+
+Inline with previous emails we’ve deleted the content of paused database named 
+test.
+
+
+
+You can no longer access the data in this database, but you retain the ability 
+to login and create a new Free Instance within Aura forever.
+Login <https://console.neo4j.io/> 
+============================================================
+
+============================================================
+[메일 2]
+ID: 19c6d101363308a5
+구분: 수신
+제목: Reminder Notice : Your paused Aura Free Instance has been deleted
+보낸 사람: The Aura Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 18 2026 04:24:55 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+Hi there,
+
+
+
+Inline with previous emails we’ve deleted the content of paused database named 
+test.
+
+
+
+You can no longer access the data in this database, but you retain the ability 
+to login and create a new Free Instance within Aura forever.
+Login <https://console.neo4j.io/> 
+============================================================
+
+============================================================
+[메일 3]
+ID: 19c6f65f08e10c75
+구분: 수신
+제목: Reminder Notice : Your paused Aura Free Instance has been deleted
+보낸 사람: The Aura Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 18 2026 15:17:57 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+Hi there,
+
+
+
+Inline with previous emails we’ve deleted the content of paused database named 
+test.
+
+
+
+You can no longer access the data in this database, but you retain the ability 
+to login and create a new Free Instance within Aura forever.
+Login <https://console.neo4j.io/> 
+============================================================
+
+============================================================
+[메일 4]
+ID: 19c69f951cee81d9
+구분: 수신
+제목: Not sure where to start with GenAI? This helps.
+보낸 사람: The Neo4j Team <graph-insights@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Tue Feb 17 2026 14:01:10 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FP37QhG9v6l8oK7CTfHuDzD5jrRqIe5F9r6PEWNAXz5F2wdDcW_M_97ojWq2cYXDEj8=>
+GraphAcademy: Knowledge Graph and GenAI Training
+Hey 인선,
+
+Sign up for hands-on, self-paced courses built by developers for developers. Whether you’re new to knowledge graphs or an experienced builder, you’ll learn how to create GenAI apps that provide accurate, explainable results.
+
+Attend GraphAcademy for hands-on training at no charge that goes over:
+
+
+	- Core LLM concepts and implementations
+	- How to build and query knowledge graphs
+	- How to search unstructured data with vector indexes
+	- How to build chatbots using Python, Typescript, Langchain, and more
+	- Working with graph databases, Cypher queries, and data modeling
+SIGN UP <https://graphacademy.neo4j.com/categories/generative-ai/?utm_source=Marketo&utm_medium=Email&utm_campaign=GenAI-Nurture-Global-&utm_content=--->
+Learn with AuraDB Free
+Start your hands-on learning today with AuraDB Free. Create your database instance, import data, and perform queries. No credit card or payment required. <a href= "https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FA1TuGWHS1oVR2V1oIn7lwp3sYMYRj2AxmpHJRXvlfWlM-UMF-oZDNcTzjTodKaSU60=" target="_blank" title="AuraDB Free" id="" >Start Now</a>.
+Developer Blog
+Ready to take a deeper dive into Neo4j technology and topics written by Neo4j engineers and community members. Explore the <a href= "https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FaEubCB3149dztLSLc6R5tvu2f6EgiO8gbM-mEqyqT02Ll-B3XL9F_sC7y2-c3tE9yc=" target="_blank" title="Neo4j Developer Blog" id="" >Developer Blog</a>.
+Best,
+The Neo4j Team
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FLtBhKPcu9G9uC4_Z7iZnup8oAz0mFs85Fiat11uv7D7Ae4n7OoL4ljk4XxhKdJLteU=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FVlN46QcSFwJ3dm9mdLiBtSo6B_7_8v__p5ESpeYfpAb_tbiAIMubJnnygpc3Z5Kwnw=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FGvTYKLOWPnKCSqRr6Q877gjFpF1bqARso8EYy-MDIdP-KJgX9ibiPoo0_cp8PSznq4=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FJVRNI4joTfY_jqrY0j90YWW6DKdjHRyYW8XIIWq5mxmQvYtvCHrNZA54cDzHuteBBw=>
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FP37QhG9v6l8oK7CTfHuDzD5jrRqIe5F9r6PEWNAXz5F2wdDcW_M_97ojWq2cYXDEj8=>
+© 2026 Neo4j, Inc.
+ Terms <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FITmVSOmcbrXmj_alhtwcD8ssLfJncouuZSOIuZRxJlzQYaM7Ul1XJ3PC6xfI-nILJw=> | Privacy Policy <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FB6NsGitlSITrHLnDtRM0-K2e9q-C_KNatjciiTyIb4Wn6o2iG1KNpUV3rGwEtZr9Mw=> | Manage Subscriptions <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FL1bByHaw60R3_oP9cppkmWCOG8G6xpDIaUgfgC0gwZSOh1D-tHraG8A5L1ukyy_ghM=> | Unsubscribe <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FFD9Ea3iMzs707WDkAtTmYhqu-hiFhR0TZq1LN1j8ZsyFcamiDawpR8dyNq6sUS_fjw=>
+ 
+ 400 Concar Dr, San Mateo, CA 94402
+
+This email was sent to suntest225@gmail.com. If you no longer wish to receive these emails you may unsubscribe here: https://go.neo4j.com/UnsubscribePage.html?mkt_unsubscribe=1&mkt_tok=NzEwLVJSQy0zMzUAAAGgCPH3FVnnD2k8I4M81DgUw0iSSG5L_xB8truaz6Je5Ututd_QVuhhHheICooMAiCWSq-nz6TKVh5C5fTzp1lfPoUzjsIrMlXDSRL1OtqReRdlBUY.
+
+============================================================
+
+============================================================
+[메일 5]
+ID: 19c5ade508a31a2a
+구분: 수신
+제목: Reminder Notice : Your paused Aura Free Instance will be deleted
+보낸 사람: The Aura Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Sat Feb 14 2026 15:37:24 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+
+
+
+
+
+
+Hi there,
+
+
+
+ We will delete the content of paused databases after 30 days, which is 3 days 
+from now.
+
+
+
+You currently have an Aura Free Instance named test. 
+
+
+
+Once it’s been deleted you will no longer have access to the resume or get the 
+data associated with this Free database.
+
+
+
+If you want to keep this data, please login and resume or download the data 
+from your database before we delete it.
+
+
+
+You will retain the ability to login and create a new Free Instance within 
+Aura forever.
+
+Login <https://console.neo4j.io/> 
+============================================================
+
+============================================================
+[메일 6]
+ID: 19c4fb99cde072d3
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Feb 12 2026 11:41:29 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하지 않으셨다면 다른 사람이 내
+Google 계정 데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770864089000?rfn%3D127%26rfnc%3D1%26eid%3D-8452957875084161307%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9FDD67Xpdj-7t51A_KTf2-zMMhqpBjdxdY7fvRUdjknTvKYk8VImY-WveoNfVQyqs2P927US0fdjnETnZIynzxx?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+clasp – The Apps Script CLI의 데이터 액세스 권한을 언제든지 변경하실 수  
+있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 7]
+ID: 19c50398c39e7247
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Feb 12 2026 14:01:13 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 GW의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 GW의 액세스를 허용하지 않으셨다면 다른  
+사람이 내 Google 계정 데이터에 액세스하려는 것일
+수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770872473000?rfn%3D127%26rfnc%3D1%26eid%3D-5052788314393971396%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9F3bZX4zH5ILKqjgzVk6d3IshVZI5aqM8mmTYxPTXXDDbQmHzR8LsLheDCKRRevg9e3Yepbs_Sv0Xw9hrhlrQ?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+GW의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 8]
+ID: 19c50518a8111663
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Feb 12 2026 14:27:26 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 GW의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 GW의 액세스를 허용하지 않으셨다면 다른  
+사람이 내 Google 계정 데이터에 액세스하려는 것일
+수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770874046000?rfn%3D127%26rfnc%3D1%26eid%3D9199244457648539491%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9G2gms9aOj5qGI36jjqlxLGIspNpD_q9RxXuV5_94sME21bg3gccNL-WENWI2moS4e0lLKsaJf3Qger8tf6BA?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+GW의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 9]
+ID: 19c4bd060f5ef56b
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 11 2026 17:27:52 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하지 않으셨다면 다른 사람이 내
+Google 계정 데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770798472000?rfn%3D127%26rfnc%3D1%26eid%3D68824670876342813%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9HmoL3ftySE-aMpWXRUSt0eif4FNKyok9U4hfBtB0QnpHcZEj4MLCBMGSfzGtm40_b-yPWVL99Hvih8Ys-oGkRl?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+clasp – The Apps Script CLI의 데이터 액세스 권한을 언제든지 변경하실 수  
+있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 10]
+ID: 19c4bd9a858c6f8d
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 11 2026 17:38:00 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 AddOnTest의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 AddOnTest의 액세스를 허용하지 않으셨다면  
+다른 사람이 내 Google 계정 데이터에
+액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770799080000?rfn%3D127%26rfnc%3D1%26eid%3D-1195156559140932872%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9GuvxQckr7iwsiVrG1ByZJ-I06rswxuRrrqG5Ctt_ZrPKjPrEgGw4K_t98nFf7AZnaaHmOvZHs1CyCfzGmjgHY?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+AddOnTest의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+

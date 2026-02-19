@@ -1,7 +1,7 @@
 function exportAllInboxAndSentIntoOneTxt() {
   // 받은 메일 + 보낸 메일
   const query = "in:inbox OR in:sent";
-  const threads = GmailApp.search(query, 0, 5);
+  const threads = GmailApp.search(query, 0, 500);
 
   const folder = DriveApp.getRootFolder();
   const myEmail = Session.getActiveUser().getEmail();
@@ -73,6 +73,8 @@ ${body}
       filename,
       content: allText,
     }),
+    headers: { "ngrok-skip-browser-warning": "1" },
+    muteHttpExceptions: true,
   });
   Logger.log(
     `총 ${mailCount}개의 메일을 추출하여 파일로 저장했습니다: ${filename}`

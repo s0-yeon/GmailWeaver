@@ -1,6 +1,36 @@
 {
   "nodes": [
     {
+      "id": "Reminder Notice : Your paused Aura Free Instance has been deleted",
+      "type": "SUBJECT",
+      "description": "Email subject \"Reminder Notice : Your paused Aura Free Instance has been deleted\"."
+    },
+    {
+      "id": "The Aura Team <aura@neo4j.com>",
+      "type": "PERSON",
+      "description": "The Aura Team <aura@neo4j.com> appears in emails."
+    },
+    {
+      "id": "suntest225@gmail.com",
+      "type": "PERSON",
+      "description": "suntest225@gmail.com appears in emails."
+    },
+    {
+      "id": "Not sure where to start with GenAI? This helps.",
+      "type": "SUBJECT",
+      "description": "Email subject \"Not sure where to start with GenAI? This helps.\"."
+    },
+    {
+      "id": "The Neo4j Team <graph-insights@neo4j.com>",
+      "type": "PERSON",
+      "description": "The Neo4j Team <graph-insights@neo4j.com> appears in emails."
+    },
+    {
+      "id": "Reminder Notice : Your paused Aura Free Instance will be deleted",
+      "type": "SUBJECT",
+      "description": "Email subject \"Reminder Notice : Your paused Aura Free Instance will be deleted\"."
+    },
+    {
       "id": "보안 알림",
       "type": "SUBJECT",
       "description": "Email subject \"보안 알림\"."
@@ -11,9 +41,59 @@
       "description": "Google <no-reply@accounts.google.com> appears in emails."
     },
     {
-      "id": "suntest225@gmail.com",
+      "id": "Struggling with GenAI accuracy? Here’s help.",
+      "type": "SUBJECT",
+      "description": "Email subject \"Struggling with GenAI accuracy? Here’s help.\"."
+    },
+    {
+      "id": "황올",
+      "type": "SUBJECT",
+      "description": "Email subject \"황올\"."
+    },
+    {
+      "id": "\"문인선\" <ddyr1554@gmail.com>",
       "type": "PERSON",
-      "description": "suntest225@gmail.com appears in emails."
+      "description": "\"문인선\" <ddyr1554@gmail.com> appears in emails."
+    },
+    {
+      "id": "t그래프",
+      "type": "SUBJECT",
+      "description": "Email subject \"t그래프\"."
+    },
+    {
+      "id": "과제 메일",
+      "type": "SUBJECT",
+      "description": "Email subject \"과제 메일\"."
+    },
+    {
+      "id": "테스트 메일입니다",
+      "type": "SUBJECT",
+      "description": "Email subject \"테스트 메일입니다\"."
+    },
+    {
+      "id": "Real data, real code: GraphRAG demo",
+      "type": "SUBJECT",
+      "description": "Email subject \"Real data, real code: GraphRAG demo\"."
+    },
+    {
+      "id": "피디에프 발신",
+      "type": "SUBJECT",
+      "description": "Email subject \"피디에프 발신\"."
+    },
+    {
+      "id": "Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes",
+      "type": "SUBJECT",
+      "description": "Email subject \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\"."
+    },
+    {
+      "id": "Neo4j Aura <aura@neo4j.com>",
+      "type": "PERSON",
+      "description": "Neo4j Aura <aura@neo4j.com> appears in emails."
+    },
+    {
+      "id": "Stop GenAI hallucinations in their tracks",
+      "type": "SUBJECT",
+      "description": "Email subject \"Stop GenAI hallucinations in their tracks\"."
     },
     {
       "id": "Still waiting to set up your first endpoint?",
@@ -39,11 +119,6 @@
       "id": "Need help importing data?",
       "type": "SUBJECT",
       "description": "Email subject \"Need help importing data?\"."
-    },
-    {
-      "id": "Neo4j Aura <aura@neo4j.com>",
-      "type": "PERSON",
-      "description": "Neo4j Aura <aura@neo4j.com> appears in emails."
     },
     {
       "id": "Gemini 웹 앱을 사용하고 계십니다",
@@ -131,11 +206,6 @@
       "description": "Email subject \"테스트용\"."
     },
     {
-      "id": "\"문인선\" <ddyr1554@gmail.com>",
-      "type": "PERSON",
-      "description": "\"문인선\" <ddyr1554@gmail.com> appears in emails."
-    },
-    {
       "id": "논문 첨부",
       "type": "SUBJECT",
       "description": "Email subject \"논문 첨부\"."
@@ -203,6 +273,105 @@
   ],
   "edges": [
     {
+      "id": "The Aura Team <aura@neo4j.com>__RELATES_TO__Reminder Notice : Your paused Aura Free Instance has been deleted",
+      "source": "The Aura Team <aura@neo4j.com>",
+      "target": "Reminder Notice : Your paused Aura Free Instance has been deleted",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "The Aura Team <aura@neo4j.com> is associated with \"Reminder Notice : Your paused Aura Free Instance has been deleted\".",
+      "label": "The Aura Team <aura@neo4j.com> is associated with \"Reminder Notice : Your paused Aura Free Instance has been deleted\".",
+      "title": "The Aura Team <aura@neo4j.com> is associated with \"Reminder Notice : Your paused Aura Free Instance has been deleted\".",
+      "tooltip": "The Aura Team <aura@neo4j.com> is associated with \"Reminder Notice : Your paused Aura Free Instance has been deleted\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__Reminder Notice : Your paused Aura Free Instance has been deleted",
+      "source": "suntest225@gmail.com",
+      "target": "Reminder Notice : Your paused Aura Free Instance has been deleted",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"Reminder Notice : Your paused Aura Free Instance has been deleted\".",
+      "label": "suntest225@gmail.com is associated with \"Reminder Notice : Your paused Aura Free Instance has been deleted\".",
+      "title": "suntest225@gmail.com is associated with \"Reminder Notice : Your paused Aura Free Instance has been deleted\".",
+      "tooltip": "suntest225@gmail.com is associated with \"Reminder Notice : Your paused Aura Free Instance has been deleted\"."
+    },
+    {
+      "id": "The Aura Team <aura@neo4j.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "The Aura Team <aura@neo4j.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "The Aura Team <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Reminder Notice : Your paused Aura Free Instance has been deleted\".",
+      "label": "The Aura Team <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Reminder Notice : Your paused Aura Free Instance has been deleted\".",
+      "title": "The Aura Team <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Reminder Notice : Your paused Aura Free Instance has been deleted\".",
+      "tooltip": "The Aura Team <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Reminder Notice : Your paused Aura Free Instance has been deleted\"."
+    },
+    {
+      "id": "The Neo4j Team <graph-insights@neo4j.com>__RELATES_TO__Not sure where to start with GenAI? This helps.",
+      "source": "The Neo4j Team <graph-insights@neo4j.com>",
+      "target": "Not sure where to start with GenAI? This helps.",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Not sure where to start with GenAI? This helps.\".",
+      "label": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Not sure where to start with GenAI? This helps.\".",
+      "title": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Not sure where to start with GenAI? This helps.\".",
+      "tooltip": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Not sure where to start with GenAI? This helps.\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__Not sure where to start with GenAI? This helps.",
+      "source": "suntest225@gmail.com",
+      "target": "Not sure where to start with GenAI? This helps.",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"Not sure where to start with GenAI? This helps.\".",
+      "label": "suntest225@gmail.com is associated with \"Not sure where to start with GenAI? This helps.\".",
+      "title": "suntest225@gmail.com is associated with \"Not sure where to start with GenAI? This helps.\".",
+      "tooltip": "suntest225@gmail.com is associated with \"Not sure where to start with GenAI? This helps.\"."
+    },
+    {
+      "id": "The Neo4j Team <graph-insights@neo4j.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "The Neo4j Team <graph-insights@neo4j.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Not sure where to start with GenAI? This helps.\".",
+      "label": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Not sure where to start with GenAI? This helps.\".",
+      "title": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Not sure where to start with GenAI? This helps.\".",
+      "tooltip": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Not sure where to start with GenAI? This helps.\"."
+    },
+    {
+      "id": "The Aura Team <aura@neo4j.com>__RELATES_TO__Reminder Notice : Your paused Aura Free Instance will be deleted",
+      "source": "The Aura Team <aura@neo4j.com>",
+      "target": "Reminder Notice : Your paused Aura Free Instance will be deleted",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "The Aura Team <aura@neo4j.com> is associated with \"Reminder Notice : Your paused Aura Free Instance will be deleted\".",
+      "label": "The Aura Team <aura@neo4j.com> is associated with \"Reminder Notice : Your paused Aura Free Instance will be deleted\".",
+      "title": "The Aura Team <aura@neo4j.com> is associated with \"Reminder Notice : Your paused Aura Free Instance will be deleted\".",
+      "tooltip": "The Aura Team <aura@neo4j.com> is associated with \"Reminder Notice : Your paused Aura Free Instance will be deleted\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__Reminder Notice : Your paused Aura Free Instance will be deleted",
+      "source": "suntest225@gmail.com",
+      "target": "Reminder Notice : Your paused Aura Free Instance will be deleted",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"Reminder Notice : Your paused Aura Free Instance will be deleted\".",
+      "label": "suntest225@gmail.com is associated with \"Reminder Notice : Your paused Aura Free Instance will be deleted\".",
+      "title": "suntest225@gmail.com is associated with \"Reminder Notice : Your paused Aura Free Instance will be deleted\".",
+      "tooltip": "suntest225@gmail.com is associated with \"Reminder Notice : Your paused Aura Free Instance will be deleted\"."
+    },
+    {
+      "id": "The Aura Team <aura@neo4j.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "The Aura Team <aura@neo4j.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "The Aura Team <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Reminder Notice : Your paused Aura Free Instance will be deleted\".",
+      "label": "The Aura Team <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Reminder Notice : Your paused Aura Free Instance will be deleted\".",
+      "title": "The Aura Team <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Reminder Notice : Your paused Aura Free Instance will be deleted\".",
+      "tooltip": "The Aura Team <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Reminder Notice : Your paused Aura Free Instance will be deleted\"."
+    },
+    {
       "id": "Google <no-reply@accounts.google.com>__RELATES_TO__보안 알림",
       "source": "Google <no-reply@accounts.google.com>",
       "target": "보안 알림",
@@ -234,6 +403,303 @@
       "label": "Google <no-reply@accounts.google.com> sent an email to suntest225@gmail.com about \"보안 알림\".",
       "title": "Google <no-reply@accounts.google.com> sent an email to suntest225@gmail.com about \"보안 알림\".",
       "tooltip": "Google <no-reply@accounts.google.com> sent an email to suntest225@gmail.com about \"보안 알림\"."
+    },
+    {
+      "id": "The Neo4j Team <graph-insights@neo4j.com>__RELATES_TO__Struggling with GenAI accuracy? Here’s help.",
+      "source": "The Neo4j Team <graph-insights@neo4j.com>",
+      "target": "Struggling with GenAI accuracy? Here’s help.",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Struggling with GenAI accuracy? Here’s help.\".",
+      "label": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Struggling with GenAI accuracy? Here’s help.\".",
+      "title": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Struggling with GenAI accuracy? Here’s help.\".",
+      "tooltip": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Struggling with GenAI accuracy? Here’s help.\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__Struggling with GenAI accuracy? Here’s help.",
+      "source": "suntest225@gmail.com",
+      "target": "Struggling with GenAI accuracy? Here’s help.",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"Struggling with GenAI accuracy? Here’s help.\".",
+      "label": "suntest225@gmail.com is associated with \"Struggling with GenAI accuracy? Here’s help.\".",
+      "title": "suntest225@gmail.com is associated with \"Struggling with GenAI accuracy? Here’s help.\".",
+      "tooltip": "suntest225@gmail.com is associated with \"Struggling with GenAI accuracy? Here’s help.\"."
+    },
+    {
+      "id": "The Neo4j Team <graph-insights@neo4j.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "The Neo4j Team <graph-insights@neo4j.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Struggling with GenAI accuracy? Here’s help.\".",
+      "label": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Struggling with GenAI accuracy? Here’s help.\".",
+      "title": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Struggling with GenAI accuracy? Here’s help.\".",
+      "tooltip": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Struggling with GenAI accuracy? Here’s help.\"."
+    },
+    {
+      "id": "\"문인선\" <ddyr1554@gmail.com>__RELATES_TO__황올",
+      "source": "\"문인선\" <ddyr1554@gmail.com>",
+      "target": "황올",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "\"문인선\" <ddyr1554@gmail.com> is associated with \"황올\".",
+      "label": "\"문인선\" <ddyr1554@gmail.com> is associated with \"황올\".",
+      "title": "\"문인선\" <ddyr1554@gmail.com> is associated with \"황올\".",
+      "tooltip": "\"문인선\" <ddyr1554@gmail.com> is associated with \"황올\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__황올",
+      "source": "suntest225@gmail.com",
+      "target": "황올",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"황올\".",
+      "label": "suntest225@gmail.com is associated with \"황올\".",
+      "title": "suntest225@gmail.com is associated with \"황올\".",
+      "tooltip": "suntest225@gmail.com is associated with \"황올\"."
+    },
+    {
+      "id": "\"문인선\" <ddyr1554@gmail.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "\"문인선\" <ddyr1554@gmail.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"황올\".",
+      "label": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"황올\".",
+      "title": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"황올\".",
+      "tooltip": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"황올\"."
+    },
+    {
+      "id": "\"문인선\" <ddyr1554@gmail.com>__RELATES_TO__t그래프",
+      "source": "\"문인선\" <ddyr1554@gmail.com>",
+      "target": "t그래프",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "\"문인선\" <ddyr1554@gmail.com> is associated with \"t그래프\".",
+      "label": "\"문인선\" <ddyr1554@gmail.com> is associated with \"t그래프\".",
+      "title": "\"문인선\" <ddyr1554@gmail.com> is associated with \"t그래프\".",
+      "tooltip": "\"문인선\" <ddyr1554@gmail.com> is associated with \"t그래프\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__t그래프",
+      "source": "suntest225@gmail.com",
+      "target": "t그래프",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"t그래프\".",
+      "label": "suntest225@gmail.com is associated with \"t그래프\".",
+      "title": "suntest225@gmail.com is associated with \"t그래프\".",
+      "tooltip": "suntest225@gmail.com is associated with \"t그래프\"."
+    },
+    {
+      "id": "\"문인선\" <ddyr1554@gmail.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "\"문인선\" <ddyr1554@gmail.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"t그래프\".",
+      "label": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"t그래프\".",
+      "title": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"t그래프\".",
+      "tooltip": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"t그래프\"."
+    },
+    {
+      "id": "\"문인선\" <ddyr1554@gmail.com>__RELATES_TO__과제 메일",
+      "source": "\"문인선\" <ddyr1554@gmail.com>",
+      "target": "과제 메일",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "\"문인선\" <ddyr1554@gmail.com> is associated with \"과제 메일\".",
+      "label": "\"문인선\" <ddyr1554@gmail.com> is associated with \"과제 메일\".",
+      "title": "\"문인선\" <ddyr1554@gmail.com> is associated with \"과제 메일\".",
+      "tooltip": "\"문인선\" <ddyr1554@gmail.com> is associated with \"과제 메일\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__과제 메일",
+      "source": "suntest225@gmail.com",
+      "target": "과제 메일",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"과제 메일\".",
+      "label": "suntest225@gmail.com is associated with \"과제 메일\".",
+      "title": "suntest225@gmail.com is associated with \"과제 메일\".",
+      "tooltip": "suntest225@gmail.com is associated with \"과제 메일\"."
+    },
+    {
+      "id": "\"문인선\" <ddyr1554@gmail.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "\"문인선\" <ddyr1554@gmail.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"과제 메일\".",
+      "label": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"과제 메일\".",
+      "title": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"과제 메일\".",
+      "tooltip": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"과제 메일\"."
+    },
+    {
+      "id": "\"문인선\" <ddyr1554@gmail.com>__RELATES_TO__테스트 메일입니다",
+      "source": "\"문인선\" <ddyr1554@gmail.com>",
+      "target": "테스트 메일입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "\"문인선\" <ddyr1554@gmail.com> is associated with \"테스트 메일입니다\".",
+      "label": "\"문인선\" <ddyr1554@gmail.com> is associated with \"테스트 메일입니다\".",
+      "title": "\"문인선\" <ddyr1554@gmail.com> is associated with \"테스트 메일입니다\".",
+      "tooltip": "\"문인선\" <ddyr1554@gmail.com> is associated with \"테스트 메일입니다\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__테스트 메일입니다",
+      "source": "suntest225@gmail.com",
+      "target": "테스트 메일입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"테스트 메일입니다\".",
+      "label": "suntest225@gmail.com is associated with \"테스트 메일입니다\".",
+      "title": "suntest225@gmail.com is associated with \"테스트 메일입니다\".",
+      "tooltip": "suntest225@gmail.com is associated with \"테스트 메일입니다\"."
+    },
+    {
+      "id": "\"문인선\" <ddyr1554@gmail.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "\"문인선\" <ddyr1554@gmail.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"테스트 메일입니다\".",
+      "label": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"테스트 메일입니다\".",
+      "title": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"테스트 메일입니다\".",
+      "tooltip": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"테스트 메일입니다\"."
+    },
+    {
+      "id": "The Neo4j Team <graph-insights@neo4j.com>__RELATES_TO__Real data, real code: GraphRAG demo",
+      "source": "The Neo4j Team <graph-insights@neo4j.com>",
+      "target": "Real data, real code: GraphRAG demo",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Real data, real code: GraphRAG demo\".",
+      "label": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Real data, real code: GraphRAG demo\".",
+      "title": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Real data, real code: GraphRAG demo\".",
+      "tooltip": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Real data, real code: GraphRAG demo\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__Real data, real code: GraphRAG demo",
+      "source": "suntest225@gmail.com",
+      "target": "Real data, real code: GraphRAG demo",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"Real data, real code: GraphRAG demo\".",
+      "label": "suntest225@gmail.com is associated with \"Real data, real code: GraphRAG demo\".",
+      "title": "suntest225@gmail.com is associated with \"Real data, real code: GraphRAG demo\".",
+      "tooltip": "suntest225@gmail.com is associated with \"Real data, real code: GraphRAG demo\"."
+    },
+    {
+      "id": "The Neo4j Team <graph-insights@neo4j.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "The Neo4j Team <graph-insights@neo4j.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Real data, real code: GraphRAG demo\".",
+      "label": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Real data, real code: GraphRAG demo\".",
+      "title": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Real data, real code: GraphRAG demo\".",
+      "tooltip": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Real data, real code: GraphRAG demo\"."
+    },
+    {
+      "id": "\"문인선\" <ddyr1554@gmail.com>__RELATES_TO__피디에프 발신",
+      "source": "\"문인선\" <ddyr1554@gmail.com>",
+      "target": "피디에프 발신",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "\"문인선\" <ddyr1554@gmail.com> is associated with \"피디에프 발신\".",
+      "label": "\"문인선\" <ddyr1554@gmail.com> is associated with \"피디에프 발신\".",
+      "title": "\"문인선\" <ddyr1554@gmail.com> is associated with \"피디에프 발신\".",
+      "tooltip": "\"문인선\" <ddyr1554@gmail.com> is associated with \"피디에프 발신\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__피디에프 발신",
+      "source": "suntest225@gmail.com",
+      "target": "피디에프 발신",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"피디에프 발신\".",
+      "label": "suntest225@gmail.com is associated with \"피디에프 발신\".",
+      "title": "suntest225@gmail.com is associated with \"피디에프 발신\".",
+      "tooltip": "suntest225@gmail.com is associated with \"피디에프 발신\"."
+    },
+    {
+      "id": "\"문인선\" <ddyr1554@gmail.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "\"문인선\" <ddyr1554@gmail.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"피디에프 발신\".",
+      "label": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"피디에프 발신\".",
+      "title": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"피디에프 발신\".",
+      "tooltip": "\"문인선\" <ddyr1554@gmail.com> sent an email to suntest225@gmail.com about \"피디에프 발신\"."
+    },
+    {
+      "id": "Neo4j Aura <aura@neo4j.com>__RELATES_TO__Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes",
+      "source": "Neo4j Aura <aura@neo4j.com>",
+      "target": "Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "Neo4j Aura <aura@neo4j.com> is associated with \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\".",
+      "label": "Neo4j Aura <aura@neo4j.com> is associated with \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\".",
+      "title": "Neo4j Aura <aura@neo4j.com> is associated with \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\".",
+      "tooltip": "Neo4j Aura <aura@neo4j.com> is associated with \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes",
+      "source": "suntest225@gmail.com",
+      "target": "Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\".",
+      "label": "suntest225@gmail.com is associated with \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\".",
+      "title": "suntest225@gmail.com is associated with \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\".",
+      "tooltip": "suntest225@gmail.com is associated with \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\"."
+    },
+    {
+      "id": "Neo4j Aura <aura@neo4j.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "Neo4j Aura <aura@neo4j.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "Neo4j Aura <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\".",
+      "label": "Neo4j Aura <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\".",
+      "title": "Neo4j Aura <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\".",
+      "tooltip": "Neo4j Aura <aura@neo4j.com> sent an email to suntest225@gmail.com about \"Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes\"."
+    },
+    {
+      "id": "The Neo4j Team <graph-insights@neo4j.com>__RELATES_TO__Stop GenAI hallucinations in their tracks",
+      "source": "The Neo4j Team <graph-insights@neo4j.com>",
+      "target": "Stop GenAI hallucinations in their tracks",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Stop GenAI hallucinations in their tracks\".",
+      "label": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Stop GenAI hallucinations in their tracks\".",
+      "title": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Stop GenAI hallucinations in their tracks\".",
+      "tooltip": "The Neo4j Team <graph-insights@neo4j.com> is associated with \"Stop GenAI hallucinations in their tracks\"."
+    },
+    {
+      "id": "suntest225@gmail.com__RELATES_TO__Stop GenAI hallucinations in their tracks",
+      "source": "suntest225@gmail.com",
+      "target": "Stop GenAI hallucinations in their tracks",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "suntest225@gmail.com is associated with \"Stop GenAI hallucinations in their tracks\".",
+      "label": "suntest225@gmail.com is associated with \"Stop GenAI hallucinations in their tracks\".",
+      "title": "suntest225@gmail.com is associated with \"Stop GenAI hallucinations in their tracks\".",
+      "tooltip": "suntest225@gmail.com is associated with \"Stop GenAI hallucinations in their tracks\"."
+    },
+    {
+      "id": "The Neo4j Team <graph-insights@neo4j.com>__SENDS_TO__suntest225@gmail.com",
+      "source": "The Neo4j Team <graph-insights@neo4j.com>",
+      "target": "suntest225@gmail.com",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Stop GenAI hallucinations in their tracks\".",
+      "label": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Stop GenAI hallucinations in their tracks\".",
+      "title": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Stop GenAI hallucinations in their tracks\".",
+      "tooltip": "The Neo4j Team <graph-insights@neo4j.com> sent an email to suntest225@gmail.com about \"Stop GenAI hallucinations in their tracks\"."
     },
     {
       "id": "ngrok team <team@m.ngrok.com>__RELATES_TO__Still waiting to set up your first endpoint?",
