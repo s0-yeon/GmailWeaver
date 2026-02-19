@@ -1,7 +1,7 @@
 function exportAllInboxAndSentIntoOneTxt() {
   // 받은 메일 + 보낸 메일
   const query = "in:inbox OR in:sent";
-  const threads = GmailApp.search(query, 0, 5);
+  const threads = GmailApp.search(query, 0, 500);
 
   const folder = DriveApp.getRootFolder();
   const myEmail = Session.getActiveUser().getEmail();
