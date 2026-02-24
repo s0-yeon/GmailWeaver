@@ -23,7 +23,7 @@ MAIL_DIR = "src/parquet/input"
 MAIL_LATEST_PATH = os.path.join(MAIL_DIR, "mail_latest.txt")
 
 GRAPH_JSON_PATH = "src/json/graphml_data.json"   # 최종으로 쓰고 싶은 그래프 JSON 경로
-GRAPH_BUILD_SCRIPT = "src/graphml2json.py"           # 그래프 JSON 만드는 스크립트 파일명(너 프로젝트에 있는 걸로)
+GRAPH_BUILD_SCRIPT = "src/mail2json.py"           # 그래프 JSON 만드는 스크립트 파일명(너 프로젝트에 있는 걸로)
 
 # ===== graphrag 쿼리 실행 =====
 @app.route('/run-query', methods=['POST'])
@@ -117,6 +117,10 @@ def upload():
     filename = data.get("filename") or f"mail_{int(time.time())}.txt"
     content = data.get("content") or ""
 
+    print("[UPLOAD] received filename:", filename)
+    print("[UPLOAD] content length:", len(content))
+    print("[UPLOAD] cwd:", os.getcwd())
+    
     # ✅ 저장 디렉토리/경로 확정
     os.makedirs(MAIL_DIR, exist_ok=True)
     file_path = os.path.join(MAIL_DIR, filename)
@@ -133,21 +137,44 @@ def upload():
     with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
         f.write(content)
 
-    # 3) 그래프 JSON 생성 스크립트 실행
+        # 3) 그래프 JSON 생성 스크립트 실행
     try:
         graph_dir = os.path.dirname(GRAPH_JSON_PATH)
         if graph_dir:
             os.makedirs(graph_dir, exist_ok=True)
 
         print("[UPLOAD] building graph... script:", GRAPH_BUILD_SCRIPT)
-        subprocess.run(["python", GRAPH_BUILD_SCRIPT], check=True)
+
+        # ✅ stdout/stderr 캡처해서 원인 확인 (python 대신 sys.executable 추천)
+        r = subprocess.run(
+            [sys.executable, GRAPH_BUILD_SCRIPT],
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+
+        if r.stdout:
+            print("[UPLOAD] graph build stdout:\n", r.stdout)
+        if r.stderr:
+            print("[UPLOAD] graph build stderr:\n", r.stderr)
 
     except subprocess.CalledProcessError as e:
-        # 스크립트 실행 자체가 실패한 경우
-        print("[UPLOAD] graph build failed:", str(e))
-        return jsonify({"ok": False, "error": f"graph build failed: {e}"}), 500
+        out = (e.stdout or "").strip()
+        err = (e.stderr or "").strip()
+        print("[UPLOAD] graph build failed stdout:\n", out)
+        print("[UPLOAD] graph build failed stderr:\n", err)
+
+        return jsonify({
+            "ok": False,
+            "error": "graph build failed",
+            "returncode": e.returncode,
+            "stdout": out[-4000:],   # 너무 길면 뒤쪽만
+            "stderr": err[-4000:],
+        }), 500
+
     except Exception as e:
-        # 그 외 예외
         print("[UPLOAD] unexpected error:", str(e))
         return jsonify({"ok": False, "error": str(e)}), 500
 
