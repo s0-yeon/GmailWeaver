@@ -24,7 +24,7 @@ MAIL_LATEST_PATH = os.path.join(MAIL_DIR, "mail_latest.txt")
 
 GRAPH_JSON_PATH = "src/json/graphml_data.json"   # 최종으로 쓰고 싶은 그래프 JSON 경로
 GRAPH_BUILD_SCRIPT = "src/mail2json.py"           # 그래프 JSON 만드는 스크립트 파일명(너 프로젝트에 있는 걸로)
-
+GRAPHRAG_ROOT = "./src/parquet" # graphrag index가 사용할 root
 # ===== graphrag 쿼리 실행 =====
 @app.route('/run-query', methods=['POST'])
 def run_query():
@@ -145,14 +145,18 @@ def upload():
 
         print("[UPLOAD] building graph... script:", GRAPH_BUILD_SCRIPT)
 
+        # 🔥 UTF-8 강제 환경 변수 (서브프로세스용)
+        env = os.environ.copy()
+        env["PYTHONUTF8"] = "1"
+        env["PYTHONIOENCODING"] = "utf-8"
+        env["RICH_DISABLE"] = "1"  # rich 이모지/컬러 출력 비활성화 (안전)
         # ✅ stdout/stderr 캡처해서 원인 확인 (python 대신 sys.executable 추천)
         r = subprocess.run(
-            [sys.executable, GRAPH_BUILD_SCRIPT],
+            [sys.executable, "-X", "utf8", GRAPH_BUILD_SCRIPT],
             check=True,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
+            stdout=sys.stdout,   # 로그 실시간 출력
+            stderr=sys.stderr,
+            env=env,
         )
 
         if r.stdout:
@@ -160,18 +164,30 @@ def upload():
         if r.stderr:
             print("[UPLOAD] graph build stderr:\n", r.stderr)
 
+        # graphrah index 자동 생성 (질의응답)
+        print("[UPLOAD] building graphrag index... root:", GRAPHRAG_ROOT)
+        r2 = subprocess.run(
+            [sys.executable, "-X", "utf8", "-m", "graphrag", "index", "--root", GRAPHRAG_ROOT],
+            check=True,
+            stdout=sys.stdout,   # 로그 실시간 출력
+            stderr=sys.stderr,
+            env=env,
+        )
+
+        if r2.stdout:
+            print("[UPLOAD] index stdout:\n", r2.stdout)
+        if r2.stderr:
+            print("[UPLOAD] index stderr:\n", r2.stderr)
+
+
     except subprocess.CalledProcessError as e:
-        out = (e.stdout or "").strip()
-        err = (e.stderr or "").strip()
-        print("[UPLOAD] graph build failed stdout:\n", out)
-        print("[UPLOAD] graph build failed stderr:\n", err)
+        print("[UPLOAD] build failed. returncode:", e.returncode)
 
         return jsonify({
             "ok": False,
             "error": "graph build failed",
             "returncode": e.returncode,
-            "stdout": out[-4000:],   # 너무 길면 뒤쪽만
-            "stderr": err[-4000:],
+            "returncode": e.returncode,
         }), 500
 
     except Exception as e:
