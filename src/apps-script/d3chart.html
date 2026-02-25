@@ -1,0 +1,278 @@
+<script>
+// ─────────────────────────────────────────
+// 전역 상태
+// selectedNode: 현재 선택된 메일 노드
+// currentData: 렌더링 중인 메일 배열 (삭제 후 재렌더링용)
+// ─────────────────────────────────────────
+const WIDTH = 700, HEIGHT = 700;
+let selectedNode = null;
+let currentData = null;
+
+// SVG + g(그룹) 설정
+// zoom/pan transform은 g에 적용 → 내부 원들이 함께 이동
+const svg = d3.select("#chart").attr("width", WIDTH).attr("height", HEIGHT);
+const g = svg.append("g");
+
+// ─────────────────────────────────────────
+// 줌 설정
+// scaleExtent: 0.5배~8배 허용
+// zoom 이벤트 발생 시 g의 transform 갱신
+// ─────────────────────────────────────────
+const zoom = d3.zoom()
+  .scaleExtent([0.5, 8])
+  .on("zoom", (event) => g.attr("transform", event.transform));
+svg.call(zoom);
+
+
+// ─────────────────────────────────────────
+// 메일 불러오기
+// web.js의 getInboxMessages() 호출
+// 성공 시 currentData 저장 후 renderCirclePacking() 실행
+// ─────────────────────────────────────────
+function loadMails() {
+  setStatus("📬 메일 불러오는 중...");
+  document.getElementById("loadBtn").disabled = true;
+
+  google.script.run
+    .withSuccessHandler(function(data) {
+      currentData = data;
+      renderCirclePacking(data);
+      setStatus("✅ 메일 " + data.length + "개 로드 완료. 동그라미를 클릭하면 선택됩니다.");
+      document.getElementById("loadBtn").disabled = false;
+    })
+    .withFailureHandler(function(err) {
+      setStatus("❌ 오류: " + err.message);
+      document.getElementById("loadBtn").disabled = false;
+    })
+    .getInboxMessages(20);
+}
+
+
+// ─────────────────────────────────────────
+// D3 Circle Packing 렌더링
+//
+// [묶음 기준]
+// root("inbox") → children(메일 1개 = 원 1개)
+// 모든 메일 value=1 → 원 크기 동일
+//
+// [색상 기준]
+// 첨부파일 있음 → 주황 (#ff9800)
+// 발신 메일     → 초록 (#34a853)
+// 수신 메일     → Tableau 팔레트 순서대로
+//
+// [좌표 계산 원리]
+// d3.hierarchy() → 트리 파싱
+// .sum(d=>d.value) → 크기 계산
+// d3.pack() → x, y, r 자동 배치
+// ─────────────────────────────────────────
+function renderCirclePacking(messages) {
+  g.selectAll("*").remove(); // 이전 렌더링 제거 (재렌더링 중복 방지)
+  selectedNode = null;
+  hideSelectedInfo();
+
+  // D3 hierarchy용 트리 데이터
+  // root → children(메일들) 1단계 구조
+  const hierarchyData = {
+    name: "inbox",
+    children: messages.map(m => ({
+      name: m.subject,
+      value: 1,                  // 동일 크기
+      messageId: m.id,           // 삭제 시 사용할 Gmail ID
+      from: m.from,
+      date: m.date,
+      direction: m.direction,    // "수신" or "발신" → 색상 구분
+      hasAttachment: m.hasAttachment // 첨부파일 여부 → 색상 구분
+    }))
+  };
+
+  // d3.hierarchy(): JSON → D3 트리 노드 변환
+  // .sum(): value 합산 → 원 크기 결정
+  // .sort(): 큰 것부터 정렬
+  const root = d3.hierarchy(hierarchyData)
+    .sum(d => d.value || 0)
+    .sort((a, b) => b.value - a.value);
+
+  // d3.pack(): 원 위치/크기 계산
+  // .size(): 캔버스 크기
+  // .padding(): 원 사이 간격
+  const pack = d3.pack().size([WIDTH - 20, HEIGHT - 20]).padding(6);
+  pack(root); // 실행 후 각 노드에 x, y, r 값 채워짐
+
+  // 노드 그룹(<g>) 생성
+  const node = g.selectAll(".node")
+    .data(root.descendants())
+    .enter().append("g")
+    .attr("class", "node")
+    .attr("transform", d => `translate(${d.x + 10},${d.y + 10})`);
+
+  // 원(circle) 그리기
+  node.append("circle")
+    .attr("r", d => d.r)
+    .attr("fill", d => {
+      if (!d.parent) return "#4285f4";                        // root 원: 파란색
+      if (d.data.hasAttachment) return "#ff9800";             // 📎 첨부파일 있음: 주황
+      if (d.data.direction === "발신") return "#34a853";      // 📤 발신: 초록
+      return d3.schemeTableau10[d.parent.children.indexOf(d) % 10]; // 📥 수신: Tableau 팔레트
+    })
+    .attr("fill-opacity", d => d.children ? 0.2 : 0.85)      // root 반투명, 메일 진하게
+    .on("click", function(event, d) {
+      event.stopPropagation(); // 배경 click 이벤트 전파 차단
+      if (d.children) {
+        zoomTo(d);             // root 원 클릭 → 줌
+      } else {
+        selectMail(this, d);   // 메일 원 클릭 → 선택
+      }
+    });
+
+  // 텍스트 레이블
+  // r>20 이상일 때만 표시, 원 크기에 따라 글자 수 조절
+  node.append("text")
+    .style("display", d => d.r > 20 ? "block" : "none")
+    .text(d => {
+      const name = d.data.name || "";
+      return d.r > 40
+        ? (name.length > 12 ? name.slice(0, 12) + "…" : name)
+        : (name.length > 6  ? name.slice(0, 6)  + "…" : name);
+    });
+
+  // 배경 클릭 → 줌 리셋 + 선택 취소
+  svg.on("click", function() {
+    zoomTo(root);
+    cancelSelect();
+  });
+
+  zoomTo(root); // 초기 전체 보기
+
+  // ─────────────────────────────────────────
+  // 줌 애니메이션
+  // 클릭한 원 d가 화면 중앙에 꽉 차도록
+  // scale = 캔버스크기 / 원지름
+  // translate = 원 중심이 화면 중앙으로
+  // ─────────────────────────────────────────
+  function zoomTo(d) {
+    const scale = Math.min(WIDTH, HEIGHT) / (2 * d.r);
+    const tx = WIDTH  / 2 - scale * d.x;
+    const ty = HEIGHT / 2 - scale * d.y;
+    svg.transition().duration(600)
+      .call(zoom.transform,
+        d3.zoomIdentity.translate(tx - 10, ty - 10).scale(scale)
+      );
+  }
+}
+
+
+// ─────────────────────────────────────────
+// 메일 선택
+// 클릭한 원에 빨간 테두리 표시
+// 발신자/날짜/방향/첨부파일 정보 박스 표시
+// 휴지통/완전삭제/취소 버튼 노출
+// ─────────────────────────────────────────
+function selectMail(circleEl, d) {
+  d3.selectAll(".node circle").classed("selected", false); // 이전 선택 초기화
+  d3.select(circleEl).classed("selected", true);           // 현재 원 선택 표시
+  selectedNode = d;                                        // 전역 저장
+
+  const info = document.getElementById("selected-info");
+  info.style.display = "block";
+  info.innerHTML = `
+    <b>제목:</b> ${d.data.name}
+    &nbsp;|&nbsp;
+    <b>${d.data.direction === "발신" ? "📤 발신" : "📥 수신"}</b>
+    &nbsp;|&nbsp; <b>발신자:</b> ${d.data.from}
+    &nbsp;|&nbsp; <b>날짜:</b> ${d.data.date}
+    ${d.data.hasAttachment ? "&nbsp;|&nbsp; 📎 첨부파일 있음" : ""}
+  `;
+
+  document.getElementById("trashBtn").style.display  = "inline-block";
+  document.getElementById("deleteBtn").style.display = "inline-block";
+  document.getElementById("cancelBtn").style.display = "inline-block";
+  setStatus("🔴 휴지통 이동 또는 완전 삭제를 선택하세요.");
+}
+
+
+// ─────────────────────────────────────────
+// 선택 취소
+// 빨간 테두리, 정보 박스, 버튼 전부 초기화
+// ─────────────────────────────────────────
+function cancelSelect() {
+  selectedNode = null;
+  d3.selectAll(".node circle").classed("selected", false);
+  hideSelectedInfo();
+  document.getElementById("trashBtn").style.display  = "none";
+  document.getElementById("deleteBtn").style.display = "none";
+  document.getElementById("cancelBtn").style.display = "none";
+  setStatus("동그라미를 클릭하면 메일이 선택됩니다.");
+}
+
+
+// ─────────────────────────────────────────
+// 휴지통으로 이동 (복구 가능, 30일 보관)
+// web.js의 trashMessage() 호출
+// 성공 시 currentData에서 제거 후 재렌더링
+// ─────────────────────────────────────────
+function confirmTrash() {
+  if (!selectedNode) return;
+  if (!confirm(`"${selectedNode.data.name}"\n\n휴지통으로 이동할까요? (복구 가능)`)) return;
+
+  setStatus("🗑️ 휴지통으로 이동 중...");
+  document.getElementById("trashBtn").disabled = true;
+
+  const msgId = selectedNode.data.messageId;
+
+  google.script.run
+    .withSuccessHandler(function() {
+      currentData = currentData.filter(m => m.id !== msgId); // 해당 메일 제거
+      renderCirclePacking(currentData);                       // 재렌더링
+      setStatus("✅ 휴지통 이동 완료! 남은 메일: " + currentData.length + "개");
+      resetButtons();
+    })
+    .withFailureHandler(function(err) {
+      setStatus("❌ 실패: " + err.message);
+      document.getElementById("trashBtn").disabled = false;
+    })
+    .trashMessage(msgId); // → web.js → GmailApp.moveToTrash()
+}
+
+
+// ─────────────────────────────────────────
+// 완전 삭제 (복구 불가)
+// web.js의 deleteMessage() 호출
+// ⚠️ Gmail Advanced Service 활성화 필요
+//   Apps Script 에디터 → 서비스(+) → Gmail API 추가
+// ─────────────────────────────────────────
+function confirmDelete() {
+  if (!selectedNode) return;
+  if (!confirm(`"${selectedNode.data.name}"\n\n⚠️ 완전 삭제합니다. 복구 불가능합니다.\n정말 삭제할까요?`)) return;
+
+  setStatus("💀 완전 삭제 중...");
+  document.getElementById("deleteBtn").disabled = true;
+
+  const msgId = selectedNode.data.messageId;
+
+  google.script.run
+    .withSuccessHandler(function() {
+      currentData = currentData.filter(m => m.id !== msgId);
+      renderCirclePacking(currentData);
+      setStatus("✅ 완전 삭제 완료! 남은 메일: " + currentData.length + "개");
+      resetButtons();
+    })
+    .withFailureHandler(function(err) {
+      setStatus("❌ 실패: " + err.message);
+      document.getElementById("deleteBtn").disabled = false;
+    })
+    .deleteMessage(msgId); // → web.js → Gmail.Users.Messages.remove()
+}
+
+
+// 버튼 상태 초기화 헬퍼
+function resetButtons() {
+  ["trashBtn","deleteBtn","cancelBtn"].forEach(id => {
+    document.getElementById(id).disabled = false;
+    document.getElementById(id).style.display = "none";
+  });
+  hideSelectedInfo();
+}
+
+function setStatus(msg) { document.getElementById("status").textContent = msg; }
+function hideSelectedInfo() { document.getElementById("selected-info").style.display = "none"; }
+</script>
