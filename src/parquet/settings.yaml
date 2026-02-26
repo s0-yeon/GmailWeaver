@@ -63,8 +63,8 @@ input:
   file_pattern: ".*\\.txt$$"
 
 chunks:
-  size: 1200
-  overlap: 100
+  size: 4000
+  overlap: 200
   group_by_columns: [id]
 
 ### Storage settings ###
@@ -143,3 +143,9 @@ global_search:
 
 drift_search:
   prompt: "prompts/drift_search_system_prompt.txt"
+
+  local_search:
+  prompt: "prompts/local_search_system_prompt.txt"
+  text_unit_prop: 0.3
+  max_tokens: 1000
+  llm_max_tokens: 1000

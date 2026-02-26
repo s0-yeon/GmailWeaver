@@ -1,92 +1,180 @@
+// ============================================================
+// src/apps-script/gmail.js
+// Gmail 동기화, 라벨, 캘린더, 단일 메일 업로드
+// ============================================================
 
-function applyLabelToRecentInboxThreads_(labelName, n) {
-  labelName = (labelName || "").trim();
-  n = Number(n || 5);
+// ── 동기화 버튼 핸들러 ─────────────────────────────────────
 
-  if (!labelName) {
-    return { ok: false, msg: "라벨 이름을 입력해줘." };
-  }
-  if (!Number.isFinite(n) || n <= 0) {
-    return { ok: false, msg: "최근 개수(N)는 1 이상 숫자여야 해." };
-  }
-
-  let label = GmailApp.getUserLabelByName(labelName);
-  if (!label) label = GmailApp.createLabel(labelName);
-
-  const threads = GmailApp.getInboxThreads(0, n);
-
-  threads.forEach(t => t.addLabel(label));
-
-  return {
-    ok: true,
-    msg: `✅ 최근 Inbox 스레드 ${threads.length}개에 "${labelName}" 라벨 적용 완료`
-  };
+function onSyncNewOnly_(e) {
+  return _runSync_(false);
 }
 
-function onClickApplyLabelRecent_(e) {
-  const inputs = (e && e.commonEventObject && e.commonEventObject.formInputs) || {};
+function onSyncAll_(e) {
+  return _runSync_(true);
+}
 
-  const labelName = (inputs.labelName && inputs.labelName.stringInputs)
-    ? inputs.labelName.stringInputs.value[0]
+function _runSync_(includeAll) {
+  try {
+    var query   = includeAll ? "in:inbox OR in:sent" : "in:inbox";
+    var threads = GmailApp.search(query, 0, 500);
+    var myEmail = Session.getActiveUser().getEmail();
+
+    var allText = "";
+    var count   = 0;
+
+    threads.forEach(function(thread) {
+      thread.getMessages().forEach(function(msg) {
+        count++;
+        allText += buildMessageText_(msg, myEmail) + "\n";
+      });
+    });
+
+    var filename = "gmail_sync_" + (includeAll ? "all" : "inbox") + "_" + dateToYmdHms_(new Date()) + ".txt";
+
+    UrlFetchApp.fetch(TunnelURL + "/upload", {
+      method: "post",
+      contentType: "application/json",
+      payload: JSON.stringify({ filename: filename, content: allText })
+    });
+
+    return _toast_("✅ " + count + "개 메일을 서버로 전송했습니다.");
+  } catch (err) {
+    return _toast_("⚠️ 동기화 실패: " + err.message);
+  }
+}
+
+// ── 라벨 적용 (선택된 메일) ───────────────────────────────
+
+function onApplyLabelToMessage_(e) {
+  var inputs     = (e && e.commonEventObject && e.commonEventObject.formInputs) || {};
+  var parameters = (e && e.commonEventObject && e.commonEventObject.parameters) || {};
+
+  var labelName = (inputs.labelName && inputs.labelName.stringInputs)
+    ? inputs.labelName.stringInputs.value[0].trim()
     : "";
 
-  const n = (inputs.n && inputs.n.stringInputs)
-    ? inputs.n.stringInputs.value[0]
-    : "5";
+  var messageId = parameters.messageId || "";
 
-  const res = applyLabelToRecentInboxThreads_(labelName, n);
+  if (!labelName) return _toast_("라벨 이름을 입력해주세요.");
+  if (!messageId) return _toast_("메시지 ID를 찾을 수 없습니다.");
 
-  return CardService.newActionResponseBuilder()
-    .setNotification(CardService.newNotification().setText(res.msg))
-    .build();
+  try {
+    var msg    = GmailApp.getMessageById(messageId);
+    var thread = msg.getThread();
+
+    var label  = GmailApp.getUserLabelByName(labelName);
+    if (!label) label = GmailApp.createLabel(labelName);
+
+    thread.addLabel(label);
+    return _toast_("✅ \"" + labelName + "\" 라벨이 적용되었습니다.");
+  } catch (err) {
+    return _toast_("⚠️ 라벨 적용 실패: " + err.message);
+  }
+}
+function onExtractAndAddCalendar_(e) {
+  var parameters = (e && e.commonEventObject && e.commonEventObject.parameters) || {};
+  var messageId  = parameters.messageId || "";
+
+  if (!messageId) return _toast_("메시지 ID를 찾을 수 없습니다.");
+
+  var msg;
+  try {
+    msg = GmailApp.getMessageById(messageId);
+  } catch (err) {
+    return _toast_("⚠️ 메일을 불러오지 못했습니다: " + err.message);
+  }
+
+  var subject = msg.getSubject() || "(제목 없음)";
+  var body    = msg.getPlainBody() || "";
+
+  // OpenAI 직접 호출 엔드포인트로 변경
+  var raw, data;
+  try {
+    var res = UrlFetchApp.fetch(TunnelURL + "/extract-calendar", {
+      method: "post",
+      contentType: "application/json",
+      headers: { "ngrok-skip-browser-warning": "1" },
+      payload: JSON.stringify({ subject: subject, body: body })
+    });
+    data = JSON.parse(res.getContentText());
+  } catch (err) {
+    return _toast_("⚠️ 서버 오류: " + err.message);
+  }
+
+  var events = data.events || [];
+  if (!events.length) return _toast_("📅 날짜/일정 정보를 찾지 못했습니다.");
+
+  var cal   = CalendarApp.getDefaultCalendar();
+  var added = 0;
+  events.forEach(function(ev) {
+    try {
+      var start = new Date(ev.startTime);
+      var end   = ev.endTime ? new Date(ev.endTime) : new Date(start.getTime() + 3600000);
+      cal.createEvent(ev.title || subject, start, end, { description: ev.description || "" });
+      added++;
+    } catch(_) {}
+  });
+
+  return _toast_(added > 0 ? "📅 " + added + "개 일정이 등록되었습니다." : "⚠️ 일정 등록 실패");
 }
 
-/**
- * 최근 N개의 Inbox thread에 사용자가 고른 라벨을 적용 (라벨 없으면 생성)
- */
-function applyLabelToRecentInboxThreads_(labelName, n) {
-  labelName = (labelName || "").trim();
-  n = Number(n || 5);
+// ── 단일 메일 서버 업로드 ──────────────────────────────────
 
-  if (!labelName) {
-    return { ok: false, msg: "라벨 이름을 입력하세요." };
+function onUploadSingleMessage_(e) {
+  var parameters = (e && e.commonEventObject && e.commonEventObject.parameters) || {};
+  var messageId  = parameters.messageId || "";
+
+  if (!messageId) return _toast_("메시지 ID를 찾을 수 없습니다.");
+
+  try {
+    var msg     = GmailApp.getMessageById(messageId);
+    var myEmail = Session.getActiveUser().getEmail();
+    var content  = buildMessageText_(msg, myEmail);
+    var filename = "gmail_single_" + messageId + ".txt";
+
+    UrlFetchApp.fetch(TunnelURL + "/upload", {
+      method: "post",
+      contentType: "application/json",
+      payload: JSON.stringify({ filename: filename, content: content })
+    });
+
+    return _toast_("☁️ 서버로 전송 완료");
+  } catch (err) {
+    return _toast_("⚠️ 전송 실패: " + err.message);
   }
-  if (!Number.isFinite(n) || n <= 0) {
-    return { ok: false, msg: "개수는 1개 이상이어야 해요." };
-  }
-
-  let label = GmailApp.getUserLabelByName(labelName);
-  if (!label) label = GmailApp.createLabel(labelName);
-
-  const threads = GmailApp.getInboxThreads(0, n);
-  threads.forEach((t) => t.addLabel(label));
-
-  return {
-    ok: true,
-    msg: `✅ 최근 Inbox 스레드 ${threads.length}개에 "${labelName}" 라벨 적용 완료`,
-  };
 }
 
-/**
- * 버튼 클릭 핸들러: 입력값 읽어서 라벨링 실행 후 토스트로 결과 표시
- */
-function onClickApplyLabelRecent_(e) {
-  const inputs =
-    (e && e.commonEventObject && e.commonEventObject.formInputs) || {};
+// ── 유틸 ───────────────────────────────────────────────────
 
-  const labelName =
-    inputs.labelName && inputs.labelName.stringInputs
-      ? inputs.labelName.stringInputs.value[0]
-      : "";
+function buildMessageText_(msg, myEmail) {
+  var direction = msg.getFrom().includes(myEmail) ? "발신" : "수신";
+  var atts = msg.getAttachments({ includeInlineImages: false });
+  var attInfo = atts.length === 0
+    ? "없음"
+    : atts.map(function(a, i) {
+        return (i + 1) + ". " + a.getName() + " | " + a.getContentType() + " | " + a.getSize() + " bytes";
+      }).join("\n  ");
 
-  const n =
-    inputs.n && inputs.n.stringInputs
-      ? inputs.n.stringInputs.value[0]
-      : "5";
+  return [
+    "============================================================",
+    "ID: "        + msg.getId(),
+    "구분: "      + direction,
+    "제목: "      + (msg.getSubject() || "(제목 없음)"),
+    "보낸 사람: " + msg.getFrom(),
+    "받는 사람: " + msg.getTo(),
+    "날짜: "      + msg.getDate(),
+    "",
+    "[첨부파일]",
+    attInfo,
+    "",
+    "[본문]",
+    msg.getPlainBody() || "",
+    "============================================================"
+  ].join("\n");
+}
 
-  const res = applyLabelToRecentInboxThreads_(labelName, n);
-
-  return CardService.newActionResponseBuilder()
-    .setNotification(CardService.newNotification().setText(res.msg))
-    .build();
+function dateToYmdHms_(d) {
+  var pad = function(n) { return String(n).padStart(2, "0"); };
+  return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) +
+    "_" + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
 }

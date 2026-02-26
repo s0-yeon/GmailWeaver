@@ -173,7 +173,7 @@ if not os.path.exists(MAIL_TXT_PATH):
 with open(MAIL_TXT_PATH, "r", encoding="utf-8") as f:
     all_text = f.read()
 
-blocks = [b.strip() for b in all_text.split(MAIL_BLOCK_SEP) if b.strip() and "[메일" in b]
+blocks = [b.strip() for b in all_text.split(MAIL_BLOCK_SEP) if b.strip() and "ID:" in b]
 
 nodes_by_id = {}
 edges = []
