@@ -1,6 +1,12 @@
 function doGet(e) {
-  return HtmlService.createHtmlOutputFromFile("index")
+  return HtmlService.createTemplateFromFile("index")
+    .evaluate()
     .setTitle("Web UI");
+}
+
+//web.js에 d3chart.js 삽입하기 위해서
+function include(filename) {
+  return HtmlService.createHtmlOutputFromFile(filename).getContent();
 }
 
 /**

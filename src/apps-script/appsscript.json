@@ -14,7 +14,7 @@
     "https://www.googleapis.com/auth/gmail.modify"
   ],
   "urlFetchWhitelist": [
-    "https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev/" 
+    "https://detainable-thumbless-arnav.ngrok-free.dev/"
   ],
   "addOns": {
     "common": {
@@ -50,5 +50,14 @@
   "webapp": {
     "executeAs": "USER_DEPLOYING",
     "access": "ANYONE_ANONYMOUS"
+  },
+  "dependencies": {
+    "enabledAdvancedServices": [
+      {
+        "userSymbol": "Gmail",
+        "version": "v1",
+        "serviceId": "gmail"
+      }
+    ]
   }
 }
