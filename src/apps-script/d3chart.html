@@ -1,27 +1,44 @@
 <script>
 // ─────────────────────────────────────────
 // 전역 상태
-// selectedNode: 현재 선택된 메일 노드
-// currentData: 렌더링 중인 메일 배열 (삭제 후 재렌더링용)
+// window.onload 밖에서 선언 → 다른 함수(loadMails 등)에서 접근 가능
 // ─────────────────────────────────────────
-const WIDTH = 700, HEIGHT = 700;
+let svg, g, zoom;
+let WIDTH, HEIGHT;
 let selectedNode = null;
 let currentData = null;
 
-// SVG + g(그룹) 설정
-// zoom/pan transform은 g에 적용 → 내부 원들이 함께 이동
-const svg = d3.select("#chart").attr("width", WIDTH).attr("height", HEIGHT);
-const g = svg.append("g");
+// ─────────────────────────────────────────
+// DOM 로드 완료 후 SVG 초기화
+// DOM이 준비되기 전에 getElementById 하면 null 반환 → 오류
+// window.onload로 감싸서 DOM 완전히 로드된 후 실행
+// ─────────────────────────────────────────
+window.addEventListener("load", function() {
+  const container = document.getElementById("zoomChartWrap");
+  if (!container) {
+    console.error("zoomChartWrap을 찾을 수 없습니다.");
+    return;
+  }
 
-// ─────────────────────────────────────────
-// 줌 설정
-// scaleExtent: 0.5배~8배 허용
-// zoom 이벤트 발생 시 g의 transform 갱신
-// ─────────────────────────────────────────
-const zoom = d3.zoom()
-  .scaleExtent([0.5, 8])
-  .on("zoom", (event) => g.attr("transform", event.transform));
-svg.call(zoom);
+  WIDTH  = container.clientWidth  || 700;
+  HEIGHT = container.clientHeight || 500;
+
+  // SVG + g(그룹) 설정
+  // zoom/pan transform은 g에 적용 → 내부 원들이 함께 이동
+  svg = d3.select("#zoomChart")
+    .attr("width",  WIDTH)
+    .attr("height", HEIGHT);
+
+  g = svg.append("g");
+
+  // 줌 설정
+  // scaleExtent: 0.5배~8배 허용
+  zoom = d3.zoom()
+    .scaleExtent([0.5, 8])
+    .on("zoom", (event) => g.attr("transform", event.transform));
+
+  svg.call(zoom);
+});
 
 
 // ─────────────────────────────────────────
@@ -50,82 +67,66 @@ function loadMails() {
 
 // ─────────────────────────────────────────
 // D3 Circle Packing 렌더링
-//
-// [묶음 기준]
-// root("inbox") → children(메일 1개 = 원 1개)
-// 모든 메일 value=1 → 원 크기 동일
-//
-// [색상 기준]
-// 첨부파일 있음 → 주황 (#ff9800)
-// 발신 메일     → 초록 (#34a853)
-// 수신 메일     → Tableau 팔레트 순서대로
-//
-// [좌표 계산 원리]
-// d3.hierarchy() → 트리 파싱
-// .sum(d=>d.value) → 크기 계산
-// d3.pack() → x, y, r 자동 배치
+// [묶음 기준] root("inbox") → children(메일 1개 = 원 1개)
+// [색상 기준] 첨부파일→주황 / 발신→초록 / 수신→Tableau 팔레트
+// [좌표 계산] d3.hierarchy() → .sum() → d3.pack() → x,y,r 자동 배치
 // ─────────────────────────────────────────
 function renderCirclePacking(messages) {
-  g.selectAll("*").remove(); // 이전 렌더링 제거 (재렌더링 중복 방지)
+  if (!svg || !g) {
+    console.error("SVG가 초기화되지 않았습니다.");
+    return;
+  }
+
+  g.selectAll("*").remove(); // 이전 렌더링 제거
   selectedNode = null;
   hideSelectedInfo();
 
-  // D3 hierarchy용 트리 데이터
-  // root → children(메일들) 1단계 구조
   const hierarchyData = {
     name: "inbox",
     children: messages.map(m => ({
       name: m.subject,
-      value: 1,                  // 동일 크기
-      messageId: m.id,           // 삭제 시 사용할 Gmail ID
+      value: 1,
+      messageId: m.id,
       from: m.from,
       date: m.date,
-      direction: m.direction,    // "수신" or "발신" → 색상 구분
-      hasAttachment: m.hasAttachment // 첨부파일 여부 → 색상 구분
+      direction: m.direction,
+      hasAttachment: m.hasAttachment
     }))
   };
 
-  // d3.hierarchy(): JSON → D3 트리 노드 변환
-  // .sum(): value 합산 → 원 크기 결정
-  // .sort(): 큰 것부터 정렬
   const root = d3.hierarchy(hierarchyData)
     .sum(d => d.value || 0)
     .sort((a, b) => b.value - a.value);
 
-  // d3.pack(): 원 위치/크기 계산
-  // .size(): 캔버스 크기
-  // .padding(): 원 사이 간격
-  const pack = d3.pack().size([WIDTH - 20, HEIGHT - 20]).padding(6);
-  pack(root); // 실행 후 각 노드에 x, y, r 값 채워짐
+  const pack = d3.pack()
+    .size([WIDTH - 20, HEIGHT - 20])
+    .padding(6);
+  pack(root);
 
-  // 노드 그룹(<g>) 생성
   const node = g.selectAll(".node")
     .data(root.descendants())
     .enter().append("g")
     .attr("class", "node")
     .attr("transform", d => `translate(${d.x + 10},${d.y + 10})`);
 
-  // 원(circle) 그리기
   node.append("circle")
     .attr("r", d => d.r)
     .attr("fill", d => {
-      if (!d.parent) return "#4285f4";                        // root 원: 파란색
-      if (d.data.hasAttachment) return "#ff9800";             // 📎 첨부파일 있음: 주황
-      if (d.data.direction === "발신") return "#34a853";      // 📤 발신: 초록
-      return d3.schemeTableau10[d.parent.children.indexOf(d) % 10]; // 📥 수신: Tableau 팔레트
+      if (!d.parent) return "#4285f4";
+      if (d.data.hasAttachment) return "#ff9800";
+      if (d.data.direction === "발신") return "#34a853";
+      return d3.schemeTableau10[d.parent.children.indexOf(d) % 10];
     })
-    .attr("fill-opacity", d => d.children ? 0.2 : 0.85)      // root 반투명, 메일 진하게
+    .attr("fill-opacity", d => d.children ? 0.2 : 0.85)
     .on("click", function(event, d) {
-      event.stopPropagation(); // 배경 click 이벤트 전파 차단
+      event.stopPropagation();
       if (d.children) {
-        zoomTo(d);             // root 원 클릭 → 줌
+        zoomTo(d);
       } else {
-        selectMail(this, d);   // 메일 원 클릭 → 선택
+        selectMail(this, d);
       }
     });
 
-  // 텍스트 레이블
-  // r>20 이상일 때만 표시, 원 크기에 따라 글자 수 조절
   node.append("text")
     .style("display", d => d.r > 20 ? "block" : "none")
     .text(d => {
@@ -135,20 +136,16 @@ function renderCirclePacking(messages) {
         : (name.length > 6  ? name.slice(0, 6)  + "…" : name);
     });
 
-  // 배경 클릭 → 줌 리셋 + 선택 취소
   svg.on("click", function() {
     zoomTo(root);
     cancelSelect();
   });
 
-  zoomTo(root); // 초기 전체 보기
+  zoomTo(root);
 
-  // ─────────────────────────────────────────
   // 줌 애니메이션
-  // 클릭한 원 d가 화면 중앙에 꽉 차도록
-  // scale = 캔버스크기 / 원지름
-  // translate = 원 중심이 화면 중앙으로
-  // ─────────────────────────────────────────
+  // scale = 캔버스크기 / 원지름 → 원이 화면에 꽉 차도록
+  // translate = 원 중심이 화면 중앙으로 이동
   function zoomTo(d) {
     const scale = Math.min(WIDTH, HEIGHT) / (2 * d.r);
     const tx = WIDTH  / 2 - scale * d.x;
@@ -163,14 +160,12 @@ function renderCirclePacking(messages) {
 
 // ─────────────────────────────────────────
 // 메일 선택
-// 클릭한 원에 빨간 테두리 표시
-// 발신자/날짜/방향/첨부파일 정보 박스 표시
-// 휴지통/완전삭제/취소 버튼 노출
+// 빨간 테두리 + 정보 박스 + 버튼 3개 노출
 // ─────────────────────────────────────────
 function selectMail(circleEl, d) {
-  d3.selectAll(".node circle").classed("selected", false); // 이전 선택 초기화
-  d3.select(circleEl).classed("selected", true);           // 현재 원 선택 표시
-  selectedNode = d;                                        // 전역 저장
+  d3.selectAll(".node circle").classed("selected", false);
+  d3.select(circleEl).classed("selected", true);
+  selectedNode = d;
 
   const info = document.getElementById("selected-info");
   info.style.display = "block";
@@ -192,7 +187,6 @@ function selectMail(circleEl, d) {
 
 // ─────────────────────────────────────────
 // 선택 취소
-// 빨간 테두리, 정보 박스, 버튼 전부 초기화
 // ─────────────────────────────────────────
 function cancelSelect() {
   selectedNode = null;
@@ -206,9 +200,8 @@ function cancelSelect() {
 
 
 // ─────────────────────────────────────────
-// 휴지통으로 이동 (복구 가능, 30일 보관)
-// web.js의 trashMessage() 호출
-// 성공 시 currentData에서 제거 후 재렌더링
+// 휴지통으로 이동 (복구 가능)
+// web.js trashMessage() → GmailApp.moveToTrash()
 // ─────────────────────────────────────────
 function confirmTrash() {
   if (!selectedNode) return;
@@ -221,8 +214,8 @@ function confirmTrash() {
 
   google.script.run
     .withSuccessHandler(function() {
-      currentData = currentData.filter(m => m.id !== msgId); // 해당 메일 제거
-      renderCirclePacking(currentData);                       // 재렌더링
+      currentData = currentData.filter(m => m.id !== msgId);
+      renderCirclePacking(currentData);
       setStatus("✅ 휴지통 이동 완료! 남은 메일: " + currentData.length + "개");
       resetButtons();
     })
@@ -230,15 +223,14 @@ function confirmTrash() {
       setStatus("❌ 실패: " + err.message);
       document.getElementById("trashBtn").disabled = false;
     })
-    .trashMessage(msgId); // → web.js → GmailApp.moveToTrash()
+    .trashMessage(msgId);
 }
 
 
 // ─────────────────────────────────────────
 // 완전 삭제 (복구 불가)
-// web.js의 deleteMessage() 호출
-// ⚠️ Gmail Advanced Service 활성화 필요
-//   Apps Script 에디터 → 서비스(+) → Gmail API 추가
+// web.js deleteMessage() → Gmail.Users.Messages.remove()
+// ⚠️ Apps Script 에디터 → 서비스(+) → Gmail API 추가 필요
 // ─────────────────────────────────────────
 function confirmDelete() {
   if (!selectedNode) return;
@@ -260,11 +252,11 @@ function confirmDelete() {
       setStatus("❌ 실패: " + err.message);
       document.getElementById("deleteBtn").disabled = false;
     })
-    .deleteMessage(msgId); // → web.js → Gmail.Users.Messages.remove()
+    .deleteMessage(msgId);
 }
 
 
-// 버튼 상태 초기화 헬퍼
+// 버튼 초기화 헬퍼
 function resetButtons() {
   ["trashBtn","deleteBtn","cancelBtn"].forEach(id => {
     document.getElementById(id).disabled = false;
