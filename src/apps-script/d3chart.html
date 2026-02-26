@@ -1,0 +1,270 @@
+<script>
+// ─────────────────────────────────────────
+// 전역 상태
+// window.onload 밖에서 선언 → 다른 함수(loadMails 등)에서 접근 가능
+// ─────────────────────────────────────────
+let svg, g, zoom;
+let WIDTH, HEIGHT;
+let selectedNode = null;
+let currentData = null;
+
+// ─────────────────────────────────────────
+// DOM 로드 완료 후 SVG 초기화
+// DOM이 준비되기 전에 getElementById 하면 null 반환 → 오류
+// window.onload로 감싸서 DOM 완전히 로드된 후 실행
+// ─────────────────────────────────────────
+window.addEventListener("load", function() {
+  const container = document.getElementById("zoomChartWrap");
+  if (!container) {
+    console.error("zoomChartWrap을 찾을 수 없습니다.");
+    return;
+  }
+
+  WIDTH  = container.clientWidth  || 700;
+  HEIGHT = container.clientHeight || 500;
+
+  // SVG + g(그룹) 설정
+  // zoom/pan transform은 g에 적용 → 내부 원들이 함께 이동
+  svg = d3.select("#zoomChart")
+    .attr("width",  WIDTH)
+    .attr("height", HEIGHT);
+
+  g = svg.append("g");
+
+  // 줌 설정
+  // scaleExtent: 0.5배~8배 허용
+  zoom = d3.zoom()
+    .scaleExtent([0.5, 8])
+    .on("zoom", (event) => g.attr("transform", event.transform));
+
+  svg.call(zoom);
+});
+
+
+// ─────────────────────────────────────────
+// 메일 불러오기
+// web.js의 getInboxMessages() 호출
+// 성공 시 currentData 저장 후 renderCirclePacking() 실행
+// ─────────────────────────────────────────
+function loadMails() {
+  setStatus("📬 메일 불러오는 중...");
+  document.getElementById("loadBtn").disabled = true;
+
+  google.script.run
+    .withSuccessHandler(function(data) {
+      currentData = data;
+      renderCirclePacking(data);
+      setStatus("✅ 메일 " + data.length + "개 로드 완료. 동그라미를 클릭하면 선택됩니다.");
+      document.getElementById("loadBtn").disabled = false;
+    })
+    .withFailureHandler(function(err) {
+      setStatus("❌ 오류: " + err.message);
+      document.getElementById("loadBtn").disabled = false;
+    })
+    .getInboxMessages(20);
+}
+
+
+// ─────────────────────────────────────────
+// D3 Circle Packing 렌더링
+// [묶음 기준] root("inbox") → children(메일 1개 = 원 1개)
+// [색상 기준] 첨부파일→주황 / 발신→초록 / 수신→Tableau 팔레트
+// [좌표 계산] d3.hierarchy() → .sum() → d3.pack() → x,y,r 자동 배치
+// ─────────────────────────────────────────
+function renderCirclePacking(messages) {
+  if (!svg || !g) {
+    console.error("SVG가 초기화되지 않았습니다.");
+    return;
+  }
+
+  g.selectAll("*").remove(); // 이전 렌더링 제거
+  selectedNode = null;
+  hideSelectedInfo();
+
+  const hierarchyData = {
+    name: "inbox",
+    children: messages.map(m => ({
+      name: m.subject,
+      value: 1,
+      messageId: m.id,
+      from: m.from,
+      date: m.date,
+      direction: m.direction,
+      hasAttachment: m.hasAttachment
+    }))
+  };
+
+  const root = d3.hierarchy(hierarchyData)
+    .sum(d => d.value || 0)
+    .sort((a, b) => b.value - a.value);
+
+  const pack = d3.pack()
+    .size([WIDTH - 20, HEIGHT - 20])
+    .padding(6);
+  pack(root);
+
+  const node = g.selectAll(".node")
+    .data(root.descendants())
+    .enter().append("g")
+    .attr("class", "node")
+    .attr("transform", d => `translate(${d.x + 10},${d.y + 10})`);
+
+  node.append("circle")
+    .attr("r", d => d.r)
+    .attr("fill", d => {
+      if (!d.parent) return "#4285f4";
+      if (d.data.hasAttachment) return "#ff9800";
+      if (d.data.direction === "발신") return "#34a853";
+      return d3.schemeTableau10[d.parent.children.indexOf(d) % 10];
+    })
+    .attr("fill-opacity", d => d.children ? 0.2 : 0.85)
+    .on("click", function(event, d) {
+      event.stopPropagation();
+      if (d.children) {
+        zoomTo(d);
+      } else {
+        selectMail(this, d);
+      }
+    });
+
+  node.append("text")
+    .style("display", d => d.r > 20 ? "block" : "none")
+    .text(d => {
+      const name = d.data.name || "";
+      return d.r > 40
+        ? (name.length > 12 ? name.slice(0, 12) + "…" : name)
+        : (name.length > 6  ? name.slice(0, 6)  + "…" : name);
+    });
+
+  svg.on("click", function() {
+    zoomTo(root);
+    cancelSelect();
+  });
+
+  zoomTo(root);
+
+  // 줌 애니메이션
+  // scale = 캔버스크기 / 원지름 → 원이 화면에 꽉 차도록
+  // translate = 원 중심이 화면 중앙으로 이동
+  function zoomTo(d) {
+    const scale = Math.min(WIDTH, HEIGHT) / (2 * d.r);
+    const tx = WIDTH  / 2 - scale * d.x;
+    const ty = HEIGHT / 2 - scale * d.y;
+    svg.transition().duration(600)
+      .call(zoom.transform,
+        d3.zoomIdentity.translate(tx - 10, ty - 10).scale(scale)
+      );
+  }
+}
+
+
+// ─────────────────────────────────────────
+// 메일 선택
+// 빨간 테두리 + 정보 박스 + 버튼 3개 노출
+// ─────────────────────────────────────────
+function selectMail(circleEl, d) {
+  d3.selectAll(".node circle").classed("selected", false);
+  d3.select(circleEl).classed("selected", true);
+  selectedNode = d;
+
+  const info = document.getElementById("selected-info");
+  info.style.display = "block";
+  info.innerHTML = `
+    <b>제목:</b> ${d.data.name}
+    &nbsp;|&nbsp;
+    <b>${d.data.direction === "발신" ? "📤 발신" : "📥 수신"}</b>
+    &nbsp;|&nbsp; <b>발신자:</b> ${d.data.from}
+    &nbsp;|&nbsp; <b>날짜:</b> ${d.data.date}
+    ${d.data.hasAttachment ? "&nbsp;|&nbsp; 📎 첨부파일 있음" : ""}
+  `;
+
+  document.getElementById("trashBtn").style.display  = "inline-block";
+  document.getElementById("deleteBtn").style.display = "inline-block";
+  document.getElementById("cancelBtn").style.display = "inline-block";
+  setStatus("🔴 휴지통 이동 또는 완전 삭제를 선택하세요.");
+}
+
+
+// ─────────────────────────────────────────
+// 선택 취소
+// ─────────────────────────────────────────
+function cancelSelect() {
+  selectedNode = null;
+  d3.selectAll(".node circle").classed("selected", false);
+  hideSelectedInfo();
+  document.getElementById("trashBtn").style.display  = "none";
+  document.getElementById("deleteBtn").style.display = "none";
+  document.getElementById("cancelBtn").style.display = "none";
+  setStatus("동그라미를 클릭하면 메일이 선택됩니다.");
+}
+
+
+// ─────────────────────────────────────────
+// 휴지통으로 이동 (복구 가능)
+// web.js trashMessage() → GmailApp.moveToTrash()
+// ─────────────────────────────────────────
+function confirmTrash() {
+  if (!selectedNode) return;
+  if (!confirm(`"${selectedNode.data.name}"\n\n휴지통으로 이동할까요? (복구 가능)`)) return;
+
+  setStatus("🗑️ 휴지통으로 이동 중...");
+  document.getElementById("trashBtn").disabled = true;
+
+  const msgId = selectedNode.data.messageId;
+
+  google.script.run
+    .withSuccessHandler(function() {
+      currentData = currentData.filter(m => m.id !== msgId);
+      renderCirclePacking(currentData);
+      setStatus("✅ 휴지통 이동 완료! 남은 메일: " + currentData.length + "개");
+      resetButtons();
+    })
+    .withFailureHandler(function(err) {
+      setStatus("❌ 실패: " + err.message);
+      document.getElementById("trashBtn").disabled = false;
+    })
+    .trashMessage(msgId);
+}
+
+
+// ─────────────────────────────────────────
+// 완전 삭제 (복구 불가)
+// web.js deleteMessage() → Gmail.Users.Messages.remove()
+// ⚠️ Apps Script 에디터 → 서비스(+) → Gmail API 추가 필요
+// ─────────────────────────────────────────
+function confirmDelete() {
+  if (!selectedNode) return;
+  if (!confirm(`"${selectedNode.data.name}"\n\n⚠️ 완전 삭제합니다. 복구 불가능합니다.\n정말 삭제할까요?`)) return;
+
+  setStatus("💀 완전 삭제 중...");
+  document.getElementById("deleteBtn").disabled = true;
+
+  const msgId = selectedNode.data.messageId;
+
+  google.script.run
+    .withSuccessHandler(function() {
+      currentData = currentData.filter(m => m.id !== msgId);
+      renderCirclePacking(currentData);
+      setStatus("✅ 완전 삭제 완료! 남은 메일: " + currentData.length + "개");
+      resetButtons();
+    })
+    .withFailureHandler(function(err) {
+      setStatus("❌ 실패: " + err.message);
+      document.getElementById("deleteBtn").disabled = false;
+    })
+    .deleteMessage(msgId);
+}
+
+
+// 버튼 초기화 헬퍼
+function resetButtons() {
+  ["trashBtn","deleteBtn","cancelBtn"].forEach(id => {
+    document.getElementById(id).disabled = false;
+    document.getElementById(id).style.display = "none";
+  });
+  hideSelectedInfo();
+}
+
+function setStatus(msg) { document.getElementById("status").textContent = msg; }
+function hideSelectedInfo() { document.getElementById("selected-info").style.display = "none"; }
+</script>
