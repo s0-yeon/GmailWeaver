@@ -93,7 +93,13 @@ def _convert_to_calendar_json(text):
                 {
                     "role": "system",
                     "content": (
+                        "너는 이메일 내용을 분석해서 캘린더 일정을 추출하는 도우미야."
                         "날짜/시간/일정 정보를 추출해서 반드시 JSON으로만 응답해. "
+                        "이메일의 제목과 본문을 함께 분석해서 캘린더에 적합한 새로운 일정 제목(title)을 만들어."
+                        "메일 제목을 그대로 복사하지 말고, 실제 일정의 목적이 드러나도록 자연스럽고 짧게 작성해."
+                        "예를 들면 '회의 안내' 같은 제목이 있더라도, 본문이 캡스톤 발표 회의에 대한 내용이면 title는 '캡스톤 발표 회의'처럼 만들어."
+                        "title은 5~20자 정도의 짧고 명확한 한국어로 작성해."
+                        "description은 일정과 관련된 핵심 내용을 간단히 넣어"
                         "형식: {\"events\": [{\"title\": \"제목\", \"startTime\": \"2026-02-26T09:00:00\", "
                         "\"endTime\": \"2026-02-26T10:00:00\", \"description\": \"\"}]} "
                         "일정 없으면 {\"events\": []}"
@@ -115,7 +121,6 @@ def extract_calendar():
     body    = data.get('body', '')
     result  = _convert_to_calendar_json(f"제목: {subject}\n\n{body}")
     return jsonify(result)
-
 
 # ===== 비동기 쿼리 실행 요청 =====
 @app.route('/run-query-async', methods=['POST'])
