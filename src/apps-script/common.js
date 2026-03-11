@@ -6,15 +6,15 @@ const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxeAjOdKpQ0P3PArjz1v
 
 // 공식 엔트리 포인트 (외부에서 호출)
 function onHomepage(e) {    // Gmail 사이드 패널을 처음 열거나, 메일을 선택하지 않은 상태일 때 자동 호출
-    return buildHomeCard_();
+    return _buildHomeCard();
 }
 
 function onGmailMessage(e) {    // 사용자가 Gmail에서 어떤 메일을 클릭했을 때 자동 호출
-    return buildGmailMessageCard_(e);
+    return _buildGmailMessageCard(e);
 }
 
 // 공통 유틸
-function webpageBtn_() {    
+function _webpageBtn() {    
     return CardService.newTextButton()  // 텍스트 버튼 객체 생성
         .setText("🌐 웹페이지로 보기")  
         .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
@@ -26,10 +26,10 @@ function webpageBtn_() {
 }
 
 // 홈 카드 (메일을 선택하지 않은 기본 상태의 UI)
-function buildHomeCard_() {
+function _buildHomeCard() {
     // 섹션 1: 웹페이지 바로가기 
     var webSection = CardService.newCardSection()     
-        .addWidget(webpageBtn_());
+        .addWidget(_webpageBtn());
 
     // 섹션 2: Gmail 동기화 
     var syncSection = CardService.newCardSection()
@@ -86,7 +86,7 @@ function buildHomeCard_() {
 }
 
 // Gmail 메시지 선택 카드
-function buildGmailMessageCard_(e) {
+function _buildGmailMessageCard(e) {
     // Gmail 메타데이터 추출
     var accessToken = e.messageMetadata ? e.messageMetadata.accessToken : null;  // OAuth 토큰. Gmail API 호출
     var messageId = e.messageMetadata ? e.messageMetadata.messageId : null;   // Gmail 메시지의 고유 ID
@@ -96,7 +96,7 @@ function buildGmailMessageCard_(e) {
 
     // 섹션 1: 웹페이지 바로가기 
     var webSection = CardService.newCardSection()   
-        .addWidget(webpageBtn_());
+        .addWidget(_webpageBtn());
 
     // 섹션 2: 라벨 분류
     var labelSection = CardService.newCardSection()

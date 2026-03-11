@@ -3,14 +3,14 @@
 
 // 동기화 버튼 핸들러  
 function onSyncNewOnly(e) {
-  return runSync_(false);
+  return _runSync(false);
 }
 
 function onSyncAll(e) {
-  return runSync_(true);
+  return _runSync(true);
 }
 
-function runSync_(includeAll) {
+function _runSync(includeAll) {
   try {
     var query   = includeAll ? "in:inbox OR in:sent" : "in:inbox";
     var threads = GmailApp.search(query, 0, 500);
@@ -21,11 +21,11 @@ function runSync_(includeAll) {
     threads.forEach(function(thread) {
       thread.getMessages().forEach(function(msg) {
         count++;
-        allText += buildMessageText_(msg, myEmail) + "\n";
+        allText += _buildMessageText(msg, myEmail) + "\n";
       });
     });
 
-    var filename = "gmail_sync_" + (includeAll ? "all" : "inbox") + "_" + dateToYmdHms_(new Date()) + ".txt";
+    var filename = "gmail_sync_" + (includeAll ? "all" : "inbox") + "_" + _dateToYmdHms(new Date()) + ".txt";
 
     UrlFetchApp.fetch(TunnelURL + "/upload", {
       method: "post",
@@ -33,9 +33,9 @@ function runSync_(includeAll) {
       payload: JSON.stringify({ filename: filename, content: allText })
     });
 
-    return toast_("✅ " + count + "개 메일을 서버로 전송했습니다.");
+    return _toast("✅ " + count + "개 메일을 서버로 전송했습니다.");
   } catch (err) {
-    return toast_("⚠️ 동기화 실패: " + err.message);
+    return _toast("⚠️ 동기화 실패: " + err.message);
   }
 }
 
@@ -50,8 +50,8 @@ function onApplyLabelToMessage(e) {
 
   var messageId = parameters.messageId || "";
 
-  if (!labelName) return toast_("라벨 이름을 입력해주세요.");
-  if (!messageId) return toast_("메시지 ID를 찾을 수 없습니다.");
+  if (!labelName) return _toast("라벨 이름을 입력해주세요.");
+  if (!messageId) return _toast("메시지 ID를 찾을 수 없습니다.");
 
   try {
     var msg    = GmailApp.getMessageById(messageId);
@@ -61,9 +61,9 @@ function onApplyLabelToMessage(e) {
     if (!label) label = GmailApp.createLabel(labelName);
 
     thread.addLabel(label);
-    return toast_("✅ \"" + labelName + "\" 라벨이 적용되었습니다.");
+    return _toast("✅ \"" + labelName + "\" 라벨이 적용되었습니다.");
   } catch (err) {
-    return toast_("⚠️ 라벨 적용 실패: " + err.message);
+    return _toast("⚠️ 라벨 적용 실패: " + err.message);
   }
 }
 
@@ -72,13 +72,13 @@ function onExtractAndAddCalendar(e) {
   var parameters = (e && e.commonEventObject && e.commonEventObject.parameters) || {};
   var messageId  = parameters.messageId || "";
 
-  if (!messageId) return toast_("메시지 ID를 찾을 수 없습니다.");
+  if (!messageId) return _toast("메시지 ID를 찾을 수 없습니다.");
 
   var msg;
   try {
     msg = GmailApp.getMessageById(messageId);
   } catch (err) {
-    return toast_("⚠️ 메일을 불러오지 못했습니다: " + err.message);
+    return _toast("⚠️ 메일을 불러오지 못했습니다: " + err.message);
   }
 
   var subject = msg.getSubject() || "(제목 없음)";
@@ -95,11 +95,11 @@ function onExtractAndAddCalendar(e) {
     });
     data = JSON.parse(res.getContentText());
   } catch (err) {
-    return toast_("⚠️ 서버 오류: " + err.message);
+    return _toast("⚠️ 서버 오류: " + err.message);
   }
 
   var events = data.events || [];
-  if (!events.length) return toast_("📅 날짜/일정 정보를 찾지 못했습니다.");
+  if (!events.length) return _toast("📅 날짜/일정 정보를 찾지 못했습니다.");
 
   var cal   = CalendarApp.getDefaultCalendar();
   var added = 0;
@@ -112,7 +112,7 @@ function onExtractAndAddCalendar(e) {
     } catch(_) {}
   });
 
-  return toast_(added > 0 ? "📅 " + added + "개 일정이 등록되었습니다." : "⚠️ 일정 등록 실패");
+  return _toast(added > 0 ? "📅 " + added + "개 일정이 등록되었습니다." : "⚠️ 일정 등록 실패");
 }
 
 // 단일 메일 서버 업로드  
@@ -120,12 +120,12 @@ function onUploadSingleMessage(e) {
   var parameters = (e && e.commonEventObject && e.commonEventObject.parameters) || {};
   var messageId  = parameters.messageId || "";
 
-  if (!messageId) return toast_("메시지 ID를 찾을 수 없습니다.");
+  if (!messageId) return _toast("메시지 ID를 찾을 수 없습니다.");
 
   try {
     var msg     = GmailApp.getMessageById(messageId);
     var myEmail = Session.getActiveUser().getEmail();
-    var content  = buildMessageText_(msg, myEmail);
+    var content  = _buildMessageText(msg, myEmail);
     var filename = "gmail_single_" + messageId + ".txt";
 
     UrlFetchApp.fetch(TunnelURL + "/upload", {
@@ -134,14 +134,14 @@ function onUploadSingleMessage(e) {
       payload: JSON.stringify({ filename: filename, content: content })
     });
 
-    return toast_("☁️ 서버로 전송 완료");
+    return _toast("☁️ 서버로 전송 완료");
   } catch (err) {
-    return toast_("⚠️ 전송 실패: " + err.message);
+    return _toast("⚠️ 전송 실패: " + err.message);
   }
 }
 
 // 유틸 
-function buildMessageText_(msg, myEmail) {
+function _buildMessageText(msg, myEmail) {
   var direction = msg.getFrom().includes(myEmail) ? "발신" : "수신";
   var atts = msg.getAttachments({ includeInlineImages: false });
   var attInfo = atts.length === 0
@@ -168,7 +168,7 @@ function buildMessageText_(msg, myEmail) {
   ].join("\n");
 }
 
-function dateToYmdHms_(d) {
+function _dateToYmdHms(d) {
   var pad = function(n) { return String(n).padStart(2, "0"); };
   return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) +
     "_" + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());

@@ -1,0 +1,3874 @@
+============================================================
+[메일 1]
+ID: 19c886910fcc8eba
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Mon Feb 23 2026 11:51:50 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+Windows에서 새로 로그인함
+
+
+gpttitti@hansung.ac.kr
+Windows 기기에서 내 Google 계정에 새로 로그인했습니다. 직접 로그인한 것이  
+맞다면 아무런 조치를 취하지 않아도 됩니다.
+본인이 아니라면 안내에 따라 계정을 보호하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=gpttitti@hansung.ac.kr&continue=https://myaccount.google.com/alert/nt/1771815110000?rfn%3D325%26rfnc%3D1%26eid%3D-7872524959143495022%26et%3D0>
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 2]
+ID: 19c800860f03de66
+구분: 수신
+제목: Your ChatGPT code is 094080
+보낸 사람: OpenAI <otp@tm1.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Feb 21 2026 20:49:17 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 094080 
+Enter this temporary verification code to continue: 094080. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+094080 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://help.openai.com/en/articles/9889414-what-is-a-one-time-password-otp-and-why-did-you-receive-one>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://help.openai.com/en/>
+
+============================================================
+
+============================================================
+[메일 3]
+ID: 19c8005cb84cc8bb
+구분: 수신
+제목: ChatGPT 코드는 515398입니다
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Feb 21 2026 20:46:27 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ ChatGPT 코드는 515398입니다 
+
+[image: OpenAI] 
+
+다음 임시 인증 코드를 입력해 계속하세요: 
+
+515398 
+
+ChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를 초기화하세요 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60WdcO_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbjtVJTcBx0qEC2p9XzSYP-2FDlX-2FYvGgaGkGGr7e4Dl-2FpQ53-2BE8-2B2qEOcNaewH6MBaHTHxUoLcykMfs2sXaGA0MAe7l0doiz1UAGVcib4xwqnYE70kaNkx63Jjh7-2FPny9zk9kStIOzbzEO91q2SUpWRAXjtmqV47GrDu7s4FyHU946MIJio10qav8T-2BVMqcwMq4Blf1ga8EMw-2FSJemTUw315-2FSF-2Bxl-2BKqFRxoOD3J4Gonh0y6ua3Kq7ROPqBeJOHaVdNtRZDNGgofPcKtDw0z-2BUS0-3D>. 
+
+
+
+감사합니다.
+ChatGPT 팀 드림 
+
+[image: OpenAI] 
+
+ChatGPT 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMtxuwNyiH8tHYK-2BH0HuuCVk-3DhEJN_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbjtVJTcBx0qEC2p9XzSYP-2FDlX-2FYvGgaGkGGr7e4Dl-2FpQ53-2BE8-2B2qEOcNaewH6MBaHTHxUoLcykMfs2sXaGA0MAe7l0doiz1UAGVcib4xwqnYugUVmNUIZg4yPyyO7vF8ba04r7iJuoxwxI6qM1FMX4KjA3VLiHHE6VoG3TplBfa-2FK3BrXYexBLoXOCxTXnHrhMevvSnOw4S-2Bx7wqzJElDYqHbpIiBXhLnqR899JCplQzCuUU9nAUZO0pQqa8k8m4kQ1hF4OYRv959sAWegpBKwM-3D> 
+
+도움말 센터 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0tn1LK51XoZKbBfyGht7CMabzCu_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbjtVJTcBx0qEC2p9XzSYP-2FDlX-2FYvGgaGkGGr7e4Dl-2FpQ53-2BE8-2B2qEOcNaewH6MBaHTHxUoLcykMfs2sXaGA0MAe7l0doiz1UAGVcib4xwqnY2qKwREqJvd59DIz7YtWmE0NTJwuG0n34LYMxNiKYTTjdawIrpcT6UiFB0VEKh9XGUW6xVm72PnIRzkGC0IOTwE4QfsA1trklN8-2B9XTdWXUMkfXyXGGKaVhm7WbLXj-2BwJyhqEKCex6t7DMVMgN9mYwTY2caCgvJR7xbadK4jySmE-3D> 
+
+============================================================
+
+============================================================
+[메일 4]
+ID: 19c8006a6da429cc
+구분: 수신
+제목: ChatGPT 코드는 515398입니다
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Feb 21 2026 20:47:23 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ ChatGPT 코드는 515398입니다 
+
+[image: OpenAI] 
+
+다음 임시 인증 코드를 입력해 계속하세요: 
+
+515398 
+
+ChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를 초기화하세요 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60yVc3_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4Lgbqd2vn7ufs6samAuyrsb-2FVWPf0h1oahqpbRF5mE7Zfc-2BjBjLj7E3SLVPaihh9IFmvWKSVr0-2FPfpO2GOJ72WF1Qy5yK0dnesJfWUg4W6WT0qwrYHS40Lt6OdFbMr84iD6Ndo0G6J-2F23GBP812RwfO63CZ-2F92FATIgGDOWlo7fgwJ2pAuBkhtWBJ72zNaBfaHN0ZJm7zSW3E-2FqmNMGWOs6srXAoeUWi-2FCp2SLzOR4KXiIbvTuE3vd-2BI1vZYEFs-2BmrtNYJplQ2QkMdKGa9QFA6NM2w-3D>. 
+
+
+
+감사합니다.
+ChatGPT 팀 드림 
+
+[image: OpenAI] 
+
+ChatGPT 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMtxuwNyiH8tHYK-2BH0HuuCVk-3DoOl9_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4Lgbqd2vn7ufs6samAuyrsb-2FVWPf0h1oahqpbRF5mE7Zfc-2BjBjLj7E3SLVPaihh9IFmvWKSVr0-2FPfpO2GOJ72WF1Qy5yK0dnesJfWUg4W6WT0qwYUvo011bM30YP35e1waKCGxHDEvOfhoQ4onkVJ8xs2hMfKQsFylVyDYLjFQRqfrX7EDCZo-2BN5Jq2Y2ZnRJEyA170SNklAuW5PgC2FB-2B44efJ9XguDuHk-2FRoDvRmeiA0gUNrmLrnXPJSMjzbyXNQQH18q-2BSlLcQJKWVFFtXMfwCw-3D> 
+
+도움말 센터 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0tn1LK51XoZKbBfyGht7CMaC15N_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4Lgbqd2vn7ufs6samAuyrsb-2FVWPf0h1oahqpbRF5mE7Zfc-2BjBjLj7E3SLVPaihh9IFmvWKSVr0-2FPfpO2GOJ72WF1Qy5yK0dnesJfWUg4W6WT0qwEJF9fPCxnyWrb2hSO-2BtfUeAsoXpQ5jb00v2BstdKhL4sYJkg-2Fhs0X9OFwI0mnb9PoWuf1iI3d8bDv-2B2b0GGkK1xkM4kvWi3Q2aaZ54QaV1-2BQcyEOCkokg2h5JDownbNu1a4zzYTkf62NoYZyZ7sBsk1h6E6PtPVcS67u9236NxA-3D> 
+
+============================================================
+
+============================================================
+[메일 5]
+ID: 19c80074ad99dfe4
+구분: 수신
+제목: ChatGPT 코드는 515398입니다
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Feb 21 2026 20:48:05 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ ChatGPT 코드는 515398입니다 
+
+[image: OpenAI] 
+
+다음 임시 인증 코드를 입력해 계속하세요: 
+
+515398 
+
+ChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를 초기화하세요 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60C3IO_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbrCukhG0cYyHp3raw2N4eEvnaATt7l6AuBABU-2B7Q1VCrTY6Zx8zpZmXQP6f0itfxV6Y77BshMou4QOSOzBiKkqiFtkQOVYMlPTVzfZFCGkb7rJEi93lArEkCKRqoh-2BZSqZiNb-2BLkBpLQDf44gqOzbS6piFO-2BehTv9CnRP3hH2rl-2F12oUzIpTwqBGDKi-2FlC-2FssogHWA0DI7jsrnJ5-2FQerYTvj-2BBwu-2B-2FocSr9EEs6-2FNAxMqrbbf6pn4acC1fABsH1fZ32p6KHXUV8E3zVZPkKZN2g-3D>. 
+
+
+
+감사합니다.
+ChatGPT 팀 드림 
+
+[image: OpenAI] 
+
+ChatGPT 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMtxuwNyiH8tHYK-2BH0HuuCVk-3D_NT0_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbrCukhG0cYyHp3raw2N4eEvnaATt7l6AuBABU-2B7Q1VCrTY6Zx8zpZmXQP6f0itfxV6Y77BshMou4QOSOzBiKkqiFtkQOVYMlPTVzfZFCGkb767NK92pVNkqEvcbYiZj3IGeCRR0YyZyM9sQ63U95TTicnwmr-2B1ce7jUmPGM2JSQYqHGwLu5wYNiI3RQWvSqPdxFZ8Y3-2BU73fl8PeuFgsGjK0KXMI3GPxSnm8vVNoKTu2BXxmoT2Ytp93vmn-2FgnRpTEC-2FnQscxxaY3F26sh0uLKI-3D> 
+
+도움말 센터 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0tn1LK51XoZKbBfyGht7CMaPgkf_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbrCukhG0cYyHp3raw2N4eEvnaATt7l6AuBABU-2B7Q1VCrTY6Zx8zpZmXQP6f0itfxV6Y77BshMou4QOSOzBiKkqiFtkQOVYMlPTVzfZFCGkb71fVn6laj5Jkng-2BSnlpF2oiW1yLJwxkucw9zXdlWV93vMokZI-2FL5jvRg0WmPSlFAA9J4IAz249CkDfjM51h2HuJ3qZpOn-2F5kP-2FW5pUTr5-2FCL1b6RldPjXQ66Yneti-2FPN6LZRjl3cQDwCq9OSEpumbCT7v2nUce0zoJOeVMpMyBNE-3D> 
+
+============================================================
+
+============================================================
+[메일 6]
+ID: 19c80042ee87ca6a
+구분: 수신
+제목: ChatGPT 코드는 873433입니다
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Feb 21 2026 20:44:41 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ ChatGPT 코드는 873433입니다 
+
+[image: OpenAI] 
+
+다음 임시 인증 코드를 입력해 계속하세요: 
+
+873433 
+
+ChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를 초기화하세요 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60HmTV_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbriCbK-2FvwJ6gKKf3gv29AplBxWpbH-2BQPP6h08JZuIjLvH7sznhwKZYVAjG8-2B2l2HLgSOG-2B71y3peuFWz7EXswdOLNJalVvIdpkTStwe5EVduKHOCwdqqT7PsWPG24CVY-2BSfub9fzoO8AiPbDM2a-2Ff7uHXdTMVbV04OX74o4Y61XEaKGJ8-2FD0EUEFjlSvStaUOFWoP1c-2BUl1Gf-2Bzo76ELFoBTV4czowjMJmB9fLNmmK4DhrtLZfbMeK6Pi4OHKMvxi6UztKi-2Bb4JnoSmMmptv-2B-2BA-3D>. 
+
+
+
+감사합니다.
+ChatGPT 팀 드림 
+
+[image: OpenAI] 
+
+ChatGPT 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMtxuwNyiH8tHYK-2BH0HuuCVk-3DzeFA_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbriCbK-2FvwJ6gKKf3gv29AplBxWpbH-2BQPP6h08JZuIjLvH7sznhwKZYVAjG8-2B2l2HLgSOG-2B71y3peuFWz7EXswdOLNJalVvIdpkTStwe5EVduF-2FB5jCSSKTiTe6mJH-2FPAu-2B0ki-2FsO6mnY5XvAcFzebR-2FRFN9ALPNX1yvEqQyh7HcY2-2FvqigQDKp9lkuxxOT8TSif7T2xP4l9eNiu8FZCgqZsu2dpmiZaZaIQ11QGWQ5yrLtri6fDF3U3IX9jc5FnG3E6Eg6dnIIywCR84Y3Mq8c8-3D> 
+
+도움말 센터 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0tn1LK51XoZKbBfyGht7CMaAd18_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbriCbK-2FvwJ6gKKf3gv29AplBxWpbH-2BQPP6h08JZuIjLvH7sznhwKZYVAjG8-2B2l2HLgSOG-2B71y3peuFWz7EXswdOLNJalVvIdpkTStwe5EVdumd69tvYctgSoTZh4tg7hSbKOBBfvyvVFZ8QJuJFCB-2BW3MVxVnFkFw6fMc-2FPmbZWKLSESl0uaVss5Fj3loUsi8nvjsz41Ccquwutnaf5DLZQZW-2FRbhI-2B-2FEf41ZGbmXxQFoy-2BGZVXMWEnu2HL18FjPpG8lzRwH-2Bw8-2FJXUtR1pZShk-3D> 
+
+============================================================
+
+============================================================
+[메일 7]
+ID: 19c7fea447b0dcbe
+구분: 수신
+제목: ChatGPT 코드는 197787입니다
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Feb 21 2026 20:16:23 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ ChatGPT 코드는 197787입니다 
+
+[image: OpenAI] 
+
+다음 임시 인증 코드를 입력해 계속하세요: 
+
+197787 
+
+ChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를 초기화하세요 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60zWKT_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbuJw0ll7MjkkXc7pZ7iP4QmblvjhHd-2BlQFf7tIahO2EIRuPR-2F6WQuJIHwlvVflIjhxlrq4bvmC8lcvDHgh-2FpmvMSRYFAXlyilpXUJ0HUqCeF65W-2BQN4LyDwlv61fnLEuWIGcaDzBNrGHv8GUFcEPDH8u31Z9kj-2F8T47kd0Qgp3cZQj11Y26OtTAx7nCnrTYEM3vd-2Bej6mMJwg33OqjG5kFhJgOggL8EC5GM0v3LSf5QiHzZ9WGoNXt8VMeMVsFplbqXCXIr6DtnKmDd-2BZvf5mxY-3D>. 
+
+
+
+감사합니다.
+ChatGPT 팀 드림 
+
+[image: OpenAI] 
+
+ChatGPT 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMtxuwNyiH8tHYK-2BH0HuuCVk-3DrZUY_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbuJw0ll7MjkkXc7pZ7iP4QmblvjhHd-2BlQFf7tIahO2EIRuPR-2F6WQuJIHwlvVflIjhxlrq4bvmC8lcvDHgh-2FpmvMSRYFAXlyilpXUJ0HUqCeFmVZfvqTB9k9xn7QGmkjXv2SU0ynzTTzrPpHti1EPnSOfWcLh3kD0LiSQHx-2FbN1-2BVE6FvXatHMA77CFOYhQQwG8esxyr6gYAQZsdwsMv6U5nAT0WbhyMERHooAT6HkOGjro-2FivuKeNl1-2FUxK8mDX7i52yLqxHmnn-2FUVFGNoTL-2FA0-3D> 
+
+도움말 센터 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0tn1LK51XoZKbBfyGht7CMar-Wt_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbuJw0ll7MjkkXc7pZ7iP4QmblvjhHd-2BlQFf7tIahO2EIRuPR-2F6WQuJIHwlvVflIjhxlrq4bvmC8lcvDHgh-2FpmvMSRYFAXlyilpXUJ0HUqCeFMwcpjMvzmIRB9RXDsOhxk2-2BprsKIJ05hHYUVlfRhQO577iHHk7cbwPFYwFJlsFDDrcHY1q0AfkS9RDuMLdaGci30Bi0LUi0GXkZSmgN2xe9tg6hkjDJzjBQkGWu7V5ktgUAwuFRDAQ9wG0nirL8f4YO0n4JJKTZ6WW-2ByNjBZr5w-3D> 
+
+============================================================
+
+============================================================
+[메일 8]
+ID: 19c3b87cd7fb7c45
+구분: 수신
+제목: ChatGPT 코드는 359235입니다
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sun Feb 08 2026 13:34:39 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ ChatGPT 코드는 359235입니다 
+
+[image: OpenAI] 
+
+다음 임시 인증 코드를 입력해 계속하세요: 
+
+359235 
+
+ChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를 초기화하세요 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60RllF_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbiokvVVD7o241jREzteAHVd6bokBckIfPUkWX9j7hWl3-2F12pMFqEAfGSlnE4P-2Bc-2BGarYKJKHhpvJ0GYBydp-2FZaU-2F2ISFRyfMJ5aAW2IzZLu0kNZ7yiTk-2BEboFPfRGKlxll09TidBaDOG8HDhtCsBqd4Lda0oqsyxnJkInfAMa-2Fdylh4kt0nyawhVl5QHoRjtxOkg033rVrik0iWEymYeVcUz2v4TEceYfIPLN5DYL8x704o-2F-2B3rtQJAvUtHlvJQn7q8x8matd2N8p0GoKvYlefs-3D>. 
+
+
+
+감사합니다.
+ChatGPT 팀 드림 
+
+[image: OpenAI] 
+
+ChatGPT 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMtxuwNyiH8tHYK-2BH0HuuCVk-3DPiVD_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbiokvVVD7o241jREzteAHVd6bokBckIfPUkWX9j7hWl3-2F12pMFqEAfGSlnE4P-2Bc-2BGarYKJKHhpvJ0GYBydp-2FZaU-2F2ISFRyfMJ5aAW2IzZLu0yVj1joqoZ3yrkwYSSaAIDr-2Fw3p2wpD54B5oh7ko0VMQzPgmSk-2BnAEuYmqfO3CAWws1vOQ-2BMRtN-2FtUcnLDDXAUL5loZ3wsAK4a1QS0X2bEgH0FxUGHvtaKLDvIJAc3-2FgX5Jzb2SLevgPZiuTUslUG-2BLrMyHBjtQKGoIc-2FBkSaKZU-3D> 
+
+도움말 센터 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0tn1LK51XoZKbBfyGht7CMaXjC7_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbiokvVVD7o241jREzteAHVd6bokBckIfPUkWX9j7hWl3-2F12pMFqEAfGSlnE4P-2Bc-2BGarYKJKHhpvJ0GYBydp-2FZaU-2F2ISFRyfMJ5aAW2IzZLu0nnXfHKd0iyu74kGZKfK2aD5EWSsxfEQkQb3z2Ix5Zjqaoxb-2BiPGBkzf1uH2dxJZh0j-2B1AwioxrlLcvjpSE5asA5J-2FdwvcSWmtNTCZujJMYLIp2d5XfBUrOl3rXsW-2FK705QiTEHK9jQM0UQpMgEDM3XWykVc0sMLw-2BCR3hAicHRo-3D> 
+
+============================================================
+
+============================================================
+[메일 9]
+ID: 19c2975048f47d93
+구분: 수신
+제목: ChatGPT 코드는 108833입니다
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Feb 05 2026 01:20:59 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ ChatGPT 코드는 108833입니다 
+
+[image: OpenAI] 
+
+다음 임시 인증 코드를 입력해 계속하세요: 
+
+108833 
+
+ChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를 초기화하세요 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX600dRh_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbuG2npTwhzzYK0STbBPKNjm938F0ZYsTqDvTTl1A1pT7twqBWATfVDFiA5QHyJLCdFgcyuBInBAE96JGhpq6eHiWzGGS2Qp4gp4QJOPo3yao8ATLVeReNL849QFRE0b5IpghLB748wFm0GgQlQGmGPv50xjO4x4p5sKyb3-2F-2Fwf8F7BVmMXC3mkDKA3aZzzn5wiCInlZf26bj7aGARTIAHvqwvdVQGxfZGxW3oJ8eyn2qdBuyqoyO4V77TB-2BEqwK2qdkhJvP6N4gy-2BmtSnnNJ-2Bo8-3D>. 
+
+
+
+감사합니다.
+ChatGPT 팀 드림 
+
+[image: OpenAI] 
+
+ChatGPT 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMtxuwNyiH8tHYK-2BH0HuuCVk-3DB1Eg_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbuG2npTwhzzYK0STbBPKNjm938F0ZYsTqDvTTl1A1pT7twqBWATfVDFiA5QHyJLCdFgcyuBInBAE96JGhpq6eHiWzGGS2Qp4gp4QJOPo3yaoQwLcvRZVr911iBlLHpkZzPeWwEuCQxDe3HL6q4A1LG3creeY1hwlJ8bWQHIk-2BXtb8MeE8EXuvNW2JpcMP93jAD-2B7HlwkISAdO4f-2BG3diveLV-2FY8yZ0oCfpF7n-2BHqiihz6PwIOsGHpe-2BAOhSpZxXWhMQz7W4Dz41HHzoHsPrHDkU-3D> 
+
+도움말 센터 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0tn1LK51XoZKbBfyGht7CMaoR5h_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbuG2npTwhzzYK0STbBPKNjm938F0ZYsTqDvTTl1A1pT7twqBWATfVDFiA5QHyJLCdFgcyuBInBAE96JGhpq6eHiWzGGS2Qp4gp4QJOPo3yaon-2Fr11NcudOoEjGD3TuJXT3i2N-2BaNEduc5t7MvLLfuL0SotP0-2B0-2FOPQSN5YjSb2exY6rioGeUQl9Y9sfEo3cNLB3XZDoxdN37sxsNGSL2ZmzjQ-2FRzLLAzXyjYxLFuQU9lfM806my3V-2BD0FdSRcWC8EIXPsyhakZDLiIX6YHXE7GA-3D> 
+
+============================================================
+
+============================================================
+[메일 10]
+ID: 19c23436fadfb01a
+구분: 수신
+제목: ChatGPT 코드는 706750입니다
+보낸 사람: ChatGPT <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Tue Feb 03 2026 20:29:07 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+  ChatGPT 코드는 706750입니다             
+
+ 
+     다음 임시 인증 코드를 입력해 계속하세요: 
+
+   706750  
+
+  ChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를
+초기화하세요
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>.
+
+
+  
+감사합니다.
+ChatGPT 팀 드림 
+
+     
+
+             ChatGPT <https://chatgpt.com> 
+
+  도움말 센터 <https://help.openai.com>
+
+============================================================
+
+============================================================
+[메일 11]
+ID: 19c1bf4103aaa61e
+구분: 수신
+제목: ChatGPT 코드는 174521입니다
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Mon Feb 02 2026 10:25:04 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ ChatGPT 코드는 174521입니다 
+
+[image: OpenAI] 
+
+다음 임시 인증 코드를 입력해 계속하세요: 
+
+174521 
+
+ChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를 초기화하세요 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60qDCe_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbnJTzHrsLokkOoxj9jU-2BIdj74CbWj625CAebxdQ-2BMRuYMpB-2F0HSk32SRh19jaYc9k-2FXgCVmjo0MRNoQHr8JjU1ADP7eQ0azeWtmqNzFhClEkH5zLob0sW6XOgaIkqHWIcrQsnpAtslX7xJMbY1xAicyaYYKuVOZYiYxV-2B3-2FyXkcWp2ko56zDjhcADH2rQh5ihfPLuZiPq2oq4QGrzrrjwMn-2BvyTvw4xTg-2FMQk1GQCXWH2rEkSU4Jnj3B-2FCdVMsaCs1DVSZ26dtIB7R092XZPRRU-3D>. 
+
+
+
+감사합니다.
+ChatGPT 팀 드림 
+
+[image: OpenAI] 
+
+ChatGPT 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMtxuwNyiH8tHYK-2BH0HuuCVk-3DVOh0_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbnJTzHrsLokkOoxj9jU-2BIdj74CbWj625CAebxdQ-2BMRuYMpB-2F0HSk32SRh19jaYc9k-2FXgCVmjo0MRNoQHr8JjU1ADP7eQ0azeWtmqNzFhClEkqLTxjS9Y-2Fa8oZLWOuCTICO-2FX6dTXxiA29pNriOUkvRVeRkmWAHApYFXCKAAQGN-2F-2Bn2wrZqqnUFIAqPV3UzUIW4fc6VAPN-2Bq2DnAXD3HrLrHvvCYgC1JKYdapkeGIvXt8BkOnwHDk6gzYuWK1eV1eAeT1i5s6ALrrvCu0SmYa7nA-3D> 
+
+도움말 센터 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0tn1LK51XoZKbBfyGht7CMaZJWS_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbnJTzHrsLokkOoxj9jU-2BIdj74CbWj625CAebxdQ-2BMRuYMpB-2F0HSk32SRh19jaYc9k-2FXgCVmjo0MRNoQHr8JjU1ADP7eQ0azeWtmqNzFhClEkhBkJC-2Fhvs5Mu3zY-2BkxClP0U7MYoFiTBViCSjjfv29I0EHLLbzBlsvK9VtHpA7gY4Hjjr33yXzM1nwQNpFi2jx1n-2BKMdKS8vfB4p4jWWy7FhbCCVKL-2FXGP82eyGiTNS6m-2BRSc00BFEy-2FZTLOUdueDBAT7QHRH8zfDUsjswUgx5Wc-3D> 
+
+============================================================
+
+============================================================
+[메일 12]
+ID: 19bcbc621dbb3463
+구분: 수신
+제목: Your ChatGPT code is 153566
+보낸 사람: OpenAI <otp@tm1.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Jan 17 2026 20:45:17 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 153566 
+Enter this temporary verification code to continue: 153566. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+153566 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://help.openai.com/en/articles/9889414-what-is-a-one-time-password-otp-and-why-did-you-receive-one>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://help.openai.com/en/>
+
+============================================================
+
+============================================================
+[메일 13]
+ID: 19b4660b3aa65ed2
+구분: 수신
+제목: Updates to Link’s Terms of Service and Privacy Policy
+보낸 사람: Link <notifications@link.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Mon Dec 22 2025 23:04:59 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Hello,
+
+We’ve made a few updates to Link’s Terms of Service (https://link.com/terms/preview) and Privacy Policy (https://link.com/privacy/preview) to reflect our newest features and services. We share these updates annually to give you transparency and control over your data.
+
+What’s changed?
+
+- New payment method partners: We’ve clarified that if you add payment methods such as buy now, pay later or crypto wallets to your Link account, you may be asked to share data with the payment service provider.
+
+- Link as an option for agentic payments: We’ve added information about how Link works with AI platforms, in the event that you choose to use Link to make a purchase through an AI agent. Learn more (https://support.link.com/questions/instant-checkout-in-chatgpt)
+
+These updates will go into effect on January 16, 2026. No action is required.
+
+Why am I receiving this email?
+
+You’re receiving this email because you have an account with Link (https://link.com), a digital wallet built by Stripe. Link helps you pay quickly and securely with your preferred payment method at over a million businesses.
+
+– The Link team
+
+You can remove your information (https://support.link.com/questions/delete-information-saved-with-link) or delete your account (https://support.link.com/how-to-delete-your-saved-payment-information) at any time.
+
+
+Link by Stripe
+Stripe Payments Europe, Limited One Wilton Park, Wilton Place, Dublin 2 D02 FX04, Ireland
+============================================================
+
+============================================================
+[메일 14]
+ID: 19ace27ad0893e7a
+구분: 수신
+제목: Your ChatGPT code is 853494
+보낸 사람: OpenAI <otp@tm1.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Nov 29 2025 14:48:17 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 853494 
+Enter this temporary verification code to continue: 853494. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+853494 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://help.openai.com/en/articles/9889414-what-is-a-one-time-password-otp-and-why-did-you-receive-one>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://help.openai.com/en/>
+
+============================================================
+
+============================================================
+[메일 15]
+ID: 19aaab9af4c6d742
+구분: 수신
+제목: Your ChatGPT code is 289587
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Nov 22 2025 17:41:26 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 289587 
+Enter this temporary verification code to continue: 289587. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+289587 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60PfXU_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLA3W1kNbla3Qf4IlNTV8iO6bAIUQwftM3DPpTdaoOXNHGGYMAR1Nny6nlm70TNpcIyr-2Bj4fU2Gumj-2F-2BA6QegtW26QKmoSbsfCRoqDhohVTquNRNlTv8h3NsGIMMWeZHtl-2B7Uzv2DerHfqfhlNhWDOamens61rz5SLZwiuBxihn-2B8Swse6-2F-2FKwW9VhLMyvtUKRIBiwK99vvUOsl4xxkJq8sZ4XpYijq36DB9vvN4z9-2B5pUVDm9ErX6YIPAM0dbtt1lQcgCbt9Njcs04CzTXmSjfA-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3DqHeI_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLA3W1kNbla3Qf4IlNTV8iO6bAIUQwftM3DPpTdaoOXNHGGYMAR1Nny6nlm70TNpcIyr-2Bj4fU2Gumj-2F-2BA6QegtW9NIcgJ8iYVD3Zv6x0GXgVcURcS1boIxklo9pYPAVtPip-2F-2BuBYPEbpfX0iPoKUxtekZSrksOjv-2F-2FiaaBcKmUh6Zu4TvJOZ1EG5-2Fak7y-2BZmnC7DVph9-2BPmHZUCyUxDKX0I-2BzQw6kPeAlyGKiznx8B-2FFJkVY2axHPAcCVwrvu2zWqPK2wMFWrPeB4kK2vhpF33oA-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FL3qm_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLA3W1kNbla3Qf4IlNTV8iO6bAIUQwftM3DPpTdaoOXNHGGYMAR1Nny6nlm70TNpcIyr-2Bj4fU2Gumj-2F-2BA6QegtW2NF-2Fx2WL7xCEtdrV3cAj7ZWmGdqSD-2BrzOXhertLkRTwYQ0J8-2BIK8-2BdF9Cz6XdDDAV2g0l7nTRpKIiaHQeuO-2Bs077pIsFY5V-2BA7nGtcQvOaoHzJGAwRcX4us4pbQhtkIxFTvGCz4u4uiuqX67miXQQciIsusTC5kEndP0PnmVkkmTQFcusqCAkeIsHra3SnuHA-3D-3D>
+
+============================================================
+
+============================================================
+[메일 16]
+ID: 19aa68af26493bdb
+구분: 수신
+제목: Your ChatGPT code is 594878
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Fri Nov 21 2025 22:11:52 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 594878 
+Enter this temporary verification code to continue: 594878. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+594878 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX609SHQ_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfL1kIhDJo0HMSCHq3WcFnu92aRNVPc0RE2EHiiaO3C4TgXu-2BHnqdEIGbzW2oTAMlbII9ePuFB9JXDf8e-2Fxg-2FSdvRv4B-2BCQbJOckiJfjytLMNoyC7GJKMnB3F2Al1IzWfwwEK1MpIr9BOttu7zp-2FZKM5id7tT77qZjyZw7wCdmCq0cOVP6B-2FGZuylwt-2Bv12H9ZRvbOCM-2BpltWYMYny6TL-2BR8X-2FJJWdzphPjR-2BTAfiqDN1o-2FAXTlVMibo-2BdU3dVxEgaYVn-2F-2FV2DbSc65pi01q3xMXw-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3D4Mco_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfL1kIhDJo0HMSCHq3WcFnu92aRNVPc0RE2EHiiaO3C4TgXu-2BHnqdEIGbzW2oTAMlbII9ePuFB9JXDf8e-2Fxg-2FSdvQ-2FlxMvo6gcU-2BJRgxU2D3Cuh2nEgkNqmzqK30PudjWaFIbkRAdotSrfOXc37Ics1PRYC7T1PvQ2oRF1iY-2Fb1Xm-2Fjze2JjNEY39twXIZP-2Bx4szHYboeuYDu78oRgMWit1A-2FeN2jniJXh9jvyWysdmL6W7eYID0RqDiwyqcJxYeKZugAf0ipYJbqiqhQedYYUpAg-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FPkwa_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfL1kIhDJo0HMSCHq3WcFnu92aRNVPc0RE2EHiiaO3C4TgXu-2BHnqdEIGbzW2oTAMlbII9ePuFB9JXDf8e-2Fxg-2FSdvbegNHcBVwdtz9vgoRuVWc-2FxsDt7IwlvUbR5N0e0-2FPISmUoYGlBQYc1GunQWnPpHOeTbKMxIZza4W45n06rmaQe-2B-2FAbGxvKP9ZrvOu36l0vhOMzHoaztG7-2FUZiJT-2Bry8h-2F-2By6rKaB2yWnsMnN7aCpRTG-2BEvcJNKCc2xlCDbKzMzG1AJ9gic-2BreiwOhTDH8pdbQ-3D-3D>
+
+============================================================
+
+============================================================
+[메일 17]
+ID: 19a904677998a025
+구분: 수신
+제목: Your ChatGPT code is 364649
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Mon Nov 17 2025 14:25:26 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 364649 
+Enter this temporary verification code to continue: 364649. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+364649 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60hgIm_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfL6qn64VozmM1bn7D4fTVy5HD-2BX0f5lRsRD6ECQnkaIzD7lqPfeUGNnc18VJfQg3cM-2BuBIARWOw7SJU7RBg-2FpCo-2BJOhny4CKrZIoY7hU4VtnZ7Ztcc83uOW4fxSXE5IRng7ymOn7yk2RNTx1x-2B2GBWI5PUQ24PKg-2FCHJ0TyDv8f0hMLAtKxqguclXM6utqlAg7YFtaIgo-2Bs2VBUlZdj9w8d88se6urSW3SVVyiclWdBp4bH2jq6zj1Ie1HQVSrOgpPBHDA-2Bb2hGIk2HyimW7no1A-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3Df9_i_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfL6qn64VozmM1bn7D4fTVy5HD-2BX0f5lRsRD6ECQnkaIzD7lqPfeUGNnc18VJfQg3cM-2BuBIARWOw7SJU7RBg-2FpCo1jYEVipX7ddPYitLlAFuqY5ApvQPxb-2FW26mbu1f-2FIn2hp8DDZR-2Fuc8Y3nZre5T3gWJ9MsvUlENR63eC43qK1Bo3JZmF3SwilHb6GKHPyNrZF-2FgF5xI3Vubs3Sn8UYhiynhT2xgTmaQrjPuScNPvEkw8qfOmWD20S5PdZNmYDT1aIMa3zJld4PJr4NFSDf-2BbwQ-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2F2AW4_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfL6qn64VozmM1bn7D4fTVy5HD-2BX0f5lRsRD6ECQnkaIzD7lqPfeUGNnc18VJfQg3cM-2BuBIARWOw7SJU7RBg-2FpCo-2BUB4VbX2gjZnH4jp4qayB-2BhFMbJbJXVCP-2FNJNVKerUC-2F6EAhJjjiwYkr63CHOXG-2BGrWp-2FHv-2FNZBXAy7yK-2F2XJ8HgKfTP8X-2FzYzVpgLcaONXffhp6abr1-2BF0cfCz2gUGWz58LH3nOwG8LQJpoGknHx7QOpkxPxueh7AsJJr2DHUAgTOg4Roi8tOYzaNHsVMMew-3D-3D>
+
+============================================================
+
+============================================================
+[메일 18]
+ID: 19a9048d2f71d759
+구분: 수신
+제목: Your ChatGPT code is 364649
+보낸 사람: ChatGPT <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Mon Nov 17 2025 14:28:02 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+     Your ChatGPT code is 364649      Enter this temporary verification
+code to continue: 364649. 
+                       ChatGPT Log-in Code 
+
+      Hi there, 
+
+  We noticed a suspicious log-in on your account. If that was you, enter
+this code: 
+
+ = 364649 =
+
+  If you were not trying to log in to ChatGPT, please reset your password
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>.
+
+
+  For more information about why you received this email, please see the
+help center article on One-Time Passwords
+<https://help.openai.com/en/articles/9889414-what-is-a-one-time-password-otp-and-why-did-you-receive-one>.
+
+
+  Best,
+ OpenAI 
+
+               If you have any questions please contact us through our help
+center <https://help.openai.com/en/>
+============================================================
+
+============================================================
+[메일 19]
+ID: 19a9048dcbc1a42d
+구분: 수신
+제목: Your ChatGPT code is 364649
+보낸 사람: ChatGPT <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Mon Nov 17 2025 14:28:04 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+     Your ChatGPT code is 364649      Enter this temporary verification
+code to continue: 364649. 
+                       ChatGPT Log-in Code 
+
+      Hi there, 
+
+  We noticed a suspicious log-in on your account. If that was you, enter
+this code: 
+
+ = 364649 =
+
+  If you were not trying to log in to ChatGPT, please reset your password
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>.
+
+
+  For more information about why you received this email, please see the
+help center article on One-Time Passwords
+<https://help.openai.com/en/articles/9889414-what-is-a-one-time-password-otp-and-why-did-you-receive-one>.
+
+
+  Best,
+ OpenAI 
+
+               If you have any questions please contact us through our help
+center <https://help.openai.com/en/>
+============================================================
+
+============================================================
+[메일 20]
+ID: 199d30b0a1fe7bfd
+구분: 수신
+제목: Your ChatGPT code is 090243
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Oct 11 2025 20:32:16 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 090243 
+Enter this temporary verification code to continue: 090243. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+090243 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60ajBM_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLtbeYPxAuOMn3ArdSXDevrAYuaTTJ0U8t4yqGm-2FbJrfPWIWU2nScA4yvdH9IJI8QwyVm5EyWC5KyJ07Q-2BVCps9Ux4gcynk7ORKyERItKc5rr7PglUzxTl4IvIG58D5Woprf7N0RinWErou8oU-2FOAr02tXRO9F0WFuz2jJfPWyOosJe97-2BVwmf5qvIlSlGdMbx9KVGnfRsiq7ywtEZ-2BwtceaYZoX4ZgPUzNtiSm2XC3VZj9mG5xIOi8iOcsdxH3SeOhRHRCEzCbvcpyyTLShdPEg-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3DYUUc_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLtbeYPxAuOMn3ArdSXDevrAYuaTTJ0U8t4yqGm-2FbJrfPWIWU2nScA4yvdH9IJI8QwyVm5EyWC5KyJ07Q-2BVCps9fBfozuU5CS4xw5ZUJcP1xxMb96UYvhCtxUpLYc7I-2FQesFeERAL3-2BMgiZOcIF1qfRANjwCYctl4-2BN2NwSDlWrGI4WKsnmlT4tysFOIPwyOne5LTk-2BAh9YJHhiCZJOwGDlFUtK6a13Z79eflFtQeLTQZK3l0UAzHXG4SFNPDB753YeD4eXgoD39W-2BrWOSa9i6GQ-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FKtJp_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLtbeYPxAuOMn3ArdSXDevrAYuaTTJ0U8t4yqGm-2FbJrfPWIWU2nScA4yvdH9IJI8QwyVm5EyWC5KyJ07Q-2BVCps9RFki1t4ettjP-2FzEFDQqeJSORvcrK6w4R9hGEGF6p0qSP0fqijPgcSp7gKwW3hB1Y4yuJgbPTMGOGup6CKaH-2FbnjIlySosf7BZnc4a9Xzy-2BEuvhefgFlzeCyCcYyzH6mGCTPIg3fy-2BngNQ-2BZCyfY8C3ZDBch3k-2F7t95ySrvm6Zm7ux-2FxgpQCHkmiz9H-2BOt-2FPsQ-3D-3D>
+
+============================================================
+
+============================================================
+[메일 21]
+ID: 199a07e605d98099
+구분: 수신
+제목: Your ChatGPT code is 464410
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Oct 02 2025 00:57:39 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 464410 
+Enter this temporary verification code to continue: 464410. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+464410 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60M0NL_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLLxjf7g0UkGINH00zWAheFN1VtlUDsITcNMycQEBeR9OhuQ2jW6D5V9kC9O0rBZZ1W2C0T75ny0LEmuD72muSomRPYTNz0XixDooUqUvJD2EUM1a3ej1-2BdRlDd-2FXd7k5JY-2FQlftOAGsv-2Bab23rlxZdArHST4XDJ9-2F71HMgRQHNEzhpVUT1pVj-2B5VSuYsv09-2BualsHk9aQ0N6GBYnmVIx3JwHKYL7dZg-2Byg7jyJqLf2G5iILCVoVgI7PkR5KiKrstS0Yqnv8UD-2FFGvIvUxfYOlLw-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3DjyRF_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLLxjf7g0UkGINH00zWAheFN1VtlUDsITcNMycQEBeR9OhuQ2jW6D5V9kC9O0rBZZ1W2C0T75ny0LEmuD72muSojENaQcSyoJH5zp91HUH23GRa8CqyjYoFVthF-2B5KGjMVd-2BSNuFS6rNynSkH-2B7b0tqXD2FitR8RiqtBUY2jO5m4NUwr5AK9JPm-2BjhuBgSD4o7yWnLrT98alH5WTRwTT-2BwTBYufmhMtOkoDd2iYtdtxrc3BH-2FIM7Dpz1r69xoKbywe-2Fao5vx7n5mUFwW-2BV2IONwQ-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FKKnW_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLLxjf7g0UkGINH00zWAheFN1VtlUDsITcNMycQEBeR9OhuQ2jW6D5V9kC9O0rBZZ1W2C0T75ny0LEmuD72muSopluAhlCNLEm354sFcMT1Xm2flb6oPfSOtNySP6JBaGnLuU-2FMQaQZ-2FoTis-2BX-2BUW9wMezQ35-2BObDvXLAvG4YiShUrwz4PgAlW-2BMv7ywladZbRbvUrOJYAzAPynqI63vpawFeXDgbpeauvLti0k-2BRVZme7Tn0PxXVD4TuWDJ7jCHJ2Tcuh6Q9-2B5h-2Fw7Zu8Fj5AEg-3D-3D>
+
+============================================================
+
+============================================================
+[메일 22]
+ID: 199a06f8bc94d8a3
+구분: 수신
+제목: Your ChatGPT code is 106797
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Oct 02 2025 00:41:26 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 106797 
+Enter this temporary verification code to continue: 106797. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+106797 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX603TKG_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfL7zuOiZVU2WIfV8F2ygajHdpzO-2FCyKx-2BC7cLacoXs680tpbNCv8cDl1im9uvGX5cIBdFyclvpE1ticNOQKrxvwJdaGqEYRRnDqHSzZjTR0KieoY-2BfFPlLmHh-2BEy2QBtZPLa3nRJUJjrG5xuqtznTZMvW8uEDpIklBievbJOrxz4uNkyWxOElxP4jN38iSOKxtYsOOvq24ykIHTNd-2BoqUC8jHUrcBEY4krp7KxAdQykEEm-2BqHfEG9HWmC9WQGP3zJ0W5n94HqXmXGXpBksOKMxlQ-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3Dlhud_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfL7zuOiZVU2WIfV8F2ygajHdpzO-2FCyKx-2BC7cLacoXs680tpbNCv8cDl1im9uvGX5cIBdFyclvpE1ticNOQKrxvwKlfL04vYOrc1cpcc7uTSZOoRpldzw3UMv71OIcjRMFt2DGGVoh2mWqgtCFLD-2FBNTv-2FL5FgiqX2byPbN1FkPw9ZTk7uB-2FqLGLVe5CnlPzwNKe3dWh9y-2BxGpZeaEISMx4f440vAns0ct2UIW061Z7ltQtqkzlINnnkzzigaAgRyZ1KEtyShNgsVlPRQlvtSGjDA-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FU1H2_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfL7zuOiZVU2WIfV8F2ygajHdpzO-2FCyKx-2BC7cLacoXs680tpbNCv8cDl1im9uvGX5cIBdFyclvpE1ticNOQKrxvwK30pLNIX1O-2F2TQAC1xQb9Xw8EqOr5ttscmeJFLyhVyAgPJZe3OJEf1-2FEAuXIm1TVZxdoL-2FEzUIKUNqa7K8yMMeBzXP7muid9u8KzGQD4QHqZK8LqcO-2Fz1jqUyPtgxdj4dffH2N-2Bv0Z8ANgtc-2BoC57QJalPeGZqaSvuAqbvKSR-2B2pf7QYmQ5xgROnTYfBzNtNg-3D-3D>
+
+============================================================
+
+============================================================
+[메일 23]
+ID: 199a05db9b3b5ebd
+구분: 수신
+제목: Your ChatGPT code is 618195
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Oct 02 2025 00:21:59 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 618195 
+Enter this temporary verification code to continue: 618195. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+618195 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60Wv8v_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLMLYql4BNKMfAcaWNjsrSKV7h1Mbbw6TdP5q-2FEoc3FRyOLtLvafT4mCLu9Xp4g8VthJrrG-2FY-2BIzVZbEDrTE8X-2FdBmPl6aRmyp5wACGZz8-2BVPhgqqnfLmoUH3HsN4-2FH5H3OEXPrMcc6UBInt9yRVrye8W4cY2nmIgeoZT5lxxWrrr-2F4Qd5N-2Bio4xQh3q0iaBMnjZgwI-2FfxtvoW0jaSPe86gJN0Yj6b5YmkQ1dtWRPG-2B-2F43tm9QvNRcZIiFgvIxbZjvtmmKUVzB7z5sucskZDARFQ-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3DS1g__LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLMLYql4BNKMfAcaWNjsrSKV7h1Mbbw6TdP5q-2FEoc3FRyOLtLvafT4mCLu9Xp4g8VthJrrG-2FY-2BIzVZbEDrTE8X-2FUwZhCa0GOWrml99htJ7BKz8-2BzsjbqcrCDJmRZeezgza21LJyKmOtChCYx1gewjf7SWQHGVlgQ2-2FJ0QH1xmq-2Fg5CvkwmwYKZeeHZ0KIvwTvHSmuX-2FSz0NRy3bh11ohrZFPpDglJdZZnSI0tVRt32dUEbT-2F-2B0moFlcUpIje3xU5o8Ba33O6UVRyuJ-2FXx57VTIHQ-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2F7_v2_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLMLYql4BNKMfAcaWNjsrSKV7h1Mbbw6TdP5q-2FEoc3FRyOLtLvafT4mCLu9Xp4g8VthJrrG-2FY-2BIzVZbEDrTE8X-2FTJAxt30N2vmdox4iPy69nTBjgdjlf6ykbBEUCcz7y6OEe5G9sSbDgCktIIsRSdj4CmFVZYNegFH3hGzeYji1VZtA27YNJy-2BhJgBO-2BZJA1NarAwPHYn0cL0tgBQSOSiS8LQRSr3iNjKAZ9TRi0UqoyznQfnIEDpgHGPYRtguZ9GjGKa61jHjNnL1orEg0Hb0cQ-3D-3D>
+
+============================================================
+
+============================================================
+[메일 24]
+ID: 1999c30d825051ff
+구분: 수신
+제목: 미리캔버스 Pro 체험판이 곧 종료됩니다.
+보낸 사람: "미리캔버스" <miricanvas@miridih.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Oct 01 2025 04:54:28 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ 미리캔버스 Pro 체험판이 곧 종료됩니다. 
+미리캔버스 Pro 체험판이 곧 종료됩니다. 
+미리캔버스 Pro 체험판이 2025년 10월 18일에 종료될 예정입니다. 
+결제 상세 정보 
+
+   - 워크스페이스 : 최지유 
+   - 요금제 : Pro (월간 결제) 
+   - 멤버 수 : 2명 
+
+결제 정보 설정 페이지에서 '기존 요금제 계속 이용하기'를 클릭하시면 Pro의 다양한 혜택을 계속해서 이용하실 수 있습니다. 
+결제 정보 설정 페이지로 이동 
+<https://zv70z2rx.r.ap-northeast-2.awstrack.me/L0/https:%2F%2Fwww.miricanvas.com%2Flogin%3Fredirect=%2Fworkspace%2Fsetting%2Fbilling/1/010c01999c30d0a7-c678f349-28c5-491c-a268-636ac8a01057-000000/w8U10SnWoftQdKHbjYlyiJdpF38=230> 
+😢 다음의 기능들을 더이상 사용할 수 없어요. 
+
+   - 별도 구매 없이 자유롭게 사용할 수 있는 프리미엄 콘텐츠 
+   - 브랜드 로고, 색상 글꼴 설정 및 글꼴 업로드 
+   - 댓글 모드를 통한 멤버 간 협업 기능 
+
+기타 문의사항은 miricanvas@miridih.com 으로 메일을 보내주세요. 
+ⓒ 2025. MIRI D.I.H. Co., Ltd. All rights reserved. 
+
+============================================================
+
+============================================================
+[메일 25]
+ID: 1999c1c5c3e21916
+구분: 수신
+제목: Meet Claude Sonnet 4.5—our smartest model yet
+보낸 사람: Anthropic Team <team@email.anthropic.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Oct 01 2025 04:32:07 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Upgrade to use file creation, search past chats, and access the power of Claude 
+Code.
+
+
+
+ <https://claude.ai>
+
+
+
+Hello,
+
+
+
+Meet Claude Sonnet 4.5 <https://www.anthropic.com/news/claude-sonnet-4-5>—our 
+smartest model yet.
+
+
+
+You'll notice better quality everywhere—improved responses in chat, higher 
+quality artifacts, and stronger reasoning through complex problems. Whether 
+you're brainstorming ideas, writing content, or working through problems, 
+Sonnet 4.5 is more helpful than ever.
+
+
+
+Try Sonnet 4.5 now  <http://claude.ai>
+
+
+
+Ready to create files with Claude?
+
+Upgrade to Pro or Max <http://claude.ai/upgrade> to generate Word docs, 
+PowerPoints, and Excel files you can download and use immediately.
+
+
+
+
+ <https://www.anthropic.com/?utm_source=email>
+
+ <https://x.com/claudeai> <https://www.linkedin.com/showcase/claude/> 
+<https://www.youtube.com/@anthropic-ai>
+
+
+
+ 
+
+
+
+This email was sent to gpttitti@hansung.ac.kr. To opt out of future emails, 
+clickunsubscribe 
+<http://links.anthropic.com/s/u/KX-6YRsQ5Rk0ku-_eyHNklS7Xp8IOBnrhL_GT9FWaC0H9Kdvk-DBvPN-lNYdPKW6tc8qT4BeufQeGVcGfg8k6DwBjn-0K_-f_QsoAHgyTJxnCuwUOnl2_vGVstZTUqJmhkZWQdm1wPRrseiDSKREQOi97xlvI6yml7TDU9T06A-bKXJDBAbuxPFzOCQO1fx65RzZ807d6h9UKp-X/DOTWd7e2gibazlTC01yp1Ltohpd52uwt/13>
+.
+
+
+
+Anthropic PBC, 548 Market St, PMB 90375, San Francisco, CA 94104 
+
+============================================================
+
+============================================================
+[메일 26]
+ID: 19998a7177bb33b8
+구분: 수신
+제목: Your ChatGPT code is 709215
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Tue Sep 30 2025 12:25:09 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 709215 
+Enter this temporary verification code to continue: 709215. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+709215 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60X0ku_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLYJwJh5O-2BP8j2imMh3GtVW4wj8NrYyK5TVgqWlRqqiqkQ-2FpwgDckKVjlp9xF9EIAmHyOJDeO-2BB-2BkmIIpGNUVkuXYf4ozAadO0B-2BYQPt4BtarlNPR9DbXK-2FfOJwg2KGOsrijXqPdBD5wOGgDtzV-2FYYBvQAiDNQ2NKlfl4N9kNzoACVr9veMR80x0VvBPAEDDhPCJ-2B7HhIyXT6KZEfXQ9K7mlECSqnzMYkL1klgUhVOenxX2fZtEhqnzg9rp3yfaWYuPVlm04LCdpZPYQ-2Ff3nQGSg-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3Dl_Ix_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLYJwJh5O-2BP8j2imMh3GtVW4wj8NrYyK5TVgqWlRqqiqkQ-2FpwgDckKVjlp9xF9EIAmHyOJDeO-2BB-2BkmIIpGNUVkuYBInt7hOwHbw1CQYHYedwz1EBK0VgZ0juMMnuHM9bts0u4PvHiwrPEC996eXXrUh9NzKEOpRx4CRTOe-2BcW4vciFnJneMv4KyihdTz0DgRT6xUjwCo1Y0RFQXRZroUou3F6ENMww4I7boz0C6gnYriKudFeTMdovEYAkVborT6-2F0XvjLGRK8-2FLzD-2BgNUTXAUAQ-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FUShm_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLYJwJh5O-2BP8j2imMh3GtVW4wj8NrYyK5TVgqWlRqqiqkQ-2FpwgDckKVjlp9xF9EIAmHyOJDeO-2BB-2BkmIIpGNUVkuQdGgsupa-2Bw-2B1XrJ3kuTjFGxYfyDfpOfCx8aXLpSGO9hce-2FkJlSvDMLM4O5MxI9xyox4CqmeFBEroEs2ssXfO2AyBjSrldtBxGeiDhUo-2B73Dgp-2BAJ3C8dFjpguMgsv1wDHpu718WqRKAwdKdU5t6QPa2U19aBjMMRLxSxJwfQOnPwo0CHC-2BFvfy0FYzurCHK9g-3D-3D>
+
+============================================================
+
+============================================================
+[메일 27]
+ID: 19979edb449aba04
+구분: 수신
+제목: Do more with Claude
+보낸 사람: Anthropic Team <team@email.anthropic.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Sep 24 2025 13:14:04 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Better models, deeper work—upgrade to keep the momentum going. 
+
+
+
+
+ <https://claude.ai/upgrade> 
+
+
+
+Ready to upgrade? 
+
+
+
+You were exploring our plans. 
+Here's how to do even more: 
+
+
+
+
+ <https://claude.ai/upgrade> 
+
+
+ <https://claude.ai/upgrade> 
+
+
+
+Not sure where to start? 
+Start with Pro—you can always scale up. 
+
+Complete Upgrade  <https://claude.ai/upgrade> 
+
+
+
+
+ <https://claude.ai/> 
+
+ <https://apps.apple.com/us/app/claude-by-anthropic/id6473753684>  
+<https://play.google.com/store/apps/details?id=com.anthropic.claude> 
+
+
+
+ <https://www.instagram.com/claudeai/> 
+
+ <https://www.linkedin.com/showcase/claude/> 
+
+ <https://x.com/claudeai> 
+
+ <https://www.youtube.com/@anthropic-ai> 
+
+
+
+Anthropic PBC, 548 Market St, PMB 90375, San Francisco, CA 94104 
+This email was sent to gpttitti@hansung.ac.kr. To opt out of future emails, 
+clickunsubscribe 
+<http://links.anthropic.com/s/u/px1qvuQ6fgRsnJ4rN0qpBptR2y7V4ormWcV795riEQ1_MnCYKKUdIui5hXyy1RsSu_OengxM9SiqkhMXF-RFbb1OWuvhVXv0i0ZJMsN2EjyblE6HDZHC1PhW1LrQwYsqWiZ9ERcjgiOPLbRguEKCowBUq7L0Q4cip426GNKCwjKqkhWkjH_f_EMWfOYa6yL86MTD8y0V2LIFmKrL/96h1tzh6JK9WM8PzrZPU6xn7WbCUEXak/13>
+. 
+============================================================
+
+============================================================
+[메일 28]
+ID: 19976d18182bc1fa
+구분: 수신
+제목: Your ChatGPT code is 820303
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Tue Sep 23 2025 22:44:24 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 820303 
+Enter this temporary verification code to continue: 820303. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+820303 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX606BBx_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLYrfMfNYEQ22pgWUnN7-2Bjix5xdjH4yljnd2gI-2By6uZJS0i4oGk5d7SqkFG0B95TKiqZeuBQFccCj87xPbuB-2Fa8XSZzL8D8aBEggw7XiUXw80YbCHjHRclJCFZeR4yxPHul-2F-2BLGuYRSRRa-2FpK8Jt8ndcl0jQzHWtvBHmE-2FIzEVNlh5Zb5xfNQdJjbiLRcK80im89iIy4Q8EfhRQHSWa9GQX-2BET7xqAn-2FsQbs854r1rB65godauXkgnNKy-2B-2FA-2Bi1a9jFCJSuCd5SOPzrsGzTbKEMg-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3D-xQI_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLYrfMfNYEQ22pgWUnN7-2Bjix5xdjH4yljnd2gI-2By6uZJS0i4oGk5d7SqkFG0B95TKiqZeuBQFccCj87xPbuB-2Fa8TiJPyMGYPdIu2dW0rKFUj9fM2vQVa04M8G1dmbb1tfz5MMs8kygtNhNoHBKlHuwYdHKYd3CFlQiwOZRuHA1fzQx64CGnCMi2pjvnd148T88zD9SWJGUV1aTIrpnCuwzXwowXUn6OJ0fd6ZaRtHBDE8KF-2Bw7HZ0x9yehP-2BTe8GMei7g6LGueKzWIVPBXdrR5Pw-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2F7k9b_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLYrfMfNYEQ22pgWUnN7-2Bjix5xdjH4yljnd2gI-2By6uZJS0i4oGk5d7SqkFG0B95TKiqZeuBQFccCj87xPbuB-2Fa8WXdE-2BIzLfLSHFtMnktcZim00F358yWvihnCvwqGkqCTIBRmOIw9L-2FGBxZZfyDhOixb3hEtK8E6c8At-2BO2ZSO8eCv-2BApq4gVfs5zgMXQ-2FrjqZBLvPUJUu4kZQXr6Fqe91i-2BzTr4Yg1IaTQZ79y88eUWhWwvVYCpbDqNolf03rjBCMAkxO0CQRz1HuAtyCIINhQ-3D-3D>
+
+============================================================
+
+============================================================
+[메일 29]
+ID: 1996f18212c33edb
+구분: 수신
+제목: Your ChatGPT code is 039674
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Mon Sep 22 2025 10:44:35 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 039674 
+Enter this temporary verification code to continue: 039674. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+039674 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX609jFi_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLIV-2FYGZ1d1ejNxuWqOJCa16JwA4zOSbk80ipz7L-2F955OgmsWGra2cdRVLiO8U8DTlo7ScwvjHXy0Hj1XMIPYMTWnHt3Op5Bk-2B-2FKJJh-2BBfcLmFPB-2F-2FGGQeumF-2Bl-2FQXYlRlShNvoOg2iFdPK7Oj5WxE-2BbvbRpsl6BZIrPSo1TW2OjOuVcON12t5TZqmYH86LVoPPJ9XWOCpffGhVySEHr0LGZYDsZ9rU9SeTBVaPuWUcqINi5vuJbTsYHNKz-2BRXPOPBtHSdpjEXN8L-2FsPq59vpyTg-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3DtyEQ_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLIV-2FYGZ1d1ejNxuWqOJCa16JwA4zOSbk80ipz7L-2F955OgmsWGra2cdRVLiO8U8DTlo7ScwvjHXy0Hj1XMIPYMTaOLH5qbQRrq1SROO6w03xlMC7W-2BztLrBIHf1-2B5rRLQwZFZwhaolIcwuTgALBFzA1TUdzDmPmTXsYKP-2FvRtug8nmkLNRthaVII4noeCxDNvh1xDcjHSGUVMW96A8jCiX6YU1U-2F-2Bu-2F5xboZh8p-2B0d4nuUF-2FvRzJBRy2csjnrRDHy1vi1VAiVHNDm9yHrYt-2BHmfw-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FhxsC_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLIV-2FYGZ1d1ejNxuWqOJCa16JwA4zOSbk80ipz7L-2F955OgmsWGra2cdRVLiO8U8DTlo7ScwvjHXy0Hj1XMIPYMTX6TDuh22XmHgp4gIxUVfN3LB4YbAZWvKRMve7LVcGroZIkbf5l7tZK-2BAN-2BXpyduyV9v7nSw-2FMSuxSgPm8xqQwAfAQNBhKmQc87vnmqieBkVGBHmjHX-2Big0wgcdfjXHnUd4FmfY-2BZG-2B1vFS-2BY-2B4ncULvGY7ydYsM5ABd5hLoRXvaimn06zQ2hhG3JH-2FZqZ1p-2BA-3D-3D>
+
+============================================================
+
+============================================================
+[메일 30]
+ID: 1995f41b0a751a70
+구분: 수신
+제목: Your ChatGPT code is 430297
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Fri Sep 19 2025 08:56:03 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 430297 
+Enter this temporary verification code to continue: 430297. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+430297 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60Tjwe_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLzKhf3gkJf7HPYzHrNU0i1mA-2BA44ikF6XRdHkkoi4MRbE1LmozcJJAjNERLo-2Bvo8VpzOLyDxcuZNJKcbqcFGqLYv7OCDR9JQWnIxwv1mZXib8Frt8rjWJ5m1N6w1IvX40zdBE2LfdNPmokLN4lolej-2BMdTFor71-2Bdmakr5Kqvkc89qO59kxnBgcYm297O04AS7iNxl7eC5sz5WhDJm9geRHI8BfnMu8XI0p3hE0I3-2FIfx-2FyqGxFrf2EPZLiZSlzUg0ql-2BaGpx6-2BsRAUlfdrOE6g-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3D8vsz_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLzKhf3gkJf7HPYzHrNU0i1mA-2BA44ikF6XRdHkkoi4MRbE1LmozcJJAjNERLo-2Bvo8VpzOLyDxcuZNJKcbqcFGqLQfTVJPxGgedf6XtH2D-2B4b3Ypd14qrisxX-2Bhq1pmhWmbD-2F-2ByTpt5sR6FHFoZA8Z6hS89ZYQJjghd-2Bun-2BLpYAIChyNpLJJYTSFZwOyY8vvhCtwqBWe1gH5MJWA2tWwcH5y8EtBaob-2FsjVqEYd5DjhA402qd0FBY6GnETdBDvX89a1n6SUz8L5-2Bd5ElphnqSu75A-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2F2inV_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y66fb5nG3mAnEQHeWCA9WzoxKoWQXStNdBBWxtzYRLDqRDrXd1ixvxt5KisxI9ACSfLzKhf3gkJf7HPYzHrNU0i1mA-2BA44ikF6XRdHkkoi4MRbE1LmozcJJAjNERLo-2Bvo8VpzOLyDxcuZNJKcbqcFGqLSQWjbC-2BTe2pFGPTfLCQUrehRSVBiksqwqx1EIJNHDjAv14yw-2BgJ9ZQlXygn-2BqGMd8NUvTm4YBFr-2FfsdXrphSit9VNm-2BrvZG8DTt4vdOl5jfn4VOQbLFqIeqAo-2BPd4wUjscsWKqjpqAzGY8IOXDsXYklZfBAMSzQ6qXEnx6quFRtsE-2B2Ty8TgMUI9FpB5-2BVuVw-3D-3D>
+
+============================================================
+
+============================================================
+[메일 31]
+ID: 1995b03fe9c9dc85
+구분: 수신
+제목: 미리캔버스 가이드북이 도착했어요!
+보낸 사람: "미리캔버스" <miricanvas@miridih.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Sep 18 2025 13:10:10 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ 미리캔버스 가이드북이 도착했어요! 
+(웹공학트랙)최지유님, 미리캔버스 Pro 무료 체험을 신청해주셔서 감사합니다 😊 
+감사의 마음을 담아 2가지 선물을 보내드려요! 
+------------------------------
+1. 꿀팁 가득 미리캔버스 가이드북 
+
+   - 미리캔버스를 200% 활용할 수 있는 꿀팁이 담겨있어요! 
+
+가이드북 보러가기 
+<https://zv70z2rx.r.ap-northeast-2.awstrack.me/L0/https:%2F%2Fhelp.miricanvas.com%2Fhc%2Fko%2Fcategories%2F360001385372-%25EC%2582%25AC%25EC%259A%25A9%25EB%25B2%2595/1/010c01995b03f5ba-4682f9fd-dcac-4b25-a0f5-f8166c758352-000000/bbwUsKQaCvF0vQFORnEJsGYNo2A=229> 
+2. 비즈하우스 할인쿠폰 2만원 + 무료 배송 
+
+   - 내 디자인을 상품으로 만들 수 있는 비즈하우스 쿠폰을 드려요. 
+   - 미리캔버스와 동일한 이메일 계정으로 비즈하우스 회원가입을 해야해요. 
+   - 쿠폰은 회원가입 후 2주 이내에 비즈하우스 계정으로 지급돼요. 
+
+비즈하우스 보러가기 
+<https://zv70z2rx.r.ap-northeast-2.awstrack.me/L0/https:%2F%2Fwww.bizhows.com%2F/1/010c01995b03f5ba-4682f9fd-dcac-4b25-a0f5-f8166c758352-000000/MHXJ6pMy8EZ1vwSkcGLou2C-PqU=229> 
+------------------------------
+궁금한 점이 있으시면 miricanvas@miridih.com으로 메일을 보내주세요. 
+Copyright © MIRI.DIH Co., Ltd 
+
+============================================================
+
+============================================================
+[메일 32]
+ID: 1995b03fc27d60f2
+구분: 수신
+제목: [미리캔버스] 미리캔버스 Pro 체험판이 시작되었습니다.
+보낸 사람: "미리캔버스" <miricanvas@miridih.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Sep 18 2025 13:10:10 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ 미리캔버스 Pro 체험판이 시작되었습니다. 
+미리캔버스 Pro 체험판이 시작되었습니다. 
+미리캔버스 Pro(을)를 한 달간 무료로 사용할 수 있는 체험판이 시작되었어요! 체험판 종료 일주일 전 메일로 알려드릴게요. 
+결제 상세 정보 
+
+   - 워크스페이스 : (웹공학트랙)최지유 
+   - 요금제 : Pro (월간 결제) 
+   - 멤버 수 : 1명 
+   - 이용 기간 : 2025년 09월 18일 ~ 2025년 10월 18일 
+   - 다음 결제일 : 2025년 10월 18일 
+   - 결제 금액 : ₩ 14,900 
+
+워크스페이스로 이동 
+<https://zv70z2rx.r.ap-northeast-2.awstrack.me/L0/https:%2F%2Fwww.miricanvas.com%2Flogin%3Fredirect=%2Fworkspace%3FteamIdx=21642794/1/010c01995b03f5b0-eba4b579-1667-4c01-8b88-3e74a5d24647-000000/9hS6-BoZekPfCZi_EHfJe-wVvDg=228> 
+유료 요금제 해지를 원하시면 결제 정보 설정 페이지 
+<https://zv70z2rx.r.ap-northeast-2.awstrack.me/L0/https:%2F%2Fwww.miricanvas.com%2Flogin%3Fredirect=%2Fworkspace%2Fsetting%2Fbilling%3FteamIdx=21642794/1/010c01995b03f5b0-eba4b579-1667-4c01-8b88-3e74a5d24647-000000/vdQGLEXXVcMLSwzFRE0C0Hqy8Co=228>를 
+통해 신청하거나 영업팀에 문의해 주세요. 더 알아보기 
+<https://zv70z2rx.r.ap-northeast-2.awstrack.me/L0/https:%2F%2Fwww.miricanvas.com%2Fs%2F1034/1/010c01995b03f5b0-eba4b579-1667-4c01-8b88-3e74a5d24647-000000/2oUhdM3QbSE-11Z62F1sar-cWCM=228> 
+ⓒ 2023. MIRI D.I.H. Co., Ltd. All rights reserved. 
+
+============================================================
+
+============================================================
+[메일 33]
+ID: 1995b03fac0a3ea4
+구분: 수신
+제목: [미리캔버스] 워크스페이스의 결제 수단이 변경되었습니다.
+보낸 사람: "미리캔버스" <miricanvas@miridih.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Sep 18 2025 13:10:09 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ 워크스페이스의 결제 수단이 변경되었습니다. 
+워크스페이스의 결제 수단이 변경되었습니다. 
+(웹공학트랙)최지유 워크스페이스의 결제 수단을 변경하셨습니다. 
+결제 수단 정보 
+
+   - 워크스페이스 : (웹공학트랙)최지유 
+   - 변경된 결제 수단 : 카카오페이 (간편결제) 
+
+결제 정보 설정 페이지로 이동 
+<https://zv70z2rx.r.ap-northeast-2.awstrack.me/L0/https:%2F%2Fwww.miricanvas.com%2Flogin%3Fredirect=%2Fworkspace%2Fsetting%2Fbilling%3FteamIdx=21642794/1/010c01995b03f2c0-bcb94566-1695-4759-8810-ef9f212f8d87-000000/LzTf2ZzT84AframBmU5dLRC3Hyw=229> 
+기타 문의사항은 miricanvas@miridih.com 으로 메일을 보내주세요. 
+ⓒ 2023. MIRI D.I.H. Co., Ltd. All rights reserved. 
+
+============================================================
+
+============================================================
+[메일 34]
+ID: 199505876545e6ad
+구분: 수신
+제목: AWS Builder ID 이메일 주소 확인
+보낸 사람: no-reply@signin.aws
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Tue Sep 16 2025 11:26:37 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+AWS Builder ID 이메일 주소 확인
+
+안녕하세요.
+
+AWS Builder ID를 시작해 주셔서 감사합니다! AWS Builder ID는 빌더를 위한 새로운 개인 프로필입니다.본인 확인이 필요합니다. 다음 확인 코드를 입력하십시오. AWS Builder ID를 생성할 의도가 아니었다면 이 이메일을 무시하십시오. 
+
+AWS Builder ID를 시작해 주셔서 감사합니다! AWS Builder ID는 빌더를 위한 새로운 개인 프로필입니다.본인 확인이 필요합니다. 다음 확인 코드를 입력하십시오. AWS Builder ID를 생성할 의도가 아니었다면 이 이메일을 무시하십시오. 
+
+확인 코드: 358612
+
+이 코드는 전송 후 10분이 경과하면 만료됩니다.
+
+
+AWS는 귀하에게 이메일을 발송하여 암호, 신용 카드 번호 또는 은행 계좌 번호를 공개하거나 확인하도록 요청하지 않습니다.
+============================================================
+
+============================================================
+[메일 35]
+ID: 198fc2c893839f03
+구분: 수신
+제목: We’re Updating our Consumer Terms and Privacy Policy
+보낸 사람: Anthropic Team <notice@email.anthropic.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sun Aug 31 2025 03:10:32 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+
+
+ <https://claude.ai>
+
+
+
+Hello,
+
+
+
+ We're writing to inform you about important updates to our Consumer Terms 
+<https://www.anthropic.com/legal/consumer-terms> and Privacy Policy 
+<https://www.anthropic.com/legal/privacy>. These changes will take effect on 
+September 28, 2025, or you can choose to accept the updated terms before this 
+date when you log in to Claude.ai.
+
+
+
+These changes only affect Consumer accounts (Claude Free, Pro, and Max plans). 
+If you use Claude for Work, via the API, or other services under our Commercial 
+Terms or other Agreements, then these changes don't apply to you.
+
+
+
+What's changing?
+
+
+
+1. Help improve Claude by allowing us to use your chats and coding sessions to 
+improve our models
+
+
+
+With your permission, we will use your chats and coding sessions to train and 
+improve our AI models. If you accept the updated Consumer Terms before 
+September 28, your preference takes effect immediately.
+
+
+
+If you choose to allow us to use your data for model training, it helps us:
+
+ * Improve our AI models and make Claude more helpful and accurate for everyone
+ * Develop more robust safeguards to help prevent misuse of Claude
+ We will only use chats and coding sessions you initiate or resume after you 
+give permission. You can change your preference anytime in yourPrivacy Settings.
+ <http://claude.ai/settings/data-privacy-controls>
+
+
+
+2. Updates to data retention– your choices and controls
+
+
+
+ If you choose to allow us to use your data for model training, we’ll retain 
+this data for 5 years. This enables us to improve Claude through deeper model 
+training as described above, while strengthening our safety systems over time. 
+You retain full control over how we use your data: if you change your training 
+preference, delete individual chats, or delete your account, we'll exclude your 
+data from future model training. Learn more about our data retention practices
+here 
+<https://privacy.anthropic.com/en/articles/10023548-how-long-do-you-store-my-data>
+.
+
+
+
+Learn more and next steps
+
+For detailed information about these changes:
+
+ *  Read our blog post 
+<https://www.anthropic.com/news/updates-to-our-consumer-terms> about these 
+updates
+ *  Review the updated Consumer Terms 
+<https://www.anthropic.com/legal/consumer-terms> and Privacy Policy 
+<https://www.anthropic.com/legal/privacy>
+ *  Visit our Privacy Center <https://privacy.anthropic.com/> for more 
+information about our practices
+ *  See our Help Center articles 
+<https://privacy.anthropic.com/en/collections/10672568-privacy-settings-controls>
+ on how to manage your privacy settings
+ * Next time you log into Claude, review the terms and confirm your settings
+ If you have questions about these updates, please visit our Help Center 
+<https://privacy.anthropic.com/en/collections/10663362-consumers>.
+
+
+
+–The Anthropic Team
+
+
+
+
+ <https://www.anthropic.com/?utm_source=email>
+
+ <https://x.com/claudeai> <https://www.linkedin.com/showcase/claude/> 
+<https://www.youtube.com/@anthropic-ai>
+
+
+
+ 
+
+
+
+This email was sent to gpttitti@hansung.ac.kr.
+
+
+
+Anthropic PBC, 548 Market St, PMB 90375, San Francisco, CA 94104 
+
+============================================================
+
+============================================================
+[메일 36]
+ID: 198a205c8a54397f
+구분: 수신
+제목: 코미러
+보낸 사람: "(컴퓨터공학부)황기태" <calafk@hansung.ac.kr>
+받는 사람: "(웹공학트랙)최지유" <gpttitti@hansung.ac.kr>
+참조(CC): 
+날짜: Wed Aug 13 2025 15:02:09 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ 2022년 임베디드 SW 경진 대회 현재 결선 진출 시연 영상.mp4
+<https://drive.google.com/file/d/1hQxLtuEF5xPvZIMz3FVc4WOwRRWanBDU/view?usp=drive_web>
+
+-- 
+
+
+
+
+--
+이 메일은 지정된 수취인만을 위해 작성되었으며, 중요한 정보나 저작권을 포함하고 있을 수 있습니다. 어떠한 권한 없이, 본 
+문서에 포함된 정보의 전부 또는 일부를 무단으로 제3자에게 공개, 배포, 복사 또는 사용하는 것을 엄격히 금지합니다. 만약, 본 메일이 
+잘못 전송된 경우, 발신인 또는 당사에 알려주시고, 본 메일을 즉시 삭제하여 주시기 바랍니다. 
+This E-mail may 
+contain confidential information and/or copyright material. This email is 
+intended for the use of the addressee only. If you receive this email by 
+mistake, please either delete it without reproducing, distributing or 
+retaining copies thereof or notify the sender immediately.
+
+ 
+<http://www.hansung.ac.kr/>
+
+============================================================
+
+============================================================
+[메일 37]
+ID: 1987dd29e2f804c0
+구분: 수신
+제목: Your ChatGPT code is 654213
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Aug 06 2025 14:20:10 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 654213 
+Enter this temporary verification code to continue: 654213. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+654213 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60bv7p_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DVn8D16ENdb6vwfY-2B28Jvg3sBDoOJP3oW53A7UztZYLu52TqsFLh4giVXNH2If-2F3YnhAanchejYOBwp2lg45NTbmb2m0Pe6ECdC365Bsq2NLNWmnzFJpUgitXvqj7XFy2uyFFcrf8VGqLae4pJg4bvSTNf3-2FtvC7U6-2FGZ-2BtXLol4-2Fy4Ux5xjjepP6rDd9uPLTUchJFzZPZWmzFK0TpMZGO8u0-2F06WxNHiudZ2-2FhtqIK2qW7z7L4NYuPK4EJwwx5kcTxLShY4B64Wp-2BdUFxS4FuW>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3DMkMW_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DVn8D16ENdb6vwfY-2B28Jvg3sBDoOJP3oW53A7UztZYLu52TqsFLh4giVXNH2If-2F3YnhAanchejYOBwp2lg45NTbIT4xSUBABxXSvaZACJwwFsmTouiqa-2FDKHC1LbM3w893e45I6ciHGU0lVFoHEzbwUkO-2FiKlTamYFzlAPPwLgfRbbOP-2B0xV15yp0ZRpLaepjdCODnSgb7nsuPND6MxyyEoXHK8bb435lBotS3wdcT65vOnSJIry8UpDSIKHfwMaHJn-2B3KSubXgB2VUesjdsegd>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FGjBs_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DVn8D16ENdb6vwfY-2B28Jvg3sBDoOJP3oW53A7UztZYLu52TqsFLh4giVXNH2If-2F3YnhAanchejYOBwp2lg45NTbEFrLtgr1nd7FgTeYheVI6jy2-2B6sczgRW8ZVlER2ow0JLDoEVviVVZs9tWaBGM2uSgGNuMpzvmcxiPx2dvzCU-2FhW5Np67XEGq1P7pkMpxTS2g6DDw7lgryvV7PxC7HpI8ej5kLt9Nomg4Ks9h-2Fh2Sp6LEhZDBz0uLreqTfLoQz0Bl6gmT-2F2lyVUEQchwRY5lx>
+
+============================================================
+
+============================================================
+[메일 38]
+ID: 198111e25892ee24
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Jul 16 2025 11:44:03 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+Apple iPad에서 새로 로그인함
+
+
+gpttitti@hansung.ac.kr
+Apple iPad 기기에서 내 Google 계정에 새로 로그인했습니다. 직접 로그인한  
+것이 맞다면 아무런 조치를 취하지 않아도
+됩니다. 본인이 아니라면 안내에 따라 계정을 보호하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=gpttitti@hansung.ac.kr&continue=https://myaccount.google.com/alert/nt/1752633843000?rfn%3D325%26rfnc%3D1%26eid%3D3464629617859261624%26et%3D0>
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2025 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 39]
+ID: 1980f4553a8819c2
+구분: 수신
+제목: Give Claude the context you have
+보낸 사람: Anthropic Team <team@email.anthropic.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Jul 16 2025 03:07:36 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+
+
+
+ <https://claude.ai/> 
+
+
+
+Give Claude the context you have 
+
+
+
+We just launched a new directory where you can discover and connect more tools 
+to Claude. When Claude gets context from your apps, it gives you more 
+personalized responses and can work directly in those tools.
+
+Give Claude your context: 
+
+
+ * Discover apps and tools that you can connect to Claude with one click 
+
+ * New tools regularly added: Notion, Canva, Figma, Stripe, Prisma, Socket, 
+and more
+
+ * Direct Claude to get information or take action across your connected tools 
+
+
+
+
+ <https://claude.ai/directory> 
+
+
+
+Ways to use Claude with connected tools:
+
+
+ * Ship faster: Turn Claude discussions into organized Notion roadmaps 
+
+ * Create designs: Transform creative briefs into Canva social media posts
+
+ * Improved design to code:  Turn Figma files into production-ready code 
+
+ * Manage payments:  Access Stripe customer data and payment information 
+
+
+
+
+
+Browse connectors  <https://claude.ai/directory> 
+
+
+
+— The Anthropic Team 
+
+
+
+
+
+
+
+
+
+
+ <https://www.instagram.com/anthropicai/> 
+
+ <https://www.linkedin.com/company/anthropicresearch/> 
+
+ <https://x.com/anthropicai> 
+
+ <https://www.youtube.com/@anthropic-ai> 
+
+
+
+Anthropic PBC, 548 Market St, PMB 90375, San Francisco, CA 94104 
+This email was sent to gpttitti@hansung.ac.kr. To opt out of future emails, 
+clickunsubscribe 
+<https://links.iterable.com/s/u/i4SSFk29yV0Qo-lUVH_xOLtXdVUxa5cjb3e8vH59vNpeEFl680uHUi1jGJ-CgtX3KcWP8Y7dthvlGN5KW3Rh1zi1tlcDpfDDlRZ6U6LiAwUulEvguEFO0gYKXj_c0Gs5_PDvxrM6kgKOc_rkkYQccKp3pw-zO43Lg3eWL1j1iyWh97dJLmO-lhR2i93tlbis3poUfB9XtxDHtQzB/o8xOZ_inVD3BEj5ifSxhCaUzI8rG8My1/10>
+. 
+============================================================
+
+============================================================
+[메일 40]
+ID: 197f2ef13c081671
+구분: 수신
+제목: 6월 10일 서비스 장애에 대한 보상 안내
+보낸 사람: OpenAI <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Jul 10 2025 15:04:02 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+( https://chatgpt.com?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+
+안녕하세요.
+
+2025년 6월 10일 오후 3시 36분부터 2025년 6월 11일 오전 7시까지(대한민국 표준시), ChatGPT 및 API 서비스에서 일시적으로 오류가 증가하는 현상이 확인되었습니다. 이 현상은 시스템 업데이트로 인하여 발생했으며, 일시적으로 상당수 서버들과의 연결이 끊기면서 가용 처리 용량이 감소함에 따라 응답 속도 지연 또는 간헐적 오류를 경험하셨을 수 있습니다. 당사는 영향을 받은 서버들을 확인한 뒤 정상적으로 복구를 완료한 상태입니다. 이번 사안으로 불편을 겪으셨다면 진심으로 사과를 드립니다.
+
+귀하는 ChatGPT Plus 또는 Pro를 웹사이트가 아닌 iPhone 앱, 즉 Apple App Store를 통해 구독하셨으므로, 해당 구독은 Apple이 관리합니다. 그러므로 환불이나 보상과 관련한 모든 요청은 귀하의 iOS 기기 내 구독 관리 기능을 통해 진행해 주셔야 합니다.
+
+2025년 6월 10일 발생한 위 사안에 대하여 보상을 신청하시려면 아래 절차를 따라 진행해 주세요.
+
+* 귀하의 iOS 기기에서 reportaproblem.apple.com에 접속하세요.
+* 귀하의 Apple 계정으로 로그인하세요.
+* “무엇을 도와드릴까요” 항목에서 “품질 문제 신고”를 선택하세요.
+* “다음”을 선택하세요.
+* 활성화 상태인 구독 목록이 표시되면 그중 “ChatGPT”를 선택하세요.
+* “다음”을 선택하세요.
+* “문제에 대한 추가 설명”란에 “구독은 계속 유지하되, 2025년 6월 10일에 15.5시간 동안 발생했던 ChatGPT 서비스 오류에 대해보상을 받고 싶습니다”라고 입력하세요.
+* “환불 요청”을 선택하세요.
+* “제출”을 선택하세요.
+
+Apple에 환불을 요청하는 자세한 방법에 대해서는 이 Apple 안내글 ( https://support.apple.com/ko-kr/118223?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term ) 을 참고해 주세요.
+
+다른 궁금하신 사항이 있으실 경우 언제든지 이 고객센터 안내글 ( https://help.openai.com/en/articles/11566286?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term ) 을 확인하시거나 support@openai.com으로 연락을 주시기 바랍니다. 양해해 주시고 OpenAI의 소중한 고객이 되어 주셔서 감사합니다.
+
+OpenAI 드림
+
+( https://openai.com?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+
+3180 18th St
+
+San Francisco, CA 94110
+
+Terms ( https://openai.com/terms?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+Privacy ( https://openai.com/privacy?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+openai.com ( https://openai.com/?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+============================================================
+
+============================================================
+[메일 41]
+ID: 197f298c9065ef71
+구분: 수신
+제목: 6월 10일 서비스 장애에 대한 안내
+보낸 사람: OpenAI <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Jul 10 2025 13:29:47 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+( https://chatgpt.com?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+
+이용자 여러분께 안내드립니다.
+
+2025년 6월 10일 오후 3시 36분부터 2025년 6월 11일 오전 7시까지(대한민국 표준시), ChatGPT 및 API 서비스에서 일시적으로 오류가 증가하는 현상이 확인되었습니다. 이 현상은 시스템 업데이트로 인하여 발생했습니다. 상당수 서버들과의 연결이 일시적으로 끊기면서 가용 처리 용량이 감소함에 따라, 응답 속도 지연 또는 간헐적 오류를 경험하셨을 수 있습니다. 불편을 끼쳐 드린 점 진심으로 사과드립니다.
+
+현재는 영향을 받은 서버들을 확인한 뒤 정상적으로 복구를 완료한 상태입니다.
+
+유료 이용자이신 경우, 2025년 7월 초까지 보상과 관련한 추가적인 안내를 드릴 예정입니다.
+
+문의사항이 있으시거나 도움이 필요하실 경우 온라인 이용자 센터 ( https://help.openai.com/en/articles/11566286-6%EC%9B%94-10%EC%9D%BC-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%9E%A5%EC%95%A0-%EA%B4%80%EB%A0%A8-%EC%9E%90%EC%A3%BC-%EB%AC%BB%EB%8A%94-%EC%A7%88%EB%AC%B8%EB%93%A4-faq?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term ) 를 방문하시거나 support@openai.com으로 연락해 주시기 바랍니다.
+
+이번 안정화 과정 중 보여주신 이해에 깊이 감사드리며, 항상 OpenAI를 믿고 이용해 주시는 소중한 고객님께 진심으로 감사드립니다.
+
+감사합니다.
+
+OpenAI 드림
+
+( https://openai.com?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+
+3180 18th St
+
+San Francisco, CA 94110
+
+Terms ( https://openai.com/terms?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+Privacy ( https://openai.com/privacy?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+openai.com ( https://openai.com/?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+============================================================
+
+============================================================
+[메일 42]
+ID: 197edc377af4c523
+구분: 수신
+제목: Your ChatGPT code is 841600
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Jul 09 2025 14:58:18 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 841600 
+Enter this temporary verification code to continue: 841600. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+841600 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60KCEv_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DXASqR6uqJJTi-2FMHZiOL-2BXnYhVOnYDo4sUc0UjagD-2Bx9vX5kB-2Fc40-2FH-2Fwa-2BanInWnJ7vnVMoojZ-2FXb48G-2FuMr28nZ-2FlavQ8ZDNMZItUFtiIFd0kpLuxZm-2BBP1ym-2FkQqE-2FmtJEkuGhzJiLKwb7hOo3sjA1ieRQ07Px-2Bco4y1JR3VwOlXuC6uRWAacL-2BQALb411Bkh8sP-2Fg-2BF4Xn-2B7Q-2BkcNzM0E0xD3bchvFHAFimsF-2Bp2VvUWfHHyFfrXh7JYYcs7v39eShwrnX6P-2BAtaYFm6fSd>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3DyD9H_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DXASqR6uqJJTi-2FMHZiOL-2BXnYhVOnYDo4sUc0UjagD-2Bx9vX5kB-2Fc40-2FH-2Fwa-2BanInWnJ7vnVMoojZ-2FXb48G-2FuMr28dV6ui692vteeFbQDXABR0-2F3yiimJ4YYN5l2QiJWh6J51EFP3cPmDwCFKpqZAwJGxzQ7weuJVaEpKBGEU497MsXU-2FehmGTY-2BEYA48-2B-2FODBFfgVkZuW3P0BiMdkmjxlTxKLOm8Hj-2F0Ea4GkXkwMjAWhCtCHE8dNcfNvd6xcAJIGfV8RV6m4wTeZxLzsgGK4IWY>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2F6nYH_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DXASqR6uqJJTi-2FMHZiOL-2BXnYhVOnYDo4sUc0UjagD-2Bx9vX5kB-2Fc40-2FH-2Fwa-2BanInWnJ7vnVMoojZ-2FXb48G-2FuMr28fv8c-2BwqhOJ2l08qiqe-2FLE2Au2kc0HE0E-2B7pJbP1JUJpwKM47-2FL2ZXYxW9ADPtBeTAAnIXCaTfVn3WFKAxEujha6y7Z0pO0r36-2FHlJCvILylK30TCec4b3Z5WnBcmxDYJAj-2B1xZ6qOyLJ36abRQO4fs2lxT6iVJxu6VDrLrvhkH9uCoka84T2ZbZV2i5o3l8O>
+
+============================================================
+
+============================================================
+[메일 43]
+ID: 197edbb9bda0cba2
+구분: 수신
+제목: Your ChatGPT code is 584974
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Jul 09 2025 14:49:42 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 584974 
+Enter this temporary verification code to continue: 584974. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+584974 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60Bk2C_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DWApS8uPYcR2JqmbJ-2FLDHKHunEbabP1gEx0-2BU8uaQPGWf7b0BMJaRUeA2t2AvT-2FegCpZgwHhPeM1FWWmvzSExCfji6k529RNbdeSIvyetKt7dw1erUOVL4xsYqNeJUxfNrvw8ek8ko6EXNmpKcidwpEBrObtxZ38ZJcchwmdb0woxi7ypL1Ih5JCZRR6GZd1Quvn2oIKputc1OEx2TkltPvOjoXWlDhTF6P-2BPdFvGjM7MpC3SLeaYjjkB1MJLLwXqw-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3Dw2dh_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DWApS8uPYcR2JqmbJ-2FLDHKHunEbabP1gEx0-2BU8uaQPGWf7b0BMJaRUeA2t2AvT-2FegCpZgwHhPeM1FWWmvzSExCf-2B-2FOVDUGCIwGEWClNX1DguLAy0icnjWJ-2BCiT7uKOtBdjlaeCnfFzRMs9ovXt2785Hou3fpNPiLeYm-2F7OJHJecxmOfWfjA8TwD7PvFrZiaVZ5Qq4JdpBZ4ArtguZpNNVAfpJq4MyfEvFMqvOnkiHdfq2L7WfGv3b6OZvvKRalll6c-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FNKH9_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DWApS8uPYcR2JqmbJ-2FLDHKHunEbabP1gEx0-2BU8uaQPGWf7b0BMJaRUeA2t2AvT-2FegCpZgwHhPeM1FWWmvzSExCfB8JQXED6jkOZKGjH3poQ3ul-2BdqK4uz3arOYCWRPFRWQYAV89DSMsUTedAw-2Bt8R-2Ftpv5uA7xJkPhYGsr8XWWi0uPJP3O4KvSqMSmsUOAsbvjYUXxepe9ReH2CMQzQl2TgseibeGGt48KF1FvrrqyZrVNmte8Nz4hTHUGzUb5Xso0-3D>
+
+============================================================
+
+============================================================
+[메일 44]
+ID: 197c986ae9866b31
+구분: 수신
+제목: Your ChatGPT code is 678745
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Jul 02 2025 14:05:34 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 678745 
+Enter this temporary verification code to continue: 678745. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+678745 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60ZkIr_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DVyXbJpncmZS2BtyRtjup445cuOMM1ti1VxMesLIQxWMZ0-2F1uzUz1MpGOKhqPQm7PS9-2BaZd2EY8eP-2FTIPzg9vhkGN2ATZy1FIv-2BNQgJSj4xnfPBzI7yIyKvdD-2FRpjjfalMABSZtJyoIq71Qd86AVoPvAKO8l-2Fhwd-2FfwFZLSyWDIYbFUrUIk8Eenz1NpPzfhRrFYvOsqDtvWRfTL11EBB9aS4g2pfFtFtIFwH9FMofXvnAZ4-2FTFAoStym7NPPaiDIqTCmHL961xfufFFZlhL6I-2Fb>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3Dkf_Y_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DVyXbJpncmZS2BtyRtjup445cuOMM1ti1VxMesLIQxWMZ0-2F1uzUz1MpGOKhqPQm7PS9-2BaZd2EY8eP-2FTIPzg9vhkxglgYeQEf51FTK618MJl4rcBH70buhQ60z9Gt9f0StuZizKVtOIjNQdMcYc-2BE3S2Om-2Bm-2FQ-2FIBbY-2BFF63qqq9CgxRuCZX8oOoDD2cGPodt5WRHVXAsue1f-2BjlYsgFu0DD-2B8rrdOyzU4Mnn0wN32vbRnHdrr7Uc4BPLr5xlslAuAXYZznLmluMU9VBl6D4lEe9>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FQVlH_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DVyXbJpncmZS2BtyRtjup445cuOMM1ti1VxMesLIQxWMZ0-2F1uzUz1MpGOKhqPQm7PS9-2BaZd2EY8eP-2FTIPzg9vhkss359dTpcfdQgTonzXOG8HobtQ-2FrKjHm-2FyXktPY8z6hDtCNJzYyDQUwiZylHCL83A9CLmBA86pMZ3X0aGOhwI1XMKzkoSCU47I9LSNHWOaSHFfJclfGMaI-2F9WFPF1-2Fdq4xYf4-2FJpI1AhhinaVYLK3Gv4BcFy8txYZEhJmO0-2Fkl-2Bc1NyBNpcoYWl5LQLDJCKM>
+
+============================================================
+
+============================================================
+[메일 45]
+ID: 197b1ed13dfa4b06
+구분: 수신
+제목: Turn your ideas into AI-powered apps
+보낸 사람: Anthropic Team <team@email.anthropic.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Jun 28 2025 00:01:04 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+
+
+
+
+
+ <https://claude.ai/artifacts>
+
+
+
+Hi there, 
+
+
+
+We've turned artifacts into something bigger—a space where your conversations 
+with Claude become interactive AI apps you can use and share.
+
+
+
+What’s new
+
+ * Dedicated artifacts space to browse, organize, and customize creations
+ * Build AI-powered apps (beta) by embedding AI capabilities into your 
+artifacts
+
+ * Easy sharing so others can experience what you've built
+
+
+ <https://claude.ai/artifacts>
+
+
+
+
+Describe any app idea to Claude—a personalized storytelling tool, coding 
+tutor, creative writing assistant—and watch it come to life. No coding required.
+
+Explore artifacts now  <>
+
+
+
+— The Anthropic Team
+
+
+
+PS: Learn more about how to use artifacts in this guide 
+<https://support.anthropic.com/en/articles/11649427-use-artifacts-to-visualize-and-create-ai-apps-without-ever-writing-a-line-of-code>
+.
+
+
+
+
+
+
+ <https://www.anthropic.com/?utm_source=email>
+
+ <https://x.com/anthropicai> 
+<https://www.linkedin.com/company/anthropicresearch> 
+<https://www.youtube.com/@anthropic-ai>
+
+
+
+ 
+
+
+
+This email was sent to gpttitti@hansung.ac.kr. Unsubscribe 
+<https://links.iterable.com/s/u/VE3hR3dxEPbAae9zcPvFz6sbTCrhp96OOIxd1N9HYZGTsX9O_iXddSqR3UhJaxQdHbY5ja9vEA1LW01VPLGjUGo204XziKPOBKagqZ5e8nC1pzr30dx2F0rr2Lj465rqIYlvJaw2Rk8FREKZn8W8EJYeVgp5m_JVOIjWUNTrU0AVS0gI_S1h2GeLLKl8qUWm-oHuw3FOIHDOOqgIt2ev45vqtYpbY62ypi4wMk3xwBj-Xjux1eZk14yQwg/ZpVL3HKhAzBCQ-Q92T71RVcyQGxxuzi5/10>
+.
+
+
+
+Anthropic PBC, 548 Market St, PMB 90375, San Francisco, CA 94104 
+
+============================================================
+
+============================================================
+[메일 46]
+ID: 197b04da48dbeb05
+구분: 수신
+제목: Your ChatGPT code is 806681
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Fri Jun 27 2025 16:32:46 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 806681 
+Enter this temporary verification code to continue: 806681. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+806681 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX609b77_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DXz0l0wUO1RPUi9rVa1Iy3vFvAZJ-2F7xEPQCoRtKv-2FmZwnE4SkxsUKv0A3Fet7doDrk49OPLiipzs6o4amMz2JEzvK3wVZtqqkddfd8Wq8fRon3YJAeuk5x1fD4qpkoxoZn7WrdfJwrMC5O1MKT0i1bRXRcOgvGJOa5OzlJsShArS43-2BLVhFfBo4XOB0ol7Le5dq71OG4LG6GISRCGW4DnEeWuEmQw-2FsU1pHE75ARQvDXxO7bqx8D7qOoE-2FNhoChJYlvQC12I7EsbIBatuvkBJqg>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3DuCb__LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DXz0l0wUO1RPUi9rVa1Iy3vFvAZJ-2F7xEPQCoRtKv-2FmZwnE4SkxsUKv0A3Fet7doDrk49OPLiipzs6o4amMz2JEziJJFA-2FcKj-2BVFxECGJDe0jKj1cY2johg0-2FNxLXkUMLakfo5V7tqIXusuSJnuRUABlzA-2B6BuzbrrDMWjkXsvUvFI-2Bq7MZYjgYLyh4DsJN-2Bg1hqgwm0iFZC4S1Vx8P3WRIKRX0IRFQkQmayDWhgOMHZ9mq547HN2-2B3yyFFGEjBfZeYSIEm2kD5PsFczOb-2FsMpw0>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FQWMj_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DXz0l0wUO1RPUi9rVa1Iy3vFvAZJ-2F7xEPQCoRtKv-2FmZwnE4SkxsUKv0A3Fet7doDrk49OPLiipzs6o4amMz2JEzjTKBQiuYmpI-2FQET7WkvL8qpYFrJm5nG1MyS1hnx5JxkBBS9-2FV6MiB4oaT0BJ1-2BNZVFvlQk5udHFuJbUnZRkgS7rb05Z4DWFDjzjnQ5STNgBMJilzPudcuZlVTiGVEekPATexoAe0xfkOiOLXdFy2QWP-2FwBtMV8bDkyfK4MGQq53n68YgkLzluQg1o1h-2B1E4A>
+
+============================================================
+
+============================================================
+[메일 47]
+ID: 1977088666916e7e
+구분: 수신
+제목: 6월 10일 서비스 장애에 대한 안내
+보낸 사람: OpenAI <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sun Jun 15 2025 07:21:15 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+( https://chatgpt.com?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+
+이용자 여러분께 안내드립니다.
+
+2025년 6월 10일 오후 3시 36분부터 2025년 6월 11일 오전 7시까지(대한민국 표준시), ChatGPT 및 API 서비스에서 일시적으로 오류가 증가하는 현상이 확인되었습니다. 이 현상은 시스템 업데이트로 인하여 발생했습니다. 상당수 서버들과의 연결이 일시적으로 끊기면서 가용 처리 용량이 감소함에 따라, 응답 속도 지연 또는 간헐적 오류를 경험하셨을 수 있습니다. 불편을 끼쳐 드린 점 진심으로 사과드립니다.
+
+현재는 영향을 받은 서버들을 확인한 뒤 정상적으로 복구를 완료한 상태입니다.
+
+유료 이용자이신 경우, 2025년 7월 초까지 보상과 관련한 추가적인 안내를 드릴 예정입니다.
+
+문의사항이 있으시거나 도움이 필요하실 경우 온라인 이용자 센터 ( https://help.openai.com/en/articles/11566286-6%EC%9B%94-10%EC%9D%BC-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%9E%A5%EC%95%A0-%EA%B4%80%EB%A0%A8-%EC%9E%90%EC%A3%BC-%EB%AC%BB%EB%8A%94-%EC%A7%88%EB%AC%B8%EB%93%A4-faq?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term ) 를 방문하시거나 support@openai.com으로 연락해 주시기 바랍니다.
+
+이번 안정화 과정 중 보여주신 이해에 깊이 감사드리며, 항상 OpenAI를 믿고 이용해 주시는 소중한 고객님께 진심으로 감사드립니다.
+
+감사합니다.
+
+OpenAI 드림
+
+( https://openai.com?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+
+3180 18th St
+
+San Francisco, CA 94110
+
+Terms ( https://openai.com/terms?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+Privacy ( https://openai.com/privacy?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+openai.com ( https://openai.com/?utm_campaign=utm_campaign&utm_content=utm_content&utm_medium=utm_medium&utm_source=utm_source&utm_term=utm_term )
+============================================================
+
+============================================================
+[메일 48]
+ID: 1976f139eba48e00
+구분: 수신
+제목: Get more from Claude with these power moves (5/5)
+보낸 사람: Anthropic Team <team@email2.anthropic.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sun Jun 15 2025 00:34:05 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+As you get comfortable with Claude, here are 5 easy techniques that can 
+transform your experience from good to great.
+
+
+
+
+
+
+
+Getting better results with Claude
+
+ <https://claude.ai>
+
+
+
+Hi there,
+
+
+
+As you get comfortable with Claude, here are 5 easy techniques that can 
+transform your experience from good to great:
+
+
+
+1. Ask Claude to think out loud: When you need help with something complext, 
+try: "Think through this step-by-step" or "Break this down into smaller steps."
+
+
+
+ 2. Be specific when results are too vague: If Claude's response isn't quite 
+what you need, add more detail: "That's helpful, but I need ideas specifically 
+for a family vacation with teenagers, not young children."
+
+
+
+ 3. Refine through conversation: Treat Claude as your creative partner and 
+shape the output together: "I like where this email draft is going, could you 
+make it more casual and half as long?"
+
+
+
+4. Specify your audience and tone: "Explain investing to a teenager" will get 
+very different results than just "Explain investing."
+
+
+
+The more you talk to Claude like a thoughtful collaborator, the better your 
+results will be!
+
+
+
+Talk to Claude  <https://claude.ai>
+
+— The Anthropic Team
+
+
+
+
+
+
+
+
+ <https://www.anthropic.com/?utm_source=email>
+
+ <https://x.com/anthropicai>  
+<https://www.linkedin.com/company/anthropicresearch> 
+<https://www.youtube.com/@anthropic-ai>
+
+
+
+ 
+
+
+
+This email was sent to gpttitti@hansung.ac.kr. Unsubscribe 
+<https://links.iterable.com/s/u/qqHzVNlMeC_05uh5zQiS5EwW7ECfvcM9PB-7N_-_40u2aqb_6IcBwdUi6PneDo9foo2OvvnZSfF0Si1ePQKoxCElvdFMyz2uuz2X3KAZ5eFhAd-lfU3FfdrsGb9XV3lAfTMEnYEfvLfJzFegf2ZthRa2FGYFiEXwR1rgr30GPaB0BVdBxhXTvTWHiRz8_xNN3P6SAkGPdT8dWf_k8GSrgfheSH4V_a2t6-yB0__NvEsG1YhHWYyjzIZ9Cg/Jmfv3kcoZcr8EqgOzKLyL-TDfkbjVML2/9>
+.
+
+
+
+Anthropic PBC, 548 Market St, PMB 90375, San Francisco, CA 94104 
+
+============================================================
+
+============================================================
+[메일 49]
+ID: 1975fa08f18341cb
+구분: 수신
+제목: Using Claude for your everyday life (4/5)
+보낸 사람: Anthropic Team <team@email2.anthropic.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Jun 12 2025 00:34:05 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+While Claude excels at work tasks, it can be just as valuable for your personal 
+life, tackling everyday challenges and projects. Here's how Claude fits into 
+your personal life.
+
+
+
+
+
+
+
+Using Claude for your everyday life
+
+
+
+
+Hi there,
+
+
+
+ While Claude excels at work tasks, it can be just as valuable for your 
+personal life, tackling everyday challenges and projects. Here's how Claude 
+fits into your personal life:
+
+
+
+1. Life assistant: Let Claude tackle recurring household planning tasks that 
+eat up your time. Try: "I'm tired of meal-prepping the same 5 meals. Can you 
+suggest some unconventional ideas that are easy to prepare but packed with 
+protein?"
+
+
+
+2. Personal learning coach: Claude can help you acquire new skills or 
+knowledge more efficiently. Try: "I want to learn basic Spanish for my upcoming 
+trip. Create a two-week study plan with daily 15-minute lessons."
+
+
+
+3. Decision-making support: Facing complex personal choices? Claude can 
+organize information and help you think through options. Try: "Help me compare 
+Portugal and Switzerland for an upcoming vacation based on culture, cost, and 
+travel logistics."
+
+
+
+4. Creative project partner: Whether planning celebrations or pursuing 
+hobbies, Claude can spark ideas and help with execution. Try: "I need creative 
+ideas for my parents' 40th anniversary celebration that won't break the bank."
+
+
+
+5. Simplify complex tasks: Need help understanding complex topics? Claude can 
+break down technical, academic, or professional concepts into simple terms. 
+Try: "Break down my car insurance policy so I understand what each section 
+means."
+
+
+
+
+
+Talk to Claude  <https://docs.anthropic.com/en/prompt-library/library>
+
+
+
+With the Claude mobile app, personalized help is always at hand—whether you're 
+at the grocery store, planning your day, or tackling home projects.
+
+
+
+
+ 
+<https://apps.apple.com/us/app/claude-by-anthropic/id6473753684?utm_source=email&utm_campaign=warming>
+ 
+<https://play.google.com/store/apps/details?id=com.anthropic.claude&utm_source=email&utm_campaign=warming>
+
+— The Anthropic Team
+
+
+
+
+
+
+
+
+ <https://www.anthropic.com/?utm_source=email>
+
+ <https://x.com/anthropicai>  
+<https://www.linkedin.com/company/anthropicresearch> 
+<https://www.youtube.com/@anthropic-ai>
+
+
+
+ 
+
+
+
+This email was sent to gpttitti@hansung.ac.kr. Unsubscribe 
+<https://links.iterable.com/s/u/KOTC3awuYLws3YOYmnrArj6CbNPup6bOTStMEX2BfTLgs663wqqbTRWBANOc3lCJUT2GF9YuE_lyg50NIu7Ab57w-a-kApQqAESeTJs4j3DgVl0JaeV66P7DkKHckQDqyfYTLvCxRGB3hg0X9ct5cGFuOxfmOJiTr4hHo2m7sJZuAg-l4JmVz9XsXVluHJo5mteybQ31Q5YMhymv2H39T8epVfi6SNPfNN2hkTyPr-k6gikXsH04FaTn6w/xfMa0s4sZ7VH22B1tDRRtr8siqTuP0Sq/9>
+.
+
+
+
+Anthropic PBC, 548 Market St, PMB 90375, San Francisco, CA 94104 
+
+============================================================
+
+============================================================
+[메일 50]
+ID: 197577e4edcf6300
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Tue Jun 10 2025 10:39:43 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+Windows에서 새로 로그인함
+
+
+gpttitti@hansung.ac.kr
+Windows 기기에서 내 Google 계정에 새로 로그인했습니다. 직접 로그인한 것이  
+맞다면 아무런 조치를 취하지 않아도 됩니다.
+본인이 아니라면 안내에 따라 계정을 보호하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=gpttitti@hansung.ac.kr&continue=https://myaccount.google.com/alert/nt/1749519583000?rfn%3D325%26rfnc%3D1%26eid%3D-978431618778182924%26et%3D0>
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2025 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 51]
+ID: 197502d78d9f57a9
+구분: 수신
+제목: Bring your ideas to life with Artifacts (3/5)
+보낸 사람: Anthropic Team <team@email.anthropic.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Mon Jun 09 2025 00:34:06 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Did you know Claude can create more than just text? Today, I want to introduce 
+you to one of Claude's most powerful features: Artifacts.
+
+
+
+
+
+
+
+Bring your ideas to life with Artifacts
+
+
+
+
+Hi there,
+
+
+
+ Did you know Claude can create more than just text? Today, I want to 
+introduce you to one of Claude's most powerful features: Artifacts.
+
+ 
+<https://claude.ai/new?q=Hi%20Claude,%20can%20you%20create%20an%208%20bit%20style%20crab%20using%20SVG?>
+
+
+
+What are Artifacts? Think of Artifacts as a dedicated window next to the chat. 
+When Claude creates something - like a diagram, code, or interactive tool - it 
+appears there, bringing your ideas and projects to life.
+
+
+
+Here's what you can ask Claude to create:
+
+ * Flowcharts & diagrams: Create a flowchart showing the customer journey for 
+an e-commerce site
+ * Data visualizations: Create a chart from my CSV file that compares my 
+different monthly expenses
+ * Interactive quizzes: Make an interactive quiz to help me practice for my 
+upcoming history test
+ * Coding projects: Create a simple to-do list app using JavaScript
+ * Learning tools: Make flashcards to help me learn everyday Spanish phrases 
+for my upcoming trip to Mexico City
+Try this: Ask Claude to "create a decision tree to help me decide whether to 
+buy or rent a home 
+<https://claude.ai/new?q=create%20a%20decision%20tree%20to%20help%20me%20decide%20whether%20to%20buy%20or%20rent%20a%20home>
+" and see what happens!
+
+Create your first Artifact  <https://claude.ai/>
+
+
+
+— The Anthropic Team
+
+
+
+
+
+
+
+
+ <https://www.anthropic.com/?utm_source=email>
+
+ <https://x.com/anthropicai> 
+<https://www.linkedin.com/company/anthropicresearch> 
+<https://www.youtube.com/@anthropic-ai>
+
+
+
+ 
+
+
+
+This email was sent to gpttitti@hansung.ac.kr. Unsubscribe 
+<https://links.iterable.com/s/u/5qzy-L8-7MYYfK_ojJBbeY8gtzOD3Gu8_1sQz8jUpaL7HjbUmr5wHDuRal_RMLHYgcXu4PeQ1e32193y_MCIjBN1Cp1FftouDg5LDk5VakI_w1z7zvyM34Ncs3dTWn3peQZY5IksogLiN7JI0V-QxRhbe9J_7tQ74MHIkKaJaazxjGk5UNPb7Jl7XL3HniljKVDY9ZIM7ZHP3B9b8lsaNC83TJsj-Euo157saRRKMOPG6Rg8nQvi8ic5HA/uniHIApt3MCniJlRpG3CEcAVTTvVLqRm/9>
+.
+
+
+
+Anthropic PBC, 548 Market St, PMB 90375, San Francisco, CA 94104 
+
+============================================================
+
+============================================================
+[메일 52]
+ID: 1974e63c31bce3a4
+구분: 수신
+제목: [곰랩] 회원가입을 축하드립니다.
+보낸 사람: GOM Lab Support Team <noreply@gomlab.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sun Jun 08 2025 16:14:07 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ 
+  
+[image: gom & company] <https://www.gomlab.com> 
+곰랩 회원이 되신 것을
+환영합니다. 
+
+안녕하세요. *gpttitti@hansung.ac.kr*님
+최고의 제품을 만들기 위해 최선을 다하겠습니다. 
+  
+회원가입 정보 
+회원 구분 개인 
+가입 구분 SNS (구글) 
+만 14세 이상 여부 만 14세 이상입니다. 
+  
+정보 수신 동의 여부 안내 
+수신 항목 
+동의 여부 비동의 
+동의 일자 2025-06-08 
+본 메일은 발신 전용입니다. 궁금하신 점이나 불편한 사항은 1:1문의 <https://www.gomlab.com/support>를 통해 
+문의해 주시기 바랍니다. 
+  
+[image: gom & company] 
+  
+㈜곰앤컴퍼니 대표이사: 이병기 사업자등록번호: 120-81-86669 통신판매업신고: 2023-서울송파-6056호 주소: 서울시 송파구 
+문정로 4길 16 (곰앤컴퍼니 빌딩) 
+  
+Copyright GOM & COMPANY All Right Reserved 
+  
+============================================================
+
+============================================================
+[메일 53]
+ID: 19745e0c685316e0
+구분: 수신
+제목: 5 ways Claude can work with you (2/5)
+보낸 사람: Anthropic Team <team@email.anthropic.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Jun 07 2025 00:34:06 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Life can be busy! Imagine what you could do with a few more hours in your day? 
+Claude can give you those hours back. Here are 5 ways Claude can help.
+
+
+
+
+
+
+
+5 ways Claude can work with you
+
+
+
+ <https://claude.ai>
+
+Hi there,
+
+
+
+ Life can be busy! Imagine what you could do with a few more hours in your 
+day? Claude can give you those hours back. Here are 5 ways Claude can help:
+
+
+
+1. Email management: Claude can help draft emails for different situation, 
+from follow-ups to sensitive communications. Try: "Help me write a diplomatic 
+email declining a project opportunity."
+
+
+
+2. Research assistant: Need to gather information quickly? Claude can 
+synthesize information on industry trends, competitors, or technical concepts. 
+Try: "Summarize the latest trends in remote work technology."
+
+
+
+ 3. Content creation: Whether it's blog posts, social media content, or 
+presentations, Claude can help generate ideas or draft content. Try: "Help me 
+outline a presentation on our quarterly results."
+
+
+
+ 4. Problem-solving partner: Stuck on a challenging problem? Explain it to 
+Claude to help you think through different approaches. Claude might ask 
+questions that lead to breakthrough insights.
+
+
+
+ 5. Meeting prep in minutes: Claude Pro and Max users can integrate their 
+Google Workspace to search emails, review documents, and see calendar 
+commitments. Try: "Help me prep for my 10am marketing meeting by summarizing 
+relevant emails and docs."
+
+
+
+Talk to Claude  <https://claude.ai>
+
+
+
+Small shifts in how you work with Claude can help you preserve more energy for 
+what truly matters.
+
+
+ — The Anthropic Team
+
+
+
+
+
+
+
+
+ <https://www.anthropic.com/?utm_source=email>
+
+ <https://x.com/anthropicai> 
+<https://www.linkedin.com/company/anthropicresearch> 
+<https://www.youtube.com/@anthropic-ai>
+
+
+
+ 
+
+
+
+This email was sent to gpttitti@hansung.ac.kr. Unsubscribe 
+<https://links.iterable.com/s/u/LbcDSmZElkwHce86FUmznhj-Tpw3czgi8KBgR1y64papW4EtlDyxRNKB3Hs3Q-GHLxF3hVsf2TuTZfUM2On_QYSsz1Pxzpv5WmE6Now20PpyYTvWWq40nWy6g9_wYVwpntfUNx37tKv72PYRigKjR6ngOQlT0A7erw3mGn_QS51ce8NRWt96mrlHQCFderxW6RvQUOzqek0CFyt_M3nB1Ldu5XE0rO2_x6XH0nJqIfzwJkgUdcgyr6JL-Q/u5QfFRtTqP2w3qLFW2-fCLBdVan87jYx/9>
+.
+
+
+
+Anthropic PBC, 548 Market St, PMB 90375, San Francisco, CA 94104 
+
+============================================================
+
+============================================================
+[메일 54]
+ID: 1973b940a52390da
+구분: 수신
+제목: The secret to your first "aha moment" with Claude (1/5)
+보낸 사람: Anthropic Team <team@email2.anthropic.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Jun 05 2025 00:34:06 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+The moment happens faster when you give Claude context. Here's how.
+
+
+
+
+
+
+
+Your first "aha moment" with Claude
+
+
+
+
+Hi there,
+
+The best part about Claude? When it suddenly clicks and you wonder how you 
+ever worked without it.
+
+
+
+
+The secret to great results
+
+
+The moment happens faster when you give Claude context. Here's how:
+
+ * Who: Tell Claude about yourself if it's relevant (I'm a marketing manager 
+working on a campaign) 
+ * What: Be specific about your task (I need to write a blog post about 
+sustainable fashion)
+ * Why: Share your goals (This needs to appeal to Gen Z customers) 
+ * How: Mention any preferences (Keep it under 500 words and include 
+statistics)
+Try it out: Next time you ask Claude something, add a bit more context and see 
+how the results improve.
+
+
+
+Instead of: "Write me a recipe" Try: "I'm a beginner cook with limited kitchen 
+equipment. Can you suggest an easy pasta dish that uses 5 ingredients or less? 
+I'm cooking for two people and prefer vegetarian options."
+
+Chat with Claude  <https://claude.ai>
+
+
+
+
+
+
+Claude is always available, everywhere—on your laptop, phone, or tablet. 
+Having Claude just a tap away means more breakthrough moments—turning ambitious 
+ideas into achievable goals with instant support.
+
+
+
+
+ 
+<https://apps.apple.com/us/app/claude-by-anthropic/id6473753684?utm_source=email&utm_campaign=warming>
+ 
+<https://play.google.com/store/apps/details?id=com.anthropic.claude&utm_source=email&utm_campaign=warming>
+
+
+
+We look forward to hearing about your next "aha moment."
+
+
+
+— The Anthropic Team
+
+
+
+
+ <https://www.anthropic.com/?utm_source=email>
+
+ <https://x.com/anthropicai> 
+<https://www.linkedin.com/company/anthropicresearch> 
+<https://www.youtube.com/@anthropic-ai>
+
+
+
+ 
+
+
+
+This email was sent to gpttitti@hansung.ac.kr. Unsubscribe 
+<https://links.iterable.com/s/u/-VH5V2damKQZ2YiwroXW_MzaYduy9e9v5JJbkCx6uUV3YcnBijFseSOEJD6lfSqQUTcVbNLpZ-pnwHeEBqCcKlX5r5idXMhQNNA9hocUPJz2ssGltMfDaqjjWM1Ydls2QvSSj9s6ISQ4h5r1bRS4Hja9TGnTG0com3shv6SzQmDhJJ74MqVQWO4XE1bpGPEhLPPwL65ywQxoMGHfEtzyJ2Pgq1olVZJg6m5OqFaiOVVc0mYZTK8mRh4hSw/iOLCGZR9upHLtHE4Sim5XL_I8cy2V9uL/9>
+.
+
+
+
+Anthropic PBC, 548 Market St, PMB 90375, San Francisco, CA 94104 
+
+============================================================
+
+============================================================
+[메일 55]
+ID: 197366db5ee1c379
+구분: 수신
+제목: Welcome to Claude — let’s get started
+보낸 사람: Anthropic Team <team@email.anthropic.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Jun 04 2025 00:34:06 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Imagine having a thought partner who adapts to your unique thinking style, 
+brings fresh perspectives to your challenges, and helps turn your ideas into 
+reality. That's Claude.
+
+
+
+
+
+
+
+Welcome to Claude, your intelligent collaborator
+
+
+
+
+ Welcome to Claude, your intelligent collaborator ready to help you tackle 
+what matters most in work and life. To help you get started, we’ll be sharing 
+tips and tricks on how to get the most out of Claude.
+
+
+
+Imagine having a thought partner who:
+
+ * Adapts to your unique thinking style 
+ * Brings fresh perspectives to your challenges
+ * Helps turn your ideas into reality
+The easiest way to get started is to simply ask Claude a question or give 
+Claude a task. Here are a few simple ideas:
+
+ * Write a firm, but friendly email to a client who missed a deadline. 
+<https://claude.ai/new?q=Write+a+firm%2C+but+friendly+email+to+a+client+who+missed+a+deadline.>
+ * Help me plan a dinner menu for 6 people with dietary restrictions. 
+<https://claude.ai/new?q=Help%20me%20plan%20a%20dinner%20menu%20for%206%20people%20with%20dietary%20restrictions>
+ * Help me tailor my resume to fit this job description. 
+<https://claude.ai/new?q=Help%20me%20tailor%20my%20resume%20to%20fit%20this%20job%20description.>
+
+
+Start your first chat  <https://claude.ai>
+
+
+
+Why Claude is different
+
+
+Claude is designed to be helpful, harmless, and honest – working as a thinking 
+partner that provides thoughtful conversations, not just a search engine or 
+task automator.
+
+
+
+
+
+
+
+What's coming next
+
+
+Over the next few days, you'll receive some tips to help you get the most out 
+of conversations with Claude, including how to create Artifacts and solve 
+complex problems together.
+
+
+
+Need something specific? Just ask Claude!
+
+
+
+Start your first chat  <https://claude.ai>
+
+
+
+ <https://www.anthropic.com/?utm_source=email>
+
+ <https://x.com/anthropicai> 
+<https://www.linkedin.com/company/anthropicresearch> 
+<https://www.youtube.com/@anthropic-ai>
+
+
+
+ 
+
+
+
+This email was sent to gpttitti@hansung.ac.kr.
+
+
+
+Anthropic PBC, 548 Market St, PMB 90375, San Francisco, CA 94104 
+
+============================================================
+
+============================================================
+[메일 56]
+ID: 197357e324e0811e
+구분: 수신
+제목: ChatGPT 비밀번호 초기화 코드는 978763
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Tue Jun 03 2025 20:12:29 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ ChatGPT 비밀번호 초기화 코드는 978763 
+
+[image: ChatGPT] 
+
+다음 임시 인증 코드를 입력해 계속하세요: 
+
+978763 
+
+비밀번호를 초기화하려 하지 않았다면 이 이메일을 무시하세요. 
+
+
+감사합니다.
+ChatGPT 팀 드림 
+
+[image: OpenAI] 
+
+ChatGPT 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMtxuwNyiH8tHYK-2BH0HuuCVk-3DulRE_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ8pyEDQNRbxdarhizbtKNerEnNQu9c30mfkMNjYLQWTLmxaZv5KOc5oyYn6VRoGknT9H9GHFwzuKu-2BnK26HDUPNpFjowq4NygGIkqnlFhnWJnNBM2Mmi42UadkjzukrapSkFYgcFYpoMh9oAJ-2Bi1S2qoYiNm49uUowPFTRkV03FVrHYnV3Peekc1400n7-2FRrHdA5mNsPhLSxJC5MqJYuRZo4LuokZwiXoU2hJV-2B8EtDBEGIQApBnnXHrhoksQCGVtkO2doul9b-2FtUzp9SxyTRyEd-2F6nCF-2Bxom9YVabSAEkKnubEi1ca4uQopgwdDv-2F51Ow-3D-3D> 
+
+도움말 센터 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0tn1LK51XoZKbBfyGht7CMa4ZpV_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ8pyEDQNRbxdarhizbtKNerEnNQu9c30mfkMNjYLQWTLmxaZv5KOc5oyYn6VRoGknT9H9GHFwzuKu-2BnK26HDUPNpFjowq4NygGIkqnlFhnWJnNBM2Mmi42UadkjzukrapUNixR8s-2FNQ10qpWcGzE2PhQ934jMGQSBtpdjwLmDrG8jB-2BzgLX-2BDMU-2F-2BzHHI1UdMAIWIfvdtt74-2FTbsRENqhEvaMpL4flgD021t452vIAmtkBoGTlehF4qLoBk1oOk-2BQax-2B02k-2Bry55bVdAyGsZK8kMY9Unn0pCnCatDK7mZ6XCYkmVvojTgx3sK1bn2PCkBQ-3D-3D> 
+
+============================================================
+
+============================================================
+[메일 57]
+ID: 19726bc543d5942d
+구분: 수신
+제목: New login to X from SafariMobileIos on iPhone
+보낸 사람: X <verify@x.com>
+받는 사람: uu <gpttitti@hansung.ac.kr>
+참조(CC): 
+날짜: Sat May 31 2025 23:26:03 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+X
+
+We noticed a login to your account @uumznxbcv from a new device. Was this you?
+
+New login
+
+Location
+대한민국 종로구, 대한민국
+
+*Location is approximate based on the login's IP address.
+
+Device
+
+        SafariMobileIos on iPhone
+
+If this was you
+You can ignore this message. There's no need to take any action.
+
+If this wasn’t you
+
+Complete these steps now to protect your account.
+
+Change your password. You'll be logged out of all your active X sessions except the one you're using at this time.
+> https://twitter.com/account/confirm_email_reset?reset_type=e&password_reset_cause=login_notification&user_id=1928812407239094273&token=CyBATHcImcUXf%214sLYC3dyo%21r_6YZYYWYwcirvl8vck%3D-1748701563847&token_version=0&confirm_pending_email=0
+
+Review the apps that have access to your account and revoke access to any unfamiliar apps. Learn more.
+> https://help.x.com/managing-your-account/connect-or-revoke-access-to-third-party-apps
+
+> https://x.com/settings/applications
+
+============================================================
+
+============================================================
+[메일 58]
+ID: 19726b780b35f885
+구분: 수신
+제목: Your X account has been reactivated!
+보낸 사람: X <info@x.com>
+받는 사람: uu <gpttitti@hansung.ac.kr>
+참조(CC): 
+날짜: Sat May 31 2025 23:20:47 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Your X account has been reactivated. You can now log in with your current account password.
+
+From The X Team.
+
+Forgot your X password? Get instructions on how to reset it:
+https://x.com/i/flow/password_reset
+
+Need help?
+https://help.x.com
+
+If you received this message in error and did not sign up for a X account, click on the url below:
+https://twitter.com/account/not_my_account/1928812407239094273/38D97-FB238-174870?ut=1&cn=cmVhY3RpdmF0aW9uX2NvbXBsZXRl
+
+============================================================
+
+============================================================
+[메일 59]
+ID: 196f65afabea46a5
+구분: 수신
+제목: Your ChatGPT code is 296813
+보낸 사람: noreply@tm.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu May 22 2025 13:57:54 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 296813 
+Enter this temporary verification code to continue: 296813. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+296813 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60tXsy_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DXprgvH6AoUoQ-2FoTISdEUQd6nN3P9-2B5wl6d1DElzHhMLGMUMrpnefqK9KLsTgZFgnYPtkIDFKyBD4F-2BHoDhKsmy26JWXELmkb4VaWz2NMfhZZ6m4ndM2RecemUooK7aZt6tfkcq1hRC-2FdwbKhMmC9Z6GLWVKcgkaAB2GJYfc4jLeMty-2Fx2zPImkjlOEuyjn4sxfmU6QESQpm3WpBttx-2FWMhz3fV05oH7l6FmRyfnjC6vEm7K0P2gaVrk9-2BGlylcM56hYQ5eaAbJytj-2FvEvX4WcE>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3DX77L_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DXprgvH6AoUoQ-2FoTISdEUQd6nN3P9-2B5wl6d1DElzHhMLGMUMrpnefqK9KLsTgZFgnYPtkIDFKyBD4F-2BHoDhKsmyepQsGE6HAZtZ04LGdp7lta3YPiZtX9HNWcICDXdxQC-2BVV40bw62ZEoNq6SPAqiGVDZQdWwRjpn1n8-2B1EJRtM9XzPEjK-2FJiXZe5783OUHBgeVV6p7paAmQhydo5-2B5QUqrheuOJ217GhOX0bFWrE1N2fwP8QvJiH7G6TnTadDdDQzRy3fYlE-2F1dBOtGL6nrYmb>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2F42i9_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4rdThLvPd3IYm5YhsttIFbDAewxiJbPLZc6xgOfPzKQ5G2A89jRixd1mNd5OOw7DXprgvH6AoUoQ-2FoTISdEUQd6nN3P9-2B5wl6d1DElzHhMLGMUMrpnefqK9KLsTgZFgnYPtkIDFKyBD4F-2BHoDhKsmyu1laVyM5B6cG-2F1jak-2FkeTWKxIwggoFPoOc2FdHpBAhAGrgrL-2FgOMJZq0IFngumLy8I6-2BmAbzpX-2BXMBjzJ7ccS9tRTuqPB-2B5seUR1-2FBN6deYmUjdoHqNmFNFoiHcIn02IY8uD9kQVHr5zTXcvWeuD9dcXFjth85XYXYySmAHeUK5QlXZFMh4asvT-2Byu5SzRfl>
+
+============================================================
+
+============================================================
+[메일 60]
+ID: 196527207fb2ef3b
+구분: 수신
+제목: Your ChatGPT code is 319820
+보낸 사람: ChatGPT <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sun Apr 20 2025 18:05:26 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+     Your ChatGPT code is 319820      Enter this temporary verification
+code to continue: 319820. 
+                       ChatGPT Log-in Code 
+
+      Hi there, 
+
+  We noticed a suspicious log-in on your account. If that was you, enter
+this code: 
+
+ = 319820 =
+
+  If you were not trying to log in to ChatGPT, please reset your password
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>.
+
+
+  For more information about why you received this email, please see the
+help center article on One-Time Passwords
+<https://help.openai.com/en/articles/9889414-what-is-a-one-time-password-otp-and-why-did-you-receive-one>.
+
+
+  Best,
+ OpenAI 
+
+               If you have any questions please contact us through our help
+center <https://help.openai.com/en/>
+============================================================
+
+============================================================
+[메일 61]
+ID: 19638989885fefc4
+구분: 수신
+제목: Your ChatGPT code is 343308
+보낸 사람: ChatGPT <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Tue Apr 15 2025 17:37:25 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+     Your ChatGPT code is 343308      Enter this temporary verification
+code to continue: 343308. 
+                       ChatGPT Log-in Code 
+
+      Hi there, 
+
+  We noticed a suspicious log-in on your account. If that was you, enter
+this code: 
+
+ = 343308 =
+
+  If you were not trying to log in to ChatGPT, please reset your password
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>.
+
+
+  For more information about why you received this email, please see the
+help center article on One-Time Passwords
+<https://help.openai.com/en/articles/9889414-what-is-a-one-time-password-otp-and-why-did-you-receive-one>.
+
+
+  Best,
+ OpenAI 
+
+               If you have any questions please contact us through our help
+center <https://help.openai.com/en/>
+============================================================
+
+============================================================
+[메일 62]
+ID: 195892dd99e77c74
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Mar 12 2025 16:07:16 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+Apple iPad에서 새로 로그인함
+
+
+gpttitti@hansung.ac.kr
+Apple iPad 기기에서 내 Google 계정에 새로 로그인했습니다. 직접 로그인한  
+것이 맞다면 아무런 조치를 취하지 않아도
+됩니다. 본인이 아니라면 안내에 따라 계정을 보호하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=gpttitti@hansung.ac.kr&continue=https://myaccount.google.com/alert/nt/1741763236000?rfn%3D325%26rfnc%3D1%26eid%3D4718459123553171443%26et%3D0>
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2025 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 63]
+ID: 195879a1c7188003
+구분: 수신
+제목: UNiDAYS 계정 인증
+보낸 사람: UNiDAYS <no-reply@myunidays.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Mar 12 2025 08:46:17 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[UNiDAYS] [https://www.myunidays.com/]
+이메일 주소를 인증하여 인증 프로세스를 완료합니다.
+지금 인증 [https://email.myunidays.com/system/clicked-ul/EauZ7kYG40eZcjfcD3fnp79G75c6_xVGt4oKisdh9zwH7aEs7Nf4ToilhHhSla7YaHR0cHM6Ly93d3cubXl1bmlkYXlzLmNvbS9LUi9rby1LUi92L2UwMjZjNGYxLTIxYmMtNDhkZS1iOTU1LTk5MWIyYTNiOTM2Yz9yZXR1cm5Vcmw9JTJmS1IlMmZrby1LUiUyZnBhcnRuZXJzJTJmYXBwbGVlZHVjYXRpb25zdG9yZSUyZm1pY3JvLWFjY2VzcyUyZm9ubGluZSZzb3VyY2U9YXBwbGVlZHVjYXRpb25zdG9yZS1TcG90bGlnaHQmc3R5bGU9ZGVmYXVsdCUyY2RlZmF1bHQlMmNhY2NvdW50JnVpLXNpZz1IdERUX2ZDTmRRYlVPcFNnblRReDlBJTNkJTNk]
+또는 이 이메일에 회신하여 계정을 인증할 수 있습니다.
+감사합니다,
+UNiDAYS 계정에 대한 도움이 필요하면 지원팀에 문의하세요.
+UNiDAYS 계정 관련 도움말은 UNiDAYS 지원 [https://www.myunidays.com/support] 으로 문의하십시오
+============================================================
+
+============================================================
+[메일 64]
+ID: 195879ce01ef075a
+구분: 수신
+제목: UNiDAYS 계정 인증
+보낸 사람: UNiDAYS <no-reply@myunidays.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Mar 12 2025 08:49:18 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[UNiDAYS] [https://www.myunidays.com/]
+이메일 주소를 인증하여 인증 프로세스를 완료합니다.
+지금 인증 [https://email.myunidays.com/system/clicked-ul/EauZ7kYG40eZcjfcD3fnp79G75c6_xVGt4oKisdh9zy0pliT54oJR6RoCJzxWXK3aHR0cHM6Ly93d3cubXl1bmlkYXlzLmNvbS9LUi9rby1LUi92LzZlOWVlNTcyLTc0OTAtNDY4Zi05ZDY1LWIwZTQxZjI4ZjNiND9yZXR1cm5Vcmw9JTJmS1IlMmZrby1LUiUyZnBhcnRuZXJzJTJmYXBwbGVlZHVjYXRpb25zdG9yZSUyZm1pY3JvLWFjY2VzcyUyZm9ubGluZSZzb3VyY2U9d3d3JnN0eWxlPW51bGwlMmNudWxsJTJjYWNjb3VudCZ1aS1zaWc9TE1TLUNMLVBPNmJwSkNXTUUtakZjUSUzZCUzZA==]
+또는 이 이메일에 회신하여 계정을 인증할 수 있습니다.
+감사합니다,
+UNiDAYS 계정에 대한 도움이 필요하면 지원팀에 문의하세요.
+UNiDAYS 계정 관련 도움말은 UNiDAYS 지원 [https://www.myunidays.com/support] 으로 문의하십시오
+============================================================
+
+============================================================
+[메일 65]
+ID: 195879d4fa304103
+구분: 발신
+제목: Re: UNiDAYS 계정 인증
+보낸 사람: "(웹공학트랙)최지유" <gpttitti@hansung.ac.kr>
+받는 사람: v+jdfx9rpfzkw6@myunidays.com
+참조(CC): 
+날짜: Wed Mar 12 2025 08:49:48 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+회신
+2025년 3월 12일 (수) 08:49, UNiDAYS <no-reply@myunidays.com>님이 작성:
+
+> [image: UNiDAYS] <https://www.myunidays.com/>
+>
+> 이메일 주소를 인증하여 인증 프로세스를 완료합니다.
+>
+> 지금 인증
+> <https://email.myunidays.com/system/clicked-ul/EauZ7kYG40eZcjfcD3fnp79G75c6_xVGt4oKisdh9zy0pliT54oJR6RoCJzxWXK3aHR0cHM6Ly93d3cubXl1bmlkYXlzLmNvbS9LUi9rby1LUi92LzZlOWVlNTcyLTc0OTAtNDY4Zi05ZDY1LWIwZTQxZjI4ZjNiND9yZXR1cm5Vcmw9JTJmS1IlMmZrby1LUiUyZnBhcnRuZXJzJTJmYXBwbGVlZHVjYXRpb25zdG9yZSUyZm1pY3JvLWFjY2VzcyUyZm9ubGluZSZzb3VyY2U9d3d3JnN0eWxlPW51bGwlMmNudWxsJTJjYWNjb3VudCZ1aS1zaWc9TE1TLUNMLVBPNmJwSkNXTUUtakZjUSUzZCUzZA==>
+>
+> 또는 이 이메일에 회신하여 계정을 인증할 수 있습니다.
+>
+> 감사합니다,
+> *UNiDAYS* 계정에 대한 도움이 필요하면 지원팀에 문의하세요.
+> UNiDAYS 계정 관련 도움말은 UNiDAYS 지원 <https://www.myunidays.com/support> 으로
+> 문의하십시오
+>
+
+============================================================
+
+============================================================
+[메일 66]
+ID: 19560d16a1d4a9bc
+구분: 수신
+제목: ChatGPT - 데이터 내보내기 준비를 마쳤습니다
+보낸 사람: OpenAI <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Tue Mar 04 2025 20:01:30 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+          요청하신 ChatGPT 데이터 내보내기를 다운로드하실
+수 있습니다. 
+                      최근 ChatGPT 데이터 복사본을
+요청하셨습니다.
+
+ 데이터 내보내기가 준비되었습니다. 아래 링크를
+클릭하여 데이터를 다운로드하세요.
+
+            데이터 내보내기 다운로드
+<https://chatgpt.com/backend-api/content?id=0d4d9fba0ea550e3d4ee7a2605dd18c23e12d613caf3f1c2498f418033736812-2025-03-04-10-58-41-7ae9e90613944c9b918a1d75cdb7d232.zip&amp;ts=483635&amp;p=de&amp;sig=a03a2eed3fecb20811864ae381eca42a3e46d68fde33447f85f291679d9eec54&amp;v=0>
+          궁금한 점은 도움말 센터
+<https://help.openai.com/en/>에 문의해 주세요.
+
+ 감사합니다.
+ChatGPT 팀
+
+============================================================
+
+============================================================
+[메일 67]
+ID: 195606d643d28ed7
+구분: 수신
+제목: Your ChatGPT code is 863823
+보낸 사람: ChatGPT <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Tue Mar 04 2025 18:12:15 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+     Your ChatGPT code is 863823      Enter this temporary verification
+code to continue: 863823. 
+                       ChatGPT Log-in Code 
+
+      Hi there, 
+
+  We noticed a suspicious log-in on your account. If that was you, enter
+this code: 
+
+ = 863823 =
+
+  If you were not trying to log in to ChatGPT, please reset your password
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>.
+
+
+  For more information about why you received this email, please see the
+help center article on One-Time Passwords
+<https://help.openai.com/en/articles/9889414-what-is-a-one-time-password-otp-and-why-did-you-receive-one>.
+
+
+  Best,
+ OpenAI 
+
+               If you have any questions please contact us through our help
+center <https://help.openai.com/en/>
+============================================================
+
+============================================================
+[메일 68]
+ID: 195602de7706a955
+구분: 수신
+제목: Your ChatGPT code is 881421
+보낸 사람: ChatGPT <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Tue Mar 04 2025 17:02:54 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+     Your ChatGPT code is 881421      Enter this temporary verification
+code to continue: 881421. 
+                       ChatGPT Log-in Code 
+
+      Hi there, 
+
+  We noticed a suspicious log-in on your account. If that was you, enter
+this code: 
+
+ = 881421 =
+
+  If you were not trying to log in to ChatGPT, please reset your password
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>.
+
+
+  For more information about why you received this email, please see the
+help center article on One-Time Passwords
+<https://help.openai.com/en/articles/9889414-what-is-a-one-time-password-otp-and-why-did-you-receive-one>.
+
+
+  Best,
+ OpenAI 
+
+               If you have any questions please contact us through our help
+center <https://help.openai.com/en/>
+============================================================
+
+============================================================
+[메일 69]
+ID: 1955b9471ccb3759
+구분: 수신
+제목: Your ChatGPT code is 648825
+보낸 사람: noreply@email.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Mon Mar 03 2025 19:36:49 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 648825 
+Enter this temporary verification code to continue: 648825. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+648825 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<http://url3243.email.openai.com/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60o-mP_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs7mQvZ0yy6yQAy7TRGJle3PiRyOX-2FSRswMMWxcfgyr2sBcsCw6F5XLkIftMKkt5TktIguqocJvDEQFrTgS3mNXnZbdHahJ2IqiP6bboXQzU0emS7SkMU7SulDO7Cr4tEFa2nb3XZawTLepwMJtnbecUBfGweOnUGDvp4UT06dIfgg-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<http://url3243.email.openai.com/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3DEYzv_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs7mQvZ0yy6yQAy7TRGJle3PgVzRmAprR1KCU-2FFgIwETT95a4548XvFJtLXQhspZmNGBbIcQ2s8bdiwOtMkR0DP8Y0uCBRoFsFkwrsFy3qHlCGG8cbbCofhvg98qyQQRUh9c56gVUi-2BzCP8oWJ0FlEijyk4A42uoEJgjO0Rc4PCxIg-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<http://url3243.email.openai.com/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FE4E4_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs7mQvZ0yy6yQAy7TRGJle3PVUMScXlX8r0yr4BYAMXZXKZglfM8wLfUqQMKo5sRAcTFR-2BQfER5y91KQNYZQs-2F76El9Mg9pA8Qivsx3bHNkJePAK9geydLaaslbT5GfxYeM-2BYWIGUdHr877pT5Kfuy-2FWtERqI0RgdRHzttrE-2FqvTtA-3D-3D>
+
+============================================================
+
+============================================================
+[메일 70]
+ID: 1955b908c1d70143
+구분: 수신
+제목: Your ChatGPT code is 263796
+보낸 사람: noreply@email.openai.com
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Mon Mar 03 2025 19:32:29 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+ Your ChatGPT code is 263796 
+Enter this temporary verification code to continue: 263796. 
+
+ChatGPT Log-in Code 
+
+Hi there, 
+
+We noticed a suspicious log-in on your account. If that was you, enter this 
+code: 
+263796 
+
+If you were not trying to log in to ChatGPT, please reset your password 
+<http://url3243.email.openai.com/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60QVJU_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs5lAhso3-2F82XQt5PTGhk2MF7BEFQRSjfV-2FtTn-2FOPDBdiDKkdgrEGNNlSKwIRlQP4yVD0WSaHf7xWXPpHuxrNVncqOkfT6hpd16VIxgbnAt6cyst8gAvzfETOlX39MpeRjPi-2BJ-2BVcxMULkNcNrSXyQ-2B8x8TNMRnNxvUS8-2FcaM0UeyQ-3D-3D>. 
+
+
+For more information about why you received this email, please see the help 
+center article on One-Time Passwords 
+<http://url3243.email.openai.com/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0s7ULBXAxde-2BKPwzW37FVj17FoKWOB-2F5TvVjpa-2BHt1UDY-2B4OCAXKKxfkFqM5ETjhOMt48em1y8ViTYj0tTMyBaCYfxj4pNqyq5h-2BD-2BBl5VMXVDu9ly97-2FikfP8zqZGcu-2F8-3Dt5AC_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs5lAhso3-2F82XQt5PTGhk2MFGFEFKeSWF1hS5gGjQI0mYGulJZGUt051JfVjgwQeodY13rdk18F2ACrTh-2FdLTr-2FuynPtd3Pa69-2Bwfaw-2FPUmIHTNit1CNr2GiMigT25ClS3dz7l24bdHYXtNEE-2FezaUQ-2BnUUhWaodGwGE-2FXU1tFWj4Q-3D-3D>. 
+
+
+Best,
+OpenAI 
+
+If you have any questions please contact us through our help center 
+<http://url3243.email.openai.com/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0vS8iPJK05Qsdjl1qKLmoz-2FIKbS_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs5lAhso3-2F82XQt5PTGhk2MF-2BzTgvJ6GwWByF1YCGVEtbn45YoV1iQYVQJ8Qr4FKN3xrkyP1AEQUO3Ibcu6Y3e6sflYT8lDt55olz7-2BTQWvjyzsX1CARc3gLrrEJyQbST8pND6B-2Fw13Cig0aCPSxB0OAcAPZpmvMZW-2BcwApGhLsqrg-3D-3D>
+
+============================================================
+
+============================================================
+[메일 71]
+ID: 194cf23caf3e4cb8
+구분: 수신
+제목: Welcome to Overleaf
+보낸 사람: Overleaf <welcome@overleaf.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Tue Feb 04 2025 13:06:54 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Hi,
+
+Thanks for signing up to Overleaf! If you ever get lost, you can log in again (https://www.overleaf.com/login) with the email address 'gpttitti@hansung.ac.kr'.
+
+If you're new to LaTeX, take a look at our Help Guides (https://www.overleaf.com/learn) and Templates (https://www.overleaf.com/templates).
+
+PS. We love talking to our users about Overleaf. Reply to this email to get in touch with us directly, whatever the reason. Questions, comments, problems, suggestions, all welcome!
+
+Regards,
+The Overleaf Team - https://www.overleaf.com      
+============================================================
+
+============================================================
+[메일 72]
+ID: 19465b58c5d2876a
+구분: 수신
+제목: Your ChatGPT code is 962435
+보낸 사람: ChatGPT <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Jan 15 2025 01:46:24 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+     Your ChatGPT code is 962435      Enter this temporary verification
+code to continue: 962435. 
+                       ChatGPT Log-in Code 
+
+      Hi there, 
+
+  We noticed a suspicious log-in on your account. If that was you, enter
+this code: 
+
+ = 962435 =
+
+  If you were not trying to log in to ChatGPT, please reset your password
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>.
+
+
+  For more information about why you received this email, please see the
+help center article on One-Time Passwords
+<https://help.openai.com/en/articles/9889414-what-is-a-one-time-password-otp-and-why-did-you-receive-one>.
+
+
+  Best,
+ OpenAI 
+
+               If you have any questions please contact us through our help
+center <https://help.openai.com/en/>
+============================================================
+
+============================================================
+[메일 73]
+ID: 19465aed11361d6b
+구분: 수신
+제목: Your ChatGPT code is 556039
+보낸 사람: ChatGPT <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Wed Jan 15 2025 01:39:02 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+     Your ChatGPT code is 556039      Enter this temporary verification
+code to continue: 556039. 
+                       ChatGPT Log-in Code 
+
+      Hi there, 
+
+  We noticed a suspicious log-in on your account. If that was you, enter
+this code: 
+
+ = 556039 =
+
+  If you were not trying to log in to ChatGPT, please reset your password
+<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>.
+
+
+  For more information about why you received this email, please see the
+help center article on One-Time Passwords
+<https://help.openai.com/en/articles/9889414-what-is-a-one-time-password-otp-and-why-did-you-receive-one>.
+
+
+  Best,
+ OpenAI 
+
+               If you have any questions please contact us through our help
+center <https://help.openai.com/en/>
+============================================================
+
+============================================================
+[메일 74]
+ID: 193e19db715a5968
+구분: 수신
+제목: "hanja.zip" 항목이 나와 공유되었습니다
+보낸 사람: "최승호 (Google Drive에서 공유)" <drive-shares-dm-noreply@google.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Fri Dec 20 2024 10:10:28 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+다음 항목을 공유했습니다.
+
+hanja.zip
+https://drive.google.com/file/d/1MCRjmqz79YqXmw_zUkGkoeXv4D_ovbQX/view?usp=sharing&ts=6764c404
+
+첨부파일이 아닌 온라인 저장 파일입니다. 항목을 열려면 위의 링크를  
+클릭하세요.
+
+============================================================
+
+============================================================
+[메일 75]
+ID: 193dee40e5cb316e
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Dec 19 2024 21:28:26 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+Windows에서 새로 로그인함
+
+
+gpttitti@hansung.ac.kr
+Windows 기기에서 내 Google 계정에 새로 로그인했습니다. 직접 로그인한 것이  
+맞다면 아무런 조치를 취하지 않아도 됩니다.
+본인이 아니라면 안내에 따라 계정을 보호하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=gpttitti@hansung.ac.kr&continue=https://myaccount.google.com/alert/nt/1734611306000?rfn%3D325%26rfnc%3D1%26eid%3D2210423811413141205%26et%3D0>
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2024 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 76]
+ID: 193deeeb877f3719
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Thu Dec 19 2024 21:40:06 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+Windows에서 새로 로그인함
+
+
+gpttitti@hansung.ac.kr
+Windows 기기에서 내 Google 계정에 새로 로그인했습니다. 직접 로그인한 것이  
+맞다면 아무런 조치를 취하지 않아도 됩니다.
+본인이 아니라면 안내에 따라 계정을 보호하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=gpttitti@hansung.ac.kr&continue=https://myaccount.google.com/alert/nt/1734612006000?rfn%3D325%26rfnc%3D1%26eid%3D-6500743249134925661%26et%3D0>
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2024 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 77]
+ID: 193929eee199fcd3
+구분: 수신
+제목: Welcome to Smallpdf!
+보낸 사람: The Smallpdf Team <info@smallpdf.com>
+받는 사람: "최지유 (It공과대학)" <gpttitti@hansung.ac.kr>
+참조(CC): 
+날짜: Thu Dec 05 2024 02:01:49 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Welcome to your Smallpdf account!
+
+Isn't it nice to process PDFs in a few simple clicks?
+
+With your account, you can even manage and download all processed files at any time via the 'Documents' tab. 
+
+Don't forget to explore our set of 20+ free tools. We've prepared a handy guide to help you get started and make the most out of your account.
+
+Get Free Guide: https://bit.ly/3iAFBzm
+============================================================
+
+============================================================
+[메일 78]
+ID: 1939267deb90b9ed
+구분: 수신
+제목: 단 한 번 클릭으로
+보낸 사람: "ilovepdf.com" <no-reply@ilovepdf.com>
+받는 사람: "(IT공과대학)최지유" <gpttitti@hansung.ac.kr>
+참조(CC): 
+날짜: Thu Dec 05 2024 01:01:38 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+      단 한 번 클릭으로                                             
+              = 인증이 완료되었습니다! =
+
+ 안녕하세요 (IT공과대학)최지유님,
+
+ 귀하께서 인증 교육 기관에 등록되어 있음을
+확인했습니다. "iLovePDF 교육용"을 사용할 수 있습니다. 
+
+제한없이 모든 도구를 사용할 수 있으며, 생산성을 높일
+수 있습니다. 보다 중요한 것에 더 많은 시간과 에너지를
+집중하세요. 아래 버튼을 클릭해 등록을 완료하세요.
+
+                 계정 활성화
+<https://www.ilovepdf.com/ko/user/education/CwqCWZmtCVFn3cxzq0CIzMfJ_zyg1WIX_1733328096/gpttitti%40hansung.ac.kr>
+                PDF에 관해 저희를 신뢰해 주셔서
+감사합니다. 
+
+*The iLovePDF Team* <https://www.facebook.com/ilovepdfcom-238648522858564/>
+<https://twitter.com/ilovepdf_com> <https://www.ilovepdf.com>
+<https://www.linkedin.com/company/ilovepdf>                                
+           *Copyright © 2024 iLovePDF S.L., all rights reserved.*
+
+============================================================
+
+============================================================
+[메일 79]
+ID: 1937ce3ec43e4ced
+구분: 수신
+제목: ChatGPT - Verify your email
+보낸 사람: ChatGPT <noreply@tm.openai.com>
+받는 사람: gpttitti@hansung.ac.kr
+참조(CC): 
+날짜: Sat Nov 30 2024 20:45:30 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+            
+
+ 
+  =  이메일 주소 인증하기  =
+
+  ChatGPT 계정 설정을 계속하려면 이 이메일 주소를
+인증해 주세요. 
+
+   이메일 주소 인증
+<https://platform.openai.com/auth/email_check?uid=auth0%7C674afadaf0a1f5431b2c0d26&amp;timestamp=1732967130&amp;app=ioschat#token=yMB8W3Tg55PFRvjg66ZD7qlmzhKPnDINORWsQKBKlvQ%3D&amp;email=gpttitti%40hansung.ac.kr>
+
+
+ 
+   이 링크는 3시간 뒤 만료됩니다. 이 요청을 하지
+않았다면 이 이메일을 무시해 주세요. 도움이 필요한
+경우 도움말 센터 <https://help.openai.com>에 문의해 주세요.
+
+============================================================
+
+============================================================
+[메일 80]
+ID: 1937cdb140f57633
+구분: 수신
+제목: 새 받은편지함 사용 관련 도움말
+보낸 사람: "Gmail 팀" <mail-noreply@google.com>
+받는 사람: "(IT공과대학)최지유" <gpttitti@hansung.ac.kr>
+참조(CC): 
+날짜: Sat Nov 30 2024 20:35:52 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+새 받은편지함 사용 관련 도움말
+[image: Gmail]
+
+받은편지함에 오신 것을 환영합니다
+[image: 검색]
+이메일을 빠르게 검색
+받은편지함에서 Google 검색을 활용하여 모든 이메일을 보관처리
+<https://support.google.com/mail/answer/6576?hl=ko&utm_source=gmailwelcomeemail&utm_medium=email&utm_campaign=gmailwelcome>하시고
+나중에 빠르게 찾으실 수 있습니다
+<https://support.google.com/mail/answer/6593?hl=ko&utm_source=gmailwelcomeemail&utm_medium=email&utm_campaign=gmailwelcome>.
+받은편지함이 깔끔하게 정리되고 보관할 항목에 대해 걱정하지 않으셔도 됩니다.
+[image: 맞춤설정]
+한성대학교 메일 맞춤설정하기
+받은편지함 배경, 이메일 서명 및 기타 옵션을 한성대학교 메일 설정
+<https://support.google.com/mail/answer/6562?hl=ko&utm_source=gmailwelcomeemail&utm_medium=email&utm_campaign=gmailwelcome>에서
+맞춤설정하세요. 내 계정 <https://myaccount.google.com/>에서 개인정보 보호 및 보안 설정을 확인하시고
+조정하세요.
+[image: 정리]
+이메일 정리하기
+라벨
+<https://support.google.com/mail/answer/118708?hl=ko&utm_source=gmailwelcomeemail&utm_medium=email&utm_campaign=gmailwelcome>로
+이메일을 정리하실 수 있습니다. 라벨은 폴더와 비슷한 역할을 하지만, 이메일 하나에 라벨을 여러 개 추가하실 수 있습니다. 또한 필터
+<https://support.google.com/mail/answer/6579?hl=ko&utm_source=gmailwelcomeemail&utm_medium=email&utm_campaign=gmailwelcome>를
+사용하시면 수신 메일이 자동으로 정렬되고 분류됩니다.
+[image: 소셜]
+받은편지함에서 바로 채팅 및 회의하기
+Gmail에서 나가지 않고 Google Chat
+<https://support.google.com/chat/answer/9341104?hl=ko&utm_source=gmailwelcomeemail&utm_medium=email&utm_campaign=gmailwelcome>에서
+연락처에 있는 사용자에게 메시지를 보내고 Google Meet
+<https://support.google.com/mail/answer/9822902?hl=ko&utm_source=gmailwelcomeemail&utm_medium=email&utm_campaign=gmailwelcome>에서
+최대 100명과 함께 화상 회의를 시작할 수 있습니다.
+
+교육자료 및 팁 보기
+Gmail 가이드, 팁, 요약 설명, Microsoft® Outlook®에서 전환하기 위해 필요한 도움말 등을 Google Workspace
+학습 센터
+<https://support.google.com/a/users/answer/9259748?hl=ko&utm_source=gmailwelcomeemail&utm_medium=email&utm_campaign=gmailwelcome>에서
+확인하세요.
+학습 센터 방문
+<https://support.google.com/a/users/answer/9259748?hl=ko&utm_source=gmailwelcomeemail&utm_medium=email&utm_campaign=gmailwelcome>
+
+Gmail과 즐거운 시간 보내세요!
+Gmail 팀
+[image: Google Cloud]
+
+© 2024 Google LLC 1600 Amphitheatre Parkway, Mountain View, CA 94043
+
+*본 메일은 Google Cloud 제품 또는 계정의 중요 변경사항을 알려드리기 위해 전송되는 필수 이메일 서비스 공지입니다.*
+
+============================================================
+
+============================================================
+[메일 81]
+ID: 1937cdb0ecb0aead
+구분: 수신
+제목: Gmail 앱을 다운로드하세요!
+보낸 사람: "Gmail 팀" <mail-noreply@google.com>
+받는 사람: "(IT공과대학)최지유" <gpttitti@hansung.ac.kr>
+참조(CC): 
+날짜: Sat Nov 30 2024 20:35:51 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Gmail 앱을 다운로드하세요!
+[image: Gmail]
+
+Gmail 앱을 다운로드하세요!
+스마트폰과 태블릿에서 가장 완벽한 한성대학교 메일 사용 경험을 제공하는 공식 Gmail 앱을 추천해 드립니다. 앱을 다운로드하시거나
+컴퓨터 또는 휴대기기에서 gmail.com으로 이동하여 시작해 보세요.
+
+[image: Get it on Google Play]
+<https://play.google.com/store/apps/details?id=com.google.android.gm&hl=ko>
+[image:
+Apple App Store]
+<https://apps.apple.com/app/gmail-email-by-google/id422689480?l=ko>
+
+Gmail과 즐거운 시간 보내세요!
+Gmail 팀
+[image: Google Cloud]
+
+© 2024 Google LLC 1600 Amphitheatre Parkway, Mountain View, CA 94043
+
+*본 메일은 Google Cloud 제품 또는 계정의 중요 변경사항을 알려드리기 위해 전송되는 필수 이메일 서비스 공지입니다.*
+
+============================================================
+

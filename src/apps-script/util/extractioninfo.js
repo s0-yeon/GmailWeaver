@@ -1,7 +1,7 @@
 // apps-script/util/extractioninfo.js
 
 // Gmail Add-on(클라이언트)이 사용자의 전체 Gmail 스냅샷을 만들어 서버(GraphRAG 파이프라인 쪽)에 업로드하는 함수
-function exportAllInboxAndSentIntoOneTxt() {
+function _exportAllInboxAndSentIntoOneTxt() {
     // 받은 메일 + 보낸 메일
     const query = "in:inbox OR in:sent";  // Gmail 검색 쿼리(검색어) 지정: 수신함 or 송신함
     const threads = GmailApp.search(query, 0, 500);   // 조건에 맞는 스레드 최대 500개 가져와서 threads 배열에 저장. 이때 단위는 스레드이므로, 각 thread 안에는 여러 message들이 존재
@@ -67,7 +67,7 @@ function exportAllInboxAndSentIntoOneTxt() {
         allText = "메일이 없습니다.\n";
     }
 
-    const filename = `gmail_ALL_inbox_sent_${dateToYmdHms_(new Date())}.txt`;   // 파일 이름 생성
+    const filename = `gmail_ALL_inbox_sent_${_dateToYmdHms(new Date())}.txt`;   // 파일 이름 생성
     //folder.createFile(filename, allText, MimeType.PLAIN_TEXT);  // 구글 드라이브에 파일 저장
     UrlFetchApp.fetch(TunnelURL +"/upload", {   // 해당 서버 주소로 HTTP POST. POST 방식을 사용하는 이유는 '서버 상태를 변경(파일 생성/저장)하기 때문
         method: "post",
@@ -83,7 +83,7 @@ function exportAllInboxAndSentIntoOneTxt() {
 }
 
 // 파일명용 날짜 문자열
-function dateToYmdHms_(d) {   // 매개변수는 Date 객체
+function _dateToYmdHms(d) {   // 매개변수는 Date 객체
     const pad = (n) => String(n).padStart(2, "0");  // 숫자를 문자열로 변환하고, 문자열 길이가 2가 되도록 앞쪽에 0을 채워서 반환. pad(padding): 데이터의 길이를 맞추기 위해 앞이나 뒤에 값을 채워 넣는 것
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;    // eg. 2026년 2월 3일 오후 4시 5분 9초 -> 2026-02-03_160509와 같은 형태로 반환. padStart()는 String 객체의 메서드
 }

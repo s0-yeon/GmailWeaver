@@ -1,35 +1,37 @@
+// src.apps-script/web.js
+// Wep App 진입점
+// 브라우저에서 Web App URL로 접근 시 실행
 function doGet(e) {
   return HtmlService.createTemplateFromFile("index")
     .evaluate()
-    .setTitle("Web UI");
+    .setTitle("GmailWeaver Web App");
 }
 
-//web.js에 d3chart.js 삽입하기 위해서
+// HTML 파일 include 유틸
+// index.html에서 다른 HTML/JS 파일을 삽입하기 위해 사용
 function include(filename) {
   return HtmlService.createHtmlOutputFromFile(filename).getContent();
 }
 
-/**
- * (선택) Web App 페이지에서 GmailApp 호출 테스트용
- * index.html에서 google.script.run으로 호출함
- */
+// 받은 편지함 상단 스레드 제목 조회 (테스트용)
+// index.html에서 google.script.run으로 호출 가능
 function getInboxTopSubjects(limit) {
   const n = Math.max(1, Math.min(Number(limit || 5), 20));
   const threads = GmailApp.getInboxThreads(0, n);
   return threads.map(t => t.getFirstMessageSubject());
 }
 
-// 브라우저에서 메일 라벨링 요청 처리함수
+// 최근 받은편지함 스레드에 라벨 적용
 function labelRecentInboxThreads(labelName, n) {
   const limit = Math.max(1, Math.min(Number(n || 5), 50));
   const name = String(labelName || "").trim();
   if (!name) throw new Error("labelName이 비어있습니다.");
 
-  // 라벨 가져오거나 없으면 생성
+  // 기존 라벨 가져오거나 없으면 생성
   let label = GmailApp.getUserLabelByName(name);
   if (!label) label = GmailApp.createLabel(name);
 
-  // 최근 받은편지함 스레드 가져와 라벨 적용
+  // 최근 받은 편지함 스레드 가져와 라벨 적용
   const threads = GmailApp.getInboxThreads(0, limit);
   threads.forEach(t => t.addLabel(label));
 
@@ -40,12 +42,8 @@ function labelRecentInboxThreads(labelName, n) {
   };
 }
 
-
-// ─────────────────────────────────────────
 // Flask 서버에서 그래프 데이터 가져오기
-// TunnelURL은 common.js에 정의 (ngrok 주소)
-// ─────────────────────────────────────────
-
+// TunnelURL은 common.js에 정의된 ngrok 주소 사용
 function getGraphData() {
   const url = TunnelURL + "/graph-data";
 
@@ -81,11 +79,9 @@ function getGraphData() {
   return data;
 }
 
-// ─────────────────────────────────────────
-// 메일 목록 가져오기 (D3 줌동그라미용)
+// 메일 목록 가져오기 (D3 줌동그라미 시각화용)
 // exportAllInboxAndSentIntoOneTxt()의 필드 구조 참고해서
 // 수신/발신 구분, 첨부파일 여부까지 포함
-// ─────────────────────────────────────────
 function getInboxMessages(limit) {
   const n = Math.max(1, Math.min(Number(limit || 20), 50));
   // 현재 로그인 계정 이메일 (수신/발신 구분에 사용)
@@ -115,23 +111,17 @@ function getInboxMessages(limit) {
   return result;
 }
 
-
-// ─────────────────────────────────────────
 // 메일 휴지통으로 이동 (복구 가능, 30일 보관)
 // gmail.modify scope로 동작 (appsscript.json에 이미 있음)
-// ─────────────────────────────────────────
 function trashMessage(messageId) {
   const msg = GmailApp.getMessageById(messageId);
   msg.moveToTrash(); // 휴지통 이동 (복구 가능)
   return { ok: true, id: messageId };
 }
 
-
-// ─────────────────────────────────────────
 // 메일 완전 삭제 (복구 불가)
 // Gmail Advanced Service 필요
 // Apps Script 에디터 → 서비스(+) → Gmail API 추가 후 사용 가능
-// ─────────────────────────────────────────
 function deleteMessage(messageId) {
   Gmail.Users.Messages.remove("me", messageId); // 영구 삭제
   return { ok: true, id: messageId };
