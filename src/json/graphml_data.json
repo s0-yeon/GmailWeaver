@@ -1,6 +1,34 @@
 {
   "nodes": [
     {
+      "id": "EMAIL::19cd7443f6439912",
+      "type": "EMAIL",
+      "description": "Email \"ChatGPT 코드는 893968입니다\" (hidden, for QA).",
+      "properties": {
+        "mail_id": "19cd7443f6439912",
+        "subject": "ChatGPT 코드는 893968입니다",
+        "from": "ChatGPT <noreply@tm.openai.com>",
+        "to": "gpttitti@hansung.ac.kr",
+        "body": "ID: 19cd7443f6439912\n구분: 수신\n제목: ChatGPT 코드는 893968입니다\n보낸 사람: ChatGPT <noreply@tm.openai.com>\n받는 사람: gpttitti@hansung.ac.kr\n날짜: Tue Mar 10 2026 19:21:39 GMT+0900 (한국 표준시)\n\n[첨부파일]\n없음\n\n[본문]\n  ChatGPT 코드는 893968입니다             \n\n\n\n \n\n     다음 임시 인증 코드를 입력해 계속하세요: \n\n\n\n   893968  \n\n\n\n  ChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를\n\n초기화하세요\n\n<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>.\n\n\n\n\n\n  \n\n감사합니다.\n\nChatGPT 팀 드림 \n\n\n\n     \n\n\n\n             ChatGPT <https://chatgpt.com> \n\n\n\n  도움말 센터 <https://help.openai.com>",
+        "raw": "ID: 19cd7443f6439912\n구분: 수신\n제목: ChatGPT 코드는 893968입니다\n보낸 사람: ChatGPT <noreply@tm.openai.com>\n받는 사람: gpttitti@hansung.ac.kr\n날짜: Tue Mar 10 2026 19:21:39 GMT+0900 (한국 표준시)\n\n[첨부파일]\n없음\n\n[본문]\n  ChatGPT 코드는 893968입니다             \n\n\n\n \n\n     다음 임시 인증 코드를 입력해 계속하세요: \n\n\n\n   893968  \n\n\n\n  ChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를\n\n초기화하세요\n\n<https://help.openai.com/en/articles/4936828-how-do-i-change-my-account-password>.\n\n\n\n\n\n  \n\n감사합니다.\n\nChatGPT 팀 드림 \n\n\n\n     \n\n\n\n             ChatGPT <https://chatgpt.com> \n\n\n\n  도움말 센터 <https://help.openai.com>"
+      }
+    },
+    {
+      "id": "ChatGPT 코드는 893968입니다",
+      "type": "SUBJECT",
+      "description": "Email subject \"ChatGPT 코드는 893968입니다\"."
+    },
+    {
+      "id": "ChatGPT <noreply@tm.openai.com>",
+      "type": "PERSON",
+      "description": "ChatGPT <noreply@tm.openai.com> appears in emails."
+    },
+    {
+      "id": "gpttitti@hansung.ac.kr",
+      "type": "PERSON",
+      "description": "gpttitti@hansung.ac.kr appears in emails."
+    },
+    {
       "id": "EMAIL::19ccd047f94f56a8",
       "type": "EMAIL",
       "description": "Email \"보안 알림\" (hidden, for QA).",
@@ -22,11 +50,6 @@
       "id": "Google <no-reply@accounts.google.com>",
       "type": "PERSON",
       "description": "Google <no-reply@accounts.google.com> appears in emails."
-    },
-    {
-      "id": "gpttitti@hansung.ac.kr",
-      "type": "PERSON",
-      "description": "gpttitti@hansung.ac.kr appears in emails."
     },
     {
       "id": "EMAIL::19c886910fcc8eba",
@@ -202,11 +225,6 @@
       "id": "ChatGPT 코드는 706750입니다",
       "type": "SUBJECT",
       "description": "Email subject \"ChatGPT 코드는 706750입니다\"."
-    },
-    {
-      "id": "ChatGPT <noreply@tm.openai.com>",
-      "type": "PERSON",
-      "description": "ChatGPT <noreply@tm.openai.com> appears in emails."
     },
     {
       "id": "EMAIL::19c1bf4103aaa61e",
@@ -1558,6 +1576,72 @@
     }
   ],
   "edges": [
+    {
+      "id": "EMAIL::19cd7443f6439912__RELATES_TO__ChatGPT 코드는 893968입니다",
+      "source": "EMAIL::19cd7443f6439912",
+      "target": "ChatGPT 코드는 893968입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "Email relates to subject \"ChatGPT 코드는 893968입니다\".",
+      "label": "Email relates to subject \"ChatGPT 코드는 893968입니다\".",
+      "title": "Email relates to subject \"ChatGPT 코드는 893968입니다\".",
+      "tooltip": "Email relates to subject \"ChatGPT 코드는 893968입니다\"."
+    },
+    {
+      "id": "ChatGPT <noreply@tm.openai.com>__RELATES_TO__EMAIL::19cd7443f6439912",
+      "source": "ChatGPT <noreply@tm.openai.com>",
+      "target": "EMAIL::19cd7443f6439912",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "ChatGPT <noreply@tm.openai.com> is related to this email.",
+      "label": "ChatGPT <noreply@tm.openai.com> is related to this email.",
+      "title": "ChatGPT <noreply@tm.openai.com> is related to this email.",
+      "tooltip": "ChatGPT <noreply@tm.openai.com> is related to this email."
+    },
+    {
+      "id": "ChatGPT <noreply@tm.openai.com>__RELATES_TO__ChatGPT 코드는 893968입니다",
+      "source": "ChatGPT <noreply@tm.openai.com>",
+      "target": "ChatGPT 코드는 893968입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "ChatGPT <noreply@tm.openai.com> is associated with \"ChatGPT 코드는 893968입니다\".",
+      "label": "ChatGPT <noreply@tm.openai.com> is associated with \"ChatGPT 코드는 893968입니다\".",
+      "title": "ChatGPT <noreply@tm.openai.com> is associated with \"ChatGPT 코드는 893968입니다\".",
+      "tooltip": "ChatGPT <noreply@tm.openai.com> is associated with \"ChatGPT 코드는 893968입니다\"."
+    },
+    {
+      "id": "gpttitti@hansung.ac.kr__RELATES_TO__EMAIL::19cd7443f6439912",
+      "source": "gpttitti@hansung.ac.kr",
+      "target": "EMAIL::19cd7443f6439912",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "gpttitti@hansung.ac.kr is related to this email.",
+      "label": "gpttitti@hansung.ac.kr is related to this email.",
+      "title": "gpttitti@hansung.ac.kr is related to this email.",
+      "tooltip": "gpttitti@hansung.ac.kr is related to this email."
+    },
+    {
+      "id": "gpttitti@hansung.ac.kr__RELATES_TO__ChatGPT 코드는 893968입니다",
+      "source": "gpttitti@hansung.ac.kr",
+      "target": "ChatGPT 코드는 893968입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 893968입니다\".",
+      "label": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 893968입니다\".",
+      "title": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 893968입니다\".",
+      "tooltip": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 893968입니다\"."
+    },
+    {
+      "id": "ChatGPT <noreply@tm.openai.com>__SENDS_TO__gpttitti@hansung.ac.kr",
+      "source": "ChatGPT <noreply@tm.openai.com>",
+      "target": "gpttitti@hansung.ac.kr",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "ChatGPT <noreply@tm.openai.com> sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 893968입니다\".",
+      "label": "ChatGPT <noreply@tm.openai.com> sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 893968입니다\".",
+      "title": "ChatGPT <noreply@tm.openai.com> sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 893968입니다\".",
+      "tooltip": "ChatGPT <noreply@tm.openai.com> sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 893968입니다\"."
+    },
     {
       "id": "EMAIL::19ccd047f94f56a8__RELATES_TO__보안 알림",
       "source": "EMAIL::19ccd047f94f56a8",
@@ -6599,6 +6683,21 @@
   ],
   "visible_nodes": [
     {
+      "id": "ChatGPT 코드는 893968입니다",
+      "type": "SUBJECT",
+      "description": "Email subject \"ChatGPT 코드는 893968입니다\"."
+    },
+    {
+      "id": "ChatGPT <noreply@tm.openai.com>",
+      "type": "PERSON",
+      "description": "ChatGPT <noreply@tm.openai.com> appears in emails."
+    },
+    {
+      "id": "gpttitti@hansung.ac.kr",
+      "type": "PERSON",
+      "description": "gpttitti@hansung.ac.kr appears in emails."
+    },
+    {
       "id": "보안 알림",
       "type": "SUBJECT",
       "description": "Email subject \"보안 알림\"."
@@ -6607,11 +6706,6 @@
       "id": "Google <no-reply@accounts.google.com>",
       "type": "PERSON",
       "description": "Google <no-reply@accounts.google.com> appears in emails."
-    },
-    {
-      "id": "gpttitti@hansung.ac.kr",
-      "type": "PERSON",
-      "description": "gpttitti@hansung.ac.kr appears in emails."
     },
     {
       "id": "Your ChatGPT code is 094080",
@@ -6657,11 +6751,6 @@
       "id": "ChatGPT 코드는 706750입니다",
       "type": "SUBJECT",
       "description": "Email subject \"ChatGPT 코드는 706750입니다\"."
-    },
-    {
-      "id": "ChatGPT <noreply@tm.openai.com>",
-      "type": "PERSON",
-      "description": "ChatGPT <noreply@tm.openai.com> appears in emails."
     },
     {
       "id": "ChatGPT 코드는 174521입니다",
@@ -7090,6 +7179,39 @@
     }
   ],
   "visible_edges": [
+    {
+      "id": "ChatGPT <noreply@tm.openai.com>__RELATES_TO__ChatGPT 코드는 893968입니다",
+      "source": "ChatGPT <noreply@tm.openai.com>",
+      "target": "ChatGPT 코드는 893968입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "ChatGPT <noreply@tm.openai.com> is associated with \"ChatGPT 코드는 893968입니다\".",
+      "label": "ChatGPT <noreply@tm.openai.com> is associated with \"ChatGPT 코드는 893968입니다\".",
+      "title": "ChatGPT <noreply@tm.openai.com> is associated with \"ChatGPT 코드는 893968입니다\".",
+      "tooltip": "ChatGPT <noreply@tm.openai.com> is associated with \"ChatGPT 코드는 893968입니다\"."
+    },
+    {
+      "id": "gpttitti@hansung.ac.kr__RELATES_TO__ChatGPT 코드는 893968입니다",
+      "source": "gpttitti@hansung.ac.kr",
+      "target": "ChatGPT 코드는 893968입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 893968입니다\".",
+      "label": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 893968입니다\".",
+      "title": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 893968입니다\".",
+      "tooltip": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 893968입니다\"."
+    },
+    {
+      "id": "ChatGPT <noreply@tm.openai.com>__SENDS_TO__gpttitti@hansung.ac.kr",
+      "source": "ChatGPT <noreply@tm.openai.com>",
+      "target": "gpttitti@hansung.ac.kr",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "ChatGPT <noreply@tm.openai.com> sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 893968입니다\".",
+      "label": "ChatGPT <noreply@tm.openai.com> sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 893968입니다\".",
+      "title": "ChatGPT <noreply@tm.openai.com> sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 893968입니다\".",
+      "tooltip": "ChatGPT <noreply@tm.openai.com> sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 893968입니다\"."
+    },
     {
       "id": "Google <no-reply@accounts.google.com>__RELATES_TO__보안 알림",
       "source": "Google <no-reply@accounts.google.com>",
