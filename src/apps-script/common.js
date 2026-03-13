@@ -3,8 +3,8 @@
 // 진입점 & 카드 빌더
 // ============================================================
 
-var TunnelURL = "https://laevorotatory-nonnutritively-nelle.ngrok-free.dev";
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwEbyrQKoZ_F5TfRJFmWIjo_LbJf8xwVwarFDlA1FUk/dev";
+var TunnelURL = "https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwQ8hXa8QIpxyD-XUbZ3FThm-XD3Jx9WKNpA4Xozf2t/dev";
 
 // ============================================================
 // 진입점
@@ -134,7 +134,7 @@ function buildGmailMessageCard_(e) {
     .setHeader("📅 일정 분석 · 등록");
 
   var calDesc = CardService.newTextParagraph()
-    .setText("메일 본문에서 날짜/시간 정보를 감지하여 Google 캘린더에 일정을 등록합니다.");
+    .setText("메일 본문에서 날짜/시간 정보를 추출하여 Google 캘린더에 일정을 등록합니다.");
 
   var calBtn = CardService.newTextButton()
     .setText("📆 일정 분석 및 등록")
