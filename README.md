@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 # appsscript-gamilewaver
-=======
+
 # GmailWeaver
 
 ## Overview
