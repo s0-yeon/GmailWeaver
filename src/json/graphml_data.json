@@ -1,6 +1,34 @@
 {
   "nodes": [
     {
+      "id": "EMAIL::19cdc5c5e5986704",
+      "type": "EMAIL",
+      "description": "Email \"ChatGPT 코드는 844067입니다\" (hidden, for QA).",
+      "properties": {
+        "mail_id": "19cdc5c5e5986704",
+        "subject": "ChatGPT 코드는 844067입니다",
+        "from": "noreply@tm.openai.com",
+        "to": "gpttitti@hansung.ac.kr",
+        "body": "ID: 19cdc5c5e5986704\n구분: 수신\n제목: ChatGPT 코드는 844067입니다\n보낸 사람: noreply@tm.openai.com\n받는 사람: gpttitti@hansung.ac.kr\n날짜: Wed Mar 11 2026 19:06:06 GMT+0900 (한국 표준시)\n\n[첨부파일]\n없음\n\n[본문]\n ChatGPT 코드는 844067입니다 \n\n[image: OpenAI] \n\n다음 임시 인증 코드를 입력해 계속하세요: \n\n844067 \n\nChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를 초기화하세요 \n<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60uNSG_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbhBaPAGIZ9hgQ7HLRCaPXDFpJAXpHz7DXbMntWZd7QILFbhaijHDyO0dtYlcK1IdyqZvwnxCznyBqFG221dvq-2FOvlEBomJJl9OnIL-2B7In-2Bk1BtsQVKKKoh0PLnCBCqzbUFIvRgR29b-2BauYRt2-2Bu6YOGWc-2FOOGFjwHs753x5Bvt4fxlzphmmVN7QsiJo2WzmbhvrL-2FTna2u7Ysj4KM4ZtDz8iuuZpNN8NfxaYUXgNDwpk287OG8YAQF018IdjUQkZVBFFaEd7L-2BEoUgiM7KaBvDE-3D>. \n\n\n\n감사합니다.\nChatGPT 팀 드림 \n\n[image: OpenAI] \n\nChatGPT \n<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMtxuwNyiH8tHYK-2BH0HuuCVk-3DGrd2_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbhBaPAGIZ9hgQ7HLRCaPXDFpJAXpHz7DXbMntWZd7QILFbhaijHDyO0dtYlcK1IdyqZvwnxCznyBqFG221dvq-2FOvlEBomJJl9OnIL-2B7In-2Bk1JonPCBwnoi06QHc-2FdG5T29G-2BMG2yYR1DDuPqEMi247BROz05tapUOlhfOCBcDMoycjYSi5Z1KQvdet-2BUyOYgM5-2F2YI-2Ff3kqNvooGHivJH1IqNWUFM2NButpcWPQvnxle7qbsmaDSIt-2Be54PCHfLpPWxqwC4tE-2FRKDuPgZ6-2Bvldk-3D> \n\n도움말 센터 \n<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0tn1LK51XoZKbBfyGht7CMaKkye_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbhBaPAGIZ9hgQ7HLRCaPXDFpJAXpHz7DXbMntWZd7QILFbhaijHDyO0dtYlcK1IdyqZvwnxCznyBqFG221dvq-2FOvlEBomJJl9OnIL-2B7In-2Bk1NZ7lBRSr0FT7aYC5wdAbmX46kCu4FdFp-2B-2Bo03wbph9y-2BFQq4rN4OcW5c1Y-2FYTO07lIn0QGTNZiQC7SOxv3w8D03HN3JshO-2BbHqoSFd06lnw1MN4D1PHeU-2BxMdhBkBwK6zV2Qvc3g8v1E1kRCAYvopAZnUITQBs5uqoREvfXGHT8-3D>",
+        "raw": "ID: 19cdc5c5e5986704\n구분: 수신\n제목: ChatGPT 코드는 844067입니다\n보낸 사람: noreply@tm.openai.com\n받는 사람: gpttitti@hansung.ac.kr\n날짜: Wed Mar 11 2026 19:06:06 GMT+0900 (한국 표준시)\n\n[첨부파일]\n없음\n\n[본문]\n ChatGPT 코드는 844067입니다 \n\n[image: OpenAI] \n\n다음 임시 인증 코드를 입력해 계속하세요: \n\n844067 \n\nChatGPT에 로그인하려 시도한 것이 아니라면, 비밀번호를 초기화하세요 \n<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0v2VhH5-2BE0zo7ACY99-2FinDaFd7n4QXFQ88vaAvg4Yh-2FvnUDCf4-2BAFFfzo-2Fq7TrRncfLPouhbxwQ5rhmu-2BvEVX60uNSG_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbhBaPAGIZ9hgQ7HLRCaPXDFpJAXpHz7DXbMntWZd7QILFbhaijHDyO0dtYlcK1IdyqZvwnxCznyBqFG221dvq-2FOvlEBomJJl9OnIL-2B7In-2Bk1BtsQVKKKoh0PLnCBCqzbUFIvRgR29b-2BauYRt2-2Bu6YOGWc-2FOOGFjwHs753x5Bvt4fxlzphmmVN7QsiJo2WzmbhvrL-2FTna2u7Ysj4KM4ZtDz8iuuZpNN8NfxaYUXgNDwpk287OG8YAQF018IdjUQkZVBFFaEd7L-2BEoUgiM7KaBvDE-3D>. \n\n\n\n감사합니다.\nChatGPT 팀 드림 \n\n[image: OpenAI] \n\nChatGPT \n<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMtxuwNyiH8tHYK-2BH0HuuCVk-3DGrd2_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbhBaPAGIZ9hgQ7HLRCaPXDFpJAXpHz7DXbMntWZd7QILFbhaijHDyO0dtYlcK1IdyqZvwnxCznyBqFG221dvq-2FOvlEBomJJl9OnIL-2B7In-2Bk1JonPCBwnoi06QHc-2FdG5T29G-2BMG2yYR1DDuPqEMi247BROz05tapUOlhfOCBcDMoycjYSi5Z1KQvdet-2BUyOYgM5-2F2YI-2Ff3kqNvooGHivJH1IqNWUFM2NButpcWPQvnxle7qbsmaDSIt-2Be54PCHfLpPWxqwC4tE-2FRKDuPgZ6-2Bvldk-3D> \n\n도움말 센터 \n<https://u20216706.ct.sendgrid.net/ls/click?upn=u001.IQLfsj4kk-2BK7JhymNusRMmfwoG2v3nTgHW39-2Fobue0tn1LK51XoZKbBfyGht7CMaKkye_LOTCDuYcuxwkyWFI10aijW5N3d12dWCfKsGEaonsDs4G1Bc9N10GD4Vz9fX22Y668c4zuVIZpQd8Txhx7Y9TQDw9cagFLw-2FGvilRP94HMKwB-2FEkpgonfsnZLZeMf5cVRSJk8Q5qjrokMUiOAg4LgbhBaPAGIZ9hgQ7HLRCaPXDFpJAXpHz7DXbMntWZd7QILFbhaijHDyO0dtYlcK1IdyqZvwnxCznyBqFG221dvq-2FOvlEBomJJl9OnIL-2B7In-2Bk1NZ7lBRSr0FT7aYC5wdAbmX46kCu4FdFp-2B-2Bo03wbph9y-2BFQq4rN4OcW5c1Y-2FYTO07lIn0QGTNZiQC7SOxv3w8D03HN3JshO-2BbHqoSFd06lnw1MN4D1PHeU-2BxMdhBkBwK6zV2Qvc3g8v1E1kRCAYvopAZnUITQBs5uqoREvfXGHT8-3D>"
+      }
+    },
+    {
+      "id": "ChatGPT 코드는 844067입니다",
+      "type": "SUBJECT",
+      "description": "Email subject \"ChatGPT 코드는 844067입니다\"."
+    },
+    {
+      "id": "noreply@tm.openai.com",
+      "type": "PERSON",
+      "description": "noreply@tm.openai.com appears in emails."
+    },
+    {
+      "id": "gpttitti@hansung.ac.kr",
+      "type": "PERSON",
+      "description": "gpttitti@hansung.ac.kr appears in emails."
+    },
+    {
       "id": "EMAIL::19cd7443f6439912",
       "type": "EMAIL",
       "description": "Email \"ChatGPT 코드는 893968입니다\" (hidden, for QA).",
@@ -22,11 +50,6 @@
       "id": "ChatGPT <noreply@tm.openai.com>",
       "type": "PERSON",
       "description": "ChatGPT <noreply@tm.openai.com> appears in emails."
-    },
-    {
-      "id": "gpttitti@hansung.ac.kr",
-      "type": "PERSON",
-      "description": "gpttitti@hansung.ac.kr appears in emails."
     },
     {
       "id": "EMAIL::19ccd047f94f56a8",
@@ -104,11 +127,6 @@
       "id": "ChatGPT 코드는 515398입니다",
       "type": "SUBJECT",
       "description": "Email subject \"ChatGPT 코드는 515398입니다\"."
-    },
-    {
-      "id": "noreply@tm.openai.com",
-      "type": "PERSON",
-      "description": "noreply@tm.openai.com appears in emails."
     },
     {
       "id": "EMAIL::19c8006a6da429cc",
@@ -1576,6 +1594,72 @@
     }
   ],
   "edges": [
+    {
+      "id": "EMAIL::19cdc5c5e5986704__RELATES_TO__ChatGPT 코드는 844067입니다",
+      "source": "EMAIL::19cdc5c5e5986704",
+      "target": "ChatGPT 코드는 844067입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "Email relates to subject \"ChatGPT 코드는 844067입니다\".",
+      "label": "Email relates to subject \"ChatGPT 코드는 844067입니다\".",
+      "title": "Email relates to subject \"ChatGPT 코드는 844067입니다\".",
+      "tooltip": "Email relates to subject \"ChatGPT 코드는 844067입니다\"."
+    },
+    {
+      "id": "noreply@tm.openai.com__RELATES_TO__EMAIL::19cdc5c5e5986704",
+      "source": "noreply@tm.openai.com",
+      "target": "EMAIL::19cdc5c5e5986704",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "noreply@tm.openai.com is related to this email.",
+      "label": "noreply@tm.openai.com is related to this email.",
+      "title": "noreply@tm.openai.com is related to this email.",
+      "tooltip": "noreply@tm.openai.com is related to this email."
+    },
+    {
+      "id": "noreply@tm.openai.com__RELATES_TO__ChatGPT 코드는 844067입니다",
+      "source": "noreply@tm.openai.com",
+      "target": "ChatGPT 코드는 844067입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "noreply@tm.openai.com is associated with \"ChatGPT 코드는 844067입니다\".",
+      "label": "noreply@tm.openai.com is associated with \"ChatGPT 코드는 844067입니다\".",
+      "title": "noreply@tm.openai.com is associated with \"ChatGPT 코드는 844067입니다\".",
+      "tooltip": "noreply@tm.openai.com is associated with \"ChatGPT 코드는 844067입니다\"."
+    },
+    {
+      "id": "gpttitti@hansung.ac.kr__RELATES_TO__EMAIL::19cdc5c5e5986704",
+      "source": "gpttitti@hansung.ac.kr",
+      "target": "EMAIL::19cdc5c5e5986704",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "gpttitti@hansung.ac.kr is related to this email.",
+      "label": "gpttitti@hansung.ac.kr is related to this email.",
+      "title": "gpttitti@hansung.ac.kr is related to this email.",
+      "tooltip": "gpttitti@hansung.ac.kr is related to this email."
+    },
+    {
+      "id": "gpttitti@hansung.ac.kr__RELATES_TO__ChatGPT 코드는 844067입니다",
+      "source": "gpttitti@hansung.ac.kr",
+      "target": "ChatGPT 코드는 844067입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 844067입니다\".",
+      "label": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 844067입니다\".",
+      "title": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 844067입니다\".",
+      "tooltip": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 844067입니다\"."
+    },
+    {
+      "id": "noreply@tm.openai.com__SENDS_TO__gpttitti@hansung.ac.kr",
+      "source": "noreply@tm.openai.com",
+      "target": "gpttitti@hansung.ac.kr",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "noreply@tm.openai.com sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 844067입니다\".",
+      "label": "noreply@tm.openai.com sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 844067입니다\".",
+      "title": "noreply@tm.openai.com sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 844067입니다\".",
+      "tooltip": "noreply@tm.openai.com sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 844067입니다\"."
+    },
     {
       "id": "EMAIL::19cd7443f6439912__RELATES_TO__ChatGPT 코드는 893968입니다",
       "source": "EMAIL::19cd7443f6439912",
@@ -6683,6 +6767,21 @@
   ],
   "visible_nodes": [
     {
+      "id": "ChatGPT 코드는 844067입니다",
+      "type": "SUBJECT",
+      "description": "Email subject \"ChatGPT 코드는 844067입니다\"."
+    },
+    {
+      "id": "noreply@tm.openai.com",
+      "type": "PERSON",
+      "description": "noreply@tm.openai.com appears in emails."
+    },
+    {
+      "id": "gpttitti@hansung.ac.kr",
+      "type": "PERSON",
+      "description": "gpttitti@hansung.ac.kr appears in emails."
+    },
+    {
       "id": "ChatGPT 코드는 893968입니다",
       "type": "SUBJECT",
       "description": "Email subject \"ChatGPT 코드는 893968입니다\"."
@@ -6691,11 +6790,6 @@
       "id": "ChatGPT <noreply@tm.openai.com>",
       "type": "PERSON",
       "description": "ChatGPT <noreply@tm.openai.com> appears in emails."
-    },
-    {
-      "id": "gpttitti@hansung.ac.kr",
-      "type": "PERSON",
-      "description": "gpttitti@hansung.ac.kr appears in emails."
     },
     {
       "id": "보안 알림",
@@ -6721,11 +6815,6 @@
       "id": "ChatGPT 코드는 515398입니다",
       "type": "SUBJECT",
       "description": "Email subject \"ChatGPT 코드는 515398입니다\"."
-    },
-    {
-      "id": "noreply@tm.openai.com",
-      "type": "PERSON",
-      "description": "noreply@tm.openai.com appears in emails."
     },
     {
       "id": "ChatGPT 코드는 873433입니다",
@@ -7179,6 +7268,39 @@
     }
   ],
   "visible_edges": [
+    {
+      "id": "noreply@tm.openai.com__RELATES_TO__ChatGPT 코드는 844067입니다",
+      "source": "noreply@tm.openai.com",
+      "target": "ChatGPT 코드는 844067입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "noreply@tm.openai.com is associated with \"ChatGPT 코드는 844067입니다\".",
+      "label": "noreply@tm.openai.com is associated with \"ChatGPT 코드는 844067입니다\".",
+      "title": "noreply@tm.openai.com is associated with \"ChatGPT 코드는 844067입니다\".",
+      "tooltip": "noreply@tm.openai.com is associated with \"ChatGPT 코드는 844067입니다\"."
+    },
+    {
+      "id": "gpttitti@hansung.ac.kr__RELATES_TO__ChatGPT 코드는 844067입니다",
+      "source": "gpttitti@hansung.ac.kr",
+      "target": "ChatGPT 코드는 844067입니다",
+      "relationship": "RELATES_TO",
+      "type": "RELATES_TO",
+      "description": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 844067입니다\".",
+      "label": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 844067입니다\".",
+      "title": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 844067입니다\".",
+      "tooltip": "gpttitti@hansung.ac.kr is associated with \"ChatGPT 코드는 844067입니다\"."
+    },
+    {
+      "id": "noreply@tm.openai.com__SENDS_TO__gpttitti@hansung.ac.kr",
+      "source": "noreply@tm.openai.com",
+      "target": "gpttitti@hansung.ac.kr",
+      "relationship": "SENDS_TO",
+      "type": "SENDS_TO",
+      "description": "noreply@tm.openai.com sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 844067입니다\".",
+      "label": "noreply@tm.openai.com sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 844067입니다\".",
+      "title": "noreply@tm.openai.com sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 844067입니다\".",
+      "tooltip": "noreply@tm.openai.com sent an email to gpttitti@hansung.ac.kr about \"ChatGPT 코드는 844067입니다\"."
+    },
     {
       "id": "ChatGPT <noreply@tm.openai.com>__RELATES_TO__ChatGPT 코드는 893968입니다",
       "source": "ChatGPT <noreply@tm.openai.com>",

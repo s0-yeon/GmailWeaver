@@ -6,31 +6,29 @@
 
 encoding_model: cl100k_base # this needs to be matched to your model!
 
-completion_models:
-  default_completion_model:
-    model_provider: openai
+models:
+  default_chat_model:
+    type: openai_chat
     model: gpt-4o-mini
-    auth_method: api_key
     api_key: ${GRAPHRAG_API_KEY}
+    model_supports_json: true
 
-embedding_models:
   default_embedding_model:
-    model_provider: openai
+    type: openai_embedding
     model: text-embedding-3-small
-    auth_method: api_key
     api_key: ${GRAPHRAG_API_KEY}
 
 
-# llm:
-#   api_key: ${GRAPHRAG_API_KEY} # set this in the generated .env file
-#   type: openai_chat # or azure_openai_chat
-#   model: gpt-4o-mini
-#   model_supports_json: true # recommended if this is available for your model.
-#   # audience: "https://cognitiveservices.azure.com/.default"
-#   # api_base: https://<instance>.openai.azure.com
-#   # api_version: 2024-02-15-preview
-#   # organization: <organization_id>
-#   # deployment_name: <azure_model_deployment_name>
+llm:
+  api_key: ${GRAPHRAG_API_KEY} # set this in the generated .env file
+  type: openai_chat # or azure_openai_chat
+  model: gpt-4o-mini
+  model_supports_json: true # recommended if this is available for your model.
+  # audience: "https://cognitiveservices.azure.com/.default"
+  # api_base: https://<instance>.openai.azure.com
+  # api_version: 2024-02-15-preview
+  # organization: <organization_id>
+  # deployment_name: <azure_model_deployment_name>
 
 parallelization:
   stagger: 0.3
@@ -58,11 +56,10 @@ embeddings:
 ### Input settings ###
 
 input:
-  type: text
-  storage:
-    type: file
-    base_dir: "input"
-  encoding: utf-8
+  type: file # or blob
+  file_type: text # or csv
+  base_dir: "input"
+  file_encoding: utf-8
   file_pattern: ".*\\.txt$$"
 
 chunks:
@@ -75,10 +72,8 @@ chunks:
 ## connection_string and container_name must be provided
 
 cache:
-  type: json
-  storage:
-    type: file
-    base_dir: "cache"
+  type: file # or blob
+  base_dir: "cache"
 
 reporting:
   type: file # or console, blob
