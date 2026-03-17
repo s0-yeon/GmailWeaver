@@ -3,6 +3,7 @@
 // Wep App 진입점
 // 브라우저에서 Web App URL로 접근 시 실행
 function doGet(e) {
+
   return HtmlService.createHtmlOutput(
     '<script>window.location.href = "' + TunnelURL + '/dashboard/";</script>'
   ).setTitle("GmailWeaver Web App");
