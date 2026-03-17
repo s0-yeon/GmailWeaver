@@ -1,3 +1,5 @@
+# src/mail2json.py
+
 import os
 import re
 import json

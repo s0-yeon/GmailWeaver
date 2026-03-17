@@ -9,11 +9,14 @@ import json
 import threading
 import uuid
 import openai
+import base64
 import requests
 
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
+import fitz  # PyMuPDF
+from docx import Document
 
 # Job 이용 공통함수 import
 from util.jobs.job_store import *
@@ -33,7 +36,9 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-# 유틸 함수: GraphRAG CLI 실행
+# 유틸 함수
+
+# GraphRAG CLI 실행
 def _run_graphrag(message, resMethod, resType):
     def decode_output(b: bytes) -> str:
         # subprocess 결과(bytes)를 문자열로 디코딩
@@ -91,7 +96,8 @@ def _run_graphrag(message, resMethod, resType):
     print(answer)
     return answer.strip()
 
-# 유틸 함수: 텍스트 → 캘린더 JSON 변환
+
+# 텍스트 → 캘린더 JSON 변환
 def _convert_to_calendar_json(text):
     # 자연어 텍스트에서 일정 정보를 추출하여 캘린더 이벤트 JSON으로 변환
     # OpenAI chat completions API를 직접 호출 (GraphRAG 우회, 빠른 응답)
@@ -128,7 +134,63 @@ def _convert_to_calendar_json(text):
         # OpenAI API 실패 시 빈 이벤트 반환 (서버 오류 전파 방지)
         print(f"[calendar convert error] {e}")
         return { "events": []}
-    
+
+# PDF 파일에서 텍스트 추출
+def _extract_text_from_pdf(file_path):
+    text = ""
+    try:
+        doc = fitz.open(file_path)
+        for page in doc:
+            text += page.get_text()
+        doc.close()
+    except Exception as e:
+        print(f"[PDF Extract Errpr] {e}")
+    return text
+
+# Word 파일에서 텍스트 추출
+def _extract_text_from_docx(file_path):
+    text = ""
+    try:
+        doc = Document(file_path)
+        for para in doc.paragraphs:
+            text += para.text + "\n"
+    except Exception as e:
+        print(f"[Docx Extract Error] {e}")
+    return text
+
+# 파일명에서 경로/위험 문자 제거
+def _sanitize_filename(name: str) -> str:
+    name = os.path.basename(name or "attachment.bin").strip()
+    name = re.sub(r"[^A-Za-z0-9._-]", "_", name)    # 영숫자, 점, 밑줄, 하이픈만 남기고 나머지는 '_'로 치환
+    return name or "attachment.bin"
+
+# attachment payload에서 base64를 받아 서버 로컬에 파일 저장
+def _save_attachment_from_base64(file_info: dict, save_dir: str) -> tuple[str, str]:
+    original_name = file_info.get("name") or "attachment.bin"
+    safe_name = _sanitize_filename(original_name)
+    mail_id = str(file_info.get("mail_id") or "no_mail_id")
+    data_base64 = file_info.get("data_base64") or ""
+
+    if not data_base64:
+        raise ValueError(f"attachment data_base64 missing: {original_name}")
+
+    os.makedirs(save_dir, exist_ok=True)
+
+    ext = os.path.splitext(safe_name)[1].lower()
+    unique_name = f"{mail_id}_{uuid.uuid4().hex[:8]}{ext or '.bin'}"
+    saved_path = os.path.join(save_dir, unique_name)
+
+    # 혹시 data URL prefix가 붙어오면 제거
+    if "," in data_base64 and "base64" in data_base64[:100]:
+        data_base64 = data_base64.split(",", 1)[1]
+
+    file_bytes = base64.b64decode(data_base64)
+
+    with open(saved_path, "wb") as f:
+        f.write(file_bytes)
+
+    return saved_path, original_name
+
 # 엔드포인트: POST /extract-calendar
 @app.route('/extract-calendar', methods=['POST'])
 def extract_calendar():     # 이메일 제목 + 본문에서 일정 이벤트를 추출하여 반환
@@ -165,6 +227,7 @@ def run_query_async():
             else:
                 result = answer
 
+
             update_job(job_id, status="done", result=result)
 
         except Exception as e:
@@ -177,6 +240,7 @@ def run_query_async():
 # 엔드포인트: GET /job-status/<job_id>
 @app.route('/job-status/<job_id>', methods=['GET'])
 def job_status(job_id):     # 비동기 Job의 현재 상태와 결과를 반환
+
     job = get_job(job_id)
     if not job:
         return jsonify({"status": "not_found"}), 404
@@ -219,14 +283,87 @@ def run_query():    # GraphRAG 쿼리를 동기 방식으로 실행하고 결과
 
 # 엔드포인트: POST /upload
 @app.route("/upload", methods=["POST"])
-def upload():   # Gmail 메일 데이터를 수신하여 저장하고, 그래프 인덱스를 재구축
+
+def upload():
+    # 1) 데이터 수신
+
     data = request.json or {}
-
     filename = data.get("filename") or f"mail_{int(time.time())}.txt"
-    content  = data.get("content") or ""
+    content = data.get("content") or ""
+    attachments = data.get("attachment") or []
 
-    print("[UPLOAD] received filename:", filename)
-    print("[UPLOAD] content length:", len(content))
+    # 2) 저장 디렉토리 준비
+    os.makedirs(MAIL_DIR, exist_ok=True)
+    os.makedirs(ATTACHMENT_DIR, exist_ok=True)
+
+    file_path = os.path.join(MAIL_DIR, filename)
+
+    # 3) 원본 메일 텍스트 저장
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    # 4) mail_latest.txt 새로 생성
+    with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    # 5) 첨부 저장 + 텍스트 추출 + 병합
+    saved_attachment_paths = []
+    extracted_full_text = ""
+    extracted_count = 0
+    failed_attachments = []
+
+    if attachments:
+        extracted_full_text = f"\n\n{MAIL_BLOCK_SEP}\n"
+        extracted_full_text += "[System] attachment data extract section\n"
+
+        for file_info in attachments:
+            f_name = file_info.get("name") or "attachment.bin"
+            mime = (file_info.get("mime") or "").lower()
+
+            try:
+                # base64 -> 서버 로컬 파일 저장
+                saved_path, original_name = _save_attachment_from_base64(
+                    file_info,
+                    ATTACHMENT_DIR
+                )
+                saved_attachment_paths.append(saved_path)
+
+                ext = os.path.splitext(original_name)[-1].lower()
+                file_text = ""
+
+                if ext == ".pdf" or mime == "application/pdf":
+                    file_text = _extract_text_from_pdf(saved_path)
+                elif ext == ".docx" or mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                    file_text = _extract_text_from_docx(saved_path)
+
+                if file_text and file_text.strip():
+                    extracted_full_text += f"\n[File name] {original_name}\n{file_text}\n"
+                    extracted_count += 1
+                else:
+                    failed_attachments.append({
+                        "name": original_name,
+                        "reason": "text extraction returned empty"
+                    })
+
+            except Exception as e:
+                failed_attachments.append({
+                    "name": f_name,
+                    "reason": str(e)
+                })
+                print(f"[UPLOAD][ATTACHMENT ERROR] {f_name}: {e}")
+
+        extracted_full_text += f"\n{MAIL_BLOCK_SEP}\n"
+
+        # 6) 추출 텍스트 append
+        if extracted_count > 0:
+            with open(MAIL_LATEST_PATH, "a", encoding="utf-8") as f:
+                f.write(extracted_full_text)
+
+    # 7) 파이프라인 실행
+    print(f"[UPLOAD] Received filename: {filename}")
+    print(f"[UPLOAD] Content length: {len(content)}")
+    print(f"[UPLOAD] Attachment count received: {len(attachments)}")
+    print(f"[UPLOAD] Attachment extracted count: {extracted_count}")
     print("[UPLOAD] cwd:", os.getcwd())
 
     # 1단계: 메일 파일 저장
@@ -259,12 +396,16 @@ def upload():   # Gmail 메일 데이터를 수신하여 저장하고, 그래프
 
 
     return jsonify({
-        "ok": True,
-        "job_id": job_id,
-        "saved_path": os.path.abspath(file_path),
-        "latest_path": os.path.abspath(MAIL_LATEST_PATH),
-        "content_length": len(content),
-    })
+            "ok": True,
+            "saved_path": os.path.abspath(file_path),
+            "latest_path": os.path.abspath(MAIL_LATEST_PATH),
+            "attachment_dir": os.path.abspath(ATTACHMENT_DIR),
+            "content_length": len(content),
+            "attachment_received_count": len(attachments),
+            "attachment_extracted_count": extracted_count,
+            "failed_attachments": failed_attachments,
+        })
+
 
 # 엔드포인트: GET /graph-data
 @app.route("/graph-data", methods=["GET"])
@@ -302,9 +443,8 @@ def static_fonts(path):
 
 # 웹앱 URL 변경 필요
 @app.route('/calendar-events', methods=['POST'])
-@app.route('/calendar-events', methods=['POST'])
 def calendar_events():
-    WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwAk_JabdKuGUHIVcaKeEnY1DUiYb0uqkiu-KdUG67Zf1U3D8k-F06RGS5043k_fZS8MQ/exec"
+    WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz3bAOxML5BZSSJcMFM1or5jY8K4NVwliHk_Rbe9jXYVBXbYM05Fl-1bPG1909_38hZ/exec"
     data = request.json or {}
     res = requests.post(WEB_APP_URL, json=data, allow_redirects=True)
     print("[calendar] status:", res.status_code)

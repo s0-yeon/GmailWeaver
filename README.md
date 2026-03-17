@@ -78,14 +78,17 @@ pip install graphrag==2.1.0
 ## Required Libraries
 
 다음 라이브러리를 사용한다.
-- openai : OpenAI API 호출
-- python-dotenv : 환경 변수(.env) 로드
-- Flask : 서버 프레임워크
-- flask-cors : CORS 설정
+- openai: OpenAI API 호출
+- python-dotenv: 환경 변수(.env) 로드
+- Flask: 서버 프레임워크
+- flask-cors: CORS 설정
+- PyMuPDF: PDF 읽고 텍스트 추출 
+- python-docx: .docx 파일 읽고 수정
+(- pandas: 데이터 분석)
 
 ### 설치 및 확인
 ```bash
-pip install openai python-dotenv Flask flask-cors
+pip install openai python-dotenv Flask flask-cors PyMuPDF python-docx pandas
 pip list
 ```
 ---
@@ -106,7 +109,16 @@ clasp pull    # Apps Script → 로컬 반영
 
 # Run
 
-## 1. Apps Script 설정 수정
+## 1. ngrok 실행
+
+로컬 서버를 외부에서 접근할 수 있도록 ngrok을 실행한다.
+
+```bash
+ngrok http 80
+```
+이때 생성된 Forwarding URL이 자신의 터널링 주소이다.
+
+## 2. Apps Script 설정 수정
 
 다음 파일에서 자신의 환경에 맞게 주소를 수정한다.
 
@@ -114,16 +126,9 @@ clasp pull    # Apps Script → 로컬 반영
 - 'TunnelURL'을 자신의 **Tunnerling URL**로 변경
 - 'WEBAPP_URL'을 자신의 **Web App URL**로 변경
 
----
-
-## 2. ngrok 실행
-
-로컬 서버를 외부에서 접근할 수 있도록 ngrok을 실행한다.
-
-```bash
-ngrok http 80
-```
-ngrok 실행 후 생성된 https 주소를 'urlFetchWhitelist'에 등록해야 한다.
+### appsscript.json
+- 'urlFetchWhitelist'을 자신의 **Tunnerling URL**로 변경
+이때 맨 끝에 '/' 문자를 반드시 추가하여 "...ngrok-free.dev/"와 같은 형태로 만든다.
 
 ---
 
@@ -162,4 +167,3 @@ clasp push
 - ngrok
 - clasp
 - Gmail 계정
->>>>>>> init
