@@ -1,10 +1,59 @@
 // src.apps-script/web.js
+
 // Wep App 진입점
 // 브라우저에서 Web App URL로 접근 시 실행
 function doGet(e) {
-  return HtmlService.createTemplateFromFile("index")
-    .evaluate()
-    .setTitle("GmailWeaver Web App");
+  return HtmlService.createHtmlOutput(
+    '<script>window.location.href = "' + TunnelURL + '/dashboard/";</script>'
+  ).setTitle("GmailWeaver Web App");
+}
+
+function doPost(e) {
+  const data = JSON.parse(e.postData.contents);
+  const action = data.action;
+  const calendar = CalendarApp.getDefaultCalendar();
+
+  if (action === 'getEvents') {
+    // 특정 기간의 일정 목록 조회
+    // FullCalenar(전체 화면 캘린더)가 현재 보이는 달력 범위를 넘겨주면
+    // 그 기간에 해당하는 구글 캘린더 일정들 반환 
+    const start = new Date(data.start);
+    const end = new Date(data.end);
+    const events = calendar.getEvents(start, end);
+    const result = events.map(ev => ({
+      id: ev.getId(),
+      title: ev.getTitle(),
+      start: ev.getStartTime().toISOString(),
+      end: ev.getEndTime().toISOString(),
+    }));
+    return ContentService.createTextOutput(JSON.stringify({ events: result }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  if (action === 'addEvent') {
+    //새 일정 추가
+    //FullCalendar(전체 화면 캘린더)에서 날짜 클릭하면 title/start/end를 받아서 구글 캘린더에 생성
+    const ev = calendar.createEvent(
+      data.title,
+      new Date(data.start),
+      new Date(data.end),
+      { description: data.description || '' }
+    );
+    return ContentService.createTextOutput(JSON.stringify({ ok: true, id: ev.getId() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  if (action === 'deleteEvent') {
+    //알정 삭제
+    //FullCalendar(전체 화면 캘린더)에서 일정 클릭 후 삭제 버튼 누르면 id로 구글 캘린더에서 삭제
+    const ev = calendar.getEventById(data.id);
+    if (ev) ev.deleteEvent();
+    return ContentService.createTextOutput(JSON.stringify({ ok: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  return ContentService.createTextOutput(JSON.stringify({ error: 'unknown action' }))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 // HTML 파일 include 유틸

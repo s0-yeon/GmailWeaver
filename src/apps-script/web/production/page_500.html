@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/favicon.ico" type="image/ico" />
+
+    <title>500 - Internal Server Error | Gentelella</title>    
+    
+    <!-- Vite Entry Point - will bundle all styles -->
+    <script type="module" src="/src/main-minimal.js"></script>
+    
+    <style>
+      .error-bg {
+        background: linear-gradient(135deg, #2A3F54 0%, #34495e 100%);
+        min-height: 100vh;
+      }
+      .brand-logo {
+        color: #1ABB9C;
+        border: 2px solid #1ABB9C;
+        padding: 8px 10px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+
+  <body class="error-bg">
+    <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100">
+      <div class="row justify-content-center w-100">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+          <div class="card shadow-lg border-0">
+            <div class="card-body text-center p-5">
+              <!-- Brand Header -->
+              <div class="text-center mb-4">
+                <div class="d-flex align-items-center justify-content-center mb-3">
+                  <img src="images/logo.svg" alt="Gentelella" style="height: 35px; width: auto;">
+                  <h3 class="mb-0 fw-bold text-dark">Gentelella</h3>
+                </div>
+              </div>
+
+              <!-- Error Icon and Number -->
+              <div class="mb-4">
+                <i class="fas fa-times-circle text-danger mb-3" style="font-size: 6rem;"></i>
+                <h1 class="display-1 fw-bold text-danger mb-0">500</h1>
+              </div>
+              
+              <!-- Error Message -->
+              <div class="mb-4">
+                <h2 class="h3 text-dark mb-3">Internal Server Error</h4>
+                <p class="text-muted lead">Something went wrong on our end. We're working to fix this issue. Please try again later.</p>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="d-grid gap-2 d-md-block mb-4">
+                <a href="index.html" class="btn btn-primary btn-lg me-md-2">
+                  <i class="fas fa-home me-2"></i>Go Home
+                </a>
+                <button type="button" class="btn btn-outline-secondary btn-lg" onclick="location.reload()">
+                  <i class="fas fa-redo me-2"></i>Try Again
+                </button>
+              </div>
+
+              <!-- Status Info -->
+              <div class="border-top pt-4">
+                <div class="row text-center">
+                  <div class="col-md-4 mb-3">
+                    <div class="d-flex flex-column align-items-center">
+                      <i class="fas fa-tools text-info fs-1 mb-2"></i>
+                      <h6 class="text-dark">Fixing</h6>
+                      <small class="text-muted">Our team is on it</small>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="d-flex flex-column align-items-center">
+                      <i class="fas fa-clock text-warning fs-1 mb-2"></i>
+                      <h6 class="text-dark">Please Wait</h6>
+                      <small class="text-muted">We'll be back soon</small>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="d-flex flex-column align-items-center">
+                      <i class="fas fa-headset text-success fs-1 mb-2"></i>
+                      <h6 class="text-dark">Support</h6>
+                      <small class="text-muted">We're here to help</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Error Details -->
+              <div class="mt-4 p-3 bg-light rounded">
+                <div class="text-start">
+                  <h6 class="text-muted mb-2">Error Details:</h6>
+                  <small class="text-muted d-block">Error ID: ERR-500-<span id="errorId"></span></small>
+                  <small class="text-muted d-block">Timestamp: <span id="timestamp"></span></small>
+                </div>
+              </div>
+
+              <!-- Help Links -->
+              <div class="mt-4">
+                <small class="text-muted">
+                  Need immediate help? 
+                  <a href="#" class="text-decoration-none">Contact Support</a> | 
+                  <a href="#" class="text-decoration-none">Status Page</a> | 
+                  <a href="#" class="text-decoration-none">Report Issue</a>
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="text-center mt-4">
+            <p class="text-light opacity-75 mb-2">
+              &copy; 2025 All Rights Reserved. Gentelella is a Bootstrap 5 template.
+            </p>
+            <div>
+              <a href="#" class="text-light text-decoration-none opacity-75 me-3">Privacy</a>
+              <a href="#" class="text-light text-decoration-none opacity-75 me-3">Terms</a>
+              <a href="#" class="text-light text-decoration-none opacity-75">Support</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Generate random error ID and timestamp
+      document.addEventListener('DOMContentLoaded', function() {
+        const errorId = Math.random().toString(36).substr(2, 9).toUpperCase();
+        const timestamp = new Date().toLocaleString();
+        
+        document.getElementById('errorId').textContent = errorId;
+        document.getElementById('timestamp').textContent = timestamp;
+      });
+    </script>
+  </body>
+</html>

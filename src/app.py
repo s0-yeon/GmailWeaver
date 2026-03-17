@@ -9,6 +9,7 @@ import json
 import threading
 import uuid
 import openai
+import requests
 
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, send_from_directory
@@ -272,7 +273,47 @@ def graph_data():   # mail2json.py가 생성한 그래프 시각화 데이터를
         return jsonify({"nodes": [], "edges": [], "error": "graph json not found"}), 200
     with open(GRAPH_JSON_PATH, "r", encoding="utf-8") as f:
         return jsonify(json.load(f))
+    
+# 엔드포인트: GET /dashboard/ (Gentella 웹앱 서빙)
+@app.route('/dashboard/', defaults={'path': 'production/index.html'})
+@app.route('/dashboard/<path:path>')
+def dashboard(path):
+    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist')
+    # /dashboard/index2.html 요청 → production/index2.html로 매핑
+    if not path.startswith('production/') and path.endswith('.html'):
+        path = 'production/' + path
+    return send_from_directory(dist_dir, path)
 
+# dist 루트 정적 파일 서빙 (assets, js, fonts)
+@app.route('/assets/<path:path>')
+def static_assets(path):
+    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'assets')
+    return send_from_directory(dist_dir, path)
+
+@app.route('/js/<path:path>')
+def static_js(path):
+    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'js')
+    return send_from_directory(dist_dir, path)
+
+@app.route('/fonts/<path:path>')
+def static_fonts(path):
+    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'fonts')
+    return send_from_directory(dist_dir, path)
+
+# 웹앱 URL 변경 필요
+@app.route('/calendar-events', methods=['POST'])
+@app.route('/calendar-events', methods=['POST'])
+def calendar_events():
+    WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwAk_JabdKuGUHIVcaKeEnY1DUiYb0uqkiu-KdUG67Zf1U3D8k-F06RGS5043k_fZS8MQ/exec"
+    data = request.json or {}
+    res = requests.post(WEB_APP_URL, json=data, allow_redirects=True)
+    print("[calendar] status:", res.status_code)
+    print("[calendar] response:", res.text[:500])
+    try:
+        return jsonify(res.json())
+    except Exception:
+        return jsonify({"events": [], "error": res.text[:200]}), 200
+    
 # 서버 진입점
 if __name__ == '__main__':
     # host='0.0.0.0': 모든 네트워크 인터페이스에서 수신 (localhost 외부 접근 허용)

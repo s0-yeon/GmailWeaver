@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Dashboard 2 - Gentelella</title>    <!-- Compiled CSS (includes Bootstrap, Font Awesome, and all vendor styles) -->
+    <script type="module" src="/src/main-minimal.js"></script>
+  </head>
+
+  <body class="nav-md page-index2">
+    <div class="container body">
+      <div class="main_container">
+        <aside class="col-md-3 left_col" aria-label="Sidebar navigation">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title"><img src="images/logo.svg" alt="Gentelella Alela!" class="logo-full logo-main" loading="lazy"><img src="images/logo-icon.svg" alt="Gentelella" class="logo-icon" loading="lazy"></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="images/img.jpg" alt="User profile photo" class="img-circle profile_img" loading="lazy">
+              </div>
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h4>John Doe</h4>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <h3>General</h3>
+                <ul class="nav side-menu">
+                  <li><a href="https://dashboardpack.com/?utm_source=gentelella&utm_medium=sidebar&utm_campaign=premium" target="_blank"><i class="bi bi-stars"></i> Go Pro <span class="badge bg-warning">Pro</span></a></li>
+                  <li><a><i class="bi bi-house"></i> Home <span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="index.html">Dashboard 1</a></li>
+                      <li><a href="index2.html">Dashboard 2</a></li>
+                      <li><a href="index3.html">Dashboard 3</a></li>
+                      <li><a href="index4.html">Dashboard 4</a></li>
+                    </ul>
+                  <li><a><i class="bi bi-pencil-square"></i> Forms <span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="form.html">General Form</a></li>
+                      <li><a href="form_advanced.html">Advanced Components</a></li>
+                      <li><a href="form_validation.html">Form Validation</a></li>
+                      <li><a href="form_wizards.html">Form Wizard</a></li>
+                      <li><a href="form_upload.html">Form Upload</a></li>
+                      <li><a href="form_buttons.html">Form Buttons</a></li>
+                    </ul>
+                  <li><a><i class="bi bi-display"></i> UI Elements <span class="badge bg-danger">Hot</span> <span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="general_elements.html">General Elements</a></li>
+                      <li><a href="media_gallery.html">Media Gallery</a></li>
+                      <li><a href="typography.html">Typography</a></li>
+                      <li><a href="icons.html">Icons</a></li>
+                      <li><a href="widgets.html">Widgets</a></li>
+                      <li><a href="invoice.html">Invoice</a></li>
+                      <li><a href="inbox.html">Inbox</a></li>
+                      <li><a href="calendar.html">Calendar</a></li>
+                    </ul>
+                  <li><a><i class="bi bi-table"></i> Tables <span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="tables.html">Tables</a></li>
+                      <li><a href="tables_dynamic.html">Table Dynamic</a></li>
+                    </ul>
+                  <li><a><i class="bi bi-bar-chart"></i> Data Presentation <span class="badge bg-success">New</span> <span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="chartjs.html">Chart.js</a></li>
+                      <li><a href="echarts.html">ECharts <span class="badge bg-info">Updated</span></a></li>
+                      <li><a href="other_charts.html">Other Charts</a></li>
+                    </ul>
+                  <li><a><i class="bi bi-layout-split"></i>Layouts <span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="fixed_sidebar.html">Fixed Sidebar</a></li>
+                      <li><a href="fixed_footer.html">Fixed Footer</a></li>
+                    </ul>
+                </ul>
+              </div>
+              <div class="menu_section">
+                <h3>Live On</h3>
+                <ul class="nav side-menu">
+                  <li><a><i class="bi bi-file-earmark-text"></i> Additional Pages <span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="e_commerce.html">E-commerce</a></li>
+                      <li><a href="projects.html">Projects</a></li>
+                      <li><a href="project_detail.html">Project Detail</a></li>
+                      <li><a href="contacts.html">Contacts</a></li>
+                      <li><a href="profile.html">Profile</a></li>
+                    </ul>
+                  <li><a><i class="bi bi-window-stack"></i> Extras <span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="page_403.html">403 Error</a></li>
+                      <li><a href="page_404.html">404 Error</a></li>
+                      <li><a href="page_500.html">500 Error</a></li>
+                      <li><a href="plain_page.html">Plain Page</a></li>
+                      <li><a href="login.html">Login Page</a></li>
+                      <li><a href="pricing_tables.html">Pricing Tables</a></li>
+                    </ul>
+                  <li><a><i class="bi bi-diagram-3"></i> Multilevel Menu <span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="#level1_1">Level One</a></li>
+                        <li><a>Level One<span class="bi bi-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+                            <li class="sub_menu"><a href="level2.html">Level Two</a>
+                            <li><a href="#level2_1">Level Two</a>
+                            <li><a href="#level2_2">Level Two</a>
+                          </ul>
+                        <li><a href="#level1_2">Level One</a></li>
+                    </ul>
+                  <li><a href="landing.html"><i class="bi bi-laptop"></i> Landing Page <span class="badge bg-info">Updated</span></a></li>
+                </ul>
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <div class="sidebar-footer hidden-small">
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Settings">
+                <span class="fas fa-cog" aria-hidden="true"></span>
+              </a>
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="FullScreen">
+                <span class="fas fa-expand" aria-hidden="true"></span>
+              </a>
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Lock">
+                <span class="fas fa-eye-slash" aria-hidden="true"></span>
+              </a>
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Logout" href="login.html">
+                <span class="fas fa-power-off" aria-hidden="true"></span>
+              </a>
+            </div>
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+            <div class="nav_menu d-flex align-items-center justify-content-between">
+                <div class="nav toggle">
+                  <a id="menu_toggle"><i class="fas fa-bars"></i></a>
+                </div>
+                <nav class="nav navbar-nav ms-auto">
+                <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                    <a href="#" role="button" class="dropdown-toggle info-number" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fas fa-envelope"></i>
+                      <span class="badge bg-green">6</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end list-unstyled msg_list dropdown-menu-lg" role="menu" aria-labelledby="navbarDropdown1">
+                      <li class="nav-item">
+                        <a class="dropdown-item">
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
+                        </a>
+                      <li class="nav-item">
+                        <a class="dropdown-item">
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
+                        </a>
+                      <li class="nav-item">
+                        <a class="dropdown-item">
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
+                        </a>
+                      <li class="nav-item">
+                        <a class="dropdown-item">
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
+                        </a>
+                      <li class="nav-item">
+                        <div class="text-center">
+                          <a class="dropdown-item">
+                            <strong>See All Alerts</strong>
+                            <i class="fas fa-angle-right"></i>
+                          </a>
+                        </div>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" role="button" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                      <img src="images/img.jpg" alt="">John Doe
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-usermenu dropdown-menu-sm" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item"  href="#" role="button"> Profile</a>
+                        <a class="dropdown-item"  href="#" role="button">
+                          <span class="badge bg-red float-end">50%</span>
+                          <span>Settings</span>
+                        </a>
+                    <a class="dropdown-item"  href="#" role="button">Help</a>
+                      <a class="dropdown-item"  href="login.html"><i class="fas fa-sign-out-alt float-end"></i> Log Out</a>
+                    </div>
+                </li>
+              </ul>
+              </nav>
+            </div>
+          </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <main class="right_col" role="main" aria-label="Main content">
+          <!-- top tiles -->
+          <div class="row g-3 mb-4">
+            <div class="col-xl-3 col-md-6">
+              <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center">
+                  <div class="flex-shrink-0 me-3">
+                    <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center avatar-md">
+                      <i class="fas fa-user-plus text-primary fs-5"></i>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="small text-muted mb-1">New Sign ups</div>
+                    <div class="h4 mb-1 fw-bold">179</div>
+                    <div class="small text-muted">Active registrations</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+              <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center">
+                  <div class="flex-shrink-0 me-3">
+                    <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center avatar-md">
+                      <i class="far fa-comments text-success fs-5"></i>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="small text-muted mb-1">Messages</div>
+                    <div class="h4 mb-1 fw-bold">1,254</div>
+                    <div class="small text-muted">Customer inquiries</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+              <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center">
+                  <div class="flex-shrink-0 me-3">
+                    <div class="rounded-circle bg-info bg-opacity-10 d-flex align-items-center justify-content-center avatar-md">
+                      <i class="fas fa-chart-column text-info fs-5"></i>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="small text-muted mb-1">Analytics</div>
+                    <div class="h4 mb-1 fw-bold">892</div>
+                    <div class="small text-muted">Reports generated</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+              <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center">
+                  <div class="flex-shrink-0 me-3">
+                    <div class="rounded-circle bg-warning bg-opacity-10 d-flex align-items-center justify-content-center avatar-md">
+                      <i class="far fa-square-check text-warning fs-5"></i>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="small text-muted mb-1">Tasks Complete</div>
+                    <div class="h4 mb-1 fw-bold">423</div>
+                    <div class="small text-muted">Finished today</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /top tiles -->
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Transaction Summary <small>Weekly progress</small></h4>
+                    <div class="filter d-flex align-items-center gap-2">
+                      <div class="input-group" id="startDatePicker" data-td-target-input="nearest" data-td-target-toggle="nearest" style="max-width: 160px;">
+                        <input type="text" class="form-control" id="startDateInput" data-td-target="#startDatePicker" placeholder="Start date" readonly />
+                        <span class="input-group-text" data-td-target="#startDatePicker" data-td-toggle="datetimepicker">
+                          <i class="fas fa-calendar"></i>
+                        </span>
+                      </div>
+                      <span class="mx-1">to</span>
+                      <div class="input-group" id="endDatePicker" data-td-target-input="nearest" data-td-target-toggle="nearest" style="max-width: 160px;">
+                        <input type="text" class="form-control" id="endDateInput" data-td-target="#endDatePicker" placeholder="End date" readonly />
+                        <span class="input-group-text" data-td-target="#endDatePicker" data-td-toggle="datetimepicker">
+                          <i class="fas fa-calendar"></i>
+                        </span>
+                      </div>
+    
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="col-md-9 col-sm-12">
+                      <div class="demo-container" style="height:280px">
+                        <div id="chart_plot_02" class="demo-placeholder"></div>
+                      </div>
+                      <div class="tiles">
+                        <div class="col-md-4 tile">
+                          <span>Total Sessions</span>
+                          <h4>231,809</h4>
+                          <span class="sparkline11 graph"></span>
+                        </div>
+                        <div class="col-md-4 tile">
+                          <span>Total Revenue</span>
+                          <h4>$231,809</h4>
+                          <span class="sparkline22 graph"></span>
+                        </div>
+                        <div class="col-md-4 tile">
+                          <span>Total Users</span>
+                          <h4>187,245</h4>
+                          <span class="sparkline11 graph"></span>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <!-- Top Performance Stats -->
+                    <div class="col-md-3 col-sm-12">
+                      <div class="row g-3">
+                        <!-- Top Agent Card -->
+                        <div class="col-12">
+                          <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent border-0 pb-0">
+                              <h6 class="mb-0 fw-bold">🏆 Top Agent</h6>
+                            </div>
+                            <div class="card-body pt-2">
+                              <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0 me-3">
+                                  <img src="images/img.jpg" alt="Top Agent" class="rounded-circle avatar-sm" loading="lazy" style="object-fit: cover;">
+                                </div>
+                                <div class="flex-grow-1">
+                                  <div class="fw-semibold mb-1">Sarah Johnson</div>
+                                  <div class="text-success fw-bold">$4,850</div>
+                                  <div class="small text-muted">18 sales today</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Team Progress Card -->
+                        <div class="col-12">
+                          <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent border-0 pb-0">
+                              <h6 class="mb-0 fw-bold">👥 Team Progress</h6>
+                            </div>
+                            <div class="card-body pt-2">
+                              <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                  <span class="small fw-medium">Daily Goal</span>
+                                  <span class="small text-muted">87%</span>
+                                </div>
+                                <div class="progress progress-xs">
+                                  <div class="progress-bar bg-success" style="width: 87%"></div>
+                                </div>
+                              </div>
+                              <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                  <span class="small fw-medium">Weekly Target</span>
+                                  <span class="small text-muted">65%</span>
+                                </div>
+                                <div class="progress progress-xs">
+                                  <div class="progress-bar bg-info" style="width: 65%"></div>
+                                </div>
+                              </div>
+                              <div class="mb-0">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                  <span class="small fw-medium">Monthly KPI</span>
+                                  <span class="small text-muted">72%</span>
+                                </div>
+                                <div class="progress progress-xs">
+                                  <div class="progress-bar bg-warning" style="width: 72%"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Quick Stats Card -->
+                        <div class="col-12">
+                          <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent border-0 pb-0">
+                              <h6 class="mb-0 fw-bold">📊 Quick Stats</h6>
+                            </div>
+                            <div class="card-body pt-2">
+                              <div class="row text-center">
+                                <div class="col-6 border-end">
+                                  <div class="text-primary fw-bold">8</div>
+                                  <div class="small text-muted">Active Agents</div>
+                                </div>
+                                <div class="col-6">
+                                  <div class="text-success fw-bold">24</div>
+                                  <div class="small text-muted">Deals Today</div>
+                                </div>
+                              </div>
+                              <hr class="my-3">
+                              <div class="row text-center">
+                                <div class="col-6 border-end">
+                                  <div class="text-info fw-bold">94%</div>
+                                  <div class="small text-muted">Satisfaction</div>
+                                </div>
+                                <div class="col-6">
+                                  <div class="text-warning fw-bold">2.3h</div>
+                                  <div class="small text-muted">Avg. Response</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Weekly Summary <small>Activity shares</small></h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="row">
+                      <!-- Weekly Sales Trend -->
+                      <div class="col-md-8">
+                        <h4>Weekly Sales Trend</h4>
+                        <div id="weeklySalesChart" class="chart-height-md"></div>
+                      </div>
+
+                      <!-- Sales Distribution -->
+                      <div class="col-md-4">
+                        <h4>Sales Distribution</h4>
+                        <div id="salesDistributionChart" class="chart-height-md"></div>
+                      </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 20px;">
+                      <!-- Daily Activity -->
+                      <div class="col-md-6">
+                        <h4>Daily Activity</h4>
+                        <div id="dailyActivityChart" class="chart-height-md"></div>
+                      </div>
+
+                      <!-- Performance Metrics -->
+                      <div class="col-md-6">
+                        <h4>Performance Metrics</h4>
+                        <div id="performanceMetricsChart" class="chart-height-md"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Recent Activity <small>Timeline</small></h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="d-flex align-items-center mb-3">
+                      <div class="rounded-circle bg-green text-white d-flex align-items-center justify-content-center me-3 avatar-xs">
+                        <i class="fas fa-check"></i>
+                      </div>
+                      <div>
+                        <div><strong>Order #1247 Completed</strong></div>
+                        <small class="text-muted">Customer payment processed successfully</small><br>
+                        <small class="text-muted">2 hours ago</small>
+                      </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center mb-3">
+                      <div class="rounded-circle bg-blue text-white d-flex align-items-center justify-content-center me-3 avatar-xs">
+                        <i class="fas fa-user-plus"></i>
+                      </div>
+                      <div>
+                        <div><strong>New User Registration</strong></div>
+                        <small class="text-muted">Sarah Miller joined the platform</small><br>
+                        <small class="text-muted">4 hours ago</small>
+                      </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center mb-3">
+                      <div class="rounded-circle bg-yellow text-white d-flex align-items-center justify-content-center me-3 avatar-xs">
+                        <i class="fas fa-exclamation-triangle"></i>
+                      </div>
+                      <div>
+                        <div><strong>System Maintenance</strong></div>
+                        <small class="text-muted">Scheduled maintenance tonight at 2 AM</small><br>
+                        <small class="text-muted">6 hours ago</small>
+                      </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                      <div class="rounded-circle bg-blue text-white d-flex align-items-center justify-content-center me-3 avatar-xs">
+                        <i class="fas fa-database"></i>
+                      </div>
+                      <div>
+                        <div><strong>Daily Backup Complete</strong></div>
+                        <small class="text-muted">All data successfully backed up</small><br>
+                        <small class="text-muted">8 hours ago</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Customer Reviews <small>Feedback</small></h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="mb-4">
+                      <div class="d-flex align-items-center mb-2">
+                        <img src="images/img.jpg" alt="Customer" class="img-circle avatar-sm" loading="lazy">
+                        <div class="ms-3">
+                          <div><strong>John Anderson</strong></div>
+                          <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="text-muted">"Excellent service and fast delivery. The product quality exceeded my expectations. Highly recommended!"</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                      <div class="d-flex align-items-center mb-2">
+                        <img src="images/user.png" alt="Customer" class="img-circle avatar-sm" loading="lazy">
+                        <div class="ms-3">
+                          <div><strong>Maria Garcia</strong></div>
+                          <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="text-muted">"Great product quality. Customer support was very helpful and responsive."</p>
+                    </div>
+                    
+                    <div class="row text-center">
+                      <div class="col-6">
+                        <h3 class="green"><i class="fas fa-star"></i> 4.8</h3>
+                        <p>Average Rating</p>
+                      </div>
+                      <div class="col-6">
+                        <h3 class="blue"><i class="fas fa-comments"></i> 1,247</h3>
+                        <p>Total Reviews</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>System Monitor <small>Status</small></h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="mb-3">
+                      <div class="d-flex justify-content-between mb-2">
+                        <span><strong>Server Load</strong></span>
+                        <span class="green">Normal</span>
+                      </div>
+                      <div class="progress progress_sm">
+                        <div class="progress-bar bg-green" style="width: 35%"></div>
+                      </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <div class="d-flex justify-content-between mb-2">
+                        <span><strong>Memory Usage</strong></span>
+                        <span class="orange">Moderate</span>
+                      </div>
+                      <div class="progress progress_sm">
+                        <div class="progress-bar bg-yellow" style="width: 68%"></div>
+                      </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <div class="d-flex justify-content-between mb-2">
+                        <span><strong>Disk Space</strong></span>
+                        <span class="green">Good</span>
+                      </div>
+                      <div class="progress progress_sm">
+                        <div class="progress-bar bg-green" style="width: 45%"></div>
+                      </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                      <div class="col-sm-6 col-xs-6">
+                        <div class="text-center">
+                          <h2 class="green">99.9%</h4>
+                          <p>System Uptime</p>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-xs-6">
+                        <div class="text-center">
+                          <h2 class="blue">247ms</h4>
+                          <p>Response Time</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="text-center">
+                      <span class="badge bg-success">
+                        <i class="fas fa-check"></i> All Systems Operational
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="float-end">
+            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>    <!-- Compiled JavaScript (Bootstrap and vendor scripts) -->
+    
+    <!-- Initialize linked Tempus Dominus pickers for date range -->
+    <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Only initialize if TempusDominus is available AND the elements exist
+        if (typeof TempusDominus !== 'undefined') {
+            const startElement = document.getElementById('startDatePicker');
+            const endElement = document.getElementById('endDatePicker');
+            
+            // Check if the required elements exist on this page
+            if (startElement && endElement) {
+                const startPicker = new TempusDominus(startElement, {
+                    display: { components: { clock: false } },
+                    localization: { format: 'MM/dd/yyyy' }
+                });
+                const endPicker = new TempusDominus(endElement, {
+                    display: { components: { clock: false } },
+                    localization: { format: 'MM/dd/yyyy' }
+                });
+                
+                // Link pickers
+                startElement.addEventListener('change.td', function(e) {
+                    endPicker.updateOptions({ restrictions: { minDate: e.detail.date } });
+                });
+                endElement.addEventListener('change.td', function(e) {
+                    startPicker.updateOptions({ restrictions: { maxDate: e.detail.date } });
+                });
+                
+            } else {
+            }
+        }
+    });
+    </script>
+  </body>
+</html>
