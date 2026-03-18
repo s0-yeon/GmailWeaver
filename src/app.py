@@ -144,7 +144,7 @@ def _extract_text_from_pdf(file_path):
             text += page.get_text()
         doc.close()
     except Exception as e:
-        print(f"[PDF Extract Errpr] {e}")
+        print(f"[PDF Extract Error] {e}")
     return text
 
 # Word 파일에서 텍스트 추출
@@ -190,6 +190,51 @@ def _save_attachment_from_base64(file_info: dict, save_dir: str) -> tuple[str, s
         f.write(file_bytes)
 
     return saved_path, original_name
+
+# 메일 블록에서 'ID: ...' 값을 추출
+def _extract_mail_id_from_block(block: str) -> str | None:
+    m = re.search(r"^\s*ID:\s*(.+?)\s*$", block, re.MULTILINE)
+    return m.group(1).strip() if m else None
+
+# mail_id 기준으로 첨부 텍스트를 각 메일 블록 하단에 삽입한 후 다시 append
+def _merge_attachments_into_mail_blocks(content: str, attachment_texts_by_mail: dict[str, list[dict]]) -> str:
+    parts = content.split(MAIL_BLOCK_SEP)   # content는 MAIL_BLOCK_SEP 기준으로 메일 블록들이 이어진 문자열이라고 가정
+    merged_blocks = []
+
+    for part in parts:
+        block = part.strip()
+        if not block:
+            continue
+
+        # 구분선 복원
+        block_text = f"{MAIL_BLOCK_SEP}\n{block}\n{MAIL_BLOCK_SEP}"
+
+        mail_id = _extract_mail_id_from_block(block_text)
+        if not mail_id:
+            merged_blocks.append(block_text)
+            continue
+
+        attachment_entries = attachment_texts_by_mail.get(mail_id, [])
+        if not attachment_entries:
+            merged_blocks.append(block_text)
+            continue
+
+        attachment_section = "\n[첨부 추출 내용]\n"
+        for item in attachment_entries:
+            attachment_section += f"[File name] {item['name']}\n{item['text']}\n"
+
+        # 블록 하단(마지막 구분선 직전)에 삽입
+        insert_pos = block_text.rfind(MAIL_BLOCK_SEP)
+        if insert_pos == -1:
+            merged_blocks.append(block_text + attachment_section)
+        else:
+            merged_blocks.append(
+                block_text[:insert_pos].rstrip() + "\n\n" +
+                attachment_section.rstrip() + "\n" +
+                MAIL_BLOCK_SEP
+            )
+
+    return "\n".join(merged_blocks) + "\n"
 
 # 엔드포인트: POST /extract-calendar
 @app.route('/extract-calendar', methods=['POST'])
@@ -283,10 +328,8 @@ def run_query():    # GraphRAG 쿼리를 동기 방식으로 실행하고 결과
 
 # 엔드포인트: POST /upload
 @app.route("/upload", methods=["POST"])
-
 def upload():
     # 1) 데이터 수신
-
     data = request.json or {}
     filename = data.get("filename") or f"mail_{int(time.time())}.txt"
     content = data.get("content") or ""
@@ -302,48 +345,63 @@ def upload():
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(content)
 
-    # 4) mail_latest.txt 새로 생성
+    # 4) mail_latest.txt 초기화
     with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
         f.write(content)
 
-    # 5) 첨부 저장 + 텍스트 추출 + 병합
-    saved_attachment_paths = []
-    extracted_full_text = ""
     extracted_count = 0
     failed_attachments = []
+    saved_attachment_paths = []
+    attachment_texts_by_mail: dict[str, list[dict]] = {}
 
+    # 5) 첨부 저장 + 텍스트 추출 + mail_id별 묶기
     if attachments:
         extracted_full_text = f"\n\n{MAIL_BLOCK_SEP}\n"
         extracted_full_text += "[System] attachment data extract section\n"
 
         for file_info in attachments:
-            f_name = file_info.get("name") or "attachment.bin"
-            mime = (file_info.get("mime") or "").lower()
+            f_name = file_info.get("name") or "attachment.bin"  
+            mime = (file_info.get("mime") or "").lower()        
+            mail_id = str(file_info.get("mail_id") or "").strip()
 
             try:
-                # base64 -> 서버 로컬 파일 저장
-                saved_path, original_name = _save_attachment_from_base64(
-                    file_info,
-                    ATTACHMENT_DIR
-                )
+                # base64 → 서버 로컬 파일 저장
+                saved_path, original_name = _save_attachment_from_base64(file_info, ATTACHMENT_DIR)
                 saved_attachment_paths.append(saved_path)
 
                 ext = os.path.splitext(original_name)[-1].lower()
                 file_text = ""
 
-                if ext == ".pdf" or mime == "application/pdf":
+                # MIME type 제한
+                if ext == ".pdf" or mime in ("application/pdf", "application/haansoftpdf"):     
                     file_text = _extract_text_from_pdf(saved_path)
                 elif ext == ".docx" or mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                     file_text = _extract_text_from_docx(saved_path)
+                else:
+                    failed_attachments.append({
+                        "name": original_name,
+                        "reason": f"unsupported type: ext={ext}, mime={mime}"
+                    })
+                    continue
 
                 if file_text and file_text.strip():
-                    extracted_full_text += f"\n[File name] {original_name}\n{file_text}\n"
+                    if mail_id:
+                        attachment_texts_by_mail.setdefault(mail_id, []).append({
+                            "name": original_name,
+                            "text": file_text.strip()
+                        })
+                    else:
+                        failed_attachments.append({
+                            "name": original_name,
+                            "reason": "mail_id missing"
+                        })
                     extracted_count += 1
                 else:
                     failed_attachments.append({
                         "name": original_name,
                         "reason": "text extraction returned empty"
                     })
+                    continue
 
             except Exception as e:
                 failed_attachments.append({
@@ -352,12 +410,13 @@ def upload():
                 })
                 print(f"[UPLOAD][ATTACHMENT ERROR] {f_name}: {e}")
 
-        extracted_full_text += f"\n{MAIL_BLOCK_SEP}\n"
+       # 6) 메일별 블록 하단에 첨부 텍스트 삽입
+        final_content = content
+        if attachment_texts_by_mail:
+            final_content = _merge_attachments_into_mail_blocks(content, attachment_texts_by_mail)
 
-        # 6) 추출 텍스트 append
-        if extracted_count > 0:
-            with open(MAIL_LATEST_PATH, "a", encoding="utf-8") as f:
-                f.write(extracted_full_text)
+        with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
+            f.write(final_content)
 
     # 7) 파이프라인 실행
     print(f"[UPLOAD] Received filename: {filename}")
@@ -366,22 +425,6 @@ def upload():
     print(f"[UPLOAD] Attachment extracted count: {extracted_count}")
     print("[UPLOAD] cwd:", os.getcwd())
 
-    # 1단계: 메일 파일 저장
-    os.makedirs(MAIL_DIR, exist_ok=True)
-    file_path = os.path.join(MAIL_DIR, filename)
-
-    with open(file_path, "w", encoding="utf-8") as f:
-        f.write(content)
-
-    # mail_latest.txt: 항상 최신 메일 내용 유지 (덮어쓰기)
-    latest_dir = os.path.dirname(MAIL_LATEST_PATH)
-    if latest_dir:
-        os.makedirs(latest_dir, exist_ok=True)
-
-    with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
-        f.write(content)
-
-    # 2, 3단계: 그래프 빌드 및 GraphRAG 인덱싱
     # GraphRAG 파이프라인을 백그라운드에서 실행
     job_id = str(uuid.uuid4())[:8]
 
@@ -393,7 +436,6 @@ def upload():
         args=(job_id,),
         daemon=True
     ).start()
-
 
     return jsonify({
             "ok": True,
