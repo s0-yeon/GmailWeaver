@@ -47,7 +47,7 @@ function _runSync(mode) {
 
     // 새로운 메일을 위로 정렬
     newMessages.sort(function(a, b){
-      return b.getData().getTime() - b.getDate().getTime();
+      return b.getDate().getTime() - b.getDate().getTime();
     });
 
     // 새로운 메일만 추가할 때 처리
