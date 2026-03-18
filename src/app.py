@@ -192,6 +192,7 @@ def _save_attachment_from_base64(file_info: dict, save_dir: str) -> tuple[str, s
 
     return saved_path, original_name
 
+# 텍스트에서 메일별로 구분
 def _split_mail_blocks(text):
     parts = text.split(MAIL_BLOCK_SEP)
     blocks = []
@@ -236,24 +237,12 @@ def _extract_block_for_sort(block):
                 return datetime.min
     return datetime.min
 
-
-# 인덱싱 준비 여부 확인
-def _is_index_ready():
-    required_paths = [
-        MAIL_LATEST_PATH,
-        os.path.join(GRAPHRAG_ROOT, "output", "graph.graphml"),
-        os.path.join(GRAPHRAG_ROOT, "output", "stats.json"),
-    ]
-    return all(os.path.exists(path) for path in required_paths)
-
-
 # 현재 mail_latest.txt 읽기
 def _read_latest_text():
     if not os.path.exists(MAIL_LATEST_PATH):
         return ""
     with open(MAIL_LATEST_PATH, "r", encoding="utf-8") as f:
         return f.read()
-
 
 # mail_latest.txt 덮어쓰기
 def _write_latest_text(text):
@@ -263,7 +252,6 @@ def _write_latest_text(text):
 
     with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
         f.write(text)
-
 
 # 새 블록들을 mail_latest.txt 맨 위로 병합
 def _prepend_blocks_to_latest(blocks, attachment_text=""):
@@ -290,6 +278,34 @@ def _prepend_blocks_to_latest(blocks, attachment_text=""):
 
     _write_latest_text(merged_text)
     return merged_text
+
+def _read_json_file(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+# 인덱스 여부 확인 (인덱스 후 생기는 파일들의 존재 확인, 해당 파일들의 크기 확인, stats.json 파싱가능 여부 등 확인)
+def _is_index_ready(): 
+    
+    graph_path = os.path.join(GRAPHRAG_ROOT, "output", "graph.graphml")
+    stats_path = os.path.join(GRAPHRAG_ROOT, "output", "stats.json")
+
+    try:
+        required_paths = [MAIL_LATEST_PATH, graph_path, stats_path]
+
+        for path in required_paths:
+            if not os.path.exists(path):
+                print(f"[INDEX READY] missing: {path}")
+                return False
+            if os.path.getsize(path) == 0:
+                print(f"[INDEX READY] empty file: {path}")
+                return False
+
+        _read_json_file(stats_path)
+        return True
+
+    except Exception as e:
+        print(f"[INDEX READY] invalid index state: {e}")
+        return False
 
 # 엔드포인트: POST /extract-calendar
 @app.route('/extract-calendar', methods=['POST'])
@@ -383,7 +399,6 @@ def run_query():    # GraphRAG 쿼리를 동기 방식으로 실행하고 결과
 
 # 엔드포인트: POST /upload
 @app.route("/upload", methods=["POST"])
-
 def upload():
     # 1) 데이터 수신
 
@@ -405,14 +420,9 @@ def upload():
         sync_mode = "rewrite"
         fallback_to_rewrite = True
 
-
     # 2) 저장 디렉토리 준비
     os.makedirs(MAIL_DIR, exist_ok=True)
     os.makedirs(ATTACHMENT_DIR, exist_ok=True)
-
-    # 4) mail_latest.txt 새로 생성
-    with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
-        f.write(content)
 
     # 5) 첨부 저장 + 텍스트 추출 + 병합
     saved_attachment_paths = []
@@ -481,11 +491,11 @@ def upload():
 
     # 전체 갱신
     if sync_mode == "rewrite":
-        final_text = content
+        final_text = content.rstrip()
         if extracted_count > 0:
-            final_text = content.rstrip() + extracted_full_text
+            final_text += extracted_full_text
 
-        _write_latest_text(final_text)
+        _write_latest_text(final_text + "\n")
         added_count = _count_mail_blocks(content)
 
     # 새 메일만 추가
@@ -527,6 +537,7 @@ def upload():
             args=(job_id,),
             daemon=True
         ).start()
+
     else:
         create_job(job_id, job_type="update")
         update_job(job_id, message="업로드 완료, 그래프 업데이트 파이프라인 시작")
@@ -536,22 +547,18 @@ def upload():
             args=(job_id,),
             daemon=True
         ).start()
-    
-
-    threading.Thread(
-        target=run_graph_pipeline,
-        args=(job_id,),
-        daemon=True
-    ).start()
-
 
     return jsonify({
             "ok": True,
+            "sync_mode": sync_mode,
+            "fallback_to_rewrite": fallback_to_rewrite,
             "latest_path": os.path.abspath(MAIL_LATEST_PATH),
             "attachment_dir": os.path.abspath(ATTACHMENT_DIR),
             "content_length": len(content),
             "attachment_received_count": len(attachments),
             "attachment_extracted_count": extracted_count,
+            "added_count": added_count,
+            "skipped_count": skipped_count,
             "failed_attachments": failed_attachments,
         })
 
