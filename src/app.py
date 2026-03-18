@@ -1,5 +1,6 @@
 # src/app.py
 
+import datetime
 import os
 import re
 import subprocess
@@ -409,12 +410,6 @@ def upload():
     os.makedirs(MAIL_DIR, exist_ok=True)
     os.makedirs(ATTACHMENT_DIR, exist_ok=True)
 
-    file_path = os.path.join(MAIL_DIR, filename)
-
-    # 3) 원본 메일 텍스트 저장
-    with open(file_path, "w", encoding="utf-8") as f:
-        f.write(content)
-
     # 4) mail_latest.txt 새로 생성
     with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
         f.write(content)
@@ -552,7 +547,6 @@ def upload():
 
     return jsonify({
             "ok": True,
-            "saved_path": os.path.abspath(file_path),
             "latest_path": os.path.abspath(MAIL_LATEST_PATH),
             "attachment_dir": os.path.abspath(ATTACHMENT_DIR),
             "content_length": len(content),
