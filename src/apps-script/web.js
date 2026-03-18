@@ -3,11 +3,13 @@
 // Wep App 진입점
 // 브라우저에서 Web App URL로 접근 시 실행
 function doGet(e) {
+  const email = Session.getActiveUser().getEmail();
+  const name = encodeURIComponent(email.split('@')[0]);
+  const dashboardUrl = TunnelURL + '/dashboard/?name=' + name;
   return HtmlService.createHtmlOutput(
-    '<script>window.location.href = "' + TunnelURL + '/dashboard/";</script>'
+    '<script>window.location.href = "' + dashboardUrl + '";<\/script>'
   ).setTitle("GmailWeaver Web App");
 }
-
 function doPost(e) {
   const data = JSON.parse(e.postData.contents);
   const action = data.action;

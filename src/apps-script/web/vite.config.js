@@ -136,7 +136,10 @@ export default defineConfig({
         landing: 'production/landing.html',
 
         // Theme comparison page (for testing)
-        theme_comparison: 'production/theme-comparison.html'
+        theme_comparison: 'production/theme-comparison.html',
+
+        // GmailWeaver custom pages
+        search: 'production/search.html'
       }
     },
     minify: 'terser',
