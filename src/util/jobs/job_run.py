@@ -68,3 +68,39 @@ def build_graphrag_index(job_id, env):
             rc,
             [sys.executable, "-m", "graphrag", "index", "--root", GRAPHRAG_ROOT]
         )
+    
+def build_graphrag_update(job_id, env):
+    update_job(job_id, progress=20, message="GraphRAG 업데이트 시작")
+
+    p = subprocess.Popen(
+        [sys.executable, "-X", "utf8", "-m", "graphrag", "update", "--root", GRAPHRAG_ROOT],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        bufsize=1,
+        env=env,
+    )
+
+    current_progress = 20
+
+    for line in p.stdout:
+        line = line.rstrip("\n")
+        print("[JOB][graphrag][update]", line)
+        append_job_log(job_id, line)
+
+        new_progress, new_message = parse_graphrag_progress(line, current_progress)
+
+        if new_progress != current_progress or new_message:
+            current_progress = new_progress
+            update_job(
+                job_id,
+                progress=current_progress,
+                message=new_message or f"업데이트 진행 중 ({current_progress}%)"
+            )
+
+    rc = p.wait()
+    if rc != 0:
+        raise subprocess.CalledProcessError(
+            rc,
+            [sys.executable, "-m", "graphrag", "update", "--root", GRAPHRAG_ROOT]
+        )
