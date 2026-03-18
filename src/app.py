@@ -20,7 +20,7 @@ from docx import Document
 
 # Job 이용 공통함수 import
 from util.jobs.job_store import *
-from util.graphrag import run_graph_pipeline
+from util.graphrag import run_graph_pipeline, run_graph_update_pipeline
 from config.setting import *
 
 # 환경변수 로드
@@ -191,6 +191,105 @@ def _save_attachment_from_base64(file_info: dict, save_dir: str) -> tuple[str, s
 
     return saved_path, original_name
 
+def _split_mail_blocks(text):
+    parts = text.split(MAIL_BLOCK_SEP)
+    blocks = []
+
+    for p in parts:
+        p = p.strip()
+        if not p:
+            continue
+        
+        block = MAIL_BLOCK_SEP + "\n" + p
+        if not block.endswith(MAIL_BLOCK_SEP):
+            block += "\n" + MAIL_BLOCK_SEP
+
+        blocks.append(block)
+
+    return blocks
+
+# 전체 텍스트에서 message ID 추출
+def _extract_message_ids(text):
+    return set(re.findall(r"^ID:\s*(.+)$", text, flags=re.MULTILINE))
+
+
+# 블록 하나에서 message ID 추출
+def _extract_message_id(block):
+    m = re.search(r"^ID:\s*(.+)$", block, flags=re.MULTILINE)
+    return m.group(1).strip() if m else None
+
+
+# 메일 블록 개수 세기
+def _count_mail_blocks(text):
+    return len(_split_mail_blocks(text))
+
+
+# 날짜 기준 정렬용 datetime 추출
+def _extract_block_for_sort(block):
+    for line in block.splitlines():
+        if line.startswith("날짜:"):
+            raw = line.replace("날짜:", "").strip()
+            try:
+                return datetime.strptime(raw, "%Y-%m-%d %H:%M:%S")
+            except Exception:
+                return datetime.min
+    return datetime.min
+
+
+# 인덱싱 준비 여부 확인
+def _is_index_ready():
+    required_paths = [
+        MAIL_LATEST_PATH,
+        os.path.join(GRAPHRAG_ROOT, "output", "graph.graphml"),
+        os.path.join(GRAPHRAG_ROOT, "output", "stats.json"),
+    ]
+    return all(os.path.exists(path) for path in required_paths)
+
+
+# 현재 mail_latest.txt 읽기
+def _read_latest_text():
+    if not os.path.exists(MAIL_LATEST_PATH):
+        return ""
+    with open(MAIL_LATEST_PATH, "r", encoding="utf-8") as f:
+        return f.read()
+
+
+# mail_latest.txt 덮어쓰기
+def _write_latest_text(text):
+    latest_dir = os.path.dirname(MAIL_LATEST_PATH)
+    if latest_dir:
+        os.makedirs(latest_dir, exist_ok=True)
+
+    with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
+        f.write(text)
+
+
+# 새 블록들을 mail_latest.txt 맨 위로 병합
+def _prepend_blocks_to_latest(blocks, attachment_text=""):
+    existing_text = _read_latest_text()
+
+    blocks = [b.strip() for b in blocks if str(b).strip()]
+    if not blocks and not attachment_text.strip():
+        return existing_text
+
+    blocks.sort(key=_extract_block_for_sort, reverse=True)
+
+    new_text_parts = []
+    if blocks:
+        new_text_parts.append("\n\n".join(blocks).strip())
+    if attachment_text.strip():
+        new_text_parts.append(attachment_text.strip())
+
+    new_text = "\n\n".join(new_text_parts).strip()
+
+    if existing_text.strip():
+        merged_text = new_text + "\n\n" + existing_text.strip() + "\n"
+    else:
+        merged_text = new_text + "\n"
+
+    _write_latest_text(merged_text)
+    return merged_text
+
 # 엔드포인트: POST /extract-calendar
 @app.route('/extract-calendar', methods=['POST'])
 def extract_calendar():     # 이메일 제목 + 본문에서 일정 이벤트를 추출하여 반환
@@ -291,6 +390,20 @@ def upload():
     filename = data.get("filename") or f"mail_{int(time.time())}.txt"
     content = data.get("content") or ""
     attachments = data.get("attachment") or []
+    requested_mode = data.get("syncmode", "append")
+
+    if not str(content).strip():
+        return jsonify({"ok": False, "error": "content가 비어있습니다."}), 400
+    
+    # append인데 기존 인덱스가 없으면 자동으로 rewrite로 전환
+    fallback_to_rewrite = False
+    sync_mode = requested_mode
+
+    if requested_mode == "append" and not _is_index_ready():
+        print("[UPLOAD] index not ready -> fallback to rewrite")
+        sync_mode = "rewrite"
+        fallback_to_rewrite = True
+
 
     # 2) 저장 디렉토리 준비
     os.makedirs(MAIL_DIR, exist_ok=True)
@@ -364,29 +477,71 @@ def upload():
     print(f"[UPLOAD] Content length: {len(content)}")
     print(f"[UPLOAD] Attachment count received: {len(attachments)}")
     print(f"[UPLOAD] Attachment extracted count: {extracted_count}")
+    print(f"[UPLOAD] Requested mode: {requested_mode}")
+    print(f"[UPLOAD] Actual mode: {sync_mode}")
     print("[UPLOAD] cwd:", os.getcwd())
 
-    # 1단계: 메일 파일 저장
-    os.makedirs(MAIL_DIR, exist_ok=True)
-    file_path = os.path.join(MAIL_DIR, filename)
+    added_count = 0
+    skipped_count = 0
 
-    with open(file_path, "w", encoding="utf-8") as f:
-        f.write(content)
+    # 전체 갱신
+    if sync_mode == "rewrite":
+        final_text = content
+        if extracted_count > 0:
+            final_text = content.rstrip() + extracted_full_text
 
-    # mail_latest.txt: 항상 최신 메일 내용 유지 (덮어쓰기)
-    latest_dir = os.path.dirname(MAIL_LATEST_PATH)
-    if latest_dir:
-        os.makedirs(latest_dir, exist_ok=True)
+        _write_latest_text(final_text)
+        added_count = _count_mail_blocks(content)
 
-    with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
-        f.write(content)
+    # 새 메일만 추가
+    else:
+        existing_text = _read_latest_text()
+        existing_ids = _extract_message_ids(existing_text)
+        new_blocks = _split_mail_blocks(content)
+
+        append_blocks = []
+
+        for block in new_blocks:
+            msg_id = _extract_message_id(block)
+            if msg_id and msg_id not in existing_ids:
+                append_blocks.append(block)
+                existing_ids.add(msg_id)
+            else:
+                skipped_count += 1
+
+        added_count = len(append_blocks)
+
+        # 실제 새 메일이 있을 때만 latest에 병합
+        if added_count > 0 or extracted_count > 0:
+            attachment_part = extracted_full_text if extracted_count > 0 else ""
+            _prepend_blocks_to_latest(append_blocks, attachment_part)
+
+    print("[UPLOAD] added:", added_count)
+    print("[UPLOAD] skipped:", skipped_count)
 
     # 2, 3단계: 그래프 빌드 및 GraphRAG 인덱싱
     # GraphRAG 파이프라인을 백그라운드에서 실행
     job_id = str(uuid.uuid4())[:8]
 
-    create_job(job_id, job_type="index")
-    update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작")
+    if sync_mode == "rewrite":
+        create_job(job_id, job_type="index")
+        update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작")
+
+        threading.Thread(
+            target = run_graph_pipeline,
+            args=(job_id,),
+            daemon=True
+        ).start()
+    else:
+        create_job(job_id, job_type="update")
+        update_job(job_id, message="업로드 완료, 그래프 업데이트 파이프라인 시작")
+
+        threading.Thread(
+            target = run_graph_update_pipeline,
+            args=(job_id,),
+            daemon=True
+        ).start()
+    
 
     threading.Thread(
         target=run_graph_pipeline,
