@@ -23,6 +23,9 @@ from util.jobs.job_store import *
 from util.graphrag import run_graph_pipeline
 from config.setting import *
 
+#Neo4J 모듈
+from util.neo4j_query import run_neo4j_query
+
 # 환경변수 로드
 load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: GraphRAG 설정(settings.yaml)과 API 키가 같은 디렉터리에 위치하기 때문
 
@@ -453,7 +456,19 @@ def calendar_events():
         return jsonify(res.json())
     except Exception:
         return jsonify({"events": [], "error": res.text[:200]}), 200
-    
+
+#NEO4J 런쿼리
+@app.route('/neo4j-query', methods=['POST'])
+def neo4j_query():
+    message = request.json.get('message', '')
+    if not str(message).strip():
+        return jsonify({'error': 'message가 비어있습니다.'}), 400
+    try:
+        result = run_neo4j_query(message)
+        return jsonify({'result': result})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 # 서버 진입점
 if __name__ == '__main__':
     # host='0.0.0.0': 모든 네트워크 인터페이스에서 수신 (localhost 외부 접근 허용)
