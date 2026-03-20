@@ -18,6 +18,7 @@ ALLOWED_TYPES = {   # 허용된 노드 종류
     "ORGANIZATION", # 기관 + 메일주소
     "SUBJECT", # 메일 제목
     "FILE", # 첨부파일 제목
+    "LABEL", # 라벨명
 }
 
 ALLOWED_REL_TYPES = {   # 허용된 엣지 종류
@@ -27,13 +28,21 @@ ALLOWED_REL_TYPES = {   # 허용된 엣지 종류
 
 MAIL_BLOCK_SEP = "============================================================"     # 메일 블록 구분자
 
-# 헬퍼 함수
-def ensure_dir_for_file(file_path: str):    # 출력 경로 보장
+# 공통 헬퍼 함수
+# 출력 경로 보장
+def ensure_dir_for_file(file_path: str):    
     dir_path = os.path.dirname(file_path)   # 파일명 제거하고 경로만 추출
     if dir_path:    
         os.makedirs(dir_path, exist_ok=True)    
 
-def safe_add_node(nodes_by_id: Dict[str, dict], node_id: str, node_type: str, description: str = "", properties: Optional[Dict[str, Any]] = None):  # 저장 및 노드 추가
+# 저장 및 노드 추가
+def safe_add_node(
+        nodes_by_id: Dict[str, dict], 
+        node_id: str, 
+        node_type: str, 
+        description: str = "", 
+        properties: Optional[Dict[str, Any]] = None 
+    ):
     if node_type not in ALLOWED_TYPES:      # 허용된 타엡에 없으면 무시
         return
     if not node_id:
@@ -48,13 +57,24 @@ def safe_add_node(nodes_by_id: Dict[str, dict], node_id: str, node_type: str, de
         if properties is not None:
             node["properties"] = properties
         nodes_by_id[node_id] = node
-    else:   # 기존 노드에 description/properties가 없으면 보강
+    else:   
+        # description 보강
         if description and not nodes_by_id[node_id].get("description"):
             nodes_by_id[node_id]["description"] = description
-        if properties is not None and "properties" not in nodes_by_id[node_id]:
-            nodes_by_id[node_id]["properties"] = properties
 
-def add_edge(edges, edge_key_set, source, target, rel_type, description=""):    # 엣지 추가
+        # properties 병합 보강
+        if properties is not None:
+            existing = nodes_by_id[node_id].get("properties", {})
+            merged = dict(existing)
+            for k, v in properties.items():
+                if v not in (None, "", [], {}):
+                    merged[k] = v
+                elif k not in merged:
+                    merged[k] = v
+            nodes_by_id[node_id]["properties"] = merged
+
+# 엣지 추가
+def add_edge(edges, edge_key_set, source, target, rel_type, description=""):    
     if not source or not target:
         return
     if rel_type not in ALLOWED_REL_TYPES:
@@ -80,79 +100,126 @@ def add_edge(edges, edge_key_set, source, target, rel_type, description=""):    
         "tooltip": desc,
     })
 
+# 텍스트 지우기
 def clean_text(s: str) -> str: 
     return (s or "").replace("\r\n", "\n").strip()
 
+# 첫 번째 라인 필드 파싱
 def parse_first_line_field(block: str, field_name: str) -> str | None:  # 예: "제목: xxx" 같은 1줄 필드 파싱
     m = re.search(rf"{re.escape(field_name)}\s*:\s*(.+)", block)
     return clean_text(m.group(1)) if m else None
 
-def parse_body_fallback(block: str) -> str: # “본문:” 또는 “내용:” 뒤의 텍스트를 우선 사용
-    """
-    본문을 확실히 알 수 없으니,
-    1) '본문:' 또는 '내용:' 같은 키워드가 있으면 그 뒤를 우선 사용
-    2) 없으면 메일 블록 전체를 Q&A용 raw 형태로 body에 저장 (최소한 항상 본문이 존재하도록 보장)
-    """
-    # 1) 본문/내용 키워드 기반 (있는 경우)
+# [라벨 정보], [첨부파일 정보], [본문], [첨부 추출 내용] 같은 섹션 내용을 추출
+def parse_section(block: str, section_name: str) -> str:
+    pattern = rf"\[{re.escape(section_name)}\]\s*\n([\s\S]*?)(?=\n\[[^\n]+\]\s*\n|$)"
+    m = re.search(pattern, block)
+    return clean_text(m.group(1)) if m else ""
+
+# 본문 내용 대체. “본문:” 또는 “내용:” 뒤의 텍스트를 우선 사용
+def parse_body_fallback(block: str) -> str:
+    section_body = parse_section(block, "본문")
+    if section_body:
+        return section_body
+
     m = re.search(r"(본문|내용)\s*:\s*([\s\S]+)", block)
     if m:
         return clean_text(m.group(2))
 
-    # 2) 없으면 블록 전체를 본문으로 (최소 보장)
     return clean_text(block)
 
-def parse_attachments(block: str) -> list[str]:     # “첨부파일:” 또는 “첨부파일 정보:” 패턴을 기반으로 첨부파일 이름들을 추출
-    """
-    첨부파일 파싱:
-    - "첨부파일:" 또는 "첨부파일 정보:" 라인이 있으면 우선 그 줄에서 파싱
-    - 여러 줄로 들어오는 경우도 있을 수 있어서, '첨부파일' 섹션을 넉넉하게 수집
-    - 결과는 파일명 리스트 (중복 제거)
-    """
-    attachments: list[str] = []
+# 라벨 파싱 (라벨 정보, 프로젝트, 중요, INBOX)
+def parse_labels(block: str) -> list[str]:
 
-    # 1) "첨부파일:" 한 줄 형태
-    for m in re.finditer(r"첨부파일(?:\s*정보)?\s*:\s*(.+)", block):
-        line = clean_text(m.group(1))
-        if not line:
-            continue
-        if "없음" in line or "없습니다" in line or "없다" in line:
-            continue
+    label_text = parse_section(block, "라벨 정보")
+    if not label_text or label_text in {"없음", "없습니다", "없다"}:
+        return []
 
-        # 쉼표로 여러 개 올 수도 있어서 분리
-        parts = [p.strip() for p in re.split(r"[,\uFF0C]", line) if p.strip()]
-        for p in parts:
-            # "파일명 (xxx)" 같은 경우 파일명만 추출
-            name = p.split("(")[0].strip()
-            if name:
-                attachments.append(name)
-
-    # 2) 여러 줄로 첨부파일이 들어오는 포맷 대응(보수적으로)
-    # 예: "첨부파일 정보:" 다음 줄에 "- a.pdf" 같은 형태
-    sec = re.search(r"첨부파일(?:\s*정보)?\s*:\s*\n([\s\S]+)", block)
-    if sec:
-        chunk = sec.group(1)
-        for line in chunk.splitlines():
-            t = line.strip().lstrip("-").strip()
-            if not t:
-                continue
-            # 다른 필드가 시작되면 중단 (보수적)
-            if re.match(r"^(ID|제목|보낸 사람|받는 사람|참조|날짜)\s*:", t):
-                break
-            if "없음" in t or "없습니다" in t or "없다" in t:
-                continue
-            name = t.split("(")[0].strip()
-            if name:
-                attachments.append(name)
+    labels = []
+    for part in re.split(r"[,\uFF0C\n]+", label_text):
+        t = clean_text(part)
+        if t and t not in {"없음", "없습니다", "없다"}:
+            labels.append(t)
 
     # 중복 제거(순서 유지)
     seen = set()
     out = []
-    for a in attachments:
-        if a not in seen:
-            seen.add(a)
-            out.append(a)
+    for label in labels:
+        if label not in seen:
+            seen.add(label)
+            out.append(label)
     return out
 
+
+ # 첨부파일 메타정보 파싱
+def parse_attachment_infos(block: str) -> list[dict]:
+    section = parse_section(block, "첨부파일 정보")
+    if not section:
+        return []
+
+    if "첨부파일: 없음" in section or section.strip() in {"없음", "없습니다", "없다"}:
+        return []
+
+    infos = []
+    for line in section.splitlines():
+        t = line.strip()
+        if not t:
+            continue
+        if t.startswith("첨부파일"):
+            continue
+
+        # "1. 파일명 | mime | size | status"
+        m = re.match(r"^\d+\.\s*(.+?)\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|\s*(.+?)\s*$", t)
+        if m:
+            infos.append({
+                "name": clean_text(m.group(1)),
+                "mime": clean_text(m.group(2)),
+                "size": clean_text(m.group(3)),
+                "status": clean_text(m.group(4)),
+            })
+            continue
+
+        # 혹시 상태 정보 없는 구버전
+        m2 = re.match(r"^\d+\.\s*(.+?)\s*\|\s*(.+?)\s*\|\s*(.+?)\s*$", t)
+        if m2:
+            infos.append({
+                "name": clean_text(m2.group(1)),
+                "mime": clean_text(m2.group(2)),
+                "size": clean_text(m2.group(3)),
+                "status": "",
+            })
+
+    # name 기준 중복 제거
+    seen = set()
+    out = []
+    for info in infos:
+        name = info.get("name", "")
+        if name and name not in seen:
+            seen.add(name)
+            out.append(info)
+
+    return out
+
+# 하위 호환용: 첨부파일명 리스트만 필요할 때 사용
+def parse_attachments(block: str) -> list[str]:
+    return [info["name"] for info in parse_attachment_infos(block) if info.get("name")]
+
+
+# 첨부 추출 텍스트 파싱
+def parse_attachment_extracted_texts(block: str) -> Dict[str, str]:
+    section = parse_section(block, "첨부 추출 내용")
+    if not section:
+        return {}
+
+    result: Dict[str, str] = {}
+
+    pattern = r"\[File name\]\s*(.+?)\n([\s\S]*?)(?=\n\[File name\]\s*.+?\n|$)"
+    for m in re.finditer(pattern, section):
+        fname = clean_text(m.group(1))
+        text = clean_text(m.group(2))
+        if fname:
+            result[fname] = text
+
+    return result
 
 # 메인 처리 루프
 print("[INFO] cwd:", os.getcwd())
@@ -171,10 +238,12 @@ edges = []          # 엣지: list
 edge_key_set = set()    # 중복 방지용
 
 for block in blocks:    # 각 메일 블록 처리
-    mail_id = parse_first_line_field(block, "ID")   # 메일 아이디
-    subject = parse_first_line_field(block, "제목") or "(제목 없음)"    # 제목
-    sender = parse_first_line_field(block, "보낸 사람")     # 수신인
-    receiver = parse_first_line_field(block, "받는 사람")   # 송신인
+    mail_id = parse_first_line_field(block, "ID")
+    subject = parse_first_line_field(block, "제목") or "(제목 없음)"
+    sender = parse_first_line_field(block, "보낸 사람")
+    receiver = parse_first_line_field(block, "받는 사람")
+    cc = parse_first_line_field(block, "참조(CC)")
+    date = parse_first_line_field(block, "날짜")
 
     if not mail_id:     # ID가 없으면 EMAIL 노드 만들기 애매하니 스킵
         continue
@@ -182,6 +251,11 @@ for block in blocks:    # 각 메일 블록 처리
     # E-mail 노드 생성: 숨김 + Q&A용 본문/원문 저장
     email_node_id = f"EMAIL::{mail_id}"
     body_text = parse_body_fallback(block)
+    raw_text = clean_text(block)
+
+    labels = parse_labels(block)
+    attachment_infos = parse_attachment_infos(block)
+    attachment_texts = parse_attachment_extracted_texts(block)
 
     safe_add_node(
         nodes_by_id,
@@ -193,8 +267,11 @@ for block in blocks:    # 각 메일 블록 처리
             "subject": subject,
             "from": sender or "",
             "to": receiver or "",
-            "body": body_text,     # Q&A용 본문 (fallback 포함)
-            "raw": clean_text(block),  # 원문 전체도 보관
+            "cc": cc or "",
+            "date": date or "",
+            "labels": labels,
+            "body": body_text,
+            "raw": raw_text,
         }
     )
 
@@ -226,21 +303,64 @@ for block in blocks:    # 각 메일 블록 처리
         add_edge(edges, edge_key_set, receiver, subject, "RELATES_TO",
                  f'{receiver} is associated with "{subject}".')
 
-    # SENDS_TO (사람 → 사람 관계)
+    # SENDS_TO 노드: 사람 → 사람 관계
     if sender and receiver:
         add_edge(edges, edge_key_set, sender, receiver, "SENDS_TO",
                  f'{sender} sent an email to {receiver} about "{subject}".')
 
+    # LABEL 노드: 라벨 노드 생성 + 메일 제목과 연결
+    for label in labels:
+        label_node_id = f"LABEL::{label}"
+        safe_add_node(
+            nodes_by_id,
+            label_node_id,
+            "LABEL",
+            description=f'Label "{label}".',
+            properties={"name": label}
+        )
+        add_edge(
+            edges, edge_key_set,
+            email_node_id, label_node_id, "RELATES_TO",
+            f'Email has label "{label}".'
+        )
+        add_edge(
+            edges, edge_key_set,
+            subject, label_node_id, "RELATES_TO",
+            f'Subject "{subject}" is associated with label "{label}".'
+        )
+
     # FILE 노드: 첨부파일 제목 노드 생성 + EMAIL과 연결
-    attachment_names = parse_attachments(block)
-    for fname in attachment_names:
-        safe_add_node(nodes_by_id, fname, "FILE", f'Attachment file "{fname}".')
-        add_edge(edges, edge_key_set, email_node_id, fname, "RELATES_TO",
-                 f'Email includes attachment "{fname}".')
-        # SUBJECT ↔ FILE 연결 (시각화용)
-        add_edge(edges, edge_key_set,
-                subject, fname, "RELATES_TO",
-                f'Attachment "{fname}" belongs to subject "{subject}".')
+    for att in attachment_infos:
+        fname = att.get("name", "")
+        if not fname:
+            continue
+
+        extracted_text = attachment_texts.get(fname, "")
+
+        safe_add_node(
+            nodes_by_id,
+            fname,
+            "FILE",
+            description=f'Attachment file "{fname}".',
+            properties={
+                "name": fname,
+                "mime": att.get("mime", ""),
+                "size": att.get("size", ""),
+                "status": att.get("status", ""),
+                "text": extracted_text,
+            }
+        )
+
+        add_edge(
+            edges, edge_key_set,
+            email_node_id, fname, "RELATES_TO",
+            f'Email includes attachment "{fname}".'
+        )
+        add_edge(
+            edges, edge_key_set,
+            subject, fname, "RELATES_TO",
+            f'Attachment "{fname}" belongs to subject "{subject}".'
+        )
     
 # JSON 저장
 all_nodes = list(nodes_by_id.values())

@@ -25,12 +25,8 @@ function _runSync(includeAll) {
     threads.forEach(function(thread) {
       thread.getMessages().forEach(function(msg) {
         count++;
-
-        // 1) TXT용 메일 블록 누적
-        allText += _buildMessageText(msg, myEmail, count) + "\n";
-
-        // 2) 서버 전송용 첨부 payload 누적
-        allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));
+        allText += _buildMessageText(msg, myEmail, count) + "\n"    // TXT용 메일 블록 누적
+        allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));   // 서버 전송용 첨부 payload 누적
       });
     });
 
@@ -58,7 +54,7 @@ function _runSync(includeAll) {
     Logger.log("메일 수: " + count);
     Logger.log("첨부 전송 개수: " + allAttachments.length);
 
-    return _toast("✅ " + count + "개 메일을 서버로 전송했습니다.");
+    return _toast("✅ " + count + "개 메일, 첨부 " + allAttachments.length + "개를 서버로 전송했습니다.");
   } catch (err) {
     return _toast("⚠️ 동기화 실패: " + err.message);
   }
@@ -251,14 +247,27 @@ function onUploadSingleMessage(e) {
   try {
     var msg     = GmailApp.getMessageById(messageId);
     var myEmail = Session.getActiveUser().getEmail();
-    var content  = _buildMessageText(msg, myEmail);
+    var content  = _buildMessageText(msg, myEmail, 1);
+    var attachments = _buildAttachmentPayload(msg);
     var filename = "gmail_single_" + messageId + ".txt";
 
-    UrlFetchApp.fetch(TunnelURL + "/upload", {
+    var res = UrlFetchApp.fetch(TunnelURL + "/upload", {
       method: "post",
       contentType: "application/json",
-      payload: JSON.stringify({ filename: filename, content: content })
+      payload: JSON.stringify({
+        filename: filename,
+        content: content,
+        attachment: attachments
+      }),
+      muteHttpExceptions: true
     });
+
+    var code = res.getResponseCode();
+    var text = res.getContentText();
+
+    if (code < 200 || code >= 300) {
+      throw new Error("[Error] upload failed: " + code + " / " + text);
+    }
 
     return _toast("☁️ 서버로 전송 완료");
   } catch (err) {
@@ -282,9 +291,19 @@ function _buildMessageText(msg, myEmail, mailIndex) {
   );
 
   // 2) 수신/발신 구분
-  var direction = msg.getFrom().includes(myEmail) ? "발신" : "수신";
+  var direction = from.includes(myEmail) ? "발신" : "수신";
 
-  // 3) 첨부파일 처리
+  // 3) 라벨 정보 처리
+  var thread = msg.getThread();
+  var userLabels = thread.getLabels().map(function(label) {
+    return label.getName();
+  });
+
+  var labelInfo = userLabels.length > 0
+    ? userLabels.join(", ")
+    : "없음";
+
+  // 4) 첨부파일 처리
   var atts = msg.getAttachments({ includeInlineImages: false });  // 본문에 인라인 이미지로 삽입된 경우 제외
   var attachmentInfo = "";  // 첨부파일 정보. TXT 기록용
 
@@ -319,7 +338,7 @@ function _buildMessageText(msg, myEmail, mailIndex) {
   var body = msg.getPlainBody() || "";
 
   return [
-    "=========================================================================================",
+    "============================================================",
     "[메일 " + mailIndex + "]",
     "ID: " + id,
     "구분: " + direction,
@@ -329,12 +348,16 @@ function _buildMessageText(msg, myEmail, mailIndex) {
     "참조(CC): " + cc,
     "날짜: " + date,
     "",
+
+    "[라벨 정보]",
+    labelInfo,
+    "",
     "[첨부파일 정보]",
     attachmentInfo,
     "",
     "[본문]",
     body,
-    "========================================================================================="
+    "============================================================"
   ].join("\n");
 }
 
@@ -343,7 +366,7 @@ function _buildAttachmentPayload(msg) {
   var atts = msg.getAttachments({ includeInlineImages: false });  // 본문에 인라인 이미지로 삽입된 경우 제외
   var id = msg.getId();
   var payload = []; 
-  var MAX_ATTACHMENT_SIZE = 5 * 1024 * 1024 * 1024; // 5GB 크기 제한
+  var MAX_ATTACHMENT_SIZE = 5 * 1024 * 1024; // 5MB 크기 제한
 
   atts.forEach(function(att, i) {
     var name = att.getName() || ("attachment_" + (i + 1));

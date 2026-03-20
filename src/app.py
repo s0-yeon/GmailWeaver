@@ -21,7 +21,7 @@ from docx import Document
 # Job 이용 공통함수 import
 from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background
-from config.setting import *
+from config.settings import *
 
 # 환경변수 로드
 load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: GraphRAG 설정(settings.yaml)과 API 키가 같은 디렉터리에 위치하기 때문
@@ -272,7 +272,6 @@ def run_query_async():
             else:
                 result = answer
 
-
             update_job(job_id, status="done", result=result)
 
         except Exception as e:
@@ -390,12 +389,7 @@ def upload():
                             "name": original_name,
                             "text": file_text.strip()
                         })
-                    else:
-                        failed_attachments.append({
-                            "name": original_name,
-                            "reason": "mail_id missing"
-                        })
-                    extracted_count += 1
+                        extracted_count += 1
                 else:
                     failed_attachments.append({
                         "name": original_name,
@@ -446,7 +440,6 @@ def upload():
             "attachment_extracted_count": extracted_count,
             "failed_attachments": failed_attachments,
         })
-
 
 # 엔드포인트: GET /graph-data
 @app.route("/graph-data", methods=["GET"])

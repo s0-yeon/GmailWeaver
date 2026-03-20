@@ -7,10 +7,10 @@ import traceback
 
 from util.jobs.job_store import update_job, append_job_log
 from util.graphrag_progress import parse_graphrag_progress  # 현재 버전에서는 실시간 파싱에 사용 안 함
-from config.setting import GRAPH_BUILD_SCRIPT, GRAPHRAG_ROOT, BASE_DIR
+from config.settings import GRAPH_BUILD_SCRIPT, GRAPHRAG_ROOT, BASE_DIR
 
 
-# [ 백그라운드 ] 메일 텍스트를 그래프 데이터 JSON으로 변환
+# 백그라운드: 메일 텍스트를 그래프 데이터 JSON으로 변환
 def build_graph_json(job_id, env):
     print(f"[JOB][mail2json] START job_id={job_id}")
     print(f"[JOB][mail2json] cwd={os.getcwd()}")
@@ -50,7 +50,7 @@ def build_graph_json(job_id, env):
         raise
 
 
-# [ 백그라운드 ] GraphRAG 인덱싱
+# 백그라운드: GraphRAG 인덱싱
 def build_graphrag_index(job_id, env):
     print(f"[JOB][graphrag] START job_id={job_id}")
     print(f"[JOB][graphrag] cwd={os.getcwd()}")
