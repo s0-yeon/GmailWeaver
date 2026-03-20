@@ -54,4 +54,3 @@ def run_graph_pipeline(job_id):
         except Exception as inner_e:
             print(f"[PIPELINE][ERROR] failed to save failed status job_id={job_id} error={inner_e}")
             traceback.print_exc()
-
