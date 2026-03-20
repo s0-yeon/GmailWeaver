@@ -1,416 +1,1114 @@
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
   <graph edgedefault="undirected">
+    <node id="VERCEL" />
+    <node id="UMC-ALBALOG" />
+    <node id="S0-YEON" />
+    <node id="GMAILWEAVER" />
+    <node id="UZICHOI" />
+    <node id="SRC" />
+    <node id="APPS-SCRIPT" />
+    <node id="VITE" />
+    <node id="PARQUET" />
+    <node id="CHAT" />
+    <node id="TEST" />
     <node id="ALIBABA" />
     <node id="ALIEXPRESS" />
-    <node id="MARCH 16 2026" />
+    <node id="CASHION" />
+    <node id="SAMUEL NAMARA" />
+    <node id="DURKE BATAGLANI" />
+    <node id="MEGGIE TAZBAH" />
+    <node id="ALIEXPRESS KOREA HOLDING" />
+    <node id="SINGAPORE" />
     <node id="EMAIL" />
-    <node id="CURRENCY DISCOUNT" />
+    <node id="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
+    <node id="PROMOTION EMAIL" />
+    <node id="CUSTOMER" />
+    <node id="SEOUL" />
+    <node id="&#44305;&#54868;&#47928; BTS &#54665;&#49324;" />
+    <node id="BTS" />
+    <node id="&#50612;&#50872;&#47548;&#54540;&#46972;&#51088;" />
+    <node id="&#55192;&#48372;&#53484; &#48149;&#46988;&#54924;" />
+    <node id="SEOUL CITY" />
+    <node id="DONGHAENG GARDEN" />
+    <node id="YONGWANGSAN NEIGHBORHOOD PARK" />
+    <node id="K-CULTURE FESTIVAL" />
+    <node id="JOSEON ROCKET" />
+    <node id="LIFELONG EDUCATION VOUCHER" />
+    <node id="SEOUL, DREAMS ON WHEELS" />
+    <node id="SEOUL FILM CENTER" />
+    <node id="HISTORICAL CULTURE TOUR" />
+    <node id="GITHUB" />
+    <node id="PERSON" />
+    <node id="SUBJECT" />
+    <node id="LABEL" />
+    <node id="FILE" />
     <node id="KOREA" />
+    <node id="EVENT" />
+    <node id="16TH ANNIVERSARY BIG SALE" />
+    <node id="BTS COMEBACK EVENT" />
+    <node id="SEOUL CITY GOVERNMENT" />
+    <node id="&#49436;&#50872;" />
+    <node id="&#49436;&#50872; &#48652;&#47004;&#46300; &#44415;&#51592;" />
+    <node id="&#49436;&#49436;&#50872;&#48120;&#49696;&#44288;" />
+    <node id="&#44256;&#51333;&#51032; &#44600;" />
+    <node id="&#51221;&#46041;" />
+    <node id="&#51060;&#51456; &#50676;&#49324; &#51665;&#53552;" />
+    <node id="&#46041;&#54665;&#44032;&#46304;" />
+    <node id="&#50857;&#50773;&#49328;&#44540;&#47536;&#44277;&#50896;" />
+    <node id="&#49436;&#50872;&#50689;&#54868;&#49468;&#53552;" />
+    <node id="K-&#47928;&#54868; &#52629;&#51228;" />
+    <node id="SEOUL METROPOLITAN GOVERNMENT" />
+    <node id="COVID-19 WEEKLY BRIEFING" />
+    <node id="INSTALLATION" />
+    <node id="SECURITY HEADERS" />
+    <node id="SITEMAP.XML" />
+    <node id="CONFIGURATION" />
+    <node id="DEPLOYMENT" />
+    <node id="BUNDLE ANALYSIS" />
+    <node id="FAVICON.ICO" />
+    <node id="FEED.XML" />
+    <node id="ROBOTSTXT" />
+    <node id="JQUERY-ELIMINATION-COMPLETE.MD" />
+    <node id="PERFORMANCE.MD" />
+    <node id="MAIN.CALENDAR.JS" />
+    <node id="MAIN-FORM-BASIC.JS" />
+    <node id="MAIN-INBOX.JS" />
+    <node id="MAIN-TABLES.JS" />
+    <node id="MAIN-UPLOAD.JS" />
+    <node id="MAIN.MINIMAL.JS" />
+    <node id="VITE.CONFIG.JS" />
+    <node id="VITEST.CONFIG.JS" />
+    <node id="EB244DB9D4BE1C0F23A0CA63541F7C53A50_V2" />
+    <node id="CHAT_EXTRACT-CONTINUATION" />
+    <node id="SRC/PARQUET/CACHE" />
+    <node id="ENTITY EXTRACTION" />
+    <node id="LANCEDB" />
+    <node id="CHAT_SUMMARIZE" />
+    <node id="PATCH LINKS" />
+    <node id="CURRENCY DISCOUNT" />
+    <node id="MESSAGE ID" />
     <node id="ELECTRONICS" />
+    <node id="HOME" />
     <node id="MOBILE PHONES" />
     <node id="BEAUTY" />
-    <node id="SPORTS" />
-    <node id="TOYS" />
-    <node id="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
-    <node id="LAZADA ONE" />
-    <node id="CUSTOMER" />
-    <node id="ALIBABA GROUP" />
-    <node id="SINGAPORE" />
-    <node id="PROMOTIONAL EMAIL" />
-    <node id="PRODUCT" />
-    <node id="DISCOUNT" />
-    <node id="E-MAIL" />
     <node id="BRAS BASAH ROAD" />
-    <node id="TOSS PAY" />
-    <node id="SAMSUNG" />
-    <node id="NH CARD" />
-    <node id="HOME" />
+    <node id="BIG SALE" />
+    <node id="SPORTE" />
+    <node id="TOYS" />
+    <node id="ANNIVERSARY SALE" />
+    <node id="PRODUCT" />
+    <node id="OPEN MARKET" />
+    <node id="SPORTS" />
+    <node id="PROMOTIONAL EMAIL" />
     <node id="SEOUL CITY HALL" />
-    <node id="FAMILY CARE SUPPORT PROGRAM" />
-    <node id="SEOUL" />
-    <node id="&#49548;&#49345;&#44277;&#51064; &#51221;&#52293; &#52509;&#47581;&#46972; '&#55192;&#48372;&#53484; &#48149;&#46988;&#54924;'" />
-    <node id="4050 &#51064;&#49373;&#46356;&#51088;&#51064;&#54617;&#44368;" />
-    <node id="&#48152;&#47140;&#46041;&#47932; &#49884;&#48124;&#54617;&#44368;" />
-    <node id="&#49436;&#50872;&#48373;&#51648;&#54252;&#53560;" />
+    <node id="GWANGHWAMUN" />
+    <node id="OULIM PLAZA" />
+    <node id="GANGSEO-GU" />
+    <node id="&#44053;&#49436;&#44396;" />
+    <node id="&#49436;&#50872; &#51221;&#52293; &#50937;&#53808;" />
     <node id="&#49548;&#49345;&#44277;&#51064;" />
-    <node id="&#51473;&#51109;&#45380;" />
-    <node id="&#52397;&#49548;&#45380;&#183;&#52397;&#45380;" />
-    <node id="&#49436;&#49436;&#50872;&#48120;&#49696;&#44288;" />
-    <node id="&#51060;&#48337;&#47928;" />
-    <node id="&#49436;&#50872;" />
-    <node id="&#50500;&#47492;&#45796;&#50868; &#46041;&#54665;&#44032;&#44172;" />
-    <node id="&#50628;&#50980;&#51452;" />
-    <node id="&#49436;&#50872;&#44544;&#47196;&#48268;&#49468;&#53552;" />
-    <node id="&#44608;&#44221;&#49440;" />
+    <node id="&#49884;&#48124;" />
+    <node id="&#51076;&#51473;&#48712;" />
+    <node id="&#44305;&#54868;&#47928;" />
+    <node id="&#51312;&#49440;&#51032; &#47196;&#53011;" />
+    <node id="&#54217;&#49373;&#44368;&#50977;&#51060;&#50857;&#44428;" />
+    <node id="&#50669;&#49324;&#47928;&#54868;&#45813;&#49324;" />
+    <node id="INSTAGRAM" />
+    <node id="FACEBOOK" />
+    <node id="YOUTUBE" />
+    <node id="TWITTER" />
+    <node id="BLOG" />
+    <node id="NEWSLETTER" />
+    <node id="ESEOUL" />
+    <node id="HIMBOTAM FAIR" />
+    <node id="KANGSEO DISTRICT" />
+    <node id="SEOUL BRAND GOODS" />
+    <node id="SEOUL POLICY WEBTOON" />
+    <node id="JUNG-DONG HISTORICAL COURSE" />
+    <node id="HISTORICAL CULTURAL TOUR" />
+    <node id="KAKAO" />
+    <node id="KAKAO DEVELOPERS" />
+    <node id="&#52852;&#52852;&#50724;" />
+    <node id="&#53216;&#54049;" />
+    <node id="&#51228;&#51452;&#53945;&#48324;&#51088;&#52824;&#46020;" />
+    <node id="&#52572;*&#50672;" />
+    <node id="&#49436;&#50872;&#53945;&#48324;&#49884;" />
+    <node id="&#47196;&#51200;&#49828; &#54644;&#47204;&#46300; &#47536;" />
+    <node id="&#44256;&#44061;&#49468;&#53552;" />
+    <node id="&#50752;&#50864; &#47716;&#48260;&#49901;" />
+    <node id="&#49340;&#49457;&#51204;&#51088;" />
+    <node id="&#49436;&#50872;&#49884;&#52397;" />
+    <node id="MARCH 19, 2026" />
+    <node id="SPRING" />
+    <node id="SAMHWA SCHOOL" />
+    <node id="&#44053;&#46041;&#49714;&#49549;&#46020;&#49436;&#44288;" />
+    <node id="&#50808;&#47196;&#50880;&#50504;&#45397;120" />
+    <node id="&#51312;&#49440;" />
+    <node id="&#44285;&#51116;&#49885;" />
+    <node id="&#49436;&#50872;&#46168;&#47112;&#44600; 100&#51064; &#50896;&#51221;&#45824;" />
+    <node id="C.S.I." />
+    <node id="GWINDEXTEST" />
+    <node id="GOOGLE" />
+    <node id="ALIEKSPRESS" />
+    <node id="SAMSUNG ELECTRONICS" />
+    <node id="SAMSUNG" />
+    <node id="HANSUNG UNIVERSITY" />
+    <node id="&#52572;&#51648;&#50976;" />
+    <node id="SURVEY" />
+    <node id="ALIBABA.COM HONG KONG LIMITED" />
+    <node id="BTS COMEBACK LIVE" />
+    <node id="4050 &#51064;&#49373;&#46356;&#51088;&#51064;&#54617;&#44368;" />
+    <node id="&#50500;&#51060;&#46028;&#48388;&#49436;&#48708;&#49828;" />
+    <node id="&#48512;&#46041;&#49328; &#47924;&#47308; &#44368;&#50977;" />
+    <node id="SEOUL GRAND PARK" />
+    <node id="MARPO BRIDGE" />
+    <node id="DREAM HOUSE" />
+    <node id="TRAM SYSTEM" />
+    <node id="&#45684;&#45349;&#49828;" />
+    <node id="&#49340;&#54617;&#49324;&#47196;" />
+    <node id="&#51060;&#51648;&#54168;&#51060;" />
+    <node id="GOOGLE CLOUD" />
+    <node id="VIOLIN" />
+    <node id="MOUNTAIN VIEW" />
+    <node id="JUNE 16, 2026" />
+    <node id="PULL REQUEST" />
+    <node id="19CFA7C46BFBF684" />
+    <node id="ONEDRIVE" />
+    <node id="MICROSOFT CORPORATION" />
+    <node id="FUN SEOUL" />
+    <node id="SEOUL ATTRACTIVE JOBS" />
+    <node id="SEOUL SPRING FESTIVAL" />
+    <node id="SUMMER FESTIVAL ON THE HAN RIVER" />
+    <node id="SEOUL AUTUMN FESTIVAL" />
+    <node id="SEOUL WINTER FESTIVAL" />
+    <node id="&#49436;&#50872; &#47588;&#47141;&#51068;&#51088;&#47532;" />
+    <node id="&#49436;&#50872;&#49884;" />
+    <node id="&#50696;&#49696;&#50689;&#51116; &#44368;&#50977;" />
     <node id="&#45908;&#46300;&#47548;&#51665;+" />
-    <node id="&#49436;&#50872;&#46168;&#47112;&#44600;" />
-    <node id="&#48513;&#54620;&#49328; &#51204;&#47581;&#45824;" />
-    <node id="&#44396;&#54028;&#48156;&#52380; &#49688;&#48320;&#52852;&#54168;" />
-    <node id="SEOUL METROPOLITAN GOVERNMENT" />
-    <node id="SAMUEL NAMARA" />
-    <node id="SEOUL'S 4.5-DAY WORKWEEK" />
-    <node id="SEOUL RESIDENTS" />
-    <node id="LINKEDIN" />
+    <node id="WIRYE LINE" />
+    <node id="SEOUL TRAIL" />
+    <node id="NORTH KOREA" />
+    <node id="HUMANITY" />
+    <node id="SELF-EMPLOYED ASSURANCE ACCOUNT" />
+    <node id="MARCH 16, 2026" />
+    <node id="CSI10186" />
+    <node id="PARKSSOJ" />
+    <node id="GMAILWEAVER COMMIT" />
+    <node id="TESTGW" />
+    <node id="ALIEXPRESS KOREA CO., LTD." />
+    <node id="GRAND SALE" />
+    <node id="DISCOUNT EVENT" />
+    <node id="&#49436;&#50872;&#48373;&#51648;&#54252;&#53560;" />
+    <node id="&#50628;&#50980;&#51452;" />
+    <node id="&#44608;&#49849;&#50500;" />
+    <node id="&#51060;&#48337;&#47928;" />
+    <node id="&#49436;&#50872;&#44544;&#47196;&#48268;&#49468;&#53552;" />
+    <node id="&#54788;&#45824;&#49885; &#53944;&#47016;" />
+    <node id="&#49436;&#50872;&#46168;&#47112;&#44600; 17&#53076;&#49828;" />
+    <node id="&#51088;&#50689;&#50629;&#51088; &#50504;&#49900;&#53685;&#51109;" />
     <node id="&#52572;&#49548;&#50672;" />
     <node id="NEXON KOREA" />
     <node id="OOKLA" />
     <node id="SK SQUARE" />
-    <node id="&#49436;&#50872;&#49884; &#53944;&#50948;&#53552;" />
-    <node id="&#49436;&#50872;&#49884;" />
-    <node id="&#49436;&#50872;&#49884; &#48660;&#47196;&#44536;" />
-    <node id="&#46972;&#51060;&#48652;&#49436;&#50872;" />
     <node id="ROWAN" />
-    <node id="EVENT" />
-    <node id="GMO" />
-    <node id="MEGA DISCOUNT" />
-    <node id="&#8361;21,306" />
-    <node id="&#8361;30,984" />
-    <node id="&#8361;40,164" />
-    <node id="&#8361;36,748" />
-    <node id="&#8361;9,966" />
-    <node id="&#8361;22,508" />
-    <node id="&#8361;56,335" />
-    <node id="&#8361;15,312" />
-    <node id="&#8361;110,345" />
-    <node id="&#8361;35,141" />
-    <node id="&#8361;11,067" />
-    <node id="&#8361;57,924" />
-    <node id="&#8361;80,797" />
-    <node id="&#8361;48,267" />
-    <node id="ALIHOLDING" />
-    <node id="SURVEY" />
-    <node id="ALIBABA.COM HONG KONG LIMITED" />
-    <node id="COUPANG" />
+    <node id="BIG DISCOUNT EVENT" />
     <node id="HONG KONG" />
-    <node id="CHOIN YOUN" />
-    <node id="ALIEEXPRESS" />
-    <node id="CUSTOMER SERVICE" />
-    <node id="GOOD FEEL ORGANIC COTTON TAMPONS" />
-    <node id="SPEEDY DOCKING POWER BANK" />
-    <node id="&#53216;&#54049;" />
-    <node id="&#52572;*&#50672;" />
+    <node id="CUPANG" />
+    <node id="&#51339;&#51008;&#45712;&#45196; &#50976;&#44592;&#45453; &#49692;&#47732; &#53456;&#54256;" />
+    <node id="&#49828;&#54588;&#46356; &#46020;&#53433; &#48372;&#51312;&#48176;&#53552;&#47532;" />
+    <node id="TIMES SQUARE" />
     <node id="&#50724;&#46748;&#44592;" />
     <node id="&#44272;&#44272;" />
     <node id="&#47732;&#49324;&#46993;" />
-    <node id="&#44256;&#44061;&#49468;&#53552;" />
-    <node id="&#49436;&#50872;&#53945;&#48324;&#49884;" />
-    <node id="&#54788;&#45824;&#52852;&#46300;&#53216;&#54168;&#51060;" />
-    <node id="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396; &#49569;&#54028;&#45824;&#47196; 570" />
-    <node id="&#50864;&#47532;&#51008;&#54665;" />
-    <node id="&#47196;&#51200;&#49828; &#54644;&#47204;&#46300; &#47536;" />
-    <node id="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396;" />
-    <node id="&#49345;&#54408; &#44368;&#54872;/&#48152;&#54408; &#50504;&#45236;" />
-    <node id="&#49548;&#48708;&#51088; &#54588;&#54644;&#48372;&#49345;" />
-    <node id="&#52292;&#47924; &#51648;&#44553;&#48372;&#51613; &#49436;&#48708;&#49828;" />
-    <node id="16&#51452;&#45380; &#44536;&#47004;&#46300; &#49464;&#51068;" />
     <node id="&#44277;&#51221;&#44144;&#47000;&#50948;&#50896;&#54924;" />
-    <node id="PRODUCTS" />
-    <node id="OPEN MARKET" />
-    <node id="16TH ANNIVERSARY GRAND SALE" />
-    <node id="KOREA ANNIVERSARY SALE" />
+    <node id="&#49888;&#47280;&#44288;&#47532;&#49468;&#53552;" />
+    <node id="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396; &#49569;&#54028;&#45824;&#47196; 570" />
+    <node id="&#54788;&#45824;&#52852;&#46300;&#53216;&#54168;&#51060;" />
+    <node id="NHN KCP" />
+    <node id="&#54620;&#44397;&#51221;&#48372;&#53685;&#49888; KICC" />
+    <node id="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396;" />
+    <node id="&#53216;&#54168;&#51060;" />
+    <node id="&#54788;&#45824;&#52852;&#46300;" />
+    <node id="1577-7011" />
+    <node id="2026&#45380; 03&#50900; 14&#51068; 13&#49884; 13&#48516;" />
+    <node id="2026&#45380; 03&#50900; 14&#51068; 16&#49884; 14&#48516;" />
+    <node id="2026&#45380; 03&#50900; 14&#51068;" />
+    <node id="ALIEKSPRESS SERVICE CENTER" />
+    <node id="INSEON22" />
     <node id="CUSTOME EMAIL" />
-    <node id="ANNIVERSARY SALE" />
-    <node id="VISION HOLDINGS" />
-    <node id="TECHGLOBAL" />
-    <node id="TIRUZIA" />
-    <node id="FIRUZABAD" />
-    <node id="FIRUZI FUNDS" />
-    <node id="QUINTARA" />
-    <node id="AURELIAN OFFICIALS" />
-    <node id="CHARTERED FLIGHT" />
+    <node id="SEOUL MARATHON" />
+    <node id="GYEONGBOKGUNG PALACE" />
+    <node id="ARIRANG" />
+    <node id="&#49436;&#50872; &#50500;&#48736;&#45800;" />
+    <node id="2026 &#49436;&#50872;&#50669;&#49324;&#47928;&#54868;&#45813;&#49324;" />
+    <node id="&#49709;&#47168;&#47928;" />
+    <node id="&#48513;&#52492;" />
+    <node id="DDP" />
+    <node id="DREAM HOUSE+" />
+    <node id="YOUNG PEOPLE" />
+    <node id="KICC" />
+    <node id="COUPANG" />
+    <node id="2026-03-12" />
+    <node id="CASHBACK EVENT" />
+    <node id="ALIBABA.COM SINGAPORE E-COMMERCE PRIVATE LIMITED" />
+    <node id="ALIEXPRESS SERVICE CENTER" />
+    <node id="DONGHAENGARDEN" />
+    <node id="KIM DAEJIN" />
+    <node id="LEE DAHYUN" />
+    <node id="JANG SUYEON" />
+    <node id="JOSUN ROCKET" />
     <node id="KROHAARA" />
-    <node id="GLOBAL EXCHANGE" />
-    <node id="CUSTODIAN" />
-    <node id="HIMBOTAM FAIR" />
-    <node id="&#44032;&#51313; &#46028;&#48372;&#45716; &#52397;&#49548;&#45380;&#183;&#52397;&#45380;" />
-    <node id="&#44608;&#49849;&#50500;" />
-    <node id="&#51088;&#50689;&#50629;&#51088; &#50504;&#49900;&#53685;&#51109;" />
-    <node id="&#51452;&#53469;&#44277;&#44553;" />
-    <node id="&#50900;&#49464;&#51648;&#50896;" />
-    <node id="&#49436;&#50872;&#46168;&#47112;&#44600; 17&#53076;&#49828;" />
-    <node id="&#49436;&#50872;&#53945;&#48324;&#49884;&#52397;" />
-    <node id="&#54620;&#44053;" />
-    <node id="&#49436;&#50872;&#53945;&#48324;&#49884; &#51473;&#44396;" />
-    <node id="&#49436;&#50872;&#49884; &#54540;&#47084;&#49828;&#52828;&#44396;" />
-    <node id="&#49436;&#50872;&#49884; &#50976;&#53916;&#48652;" />
-    <node id="&#49436;&#50872;&#49884; &#54168;&#51060;&#49828;&#48513;" />
-    <node id="&#45796;&#49328;&#53084;&#49468;&#53552;" />
-    <node id="ALIASPRESS" />
-    <node id="BIG DISCOUNT EVENT" />
-    <node id="AE-BEST-CARE-MARKET13@DEALS.ALIPRESS.COM" />
-    <node id="MARCH 15 2026" />
-    <node id="SMARTPHONES" />
-    <node id="MEGA DISCOUNT EVENT" />
-    <node id="&#55092;&#45824;&#54256;" />
+    <node id="FIRUZABAD" />
+    <node id="TIRUZIA" />
+    <node id="ALHAMIA PRISON" />
+    <node id="2026-03-20" />
+    <node id="LAZADA ONE" />
+    <node id="&#52852;&#52852;&#50724;&#46356;&#48296;&#47196;&#54140;&#49828;" />
+    <node id="2026&#45380; 4&#50900; 20&#51068;" />
+    <node id="&#47196;&#53011;&#48176;&#49569;" />
+    <node id="&#50689;&#53685;&#44396;" />
+    <node id="&#51473;&#51109;&#45380;&#52712;&#50629;&#49324;&#44288;&#54617;&#44368;" />
+    <node id="&#49328;&#54980;&#51312;&#47532;&#48708;" />
+    <node id="&#51076;&#49328;&#48512;&#44368;&#53685;&#48708;" />
+    <node id="KIM YUN-KYUNG" />
+    <node id="SAFETY REGULATIONS" />
+    <node id="KANGDONG FOREST LIBRARY" />
+    <node id="LEE HAE-RIN" />
+    <node id="JEON MI-AE" />
+    <node id="SEOUL DULLEGI" />
     <node id="&#48624;&#54000;" />
     <node id="&#49828;&#54252;&#52768;" />
     <node id="&#51109;&#45212;&#44048;" />
-    <node id="CUSTOMER FEEDBACK" />
-    <node id="CHOIN" />
-    <node id="TIMES SQUARE" />
-    <node id="CS&#49884;&#47532;&#50620;" />
-    <node id="&#45348;&#48708;&#44172;&#51060;&#49496;" />
-    <node id="PMP" />
-    <node id="&#45432;&#53944;&#48513;" />
-    <node id="&#45936;&#49828;&#53356;&#53457;PC" />
-    <node id="&#49888;&#47784;&#45944;" />
-    <node id="&#49548;&#48708;&#51088; &#54588;&#54644;&#48372;&#49345;&#44508;&#51221;" />
-    <node id="&#53216;&#54049; &#44256;&#44061;&#49468;&#53552;" />
-    <node id="&#49548;&#48708;&#51088; &#54588;&#54644; &#48372;&#49345;" />
-    <node id="&#47560;&#53011;&#54540;&#47112;&#51060;&#49828;" />
-    <node id="&#44256;&#44061;" />
-    <node id="&#49345;&#54408;" />
-    <node id="&#49548;&#48708;&#51088; &#54588;&#54644; &#48372;&#49345; &#44508;&#51221;" />
-    <node id="&#44368;&#54872;/&#48152;&#54408;" />
-    <node id="A/S" />
-    <node id="GRAND SALE" />
-    <node id="4050 LIFE DESIGN SCHOOL" />
-    <node id="SEOUL WELFARE PORTAL" />
-    <node id="SELF-CARE ALLOWANCE" />
-    <node id="SEOUL GLOBAL CENTER" />
-    <node id="YOUNG ADULTS" />
-    <node id="&#50948;&#47168;&#49440;" />
-    <node id="&#52397;&#45380; &#51665; &#44145;&#51221; &#45916;&#50612;&#46300;&#47548;" />
-    <node id="&#49436;&#50872;&#49324;&#46988;&#46308;" />
-    <node id="MINIMUM YOUNG" />
-    <node id="DUBLIN" />
-    <node id="EMAIL NOTIFICATION" />
-    <node id="ALIEXPRESS SERVICE CENTER" />
+    <node id="GALAXY AI SUBSCRIPTION CLUB" />
+    <node id="JEON YOUNG-HYUN" />
+    <node id="SUWON" />
+    <node id="GYEONGGI-DO" />
+    <node id="CUSTOMER SERVICE" />
+    <node id="CHOSUN UNIVERSITY" />
+    <node id="CUSTOMER SURVEY" />
+    <node id="KIM MINJI" />
+    <node id="&#44608;&#48124;&#51648;" />
+    <node id="&#52488;&#46321;&#50504;&#49900;&#48296;" />
+    <node id="&#51312;&#49688;&#48393;" />
+    <node id="&#51221;&#54693;&#49440;" />
+    <node id="&#49436;&#50872;&#45824;&#44277;&#50896; &#49885;&#47932;&#50896;" />
+    <node id="&#51060;&#45796;&#54788;" />
+    <node id="&#49772;&#50628;&#49772;&#50628; &#47784;&#45789;" />
+    <node id="&#48652;&#47004;&#46356;" />
+    <node id="&#49436;&#50872;&#53945;&#48324;&#49884; &#49569;&#54028;&#44396; &#49340;&#54617;&#49324;&#47196; 99 &#49464;&#44221;&#48716;&#46377; 5&#52789;" />
+    <node id="&#50732;&#45936;&#51060;&#53412;&#52828;" />
+    <node id="&#54788;&#45824;" />
+    <node id="2026-03-17" />
+    <node id="GOOGLE CLOUD SUPPORT" />
+    <node id="CSV FILE" />
+    <node id="GOOGLE LLC" />
+    <node id="ONE DRIVE" />
+    <node id="HANGANG FESTIVAL" />
+    <node id="ARTS TALENT EDUCATION" />
+    <node id="CITIZEN JOURNALIST" />
+    <node id="SEOUL MOVIE CENTER" />
+    <node id="BUKHAN MOUNTAIN VIEWPOINT" />
+    <node id="HISTORICAL CULTURAL SURVEY" />
+    <node id="SELF-EMPLOYED SAFE ACCOUNT" />
+    <node id="SEOUL CIRCUMFERENCE TRAIL 17" />
+    <node id="TOSS PAY" />
+    <node id="NH CARD" />
+    <node id="ALIBABA GROUP" />
+    <node id="EDM" />
+    <node id="AEUG_EDM_137444" />
+    <node id="CURRENCY" />
+    <node id="DISCOUNT" />
+    <node id="CREDIT CARD" />
+    <node id="CUPON" />
+    <node id="PRODUCTS" />
+    <node id="SMALL BUSINESS OWNERS" />
+    <node id="&#52397;&#49548;&#45380;&#183;&#52397;&#45380;" />
+    <node id="&#45236;&#52828;&#44396;&#49436;&#50872;" />
+    <node id="&#51088;&#44592;&#46028;&#48388;&#48708;" />
+    <node id="&#44608;&#44221;&#49440;" />
+    <node id="&#53944;&#47016;" />
+    <node id="&#48513;&#54620;&#49328; &#51204;&#47581;&#45824;" />
+    <node id="&#44396;&#54028;&#48156;&#52380; &#49688;&#48320;&#52852;&#54168;" />
+    <node id="DASAN CALL CENTER" />
+    <node id="SEOUL YOUTUBE" />
+    <node id="SEOUL FACEBOOK" />
+    <node id="SEOUL TWITTER" />
+    <node id="SEOUL BLOG" />
+    <node id="LINKEDIN" />
+    <node id="GHYTAONDFKN3RHPAXRY6NKPXRGOEVL2SRQU7V90EFRK" />
+    <node id="1005006173009012" />
+    <node id="1005006160881604" />
+    <node id="1005009379999340" />
+    <node id="1005010026543235" />
+    <node id="1005007181134996" />
+    <node id="1005010736431137" />
+    <node id="1005010614786911" />
+    <node id="1005010458233645" />
+    <node id="1005010308594298" />
+    <node id="1005006756167788" />
+    <node id="1005006444737652" />
+    <node id="1005010266771391" />
+    <node id="1005009294596040" />
+    <node id="1005009571493628" />
+    <node id="1005010462245005" />
+    <node id="1005008707809674" />
+    <node id="1005001948459033" />
+    <node id="CYBER MALL" />
+    <node id="E-COMMERCE" />
+    <node id="GLOBAL EXCHANGE" />
+    <node id="PURCHASE PROTECTION POLICY" />
+    <node id="CHOIN YOUN" />
     <node id="ORDER" />
-    <node id="&#49888;&#47280;&#44288;&#47532;&#49468;&#53552;" />
-    <node id="&#49548;&#48708;&#51088; &#54588;&#54644; &#48372;&#49345;&#52376;&#47532; &#44592;&#44396;" />
-    <node id="NHN KCP" />
-    <node id="2026&#45380; 03&#50900; 14&#51068;" />
-    <node id="&#49548;&#48708;&#51088;&#54588;&#54644;&#48372;&#49345;" />
-    <node id="&#49436;&#50872; &#49569;&#54028;&#44396; &#49569;&#54028;&#45824;&#47196; 570" />
-    <node id="&#54788;&#45824;&#52852;&#46300;" />
+    <node id="GOOD FEELING ORGANIC COTTON TAMPONS" />
+    <node id="SPEEDY DOCKING POWER BANK" />
+    <node id="&#50724;&#46748;&#44592; &#52860;&#52860;&#54620; &#46076;&#51648;&#44256;&#44592;&#44608;&#52824;&#52252;" />
+    <node id="2026-03-13" />
+    <node id="FREE SHIPPING" />
+    <node id="50% DISCOUNT" />
+    <node id="GMAILWEAVER#20" />
+    <node id="MARCH 21" />
+    <node id="MARCH 14" />
+    <node id="GWAHNGHWAMUN" />
+    <node id="SEOUL DAD GROUP" />
+    <node id="MORNING MARATHON" />
+    <node id="2026 SEOUL HISTORICAL CULTURAL TOUR" />
+    <node id="DAD SUPPORT PROGRAM" />
+    <node id="SCREEN PARK GOLF COURSE" />
+    <node id="AI ZONE" />
+    <node id="&#54620;&#50577;" />
+    <node id="&#49436;&#50872;&#53945;&#48324;&#49884;&#52397;" />
+    <node id="&#54620;&#44053;&#48260;&#49828;" />
+    <node id="&#49436;&#50872;&#49324;&#46988;&#46308;" />
+    <node id="&#51060;&#44036;&#49688;&#47928;" />
+    <node id="&#51109;&#49888;&#51088;" />
+    <node id="AURELIA" />
+    <node id="QUINTARA" />
+    <node id="&#53216;&#54049;(&#51452;)" />
+    <node id="DISCOUNTS" />
+    <node id="CASHBACK" />
+    <node id="PHONES" />
+    <node id="CAUSEWAY BAY" />
+    <node id="MATHESON STREET" />
+    <node id="GOOGLE PLAY STORE" />
+    <node id="ITUNES APP STORE" />
+    <node id="PRODUCT PAGE" />
+    <node id="GRAPH SCHEMA" />
+    <node id="MAIL DATA" />
+    <node id="GRAPH DATA" />
+    <node id="GMAIL API" />
+    <node id="REVIEW REQUESTED" />
+    <node id="TABLES.JS" />
+    <node id="WEATHER.JS" />
+    <node id="SCSS" />
+    <node id="CONFIG" />
+    <node id="MARCH 20, 2026" />
+    <node id="SOUTH KOREAN WON" />
+    <node id="16TH ANNIVERSARY" />
+    <node id="COUPON" />
+    <node id="OULRIM PLAZA" />
+    <node id="HIMBOTAEM FAIR" />
+    <node id="GANGSEO DISTRICT" />
+    <node id="MARCH 25" />
+    <node id="K-DANCE FESTIVAL" />
+    <node id="YONGWANGSAN PARK" />
+    <node id="KOREAN CULTURE FESTIVAL" />
+    <node id="KOREAN EDUCATION VOUCHER" />
+    <node id="SEOSOUL ART MUSEUM" />
+    <node id="KOREAN HISTORY COURSE" />
+    <node id="GONGJONG'S PATH" />
+    <node id="KOREAN EDUCATION VOUCHER PROGRAM" />
+    <node id="IDA HYUN" />
+    <node id="CULTURAL POLICY" />
+    <node id="CUSTOMERS" />
+    <node id="GITHUB PULL REQUEST" />
+    <node id="GMAIL" />
+    <node id="CLOTHING DISCOUNT" />
+    <node id="AE-BEST-CARE-MARKET13" />
+    <node id="16TH ANNIVERSARY SALE" />
+    <node id="BTS EVENT" />
+    <node id="KIM DAE-JIN" />
+    <node id="SEOUL, DREAMING OF RUNNING" />
+    <node id="CITIZENS OF SEOUL" />
+    <node id="&#8361;8,564" />
+    <node id="&#8361;7,109" />
+    <node id="&#8361;16,208" />
+    <node id="&#8361;9,137" />
+    <node id="&#8361;4,264" />
+    <node id="&#8361;7,514" />
+    <node id="&#8361;6,391" />
+    <node id="&#8361;8,616" />
+    <node id="&#8361;4,219" />
+    <node id="&#8361;22,151" />
+    <node id="&#8361;10,494" />
+    <node id="&#8361;3,409" />
+    <node id="&#8361;4,555" />
+    <node id="&#8361;21,005" />
+    <node id="&#8361;4,295" />
+    <node id="&#8361;7,919" />
+    <node id="51 BRAS BASAH ROAD" />
+    <node id="SEOUL DAD'S GROUP" />
+    <node id="HAN RIVER" />
+    <node id="K-WAVE" />
+    <node id="&#52380;&#54840; &#49828;&#53356;&#47536; &#54028;&#53356;&#44264;&#54532;&#51109;" />
+    <node id="&#49436;&#52488; AI ZONE" />
+    <node id="&#51452;4&#51068;&#51228;" />
+    <node id="&#51648;&#54616;&#52384;" />
+    <node id="&#54168;&#45328;&#54000;" />
+    <node id="EASYPAY" />
+    <node id="PAYMENT RECEIPT" />
+    <node id="GMO" />
+    <node id="CREATIVE IMG" />
+    <node id="TRACKING LOG" />
+    <node id="DEALS" />
+    <node id="APP-ONLY DEALS" />
+    <node id="PRICES" />
+    <node id="&#55092;&#45824;&#54256;" />
+    <edge source="VERCEL" target="UMC-ALBALOG" />
+    <edge source="VERCEL" target="GITHUB" />
+    <edge source="VERCEL" target="GMAILWEAVER" />
+    <edge source="UMC-ALBALOG" target="S0-YEON" />
+    <edge source="UMC-ALBALOG" target="GITHUB" />
+    <edge source="S0-YEON" target="GMAILWEAVER" />
+    <edge source="S0-YEON" target="UZICHOI" />
+    <edge source="S0-YEON" target="CUSTOME EMAIL" />
+    <edge source="S0-YEON" target="GMAILWEAVER#20" />
+    <edge source="S0-YEON" target="REVIEW REQUESTED" />
+    <edge source="GMAILWEAVER" target="UZICHOI" />
+    <edge source="GMAILWEAVER" target="GITHUB" />
+    <edge source="GMAILWEAVER" target="ALIEXPRESS" />
+    <edge source="GMAILWEAVER" target="19CFA7C46BFBF684" />
+    <edge source="GMAILWEAVER" target="INSEON22" />
+    <edge source="GMAILWEAVER" target="PARKSSOJ" />
+    <edge source="GMAILWEAVER" target="EMAIL" />
+    <edge source="GMAILWEAVER" target="PULL REQUEST" />
+    <edge source="GMAILWEAVER" target="GRAPH SCHEMA" />
+    <edge source="GMAILWEAVER" target="MAIL DATA" />
+    <edge source="GMAILWEAVER" target="GRAPH DATA" />
+    <edge source="GMAILWEAVER" target="GMAIL API" />
+    <edge source="GMAILWEAVER" target="GMAIL" />
+    <edge source="UZICHOI" target="GMAILWEAVER#20" />
+    <edge source="UZICHOI" target="PULL REQUEST" />
+    <edge source="UZICHOI" target="GITHUB PULL REQUEST" />
+    <edge source="SRC" target="APPS-SCRIPT" />
+    <edge source="SRC" target="VITE" />
+    <edge source="SRC" target="PARQUET" />
+    <edge source="SRC" target="TABLES.JS" />
+    <edge source="SRC" target="WEATHER.JS" />
+    <edge source="SRC" target="SCSS" />
+    <edge source="SRC" target="CONFIG" />
+    <edge source="APPS-SCRIPT" target="INSTALLATION" />
+    <edge source="APPS-SCRIPT" target="SECURITY HEADERS" />
+    <edge source="APPS-SCRIPT" target="SITEMAP.XML" />
+    <edge source="APPS-SCRIPT" target="CONFIGURATION" />
+    <edge source="APPS-SCRIPT" target="DEPLOYMENT" />
+    <edge source="APPS-SCRIPT" target="BUNDLE ANALYSIS" />
+    <edge source="APPS-SCRIPT" target="FAVICON.ICO" />
+    <edge source="APPS-SCRIPT" target="FEED.XML" />
+    <edge source="APPS-SCRIPT" target="ROBOTSTXT" />
+    <edge source="APPS-SCRIPT" target="JQUERY-ELIMINATION-COMPLETE.MD" />
+    <edge source="APPS-SCRIPT" target="PERFORMANCE.MD" />
+    <edge source="APPS-SCRIPT" target="MAIN.CALENDAR.JS" />
+    <edge source="APPS-SCRIPT" target="MAIN-FORM-BASIC.JS" />
+    <edge source="APPS-SCRIPT" target="MAIN-INBOX.JS" />
+    <edge source="APPS-SCRIPT" target="MAIN-TABLES.JS" />
+    <edge source="APPS-SCRIPT" target="MAIN-UPLOAD.JS" />
+    <edge source="APPS-SCRIPT" target="MAIN.MINIMAL.JS" />
+    <edge source="APPS-SCRIPT" target="VITE.CONFIG.JS" />
+    <edge source="APPS-SCRIPT" target="VITEST.CONFIG.JS" />
+    <edge source="PARQUET" target="LANCEDB" />
+    <edge source="CHAT" target="TEST" />
     <edge source="ALIBABA" target="ALIEXPRESS" />
-    <edge source="ALIEXPRESS" target="MARCH 16 2026" />
-    <edge source="ALIEXPRESS" target="EMAIL" />
-    <edge source="ALIEXPRESS" target="CURRENCY DISCOUNT" />
+    <edge source="ALIBABA" target="SAMSUNG" />
+    <edge source="ALIBABA" target="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
+    <edge source="ALIBABA" target="TOSS PAY" />
+    <edge source="ALIBABA" target="MARCH 16, 2026" />
+    <edge source="ALIBABA" target="ROWAN" />
+    <edge source="ALIBABA" target="KOREA" />
+    <edge source="ALIBABA" target="EDM" />
+    <edge source="ALIBABA" target="NH CARD" />
     <edge source="ALIEXPRESS" target="ALIEXPRESS" />
+    <edge source="ALIEXPRESS" target="ALIEXPRESS KOREA HOLDING" />
+    <edge source="ALIEXPRESS" target="EMAIL" />
+    <edge source="ALIEXPRESS" target="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
     <edge source="ALIEXPRESS" target="KOREA" />
+    <edge source="ALIEXPRESS" target="EVENT" />
+    <edge source="ALIEXPRESS" target="16TH ANNIVERSARY BIG SALE" />
+    <edge source="ALIEXPRESS" target="GITHUB" />
     <edge source="ALIEXPRESS" target="ELECTRONICS" />
+    <edge source="ALIEXPRESS" target="HOME" />
     <edge source="ALIEXPRESS" target="MOBILE PHONES" />
     <edge source="ALIEXPRESS" target="BEAUTY" />
-    <edge source="ALIEXPRESS" target="SPORTS" />
+    <edge source="ALIEXPRESS" target="BIG SALE" />
+    <edge source="ALIEXPRESS" target="SPORTE" />
     <edge source="ALIEXPRESS" target="TOYS" />
-    <edge source="ALIEXPRESS" target="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
-    <edge source="ALIEXPRESS" target="CUSTOMER" />
-    <edge source="ALIEXPRESS" target="ALIBABA GROUP" />
-    <edge source="ALIEXPRESS" target="PRODUCT" />
-    <edge source="ALIEXPRESS" target="E-MAIL" />
-    <edge source="ALIEXPRESS" target="SINGAPORE" />
-    <edge source="ALIEXPRESS" target="HOME" />
-    <edge source="ALIEXPRESS" target="ROWAN" />
-    <edge source="ALIEXPRESS" target="EVENT" />
-    <edge source="ALIEXPRESS" target="GMO" />
-    <edge source="ALIEXPRESS" target="MEGA DISCOUNT" />
-    <edge source="ALIEXPRESS" target="&#8361;21,306" />
-    <edge source="ALIEXPRESS" target="&#8361;30,984" />
-    <edge source="ALIEXPRESS" target="&#8361;40,164" />
-    <edge source="ALIEXPRESS" target="&#8361;36,748" />
-    <edge source="ALIEXPRESS" target="&#8361;9,966" />
-    <edge source="ALIEXPRESS" target="&#8361;22,508" />
-    <edge source="ALIEXPRESS" target="&#8361;56,335" />
-    <edge source="ALIEXPRESS" target="&#8361;15,312" />
-    <edge source="ALIEXPRESS" target="&#8361;110,345" />
-    <edge source="ALIEXPRESS" target="&#8361;35,141" />
-    <edge source="ALIEXPRESS" target="&#8361;11,067" />
-    <edge source="ALIEXPRESS" target="&#8361;57,924" />
-    <edge source="ALIEXPRESS" target="&#8361;80,797" />
-    <edge source="ALIEXPRESS" target="&#8361;48,267" />
-    <edge source="ALIEXPRESS" target="ALIHOLDING" />
-    <edge source="ALIEXPRESS" target="16&#51452;&#45380; &#44536;&#47004;&#46300; &#49464;&#51068;" />
-    <edge source="ALIEXPRESS" target="DISCOUNT" />
-    <edge source="ALIEXPRESS" target="OPEN MARKET" />
-    <edge source="ALIEXPRESS" target="KOREA ANNIVERSARY SALE" />
-    <edge source="ALIEXPRESS" target="CUSTOME EMAIL" />
     <edge source="ALIEXPRESS" target="ANNIVERSARY SALE" />
+    <edge source="ALIEXPRESS" target="CUSTOMER" />
+    <edge source="ALIEXPRESS" target="OPEN MARKET" />
+    <edge source="ALIEXPRESS" target="SPORTS" />
+    <edge source="ALIEXPRESS" target="C.S.I." />
+    <edge source="ALIEXPRESS" target="SAMSUNG ELECTRONICS" />
+    <edge source="ALIEXPRESS" target="SURVEY" />
+    <edge source="ALIEXPRESS" target="ALIBABA.COM HONG KONG LIMITED" />
+    <edge source="ALIEXPRESS" target="SEOUL METROPOLITAN GOVERNMENT" />
+    <edge source="ALIEXPRESS" target="MARCH 16, 2026" />
+    <edge source="ALIEXPRESS" target="ALIEXPRESS KOREA CO., LTD." />
+    <edge source="ALIEXPRESS" target="SINGAPORE" />
+    <edge source="ALIEXPRESS" target="DISCOUNT EVENT" />
+    <edge source="ALIEXPRESS" target="SEOUL CITY HALL" />
+    <edge source="ALIEXPRESS" target="ROWAN" />
     <edge source="ALIEXPRESS" target="BIG DISCOUNT EVENT" />
-    <edge source="ALIEXPRESS" target="AE-BEST-CARE-MARKET13@DEALS.ALIPRESS.COM" />
-    <edge source="ALIEXPRESS" target="MEGA DISCOUNT EVENT" />
+    <edge source="ALIEXPRESS" target="CUPANG" />
+    <edge source="ALIEXPRESS" target="COUPANG" />
+    <edge source="ALIEXPRESS" target="CASHBACK EVENT" />
+    <edge source="ALIEXPRESS" target="HONG KONG" />
+    <edge source="ALIEXPRESS" target="CSI10186" />
+    <edge source="ALIEXPRESS" target="2026-03-20" />
+    <edge source="ALIEXPRESS" target="CUSTOMER SURVEY" />
+    <edge source="ALIEXPRESS" target="ALIBABA GROUP" />
+    <edge source="ALIEXPRESS" target="&#52572;&#49548;&#50672;" />
+    <edge source="ALIEXPRESS" target="GHYTAONDFKN3RHPAXRY6NKPXRGOEVL2SRQU7V90EFRK" />
+    <edge source="ALIEXPRESS" target="1005006173009012" />
+    <edge source="ALIEXPRESS" target="1005006160881604" />
+    <edge source="ALIEXPRESS" target="1005009379999340" />
+    <edge source="ALIEXPRESS" target="1005010026543235" />
+    <edge source="ALIEXPRESS" target="1005007181134996" />
+    <edge source="ALIEXPRESS" target="1005010736431137" />
+    <edge source="ALIEXPRESS" target="1005010614786911" />
+    <edge source="ALIEXPRESS" target="1005010458233645" />
+    <edge source="ALIEXPRESS" target="1005010308594298" />
+    <edge source="ALIEXPRESS" target="1005006756167788" />
+    <edge source="ALIEXPRESS" target="1005006444737652" />
+    <edge source="ALIEXPRESS" target="1005010266771391" />
+    <edge source="ALIEXPRESS" target="1005009294596040" />
+    <edge source="ALIEXPRESS" target="1005009571493628" />
+    <edge source="ALIEXPRESS" target="1005010462245005" />
+    <edge source="ALIEXPRESS" target="1005008707809674" />
+    <edge source="ALIEXPRESS" target="1005001948459033" />
+    <edge source="ALIEXPRESS" target="GLOBAL EXCHANGE" />
+    <edge source="ALIEXPRESS" target="PURCHASE PROTECTION POLICY" />
+    <edge source="ALIEXPRESS" target="E-COMMERCE" />
+    <edge source="ALIEXPRESS" target="TIMES SQUARE" />
+    <edge source="ALIEXPRESS" target="CASHBACK" />
+    <edge source="ALIEXPRESS" target="PHONES" />
+    <edge source="ALIEXPRESS" target="ALIBABA.COM SINGAPORE E-COMMERCE PRIVATE LIMITED" />
+    <edge source="ALIEXPRESS" target="GOOGLE PLAY STORE" />
+    <edge source="ALIEXPRESS" target="ITUNES APP STORE" />
+    <edge source="ALIEXPRESS" target="MARCH 20, 2026" />
+    <edge source="ALIEXPRESS" target="SOUTH KOREAN WON" />
+    <edge source="ALIEXPRESS" target="COUPON" />
+    <edge source="ALIEXPRESS" target="DISCOUNT" />
+    <edge source="ALIEXPRESS" target="PRODUCT" />
+    <edge source="ALIEXPRESS" target="CYBER MALL" />
+    <edge source="ALIEXPRESS" target="CLOTHING DISCOUNT" />
+    <edge source="ALIEXPRESS" target="AE-BEST-CARE-MARKET13" />
+    <edge source="ALIEXPRESS" target="&#8361;8,564" />
+    <edge source="ALIEXPRESS" target="&#8361;7,109" />
+    <edge source="ALIEXPRESS" target="&#8361;16,208" />
+    <edge source="ALIEXPRESS" target="&#8361;9,137" />
+    <edge source="ALIEXPRESS" target="&#8361;4,264" />
+    <edge source="ALIEXPRESS" target="&#8361;7,514" />
+    <edge source="ALIEXPRESS" target="&#8361;6,391" />
+    <edge source="ALIEXPRESS" target="&#8361;8,616" />
+    <edge source="ALIEXPRESS" target="&#8361;4,219" />
+    <edge source="ALIEXPRESS" target="&#8361;22,151" />
+    <edge source="ALIEXPRESS" target="&#8361;10,494" />
+    <edge source="ALIEXPRESS" target="&#8361;3,409" />
+    <edge source="ALIEXPRESS" target="&#8361;4,555" />
+    <edge source="ALIEXPRESS" target="&#8361;21,005" />
+    <edge source="ALIEXPRESS" target="&#8361;4,295" />
+    <edge source="ALIEXPRESS" target="&#8361;7,919" />
+    <edge source="ALIEXPRESS" target="LINKEDIN" />
+    <edge source="ALIEXPRESS" target="GMO" />
+    <edge source="ALIEXPRESS" target="CREATIVE IMG" />
+    <edge source="ALIEXPRESS" target="EDM" />
+    <edge source="ALIEXPRESS" target="TRACKING LOG" />
+    <edge source="ALIEXPRESS" target="DEALS" />
+    <edge source="ALIEXPRESS" target="APP-ONLY DEALS" />
+    <edge source="ALIEXPRESS" target="PRICES" />
+    <edge source="ALIEXPRESS" target="ALIEXPRESS SERVICE CENTER" />
+    <edge source="ALIEXPRESS" target="DISCOUNTS" />
     <edge source="ALIEXPRESS" target="&#55092;&#45824;&#54256;" />
     <edge source="ALIEXPRESS" target="&#48624;&#54000;" />
     <edge source="ALIEXPRESS" target="&#49828;&#54252;&#52768;" />
     <edge source="ALIEXPRESS" target="&#51109;&#45212;&#44048;" />
-    <edge source="ALIEXPRESS" target="SURVEY" />
-    <edge source="ALIEXPRESS" target="COUPANG" />
-    <edge source="ALIEXPRESS" target="HONG KONG" />
-    <edge source="ALIEXPRESS" target="GRAND SALE" />
-    <edge source="ALIEXPRESS" target="EMAIL NOTIFICATION" />
-    <edge source="ALIEXPRESS" target="ALIEXPRESS SERVICE CENTER" />
-    <edge source="EMAIL" target="KOREA" />
-    <edge source="EMAIL" target="PROMOTIONAL EMAIL" />
+    <edge source="CASHION" target="SAMUEL NAMARA" />
+    <edge source="CASHION" target="DURKE BATAGLANI" />
+    <edge source="CASHION" target="MEGGIE TAZBAH" />
+    <edge source="CASHION" target="FIRUZABAD" />
+    <edge source="SAMUEL NAMARA" target="ALHAMIA PRISON" />
+    <edge source="SAMUEL NAMARA" target="MEGGIE TAZBAH" />
+    <edge source="SAMUEL NAMARA" target="DURKE BATAGLANI" />
+    <edge source="DURKE BATAGLANI" target="FIRUZABAD" />
+    <edge source="DURKE BATAGLANI" target="MEGGIE TAZBAH" />
+    <edge source="MEGGIE TAZBAH" target="FIRUZABAD" />
+    <edge source="ALIEXPRESS KOREA HOLDING" target="SINGAPORE" />
+    <edge source="SINGAPORE" target="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
+    <edge source="SINGAPORE" target="CUSTOMER" />
+    <edge source="SINGAPORE" target="LAZADA ONE" />
+    <edge source="SINGAPORE" target="SEOUL" />
+    <edge source="EMAIL" target="PERSON" />
+    <edge source="EMAIL" target="SUBJECT" />
+    <edge source="EMAIL" target="LABEL" />
+    <edge source="EMAIL" target="FILE" />
+    <edge source="EMAIL" target="CURRENCY DISCOUNT" />
+    <edge source="EMAIL" target="MESSAGE ID" />
     <edge source="EMAIL" target="CUSTOMER" />
-    <edge source="KOREA" target="DISCOUNT" />
-    <edge source="KOREA" target="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." />
-    <edge source="KOREA" target="KOREA ANNIVERSARY SALE" />
-    <edge source="KOREA" target="ANNIVERSARY SALE" />
-    <edge source="KOREA" target="SEOUL" />
-    <edge source="ELECTRONICS" target="SMARTPHONES" />
-    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="LAZADA ONE" />
+    <edge source="EMAIL" target="GOOGLE CLOUD" />
+    <edge source="EMAIL" target="CREDIT CARD" />
+    <edge source="EMAIL" target="COUPANG" />
+    <edge source="EMAIL" target="2026-03-13" />
+    <edge source="EMAIL" target="FREE SHIPPING" />
+    <edge source="EMAIL" target="50% DISCOUNT" />
+    <edge source="EMAIL" target="CASHBACK" />
+    <edge source="EMAIL" target="PRODUCT PAGE" />
+    <edge source="EMAIL" target="ALIEXPRESS KOREA CO., LTD." />
+    <edge source="EMAIL" target="16TH ANNIVERSARY BIG SALE" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="SEOUL" />
     <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="BRAS BASAH ROAD" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="KAKAO" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="ALIEKSPRESS" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="ONEDRIVE" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="ALIEXPRESS KOREA CO., LTD." />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="GRAND SALE" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="LAZADA ONE" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="SAMSUNG ELECTRONICS" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="&#48624;&#54000;" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="&#49828;&#54252;&#52768;" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="&#51109;&#45212;&#44048;" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="GOOGLE CLOUD" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="MICROSOFT CORPORATION" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="KOREA" />
     <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="SEOUL CITY HALL" />
-    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="MEGA DISCOUNT" />
-    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="SINGAPORE" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="BIG DISCOUNT EVENT" />
     <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="ALIBABA GROUP" />
-    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="CUSTODIAN" />
-    <edge source="LAZADA ONE" target="SINGAPORE" />
-    <edge source="CUSTOMER" target="PROMOTIONAL EMAIL" />
-    <edge source="CUSTOMER" target="DISCOUNT" />
-    <edge source="CUSTOMER" target="SURVEY" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="16TH ANNIVERSARY BIG SALE" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="ELECTRONICS" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="MOBILE PHONES" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="BEAUTY" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="SPORTS" />
+    <edge source="ALIEXPRESS KOREA HOLDING (SINGAPORE) PTE. LTD." target="TOYS" />
+    <edge source="PROMOTION EMAIL" target="CUSTOMER" />
     <edge source="CUSTOMER" target="OPEN MARKET" />
-    <edge source="CUSTOMER" target="16TH ANNIVERSARY GRAND SALE" />
-    <edge source="CUSTOMER" target="CUSTOMER FEEDBACK" />
-    <edge source="ALIBABA GROUP" target="COUPANG" />
-    <edge source="PRODUCT" target="DISCOUNT" />
-    <edge source="DISCOUNT" target="PRODUCTS" />
-    <edge source="DISCOUNT" target="ANNIVERSARY SALE" />
-    <edge source="TOSS PAY" target="SAMSUNG" />
-    <edge source="TOSS PAY" target="NH CARD" />
-    <edge source="SEOUL CITY HALL" target="FAMILY CARE SUPPORT PROGRAM" />
-    <edge source="SEOUL CITY HALL" target="SEOUL METROPOLITAN GOVERNMENT" />
-    <edge source="SEOUL CITY HALL" target="HIMBOTAM FAIR" />
-    <edge source="SEOUL CITY HALL" target="CUSTODIAN" />
-    <edge source="SEOUL CITY HALL" target="4050 LIFE DESIGN SCHOOL" />
-    <edge source="SEOUL CITY HALL" target="SEOUL" />
-    <edge source="SEOUL" target="&#49548;&#49345;&#44277;&#51064; &#51221;&#52293; &#52509;&#47581;&#46972; '&#55192;&#48372;&#53484; &#48149;&#46988;&#54924;'" />
-    <edge source="SEOUL" target="4050 &#51064;&#49373;&#46356;&#51088;&#51064;&#54617;&#44368;" />
-    <edge source="SEOUL" target="&#48152;&#47140;&#46041;&#47932; &#49884;&#48124;&#54617;&#44368;" />
-    <edge source="SEOUL" target="&#49436;&#50872;&#48373;&#51648;&#54252;&#53560;" />
+    <edge source="CUSTOMER" target="PROMOTIONAL EMAIL" />
+    <edge source="CUSTOMER" target="ALIEXPRESS KOREA CO., LTD." />
+    <edge source="CUSTOMER" target="SURVEY" />
+    <edge source="SEOUL" target="&#44305;&#54868;&#47928; BTS &#54665;&#49324;" />
+    <edge source="SEOUL" target="BTS" />
+    <edge source="SEOUL" target="&#50612;&#50872;&#47548;&#54540;&#46972;&#51088;" />
+    <edge source="SEOUL" target="&#55192;&#48372;&#53484; &#48149;&#46988;&#54924;" />
+    <edge source="SEOUL" target="SEOUL CITY" />
+    <edge source="SEOUL" target="DONGHAENG GARDEN" />
+    <edge source="SEOUL" target="YONGWANGSAN NEIGHBORHOOD PARK" />
+    <edge source="SEOUL" target="K-CULTURE FESTIVAL" />
+    <edge source="SEOUL" target="JOSEON ROCKET" />
+    <edge source="SEOUL" target="LIFELONG EDUCATION VOUCHER" />
+    <edge source="SEOUL" target="SEOUL FILM CENTER" />
+    <edge source="SEOUL" target="HISTORICAL CULTURE TOUR" />
+    <edge source="SEOUL" target="BTS COMEBACK EVENT" />
     <edge source="SEOUL" target="SEOUL METROPOLITAN GOVERNMENT" />
-    <edge source="SEOUL" target="SAMUEL NAMARA" />
-    <edge source="SEOUL" target="SEOUL'S 4.5-DAY WORKWEEK" />
-    <edge source="SEOUL" target="CHOIN YOUN" />
-    <edge source="SEOUL" target="HIMBOTAM FAIR" />
+    <edge source="SEOUL" target="GWANGHWAMUN" />
+    <edge source="SEOUL" target="KOREA" />
+    <edge source="SEOUL" target="ESEOUL" />
+    <edge source="SEOUL" target="SEOUL BRAND GOODS" />
+    <edge source="SEOUL" target="SEOUL POLICY WEBTOON" />
+    <edge source="SEOUL" target="JUNG-DONG HISTORICAL COURSE" />
+    <edge source="SEOUL" target="HISTORICAL CULTURAL TOUR" />
+    <edge source="SEOUL" target="SEOUL CITY HALL" />
+    <edge source="SEOUL" target="SPRING" />
+    <edge source="SEOUL" target="SAMHWA SCHOOL" />
+    <edge source="SEOUL" target="BTS COMEBACK LIVE" />
+    <edge source="SEOUL" target="4050 &#51064;&#49373;&#46356;&#51088;&#51064;&#54617;&#44368;" />
+    <edge source="SEOUL" target="&#50500;&#51060;&#46028;&#48388;&#49436;&#48708;&#49828;" />
+    <edge source="SEOUL" target="&#48512;&#46041;&#49328; &#47924;&#47308; &#44368;&#50977;" />
     <edge source="SEOUL" target="&#49436;&#49436;&#50872;&#48120;&#49696;&#44288;" />
-    <edge source="SEOUL" target="&#50628;&#50980;&#51452;" />
-    <edge source="SEOUL" target="&#44032;&#51313; &#46028;&#48372;&#45716; &#52397;&#49548;&#45380;&#183;&#52397;&#45380;" />
-    <edge source="SEOUL" target="COUPANG" />
-    <edge source="SEOUL" target="SEOUL WELFARE PORTAL" />
-    <edge source="SEOUL" target="SELF-CARE ALLOWANCE" />
-    <edge source="SEOUL" target="SEOUL GLOBAL CENTER" />
+    <edge source="SEOUL" target="SEOUL GRAND PARK" />
+    <edge source="SEOUL" target="MARPO BRIDGE" />
+    <edge source="SEOUL" target="DREAM HOUSE" />
+    <edge source="SEOUL" target="TRAM SYSTEM" />
+    <edge source="SEOUL" target="FUN SEOUL" />
+    <edge source="SEOUL" target="WIRYE LINE" />
+    <edge source="SEOUL" target="SEOUL TRAIL" />
+    <edge source="SEOUL" target="NORTH KOREA" />
     <edge source="SEOUL" target="&#52572;*&#50672;" />
-    <edge source="&#49548;&#49345;&#44277;&#51064; &#51221;&#52293; &#52509;&#47581;&#46972; '&#55192;&#48372;&#53484; &#48149;&#46988;&#54924;'" target="&#49548;&#49345;&#44277;&#51064;" />
-    <edge source="4050 &#51064;&#49373;&#46356;&#51088;&#51064;&#54617;&#44368;" target="&#51473;&#51109;&#45380;" />
-    <edge source="4050 &#51064;&#49373;&#46356;&#51088;&#51064;&#54617;&#44368;" target="&#49436;&#50872;&#48373;&#51648;&#54252;&#53560;" />
-    <edge source="&#49436;&#50872;&#48373;&#51648;&#54252;&#53560;" target="&#52397;&#49548;&#45380;&#183;&#52397;&#45380;" />
-    <edge source="&#49436;&#49436;&#50872;&#48120;&#49696;&#44288;" target="&#51060;&#48337;&#47928;" />
-    <edge source="&#49436;&#49436;&#50872;&#48120;&#49696;&#44288;" target="&#49436;&#50872;" />
-    <edge source="&#49436;&#49436;&#50872;&#48120;&#49696;&#44288;" target="&#50628;&#50980;&#51452;" />
-    <edge source="&#49436;&#50872;" target="&#50500;&#47492;&#45796;&#50868; &#46041;&#54665;&#44032;&#44172;" />
+    <edge source="SEOUL" target="SEOUL MARATHON" />
+    <edge source="SEOUL" target="GYEONGBOKGUNG PALACE" />
+    <edge source="SEOUL" target="OULIM PLAZA" />
+    <edge source="SEOUL" target="DONGHAENGARDEN" />
+    <edge source="SEOUL" target="KIM DAEJIN" />
+    <edge source="SEOUL" target="JOSUN ROCKET" />
+    <edge source="SEOUL" target="SEOUL CITY GOVERNMENT" />
+    <edge source="SEOUL" target="SEOUL DULLEGI" />
+    <edge source="SEOUL" target="YOUNG PEOPLE" />
+    <edge source="SEOUL" target="BUKHAN MOUNTAIN VIEWPOINT" />
+    <edge source="SEOUL" target="HISTORICAL CULTURAL SURVEY" />
+    <edge source="SEOUL" target="HIMBOTAM FAIR" />
+    <edge source="SEOUL" target="&#49436;&#50872;&#48373;&#51648;&#54252;&#53560;" />
+    <edge source="SEOUL" target="&#52397;&#49548;&#45380;&#183;&#52397;&#45380;" />
+    <edge source="SEOUL" target="&#45236;&#52828;&#44396;&#49436;&#50872;" />
+    <edge source="SEOUL" target="COUPANG" />
+    <edge source="SEOUL" target="MARCH 14" />
+    <edge source="SEOUL" target="SEOUL DAD GROUP" />
+    <edge source="SEOUL" target="MORNING MARATHON" />
+    <edge source="SEOUL" target="2026 SEOUL HISTORICAL CULTURAL TOUR" />
+    <edge source="SEOUL" target="HIMBOTAEM FAIR" />
+    <edge source="SEOUL" target="K-DANCE FESTIVAL" />
+    <edge source="SEOUL" target="YONGWANGSAN PARK" />
+    <edge source="SEOUL" target="KOREAN CULTURE FESTIVAL" />
+    <edge source="SEOUL" target="KOREAN EDUCATION VOUCHER" />
+    <edge source="SEOUL" target="SEOSOUL ART MUSEUM" />
+    <edge source="SEOUL" target="KOREAN HISTORY COURSE" />
+    <edge source="SEOUL" target="GONGJONG'S PATH" />
+    <edge source="SEOUL" target="KOREAN EDUCATION VOUCHER PROGRAM" />
+    <edge source="SEOUL" target="KIM DAE-JIN" />
+    <edge source="SEOUL" target="ARIRANG" />
+    <edge source="SEOUL" target="SEOUL DAD'S GROUP" />
+    <edge source="SEOUL" target="HAN RIVER" />
+    <edge source="&#44305;&#54868;&#47928; BTS &#54665;&#49324;" target="BTS" />
+    <edge source="BTS" target="BTS COMEBACK EVENT" />
+    <edge source="BTS" target="SEOUL CITY HALL" />
+    <edge source="BTS" target="GWANGHWAMUN" />
+    <edge source="BTS" target="K-CULTURE FESTIVAL" />
+    <edge source="BTS" target="ARIRANG" />
+    <edge source="BTS" target="MARCH 21" />
+    <edge source="BTS" target="OULRIM PLAZA" />
+    <edge source="BTS" target="KOREA" />
+    <edge source="BTS" target="&#44305;&#54868;&#47928;" />
+    <edge source="BTS" target="K-WAVE" />
+    <edge source="&#50612;&#50872;&#47548;&#54540;&#46972;&#51088;" target="&#49436;&#50872;" />
+    <edge source="&#50612;&#50872;&#47548;&#54540;&#46972;&#51088;" target="&#44053;&#49436;&#44396;" />
+    <edge source="&#55192;&#48372;&#53484; &#48149;&#46988;&#54924;" target="&#49436;&#50872;" />
+    <edge source="&#55192;&#48372;&#53484; &#48149;&#46988;&#54924;" target="&#49548;&#49345;&#44277;&#51064;" />
+    <edge source="SEOUL CITY" target="SEOUL, DREAMS ON WHEELS" />
+    <edge source="SEOUL CITY" target="BTS COMEBACK LIVE" />
+    <edge source="SEOUL CITY" target="LIFELONG EDUCATION VOUCHER" />
+    <edge source="SEOUL CITY" target="SEOUL ATTRACTIVE JOBS" />
+    <edge source="SEOUL CITY" target="ARTS TALENT EDUCATION" />
+    <edge source="SEOUL CITY" target="CITIZEN JOURNALIST" />
+    <edge source="SEOUL CITY" target="SEOUL MOVIE CENTER" />
+    <edge source="SEOUL CITY" target="DAD SUPPORT PROGRAM" />
+    <edge source="SEOUL CITY" target="AI ZONE" />
+    <edge source="SEOUL CITY" target="IDA HYUN" />
+    <edge source="SEOUL CITY" target="SEOUL, DREAMING OF RUNNING" />
+    <edge source="YONGWANGSAN NEIGHBORHOOD PARK" target="JANG SUYEON" />
+    <edge source="K-CULTURE FESTIVAL" target="DREAM HOUSE" />
+    <edge source="K-CULTURE FESTIVAL" target="SEOUL METROPOLITAN GOVERNMENT" />
+    <edge source="K-CULTURE FESTIVAL" target="MARCH 21" />
+    <edge source="K-CULTURE FESTIVAL" target="GWAHNGHWAMUN" />
+    <edge source="LIFELONG EDUCATION VOUCHER" target="SEOUL CITY HALL" />
+    <edge source="LIFELONG EDUCATION VOUCHER" target="SEOUL ATTRACTIVE JOBS" />
+    <edge source="LIFELONG EDUCATION VOUCHER" target="ARTS TALENT EDUCATION" />
+    <edge source="SEOUL FILM CENTER" target="HISTORICAL CULTURE TOUR" />
+    <edge source="SEOUL FILM CENTER" target="SEOUL METROPOLITAN GOVERNMENT" />
+    <edge source="HISTORICAL CULTURE TOUR" target="CITIZENS OF SEOUL" />
+    <edge source="GITHUB" target="PATCH LINKS" />
+    <edge source="GITHUB" target="PULL REQUEST" />
+    <edge source="GITHUB" target="PARKSSOJ" />
+    <edge source="GITHUB" target="GMAILWEAVER#20" />
+    <edge source="PERSON" target="SUBJECT" />
+    <edge source="PERSON" target="LABEL" />
+    <edge source="PERSON" target="FILE" />
+    <edge source="KOREA" target="GWANGHWAMUN" />
+    <edge source="KOREA" target="DISCOUNT EVENT" />
+    <edge source="KOREA" target="ROWAN" />
+    <edge source="KOREA" target="GALAXY AI SUBSCRIPTION CLUB" />
+    <edge source="KOREA" target="HANSUNG UNIVERSITY" />
+    <edge source="KOREA" target="SAMSUNG" />
+    <edge source="KOREA" target="NH CARD" />
+    <edge source="KOREA" target="COUPANG" />
+    <edge source="KOREA" target="ALIEXPRESS KOREA CO., LTD." />
+    <edge source="KOREA" target="CLOTHING DISCOUNT" />
+    <edge source="KOREA" target="PRODUCT" />
+    <edge source="EVENT" target="KROHAARA" />
+    <edge source="EVENT" target="FIRUZABAD" />
+    <edge source="BTS COMEBACK EVENT" target="SEOUL CITY GOVERNMENT" />
+    <edge source="BTS COMEBACK EVENT" target="SEOUL CITY HALL" />
+    <edge source="BTS COMEBACK EVENT" target="GWANGHWAMUN" />
+    <edge source="&#49436;&#50872;" target="&#49436;&#50872; &#48652;&#47004;&#46300; &#44415;&#51592;" />
+    <edge source="&#49436;&#50872;" target="&#49436;&#49436;&#50872;&#48120;&#49696;&#44288;" />
+    <edge source="&#49436;&#50872;" target="&#46041;&#54665;&#44032;&#46304;" />
+    <edge source="&#49436;&#50872;" target="&#50857;&#50773;&#49328;&#44540;&#47536;&#44277;&#50896;" />
+    <edge source="&#49436;&#50872;" target="&#49436;&#50872;&#50689;&#54868;&#49468;&#53552;" />
+    <edge source="&#49436;&#50872;" target="K-&#47928;&#54868; &#52629;&#51228;" />
+    <edge source="&#49436;&#50872;" target="&#49436;&#50872; &#51221;&#52293; &#50937;&#53808;" />
+    <edge source="&#49436;&#50872;" target="&#51076;&#51473;&#48712;" />
+    <edge source="&#49436;&#50872;" target="&#44305;&#54868;&#47928;" />
+    <edge source="&#49436;&#50872;" target="&#51312;&#49440;&#51032; &#47196;&#53011;" />
+    <edge source="&#49436;&#50872;" target="&#54217;&#49373;&#44368;&#50977;&#51060;&#50857;&#44428;" />
+    <edge source="&#49436;&#50872;" target="&#50669;&#49324;&#47928;&#54868;&#45813;&#49324;" />
+    <edge source="&#49436;&#50872;" target="&#44053;&#46041;&#49714;&#49549;&#46020;&#49436;&#44288;" />
+    <edge source="&#49436;&#50872;" target="&#50808;&#47196;&#50880;&#50504;&#45397;120" />
+    <edge source="&#49436;&#50872;" target="&#49436;&#50872;&#49884;&#52397;" />
     <edge source="&#49436;&#50872;" target="&#49436;&#50872;&#44544;&#47196;&#48268;&#49468;&#53552;" />
-    <edge source="&#49436;&#50872;" target="&#45908;&#46300;&#47548;&#51665;+" />
-    <edge source="&#49436;&#50872;" target="&#49436;&#50872;&#46168;&#47112;&#44600;" />
+    <edge source="&#49436;&#50872;" target="&#50628;&#50980;&#51452;" />
     <edge source="&#49436;&#50872;" target="&#44608;&#49849;&#50500;" />
     <edge source="&#49436;&#50872;" target="&#44608;&#44221;&#49440;" />
-    <edge source="&#49436;&#50872;" target="&#51088;&#50689;&#50629;&#51088; &#50504;&#49900;&#53685;&#51109;" />
-    <edge source="&#49436;&#50872;" target="&#51452;&#53469;&#44277;&#44553;" />
-    <edge source="&#49436;&#50872;" target="&#50900;&#49464;&#51648;&#50896;" />
+    <edge source="&#49436;&#50872;" target="&#45908;&#46300;&#47548;&#51665;+" />
+    <edge source="&#49436;&#50872;" target="&#53944;&#47016;" />
     <edge source="&#49436;&#50872;" target="&#49436;&#50872;&#46168;&#47112;&#44600; 17&#53076;&#49828;" />
-    <edge source="&#49436;&#50872;" target="&#53216;&#54049;" />
-    <edge source="&#50500;&#47492;&#45796;&#50868; &#46041;&#54665;&#44032;&#44172;" target="&#50628;&#50980;&#51452;" />
-    <edge source="&#49436;&#50872;&#44544;&#47196;&#48268;&#49468;&#53552;" target="&#44608;&#44221;&#49440;" />
-    <edge source="&#49436;&#50872;&#44544;&#47196;&#48268;&#49468;&#53552;" target="&#44608;&#49849;&#50500;" />
-    <edge source="&#49436;&#50872;&#44544;&#47196;&#48268;&#49468;&#53552;" target="&#45908;&#46300;&#47548;&#51665;+" />
-    <edge source="&#49436;&#50872;&#46168;&#47112;&#44600;" target="&#48513;&#54620;&#49328; &#51204;&#47581;&#45824;" />
-    <edge source="&#49436;&#50872;&#46168;&#47112;&#44600;" target="&#44396;&#54028;&#48156;&#52380; &#49688;&#48320;&#52852;&#54168;" />
-    <edge source="&#48513;&#54620;&#49328; &#51204;&#47581;&#45824;" target="&#44396;&#54028;&#48156;&#52380; &#49688;&#48320;&#52852;&#54168;" />
-    <edge source="SAMUEL NAMARA" target="AURELIAN OFFICIALS" />
-    <edge source="SEOUL'S 4.5-DAY WORKWEEK" target="SEOUL RESIDENTS" />
-    <edge source="LINKEDIN" target="&#52572;&#49548;&#50672;" />
-    <edge source="LINKEDIN" target="NEXON KOREA" />
-    <edge source="LINKEDIN" target="OOKLA" />
-    <edge source="LINKEDIN" target="SK SQUARE" />
-    <edge source="LINKEDIN" target="MINIMUM YOUNG" />
-    <edge source="LINKEDIN" target="DUBLIN" />
-    <edge source="&#52572;&#49548;&#50672;" target="NEXON KOREA" />
-    <edge source="&#52572;&#49548;&#50672;" target="OOKLA" />
-    <edge source="&#52572;&#49548;&#50672;" target="SK SQUARE" />
-    <edge source="&#52572;&#49548;&#50672;" target="ALIASPRESS" />
-    <edge source="&#49436;&#50872;&#49884; &#53944;&#50948;&#53552;" target="&#49436;&#50872;&#49884;" />
-    <edge source="&#49436;&#50872;&#49884;" target="&#49436;&#50872;&#49884; &#48660;&#47196;&#44536;" />
-    <edge source="&#49436;&#50872;&#49884;" target="&#46972;&#51060;&#48652;&#49436;&#50872;" />
-    <edge source="&#49436;&#50872;&#49884; &#48660;&#47196;&#44536;" target="&#49436;&#50872;&#53945;&#48324;&#49884;" />
-    <edge source="&#46972;&#51060;&#48652;&#49436;&#50872;" target="&#49436;&#50872;&#53945;&#48324;&#49884;" />
-    <edge source="ROWAN" target="GMO" />
-    <edge source="ALIBABA.COM HONG KONG LIMITED" target="COUPANG" />
-    <edge source="ALIBABA.COM HONG KONG LIMITED" target="HONG KONG" />
-    <edge source="COUPANG" target="CHOIN YOUN" />
-    <edge source="COUPANG" target="ALIEEXPRESS" />
-    <edge source="COUPANG" target="CUSTOMER SERVICE" />
-    <edge source="COUPANG" target="CHOIN" />
-    <edge source="COUPANG" target="&#52572;*&#50672;" />
-    <edge source="HONG KONG" target="TIMES SQUARE" />
-    <edge source="CHOIN YOUN" target="GOOD FEEL ORGANIC COTTON TAMPONS" />
-    <edge source="CHOIN YOUN" target="SPEEDY DOCKING POWER BANK" />
-    <edge source="CUSTOMER SERVICE" target="CHOIN" />
+    <edge source="&#49436;&#50872;" target="&#51088;&#50689;&#50629;&#51088; &#50504;&#49900;&#53685;&#51109;" />
+    <edge source="&#49436;&#50872;" target="&#48513;&#54620;&#49328; &#51204;&#47581;&#45824;" />
+    <edge source="&#49436;&#50872;" target="&#44396;&#54028;&#48156;&#52380; &#49688;&#48320;&#52852;&#54168;" />
+    <edge source="&#49436;&#50872;" target="&#54620;&#44053;&#48260;&#49828;" />
+    <edge source="&#49436;&#50872;" target="&#49436;&#50872;&#49324;&#46988;&#46308;" />
+    <edge source="&#49436;&#50872; &#48652;&#47004;&#46300; &#44415;&#51592;" target="&#49548;&#49345;&#44277;&#51064;" />
+    <edge source="&#49436;&#50872; &#48652;&#47004;&#46300; &#44415;&#51592;" target="&#49884;&#48124;" />
+    <edge source="&#49436;&#49436;&#50872;&#48120;&#49696;&#44288;" target="&#49436;&#50872;&#49884;" />
+    <edge source="&#49436;&#49436;&#50872;&#48120;&#49696;&#44288;" target="&#51060;&#48337;&#47928;" />
+    <edge source="&#49436;&#49436;&#50872;&#48120;&#49696;&#44288;" target="&#51312;&#49688;&#48393;" />
+    <edge source="&#44256;&#51333;&#51032; &#44600;" target="&#51221;&#46041;" />
+    <edge source="&#51221;&#46041;" target="&#51060;&#51456; &#50676;&#49324; &#51665;&#53552;" />
+    <edge source="&#49436;&#50872;&#50689;&#54868;&#49468;&#53552;" target="K-&#47928;&#54868; &#52629;&#51228;" />
+    <edge source="&#49436;&#50872;&#50689;&#54868;&#49468;&#53552;" target="&#49436;&#50872;&#53945;&#48324;&#49884;" />
+    <edge source="&#49436;&#50872;&#50689;&#54868;&#49468;&#53552;" target="&#49436;&#50872;&#49884;" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="COVID-19 WEEKLY BRIEFING" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="INSTAGRAM" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="FACEBOOK" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="YOUTUBE" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="TWITTER" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="BLOG" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="NEWSLETTER" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="C.S.I." />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="&#52572;&#49548;&#50672;" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="DREAM HOUSE+" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="DASAN CALL CENTER" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="SEOUL CITY HALL" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="SEOUL YOUTUBE" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="SEOUL FACEBOOK" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="SEOUL TWITTER" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="SEOUL BLOG" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="LINKEDIN" />
+    <edge source="SEOUL METROPOLITAN GOVERNMENT" target="CULTURAL POLICY" />
+    <edge source="EB244DB9D4BE1C0F23A0CA63541F7C53A50_V2" target="CHAT_EXTRACT-CONTINUATION" />
+    <edge source="CHAT_EXTRACT-CONTINUATION" target="CHAT_SUMMARIZE" />
+    <edge source="SRC/PARQUET/CACHE" target="ENTITY EXTRACTION" />
+    <edge source="SRC/PARQUET/CACHE" target="LANCEDB" />
+    <edge source="ELECTRONICS" target="PRODUCTS" />
+    <edge source="BIG SALE" target="ALIEKSPRESS" />
+    <edge source="ANNIVERSARY SALE" target="PRODUCT" />
+    <edge source="PRODUCT" target="OPEN MARKET" />
+    <edge source="PRODUCT" target="DISCOUNT" />
+    <edge source="PRODUCT" target="E-COMMERCE" />
+    <edge source="OPEN MARKET" target="ALIEXPRESS KOREA CO., LTD." />
+    <edge source="PROMOTIONAL EMAIL" target="BIG DISCOUNT EVENT" />
+    <edge source="PROMOTIONAL EMAIL" target="16TH ANNIVERSARY SALE" />
+    <edge source="SEOUL CITY HALL" target="GWANGHWAMUN" />
+    <edge source="SEOUL CITY HALL" target="OULIM PLAZA" />
+    <edge source="SEOUL CITY HALL" target="HIMBOTAM FAIR" />
+    <edge source="SEOUL CITY HALL" target="MARCH 19, 2026" />
+    <edge source="SEOUL CITY HALL" target="SEOUL ATTRACTIVE JOBS" />
+    <edge source="SEOUL CITY HALL" target="BTS COMEBACK LIVE" />
+    <edge source="SEOUL CITY HALL" target="BTS EVENT" />
+    <edge source="GWANGHWAMUN" target="BTS EVENT" />
+    <edge source="OULIM PLAZA" target="GANGSEO-GU" />
+    <edge source="OULIM PLAZA" target="KANGSEO DISTRICT" />
+    <edge source="GANGSEO-GU" target="OULRIM PLAZA" />
+    <edge source="&#50669;&#49324;&#47928;&#54868;&#45813;&#49324;" target="&#49436;&#50872;&#53945;&#48324;&#49884;" />
+    <edge source="ESEOUL" target="ESEOUL" />
+    <edge source="HIMBOTAM FAIR" target="SMALL BUSINESS OWNERS" />
+    <edge source="KAKAO" target="KAKAO DEVELOPERS" />
+    <edge source="KAKAO" target="CUPANG" />
+    <edge source="KAKAO" target="&#51228;&#51452;&#53945;&#48324;&#51088;&#52824;&#46020;" />
+    <edge source="KAKAO" target="&#52852;&#52852;&#50724;&#46356;&#48296;&#47196;&#54140;&#49828;" />
+    <edge source="KAKAO" target="2026&#45380; 4&#50900; 20&#51068;" />
+    <edge source="&#52852;&#52852;&#50724;" target="&#53216;&#54049;" />
+    <edge source="&#52852;&#52852;&#50724;" target="&#51228;&#51452;&#53945;&#48324;&#51088;&#52824;&#46020;" />
     <edge source="&#53216;&#54049;" target="&#52572;*&#50672;" />
+    <edge source="&#53216;&#54049;" target="&#47196;&#51200;&#49828; &#54644;&#47204;&#46300; &#47536;" />
+    <edge source="&#53216;&#54049;" target="&#44256;&#44061;&#49468;&#53552;" />
+    <edge source="&#53216;&#54049;" target="&#50752;&#50864; &#47716;&#48260;&#49901;" />
+    <edge source="&#53216;&#54049;" target="&#45684;&#45349;&#49828;" />
+    <edge source="&#53216;&#54049;" target="&#51060;&#51648;&#54168;&#51060;" />
+    <edge source="&#53216;&#54049;" target="&#51339;&#51008;&#45712;&#45196; &#50976;&#44592;&#45453; &#49692;&#47732; &#53456;&#54256;" />
+    <edge source="&#53216;&#54049;" target="&#49828;&#54588;&#46356; &#46020;&#53433; &#48372;&#51312;&#48176;&#53552;&#47532;" />
     <edge source="&#53216;&#54049;" target="&#50724;&#46748;&#44592;" />
     <edge source="&#53216;&#54049;" target="&#44272;&#44272;" />
     <edge source="&#53216;&#54049;" target="&#47732;&#49324;&#46993;" />
-    <edge source="&#53216;&#54049;" target="&#44256;&#44061;&#49468;&#53552;" />
-    <edge source="&#53216;&#54049;" target="&#50864;&#47532;&#51008;&#54665;" />
-    <edge source="&#53216;&#54049;" target="&#47196;&#51200;&#49828; &#54644;&#47204;&#46300; &#47536;" />
-    <edge source="&#53216;&#54049;" target="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396;" />
-    <edge source="&#53216;&#54049;" target="&#49345;&#54408; &#44368;&#54872;/&#48152;&#54408; &#50504;&#45236;" />
-    <edge source="&#53216;&#54049;" target="&#49548;&#48708;&#51088; &#54588;&#54644;&#48372;&#49345;" />
-    <edge source="&#53216;&#54049;" target="CS&#49884;&#47532;&#50620;" />
-    <edge source="&#53216;&#54049;" target="&#45348;&#48708;&#44172;&#51060;&#49496;" />
-    <edge source="&#53216;&#54049;" target="PMP" />
-    <edge source="&#53216;&#54049;" target="&#45432;&#53944;&#48513;" />
-    <edge source="&#53216;&#54049;" target="&#45936;&#49828;&#53356;&#53457;PC" />
     <edge source="&#53216;&#54049;" target="&#44277;&#51221;&#44144;&#47000;&#50948;&#50896;&#54924;" />
-    <edge source="&#53216;&#54049;" target="&#49888;&#47784;&#45944;" />
-    <edge source="&#53216;&#54049;" target="&#49548;&#48708;&#51088; &#54588;&#54644;&#48372;&#49345;&#44508;&#51221;" />
-    <edge source="&#53216;&#54049;" target="&#52292;&#47924; &#51648;&#44553;&#48372;&#51613; &#49436;&#48708;&#49828;" />
-    <edge source="&#53216;&#54049;" target="&#49548;&#48708;&#51088; &#54588;&#54644; &#48372;&#49345;" />
-    <edge source="&#53216;&#54049;" target="&#47560;&#53011;&#54540;&#47112;&#51060;&#49828;" />
     <edge source="&#53216;&#54049;" target="&#49888;&#47280;&#44288;&#47532;&#49468;&#53552;" />
-    <edge source="&#53216;&#54049;" target="&#49548;&#48708;&#51088; &#54588;&#54644; &#48372;&#49345;&#52376;&#47532; &#44592;&#44396;" />
-    <edge source="&#53216;&#54049;" target="&#49436;&#50872;&#53945;&#48324;&#49884;" />
+    <edge source="&#53216;&#54049;" target="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396; &#49569;&#54028;&#45824;&#47196; 570" />
     <edge source="&#53216;&#54049;" target="NHN KCP" />
-    <edge source="&#53216;&#54049;" target="2026&#45380; 03&#50900; 14&#51068;" />
-    <edge source="&#53216;&#54049;" target="&#49548;&#48708;&#51088;&#54588;&#54644;&#48372;&#49345;" />
-    <edge source="&#53216;&#54049;" target="&#49436;&#50872; &#49569;&#54028;&#44396; &#49569;&#54028;&#45824;&#47196; 570" />
-    <edge source="&#52572;*&#50672;" target="&#50724;&#46748;&#44592;" />
-    <edge source="&#52572;*&#50672;" target="&#44272;&#44272;" />
-    <edge source="&#52572;*&#50672;" target="&#47732;&#49324;&#46993;" />
+    <edge source="&#53216;&#54049;" target="&#54620;&#44397;&#51221;&#48372;&#53685;&#49888; KICC" />
+    <edge source="&#53216;&#54049;" target="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396;" />
+    <edge source="&#53216;&#54049;" target="&#53216;&#54168;&#51060;" />
+    <edge source="&#53216;&#54049;" target="&#54788;&#45824;&#52852;&#46300;" />
+    <edge source="&#53216;&#54049;" target="1577-7011" />
+    <edge source="&#53216;&#54049;" target="2026&#45380; 03&#50900; 14&#51068; 13&#49884; 13&#48516;" />
+    <edge source="&#53216;&#54049;" target="2026&#45380; 03&#50900; 14&#51068; 16&#49884; 14&#48516;" />
+    <edge source="&#53216;&#54049;" target="&#47196;&#53011;&#48176;&#49569;" />
+    <edge source="&#53216;&#54049;" target="&#49340;&#49457;&#51204;&#51088;" />
+    <edge source="&#53216;&#54049;" target="&#49436;&#50872;&#49884;&#52397;" />
+    <edge source="&#53216;&#54049;" target="&#50732;&#45936;&#51060;&#53412;&#52828;" />
     <edge source="&#52572;*&#50672;" target="&#49436;&#50872;&#53945;&#48324;&#49884;" />
+    <edge source="&#52572;*&#50672;" target="CUPANG" />
+    <edge source="&#52572;*&#50672;" target="&#51339;&#51008;&#45712;&#45196; &#50976;&#44592;&#45453; &#49692;&#47732; &#53456;&#54256;" />
+    <edge source="&#52572;*&#50672;" target="&#49828;&#54588;&#46356; &#46020;&#53433; &#48372;&#51312;&#48176;&#53552;&#47532;" />
     <edge source="&#52572;*&#50672;" target="&#54788;&#45824;&#52852;&#46300;&#53216;&#54168;&#51060;" />
-    <edge source="&#52572;*&#50672;" target="&#53216;&#54049; &#44256;&#44061;&#49468;&#53552;" />
-    <edge source="&#52572;*&#50672;" target="ORDER" />
-    <edge source="&#52572;*&#50672;" target="&#54788;&#45824;&#52852;&#46300;" />
     <edge source="&#52572;*&#50672;" target="2026&#45380; 03&#50900; 14&#51068;" />
-    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#49436;&#50872;&#49884; &#49569;&#54028;&#44396; &#49569;&#54028;&#45824;&#47196; 570" />
-    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#49436;&#50872;&#53945;&#48324;&#49884;&#52397;" />
-    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#54620;&#44053;" />
-    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#49436;&#50872;&#53945;&#48324;&#49884; &#51473;&#44396;" />
-    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#49436;&#50872;&#49884; &#54540;&#47084;&#49828;&#52828;&#44396;" />
-    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#49436;&#50872;&#49884; &#50976;&#53916;&#48652;" />
-    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#49436;&#50872;&#49884; &#54168;&#51060;&#49828;&#48513;" />
-    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#50948;&#47168;&#49440;" />
+    <edge source="&#52572;*&#50672;" target="KICC" />
+    <edge source="&#52572;*&#50672;" target="COUPANG" />
+    <edge source="&#52572;*&#50672;" target="2026-03-12" />
+    <edge source="&#52572;*&#50672;" target="&#51060;&#51648;&#54168;&#51060;" />
+    <edge source="&#52572;*&#50672;" target="&#54788;&#45824;" />
+    <edge source="&#52572;*&#50672;" target="2026-03-17" />
+    <edge source="&#52572;*&#50672;" target="NHN KCP" />
+    <edge source="&#52572;*&#50672;" target="&#54620;&#44397;&#51221;&#48372;&#53685;&#49888; KICC" />
+    <edge source="&#52572;*&#50672;" target="&#53216;&#54168;&#51060;" />
+    <edge source="&#52572;*&#50672;" target="&#54788;&#45824;&#52852;&#46300;" />
+    <edge source="&#52572;*&#50672;" target="&#50724;&#46748;&#44592; &#52860;&#52860;&#54620; &#46076;&#51648;&#44256;&#44592;&#44608;&#52824;&#52252;" />
+    <edge source="&#52572;*&#50672;" target="PAYMENT RECEIPT" />
+    <edge source="&#52572;*&#50672;" target="CREDIT CARD" />
+    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#49436;&#50872;&#46168;&#47112;&#44600; 100&#51064; &#50896;&#51221;&#45824;" />
+    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#45684;&#45349;&#49828;" />
+    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#49436;&#50872;&#44544;&#47196;&#48268;&#49468;&#53552;" />
+    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#45908;&#46300;&#47548;&#51665;+" />
+    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#54788;&#45824;&#49885; &#53944;&#47016;" />
     <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#49436;&#50872;&#46168;&#47112;&#44600; 17&#53076;&#49828;" />
-    <edge source="&#50864;&#47532;&#51008;&#54665;" target="&#52292;&#47924; &#51648;&#44553;&#48372;&#51613; &#49436;&#48708;&#49828;" />
-    <edge source="&#49548;&#48708;&#51088; &#54588;&#54644;&#48372;&#49345;" target="&#44277;&#51221;&#44144;&#47000;&#50948;&#50896;&#54924;" />
-    <edge source="&#44277;&#51221;&#44144;&#47000;&#50948;&#50896;&#54924;" target="&#49548;&#48708;&#51088; &#54588;&#54644; &#48372;&#49345;&#52376;&#47532; &#44592;&#44396;" />
-    <edge source="PRODUCTS" target="SMARTPHONES" />
-    <edge source="VISION HOLDINGS" target="TECHGLOBAL" />
-    <edge source="TECHGLOBAL" target="GLOBAL EXCHANGE" />
-    <edge source="TIRUZIA" target="FIRUZABAD" />
-    <edge source="FIRUZI FUNDS" target="QUINTARA" />
-    <edge source="CHARTERED FLIGHT" target="KROHAARA" />
-    <edge source="&#51088;&#50689;&#50629;&#51088; &#50504;&#49900;&#53685;&#51109;" target="&#49436;&#50872;&#53945;&#48324;&#49884;&#52397;" />
-    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;&#52397;" target="&#45796;&#49328;&#53084;&#49468;&#53552;" />
-    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;&#52397;" target="&#52397;&#45380; &#51665; &#44145;&#51221; &#45916;&#50612;&#46300;&#47548;" />
-    <edge source="BIG DISCOUNT EVENT" target="MARCH 15 2026" />
-    <edge source="&#53216;&#54049; &#44256;&#44061;&#49468;&#53552;" target="&#44256;&#44061;" />
-    <edge source="&#44256;&#44061;" target="&#49345;&#54408;" />
-    <edge source="&#44256;&#44061;" target="&#49548;&#48708;&#51088; &#54588;&#54644; &#48372;&#49345; &#44508;&#51221;" />
-    <edge source="&#49345;&#54408;" target="&#44368;&#54872;/&#48152;&#54408;" />
-    <edge source="&#49345;&#54408;" target="A/S" />
-    <edge source="SELF-CARE ALLOWANCE" target="YOUNG ADULTS" />
-    <edge source="&#52397;&#45380; &#51665; &#44145;&#51221; &#45916;&#50612;&#46300;&#47548;" target="&#49436;&#50872;&#49324;&#46988;&#46308;" />
+    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#51088;&#50689;&#50629;&#51088; &#50504;&#49900;&#53685;&#51109;" />
+    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#49436;&#50872;&#53945;&#48324;&#49884; &#49569;&#54028;&#44396; &#49340;&#54617;&#49324;&#47196; 99 &#49464;&#44221;&#48716;&#46377; 5&#52789;" />
+    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#49436;&#50872;&#53945;&#48324;&#49884;&#52397;" />
+    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;" target="&#51452;4&#51068;&#51228;" />
+    <edge source="&#44256;&#44061;&#49468;&#53552;" target="&#49340;&#49457;&#51204;&#51088;" />
+    <edge source="&#44256;&#44061;&#49468;&#53552;" target="&#49436;&#50872;&#49884;&#52397;" />
+    <edge source="&#44256;&#44061;&#49468;&#53552;" target="&#45684;&#45349;&#49828;" />
+    <edge source="&#49340;&#49457;&#51204;&#51088;" target="&#50689;&#53685;&#44396;" />
+    <edge source="&#49436;&#50872;&#49884;&#52397;" target="&#51473;&#51109;&#45380;&#52712;&#50629;&#49324;&#44288;&#54617;&#44368;" />
+    <edge source="&#49436;&#50872;&#49884;&#52397;" target="&#51088;&#50689;&#50629;&#51088; &#50504;&#49900;&#53685;&#51109;" />
+    <edge source="&#49436;&#50872;&#49884;&#52397;" target="&#49328;&#54980;&#51312;&#47532;&#48708;" />
+    <edge source="&#49436;&#50872;&#49884;&#52397;" target="&#51076;&#49328;&#48512;&#44368;&#53685;&#48708;" />
+    <edge source="MARCH 19, 2026" target="SPRING" />
+    <edge source="&#51312;&#49440;" target="&#44285;&#51116;&#49885;" />
+    <edge source="&#49436;&#50872;&#46168;&#47112;&#44600; 100&#51064; &#50896;&#51221;&#45824;" target="&#49436;&#50872;&#49884;" />
+    <edge source="C.S.I." target="GOOGLE" />
+    <edge source="GWINDEXTEST" target="GOOGLE" />
+    <edge source="GOOGLE" target="CSI10186" />
+    <edge source="ALIEKSPRESS" target="ALIEKSPRESS SERVICE CENTER" />
+    <edge source="SAMSUNG ELECTRONICS" target="GALAXY AI SUBSCRIPTION CLUB" />
+    <edge source="SAMSUNG ELECTRONICS" target="JEON YOUNG-HYUN" />
+    <edge source="SAMSUNG ELECTRONICS" target="SUWON" />
+    <edge source="SAMSUNG ELECTRONICS" target="GYEONGGI-DO" />
+    <edge source="SAMSUNG ELECTRONICS" target="CUSTOMER SERVICE" />
+    <edge source="SAMSUNG" target="HANSUNG UNIVERSITY" />
+    <edge source="SAMSUNG" target="&#52572;&#51648;&#50976;" />
+    <edge source="SAMSUNG" target="TOSS PAY" />
+    <edge source="SAMSUNG" target="MARCH 16, 2026" />
+    <edge source="SAMSUNG" target="NH CARD" />
+    <edge source="HANSUNG UNIVERSITY" target="&#52572;&#51648;&#50976;" />
+    <edge source="HANSUNG UNIVERSITY" target="CHOSUN UNIVERSITY" />
+    <edge source="ALIBABA.COM HONG KONG LIMITED" target="HONG KONG" />
+    <edge source="BTS COMEBACK LIVE" target="KIM MINJI" />
+    <edge source="4050 &#51064;&#49373;&#46356;&#51088;&#51064;&#54617;&#44368;" target="&#49436;&#50872;&#49884;" />
+    <edge source="4050 &#51064;&#49373;&#46356;&#51088;&#51064;&#54617;&#44368;" target="&#49436;&#50872;&#48373;&#51648;&#54252;&#53560;" />
+    <edge source="&#45684;&#45349;&#49828;" target="&#49340;&#54617;&#49324;&#47196;" />
+    <edge source="&#45684;&#45349;&#49828;" target="&#48652;&#47004;&#46356;" />
+    <edge source="GOOGLE CLOUD" target="VIOLIN" />
+    <edge source="GOOGLE CLOUD" target="MOUNTAIN VIEW" />
+    <edge source="GOOGLE CLOUD" target="JUNE 16, 2026" />
+    <edge source="GOOGLE CLOUD" target="GOOGLE CLOUD SUPPORT" />
+    <edge source="GOOGLE CLOUD" target="CSV FILE" />
+    <edge source="GOOGLE CLOUD" target="GOOGLE LLC" />
+    <edge source="ONEDRIVE" target="MICROSOFT CORPORATION" />
+    <edge source="MICROSOFT CORPORATION" target="ONE DRIVE" />
+    <edge source="FUN SEOUL" target="SEOUL SPRING FESTIVAL" />
+    <edge source="FUN SEOUL" target="SUMMER FESTIVAL ON THE HAN RIVER" />
+    <edge source="FUN SEOUL" target="SEOUL AUTUMN FESTIVAL" />
+    <edge source="FUN SEOUL" target="SEOUL WINTER FESTIVAL" />
+    <edge source="FUN SEOUL" target="HANGANG FESTIVAL" />
+    <edge source="&#49436;&#50872; &#47588;&#47141;&#51068;&#51088;&#47532;" target="&#49436;&#50872;&#49884;" />
+    <edge source="&#49436;&#50872;&#49884;" target="&#50696;&#49696;&#50689;&#51116; &#44368;&#50977;" />
+    <edge source="&#49436;&#50872;&#49884;" target="&#45908;&#46300;&#47548;&#51665;+" />
+    <edge source="&#49436;&#50872;&#49884;" target="&#49436;&#50872;&#48373;&#51648;&#54252;&#53560;" />
+    <edge source="&#49436;&#50872;&#49884;" target="&#50628;&#50980;&#51452;" />
+    <edge source="&#49436;&#50872;&#49884;" target="&#44608;&#49849;&#50500;" />
+    <edge source="&#49436;&#50872;&#49884;" target="&#49436;&#50872; &#50500;&#48736;&#45800;" />
+    <edge source="&#49436;&#50872;&#49884;" target="2026 &#49436;&#50872;&#50669;&#49324;&#47928;&#54868;&#45813;&#49324;" />
+    <edge source="&#49436;&#50872;&#49884;" target="&#52380;&#54840; &#49828;&#53356;&#47536; &#54028;&#53356;&#44264;&#54532;&#51109;" />
+    <edge source="&#49436;&#50872;&#49884;" target="&#49436;&#52488; AI ZONE" />
+    <edge source="&#49436;&#50872;&#49884;" target="LINKEDIN" />
+    <edge source="&#45908;&#46300;&#47548;&#51665;+" target="&#49436;&#50872;&#53945;&#48324;&#49884;&#52397;" />
+    <edge source="HUMANITY" target="SELF-EMPLOYED ASSURANCE ACCOUNT" />
+    <edge source="MARCH 16, 2026" target="NH CARD" />
+    <edge source="CSI10186" target="TESTGW" />
+    <edge source="CSI10186" target="PARKSSOJ" />
+    <edge source="PARKSSOJ" target="GMAILWEAVER COMMIT" />
+    <edge source="ALIEXPRESS KOREA CO., LTD." target="CYBER MALL" />
+    <edge source="&#52572;&#49548;&#50672;" target="NEXON KOREA" />
+    <edge source="&#52572;&#49548;&#50672;" target="OOKLA" />
+    <edge source="&#52572;&#49548;&#50672;" target="SK SQUARE" />
+    <edge source="&#52572;&#49548;&#50672;" target="LINKEDIN" />
+    <edge source="&#52572;&#49548;&#50672;" target="&#53216;&#54049;(&#51452;)" />
+    <edge source="&#52572;&#49548;&#50672;" target="KICC" />
+    <edge source="NEXON KOREA" target="OOKLA" />
+    <edge source="NEXON KOREA" target="SK SQUARE" />
+    <edge source="OOKLA" target="SK SQUARE" />
+    <edge source="ROWAN" target="EDM" />
+    <edge source="BIG DISCOUNT EVENT" target="E-COMMERCE" />
+    <edge source="HONG KONG" target="TIMES SQUARE" />
+    <edge source="HONG KONG" target="CAUSEWAY BAY" />
+    <edge source="HONG KONG" target="ALIBABA.COM SINGAPORE E-COMMERCE PRIVATE LIMITED" />
+    <edge source="CUPANG" target="&#54788;&#45824;&#52852;&#46300;&#53216;&#54168;&#51060;" />
+    <edge source="CUPANG" target="2026&#45380; 4&#50900; 20&#51068;" />
+    <edge source="TIMES SQUARE" target="ALIBABA.COM SINGAPORE E-COMMERCE PRIVATE LIMITED" />
+    <edge source="INSEON22" target="CUSTOME EMAIL" />
+    <edge source="SEOUL MARATHON" target="MARCH 14" />
+    <edge source="2026 &#49436;&#50872;&#50669;&#49324;&#47928;&#54868;&#45813;&#49324;" target="&#49709;&#47168;&#47928;" />
+    <edge source="2026 &#49436;&#50872;&#50669;&#49324;&#47928;&#54868;&#45813;&#49324;" target="&#48513;&#52492;" />
+    <edge source="2026 &#49436;&#50872;&#50669;&#49324;&#47928;&#54868;&#45813;&#49324;" target="DDP" />
+    <edge source="2026 &#49436;&#50872;&#50669;&#49324;&#47928;&#54868;&#45813;&#49324;" target="&#51060;&#44036;&#49688;&#47928;" />
+    <edge source="DDP" target="&#54620;&#50577;" />
+    <edge source="DDP" target="&#49436;&#50872;&#53945;&#48324;&#49884;&#52397;" />
+    <edge source="DREAM HOUSE+" target="YOUNG PEOPLE" />
+    <edge source="YOUNG PEOPLE" target="SELF-EMPLOYED SAFE ACCOUNT" />
+    <edge source="KICC" target="COUPANG" />
+    <edge source="KICC" target="EASYPAY" />
+    <edge source="KICC" target="PAYMENT RECEIPT" />
+    <edge source="COUPANG" target="CHOIN YOUN" />
+    <edge source="COUPANG" target="CUSTOMER SERVICE" />
+    <edge source="ALIBABA.COM SINGAPORE E-COMMERCE PRIVATE LIMITED" target="ALIEXPRESS SERVICE CENTER" />
+    <edge source="ALIBABA.COM SINGAPORE E-COMMERCE PRIVATE LIMITED" target="CAUSEWAY BAY" />
+    <edge source="DONGHAENGARDEN" target="LEE DAHYUN" />
+    <edge source="KROHAARA" target="FIRUZABAD" />
+    <edge source="FIRUZABAD" target="TIRUZIA" />
+    <edge source="FIRUZABAD" target="AURELIA" />
+    <edge source="FIRUZABAD" target="QUINTARA" />
+    <edge source="LAZADA ONE" target="51 BRAS BASAH ROAD" />
+    <edge source="KIM YUN-KYUNG" target="SAFETY REGULATIONS" />
+    <edge source="KIM YUN-KYUNG" target="KANGDONG FOREST LIBRARY" />
+    <edge source="SAFETY REGULATIONS" target="LEE HAE-RIN" />
+    <edge source="SAFETY REGULATIONS" target="JEON MI-AE" />
+    <edge source="KANGDONG FOREST LIBRARY" target="LEE HAE-RIN" />
+    <edge source="KANGDONG FOREST LIBRARY" target="JEON MI-AE" />
+    <edge source="&#44608;&#48124;&#51648;" target="&#52488;&#46321;&#50504;&#49900;&#48296;" />
+    <edge source="&#51221;&#54693;&#49440;" target="&#49436;&#50872;&#45824;&#44277;&#50896; &#49885;&#47932;&#50896;" />
+    <edge source="&#51060;&#45796;&#54788;" target="&#49772;&#50628;&#49772;&#50628; &#47784;&#45789;" />
+    <edge source="CITIZEN JOURNALIST" target="SCREEN PARK GOLF COURSE" />
+    <edge source="BUKHAN MOUNTAIN VIEWPOINT" target="SEOUL CIRCUMFERENCE TRAIL 17" />
+    <edge source="TOSS PAY" target="NH CARD" />
+    <edge source="EDM" target="AEUG_EDM_137444" />
+    <edge source="CURRENCY" target="DISCOUNT" />
+    <edge source="DISCOUNT" target="PRODUCTS" />
+    <edge source="DISCOUNT" target="MARCH 20, 2026" />
+    <edge source="DISCOUNT" target="16TH ANNIVERSARY" />
+    <edge source="DISCOUNT" target="CLOTHING DISCOUNT" />
+    <edge source="DISCOUNT" target="E-COMMERCE" />
+    <edge source="CUPON" target="PRODUCTS" />
+    <edge source="PRODUCTS" target="DISCOUNTS" />
+    <edge source="PRODUCTS" target="CUSTOMERS" />
+    <edge source="&#52397;&#49548;&#45380;&#183;&#52397;&#45380;" target="&#51088;&#44592;&#46028;&#48388;&#48708;" />
+    <edge source="LINKEDIN" target="EASYPAY" />
+    <edge source="CHOIN YOUN" target="ORDER" />
+    <edge source="ORDER" target="GOOD FEELING ORGANIC COTTON TAMPONS" />
+    <edge source="ORDER" target="SPEEDY DOCKING POWER BANK" />
+    <edge source="MARCH 21" target="GWAHNGHWAMUN" />
+    <edge source="&#49436;&#50872;&#53945;&#48324;&#49884;&#52397;" target="&#51648;&#54616;&#52384;" />
+    <edge source="&#51060;&#44036;&#49688;&#47928;" target="&#51109;&#49888;&#51088;" />
+    <edge source="AURELIA" target="QUINTARA" />
+    <edge source="CAUSEWAY BAY" target="MATHESON STREET" />
+    <edge source="MARCH 20, 2026" target="16TH ANNIVERSARY" />
+    <edge source="OULRIM PLAZA" target="GANGSEO DISTRICT" />
+    <edge source="HIMBOTAEM FAIR" target="MARCH 25" />
+    <edge source="CULTURAL POLICY" target="CITIZENS OF SEOUL" />
+    <edge source="GMAIL" target="AE-BEST-CARE-MARKET13" />
+    <edge source="KIM DAE-JIN" target="SEOUL, DREAMING OF RUNNING" />
+    <edge source="&#51648;&#54616;&#52384;" target="&#54168;&#45328;&#54000;" />
   </graph>
 </graphml>

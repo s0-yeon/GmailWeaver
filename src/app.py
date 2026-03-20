@@ -20,7 +20,7 @@ from docx import Document
 
 # Job 이용 공통함수 import
 from util.jobs.job_store import *
-from util.graphrag import run_graph_pipeline
+from util.jobs.job_run import start_graph_pipeline_background
 from config.setting import *
 
 # 환경변수 로드
@@ -431,11 +431,10 @@ def upload():
     create_job(job_id, job_type="index")
     update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작")
 
-    threading.Thread(
-        target=run_graph_pipeline,
-        args=(job_id,),
-        daemon=True
-    ).start()
+    env = os.environ.copy()
+    env["PYTHONUNBUFFERED"] = "1"
+
+    start_graph_pipeline_background(job_id, env)
 
     return jsonify({
             "ok": True,
