@@ -30,13 +30,16 @@ def update_job(job_id, **kwargs):  # Job 수정
     with _jobs_lock:
         if job_id in _jobs:
             _jobs[job_id].update(kwargs)
+        else:
+            print(f"[JOB_STORE] update_job failed: unknown job_id={job_id}")
 
 def append_job_log(job_id, line):  # Job 로그 추가
     with _jobs_lock:
         if job_id in _jobs:
             _jobs[job_id]["logs"].append(line)
-            # 로그가 너무 길어지지 않게 최근 100줄만 유지
             _jobs[job_id]["logs"] = _jobs[job_id]["logs"][-100:]
+        else:
+            print(f"[JOB_STORE] append_job_log failed: unknown job_id={job_id}")
 
 def get_job(job_id):  # Job 조회
     with _jobs_lock:
