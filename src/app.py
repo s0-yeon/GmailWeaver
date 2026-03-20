@@ -461,7 +461,6 @@ def static_fonts(path):
 
 # 웹앱 URL 변경 필요
 @app.route('/calendar-events', methods=['POST'])
-@app.route('/calendar-events', methods=['POST'])
 def calendar_events():
     WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxzZJZJRPNeK573TsQKLZ7XuYpB8pYmiDNzGz60CDcKQWoMGMKeGGk1zWOc35O3kCRN2Q/exec"
     data = request.json or {}
