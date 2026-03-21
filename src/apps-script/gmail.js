@@ -4,60 +4,145 @@
 // 동기화 버튼 핸들러  
 // 서버에 없는 메일 추가
 function onSyncNewOnly(e) {
-  return _runSync(false);
+  return _runSync("append");
 }
 
 // 전체 갱신 (보낸 메일 포함)
 function onSyncAll(e) {
-  return _runSync(true);
+  return _runSync("rewrite");
 }
 
 // Gmail 동기화
-function _runSync(includeAll) {
+function _runSync(mode) {
   try {
-    var query   = includeAll ? "in:inbox OR in:sent" : "in:inbox";
-    var threads = GmailApp.search(query, 0, 50);
+    var props = PropertiesService.getUserProperties();
+    var lastSyncMs = Number(props.getProperty("GW_LAST_SYNC_MS")||"0");
+    var threads = [];
+
     var myEmail = Session.getActiveUser().getEmail();
     var allText = "";
     var count = 0;
     var allAttachments = []; 
 
+    if (mode === "rewrite") {
+      var queryAll = "in:inbox OR in:sent";
+      threads = GmailApp.search(queryAll, 0, 200);
+
+      threads.forEach(function(thread) {
+        thread.getMessages().forEach(function(msg) {
+          count++;
+          allText += _buildMessageText(msg, myEmail, count) + "\n";
+          allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));
+        });
+      });
+
+      if (count === 0){
+        return _toast("📭 전송할 메일이 없습니다.");
+      }
+
+      var filenameAll = "mail_latest.txt"
+
+      var resAll = UrlFetchApp.fetch(TunnelURL + "/upload", {
+        method: "post",
+        contentType: "application/json",
+        payload: JSON.stringify({
+          filename: filenameAll,
+          content: allText,
+          attachment: allAttachments,
+          syncmode: "rewrite"
+        }),
+        muteHttpExceptions: true
+      });
+
+      var codeAll = resAll.getResponseCode();
+      var textAll = resAll.getContentText();
+
+      if (codeAll < 200 || codeAll >= 300) {
+        throw new Error("upload failed: " + codeAll + " / " + textAll);
+      }
+
+      props.setProperty("GW_LAST_SYNC_MS", String(Date.now()));
+
+      Logger.log("upload success: " + codeAll + " / " + textAll);
+      Logger.log("메일 수: " + count);
+      Logger.log("첨부 전송 개수: " + allAttachments.length);
+
+      return _toast("✅ " + count + "개 메일을 서버로 전송했습니다.");
+    }
+
+    var queryNew = "in:inbox OR in:sent";
+    threads = GmailApp.search(queryNew, 0, 200);
+
+    var newMessages = [];
+
     threads.forEach(function(thread) {
       thread.getMessages().forEach(function(msg) {
-        count++;
-        allText += _buildMessageText(msg, myEmail, count) + "\n"    // TXT용 메일 블록 누적
-        allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));   // 서버 전송용 첨부 payload 누적
+        var msgTime = msg.getDate().getTime();
+        if (msgTime > lastSyncMs) {
+          newMessages.push(msg);
+        }
       });
     });
 
-    var filename = "gmail_sync_" + (includeAll ? "all" : "inbox") + "_" + _dateToYmdHms(new Date()) + ".txt";
+    // 새로운 메일을 위로 정렬
+    newMessages.sort(function(a, b){
+      return b.getDate().getTime() - a.getDate().getTime();
+    });
 
-    var res = UrlFetchApp.fetch(TunnelURL + "/upload", {  // 응답
+    // 새로운 메일만 추가할 때 처리
+    newMessages.forEach(function(msg){
+      count++;
+      allText += _buildMessageText(msg, myEmail, count) + "\n";
+      allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));
+    });
+
+    if (count === 0) {
+      return _toast("📭 새로 추가할 메일이 없습니다.");
+    }
+
+    // append 누를 때마다 새로운 파일
+    var filename = "inc_" + _dateToYmdHms(new Date()) + ".txt";
+
+    var resNew = UrlFetchApp.fetch(TunnelURL + "/upload", {
       method: "post",
       contentType: "application/json",
-      payload: JSON.stringify({   // 페이로드. 전송되는 데이터 자체
-        filename: filename,
-        content: allText,
-        attachment: allAttachments
+      payload: JSON.stringify({
+          filename: filename,
+          content: allText,
+          attachment: allAttachments,
+          syncmode: "append"
       }),
       muteHttpExceptions: true
     });
 
-    var code = res.getResponseCode();
-    var text = res.getContentText();
+    var codeNew = resNew.getResponseCode();
+    var textNew = resNew.getContentText();
 
-    if (code < 200 || code >= 300) {  
-      throw new Error("upload failed: " + code + " / " + text);
+    if (codeNew < 200 || codeNew >=300){
+      throw new Error("upload failed: " + codeNew + " / " + textNew);
     }
 
-    Logger.log("upload success: " + code + " / " + text);
+    var dataNew = {};
+    try {
+      dataNew = JSON.parse(textNew);
+    } catch (err) {
+      throw new Error("응답 JSON 파싱 실패: " + textNew);
+    }
+
+    // 동기화 시간 저장
+    props.setProperty("GW_LAST_SYNC_MS", String(Date.now()));
+
+    Logger.log("upload success: " + codeNew + " / " + textNew);
     Logger.log("메일 수: " + count);
     Logger.log("첨부 전송 개수: " + allAttachments.length);
 
-    return _toast("✅ " + count + "개 메일, 첨부 " + allAttachments.length + "개를 서버로 전송했습니다.");
-  } catch (err) {
-    return _toast("⚠️ 동기화 실패: " + err.message);
-  }
+    if (dataNew.fallback_to_rewrite) {
+      return _toast("기존 인덱스가 없어 전체 인덱싱을 먼저 실행합니다.");
+    }
+    return _toast("✅ " + count + "개 새 메일을 서버로 전송했습니다.");
+} catch (err) {
+  return _toast("⚠️ 동기화 실패: " + err.message);
+}
 }
 
 // 라벨 적용 (선택된 메일)
@@ -235,44 +320,6 @@ function onSaveCalendarWithManualTitle(e) {
   });
 
   return _toast(added > 0 ? "📅 " + added + "개 일정이 저장되었습니다." : "⚠️ 일정 저장 실패");
-}
-
-// 단일 메일 서버 업로드  
-function onUploadSingleMessage(e) {
-  var parameters = (e && e.commonEventObject && e.commonEventObject.parameters) || {};
-  var messageId  = parameters.messageId || "";
-
-  if (!messageId) return _toast("메시지 ID를 찾을 수 없습니다.");
-
-  try {
-    var msg     = GmailApp.getMessageById(messageId);
-    var myEmail = Session.getActiveUser().getEmail();
-    var content  = _buildMessageText(msg, myEmail, 1);
-    var attachments = _buildAttachmentPayload(msg);
-    var filename = "gmail_single_" + messageId + ".txt";
-
-    var res = UrlFetchApp.fetch(TunnelURL + "/upload", {
-      method: "post",
-      contentType: "application/json",
-      payload: JSON.stringify({
-        filename: filename,
-        content: content,
-        attachment: attachments
-      }),
-      muteHttpExceptions: true
-    });
-
-    var code = res.getResponseCode();
-    var text = res.getContentText();
-
-    if (code < 200 || code >= 300) {
-      throw new Error("[Error] upload failed: " + code + " / " + text);
-    }
-
-    return _toast("☁️ 서버로 전송 완료");
-  } catch (err) {
-    return _toast("⚠️ 전송 실패: " + err.message);
-  }
 }
 
 // 공통 유틸 
