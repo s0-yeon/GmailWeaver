@@ -247,7 +247,6 @@ def _split_mail_blocks(text):
         p = p.strip()
         if not p:
             continue
-
         block = MAIL_BLOCK_SEP + "\n" + p
         if not block.endswith(MAIL_BLOCK_SEP):
             block += "\n" + MAIL_BLOCK_SEP
@@ -300,6 +299,7 @@ def _read_json_file(path):
     
 # 인덱스 여부 확인
 def _is_index_ready():
+
     graph_path = os.path.join(GRAPHRAG_ROOT, "output", "graph.graphml")
     stats_path = os.path.join(GRAPHRAG_ROOT, "output", "stats.json")
 
@@ -575,6 +575,7 @@ def upload():
     if sync_mode == "rewrite":
         create_job(job_id, job_type="index")
         update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작")
+
     else:
         create_job(job_id, job_type="update")
         update_job(job_id, message="업로드 완료, 그래프 업데이트 파이프라인 시작")
@@ -606,6 +607,8 @@ def upload():
             "skipped_count": skipped_count,
             "attachment_received_count": len(attachments),
             "attachment_extracted_count": extracted_count,
+            "added_count": added_count,
+            "skipped_count": skipped_count,
             "failed_attachments": failed_attachments,
         })
 

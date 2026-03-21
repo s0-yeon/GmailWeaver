@@ -321,7 +321,6 @@ function onSaveCalendarWithManualTitle(e) {
 
   return _toast(added > 0 ? "📅 " + added + "개 일정이 저장되었습니다." : "⚠️ 일정 저장 실패");
 }
-
 // 공통 유틸 
 // 메일 1개의 TXT 블록 생성
 function _buildMessageText(msg, myEmail, mailIndex) {

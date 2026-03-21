@@ -59,11 +59,15 @@ def build_graphrag_index(job_id, env):
     print(f"[JOB][graphrag] root_exists={os.path.exists(GRAPHRAG_ROOT)}")
 
     update_job(job_id, progress=20, message="GraphRAG 인덱싱 시작")
+<<<<<<< HEAD
     append_job_log(job_id, "[START] build_graphrag_index")
     append_job_log(job_id, f"[INFO] cwd={os.getcwd()}")
     append_job_log(job_id, f"[INFO] sys.executable={sys.executable}")
     append_job_log(job_id, f"[INFO] GRAPHRAG_ROOT={GRAPHRAG_ROOT}")
     append_job_log(job_id, f"[INFO] root_exists={os.path.exists(GRAPHRAG_ROOT)}")
+=======
+    print("[JOB] graphrag index subprocess started")
+>>>>>>> f220570bdcd75abaf23cacd12601135a97db9013
 
     cmd = [
         sys.executable,
@@ -227,6 +231,64 @@ def start_graph_update_pipeline_background(job_id, env):
     )
     t.start()
 
+<<<<<<< HEAD
     print(f"[JOB][update-pipeline] BACKGROUND THREAD STARTED job_id={job_id} thread={t.name}")
     append_job_log(job_id, f"[INFO] update background thread started name={t.name}")
     return t
+=======
+        if new_progress != current_progress or new_message:
+            current_progress = new_progress
+            update_job(
+                job_id,
+                progress=current_progress,
+                message=new_message or f"인덱싱 진행 중 ({current_progress}%)"
+            )
+
+    rc = p.wait()
+    print(f"[JOB] graphrag index subprocess finished rc={rc}")
+    append_job_log(job_id, f"[SYSTEM] graphrag index finished rc={rc}")
+    if rc != 0:
+        raise subprocess.CalledProcessError(
+            rc,
+            [sys.executable, "-m", "graphrag", "index", "--root", GRAPHRAG_ROOT]
+        )
+    
+def build_graphrag_update(job_id, env):
+    update_job(job_id, progress=20, message="GraphRAG 업데이트 시작")
+    print("[JOB] graphrag index subprocess started", flush=True)
+
+    p = subprocess.Popen(
+        [sys.executable, "-X", "utf8", "-m", "graphrag", "update", "--root", GRAPHRAG_ROOT],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        bufsize=1,
+        env=env,
+    )
+
+    current_progress = 20
+
+    for line in p.stdout:
+        line = line.rstrip("\n")
+        print("[JOB][graphrag][update]", line)
+        append_job_log(job_id, line)
+
+        new_progress, new_message = parse_graphrag_progress(line, current_progress)
+
+        if new_progress != current_progress or new_message:
+            current_progress = new_progress
+            update_job(
+                job_id,
+                progress=current_progress,
+                message=new_message or f"업데이트 진행 중 ({current_progress}%)"
+            )
+
+    rc = p.wait()
+    print(f"[JOB] graphrag index subprocess finished rc={rc}", flush=True)
+    append_job_log(job_id, f"[SYSTEM] graphrag index finished rc={rc}")
+    if rc != 0:
+        raise subprocess.CalledProcessError(
+            rc,
+            [sys.executable, "-m", "graphrag", "update", "--root", GRAPHRAG_ROOT]
+        )
+>>>>>>> f220570bdcd75abaf23cacd12601135a97db9013
