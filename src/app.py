@@ -1,5 +1,6 @@
 # src/app.py
 
+import datetime
 import os
 import re
 import subprocess
@@ -11,6 +12,7 @@ import uuid
 import openai
 import base64
 import requests
+import shutil
 
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, send_from_directory
@@ -20,7 +22,7 @@ from docx import Document
 
 # Job 이용 공통함수 import
 from util.jobs.job_store import *
-from util.jobs.job_run import start_graph_pipeline_background
+from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
 
 # 환경변수 로드
@@ -236,6 +238,89 @@ def _merge_attachments_into_mail_blocks(content: str, attachment_texts_by_mail: 
 
     return "\n".join(merged_blocks) + "\n"
 
+# 텍스트에서 메일별로 구분
+def _split_mail_blocks(text):
+    parts = text.split(MAIL_BLOCK_SEP)
+    blocks = []
+
+    for p in parts:
+        p = p.strip()
+        if not p:
+            continue
+        block = MAIL_BLOCK_SEP + "\n" + p
+        if not block.endswith(MAIL_BLOCK_SEP):
+            block += "\n" + MAIL_BLOCK_SEP
+
+        blocks.append(block)
+
+    return blocks
+
+def _extract_message_ids(text):
+    return set(re.findall(r"^\s*ID:\s*(.+?)\s*$", text, flags=re.MULTILINE))
+
+# 날짜 기준 정렬용 datetime 추출
+def _extract_block_for_sort(block):
+    for line in block.splitlines():
+        if line.startswith("날짜:"):
+            raw = line.replace("날짜:", "").strip()
+            try:
+                return datetime.datetime.strptime(raw, "%Y-%m-%d %H:%M:%S")
+            except Exception:
+                return datetime.datetime.min
+    return datetime.datetime.min
+
+# 현재 mail_latest.txt 읽기
+def _read_latest_text():
+    if not os.path.exists(MAIL_LATEST_PATH):
+        return ""
+    with open(MAIL_LATEST_PATH, "r", encoding="utf-8") as f:
+        return f.read()
+
+def _delete_incremental_files():
+    os.makedirs(MAIL_DIR, exist_ok=True)
+
+    for name in os.listdir(MAIL_DIR):
+        if name.startswith("inc_") and name.endswith(".txt"):
+            path = os.path.join(MAIL_DIR, name)
+            try:
+                os.remove(path)
+            except Exception as e:
+                print(f"[UPLOAD] failed to remove incremental file: {path} / {e}")
+
+def _build_incremental_path(filename: str) -> str:
+    safe_name = _sanitize_filename(filename or "")
+    if not safe_name.startswith("inc_"):
+        safe_name = f"inc_{datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S')}.txt"
+    return os.path.join(MAIL_DIR, safe_name)
+
+def _read_json_file(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+    
+# 인덱스 여부 확인
+def _is_index_ready():
+
+    graph_path = os.path.join(GRAPHRAG_ROOT, "output", "graph.graphml")
+    stats_path = os.path.join(GRAPHRAG_ROOT, "output", "stats.json")
+
+    try:
+        required_paths = [MAIL_LATEST_PATH, graph_path, stats_path]
+
+        for path in required_paths:
+            if not os.path.exists(path):
+                print(f"[INDEX READY] missing: {path}")
+                return False
+            if os.path.getsize(path) == 0:
+                print(f"[INDEX READY] empty file: {path}")
+                return False
+
+        _read_json_file(stats_path)
+        return True
+
+    except Exception as e:
+        print(f"[INDEX READY] invalid index state: {e}")
+        return False
+
 # 엔드포인트: POST /extract-calendar
 @app.route('/extract-calendar', methods=['POST'])
 def extract_calendar():     # 이메일 제목 + 본문에서 일정 이벤트를 추출하여 반환
@@ -333,20 +418,24 @@ def upload():
     filename = data.get("filename") or f"mail_{int(time.time())}.txt"
     content = data.get("content") or ""
     attachments = data.get("attachment") or []
+    requested_mode = data.get("syncmode", "append")
+
+    if not str(content).strip():
+        return jsonify({"ok": False, "error": "content가 비어있습니다."}), 400
+    
+    # append인데 기존 인덱스가 없으면 자동으로 rewrite로 전환
+    fallback_to_rewrite = False
+    sync_mode = requested_mode
+
+    # 새로운 메일 추가 모드이지만 인덱싱이 되어있지 않으면 인덱싱 모드로 전환
+    if requested_mode == "append" and not _is_index_ready():
+        print("[UPLOAD] index not ready -> fallback to rewrite")
+        sync_mode = "rewrite"
+        fallback_to_rewrite = True
 
     # 2) 저장 디렉토리 준비
     os.makedirs(MAIL_DIR, exist_ok=True)
     os.makedirs(ATTACHMENT_DIR, exist_ok=True)
-
-    file_path = os.path.join(MAIL_DIR, filename)
-
-    # 3) 원본 메일 텍스트 저장
-    with open(file_path, "w", encoding="utf-8") as f:
-        f.write(content)
-
-    # 4) mail_latest.txt 초기화
-    with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
-        f.write(content)
 
     extracted_count = 0
     failed_attachments = []
@@ -404,40 +493,122 @@ def upload():
                 })
                 print(f"[UPLOAD][ATTACHMENT ERROR] {f_name}: {e}")
 
-       # 6) 메일별 블록 하단에 첨부 텍스트 삽입
-        final_content = content
-        if attachment_texts_by_mail:
-            final_content = _merge_attachments_into_mail_blocks(content, attachment_texts_by_mail)
-
-        with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
-            f.write(final_content)
-
     # 7) 파이프라인 실행
     print(f"[UPLOAD] Received filename: {filename}")
     print(f"[UPLOAD] Content length: {len(content)}")
     print(f"[UPLOAD] Attachment count received: {len(attachments)}")
     print(f"[UPLOAD] Attachment extracted count: {extracted_count}")
+    print(f"[UPLOAD] Requested mode: {requested_mode}")
+    print(f"[UPLOAD] Actual mode: {sync_mode}")
     print("[UPLOAD] cwd:", os.getcwd())
+
+    added_count = 0
+    skipped_count = 0
+    saved_mail_path = ""
+
+    # 전체 갱신: 새 content 전체를 기준으로 다시 씀
+    if sync_mode == "rewrite":
+        final_content = content
+        if attachment_texts_by_mail:
+            final_content = _merge_attachments_into_mail_blocks(content, attachment_texts_by_mail)
+        # 이 전에 새로운 메일 추가해서 생긴 input 파일들 삭제
+        _delete_incremental_files()
+
+        # 지금까지의 메일 데이터들 다 합친 mail_latest.txt 파일 생성
+        with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
+            f.write(final_content.rstrip() + "\n")
+
+        saved_mail_path = MAIL_LATEST_PATH
+        added_count = len(_split_mail_blocks(content))
+
+    # 새 메일만 추가
+    else:
+        existing_text = _read_latest_text()
+        existing_ids = _extract_message_ids(existing_text)
+
+        new_blocks = _split_mail_blocks(content)
+        append_blocks = []
+
+        for block in new_blocks:
+            msg_id = _extract_mail_id_from_block(block)
+            # 해당 메일에 첨부 추출 텍스트가 있으면 그 블록에만 병합
+            if not msg_id:
+                skipped_count += 1
+                continue
+
+            if msg_id in existing_ids:
+                skipped_count += 1
+                continue
+
+            if msg_id in attachment_texts_by_mail:
+                block = _merge_attachments_into_mail_blocks(
+                    block,
+                    {msg_id: attachment_texts_by_mail[msg_id]}
+                ).strip()
+
+            append_blocks.append(block.strip())
+            existing_ids.add(msg_id)
+
+        added_count = len(append_blocks)
+
+        # 새 메일을 위쪽에 붙이고 기존 내용 유지
+        if append_blocks:
+            append_blocks.sort(key=_extract_block_for_sort, reverse=True)
+            inc_content = "\n\n".join(append_blocks).strip() + "\n"
+
+            inc_path = _build_incremental_path(filename)
+            with open(inc_path, "w", encoding="utf-8") as f:
+                f.write(inc_content)
+
+            saved_mail_path = inc_path
+        else:
+            saved_mail_path = ""
+
+    print("[UPLOAD] added:", added_count)
+    print("[UPLOAD] skipped:", skipped_count)
+    if saved_mail_path:
+        print("[UPLOAD] saved mail path:", os.path.abspath(saved_mail_path))
 
     # GraphRAG 파이프라인을 백그라운드에서 실행
     job_id = str(uuid.uuid4())[:8]
 
-    create_job(job_id, job_type="index")
-    update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작")
+    if sync_mode == "rewrite":
+        create_job(job_id, job_type="index")
+        update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작")
+
+    else:
+        create_job(job_id, job_type="update")
+        update_job(job_id, message="업로드 완료, 그래프 업데이트 파이프라인 시작")
 
     env = os.environ.copy()
     env["PYTHONUNBUFFERED"] = "1"
 
-    start_graph_pipeline_background(job_id, env)
+    if sync_mode == "rewrite":
+        update_dir = os.path.join(GRAPHRAG_ROOT, "update_output")
+        if os.path.exists(update_dir):
+            shutil.rmtree(update_dir)
+            print(f"[CLEAN] update_output 삭제 완료: {update_dir}")
+        else:
+            print(f"[CLEAN] update_output 없음: {update_dir}")
+        start_graph_pipeline_background(job_id, env)
+    else:
+        start_graph_update_pipeline_background(job_id, env)
 
     return jsonify({
             "ok": True,
-            "saved_path": os.path.abspath(file_path),
+            "requested_mode": requested_mode,
+            "actual_mode": sync_mode,
+            "fallback_to_rewrite": fallback_to_rewrite,
             "latest_path": os.path.abspath(MAIL_LATEST_PATH),
+            "saved_mail_path": os.path.abspath(saved_mail_path) if saved_mail_path else "",
             "attachment_dir": os.path.abspath(ATTACHMENT_DIR),
             "content_length": len(content),
+            "added_count": added_count,
+            "skipped_count": skipped_count,
             "attachment_received_count": len(attachments),
             "attachment_extracted_count": extracted_count,
+            "added_count": added_count,
+            "skipped_count": skipped_count,
             "failed_attachments": failed_attachments,
         })
 
@@ -478,7 +649,7 @@ def static_fonts(path):
 # 웹앱 URL 변경 필요
 @app.route('/calendar-events', methods=['POST'])
 def calendar_events():
-    WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz3bAOxML5BZSSJcMFM1or5jY8K4NVwliHk_Rbe9jXYVBXbYM05Fl-1bPG1909_38hZ/exec"
+    WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec"
     data = request.json or {}
     res = requests.post(WEB_APP_URL, json=data, allow_redirects=True)
     print("[calendar] status:", res.status_code)

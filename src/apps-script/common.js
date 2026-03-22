@@ -1,7 +1,7 @@
 // src/apps-script/common.js
 
-var TunnelURL = "https://transpalmar-christine-noneducatory.ngrok-free.dev";    // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz3bAOxML5BZSSJcMFM1or5jY8K4NVwliHk_Rbe9jXYVBXbYM05Fl-1bPG1909_38hZ/exec";   // Apps Script Web App으로 배포된 URL
+var TunnelURL = "https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev";    // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec";   // Apps Script Web App으로 배포된 URL
 
 // 공식 엔트리 포인트 (외부에서 호출)
 function onHomepage(e) {    // Gmail 사이드 패널을 처음 열거나, 메일을 선택하지 않은 상태일 때 자동 호출
@@ -135,22 +135,6 @@ function _buildGmailMessageCard(e) {
 
     calSection.addWidget(calDesc).addWidget(calBtn);   // 캘린더 섹션에 위젯 추가
 
-    // 섹션 4: 서버로 전송
-    var serverSection = CardService.newCardSection()
-        .setHeader("☁ 서버로 전송");
-
-    var serverBtn = CardService.newTextButton()     // 서버 전송 버튼
-        .setText("이 메일을 서버로 전송")
-        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-        .setOnClickAction(
-            CardService.newAction()
-                .setFunctionName("onUploadSingleMessage")   // 클릭 시 "onUploadingSingleMessage" 함수를 서버에서 실행
-                .setParameters({ messageId: messageId || "" })  
-                // 해당 messageID를 받은 함수가 TunnelURL(Flask 서버)로 메일 데이터를 POST
-        );
-
-    serverSection.addWidget(serverBtn);     // 서버 전송 섹션에 위젯 추가
-
     return CardService.newCardBuilder() 
         .setHeader(
             CardService.newCardHeader()
@@ -160,6 +144,5 @@ function _buildGmailMessageCard(e) {
         .addSection(webSection)
         .addSection(labelSection)
         .addSection(calSection)
-        .addSection(serverSection)
         .build();   // 최종 Card 객체 생성 및 반환
     }

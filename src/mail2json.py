@@ -221,17 +221,67 @@ def parse_attachment_extracted_texts(block: str) -> Dict[str, str]:
 
     return result
 
+def get_input_mail_files() -> list[str]:
+    files = []
+
+    # 전체 스냅샷 파일
+    if os.path.exists(MAIL_TXT_PATH):
+        files.append(MAIL_TXT_PATH)
+
+    # append 때 생성되는 증분 파일들
+    if os.path.exists(INPUT_DIR):
+        inc_files = []
+        for name in os.listdir(INPUT_DIR):
+            if name.startswith("inc_") and name.endswith(".txt"):
+                inc_files.append(os.path.join(INPUT_DIR, name))
+
+        inc_files.sort()
+        files.extend(inc_files)
+
+    return files
+
 # 메인 처리 루프
 print("[INFO] cwd:", os.getcwd())
-print("[INFO] reading:", MAIL_TXT_PATH)
 
-if not os.path.exists(MAIL_TXT_PATH):
-    raise FileNotFoundError(f"Mail file not found: {MAIL_TXT_PATH}")
+input_files = get_input_mail_files()
+print("[INFO] reading:", input_files)
+for f in input_files:
+    print(" -", f)
 
-with open(MAIL_TXT_PATH, "r", encoding="utf-8") as f:   
-    all_text = f.read()
+if not input_files:
+    raise FileNotFoundError(f"No mail input files found in: {INPUT_DIR}")
+
+all_text_parts = []
+for path in input_files:
+    with open(path, "r", encoding="utf-8") as f:   
+        txt = f.read().strip()
+        if txt:
+            all_text_parts.append(txt)
+
+all_text = "\n\n".join(all_text_parts).strip()
 
 blocks = [b.strip() for b in all_text.split(MAIL_BLOCK_SEP) if b.strip() and "ID:" in b]   # 텍스트 전체를 MAIL_BLOCK_SEP로 split
+
+# 같은 메일 ID가 여러 파일에 있어도 한 번만 처리
+seen_ids = set()
+unique_blocks = []
+
+for block in blocks:
+    m = re.search(r"^\s*ID:\s*(.+?)\s*$", block, re.MULTILINE)
+    if not m:
+        continue
+
+    mail_id = m.group(1).strip()
+    if not mail_id:
+        continue
+
+    if mail_id in seen_ids:
+        continue
+
+    seen_ids.add(mail_id)
+    unique_blocks.append(block)
+
+blocks = unique_blocks
 
 nodes_by_id = {}    # 노드: id → node dict
 edges = []          # 엣지: list
