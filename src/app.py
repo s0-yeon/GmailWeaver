@@ -30,6 +30,9 @@ load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: Graph
 app = Flask(__name__)   # Flask 앱 객체 생성. 해당 파일이 서버의 메인 애플리케이션이라는 의미
 CORS(app)   # Cross-Origin Resource Sharing 허용 (다른 환경에서 이 서버의 API를 호출할 수 있도록)
 
+# Apps Script Web App URL (캘린더, 라벨 등 모든 프록시에서 공통 사용)
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzuZ8CJdGBVGp2kqqmqwm43yW_wVoeDex6efJnpEe7fCTQXXtueEl2SVSFjvtrW-sB4/exec"
+
 # 한글 출력 시 깨지거나 에러 나는 것 방지 (utf-8 인코딩 및 대체 문자 처리)
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -272,7 +275,6 @@ def run_query_async():
             else:
                 result = answer
 
-
             update_job(job_id, status="done", result=result)
 
         except Exception as e:
@@ -483,19 +485,32 @@ def static_fonts(path):
     dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'fonts')
     return send_from_directory(dist_dir, path)
 
-# 웹앱 URL 변경 필요
+# 엔드포인트: POST /calendar-events (Apps Script 캘린더 프록시)
 @app.route('/calendar-events', methods=['POST'])
 def calendar_events():
-    WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzuZ8CJdGBVGp2kqqmqwm43yW_wVoeDex6efJnpEe7fCTQXXtueEl2SVSFjvtrW-sB4/exec"
     data = request.json or {}
-    res = requests.post(WEB_APP_URL, json=data, allow_redirects=True)
+    res = requests.post(WEBAPP_URL, json=data, allow_redirects=True)
     print("[calendar] status:", res.status_code)
     print("[calendar] response:", res.text[:500])
     try:
         return jsonify(res.json())
     except Exception:
         return jsonify({"events": [], "error": res.text[:200]}), 200
-    
+
+# 엔드포인트: POST /labels-proxy (Apps Script 라벨 프록시)
+@app.route('/labels-proxy', methods=['POST'])
+def labels_proxy():
+    data = request.json or {}
+    try:
+        res = requests.post(WEBAPP_URL, json=data, allow_redirects=True)
+        print("[labels] status:", res.status_code)
+        try:
+            return jsonify(res.json())
+        except Exception:
+            return jsonify({"ok": False, "error": res.text[:200]}), 200
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
 # 서버 진입점
 if __name__ == '__main__':
     # host='0.0.0.0': 모든 네트워크 인터페이스에서 수신 (localhost 외부 접근 허용)
