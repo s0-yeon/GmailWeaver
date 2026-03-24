@@ -2,7 +2,7 @@
 
 // 애드온 UI에서 "스마트 검색" 버튼을 눌렀을 때 호출되는 함수 
 function onSmartSearch(e) {    // e: Apps Script 이벤트 객체. e.commonEventObject.formInputs 안에 사용자 입력값이 담겨 있음
-    var inputs = (e && e.commonEventObject && e.commonEventObject.formInputs) || {};  //이벤트 객체에서 폼 입력값 추출 && 체이닝으로 null 에러 방지
+    var inputs = (e && e.commonEventObject && e.commonEventObject.formInputs) || {};  // 이벤트 객체에서 폼 입력값 추출 && 체이닝으로 null 에러 방지
     var query  = (inputs.searchQuery && inputs.searchQuery.stringInputs)  
         ? inputs.searchQuery.stringInputs.value[0].trim() : ""; // 폼에서 searchQuery라는 이름의 입력값 추출. 없으면 빈 문자열. 앞뒤 공백 제거
     if (!query) return _toast("메시지를 입력해주세요.");     // 검색어 비어있으면 토스트 알림 띄우기
@@ -13,7 +13,7 @@ function onSmartSearch(e) {    // e: Apps Script 이벤트 객체. e.commonEvent
             method: "post",   
             contentType: "application/json",
             headers: { "ngrok-skip-browser-warning": "1" },   // ngrok이 브라우저에 경고 페이지를 띄우는 것을 방지하는 헤더
-            payload: JSON.stringify({ message: query, resMethod: "local", resType: "structured" })    // '구조화'로 응답 형식 지정
+            payload: JSON.stringify({ message: query, resMethod: "global", resType: "structured" })    // '구조화'로 응답 형식 지정
         });
         jobId = JSON.parse(res.getContentText()).jobId;     // 서버 응답 객체(res)에서 텍스트를 추출하여 JSON 객체로 변환한 후, 그 객체에서 jobId 값을 추출
     } catch (err) { return _toast("⚠️ 서버 연결 실패: " + err.message); }
