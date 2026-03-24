@@ -1,5 +1,5 @@
 import os
-import time
+import time 
 import traceback
 
 from util.jobs.job_store import update_job
@@ -21,13 +21,13 @@ def run_graph_pipeline(job_id):
         print(f"[PIPELINE][INDEX] env prepared job_id={job_id}")
         print(f"[PIPELINE][INDEX] cwd={os.getcwd()} job_id={job_id}")
 
-        print(f"[PIPELINE][INDEX] calling build_graph_json job_id={job_id}")
-        build_graph_json(job_id, env)
-        print(f"[PIPELINE][INDEX] build_graph_json DONE job_id={job_id}")
-
         print(f"[PIPELINE][INDEX] calling build_graphrag_index job_id={job_id}")
         build_graphrag_index(job_id, env)
         print(f"[PIPELINE][INDEX] build_graphrag_index DONE job_id={job_id}")
+
+        print(f"[PIPELINE][INDEX] calling build_graph_json job_id={job_id}")
+        build_graph_json(job_id, env)
+        print(f"[PIPELINE][INDEX] build_graph_json DONE job_id={job_id}")
 
         update_job(
             job_id,
@@ -76,7 +76,7 @@ def run_graph_update_pipeline(job_id):
         print(f"[PIPELINE][UPDATE] build_graph_json DONE job_id={job_id}")
 
         print(f"[PIPELINE][UPDATE] calling build_graphrag_update job_id={job_id}")
-        build_graphrag_index(job_id, env)
+        build_graphrag_update(job_id, env)
         print(f"[PIPELINE][UPDATE] build_graphrag_update DONE job_id={job_id}")
 
         update_job(
@@ -104,33 +104,3 @@ def run_graph_update_pipeline(job_id):
         except Exception as inner_e:
             print(f"[PIPELINE][UPDATE][ERROR] failed to save failed status job_id={job_id} error={inner_e}")
             traceback.print_exc()
-
-def run_graph_update_pipeline(job_id):
-    try:
-        update_job(job_id, status="running", progress=1, message="그래프 업데이트 완료")
-
-        env = os.environ.copy()
-        env["PYTHONUTF8"] = "1"
-        env["PYTHONIOENCODING"] = "utf-8"
-        env["RICH_DISABLE"] = "1"
-
-        build_graph_json(job_id, env)
-        build_graphrag_update(job_id, env)
-
-        update_job(
-            job_id,
-            status="done",
-            progress=100,
-            message="JSON 변환, GraphRAG 업데이트 완료",
-            finished_at=time.time(),
-        )
-
-    except Exception as e:
-        update_job(
-            job_id,
-            status="failed",
-            progress=100,
-            message="그래프 업데이트 파이프라인 실패",
-            error=str(e),
-            finished_at=time.time(),
-        )
