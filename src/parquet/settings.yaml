@@ -4,137 +4,116 @@
 ### LLM settings ###
 ## There are a number of settings to tune the threading and token limits for LLM calls - check the docs.
 
-encoding_model: cl100k_base # this needs to be matched to your model!
+encoding_model: cl100k_base
 
-models:
+# ── 모델 설정 (레거시 llm: 블록 완전 제거, models: 로 통합) ──
+models:				# ← 텍스트 생성용 (entity 추출, 요약, 리포트)
   default_chat_model:
     type: openai_chat
     model: gpt-4o-mini
     api_key: ${GRAPHRAG_API_KEY}
     model_supports_json: true
 
-  default_embedding_model:
+  default_embedding_model:		# ← 벡터화용 (LanceDB에 저장될 임베딩 생성)
     type: openai_embedding
     model: text-embedding-3-small
     api_key: ${GRAPHRAG_API_KEY}
 
-
-llm:
-  api_key: ${GRAPHRAG_API_KEY} # set this in the generated .env file
-  type: openai_chat # or azure_openai_chat
-  model: gpt-4o-mini
-  model_supports_json: true # recommended if this is available for your model.
-  # audience: "https://cognitiveservices.azure.com/.default"
-  # api_base: https://<instance>.openai.azure.com
-  # api_version: 2024-02-15-preview
-  # organization: <organization_id>
-  # deployment_name: <azure_model_deployment_name>
-
+# ── 병렬 처리 (속도 최적화 핵심) ──
 parallelization:
-  stagger: 0.3
-  # num_threads: 50
+  stagger: 0.1       # 0.3 → 0.1
+  num_threads: 25    # 주석 해제
 
-async_mode: threaded # or asyncio
+async_mode: threaded
 
+# ── 임베딩 (embeddings.llm 중복 제거, vector_store만 유지) ──
 embeddings:
-  async_mode: threaded # or asyncio
+  async_mode: threaded
   vector_store:
     type: lancedb
     db_uri: 'output/lancedb'
     container_name: default
     overwrite: true
-  llm:
-    api_key: ${GRAPHRAG_API_KEY}
-    type: openai_embedding # or azure_openai_embedding
-    model: text-embedding-3-small
-    # api_base: https://<instance>.openai.azure.com
-    # api_version: 2024-02-15-preview
-    # audience: "https://cognitiveservices.azure.com/.default"
-    # organization: <organization_id>
-    # deployment_name: <azure_model_deployment_name>
 
-### Input settings ###
-
+# ── 입력 ──
 input:
-  type: file # or blob
-  file_type: text # or csv
+  type: file
+  file_type: text
   base_dir: "input"
   file_encoding: utf-8
   file_pattern: ".*\\.txt$$"
 
+# ── 청크 (이메일 특성에 맞게 축소) ──
 chunks:
-  size: 4000
-  overlap: 200
+  size: 1200         # 4000 → 1200
+  overlap: 100       # 200 → 100
   group_by_columns: [id]
 
-### Storage settings ###
-## If blob storage is specified in the following four sections,
-## connection_string and container_name must be provided
-
+# ── 스토리지 ──
 cache:
-  type: file # or blob
+  type: file
   base_dir: "cache"
 
 reporting:
-  type: file # or console, blob
+  type: file
   base_dir: "logs"
 
 storage:
-  type: file # or blob
+  type: file
   base_dir: "output"
 
-## only turn this on if running `graphrag index` with custom settings
-## we normally use `graphrag update` with the defaults
 update_index_storage:
-  # type: file # or blob
+  # type: file
   # base_dir: "update_output"
 
-### Workflow settings ###
-
+# ── 워크플로우 ──
 skip_workflows: []
 
+# ── 엔티티 추출 (LLM 호출 횟수 감소) ──
 entity_extraction:
   prompt: "prompts/entity_extraction.txt"
-  entity_types: [organization,person,geo,event]
-  max_gleanings: 1
+  entity_types: [organization, person, event]  # geo 제거
+  max_gleanings: 0   # 1 → 0
 
+# ── 설명 요약 ──
 summarize_descriptions:
   prompt: "prompts/summarize_descriptions.txt"
-  max_length: 500
+  max_length: 300    # 500 → 300
 
+# ── 클레임 추출 (비활성) ──
 claim_extraction:
   enabled: false
   prompt: "prompts/claim_extraction.txt"
   description: "Any claims or facts that could be relevant to information discovery."
-  max_gleanings: 1
+  max_gleanings: 0
 
+# ── 커뮤니티 리포트 ──
 community_reports:
   prompt: "prompts/community_report.txt"
-  max_length: 2000
-  max_input_length: 8000
+  max_length: 1200        # 2000 → 1200
+  max_input_length: 5000  # 8000 → 5000
 
 cluster_graph:
   max_cluster_size: 10
 
 embed_graph:
-  enabled: false # if true, will generate node2vec embeddings for nodes
+  enabled: false
 
 umap:
-  enabled: false # if true, will generate UMAP embeddings for nodes
+  enabled: false
 
+# ── 스냅샷 (공식 스펙 필드명으로 수정) ──
 snapshots:
-  graphml: true
-  raw_entities: false
-  top_level_nodes: false
+  graphml: false       # true → false
+  raw_graph: false     # raw_entities(오류) → raw_graph(공식 필드명)
   embeddings: false
-  transient: false
+  # top_level_nodes 제거 → 존재하지 않는 필드
 
-### Query settings ###
-## The prompt locations are required here, but each search method has a number of optional knobs that can be tuned.
-## See the config docs: https://microsoft.github.io/graphrag/config/yaml/#query
-
+# ── 쿼리 ──
 local_search:
   prompt: "prompts/local_search_system_prompt.txt"
+  text_unit_prop: 0.5
+  max_context_tokens: 4000   # max_tokens(오류) → max_context_tokens
 
 global_search:
   map_prompt: "prompts/global_search_map_system_prompt.txt"
@@ -143,9 +122,3 @@ global_search:
 
 drift_search:
   prompt: "prompts/drift_search_system_prompt.txt"
-
-  local_search:
-  prompt: "prompts/local_search_system_prompt.txt"
-  text_unit_prop: 0.3
-  max_tokens: 1000
-  llm_max_tokens: 1000
