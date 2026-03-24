@@ -84,11 +84,12 @@ pip install graphrag==2.1.0
 - flask-cors: CORS 설정
 - PyMuPDF: PDF 읽고 텍스트 추출 
 - python-docx: .docx 파일 읽고 수정
-(- pandas: 데이터 분석)
+- python-pptx: .pptx 파일 읽고 수정
+- openyxl: .xlsx 파일 읽고 수정
 
 ### 설치 및 확인
 ```bash
-pip install openai python-dotenv Flask flask-cors PyMuPDF python-docx pandas
+pip install flask flask-cors python-dotenv openai pymupdf python-docx python-pptx openpyxl requests
 pip list
 ```
 ---
