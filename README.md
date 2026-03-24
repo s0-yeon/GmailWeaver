@@ -83,9 +83,10 @@ pip install graphrag==2.1.0
 - Flask: 서버 프레임워크
 - flask-cors: CORS 설정
 - PyMuPDF: PDF 읽고 텍스트 추출 
-- python-docx: .docx 파일 읽고 수정
-- python-pptx: .pptx 파일 읽고 수정
-- openyxl: .xlsx 파일 읽고 수정
+- python-docx: DOCS 파일 읽고 수정
+- olefile: HWP 파일 읽고 수정
+- python-pptx: PPTX 파일 읽고 수정
+- openyxl: XLSX 파일 읽고 수정
 
 ### 설치 및 확인
 ```bash
