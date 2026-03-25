@@ -2,7 +2,7 @@
 var TunnelURL = "https://laevorotatory-nonnutritively-nelle.ngrok-free.dev";
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzuZ8CJdGBVGp2kqqmqwm43yW_wVoeDex6efJnpEe7fCTQXXtueEl2SVSFjvtrW-sB4/exec";
 
-const OLIVE = "#465822";
+const OLIVE = "#c6d8a5";
 
 // 공식 엔트리 포인트 (외부에서 호출)
 function onHomepage(e) {
@@ -48,6 +48,8 @@ function _buildHomeCard() {
         .addWidget(_webpageBtn())
         .addWidget(syncNewBtn)
         .addWidget(syncAllBtn);
+
+    // 이하 동일
 
     var searchInput = CardService.newTextInput()
         .setFieldName("searchQuery")
@@ -136,7 +138,7 @@ function _buildGmailMessageCard(e) {
     var calSection = CardService.newCardSection()
         .addWidget(calBtn)      // 버튼 위
         .addWidget(calDesc);    // 설명 아래 (섹션 헤더 없음)
-        
+
     return CardService.newCardBuilder()
 
         .setHeader(

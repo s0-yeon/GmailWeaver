@@ -1,5 +1,6 @@
 # src/app.py
 
+import datetime
 import os
 import re
 import subprocess
@@ -11,17 +12,22 @@ import uuid
 import openai
 import base64
 import requests
+import shutil
 
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import fitz  # PyMuPDF
 from docx import Document
+import olefile
+import csv
+from pptx import Presentation
+from openpyxl import load_workbook
 
 # Job 이용 공통함수 import
 from util.jobs.job_store import *
-from util.graphrag import run_graph_pipeline
-from config.setting import *
+from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
+from config.settings import *
 
 # 환경변수 로드
 load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: GraphRAG 설정(settings.yaml)과 API 키가 같은 디렉터리에 위치하기 때문
@@ -161,6 +167,100 @@ def _extract_text_from_docx(file_path):
         print(f"[Docx Extract Error] {e}")
     return text
 
+# HWP 파일에서 텍스트 추출
+def _extract_text_from_hwp(file_path):
+    text = ""
+    try:
+        f = olefile.OleFileIO(file_path)
+        dirs = f.listdir()
+        sections = [d for d in dirs if "BodyText/Section" in "/".join(d)]
+        
+        for section in sections:
+            stream = f.openstream("/".join(section))
+            data = stream.read()
+            try:
+                # 가공되지 않은 바이너리에서 한글 텍스트 패턴 추출 시도
+                decoded_text = data.decode("utf-16", errors="ignore")
+                # 불필요한 제어문자 및 바이너리 찌꺼기 제거 (정규식 활용 가능)
+                clean_text = "".join(c for c in decoded_text if c.isalnum() or c in " \n\t.,()[]")
+                text += clean_text + "\n"
+            except Exception as e:
+                print(f"[HWP Decode Error in {section}] {e}")
+                
+        f.close()
+    except Exception as e:
+        print(f"[HWP Extract Error] {e}")
+    return text
+
+# TXT 파일에서 텍스트 추출 
+def _extract_text_from_txt(file_path):
+    text = ""
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            text = f.read()
+    except UnicodeDecodeError:
+        try:
+            with open(file_path, "r", encoding="cp949") as f:
+                text = f.read()
+        except Exception as e:
+            print(f"[TXT Extract Error] {e}")
+    except Exception as e:
+        print(f"[TXT Extract Error] {e}")
+    return text
+
+# PPTX 파일에서 텍스트 추출
+def _extract_text_from_pptx(file_path):
+    text = ""
+    try:
+        prs = Presentation(file_path)
+        for slide in prs.slides:
+            for shape in slide.shapes:
+                if hasattr(shape, "text") and shape.text:
+                    text += shape.text + "\n"
+    except Exception as e:
+        print(f"[PPTX Extract Error] {e}")
+    return text
+
+# XLSX 파일에서 텍스트 추출
+def _extract_text_from_xlsx(file_path):
+    text = ""
+    try:
+        wb = load_workbook(file_path, data_only=True)
+        for ws in wb.worksheets:
+            text += f"[Sheet] {ws.title}\n"
+            for row in ws.iter_rows(values_only=True):
+                row_values = [str(cell) if cell is not None else "" for cell in row]
+                # 빈 행은 스킵
+                if any(v.strip() for v in row_values):
+                    text += " | ".join(row_values) + "\n"
+            text += "\n"
+    except Exception as e:
+        print(f"[XLSX Extract Error] {e}")
+    return text
+
+# CSV 파일에서 텍스트 추출
+def _extract_text_from_csv(file_path):
+    text = ""
+    try:
+        with open(file_path, "r", encoding="utf-8", newline="") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                row_values = [str(cell) if cell is not None else "" for cell in row]
+                text += " | ".join(row_values) + "\n"
+    except UnicodeDecodeError:
+        try:
+            with open(file_path, "r", encoding="cp949", newline="") as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    row_values = [str(cell) if cell is not None else "" for cell in row]
+                    text += " | ".join(row_values) + "\n"
+        except Exception as e:
+            print(f"[CSV Extract Error] {e}")
+    except Exception as e:
+        print(f"[CSV Extract Error] {e}")
+    return text
+
+
 # 파일명에서 경로/위험 문자 제거
 def _sanitize_filename(name: str) -> str:
     name = os.path.basename(name or "attachment.bin").strip()
@@ -238,6 +338,90 @@ def _merge_attachments_into_mail_blocks(content: str, attachment_texts_by_mail: 
             )
 
     return "\n".join(merged_blocks) + "\n"
+
+
+# 텍스트에서 메일별로 구분
+def _split_mail_blocks(text):
+    parts = text.split(MAIL_BLOCK_SEP)
+    blocks = []
+
+    for p in parts:
+        p = p.strip()
+        if not p:
+            continue
+        block = MAIL_BLOCK_SEP + "\n" + p
+        if not block.endswith(MAIL_BLOCK_SEP):
+            block += "\n" + MAIL_BLOCK_SEP
+
+        blocks.append(block)
+
+    return blocks
+
+def _extract_message_ids(text):
+    return set(re.findall(r"^\s*ID:\s*(.+?)\s*$", text, flags=re.MULTILINE))
+
+# 날짜 기준 정렬용 datetime 추출
+def _extract_block_for_sort(block):
+    for line in block.splitlines():
+        if line.startswith("날짜:"):
+            raw = line.replace("날짜:", "").strip()
+            try:
+                return datetime.datetime.strptime(raw, "%Y-%m-%d %H:%M:%S")
+            except Exception:
+                return datetime.datetime.min
+    return datetime.datetime.min
+
+# 현재 mail_latest.txt 읽기
+def _read_latest_text():
+    if not os.path.exists(MAIL_LATEST_PATH):
+        return ""
+    with open(MAIL_LATEST_PATH, "r", encoding="utf-8") as f:
+        return f.read()
+
+def _delete_incremental_files():
+    os.makedirs(MAIL_DIR, exist_ok=True)
+
+    for name in os.listdir(MAIL_DIR):
+        if name.startswith("inc_") and name.endswith(".txt"):
+            path = os.path.join(MAIL_DIR, name)
+            try:
+                os.remove(path)
+            except Exception as e:
+                print(f"[UPLOAD] failed to remove incremental file: {path} / {e}")
+
+def _build_incremental_path(filename: str) -> str:
+    safe_name = _sanitize_filename(filename or "")
+    if not safe_name.startswith("inc_"):
+        safe_name = f"inc_{datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S')}.txt"
+    return os.path.join(MAIL_DIR, safe_name)
+
+def _read_json_file(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+    
+# 인덱스 여부 확인
+def _is_index_ready():
+
+    graph_path = os.path.join(GRAPHRAG_ROOT, "output", "graph.graphml")
+    stats_path = os.path.join(GRAPHRAG_ROOT, "output", "stats.json")
+
+    try:
+        required_paths = [MAIL_LATEST_PATH, graph_path, stats_path]
+
+        for path in required_paths:
+            if not os.path.exists(path):
+                print(f"[INDEX READY] missing: {path}")
+                return False
+            if os.path.getsize(path) == 0:
+                print(f"[INDEX READY] empty file: {path}")
+                return False
+
+        _read_json_file(stats_path)
+        return True
+
+    except Exception as e:
+        print(f"[INDEX READY] invalid index state: {e}")
+        return False
 
 # 엔드포인트: POST /extract-calendar
 @app.route('/extract-calendar', methods=['POST'])
@@ -336,6 +520,21 @@ def upload():
     filename = data.get("filename") or f"mail_{int(time.time())}.txt"
     content = data.get("content") or ""
     attachments = data.get("attachment") or []
+    requested_mode = data.get("syncmode", "append")
+
+    if not str(content).strip():
+        return jsonify({"ok": False, "error": "content가 비어있습니다."}), 400
+    
+    # append인데 기존 인덱스가 없으면 자동으로 rewrite로 전환
+    fallback_to_rewrite = False
+    sync_mode = requested_mode
+
+    # 새로운 메일 추가 모드이지만 인덱싱이 되어있지 않으면 인덱싱 모드로 전환
+    if requested_mode == "append" and not _is_index_ready():
+        print("[UPLOAD] index not ready -> fallback to rewrite")
+        sync_mode = "rewrite"
+        fallback_to_rewrite = True
+
 
     # 2) 저장 디렉토리 준비
     os.makedirs(MAIL_DIR, exist_ok=True)
@@ -379,6 +578,16 @@ def upload():
                     file_text = _extract_text_from_pdf(saved_path)
                 elif ext == ".docx" or mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                     file_text = _extract_text_from_docx(saved_path)
+                elif ext == ".hwp" or mime in ("application/x-hwp", "application/haansofthwp"): # 추가
+                    file_text = _extract_text_from_hwp(saved_path)
+                elif ext == ".txt" or mime == "text/plain":
+                    file_text = _extract_text_from_txt(saved_path)
+                elif ext == ".pptx" or mime == "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+                    file_text = _extract_text_from_pptx(saved_path)
+                elif ext == ".xlsx" or mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                    file_text = _extract_text_from_xlsx(saved_path)
+                elif ext == ".csv" or mime in ("text/csv", "application/csv"):
+                    file_text = _extract_text_from_csv(saved_path)
                 else:
                     failed_attachments.append({
                         "name": original_name,
@@ -425,26 +634,114 @@ def upload():
     print(f"[UPLOAD] Content length: {len(content)}")
     print(f"[UPLOAD] Attachment count received: {len(attachments)}")
     print(f"[UPLOAD] Attachment extracted count: {extracted_count}")
+    print(f"[UPLOAD] Requested mode: {requested_mode}")
+    print(f"[UPLOAD] Actual mode: {sync_mode}")
     print("[UPLOAD] cwd:", os.getcwd())
+
+
+    added_count = 0
+    skipped_count = 0
+    saved_mail_path = ""
+
+    # 전체 갱신: 새 content 전체를 기준으로 다시 씀
+    if sync_mode == "rewrite":
+        final_content = content
+        if attachment_texts_by_mail:
+            final_content = _merge_attachments_into_mail_blocks(content, attachment_texts_by_mail)
+        # 이 전에 새로운 메일 추가해서 생긴 input 파일들 삭제
+        _delete_incremental_files()
+
+        # 지금까지의 메일 데이터들 다 합친 mail_latest.txt 파일 생성
+        with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
+            f.write(final_content.rstrip() + "\n")
+
+        saved_mail_path = MAIL_LATEST_PATH
+        added_count = len(_split_mail_blocks(content))
+
+    # 새 메일만 추가
+    else:
+        existing_text = _read_latest_text()
+        existing_ids = _extract_message_ids(existing_text)
+
+        new_blocks = _split_mail_blocks(content)
+        append_blocks = []
+
+        for block in new_blocks:
+            msg_id = _extract_mail_id_from_block(block)
+            # 해당 메일에 첨부 추출 텍스트가 있으면 그 블록에만 병합
+            if not msg_id:
+                skipped_count += 1
+                continue
+
+            if msg_id in existing_ids:
+                skipped_count += 1
+                continue
+
+            if msg_id in attachment_texts_by_mail:
+                block = _merge_attachments_into_mail_blocks(
+                    block,
+                    {msg_id: attachment_texts_by_mail[msg_id]}
+                ).strip()
+
+            append_blocks.append(block.strip())
+            existing_ids.add(msg_id)
+
+        added_count = len(append_blocks)
+
+        # 새 메일을 위쪽에 붙이고 기존 내용 유지
+        if append_blocks:
+            append_blocks.sort(key=_extract_block_for_sort, reverse=True)
+            inc_content = "\n\n".join(append_blocks).strip() + "\n"
+
+            inc_path = _build_incremental_path(filename)
+            with open(inc_path, "w", encoding="utf-8") as f:
+                f.write(inc_content)
+
+            saved_mail_path = inc_path
+        else:
+            saved_mail_path = ""
+
+    print("[UPLOAD] added:", added_count)
+    print("[UPLOAD] skipped:", skipped_count)
+    if saved_mail_path:
+        print("[UPLOAD] saved mail path:", os.path.abspath(saved_mail_path))
 
     # GraphRAG 파이프라인을 백그라운드에서 실행
     job_id = str(uuid.uuid4())[:8]
 
-    create_job(job_id, job_type="index")
-    update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작")
+    if sync_mode == "rewrite":
+        create_job(job_id, job_type="index")
+        update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작")
 
-    threading.Thread(
-        target=run_graph_pipeline,
-        args=(job_id,),
-        daemon=True
-    ).start()
+    else:
+        create_job(job_id, job_type="update")
+        update_job(job_id, message="업로드 완료, 그래프 업데이트 파이프라인 시작")
+
+    env = os.environ.copy()
+    env["PYTHONUNBUFFERED"] = "1"
+
+    if sync_mode == "rewrite":
+        update_dir = os.path.join(GRAPHRAG_ROOT, "update_output")
+        if os.path.exists(update_dir):
+            shutil.rmtree(update_dir)
+            print(f"[CLEAN] update_output 삭제 완료: {update_dir}")
+        else:
+            print(f"[CLEAN] update_output 없음: {update_dir}")
+        start_graph_pipeline_background(job_id, env)
+    else:
+        start_graph_update_pipeline_background(job_id, env)
 
     return jsonify({
             "ok": True,
-            "saved_path": os.path.abspath(file_path),
+            "requested_mode": requested_mode,
+            "actual_mode": sync_mode,
+            "fallback_to_rewrite": fallback_to_rewrite,
             "latest_path": os.path.abspath(MAIL_LATEST_PATH),
+            "saved_mail_path": os.path.abspath(saved_mail_path) if saved_mail_path else "",
             "attachment_dir": os.path.abspath(ATTACHMENT_DIR),
             "content_length": len(content),
+            "added_count": added_count,
+            "skipped_count": skipped_count,
             "attachment_received_count": len(attachments),
             "attachment_extracted_count": extracted_count,
             "failed_attachments": failed_attachments,
@@ -459,6 +756,11 @@ def graph_data():   # mail2json.py가 생성한 그래프 시각화 데이터를
     with open(GRAPH_JSON_PATH, "r", encoding="utf-8") as f:
         return jsonify(json.load(f))
     
+# 엔드포인트: GET /index-status
+@app.route("/index-status", methods=["GET"])
+def index_status():     # GraphRAG 인덱싱 완료 여부 반환
+    return jsonify({ "indexed": _is_index_ready() })
+
 # 엔드포인트: GET /dashboard/ (Gentella 웹앱 서빙)
 @app.route('/dashboard/', defaults={'path': 'production/index.html'})
 @app.route('/dashboard/<path:path>')
