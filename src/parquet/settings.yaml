@@ -135,6 +135,15 @@ snapshots:
 
 local_search:
   prompt: "prompts/local_search_system_prompt.txt"
+  text_unit_prop: 0.5        # 기본 0.1 → TextUnit 직접 검색 비중 대폭 증가
+  community_prop: 0.1
+  conversation_history_max_turns: 5
+  top_k_mapped_entities: 10  # 기본 3 → 관련 엔티티 더 많이 수집
+  top_k_relationships: 10    # 기본 5 → 관련 관계 더 많이 수집
+  max_tokens: 12000           # 컨텍스트 창 확보
+  temperature: 0.0            # 이메일 분석은 결정론적 답변이 정확
+  llm_max_tokens: 2000
+
 
 global_search:
   map_prompt: "prompts/global_search_map_system_prompt.txt"

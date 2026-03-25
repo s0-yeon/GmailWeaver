@@ -24,7 +24,7 @@ from util.graphrag import run_graph_pipeline
 from config.setting import *
 
 #Neo4J 모듈
-from util.neo4j_query import run_neo4j_query
+from util.parquet_query import answer_query
 
 # 환경변수 로드
 load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: GraphRAG 설정(settings.yaml)과 API 키가 같은 디렉터리에 위치하기 때문
@@ -218,11 +218,15 @@ def run_query_async():
     create_job(job_id, job_type="query")
     update_job(job_id, status="pending", result=None, resType=resType)
 
-    def _worker():  # 백그라운드 스레드에서 실행되는 실제 작업 함수
+    def _worker():
         try:
-            # 한국어 응답 강제 (GraphRAG 기본 응답이 영어일 경우 대비)
-            full_message = message + " 영어 말고 한국어로 답변해줘."
+        # ── 쿼리 재작성 추가 ──────────────────────────────
+            rewritten = rewrite_query_for_graphrag(message)
+            print(f"[REWRITE] {message} → {rewritten}")
+        
+            full_message = rewritten + " 영어 말고 한국어로 답변해줘."
             answer = _run_graphrag(full_message, resMethod, resType)
+        # 이하 기존 코드 동일...
 
             if resType.lower() == "calendar":
                 # 캘린더 타입: GraphRAG 텍스트 답변을 다시 OpenAI로 구조화
@@ -457,14 +461,13 @@ def calendar_events():
     except Exception:
         return jsonify({"events": [], "error": res.text[:200]}), 200
 
-#NEO4J 런쿼리
 @app.route('/neo4j-query', methods=['POST'])
 def neo4j_query():
     message = request.json.get('message', '')
     if not str(message).strip():
         return jsonify({'error': 'message가 비어있습니다.'}), 400
     try:
-        result = run_neo4j_query(message)
+        result = answer_query(message)
         return jsonify({'result': result})
     except Exception as e:
         return jsonify({'error': str(e)}), 500

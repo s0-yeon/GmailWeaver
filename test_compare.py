@@ -1,5 +1,10 @@
 import requests
 import time
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "src", "util"))
+from parquet_query import answer_query
 
 BASE_URL = "http://localhost:80"
 
@@ -9,19 +14,16 @@ QUESTIONS = [
     "누가 가장 많이 이메일을 보냈어?",
 ]
 
-def test_neo4j(question):
+
+def test_parquet(question):
     start = time.time()
     try:
-        r = requests.post(
-            f"{BASE_URL}/neo4j-query",
-            json={"message": question},
-            timeout=120
-        )
+        result = answer_query(question)
         elapsed = time.time() - start
-        data = r.json()
-        return elapsed, data.get("result", data.get("error", "응답 없음"))
+        return elapsed, result
     except Exception as e:
         return time.time() - start, f"오류: {e}"
+
 
 def test_graphrag(question):
     start = time.time()
@@ -37,16 +39,17 @@ def test_graphrag(question):
     except Exception as e:
         return time.time() - start, f"오류: {e}"
 
+
 if __name__ == "__main__":
     for i, question in enumerate(QUESTIONS):
         print("=" * 60)
         print(f"[질문 {i+1}] {question}")
         print("=" * 60)
 
-        t1, r1 = test_neo4j(question)
+        t1, r1 = test_parquet(question)
         t2, r2 = test_graphrag(question)
 
-        print(f"[Neo4j]    {t1:.2f}초")
+        print(f"[Parquet]  {t1:.2f}초")
         print(f"  답변: {r1[:300]}")
         print()
         print(f"[GraphRAG] {t2:.2f}초")
