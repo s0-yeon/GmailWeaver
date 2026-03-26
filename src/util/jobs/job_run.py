@@ -4,6 +4,7 @@ import sys
 import subprocess
 import threading
 import traceback
+import networkx as nx
 
 from util.jobs.job_store import update_job, append_job_log
 from util.graphrag_progress import parse_graphrag_progress  # 현재 버전에서는 실시간 파싱에 사용 안 함
@@ -102,7 +103,7 @@ def build_graphrag_index(job_id, env):
         append_job_log(job_id, f"[ERROR] build_graphrag_index failed: {e}")
         raise
 
-# 백그라운드: GraphRAG 인덱싱
+# 백그라운드: GraphRAG 업데이트
 def build_graphrag_update(job_id, env):
     print(f"[JOB][graphrag-update] START job_id={job_id}")
     print(f"[JOB][graphrag-update] cwd={os.getcwd()}")
@@ -148,12 +149,23 @@ def build_graphrag_update(job_id, env):
         update_job(job_id, progress=90, message="GraphRAG 업데이트 완료")
         print(f"[JOB][graphrag-update] SUCCESS job_id={job_id}")
 
+        # 새로운 데이터 graphml 원래 output graphml과 병합
+        output_graphml = os.path.join(GRAPHRAG_ROOT, "output", "graph.graphml")
+        update_output_dir = os.path.join(GRAPHRAG_ROOT, "update_output")
+        latest = sorted(os.listdir(update_output_dir))[-1]
+        delta_graphml = os.path.join(update_output_dir, latest, "delta", "graph.graphml")
+        
+        if os.path.exists(delta_graphml):
+            G_output = nx.read_graphml(output_graphml)
+            G_delta = nx.read_graphml(delta_graphml)
+            G_merged = nx.compose(G_output, G_delta)
+        nx.write_graphml(G_merged, output_graphml)
+
     except Exception as e:
         print(f"[JOB][graphrag-update][ERROR] job_id={job_id} error={e}")
         traceback.print_exc()
         append_job_log(job_id, f"[ERROR] build_graphrag_update failed: {e}")
         raise
-
 
 # 전체 파이프라인 실행
 def run_graph_pipeline(job_id, env):
