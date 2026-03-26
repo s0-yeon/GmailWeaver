@@ -61,13 +61,14 @@ function _runSync(mode) {
         throw new Error("upload failed: " + codeAll + " / " + textAll);
       }
 
+      // 동기화 시간 저장
       props.setProperty("GW_LAST_SYNC_MS", String(Date.now()));
 
       Logger.log("upload success: " + codeAll + " / " + textAll);
       Logger.log("메일 수: " + count);
       Logger.log("첨부 전송 개수: " + allAttachments.length);
 
-      return _toast("✅ " + count + "개 메일을 서버로 전송했습니다.");
+      return _toast("✅ " + count + "개 메일, 첨부 " + allAttachments.length + "개를 서버로 전송했습니다.");
     }
 
     var queryNew = "in:inbox OR in:sent";
@@ -321,6 +322,7 @@ function onSaveCalendarWithManualTitle(e) {
 
   return _toast(added > 0 ? "📅 " + added + "개 일정이 저장되었습니다." : "⚠️ 일정 저장 실패");
 }
+
 // 공통 유틸 
 // 메일 1개의 TXT 블록 생성
 function _buildMessageText(msg, myEmail, mailIndex) {
@@ -360,16 +362,17 @@ function _buildMessageText(msg, myEmail, mailIndex) {
       var name = a.getName() || ("attachment_" + (i + 1));
       var mime = a.getContentType() || "application/octet-stream";
       var size = a.getSize();
-
       var lowerName = name.toLowerCase();
-      var isPdf = lowerName.endsWith(".pdf") ||
-                  mime === "application/pdf" ||
-                  mime === "application/haansoftpdf";
-      var isDocx = lowerName.endsWith(".docx") ||
-                   mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+      // 확장자 및 MIME 타입 체크 확장
+      var isSupported = lowerName.endsWith(".pdf") || lowerName.endsWith(".docx") || 
+                        lowerName.endsWith(".hwp") || lowerName.endsWith(".pptx") || 
+                        lowerName.endsWith(".xlsx") || lowerName.endsWith(".csv") || 
+                        lowerName.endsWith(".txt");
 
       var status = "";
-      if (!(isPdf || isDocx)) {
+
+      if (!isSupported) {
         status = "업로드 제외: 형식 미지원";
       } else if (size > 5 * 1024 * 1024) {
         status = "업로드 제외: 용량 초과";
@@ -377,11 +380,18 @@ function _buildMessageText(msg, myEmail, mailIndex) {
         status = "업로드 포함";
       }
 
-      return "  " + (i + 1) + ". " + name + " | " + mime + " | " + size + " bytes | " + status;
+      return "- " + name + " (" + (size/1024).toFixed(1) + " KB) [" + status + "]";
     }).join("\n");
   }
 
   var body = msg.getPlainBody() || "";
+  // 본문 input txt 필요없는 요소 줄이기
+  body = body.replace(/\r\n/g, "\n"); // \r\n (윈도우 방식) -> \n
+  body = body.replace(/\[image:[^\]]*\]/gi, ""); // [image: ] 제거
+  body = body.replace(/[ \t]+/g, " "); // 연속 스페이스, 탭 -> 1개
+  body = body.replace(/\n{2,}/g, "\n"); // 연속 줄바꿈 -> 1줄 줄바꿈
+  body = body.replace(/ \n/g, "\n"); // 줄 끝 스페이스 제거
+  body = body.replace(/\n /g, "\n"); // 줄 시작 스페이스 제거
 
   return [
     "============================================================",
@@ -389,8 +399,8 @@ function _buildMessageText(msg, myEmail, mailIndex) {
     "ID: " + id,
     "구분: " + direction,
     "제목: " + subject,
-    "보낸 사람: " + from,
-    "받는 사람: " + to,
+    "발신인: " + from,
+    "수신인: " + to,
     "참조(CC): " + cc,
     "날짜: " + date,
     "",
@@ -401,7 +411,7 @@ function _buildMessageText(msg, myEmail, mailIndex) {
     "[첨부파일 정보]",
     attachmentInfo,
     "",
-    "[본문]",
+    "[메일 본문]",
     body,
     "============================================================"
   ].join("\n");
@@ -420,29 +430,29 @@ function _buildAttachmentPayload(msg) {
     var size = att.getSize();
     var lowerName = name.toLowerCase();
 
-    // PDF
-    var isPdf = lowerName.endsWith(".pdf") ||   
-                mime === "application/pdf" ||
-                mime === "application/haansoftpdf";
+    var isPdf  = lowerName.endsWith(".pdf")  || mime === "application/pdf" || mime === "application/haansoftpdf";
+    var isDocx = lowerName.endsWith(".docx") || mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    var isHwp  = lowerName.endsWith(".hwp")  || mime === "application/x-hwp" || mime === "application/haansofthwp";
+    var isPptx = lowerName.endsWith(".pptx") || mime === "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+    var isXlsx = lowerName.endsWith(".xlsx") || mime === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    var isCsv  = lowerName.endsWith(".csv")  || mime === "text/csv" || mime === "application/csv";
+    var isTxt  = lowerName.endsWith(".txt")  || mime === "text/plain";
 
-    // DOCS
-    var isDocx = lowerName.endsWith(".docx") ||
-                 mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    var isSupported = isPdf || isDocx || isHwp || isPptx || isXlsx || isCsv || isTxt;
 
-    // 형식 & 크기 조건
-    if ((isPdf || isDocx) && size <= MAX_ATTACHMENT_SIZE) {
-      var dataBase64 = Utilities.base64Encode(att.getBytes());
-
-      payload.push({
-        mail_id: id,
-        name: name,
-        mime: mime,
-        data_base64: dataBase64
-      });
-    }
+    // base64 인코딩 후 payload push
+    if (isSupported && size <= MAX_ATTACHMENT_SIZE) {
+        var dataBase64 = Utilities.base64Encode(att.getBytes());
+        payload.push({
+          mail_id: id,
+          name: name,
+          mime: mime,
+          data_base64: dataBase64
+        });
+      }
   });
-
-  return payload;
+  
+  return payload;  
 }
 
 function _dateToYmdHms(d) {

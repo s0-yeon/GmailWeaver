@@ -19,6 +19,10 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import fitz  # PyMuPDF
 from docx import Document
+import olefile
+import csv
+from pptx import Presentation
+from openpyxl import load_workbook
 
 # Job 이용 공통함수 import
 from util.jobs.job_store import *
@@ -31,6 +35,9 @@ load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: Graph
 # Flask 앱 초기화
 app = Flask(__name__)   # Flask 앱 객체 생성. 해당 파일이 서버의 메인 애플리케이션이라는 의미
 CORS(app)   # Cross-Origin Resource Sharing 허용 (다른 환경에서 이 서버의 API를 호출할 수 있도록)
+
+# Apps Script Web App URL (캘린더, 라벨 등 모든 프록시에서 공통 사용)
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzuZ8CJdGBVGp2kqqmqwm43yW_wVoeDex6efJnpEe7fCTQXXtueEl2SVSFjvtrW-sB4/exec"
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지 (utf-8 인코딩 및 대체 문자 처리)
 if hasattr(sys.stdout, "reconfigure"):
@@ -160,6 +167,100 @@ def _extract_text_from_docx(file_path):
         print(f"[Docx Extract Error] {e}")
     return text
 
+# HWP 파일에서 텍스트 추출
+def _extract_text_from_hwp(file_path):
+    text = ""
+    try:
+        f = olefile.OleFileIO(file_path)
+        dirs = f.listdir()
+        sections = [d for d in dirs if "BodyText/Section" in "/".join(d)]
+        
+        for section in sections:
+            stream = f.openstream("/".join(section))
+            data = stream.read()
+            try:
+                # 가공되지 않은 바이너리에서 한글 텍스트 패턴 추출 시도
+                decoded_text = data.decode("utf-16", errors="ignore")
+                # 불필요한 제어문자 및 바이너리 찌꺼기 제거 (정규식 활용 가능)
+                clean_text = "".join(c for c in decoded_text if c.isalnum() or c in " \n\t.,()[]")
+                text += clean_text + "\n"
+            except Exception as e:
+                print(f"[HWP Decode Error in {section}] {e}")
+                
+        f.close()
+    except Exception as e:
+        print(f"[HWP Extract Error] {e}")
+    return text
+
+# TXT 파일에서 텍스트 추출 
+def _extract_text_from_txt(file_path):
+    text = ""
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            text = f.read()
+    except UnicodeDecodeError:
+        try:
+            with open(file_path, "r", encoding="cp949") as f:
+                text = f.read()
+        except Exception as e:
+            print(f"[TXT Extract Error] {e}")
+    except Exception as e:
+        print(f"[TXT Extract Error] {e}")
+    return text
+
+# PPTX 파일에서 텍스트 추출
+def _extract_text_from_pptx(file_path):
+    text = ""
+    try:
+        prs = Presentation(file_path)
+        for slide in prs.slides:
+            for shape in slide.shapes:
+                if hasattr(shape, "text") and shape.text:
+                    text += shape.text + "\n"
+    except Exception as e:
+        print(f"[PPTX Extract Error] {e}")
+    return text
+
+# XLSX 파일에서 텍스트 추출
+def _extract_text_from_xlsx(file_path):
+    text = ""
+    try:
+        wb = load_workbook(file_path, data_only=True)
+        for ws in wb.worksheets:
+            text += f"[Sheet] {ws.title}\n"
+            for row in ws.iter_rows(values_only=True):
+                row_values = [str(cell) if cell is not None else "" for cell in row]
+                # 빈 행은 스킵
+                if any(v.strip() for v in row_values):
+                    text += " | ".join(row_values) + "\n"
+            text += "\n"
+    except Exception as e:
+        print(f"[XLSX Extract Error] {e}")
+    return text
+
+# CSV 파일에서 텍스트 추출
+def _extract_text_from_csv(file_path):
+    text = ""
+    try:
+        with open(file_path, "r", encoding="utf-8", newline="") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                row_values = [str(cell) if cell is not None else "" for cell in row]
+                text += " | ".join(row_values) + "\n"
+    except UnicodeDecodeError:
+        try:
+            with open(file_path, "r", encoding="cp949", newline="") as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    row_values = [str(cell) if cell is not None else "" for cell in row]
+                    text += " | ".join(row_values) + "\n"
+        except Exception as e:
+            print(f"[CSV Extract Error] {e}")
+    except Exception as e:
+        print(f"[CSV Extract Error] {e}")
+    return text
+
+
 # 파일명에서 경로/위험 문자 제거
 def _sanitize_filename(name: str) -> str:
     name = os.path.basename(name or "attachment.bin").strip()
@@ -237,6 +338,7 @@ def _merge_attachments_into_mail_blocks(content: str, attachment_texts_by_mail: 
             )
 
     return "\n".join(merged_blocks) + "\n"
+
 
 # 텍스트에서 메일별로 구분
 def _split_mail_blocks(text):
@@ -433,9 +535,20 @@ def upload():
         sync_mode = "rewrite"
         fallback_to_rewrite = True
 
+
     # 2) 저장 디렉토리 준비
     os.makedirs(MAIL_DIR, exist_ok=True)
     os.makedirs(ATTACHMENT_DIR, exist_ok=True)
+
+    file_path = os.path.join(MAIL_DIR, filename)
+
+    # 3) 원본 메일 텍스트 저장
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    # 4) mail_latest.txt 초기화
+    with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
+        f.write(content)
 
     extracted_count = 0
     failed_attachments = []
@@ -465,6 +578,16 @@ def upload():
                     file_text = _extract_text_from_pdf(saved_path)
                 elif ext == ".docx" or mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                     file_text = _extract_text_from_docx(saved_path)
+                elif ext == ".hwp" or mime in ("application/x-hwp", "application/haansofthwp"): # 추가
+                    file_text = _extract_text_from_hwp(saved_path)
+                elif ext == ".txt" or mime == "text/plain":
+                    file_text = _extract_text_from_txt(saved_path)
+                elif ext == ".pptx" or mime == "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+                    file_text = _extract_text_from_pptx(saved_path)
+                elif ext == ".xlsx" or mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                    file_text = _extract_text_from_xlsx(saved_path)
+                elif ext == ".csv" or mime in ("text/csv", "application/csv"):
+                    file_text = _extract_text_from_csv(saved_path)
                 else:
                     failed_attachments.append({
                         "name": original_name,
@@ -478,7 +601,12 @@ def upload():
                             "name": original_name,
                             "text": file_text.strip()
                         })
-                        extracted_count += 1
+                    else:
+                        failed_attachments.append({
+                            "name": original_name,
+                            "reason": "mail_id missing"
+                        })
+                    extracted_count += 1
                 else:
                     failed_attachments.append({
                         "name": original_name,
@@ -493,6 +621,14 @@ def upload():
                 })
                 print(f"[UPLOAD][ATTACHMENT ERROR] {f_name}: {e}")
 
+       # 6) 메일별 블록 하단에 첨부 텍스트 삽입
+        final_content = content
+        if attachment_texts_by_mail:
+            final_content = _merge_attachments_into_mail_blocks(content, attachment_texts_by_mail)
+
+        with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
+            f.write(final_content)
+
     # 7) 파이프라인 실행
     print(f"[UPLOAD] Received filename: {filename}")
     print(f"[UPLOAD] Content length: {len(content)}")
@@ -501,6 +637,7 @@ def upload():
     print(f"[UPLOAD] Requested mode: {requested_mode}")
     print(f"[UPLOAD] Actual mode: {sync_mode}")
     print("[UPLOAD] cwd:", os.getcwd())
+
 
     added_count = 0
     skipped_count = 0
@@ -570,18 +707,18 @@ def upload():
         print("[UPLOAD] saved mail path:", os.path.abspath(saved_mail_path))
 
     # GraphRAG 파이프라인을 백그라운드에서 실행
-    job_id = str(uuid.uuid4())[:8]
+    job_id = str(uuid.uuid4())[:8] # 작업 구분용, 앞 8자리만 잘라서 사용
 
     if sync_mode == "rewrite":
-        create_job(job_id, job_type="index")
-        update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작")
+        create_job(job_id, job_type="index") # 새로운 작업을 생성 (타입: index = 전체 재생성)
+        update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작") # 작업 상태 메시지 업데이트 (로그에서 확인용)
 
     else:
         create_job(job_id, job_type="update")
         update_job(job_id, message="업로드 완료, 그래프 업데이트 파이프라인 시작")
 
-    env = os.environ.copy()
-    env["PYTHONUNBUFFERED"] = "1"
+    env = os.environ.copy() # os.environ = 프로세스의 환경변수들을 담고 있는 객체, 모든 프로세스의 환경을 통일하기 위함
+    env["PYTHONUNBUFFERED"] = "1" # 실시간 로그를 출력하기 위함
 
     if sync_mode == "rewrite":
         update_dir = os.path.join(GRAPHRAG_ROOT, "update_output")
@@ -590,7 +727,7 @@ def upload():
             print(f"[CLEAN] update_output 삭제 완료: {update_dir}")
         else:
             print(f"[CLEAN] update_output 없음: {update_dir}")
-        start_graph_pipeline_background(job_id, env)
+        start_graph_pipeline_background(job_id, env) # GraphRAG 파이프라인 함수 실행
     else:
         start_graph_update_pipeline_background(job_id, env)
 
@@ -607,10 +744,9 @@ def upload():
             "skipped_count": skipped_count,
             "attachment_received_count": len(attachments),
             "attachment_extracted_count": extracted_count,
-            "added_count": added_count,
-            "skipped_count": skipped_count,
             "failed_attachments": failed_attachments,
         })
+
 
 # 엔드포인트: GET /graph-data
 @app.route("/graph-data", methods=["GET"])
@@ -620,6 +756,11 @@ def graph_data():   # mail2json.py가 생성한 그래프 시각화 데이터를
     with open(GRAPH_JSON_PATH, "r", encoding="utf-8") as f:
         return jsonify(json.load(f))
     
+# 엔드포인트: GET /index-status
+@app.route("/index-status", methods=["GET"])
+def index_status():     # GraphRAG 인덱싱 완료 여부 반환
+    return jsonify({ "indexed": _is_index_ready() })
+
 # 엔드포인트: GET /dashboard/ (Gentella 웹앱 서빙)
 @app.route('/dashboard/', defaults={'path': 'production/index.html'})
 @app.route('/dashboard/<path:path>')
@@ -646,19 +787,32 @@ def static_fonts(path):
     dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'fonts')
     return send_from_directory(dist_dir, path)
 
-# 웹앱 URL 변경 필요
+# 엔드포인트: POST /calendar-events (Apps Script 캘린더 프록시)
 @app.route('/calendar-events', methods=['POST'])
 def calendar_events():
-    WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec"
     data = request.json or {}
-    res = requests.post(WEB_APP_URL, json=data, allow_redirects=True)
+    res = requests.post(WEBAPP_URL, json=data, allow_redirects=True)
     print("[calendar] status:", res.status_code)
     print("[calendar] response:", res.text[:500])
     try:
         return jsonify(res.json())
     except Exception:
         return jsonify({"events": [], "error": res.text[:200]}), 200
-    
+
+# 엔드포인트: POST /labels-proxy (Apps Script 라벨 프록시)
+@app.route('/labels-proxy', methods=['POST'])
+def labels_proxy():
+    data = request.json or {}
+    try:
+        res = requests.post(WEBAPP_URL, json=data, allow_redirects=True)
+        print("[labels] status:", res.status_code)
+        try:
+            return jsonify(res.json())
+        except Exception:
+            return jsonify({"ok": False, "error": res.text[:200]}), 200
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
 # 서버 진입점
 if __name__ == '__main__':
     # host='0.0.0.0': 모든 네트워크 인터페이스에서 수신 (localhost 외부 접근 허용)

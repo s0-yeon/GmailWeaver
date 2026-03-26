@@ -15,12 +15,16 @@
     "https://www.googleapis.com/auth/calendar"
   ],
   "urlFetchWhitelist": [
-    "https://transpalmar-christine-noneducatory.ngrok-free.dev/"
+    "https://laevorotatory-nonnutritively-nelle.ngrok-free.dev/"
   ],
   "addOns": {
     "common": {
-      "name": "GmailWeaver",
+      "name": "🫒 Olive",
       "logoUrl": "https://cdn-icons-png.flaticon.com/512/7830/7830615.png",
+      "layoutProperties": {
+        "primaryColor": "#465822",
+        "secondaryColor": "#4a6516"
+      },
       "homepageTrigger": {
         "runFunction": "onHomepage",
         "enabled": true

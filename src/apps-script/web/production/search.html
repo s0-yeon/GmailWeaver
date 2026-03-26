@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:* https://api.example.com https://*.googleapis.com; frame-src 'self'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.svg" sizes="180x180">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="rgb(42, 63, 84)">
+    <title>Search | GmailWeaver</title>
+    <script type="module" src="/src/main-minimal.js"></script>
+    <style>
+      /* 로고 텍스트 */
+      .site_title_text {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: 0.5px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .site_title_text i { font-size: 1.3rem; color: #26B99A; }
+
+      /* 검색 상단 영역 */
+      .gw-search-top {
+        padding: 28px 32px 20px 32px;
+        border-bottom: 1px solid #e8e8e8;
+        margin-bottom: 32px;
+      }
+      .gw-search-box {
+        width: 100%;
+        position: relative;
+      }
+      .gw-search-box input {
+        width: 100%;
+        padding: 15px 56px 15px 24px;
+        font-size: 1.05rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 32px;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      }
+      .gw-search-box input:focus {
+        border-color: #26B99A;
+        box-shadow: 0 2px 14px rgba(38,185,154,0.18);
+      }
+      .gw-search-box button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #26B99A;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .gw-search-box button:hover { background: #1a9e82; }
+      .gw-search-box button i { color: white; font-size: 1rem; }
+
+      /* 최근 검색어 */
+      .gw-recent-searches {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+      }
+      .gw-recent-label {
+        font-size: 0.8rem;
+        color: #aaa;
+        margin-right: 4px;
+        white-space: nowrap;
+      }
+      .gw-recent-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        background: #f4f6f8;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        font-size: 0.82rem;
+        color: #2A3F54;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s;
+        user-select: none;
+      }
+      .gw-recent-tag:hover {
+        background: #e8f7f4;
+        border-color: #26B99A;
+        color: #26B99A;
+      }
+      .gw-recent-tag .gw-tag-del {
+        font-size: 0.75rem;
+        color: #bbb;
+        line-height: 1;
+        padding: 0 2px;
+        border-radius: 50%;
+      }
+      .gw-recent-tag .gw-tag-del:hover {
+        color: #e74c3c;
+        background: #fee;
+      }
+      .gw-recent-clear {
+        font-size: 0.78rem;
+        color: #bbb;
+        cursor: pointer;
+        margin-left: 4px;
+        text-decoration: underline;
+      }
+      .gw-recent-clear:hover { color: #e74c3c; }
+
+      /* 결과 영역 */
+      .gw-result-wrapper {
+        padding: 0 32px 40px 32px;
+      }
+      .gw-query-label {
+        font-size: 0.9rem;
+        color: #73879C;
+        margin-bottom: 20px;
+      }
+      .gw-query-label strong { color: #2A3F54; font-size: 1rem; }
+
+      /* 로딩 */
+      .gw-loading {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: #73879C;
+        font-size: 1rem;
+        padding: 32px 0;
+      }
+      .gw-spinner {
+        width: 24px;
+        height: 24px;
+        border: 3px solid #e0e0e0;
+        border-top-color: #26B99A;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        flex-shrink: 0;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* 결과 카드 */
+      .gw-result-card {
+        background: #fff;
+        border: 1px solid #e8e8e8;
+        border-radius: 12px;
+        padding: 32px 36px;
+        line-height: 1.9;
+        color: #2A3F54;
+        font-size: 1.05rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      }
+
+      /* 에러 */
+      .gw-error {
+        color: #e74c3c;
+        padding: 20px 0;
+        font-size: 1rem;
+      }
+
+      /* 빈 상태 */
+      .gw-empty {
+        padding: 80px 0;
+        text-align: center;
+        color: #bbb;
+      }
+      .gw-empty i { font-size: 3.5rem; display: block; margin-bottom: 16px; color: #e0e0e0; }
+      .gw-empty p { font-size: 1rem; }
+    </style>
+  </head>
+
+  <body class="nav-md page-search">
+    <div class="container body">
+      <div class="main_container">
+
+        <!-- Sidebar -->
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title site_title_text">
+                <i class="bi bi-envelope-heart-fill"></i>
+                Olive
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
+              </div>
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h4 id="google-profile-name">-</h4>
+              </div>
+            </div>
+            <br />
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="index.html"><i class="bi bi-house"></i> Home</a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> Search</a></li>
+                  <li><a href="index2.html"><i class="bi bi-tags"></i> Labels</a></li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> Calendar</a></li>
+                  
+                </ul>
+              </div>
+              <div class="menu_section">
+                <h3>My Account</h3>
+                <ul class="nav side-menu">
+                  <li>
+                    <a><i class="bi bi-bar-chart"></i> Statistics<span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="chartjs.html">Chart.js</a></li>
+                      <li><a href="echarts.html">ECharts <span class="badge bg-info">Updated</span></a></li>
+                      <li><a href="other_charts.html">Other Charts</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> Contacts</a></li>
+                  <li><a href="profile.html"><i class="bi bi-person-circle"></i> Profile</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="sidebar-footer hidden-small">
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Settings">
+                <span class="fas fa-cog" aria-hidden="true"></span>
+              </a>
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="FullScreen">
+                <span class="fas fa-expand" aria-hidden="true"></span>
+              </a>
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Lock">
+                <span class="fas fa-eye-slash" aria-hidden="true"></span>
+              </a>
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Logout" href="login.html">
+                <span class="fas fa-power-off" aria-hidden="true"></span>
+              </a>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Top Navigation -->
+        <div class="top_nav">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fas fa-bars"></i></a>
+            </div>
+            <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle" style="font-size: 1.4rem; vertical-align: middle;"></i>
+                    <span id="google-nav-name" style="margin-left: 6px;">-</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end dropdown-usermenu dropdown-menu-sm" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="profile.html" role="button">Profile</a>
+                    <a class="dropdown-item" href="#" role="button">Settings</a>
+                    <a class="dropdown-item" href="#" role="button">Help</a>
+                    <a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt float-end"></i> Log Out</a>
+                  </div>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        <!-- Page Content -->
+        <main class="right_col" role="main" aria-label="Main content">
+          <div class="">
+
+            <!-- 상단 검색창 -->
+            <div class="gw-search-top">
+              <div class="gw-search-box">
+                <input type="text" id="search-input" placeholder="메일에 대해 궁금한 것을 검색하세요..." autocomplete="off">
+                <button id="search-btn" type="button">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+
+              <!-- 최근 검색어 -->
+              <div class="gw-recent-searches" id="recent-searches-bar" style="display:none;">
+                <span class="gw-recent-label"><i class="fas fa-history me-1"></i>최근 검색:</span>
+                <div id="recent-tags"></div>
+                <span class="gw-recent-clear" id="clear-recent">전체 삭제</span>
+              </div>
+            </div>
+
+            <!-- 결과 -->
+            <div class="gw-result-wrapper">
+              <div id="result-container">
+                <div class="gw-empty">
+                  <i class="bi bi-search"></i>
+                  <p>검색어를 입력해 메일을 분석하세요.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </main>
+
+        <footer>
+          <div class="float-end">
+            GmailWeaver &mdash; Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+
+      </div>
+    </div>
+
+    <script>
+      const FLASK_URL = 'http://127.0.0.1:80';
+      const RECENT_KEY = 'gw_recent_searches';
+      const MAX_RECENT = 8;
+
+      // ── 이름 처리 ──
+      const params = new URLSearchParams(window.location.search);
+      const nameParam = params.get('name');
+      const name = nameParam
+        ? decodeURIComponent(nameParam)
+        : (sessionStorage.getItem('gw_user_name') || '-');
+      if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
+      document.getElementById('google-profile-name').textContent = name;
+      document.getElementById('google-nav-name').textContent = name;
+
+      // 검색창에 쿼리 복원
+      const query = params.get('q');
+      if (query) document.getElementById('search-input').value = decodeURIComponent(query);
+
+      // ── 최근 검색어 관리 ──
+      function getRecents() {
+        try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; }
+        catch { return []; }
+      }
+      function saveRecent(q) {
+        let recents = getRecents().filter(r => r !== q);
+        recents.unshift(q);
+        if (recents.length > MAX_RECENT) recents = recents.slice(0, MAX_RECENT);
+        localStorage.setItem(RECENT_KEY, JSON.stringify(recents));
+      }
+      function removeRecent(q) {
+        const recents = getRecents().filter(r => r !== q);
+        localStorage.setItem(RECENT_KEY, JSON.stringify(recents));
+        renderRecents();
+      }
+      function clearRecents() {
+        localStorage.removeItem(RECENT_KEY);
+        renderRecents();
+      }
+      function renderRecents() {
+        const recents = getRecents();
+        const bar = document.getElementById('recent-searches-bar');
+        const tagsEl = document.getElementById('recent-tags');
+
+        if (recents.length === 0) {
+          bar.style.display = 'none';
+          return;
+        }
+        bar.style.display = 'flex';
+        tagsEl.innerHTML = recents.map(r => `
+          <span class="gw-recent-tag" data-q="${escapeAttr(r)}">
+            <i class="fas fa-history" style="font-size:0.72rem; color:#aaa;"></i>
+            ${escapeHtml(r)}
+            <span class="gw-tag-del" data-del="${escapeAttr(r)}" title="삭제">×</span>
+          </span>
+        `).join('');
+
+        // 태그 클릭 → 검색
+        tagsEl.querySelectorAll('.gw-recent-tag').forEach(tag => {
+          tag.addEventListener('click', function(e) {
+            if (e.target.classList.contains('gw-tag-del')) return;
+            const q = this.dataset.q;
+            document.getElementById('search-input').value = q;
+            runSearch(q);
+          });
+        });
+        // 삭제 버튼
+        tagsEl.querySelectorAll('.gw-tag-del').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            removeRecent(this.dataset.del);
+          });
+        });
+      }
+
+      document.getElementById('clear-recent').addEventListener('click', clearRecents);
+
+      // 최근 검색어 초기 렌더
+      renderRecents();
+
+      // ── 검색 이동 ──
+      function doSearch() {
+        const q = document.getElementById('search-input').value.trim();
+        if (!q) return;
+        runSearch(q);
+      }
+      document.getElementById('search-btn').addEventListener('click', doSearch);
+      document.getElementById('search-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') doSearch();
+      });
+
+      // ── 유틸 ──
+      function escapeHtml(str) {
+        return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+      function escapeAttr(str) {
+        return String(str).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+
+      function showLoading(q) {
+        document.getElementById('result-container').innerHTML = `
+          <div class="gw-query-label">검색어: <strong>${escapeHtml(q)}</strong></div>
+          <div class="gw-loading">
+            <div class="gw-spinner"></div>
+            <span>메일을 분석하고 있습니다...</span>
+          </div>
+        `;
+      }
+      function showResult(q, text) {
+        document.getElementById('result-container').innerHTML = `
+          <div class="gw-query-label">검색어: <strong>${escapeHtml(q)}</strong></div>
+          <div class="gw-result-card">${escapeHtml(text)}</div>
+        `;
+      }
+      function showError(q, msg) {
+        document.getElementById('result-container').innerHTML = `
+          <div class="gw-query-label">검색어: <strong>${escapeHtml(q)}</strong></div>
+          <div class="gw-error"><i class="fas fa-exclamation-circle me-2"></i>${escapeHtml(msg)}</div>
+        `;
+      }
+
+      // ── Job 폴링 ──
+      async function pollJob(jobId, q, interval = 2000, maxTries = 60) {
+        for (let i = 0; i < maxTries; i++) {
+          await new Promise(r => setTimeout(r, interval));
+          try {
+            const res = await fetch(`${FLASK_URL}/job-status/${jobId}`);
+            const data = await res.json();
+            if (data.status === 'done') { showResult(q, data.result || '결과가 없습니다.'); return; }
+            if (data.status === 'error') { showError(q, data.result || '오류가 발생했습니다.'); return; }
+          } catch (e) { showError(q, '서버 연결에 실패했습니다.'); return; }
+        }
+        showError(q, '응답 시간이 초과되었습니다. 다시 시도해주세요.');
+      }
+
+      // ── GraphRAG 검색 ──
+      async function runSearch(q) {
+        showLoading(q);
+        saveRecent(q);
+        renderRecents();
+        try {
+          const res = await fetch(`${FLASK_URL}/run-query-async`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: q, resMethod: 'local', resType: 'text' })
+          });
+          const data = await res.json();
+          if (!data.jobId) { showError(q, '검색 요청에 실패했습니다.'); return; }
+          await pollJob(data.jobId, q);
+        } catch (e) {
+          showError(q, '서버에 연결할 수 없습니다. Flask 서버가 실행 중인지 확인하세요.');
+        }
+      }
+
+      // 페이지 로드 시 쿼리 있으면 자동 실행
+      if (query && query.trim()) runSearch(decodeURIComponent(query));
+    </script>
+  </body>
+</html>
