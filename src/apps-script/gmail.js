@@ -49,7 +49,8 @@ function _runSync(mode) {
           filename: filenameAll,
           content: allText,
           attachment: allAttachments,
-          syncmode: "rewrite"
+          syncmode: "rewrite",
+          gmail_id: myEmail
         }),
         muteHttpExceptions: true
       });
@@ -110,7 +111,8 @@ function _runSync(mode) {
           filename: filename,
           content: allText,
           attachment: allAttachments,
-          syncmode: "append"
+          syncmode: "append",
+          gmail_id: myEmail
       }),
       muteHttpExceptions: true
     });

@@ -28,6 +28,7 @@ from openpyxl import load_workbook
 from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
+from util.user_path import UserPaths
 
 # 환경변수 로드
 load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: GraphRAG 설정(settings.yaml)과 API 키가 같은 디렉터리에 위치하기 때문
@@ -367,41 +368,41 @@ def _extract_block_for_sort(block):
     return datetime.datetime.min
 
 # 현재 mail_latest.txt 읽기
-def _read_latest_text():
-    if not os.path.exists(MAIL_LATEST_PATH):
+def _read_latest_text(paths):
+    if not os.path.exists(paths.MAIL_LATEST_PATH):
         return ""
-    with open(MAIL_LATEST_PATH, "r", encoding="utf-8") as f:
+    with open(paths.MAIL_LATEST_PATH, "r", encoding="utf-8") as f:
         return f.read()
 
-def _delete_incremental_files():
-    os.makedirs(MAIL_DIR, exist_ok=True)
+def _delete_incremental_files(paths):
+    os.makedirs(paths.MAIL_DIR, exist_ok=True)
 
-    for name in os.listdir(MAIL_DIR):
+    for name in os.listdir(paths.MAIL_DIR):
         if name.startswith("inc_") and name.endswith(".txt"):
-            path = os.path.join(MAIL_DIR, name)
+            path = os.path.join(paths.MAIL_DIR, name)
             try:
                 os.remove(path)
             except Exception as e:
                 print(f"[UPLOAD] failed to remove incremental file: {path} / {e}")
 
-def _build_incremental_path(filename: str) -> str:
+def _build_incremental_path(filename: str,paths) -> str:
     safe_name = _sanitize_filename(filename or "")
     if not safe_name.startswith("inc_"):
         safe_name = f"inc_{datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S')}.txt"
-    return os.path.join(MAIL_DIR, safe_name)
+    return os.path.join(paths.MAIL_DIR, safe_name)
 
 def _read_json_file(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
     
 # 인덱스 여부 확인
-def _is_index_ready():
+def _is_index_ready(paths):
 
-    graph_path = os.path.join(GRAPHRAG_ROOT, "output", "graph.graphml")
-    stats_path = os.path.join(GRAPHRAG_ROOT, "output", "stats.json")
+    graph_path = os.path.join(paths.GRAPHRAG_ROOT, "output", "graph.graphml")
+    stats_path = os.path.join(paths.GRAPHRAG_ROOT, "output", "stats.json")
 
     try:
-        required_paths = [MAIL_LATEST_PATH, graph_path, stats_path]
+        required_paths = [paths.MAIL_LATEST_PATH, graph_path, stats_path]
 
         for path in required_paths:
             if not os.path.exists(path):
@@ -516,23 +517,28 @@ def upload():
     content = data.get("content") or ""
     attachments = data.get("attachment") or []
     requested_mode = data.get("syncmode", "append")
+    gmail_id = (data.get("gmail_id") or "").strip().lower()
+
+    paths = UserPaths(BASE_DIR, gmail_id) # 각 유저별 고유경로 설정
 
     if not str(content).strip():
         return jsonify({"ok": False, "error": "content가 비어있습니다."}), 400
+    if not gmail_id:
+        return jsonify({"ok": False, "error": "gmail_id가 비어있습니다."}), 400
     
     # append인데 기존 인덱스가 없으면 자동으로 rewrite로 전환
     fallback_to_rewrite = False
     sync_mode = requested_mode
 
     # 새로운 메일 추가 모드이지만 인덱싱이 되어있지 않으면 인덱싱 모드로 전환
-    if requested_mode == "append" and not _is_index_ready():
+    if requested_mode == "append" and not _is_index_ready(paths):
         print("[UPLOAD] index not ready -> fallback to rewrite")
         sync_mode = "rewrite"
         fallback_to_rewrite = True
 
     # 2) 저장 디렉토리 준비
-    os.makedirs(MAIL_DIR, exist_ok=True)
-    os.makedirs(ATTACHMENT_DIR, exist_ok=True)
+    os.makedirs(paths.MAIL_DIR, exist_ok=True)
+    os.makedirs(paths.ATTACHMENT_DIR, exist_ok=True)
 
     extracted_count = 0
     failed_attachments = []
@@ -551,7 +557,7 @@ def upload():
 
             try:
                 # base64 → 서버 로컬 파일 저장
-                saved_path, original_name = _save_attachment_from_base64(file_info, ATTACHMENT_DIR)
+                saved_path, original_name = _save_attachment_from_base64(file_info, paths.ATTACHMENT_DIR)
                 saved_attachment_paths.append(saved_path)
 
                 ext = os.path.splitext(original_name)[-1].lower()
@@ -622,15 +628,15 @@ def upload():
         _delete_incremental_files()
 
         # 지금까지의 메일 데이터들 다 합친 mail_latest.txt 파일 생성
-        with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
+        with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
             f.write(final_content.rstrip() + "\n")
 
-        saved_mail_path = MAIL_LATEST_PATH
+        saved_mail_path = paths.MAIL_LATEST_PATH
         added_count = len(_split_mail_blocks(content))
 
     # 새 메일만 추가
     else:
-        existing_text = _read_latest_text()
+        existing_text = _read_latest_text(paths)
         existing_ids = _extract_message_ids(existing_text)
 
         new_blocks = _split_mail_blocks(content)
@@ -663,7 +669,7 @@ def upload():
             append_blocks.sort(key=_extract_block_for_sort, reverse=True)
             inc_content = "\n\n".join(append_blocks).strip() + "\n"
 
-            inc_path = _build_incremental_path(filename)
+            inc_path = _build_incremental_path(filename,paths)
             with open(inc_path, "w", encoding="utf-8") as f:
                 f.write(inc_content)
 
@@ -691,7 +697,7 @@ def upload():
     env["PYTHONUNBUFFERED"] = "1"
 
     if sync_mode == "rewrite":
-        update_dir = os.path.join(GRAPHRAG_ROOT, "update_output")
+        update_dir = os.path.join(paths.GRAPHRAG_ROOT, "update_output")
         if os.path.exists(update_dir):
             shutil.rmtree(update_dir)
             print(f"[CLEAN] update_output 삭제 완료: {update_dir}")
@@ -704,11 +710,12 @@ def upload():
     return jsonify({
             "ok": True,
             "requested_mode": requested_mode,
+            "job_id":job_id,
             "actual_mode": sync_mode,
             "fallback_to_rewrite": fallback_to_rewrite,
-            "latest_path": os.path.abspath(MAIL_LATEST_PATH),
+            "latest_path": os.path.abspath(paths.MAIL_LATEST_PATH),
             "saved_mail_path": os.path.abspath(saved_mail_path) if saved_mail_path else "",
-            "attachment_dir": os.path.abspath(ATTACHMENT_DIR),
+            "attachment_dir": os.path.abspath(paths.ATTACHMENT_DIR),
             "content_length": len(content),
             "added_count": added_count,
             "skipped_count": skipped_count,
@@ -754,7 +761,7 @@ def static_fonts(path):
 # 웹앱 URL 변경 필요
 @app.route('/calendar-events', methods=['POST'])
 def calendar_events():
-    WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxukCvAI3IAFJeDHifDOS2EDc-TbnT354LLNjgaDfs/dev"
+    WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwAk_JabdKuGUHIVcaKeEnY1DUiYb0uqkiu-KdUG67Zf1U3D8k-F06RGS5043k_fZS8MQ/exec"
     data = request.json or {}
     res = requests.post(WEB_APP_URL, json=data, allow_redirects=True)
     print("[calendar] status:", res.status_code)
