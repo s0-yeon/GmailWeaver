@@ -174,9 +174,9 @@ def run_graph_pipeline(job_id, env):
 
     try:
         update_job(job_id, progress=0, status="running", message="작업 시작")
-
-        build_graph_json(job_id, env)
+        
         build_graphrag_index(job_id, env)
+        build_graph_json(job_id, env)
 
         update_job(job_id, progress=100, status="done", message="인덱싱 완료")
         append_job_log(job_id, "[END] run_graph_pipeline success")
@@ -196,9 +196,9 @@ def run_graph_update_pipeline(job_id, env):
 
     try:
         update_job(job_id, progress=0, status="running", message="업데이트 작업 시작")
-
-        build_graph_json(job_id, env)
+        
         build_graphrag_update(job_id, env)
+        build_graph_json(job_id, env)
 
         update_job(job_id, progress=100, status="done", message="업데이트 완료")
         append_job_log(job_id, "[END] run_graph_update_pipeline success")
