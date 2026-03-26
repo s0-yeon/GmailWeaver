@@ -1,6 +1,6 @@
 import os
 import time 
-import traceback
+import traceback  
 
 from util.jobs.job_store import update_job
 from util.jobs.job_run import build_graph_json,build_graphrag_index,build_graphrag_update
