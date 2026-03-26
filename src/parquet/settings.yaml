@@ -1,119 +1,140 @@
-### This config file contains required core defaults that must be set, along with a handful of common optional settings.
-### For a full list of available settings, see https://microsoft.github.io/graphrag/config/yaml/
+### GraphRAG 핵심 설정 파일
+### 전체 설정 목록: https://microsoft.github.io/graphrag/config/yaml/
 
-### LLM settings ###
-## There are a number of settings to tune the threading and token limits for LLM calls - check the docs.
+# 토크나이저 설정 : GPT에게 텍스트 보내기 전에 토큰 수 미리 세기
+# cl100k_GPT-4o, GPT-4o-mini, text-embedding-3 계열과 일치함
+encoding_model: cl100k_base 
 
-encoding_model: cl100k_base
-
-# ── 모델 설정 (레거시 llm: 블록 완전 제거, models: 로 통합) ──
-models:				# ← 텍스트 생성용 (entity 추출, 요약, 리포트)
+models:
+# 텍스트 생성 모델 - entity 추출, 커뮤니티 요약, 리포트 생성에 사용
   default_chat_model:
     type: openai_chat
     model: gpt-4o-mini
     api_key: ${GRAPHRAG_API_KEY}
     model_supports_json: true
-
-  default_embedding_model:		# ← 벡터화용 (LanceDB에 저장될 임베딩 생성)
+    
+ # 임베딩 모델 - 텍스트를 벡터로 변환하여 LanceDB에 저장
+  default_embedding_model:
     type: openai_embedding
     model: text-embedding-3-small
     api_key: ${GRAPHRAG_API_KEY}
 
-# ── 병렬 처리 (속도 최적화 핵심) ──
+# AI에게 청크 보내는 설정 (인덱싱 속도에 가장 큰 영향을 주는 항목)
+# 병렬 처리 설정 - 청크를 stagger 시차로 num_threads 개수만큼 병렬로 AI API 에게 보냄
+# stagger: API 요청 간 대기 시간(초) - 낮출수록 빠르지만 Rate Limit(서버 부하) 위험 증가
+# num_threads: 동시 실행 작업자 수 - OpenAI Tier에 따라 조정 필요
 parallelization:
-  stagger: 0.1       # 0.3 → 0.1
-  num_threads: 25    # 주석 해제
+  stagger: 0.1
+  num_threads: 25
 
-async_mode: threaded
+#AI API 비동기 처리 방식 : 응답 대기 중에도 스레드 요청 가능(threaded) vs 끝날때까지 대기 (asyncio)
+async_mode: threaded # or asyncio
 
-# ── 임베딩 (embeddings.llm 중복 제거, vector_store만 유지) ──
+# 임베딩 설정 :  텍스트 → 벡터 변환 → LanceDB 저장 과정을 제어
 embeddings:
-  async_mode: threaded
+  async_mode: threaded # or asyncio
   vector_store:
     type: lancedb
     db_uri: 'output/lancedb'
     container_name: default
     overwrite: true
+  
+### Input settings ###
 
-# ── 입력 ──
+# 입력 파일 설정
+# input/ 디렉터리의 .txt 파일을 읽어 인덱싱 대상으로 사용
 input:
-  type: file
-  file_type: text
+  type: file # or blob
+  file_type: text # or csv
   base_dir: "input"
   file_encoding: utf-8
   file_pattern: ".*\\.txt$$"
 
-# ── 청크 (이메일 특성에 맞게 축소) ──
+# 청크 분할 설정
+# 이메일 특성에 맞게 청크 크기 축소
+# size: 청크 1개의 최대 토큰 수 (4000 → 1200)
+# overlap: 청크 간 문맥 유지를 위해 겹치는 토큰 수 (200 → 100)
 chunks:
-  size: 1200         # 4000 → 1200
-  overlap: 100       # 200 → 100
+  size: 1200
+  overlap: 100
   group_by_columns: [id]
 
-# ── 스토리지 ──
+# 파일 저장 경로 설정
+# cache: LLM 응답 캐시 - 동일 요청 재호출 방지로 비용 절약
+# reporting: 인덱싱 로그 저장
+# storage: 최종 Parquet 파일 저장 (Entity, Relationship, Community 등)
 cache:
-  type: file
+  type: file # or blob
   base_dir: "cache"
 
 reporting:
-  type: file
+  type: file # or console, blob
   base_dir: "logs"
 
 storage:
-  type: file
+  type: file # or blob
   base_dir: "output"
 
+##증분 인덱싱 (미래 사용 가능)
+## 기존 데이터 유지 → 새 데이터만 추가/업데이트
+## update_output/ 폴더에 변경분만 저장
 update_index_storage:
-  # type: file
-  # base_dir: "update_output"
+  type: file # or blob
+  base_dir: "update_output"
 
-# ── 워크플로우 ──
+### Workflow settings ###
+
+# 건너뛸 단계가 있으면 밑에 배열에 설정
 skip_workflows: []
 
-# ── 엔티티 추출 (LLM 호출 횟수 감소) ──
+# 엔티티 추출 설정
+# entity_types: 추출 대상 엔티티 종류 (geo 제거 - 이메일 데이터에 불필요)
+# max_gleanings: 추출 후 LLM 재호출 횟수 (1 → 0으로 줄여 호출 횟수 절감/ 메일이니까 대부분 엔티티 뽑힐거라 생각해 결졍)
 entity_extraction:
   prompt: "prompts/entity_extraction.txt"
-  entity_types: [organization, person, event]  # geo 제거
-  max_gleanings: 0   # 1 → 0
+  entity_types: [mail,label,title,attachment,organization,person,project,event,date,EMAIL_SENDER,EMAIL_RECIPIENT,EMAIL_SUBJECT]
+  max_gleanings: 0
 
-# ── 설명 요약 ──
+#엔티티 중복 없애는 작업 : 요약
+# max_length: 요약 얼마나? 적을수록 요약 올라감
 summarize_descriptions:
   prompt: "prompts/summarize_descriptions.txt"
-  max_length: 300    # 500 → 300
+  max_length: 300
 
-# ── 클레임 추출 (비활성) ──
+#
 claim_extraction:
   enabled: false
   prompt: "prompts/claim_extraction.txt"
   description: "Any claims or facts that could be relevant to information discovery."
-  max_gleanings: 0
+  max_gleanings: 1
 
-# ── 커뮤니티 리포트 ──
 community_reports:
   prompt: "prompts/community_report.txt"
-  max_length: 1200        # 2000 → 1200
-  max_input_length: 5000  # 8000 → 5000
+  max_length: 2000
+  max_input_length: 8000
 
 cluster_graph:
   max_cluster_size: 10
 
 embed_graph:
-  enabled: false
+  enabled: false # if true, will generate node2vec embeddings for nodes
 
 umap:
-  enabled: false
+  enabled: false # if true, will generate UMAP embeddings for nodes
 
-# ── 스냅샷 (공식 스펙 필드명으로 수정) ──
 snapshots:
-  graphml: false       # true → false
-  raw_graph: false     # raw_entities(오류) → raw_graph(공식 필드명)
+  graphml: true
+  raw_entities: false
+  top_level_nodes: false
   embeddings: false
-  # top_level_nodes 제거 → 존재하지 않는 필드
+  transient: false
 
-# ── 쿼리 ──
+### Query settings ###
+## The prompt locations are required here, but each search method has a number of optional knobs that can be tuned.
+## See the config docs: https://microsoft.github.io/graphrag/config/yaml/#query
+
 local_search:
   prompt: "prompts/local_search_system_prompt.txt"
-  text_unit_prop: 0.5
-  max_context_tokens: 4000   # max_tokens(오류) → max_context_tokens
 
 global_search:
   map_prompt: "prompts/global_search_map_system_prompt.txt"
@@ -122,3 +143,9 @@ global_search:
 
 drift_search:
   prompt: "prompts/drift_search_system_prompt.txt"
+
+  local_search:
+  prompt: "prompts/local_search_system_prompt.txt"
+  text_unit_prop: 0.3
+  max_tokens: 1000
+  llm_max_tokens: 1000
