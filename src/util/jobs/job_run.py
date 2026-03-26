@@ -26,18 +26,19 @@ def build_graph_json(job_id, env):
     append_job_log(job_id, f"[INFO] GRAPH_BUILD_SCRIPT={GRAPH_BUILD_SCRIPT}")
     append_job_log(job_id, f"[INFO] script_exists={os.path.exists(GRAPH_BUILD_SCRIPT)}")
 
+    # GraphRAG CLI 실행 명령어 구성
     cmd = [sys.executable, "-u", "-X", "utf8", GRAPH_BUILD_SCRIPT]
     print(f"[JOB][mail2json] CMD={cmd}")
     append_job_log(job_id, f"[CMD] {cmd}")
 
     try:
-        # 원래처럼 자식 프로세스 로그를 현재 서버 콘솔에 직접 출력
+        # 파이썬 스크립트 실행
         subprocess.run(
             cmd,
-            check=True,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-            env=env,
+            check=True,         # 실패 시 exception 발생
+            stdout=sys.stdout,  # 출력 → 서버 콘솔로 바로 전달
+            stderr=sys.stderr,  # 에러 → 서버 콘솔로 바로 전달
+            env=env,            # 환경변수 전달
         )
 
         append_job_log(job_id, "[END] build_graph_json success")
@@ -66,12 +67,13 @@ def build_graphrag_index(job_id, env):
     append_job_log(job_id, f"[INFO] GRAPHRAG_ROOT={GRAPHRAG_ROOT}")
     append_job_log(job_id, f"[INFO] root_exists={os.path.exists(GRAPHRAG_ROOT)}")
 
+    # GraphRAG CLI 실행 명령어 구성
     cmd = [
         sys.executable,
-        "-u",              # 중요: stdout/stderr 버퍼링 최소화
+        "-u",              # stdout/stderr 버퍼링 최소화
         "-X", "utf8",
-        "-m", "graphrag",
-        "index",
+        "-m", "graphrag",  # graphrag 모듈 실행
+        "index",           # graphrag 모듈의 index 명령
         "--root", GRAPHRAG_ROOT
     ]
 
@@ -85,6 +87,7 @@ def build_graphrag_index(job_id, env):
         # 세밀한 진행률 파싱 대신 단계 진행률만 갱신
         update_job(job_id, progress=30, message="GraphRAG 인덱싱 실행 중")
 
+        # 파이썬 스크립트 실행
         subprocess.run(
             cmd,
             check=True,
@@ -167,15 +170,17 @@ def build_graphrag_update(job_id, env):
         append_job_log(job_id, f"[ERROR] build_graphrag_update failed: {e}")
         raise
 
-# 전체 파이프라인 실행
-def run_graph_pipeline(job_id, env):
+# 전체 파이프라인 실행 (index 기준)
+def run_graph_pipeline(job_id, env): 
     print(f"[JOB][pipeline] START job_id={job_id}")
     append_job_log(job_id, "[START] run_graph_pipeline")
 
     try:
         update_job(job_id, progress=0, status="running", message="작업 시작")
 
-        build_graph_json(job_id, env)
+        # 1단계: JSON 생성
+        build_graph_json(job_id, env) 
+        # 2단계: GraphRAG 인덱싱
         build_graphrag_index(job_id, env)
 
         update_job(job_id, progress=100, status="done", message="인덱싱 완료")
@@ -211,17 +216,18 @@ def run_graph_update_pipeline(job_id, env):
         print(f"[JOB][update-pipeline][ERROR] job_id={job_id} error={error_msg}")
         traceback.print_exc()
 
-# 백그라운드 스레드 시작
+# 백그라운드 전체 파이프라인 실행 (index 기준)
 def start_graph_pipeline_background(job_id, env):
     print(f"[JOB][pipeline] BACKGROUND START job_id={job_id}")
     append_job_log(job_id, "[INFO] background thread starting")
 
+     # 새로운 스레드 생성
     t = threading.Thread(
-        target=run_graph_pipeline,
+        target=run_graph_pipeline,  # 실행할 함수 : 그래프라그 파이프라인 (인덱싱) 실헹 함수
         args=(job_id, env.copy()),
-        daemon=True,
+        daemon=True,                # app.py 종료 시 같이 종료
     )
-    t.start()
+    t.start() # 스레드 실행 (비동기 시작)
 
     print(f"[JOB][pipeline] BACKGROUND THREAD STARTED job_id={job_id} thread={t.name}")
     append_job_log(job_id, f"[INFO] background thread started name={t.name}")

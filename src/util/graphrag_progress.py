@@ -1,5 +1,5 @@
 import re
-
+# [?]이거 쓸지 안쓸지 모름[?]
 # 그래프라그 인덱싱 진행도를 표기하기 위한 현재 진행도 리턴 함수
 def parse_graphrag_progress(line, current_progress):
     text = line.strip()

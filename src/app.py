@@ -707,18 +707,18 @@ def upload():
         print("[UPLOAD] saved mail path:", os.path.abspath(saved_mail_path))
 
     # GraphRAG 파이프라인을 백그라운드에서 실행
-    job_id = str(uuid.uuid4())[:8]
+    job_id = str(uuid.uuid4())[:8] # 작업 구분용, 앞 8자리만 잘라서 사용
 
     if sync_mode == "rewrite":
-        create_job(job_id, job_type="index")
-        update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작")
+        create_job(job_id, job_type="index") # 새로운 작업을 생성 (타입: index = 전체 재생성)
+        update_job(job_id, message="업로드 완료, 그래프 파이프라인 시작") # 작업 상태 메시지 업데이트 (로그에서 확인용)
 
     else:
         create_job(job_id, job_type="update")
         update_job(job_id, message="업로드 완료, 그래프 업데이트 파이프라인 시작")
 
-    env = os.environ.copy()
-    env["PYTHONUNBUFFERED"] = "1"
+    env = os.environ.copy() # os.environ = 프로세스의 환경변수들을 담고 있는 객체, 모든 프로세스의 환경을 통일하기 위함
+    env["PYTHONUNBUFFERED"] = "1" # 실시간 로그를 출력하기 위함
 
     if sync_mode == "rewrite":
         update_dir = os.path.join(GRAPHRAG_ROOT, "update_output")
@@ -727,7 +727,7 @@ def upload():
             print(f"[CLEAN] update_output 삭제 완료: {update_dir}")
         else:
             print(f"[CLEAN] update_output 없음: {update_dir}")
-        start_graph_pipeline_background(job_id, env)
+        start_graph_pipeline_background(job_id, env) # GraphRAG 파이프라인 함수 실행
     else:
         start_graph_update_pipeline_background(job_id, env)
 
