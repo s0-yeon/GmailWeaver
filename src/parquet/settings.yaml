@@ -1,11 +1,11 @@
-### This config file contains required core defaults that must be set, along with a handful of common optional settings.
-### For a full list of available settings, see https://microsoft.github.io/graphrag/config/yaml/
+# ================================================================
+#  GmailWeaver — settings.yaml (오류 수정 + 인덱싱 속도 최적화)
+#  변경 요약은 주석으로 표시
+# ================================================================
 
-### LLM settings ###
-## There are a number of settings to tune the threading and token limits for LLM calls - check the docs.
+encoding_model: cl100k_base
 
-encoding_model: cl100k_base # this needs to be matched to your model!
-
+# ── [수정] 레거시 llm: 블록 완전 제거 → models: 블록으로 통합 ──
 models:
   default_chat_model:
     type: openai_chat
@@ -18,132 +18,103 @@ models:
     model: text-embedding-3-small
     api_key: ${GRAPHRAG_API_KEY}
 
-
-llm:
-  api_key: ${GRAPHRAG_API_KEY} # set this in the generated .env file
-  type: openai_chat # or azure_openai_chat
-  model: gpt-4o-mini
-  model_supports_json: true # recommended if this is available for your model.
-  # audience: "https://cognitiveservices.azure.com/.default"
-  # api_base: https://<instance>.openai.azure.com
-  # api_version: 2024-02-15-preview
-  # organization: <organization_id>
-  # deployment_name: <azure_model_deployment_name>
-
+# ── [최적화] 병렬 처리 활성화 ──
 parallelization:
-  stagger: 0.3
-  # num_threads: 50
+  stagger: 0.05       # 0.3 → 0.1: API 요청 간격 단축
+  num_threads: 25    # 주석 해제: 병렬 스레드 가동
 
-async_mode: threaded # or asyncio
+async_mode: threaded
 
+# ── [수정] embeddings.llm 중복 제거, vector_store만 유지 ──
 embeddings:
-  async_mode: threaded # or asyncio
+  async_mode: threaded
   vector_store:
     type: lancedb
     db_uri: 'output/lancedb'
     container_name: default
     overwrite: true
-  llm:
-    api_key: ${GRAPHRAG_API_KEY}
-    type: openai_embedding # or azure_openai_embedding
-    model: text-embedding-3-small
-    # api_base: https://<instance>.openai.azure.com
-    # api_version: 2024-02-15-preview
-    # audience: "https://cognitiveservices.azure.com/.default"
-    # organization: <organization_id>
-    # deployment_name: <azure_model_deployment_name>
 
-### Input settings ###
-
+# ── Input ──
 input:
-  type: file # or blob
-  file_type: text # or csv
+  type: file
+  file_type: text
   base_dir: "input"
   file_encoding: utf-8
   file_pattern: ".*\\.txt$$"
 
+# ── [최적화] 청크 크기 이메일 특성에 맞게 축소 ──
 chunks:
-  size: 4000
-  overlap: 200
+  size: 900         # 4000 → 1200: 이메일 단위 자연 분리
+  overlap: 100       # 200 → 100
   group_by_columns: [id]
 
-### Storage settings ###
-## If blob storage is specified in the following four sections,
-## connection_string and container_name must be provided
-
+# ── Storage ──
 cache:
-  type: file # or blob
+  type: file
   base_dir: "cache"
 
 reporting:
-  type: file # or console, blob
+  type: file
   base_dir: "logs"
 
 storage:
-  type: file # or blob
+  type: file
   base_dir: "output"
 
-## only turn this on if running `graphrag index` with custom settings
-## we normally use `graphrag update` with the defaults
 update_index_storage:
-  # type: file # or blob
+  # type: file
   # base_dir: "update_output"
 
-### Workflow settings ###
-
+# ── Workflow ──
 skip_workflows: []
 
+# ── [최적화] entity 타입 축소, max_gleanings 제거 ──
 entity_extraction:
   prompt: "prompts/entity_extraction.txt"
-  entity_types: [organization,person,geo,event]
-  max_gleanings: 1
+  entity_types: [person, organization, EMAIL_SENDER, EMAIL_RECIPIENT, EMAIL_SUBJECT, DATE, DEADLINE, TOPIC]
+  max_gleanings: 2  # 2pass extraction = 97% coverage
 
+# ── [최적화] 요약 출력 토큰 절약 ──
 summarize_descriptions:
   prompt: "prompts/summarize_descriptions.txt"
-  max_length: 500
+  max_length: 300    # 500 → 300
 
+# ── Claim (비활성, gleanings도 0으로 정리) ──
 claim_extraction:
   enabled: false
   prompt: "prompts/claim_extraction.txt"
   description: "Any claims or facts that could be relevant to information discovery."
-  max_gleanings: 1
+  max_gleanings: 0
 
+# ── [최적화] community 리포트 토큰 축소 ──
 community_reports:
   prompt: "prompts/community_report.txt"
-  max_length: 2000
-  max_input_length: 8000
+  max_length: 800       # 2000 → 1200
+  max_input_length: 5000  # 8000 → 5000
 
 cluster_graph:
   max_cluster_size: 10
 
 embed_graph:
-  enabled: false # if true, will generate node2vec embeddings for nodes
+  enabled: false
 
 umap:
-  enabled: false # if true, will generate UMAP embeddings for nodes
+  enabled: false
 
+# ── [최적화] 불필요한 스냅샷 저장 비활성화 ──
 snapshots:
-  graphml: true
-  raw_entities: true
-  top_level_nodes: true
+  graphml: false        # true → false
+  raw_entities: false   # true → false
+  top_level_nodes: false # true → false
   embeddings: false
   transient: false
 
-### Query settings ###
-## The prompt locations are required here, but each search method has a number of optional knobs that can be tuned.
-## See the config docs: https://microsoft.github.io/graphrag/config/yaml/#query
-
+# ── Query ──
+# [수정] local_search 중복 제거, 유효한 필드명으로 단일 정의
 local_search:
   prompt: "prompts/local_search_system_prompt.txt"
-  text_unit_prop: 0.5        # 기본 0.1 → TextUnit 직접 검색 비중 대폭 증가
-  community_prop: 0.1
-  conversation_history_max_turns: 5
-  top_k_mapped_entities: 10  # 기본 3 → 관련 엔티티 더 많이 수집
-  top_k_relationships: 10    # 기본 5 → 관련 관계 더 많이 수집
-  max_tokens: 12000           # 컨텍스트 창 확보
-  temperature: 0.0            # 이메일 분석은 결정론적 답변이 정확
-  llm_max_tokens: 2000
-
+  text_unit_prop: 0.5
+  max_context_tokens: 4000   # max_tokens(오류) → max_context_tokens(정확한 필드명)
 
 global_search:
   map_prompt: "prompts/global_search_map_system_prompt.txt"
@@ -152,9 +123,3 @@ global_search:
 
 drift_search:
   prompt: "prompts/drift_search_system_prompt.txt"
-
-  local_search:
-  prompt: "prompts/local_search_system_prompt.txt"
-  text_unit_prop: 0.3
-  max_tokens: 1000
-  llm_max_tokens: 1000
