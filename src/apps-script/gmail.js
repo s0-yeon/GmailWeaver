@@ -457,7 +457,7 @@ function _buildAttachmentPayload(msg) {
           name: name,
           mime: mime,
           data_base64: dataBase64
-        });
+        });  
       }
   });
   
