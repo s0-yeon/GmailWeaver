@@ -339,7 +339,6 @@ def _merge_attachments_into_mail_blocks(content: str, attachment_texts_by_mail: 
 
     return "\n".join(merged_blocks) + "\n"
 
-
 # 텍스트에서 메일별로 구분
 def _split_mail_blocks(text):
     parts = text.split(MAIL_BLOCK_SEP)
@@ -747,7 +746,6 @@ def upload():
             "failed_attachments": failed_attachments,
         })
 
-
 # 엔드포인트: GET /graph-data
 @app.route("/graph-data", methods=["GET"])
 def graph_data():   # mail2json.py가 생성한 그래프 시각화 데이터를 반환
@@ -755,6 +753,14 @@ def graph_data():   # mail2json.py가 생성한 그래프 시각화 데이터를
         return jsonify({"nodes": [], "edges": [], "error": "graph json not found"}), 200
     with open(GRAPH_JSON_PATH, "r", encoding="utf-8") as f:
         return jsonify(json.load(f))
+
+# 엔드포인트: GET /graph-view
+@app.route("/graph-view", methods=["GET"])
+def graph_view():
+    return send_from_directory(
+        os.path.join(os.path.dirname(__file__), "json"),
+        "graph_view.html"
+    )
     
 # 엔드포인트: GET /index-status
 @app.route("/index-status", methods=["GET"])
