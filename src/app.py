@@ -9,7 +9,7 @@ import sys
 import json
 import threading
 import uuid
-import openai
+import openai  
 import base64
 import requests
 import shutil
@@ -733,9 +733,9 @@ def upload():
     env = os.environ.copy() # os.environ = 프로세스의 환경변수들을 담고 있는 객체, 모든 프로세스의 환경을 통일하기 위함
     env["PYTHONUNBUFFERED"] = "1" # 실시간 로그를 출력하기 위함
 
-    if sync_mode == "rewrite":
-        update_dir = os.path.join(GRAPHRAG_ROOT, "update_output")
-        if os.path.exists(update_dir):
+    if sync_mode == "rewrite": # 전체 갱신할 때
+        update_dir = os.path.join(GRAPHRAG_ROOT, "update_output") # 이전에 증분 결과 있으면 폴더 삭제
+        if os.path.exists(update_dir): 
             shutil.rmtree(update_dir)
             print(f"[CLEAN] update_output 삭제 완료: {update_dir}")
         else:
