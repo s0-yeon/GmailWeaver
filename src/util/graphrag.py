@@ -72,11 +72,11 @@ def run_graph_update_pipeline(job_id):
         print(f"[PIPELINE][UPDATE] cwd={os.getcwd()} job_id={job_id}")
 
         print(f"[PIPELINE][UPDATE] calling build_graph_json job_id={job_id}")
-        build_graph_json(job_id, env)
+        build_graphrag_update(job_id, env) 
         print(f"[PIPELINE][UPDATE] build_graph_json DONE job_id={job_id}")
 
         print(f"[PIPELINE][UPDATE] calling build_graphrag_update job_id={job_id}")
-        build_graphrag_update(job_id, env)
+        build_graph_json(job_id, env)
         print(f"[PIPELINE][UPDATE] build_graphrag_update DONE job_id={job_id}")
 
         update_job(
