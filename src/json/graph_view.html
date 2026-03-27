@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- d3.js 라이브러리 (시각화에 사용)-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+</head>
+<body>
+    <!-- 그래프 그려지는 svg 영역 = 화면 전체-->
+  <svg id="graph" style="width:100vw;height:100vh;"></svg>
+  <script>
+    const COLORS = {
+      PERSON: "#60a5fa", // 사람 = 파란색
+      ORGANIZATION: "#34d399", // 조직, 기관 = 초록색
+      GEO: "#fbbf24", // 지역 = 노란색
+      EVENT: "#f87171", // 이벤트 = 빨간색
+      unknown: "#c9d1d9" // 나머지 = 회색
+    };
+
+    // Flask /graph-data 엔드포인트에서 노드와 엣지 데이터 fetch
+    fetch(window.location.origin + "/graph-data")
+      .then(res => res.json())
+      .then(data => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        const svg = d3.select("#graph"); // svg 요소
+        const g = svg.append("g"); // 그래프 담을 태그
+
+        const zoom = d3.zoom().on("zoom", e => g.attr("transform", e.transform));
+        svg.call(zoom); // svg에 줌 이벤트 등록
+        svg.call(zoom.transform, d3.zoomIdentity.translate(w/2, h/2).scale(0.5)); // 초기 줌 레벨 = 0.5 (그래프 전체가 보이도록)
+
+        // 노드들 간의 힘 설정 (움직임)
+        const simulation = d3.forceSimulation(data.nodes)
+          .force("link", d3.forceLink(data.edges)
+            .id(d => d.label) // 엣지의 source와 target가 label 기준으로 연결
+            .distance(80)) // 연결 노드 사이의 거리
+          .force("charge", d3.forceManyBody().strength(-15)) // 노드들 간의 밀어내는 힘
+          .force("collide", d3.forceCollide(35)); // 노드들 겹치지 않도록 함
+
+        // 엣지 그리기
+        const link = g.append("g")
+          .selectAll("line")
+          .data(data.edges) // 엣지 데이터 바인딩
+          .join("line") // 선 생성
+          .attr("stroke", "#aaaaaa") // 엣지 색상
+          .attr("stroke-width", 1.5) // 두께
+          .attr("stroke-opacity", 0.6); // 투명도
+
+        // 노드 그리기
+        const node = g.append("g")
+          .selectAll("g")
+          .data(data.nodes) // 노드 데이터 바인딩
+          .join("g") // 각 노드마다 g 요소 생성
+          .call(d3.drag() // 드래그 이벤트 등록
+            .on("start", (e, d) => {
+                // 드래그하면 simulation 재시작
+              if (!e.active) simulation.alphaTarget(0.3).restart();
+              d.fx = d.x; d.fy = d.y; // 고정된 노드 위치
+            })
+            .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; }) // 노드 위치 마우스 위치로 업데이트
+            .on("end", (e, d) => {
+                // 드래그 끝나면 노드 고정 끝. 자유롭게 움직임.
+              if (!e.active) simulation.alphaTarget(0);
+              d.fx = null; d.fy = null;
+            })
+          );
+        // 노드
+        node.append("circle")
+          .attr("r", 30) // 원 크기 (반지름)
+          .attr("fill", d => COLORS[d.entity_type] || COLORS.unknown) // 타입별 색상
+          .attr("stroke", "#fff") // 테두리 = 흰색
+          .attr("stroke-width", 1.5); // 테두리 두께
+        // 노드 안에 텍스트 표시
+        node.append("text")
+          .text(d => d.label || d.id) // label 없으면 id 표시
+          .attr("text-anchor", "middle") // 가로 중앙 정렬
+          .attr("dominant-baseline", "middle") // 세로 중앙 정렬
+          .attr("font-size", 10) // 글자 크기
+          .attr("fill", "#333"); // 글자 색상
+
+        // 시뮬레이션 틱마다 노드와 엣지 위치 업데이트
+        simulation.on("tick", () => {
+        // 엣지 양 끝점 위치 업데이트
+          link
+            .attr("x1", d => d.source.x) // 처음 노드 x좌표
+            .attr("y1", d => d.source.y) // 처음 노드 y좌표
+            .attr("x2", d => d.target.x) // 나중 노드 x좌표
+            .attr("y2", d => d.target.y); // 나중 노드 y좌표
+        // 노드위치 업데이트
+          node.attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+      });
+  </script>
+</body>
+</html>
