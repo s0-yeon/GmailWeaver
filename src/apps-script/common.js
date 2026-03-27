@@ -1,6 +1,6 @@
 // src/apps-script/common.js
-var TunnelURL = "https://laevorotatory-nonnutritively-nelle.ngrok-free.dev";
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzuZ8CJdGBVGp2kqqmqwm43yW_wVoeDex6efJnpEe7fCTQXXtueEl2SVSFjvtrW-sB4/exec";
+var TunnelURL = "https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec";
 
 const OLIVE = "#c6d8a5";
 
