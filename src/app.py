@@ -408,6 +408,61 @@ def _build_incremental_path(filename: str) -> str:
 def _read_json_file(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
+# 이름+메일주소 형식에서 이름과 메일주소 분리하여 반환
+def _parse_contact(raw: str) -> tuple[str, str]:
+        m = re.search(r"^(.*?)\s*<([^>]+)>", raw.strip())
+        if m:
+            name  = m.group(1).strip().strip('"')
+            email = m.group(2).strip().lower()
+        else:
+            name  = ""
+            email = raw.strip().lower()
+        return name, email
+
+# 메일 블록에서 특정 필드 값 추출
+def _extract_field(block: str, label: str) -> str:
+        m = re.search(rf"^{label}:\s*(.+)$", block, re.MULTILINE)
+        return m.group(1).strip() if m else ""
+
+# 메일 발신 수신 횟수 계정별로 저장
+def _save_mail_contact_stats(blocks: list[str], mode: str = "rewrite"):
+    
+    # 새로운 메일만 추가된 거라 이미 횟수 저장한 json 파일이 존재할 때 
+    if mode == "append" and os.path.exists(MAIL_STATICS_PATH):
+        with open(MAIL_STATICS_PATH, "r", encoding="utf-8") as f:
+            stats = json.load(f)
+    else: # 전체 갱신 모드일 때 빈 딕셔너리로 초기화해서 새로 횟수 셈
+        stats = {}
+    # 송수신 횟수 누적
+    def add(name: str, email: str, direction: str):
+        if not email or email in ("-", ""):
+            return
+        # 이메일 처음 등장하면 name, sent, received 초기화
+        stats.setdefault(email, {"name": name, "sent": 0, "received": 0})
+        # 이름이 있을 때 덮어씀
+        if name:
+            stats[email]["name"] = name
+        stats[email][direction] += 1
+    # 블록 순회하며 횟수 집계
+    for block in blocks:
+        direction = _extract_field(block, "구분") # 발신 또는 수신
+        from_raw  = _extract_field(block, "발신인") # 발신인 원문
+        to_raw    = _extract_field(block, "수신인") # 수신인 원문 
+
+        if direction == "발신":
+            # 수신인 여러명이면 ,로 구분
+            for addr in to_raw.split(","):
+                name, email = _parse_contact(addr)
+                add(name, email, "sent")
+        elif direction == "수신":
+            name, email = _parse_contact(from_raw)
+            add(name, email, "received")
+    # json 파일에 저장
+    with open(MAIL_STATICS_PATH, "w", encoding="utf-8") as f:
+        json.dump(stats, f, ensure_ascii=False, indent=2) # indent=2 : 사람이 읽기 쉽게 들여쓰기 적용
+
+    print(f"[STATS] ({mode}) 계정 {len(stats)}개 집계 완료 → {MAIL_STATICS_PATH}")
     
 # 인덱스 여부 확인
 def _is_index_ready():
@@ -550,7 +605,12 @@ def upload():
 
     # 2) 저장 디렉토리 준비
     os.makedirs(MAIL_DIR, exist_ok=True)
-    os.makedirs(ATTACHMENT_DIR, exist_ok=True)
+
+    # rewrite면 기존 첨부파일 먼저 전부 삭제
+    if sync_mode == "rewrite":
+        if os.path.exists(ATTACHMENT_DIR):
+            shutil.rmtree(ATTACHMENT_DIR)
+            print(f"[CLEAN] attachment 폴더 초기화 완료: {ATTACHMENT_DIR}")
 
     file_path = os.path.join(MAIL_DIR, filename)
 
@@ -639,7 +699,7 @@ def upload():
             final_content = _merge_attachments_into_mail_blocks(content, attachment_texts_by_mail)
 
         with open(MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
-            f.write(final_content)
+            f.write(final_content)  
 
     # 7) 파이프라인 실행
     print(f"[UPLOAD] Received filename: {filename}")
@@ -668,6 +728,8 @@ def upload():
 
         saved_mail_path = MAIL_LATEST_PATH
         added_count = len(_split_mail_blocks(content))
+        added_count = len(_split_mail_blocks(content))
+        _save_mail_contact_stats(_split_mail_blocks(content), mode="rewrite")
 
     # 새 메일만 추가 append 모드
     else:
@@ -710,6 +772,7 @@ def upload():
                 f.write(inc_content)
 
             saved_mail_path = inc_path
+            _save_mail_contact_stats(append_blocks, mode="append")
         else:
             # 신규 메일 없으면 파일 저장 없이 넘어감
             saved_mail_path = ""
@@ -734,12 +797,12 @@ def upload():
     env["PYTHONUNBUFFERED"] = "1" # 실시간 로그를 출력하기 위함
 
     if sync_mode == "rewrite": # 전체 갱신할 때
-        update_dir = os.path.join(GRAPHRAG_ROOT, "update_output") # 이전에 증분 결과 있으면 폴더 삭제
-        if os.path.exists(update_dir): 
-            shutil.rmtree(update_dir)
-            print(f"[CLEAN] update_output 삭제 완료: {update_dir}")
+        # 이전에 증분 결과 있으면 폴더 삭제
+        if os.path.exists(UPDATE_DIR): 
+            shutil.rmtree(UPDATE_DIR)
+            print(f"[CLEAN] update_output 삭제 완료: {UPDATE_DIR}")
         else:
-            print(f"[CLEAN] update_output 없음: {update_dir}")
+            print(f"[CLEAN] update_output 없음: {UPDATE_DIR}")
         start_graph_pipeline_background(job_id, env) # GraphRAG 파이프라인 함수 실행
     else:
         start_graph_update_pipeline_background(job_id, env)
