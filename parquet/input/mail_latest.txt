@@ -1,0 +1,2766 @@
+============================================================
+[메일 1]
+ID: 19c6ab907a6a1263
+구분: 수신
+제목: Reminder Notice : Your paused Aura Free Instance has been deleted
+보낸 사람: The Aura Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Tue Feb 17 2026 17:30:36 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+Hi there,
+
+
+
+Inline with previous emails we’ve deleted the content of paused database named 
+test.
+
+
+
+You can no longer access the data in this database, but you retain the ability 
+to login and create a new Free Instance within Aura forever.
+Login <https://console.neo4j.io/> 
+============================================================
+
+============================================================
+[메일 2]
+ID: 19c6d101363308a5
+구분: 수신
+제목: Reminder Notice : Your paused Aura Free Instance has been deleted
+보낸 사람: The Aura Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 18 2026 04:24:55 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+Hi there,
+
+
+
+Inline with previous emails we’ve deleted the content of paused database named 
+test.
+
+
+
+You can no longer access the data in this database, but you retain the ability 
+to login and create a new Free Instance within Aura forever.
+Login <https://console.neo4j.io/> 
+============================================================
+
+============================================================
+[메일 3]
+ID: 19c6f65f08e10c75
+구분: 수신
+제목: Reminder Notice : Your paused Aura Free Instance has been deleted
+보낸 사람: The Aura Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 18 2026 15:17:57 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+Hi there,
+
+
+
+Inline with previous emails we’ve deleted the content of paused database named 
+test.
+
+
+
+You can no longer access the data in this database, but you retain the ability 
+to login and create a new Free Instance within Aura forever.
+Login <https://console.neo4j.io/> 
+============================================================
+
+============================================================
+[메일 4]
+ID: 19c69f951cee81d9
+구분: 수신
+제목: Not sure where to start with GenAI? This helps.
+보낸 사람: The Neo4j Team <graph-insights@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Tue Feb 17 2026 14:01:10 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FP37QhG9v6l8oK7CTfHuDzD5jrRqIe5F9r6PEWNAXz5F2wdDcW_M_97ojWq2cYXDEj8=>
+GraphAcademy: Knowledge Graph and GenAI Training
+Hey 인선,
+
+Sign up for hands-on, self-paced courses built by developers for developers. Whether you’re new to knowledge graphs or an experienced builder, you’ll learn how to create GenAI apps that provide accurate, explainable results.
+
+Attend GraphAcademy for hands-on training at no charge that goes over:
+
+
+	- Core LLM concepts and implementations
+	- How to build and query knowledge graphs
+	- How to search unstructured data with vector indexes
+	- How to build chatbots using Python, Typescript, Langchain, and more
+	- Working with graph databases, Cypher queries, and data modeling
+SIGN UP <https://graphacademy.neo4j.com/categories/generative-ai/?utm_source=Marketo&utm_medium=Email&utm_campaign=GenAI-Nurture-Global-&utm_content=--->
+Learn with AuraDB Free
+Start your hands-on learning today with AuraDB Free. Create your database instance, import data, and perform queries. No credit card or payment required. <a href= "https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FA1TuGWHS1oVR2V1oIn7lwp3sYMYRj2AxmpHJRXvlfWlM-UMF-oZDNcTzjTodKaSU60=" target="_blank" title="AuraDB Free" id="" >Start Now</a>.
+Developer Blog
+Ready to take a deeper dive into Neo4j technology and topics written by Neo4j engineers and community members. Explore the <a href= "https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FaEubCB3149dztLSLc6R5tvu2f6EgiO8gbM-mEqyqT02Ll-B3XL9F_sC7y2-c3tE9yc=" target="_blank" title="Neo4j Developer Blog" id="" >Developer Blog</a>.
+Best,
+The Neo4j Team
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FLtBhKPcu9G9uC4_Z7iZnup8oAz0mFs85Fiat11uv7D7Ae4n7OoL4ljk4XxhKdJLteU=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FVlN46QcSFwJ3dm9mdLiBtSo6B_7_8v__p5ESpeYfpAb_tbiAIMubJnnygpc3Z5Kwnw=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FGvTYKLOWPnKCSqRr6Q877gjFpF1bqARso8EYy-MDIdP-KJgX9ibiPoo0_cp8PSznq4=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FJVRNI4joTfY_jqrY0j90YWW6DKdjHRyYW8XIIWq5mxmQvYtvCHrNZA54cDzHuteBBw=>
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FP37QhG9v6l8oK7CTfHuDzD5jrRqIe5F9r6PEWNAXz5F2wdDcW_M_97ojWq2cYXDEj8=>
+© 2026 Neo4j, Inc.
+ Terms <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FITmVSOmcbrXmj_alhtwcD8ssLfJncouuZSOIuZRxJlzQYaM7Ul1XJ3PC6xfI-nILJw=> | Privacy Policy <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FB6NsGitlSITrHLnDtRM0-K2e9q-C_KNatjciiTyIb4Wn6o2iG1KNpUV3rGwEtZr9Mw=> | Manage Subscriptions <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FL1bByHaw60R3_oP9cppkmWCOG8G6xpDIaUgfgC0gwZSOh1D-tHraG8A5L1ukyy_ghM=> | Unsubscribe <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgCPH3FFD9Ea3iMzs707WDkAtTmYhqu-hiFhR0TZq1LN1j8ZsyFcamiDawpR8dyNq6sUS_fjw=>
+ 
+ 400 Concar Dr, San Mateo, CA 94402
+
+This email was sent to suntest225@gmail.com. If you no longer wish to receive these emails you may unsubscribe here: https://go.neo4j.com/UnsubscribePage.html?mkt_unsubscribe=1&mkt_tok=NzEwLVJSQy0zMzUAAAGgCPH3FVnnD2k8I4M81DgUw0iSSG5L_xB8truaz6Je5Ututd_QVuhhHheICooMAiCWSq-nz6TKVh5C5fTzp1lfPoUzjsIrMlXDSRL1OtqReRdlBUY.
+
+============================================================
+
+============================================================
+[메일 5]
+ID: 19c5ade508a31a2a
+구분: 수신
+제목: Reminder Notice : Your paused Aura Free Instance will be deleted
+보낸 사람: The Aura Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Sat Feb 14 2026 15:37:24 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+
+
+
+
+
+
+Hi there,
+
+
+
+ We will delete the content of paused databases after 30 days, which is 3 days 
+from now.
+
+
+
+You currently have an Aura Free Instance named test. 
+
+
+
+Once it’s been deleted you will no longer have access to the resume or get the 
+data associated with this Free database.
+
+
+
+If you want to keep this data, please login and resume or download the data 
+from your database before we delete it.
+
+
+
+You will retain the ability to login and create a new Free Instance within 
+Aura forever.
+
+Login <https://console.neo4j.io/> 
+============================================================
+
+============================================================
+[메일 6]
+ID: 19c4fb99cde072d3
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Feb 12 2026 11:41:29 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하지 않으셨다면 다른 사람이 내
+Google 계정 데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770864089000?rfn%3D127%26rfnc%3D1%26eid%3D-8452957875084161307%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9FDD67Xpdj-7t51A_KTf2-zMMhqpBjdxdY7fvRUdjknTvKYk8VImY-WveoNfVQyqs2P927US0fdjnETnZIynzxx?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+clasp – The Apps Script CLI의 데이터 액세스 권한을 언제든지 변경하실 수  
+있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 7]
+ID: 19c50398c39e7247
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Feb 12 2026 14:01:13 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 GW의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 GW의 액세스를 허용하지 않으셨다면 다른  
+사람이 내 Google 계정 데이터에 액세스하려는 것일
+수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770872473000?rfn%3D127%26rfnc%3D1%26eid%3D-5052788314393971396%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9F3bZX4zH5ILKqjgzVk6d3IshVZI5aqM8mmTYxPTXXDDbQmHzR8LsLheDCKRRevg9e3Yepbs_Sv0Xw9hrhlrQ?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+GW의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 8]
+ID: 19c50518a8111663
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Feb 12 2026 14:27:26 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 GW의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 GW의 액세스를 허용하지 않으셨다면 다른  
+사람이 내 Google 계정 데이터에 액세스하려는 것일
+수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770874046000?rfn%3D127%26rfnc%3D1%26eid%3D9199244457648539491%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9G2gms9aOj5qGI36jjqlxLGIspNpD_q9RxXuV5_94sME21bg3gccNL-WENWI2moS4e0lLKsaJf3Qger8tf6BA?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+GW의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 9]
+ID: 19c4bd060f5ef56b
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 11 2026 17:27:52 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하지 않으셨다면 다른 사람이 내
+Google 계정 데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770798472000?rfn%3D127%26rfnc%3D1%26eid%3D68824670876342813%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9HmoL3ftySE-aMpWXRUSt0eif4FNKyok9U4hfBtB0QnpHcZEj4MLCBMGSfzGtm40_b-yPWVL99Hvih8Ys-oGkRl?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+clasp – The Apps Script CLI의 데이터 액세스 권한을 언제든지 변경하실 수  
+있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 10]
+ID: 19c4bd9a858c6f8d
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 11 2026 17:38:00 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 AddOnTest의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 AddOnTest의 액세스를 허용하지 않으셨다면  
+다른 사람이 내 Google 계정 데이터에
+액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770799080000?rfn%3D127%26rfnc%3D1%26eid%3D-1195156559140932872%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9GuvxQckr7iwsiVrG1ByZJ-I06rswxuRrrqG5Ctt_ZrPKjPrEgGw4K_t98nFf7AZnaaHmOvZHs1CyCfzGmjgHY?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+AddOnTest의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 11]
+ID: 19c45ec9161fe73b
+구분: 수신
+제목: Struggling with GenAI accuracy? Here’s help.
+보낸 사람: The Neo4j Team <graph-insights@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Tue Feb 10 2026 14:00:48 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3SVYjSYzM_7OVqmnHiQslLOI0c6gP9TKd0XzgZTwvVoPN4KXZFp7u3YZCRgsmGSbOVk=>
+Build GraphRAG for Accurate, Contextual GenAI
+Hey 인선,
+
+Previous emails have explained what GraphRAG is and shown it in action. Now, you can learn step by step how to create a GraphRAG architecture with a knowledge graph.
+
+A knowledge graph provides a mental model of your data with its connected entities and relationships. Using one, your LLM can access information about dependencies, sequences, hierarchies, and deeper, true meaning to provide the context GenAI accuracy needs.
+
+Read this developer’s guide to GraphRAG <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3XFoX_2xqpqVhsOwGFvVsNOpPrdyVSmWWo_Ot3Cw-lbsh8QmEOG2jnPdpYK8lT8Hrz4=> to learn how to:
+
+
+	- Prepare a knowledge graph for GraphRAG
+	- Combine a knowledge graph with native vector search
+	- Implement three GraphRAG retrieval patterns
+LEARN TO BUILD <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3XFoX_2xqpqVhsOwGFvVsNOpPrdyVSmWWo_Ot3Cw-lbsh8QmEOG2jnPdpYK8lT8Hrz4=>
+<span>Neo4j Events Hub</span>
+Gain further insights from new webinars on the <a href= "https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3bKH6f1p5Gdc8j4aY6av5YsE2wWzFg0aKDz6OpuFpIsPYHgpqqt5_PqPejhGaNL93z4=" target="_blank" title="Neo4j Events Hub" id="" >Neo4j Events Hub</a>.
+Graph Academy
+Build your Neo4j foundation or sharpen your skills with Neo4j’s free hands-on courses. Learn more at <a href= "https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3XSxY2InpPsxh8A9FzZYTxlEcZkKepzXOjL9gPFMuQBOmoTJ5ikAJeohbH28eMCAe7U=" target="_blank" title="GraphAcademy" id="" >GraphAcademy</a>.
+Best,
+The Neo4j Team
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3VJko1sapgxJLgZvK_wJYhGtGsOQUqTVfLWIwy43aG8UiomEUiFpmyE-YEJr-oStnm0=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3VbMyMqS9Vybrlx8ONdFwLyk0QYZue3KA3VuYhPI0kICDpJ91f03h3M6srzYnrpCcrQ=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3XCHZKRfSLAZz8vLxI5sjAg9YPyY2GuYuollFs3nCDjhhJa5BKeBw8QM_20q8TzG9X0=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3YDw3XXxEw0rC-9g3A4R5DdogQamG2EUq87nEoJqMApuCp8Fx3dg51mKsj0brL043Uc=>
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3SVYjSYzM_7OVqmnHiQslLOI0c6gP9TKd0XzgZTwvVoPN4KXZFp7u3YZCRgsmGSbOVk=>
+© 2026 Neo4j, Inc.
+ Terms <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3av_GdCe7j4SpjDcWG7zNUK8AYP-ccaPITVBq2kneT0ZkhF3BsHW8TUrezw1kEPDq78=> | Privacy Policy <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3UfbhcevOMVi0rhufSHbH-bkWrLjXAYJ9cERDYUdKe65OMV0_mVSIIXMxT4udSCbhak=> | Manage Subscriptions <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3TXJT0gud3-qQA37fPUe-bofbwax9Ex2A-i3nkzYpYNBerChPuLnWUfonFxmNk32U5s=> | Unsubscribe <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGf5OUe3VIMGzgacis_ZuEZLOZbuuuhnJMW9Wt1hpRKn0zBYAm78PCHfYEANHPzA_UyTcX1Zow=>
+ 
+ 400 Concar Dr, San Mateo, CA 94402
+
+This email was sent to suntest225@gmail.com. If you no longer wish to receive these emails you may unsubscribe here: https://go.neo4j.com/UnsubscribePage.html?mkt_unsubscribe=1&mkt_tok=NzEwLVJSQy0zMzUAAAGf5OUe3XjHAnTPL1jfLh9-D_0v4yZiOjYHRk5NVbp6TH2peICKTg7jHV1j7bMFzFT3BIg4gwUplhn9bmrP0dQG4g6gn8n92wIK_aQnHTOLKcnxMn0.
+
+============================================================
+
+============================================================
+[메일 12]
+ID: 19c40fb7b97e0eb0
+구분: 수신
+제목: 황올
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Mon Feb 09 2026 14:58:58 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+황금올리브
+
+
+
+
+
+
+
+
+비비큐
+
+
+
+
+
+
+
+
+
+
+자메이카통다리
+
+============================================================
+
+============================================================
+[메일 13]
+ID: 19c40fae3ec8f7f0
+구분: 수신
+제목: t그래프
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Mon Feb 09 2026 14:58:17 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일:
+  1. T그래프.hwpx | application/haansofthwpx | 61016 bytes
+
+
+[본문]
+t그래프에 대해서 보내드립니다.
+
+============================================================
+
+============================================================
+[메일 14]
+ID: 19c40fa4d29fbf60
+구분: 수신
+제목: 과제 메일
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Mon Feb 09 2026 14:57:40 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일:
+  1. Gmail객체표.hwpx | application/haansofthwpx | 38837 bytes
+  2. Gmail 부가기능 아이디어 테스트.hwpx | application/haansofthwpx | 63735 bytes
+
+
+[본문]
+
+
+============================================================
+
+============================================================
+[메일 15]
+ID: 19c40f9cc0c5b464
+구분: 수신
+제목: 테스트 메일입니다
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Mon Feb 09 2026 14:57:07 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+테테테테테테테스스스스스스스트트트트트트
+
+============================================================
+
+============================================================
+[메일 16]
+ID: 19c2c2c2e1f27fcc
+구분: 수신
+제목: Real data, real code: GraphRAG demo
+보낸 사람: The Neo4j Team <graph-insights@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Feb 05 2026 14:00:17 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOfauGWIb5obwzDGotubpN0HPjWydg8ajLWgf3W4NtqWKYc_fRJMmK6tXWZBwZg7Sl6k=>
+How GraphRAG Works: A Real-World Example
+Hey 인선,
+
+Want to see GraphRAG in action with real data?
+
+Traditional RAG struggles with complex data relationships. Find out how GraphRAG solves this issue using US Security and Exchange Commission (SEC) filings as an example.
+
+Watch this eight-minute technical demo to learn how to:
+
+
+
+	- Build knowledge graphs from structured and unstructured data
+	- Combine knowledge graphs with vector-search RAG into GraphRAG
+	- Monitor and improve your grounding data quality
+WATCH TECHNICAL DEMO <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOQIVz8S-U_bZCjJ1WdAjprgTKBikmW4MDiu7cJmNPW2dP-kX7m5tlt4ga3oQSYxVpxQ=>
+<span>Learn on Your Schedule</span>
+Go deeper into graph technology at Neo4j’s <a href= "https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOB-pijboqCs-sl2DGly15m5h6gUkVefs4qu85ARAHym34BLupc-bBAjcRgSrxXCEASc=" target="_blank" title="on-demand webinar library" id="" >on-demand webinar library</a>
+Graph Academy
+Build your Neo4j foundation or sharpen your skills with Neo4j’s free hands-on courses. Learn more at <a href= "https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOS3War32slrAdORdK13gsepdGQ-XaTJZFJurSonf75dYg8CeDfugp0OltFPmzz82AeU=" target="_blank" title="GraphAcademy" id="" >GraphAcademy</a>.
+Best,
+The Neo4j Team
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOL-I357GJLHgElpgosYgfWS0YfQf28plKv81KJf00Tk3SfdH55GJvA8hoDffs2pR56I=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOfiABri_5UqiuQEBOCxi8CxuyAnJIISeXYogE4C3mXxkz3MysCY86YkoB5TZ0RbAMWI=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOWWAbJ7QSp7nEUng3aKPmRtR0uuBJug9f_CL46D7f9TtQvPT4S2iF_lEmlFdxAKJ3-w=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOSJACZW1ym8JgiqMkDg7gPuOcD_-47NpCFVsfCqDHu-VEond_EE8vnCXDXfOmatIirE=>
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOfauGWIb5obwzDGotubpN0HPjWydg8ajLWgf3W4NtqWKYc_fRJMmK6tXWZBwZg7Sl6k=>
+© 2026 Neo4j, Inc.
+ Terms <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOBELLTHGwmyMeY3wfDCpSFSlcrBCTnyUce2RVq2vn88N0CcjZhmh28FBh-2PGX8wDV4=> | Privacy Policy <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOfN4yju8gtWbUeYeya3RuImnCFrsK1UsntNYYOFHbusnWJmdccjfZ5ZrbI_Brw8htLU=> | Manage Subscriptions <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOFb45c0gYsYiQ7iZte-0chd01bZd5xSVZoCv1BXnxT3J8vJHEUtYRQN36-z2nyMwPL8=> | Unsubscribe <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfyyTXOUCD493OGvB3cjHs92spLCF3Y2kmRNVltQ1uUdcdE-qqKur_IKjZPqtxFscjqrGKvoQ=>
+ 
+ 400 Concar Dr, San Mateo, CA 94402
+
+This email was sent to suntest225@gmail.com. If you no longer wish to receive these emails you may unsubscribe here: https://go.neo4j.com/UnsubscribePage.html?mkt_unsubscribe=1&mkt_tok=NzEwLVJSQy0zMzUAAAGfyyTXOaFgIrFxbEbcQ2Rld4ai7HvGDAb1iYkFLh7tHRjEi96vFlUX8O96LuIp6dhaRkvmsy4npbu9AWzVjLB6m9yR2aVMlMrUbVVmmCw_uP8MVNY.
+
+============================================================
+
+============================================================
+[메일 17]
+ID: 19c2b6c10b6ec670
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Feb 05 2026 10:30:26 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하지 않으셨다면 다른 사람이 내
+Google 계정 데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770255026000?rfn%3D127%26rfnc%3D1%26eid%3D-9078385412637415277%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9E1j03xqhIdy6f7vkNUB6_kg5tAkSVu4W-rRErJNBGhjEwZvPPsx2-qdB-JWBeU7rSUtfKvs9gLWTuSqPuWEiQU?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+clasp – The Apps Script CLI의 데이터 액세스 권한을 언제든지 변경하실 수  
+있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 18]
+ID: 19c2cb928db79fda
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Feb 05 2026 16:34:17 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 graphTest의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 graphTest의 액세스를 허용하지 않으셨다면  
+다른 사람이 내 Google 계정 데이터에
+액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770276857000?rfn%3D127%26rfnc%3D1%26eid%3D-5892064752824312326%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9E-695nN8pu3L-dx88DXnbadlr2YsdeVoytYoH7EKzP64zLJOolB0mLaPeNEOSNq_-GFZXfymtkAUdouTHrcRY?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+graphTest의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 19]
+ID: 19c2cbaa5703404c
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Feb 05 2026 16:35:54 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 graphTest의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 graphTest의 액세스를 허용하지 않으셨다면  
+다른 사람이 내 Google 계정 데이터에
+액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770276954000?rfn%3D127%26rfnc%3D1%26eid%3D-822466730908899665%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9HWhltjZYJol517CZk2dOPyowO8K-MsvYk4dsOPtMmTRrWPHGbXwjSsbMtImGYKco0N5j4xid1p7dXFOGzHZYQ?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+graphTest의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 20]
+ID: 19c273f4b0a7a524
+구분: 수신
+제목: 피디에프 발신
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 04 2026 15:02:52 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일:
+  1. LLM 개발을 위한 학습용 데이터의 가치평가 프레임워크 연구.pdf | application/pdf | 1278258 bytes
+
+
+[본문]
+피디에프 테스트용
+
+============================================================
+
+============================================================
+[메일 21]
+ID: 19c2705c7b433e23
+구분: 수신
+제목: Introducing Neo4j Aura Agent: Build Knowledge Graph Powered AI Agents in Minutes
+보낸 사람: Neo4j Aura <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 04 2026 14:00:15 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+
+ 
+
+
+
+
+
+
+Hello 인선,
+
+ We’re excited to introduce Neo4j Aura Agent, a new platform for building AI 
+agents grounded directly in your AuraDB knowledge graphs. Aura Agent removes 
+the complexity of integrating AI frameworks, models and infrastructure, so you 
+can build, test, and deploy agents in minutes.
+
+
+
+
+Key Features
+
+
+
+
+ * Easily generate ontology-driven agents: Automatically generate agents 
+tailored to your graph schema. With just a few details about your use case, you 
+get a ready-to-test agent with instructions and prebuilt retrieval tools..
+ * Higher accuracy with Agentic GraphRAG:  Combine vector search and graph 
+queries for more precise retrieval, richer context and more accurate answers 
+than traditional RAG approaches.
+ * Transparent reasoning: Through detailed planning, tool execution and 
+multi-hop graph data retrieval, agents provide clear and explainable answers.
+ * One-click deployment: Deploy agents to a secure endpoint, ready for REST or 
+MCP integration.
+
+Preview-to-GA transition details
+
+
+ Thank you to everyone who participated in Preview and helped shape Aura 
+Agent. During Preview, the use of Aura Agent was entirely free.
+
+As we move into General Availability, Aura Agent introduces usage-based 
+pricing. Here’s how it works
+
+
+Internal agents - No cost
+
+
+ When agent visibility is set to Internal, you can create and test your agents 
+within the Aura Console at no cost.
+
+
+External agents - Usage-based pricing
+
+
+ When agent visibility is set to External, your agent is accessible via the 
+hosted Aura API or MCP endpoints and ready for integration into your AI 
+applications and workflows. External agents are billed at $0.35 per agent-hour.
+
+
+ * Grace period (through February 29, 2026):
+All external agent usage remains free throughout February 2026, allowing teams 
+to continue testing and validating their agents.
+ * Billing starts March 1, 2026:
+External agents will be billed at $0.35 per agent-hour. March usage will 
+appear on your April 1, 2026 invoice.
+
+
+
+ If you’d like to avoid usage charges, you can keep your agents internal and 
+continue iterating on them in Aura Console at no cost.
+
+
+Want to learn more about Aura Agent?
+
+ Read the Launch Blog  
+<https://neo4j.com/blog/agentic-ai/neo4j-launches-aura-agent/>or explore the 
+documentation <http://neo4j.com/docs/aura/aura-agent> to get started. 
+
+We’re excited to see the agents you build with Aura Agent.
+
+
+Best regards,
+
+ The Neo4j Team
+
+
+ 
+
+
+
+
+ <https://www.facebook.com/neo4j.graph.database>  <https://twitter.com/neo4j>  
+<https://www.linkedin.com/company/neo4j>  <https://www.youtube.com/neo4j> 
+ © 2026 Neo4j, Inc. 
+neo4j.com <https://neo4j.com/>  | Privacy Policy 
+<https://neo4j.com/privacy-policy/>  | Unsubscribe  
+<https://links.iterable.com/s/cu/LkYGpJqReNgMYCj2oh5XnTVbhIxVhga5Av4RB3wOFgTzaLKj0Ax2lKzHxRs7gn3ZLVxaYYz6a2bnvUrY15Un_ub_-7PdWiJINuNfhbyNOYeiC-iussJMLSAgUhK6sIKwzDQfU2fiiF2G1vzBu_-SQAq7azngyuALmGWPmtr2IXx-p591HJWtChSRO4s_Kek2wwSmScrKdOHi7uIULgVTSw474MZ7TcNlSZpL-VCc/2FBzzpOx802Hr05Zr0u2azqCRr2uMtPP/17>
+
+  
+============================================================
+
+============================================================
+[메일 22]
+ID: 19c26f61da8fbc52
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 04 2026 13:43:07 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하지 않으셨다면 다른 사람이 내
+Google 계정 데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770180187000?rfn%3D127%26rfnc%3D1%26eid%3D4684541359904744160%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9HfqZwIOgmdb2f6xgiqHy0ymVgpRVu7OEJDtSBBfN2SV-wDzgoCl82NcqCdaZ7MYiRBGwWGnpV7MjS3LtOjSMC6?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+clasp – The Apps Script CLI의 데이터 액세스 권한을 언제든지 변경하실 수  
+있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 23]
+ID: 19c27114d4844e5a
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 04 2026 14:12:50 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 AttTest의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 AttTest의 액세스를 허용하지 않으셨다면 다른  
+사람이 내 Google 계정 데이터에
+액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770181970000?rfn%3D127%26rfnc%3D1%26eid%3D181812657450316694%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9FKi11s-3Bt-tpUaUKMk_aVuNCCzYoOEM5i6uHpRcIof3yy6IQcgGD4qaebo25Ar6rgiJKWnVJrr-UwuIYADt4?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+AttTest의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 24]
+ID: 19c2713203918b09
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 04 2026 14:14:49 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 AttTest의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 AttTest의 액세스를 허용하지 않으셨다면 다른  
+사람이 내 Google 계정 데이터에
+액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770182089000?rfn%3D127%26rfnc%3D1%26eid%3D2523991481023586672%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9GDVK3fjlwityBERMhqL2mOSp6uQ6kRHosXJF27xj-UJQUHNMjVJfjUx-pbcXuLQtno7x7c84BGDpOegKTe8S4?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+AttTest의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 25]
+ID: 19c275e5b42aa127
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Feb 04 2026 15:37:00 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 mailSummation의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 mailSummation의 액세스를 허용하지 않으셨다면  
+다른 사람이 내 Google 계정 데이터에
+액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770187020000?rfn%3D127%26rfnc%3D1%26eid%3D-1004920271827135392%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9E-9oqqDEo4OIcxHGdTzn_kIIgWKcov3XnFjMspvTWMOC4mzrMNVn5aXgmXh2JfZHDtvsV7JouekIYfK7lpXug?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+mailSummation의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 26]
+ID: 19c21dfb4ac9c11f
+구분: 수신
+제목: Stop GenAI hallucinations in their tracks
+보낸 사람: The Neo4j Team <graph-insights@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Tue Feb 03 2026 14:00:33 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-ighcaf13HqBCv2qtTJuYS9PxGFUj_wP13ghk-UihJmxkoK8NvBRDjtFz2SL19qecgs=>
+Accurate, Explainable GenAI Results With GraphRAG
+Hey 인선,
+
+RAG using only vector search has limitations. It misses out on context, can’t grasp relationships between data points, and often produces unreliable results. When your app needs to understand the connections between people, places, and things, basic RAG falls short. You can end up with hallucinations or irrelevant, unexplainable results.
+
+GraphRAG solves this by combining knowledge graphs and graph data science with traditional RAG approaches.
+
+Watch this 90-second video to learn:
+
+
+
+ - Why traditional RAG produces hallucinations and how GraphRAG fixes this
+ - How knowledge graphs add critical context to your GenAI results
+ - How to get started with GraphRAG
+WATCH VIDEO <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-l0Doh6XKnHPpkw32gRVGH14RrHaa8H_qm0nIrHyJC8SEolxN4xkzoISTTcB7ZdsIqA=>
+Learn with AuraDB Free
+Start your hands-on learning today with AuraDB Free. Create your database instance, import data, and perform queries. No credit card or payment required. <a href= "https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-rybsKKfpzmuHp2ePl-jBx0jN4BHriUILmUhn76TxwV_QlfgYIgf5LcxC1aSAmfUolM=" target="_blank" title="AuraDB Free" id="" >Start Now</a>.
+Graph Academy
+Build your Neo4j foundation or sharpen your skills with Neo4j’s free hands-on courses. Learn more at <a href= "https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-irvksVPStdFMqPc8PAzRVvy2ZvD5SXvAHekJd8jmqHnOONqt9p8Zbesyjz5Q604-MA=" target="_blank" title="GraphAcademy" id="" >GraphAcademy</a>.
+Best,
+The Neo4j Team
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-rjcfLZPVsZStewbfWBmoWaeESeHy-Z589YOfJSwR9-bTI6bNJ1k75FIElLdvPnVkEw=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-gI3SP9Zt9lMbtkUDpELC4R8FgE163ydI4LFiz-SDSZy8pP7svUVZJ7os2SVV-H-Fu4=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-rdGAv8SOpQTGgzvGht5RspiAGKyejIs6ihd11HtPVVUVjhDjNluhp8Otp7KK_27Shg=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-vrVYkz6QELYStcORQOS9Ifwi_RLbMuos3miLBeb1QkLloIoLip6pQiJJNGauuaXFFY=>
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-ighcaf13HqBCv2qtTJuYS9PxGFUj_wP13ghk-UihJmxkoK8NvBRDjtFz2SL19qecgs=>
+© 2026 Neo4j, Inc.
+ Terms <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-m6f55X_ObDJDvxXQu2l9ZpddzyVb-xljJYYsqTBgRpeiSJaHPvtHzVJUmVxqqNrV5A=> | Privacy Policy <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-hsi_k161WZzukGck8iAS_ORSEXqwXIQGhmouNSbBDK7hu4N4C1DZCIZCygzxIn7-lE=> | Manage Subscriptions <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-pH4JPq0syVqFhs3Rmnkw6e0ymMHFYk-adyGUZLNt5dEV5ANKr5Mw9o7brlKEGbQYGQ=> | Unsubscribe <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfwNhf-rT1Cm8A3Q6Mt3A16yLvKFP-BG5OtKYsnSwZwCvs8xR55MyeBOFvmB2IEASgjmvCbVw=>
+ 
+ 400 Concar Dr, San Mateo, CA 94402
+
+This email was sent to suntest225@gmail.com. If you no longer wish to receive these emails you may unsubscribe here: https://go.neo4j.com/UnsubscribePage.html?mkt_unsubscribe=1&mkt_tok=NzEwLVJSQy0zMzUAAAGfwNhf-n2G8n5Q9nKqrSPjAMTSeu5yVOfqo4fxwGBrjjUnBD7pHSNYicIBWpjD9FvYceBuPb__Tkf8Izme89EJgdBBD-IlCRvrd0WCk_7DD8sMOTQ.
+
+============================================================
+
+============================================================
+[메일 27]
+ID: 19c211e36868b0d8
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Tue Feb 03 2026 10:29:12 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하지 않으셨다면 다른 사람이 내
+Google 계정 데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770082152000?rfn%3D127%26rfnc%3D1%26eid%3D-5861167313224272132%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9EySxjwfdBgDmYpeSPD10GYTq71ZswQztKPBddI4RSGdg08ZcFw-nLh7KYz7QSaHV1SKPZDSpmYSyWLLhoNpRhE?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+clasp – The Apps Script CLI의 데이터 액세스 권한을 언제든지 변경하실 수  
+있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 28]
+ID: 19c21406f1e90cf7
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Tue Feb 03 2026 11:06:35 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 AddOnTest의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 AddOnTest의 액세스를 허용하지 않으셨다면  
+다른 사람이 내 Google 계정 데이터에
+액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770084395000?rfn%3D127%26rfnc%3D1%26eid%3D-7527546174889793713%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9ED8JTrSULmLdq4MfOWcqbRE0S4fliM3y6Ij_YupJiCkdLKNKH-3I16DX4EWa4EBOxJkfBWCQ9_jtZS1YHP6uE?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+AddOnTest의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 29]
+ID: 19c1a5de9b508c69
+구분: 수신
+제목: Still waiting to set up your first endpoint?
+보낸 사람: ngrok team <team@m.ngrok.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Mon Feb 02 2026 03:00:59 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Hey suntest225@gmail.com, it’s been a while since you signed up for ngrok, and we noticed you haven’t spun up an endpoint yet.
+
+Are you stuck? Most developers get an endpoint online within the first two days. It's easy to get started with one command:
+
+---> ngrok http 8080
+
+Use that and your free static domain (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/MWsL5Pl4ng0N6Fbbf9YXDCLW4bWRWk5K0c4nN2lhp1R3pyd0W7Y8-PT6lZ3plW8sjtMP1ZDhqhW4nBx0R703cv6W1ftLMK4Bf-sJW5jSZ876mHgBjW98nZqT4_QBfDW41Slpj9h1PHbW6m7bCR25kHb8W4dYqRm3zfPMjW1TWVL_8X9SVSW7SQsZD1z02t8W3zdyjV1zqjKtW4Rmj5n1Cs3_8W1JJ5nJ7fmKbrW4y6cvv11PDPjW2Q_HSp4RyphFW64sjwS66zdWpN7SmQkGwdlPmW8362q-6JmcqVV5nSX_70T7GTW5wpcpf4hqnkhW1VsCTK2S-N5lVfLGNc8fVVpVW751wMb1c_MtRW34Rgwz5-QKsvW9hnxkl72mDzkW6-gpK46Xzr6_dkbbVT04 ) to start by sharing a service from localhost or securely testing a webhook. From there, the path is for you to build, but take a peek at some examples of what you can build (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/MWsL5Pl4ng0N6Fbbf9YXDCLW4bWRWk5K0c4nN2lhp2q3pyd0W95jsWP6lZ3pGW4h2x6l5jjBfFW1qK1rB6ZDny5W4M1bTl8NwC__N3bkjNB8TWtpW5tBZfx3WhNMMW1yRqHZ2TqR2yW8Ndry7591vdPVD0WZz8RLddtW6cssvK68bwzrVbbVTk4hGbNLW36bfc15WP2f0W3L9yB54XHRDpW3Td3Gv95DZPXW875BkM89F05HW90GYsr3lv14CW7QRwjj8qvfr0W3sDRBt3Z_yt_W4F8LKk9jK5g8W3PX9qq2Cv257W2GVprG30D9NLVSMMcF2ZXBQhW3BvBr38DNsWnVyl_q44LNm83W3pGnGX5HMc5NW4nnJx96RYDkhW5H1JMY4JlkhTW4CP3s-2p4ZMNW3_Hc7y6rSPNdN76RqvWdksn-W8ct6mr471yC7f4JfH9204 ) for inspiration.
+
+Need help wiring it up? Reply anytime.
+
+<3
+Team @ ngrok
+
+View in browser (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/MWsL5Pl4ng0N6Fbbf9YXDCLW4bWRWk5K0c4nN2lhp1R5n4LbW7Y9pgv6lZ3nzW783wK31Wq-0pW4w2p1d3SdkMvW4P60Cg1jDDQ9W8Vzf7T73qhv2W7D5Sy63CfsNGN5RxsYrj0zptW56_d_S98qFZbW4vZV3S8dv12WW4Z6pJm5QwxvlW9kX7ZT7ZSSrnW1Bs1hP7mb1XRW3x_d951lZkCFW8V0fvl5zbgF3W2N_N4b8j2tdyVf-mZm6W2XbBW71wSCK6Zrg1FN5G8yGGX4DqzW1XJLWQ6RG3r4W2mDrjH44LJ8tW89b2Vt8RFzNbW1n7XJ52YxJbsW7wRJVr3xCbt_W7LLNNr1DjtRlW5j6LbZ3JyJJBW7qgB5n8L6ZtVW4_qg543jLkGqVWRrCT5Fs9z7W5vtRGG7Ky69zW1rGcdS5YRd1NW5QJbwy2krdfGW8sPhZJ120YNMW1pBVLH4bFC9PW4XJ72t4T9J5XW1ZxSww4stCT7VH7yVs8BZLQ1W77PvHd8SRZsNW83dK7G1s4wbzW99yjQ28KnmFzW9b5kWV62kG4dW8q1xKz87TC8rW2J9F7y5cl_35W5ZVYMV7g--gHf3_q-5F04 )
+
+GitHub (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/MWsL5Pl4ng0N6Fbbf9YXDCLW4bWRWk5K0c4nN2lhp1x3pyd0W7lCdLW6lZ3nJW66b3Vp5rm0slN1hsBDhh1L6QN7J5Jh0_FMK_VyKd9K26Pd00W7YJspY7cZZk2W8mW4Zb7QfkBtW1l6X3l4G-_z3W5wzhWT8VQW7hW8C_ZND8LjLWXW9hdcc657Dv2XW4_61tJ7mnkv2W5wVXsR58YbFmW13Dhj29fpS-bW61XwdZ4X91QnW8HbPbf6D6zCxW794rXD4lQMmhW4JtXtv6J0g43W9dns_c7CkvQ1W1bNKLX2HGgryW2wMSZp3CGXqyVFcHKy4dRnrHW7vWcbT69qq3VVgm1gw2wqQxCW39cb1-10f0SDf8f6Zkz04 )
+LinkedIn (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/MWsL5Pl4ng0N6Fbbf9YXDCLW4bWRWk5K0c4nN2lhp1R3pyd0W7Y8-PT6lZ3nCVfrt4r8V0J2sW6RS54k1YyFJ4W7yGFBN42Gn8TN2WP00TGklMwW1sTvK138GQ-JW3TZJtx4ZzvTbW3TYJrT99zr9SVLqKhT98jp3rW8ts7FC8BHtWKW8pc1Mx6jjTtLW2Hl4SP4tDsxpW3rQpQ81Gp5kJW42LjFc2pmTBZV_hMpx8cGVsjW5-7vg-71ZXnsW4Y_25p2QQbxYW2n6FF71WrRMVW85-q1b57vhMBW2l0dTp6wfx9_W5xQZy07vFjdvW4N-Y3m1r5LM9W78ZMw17LlgwZW3nNNzx7bQTkXVt24qK8HXZSfN6P88j4B2KcJW4-Xv8M3h8nBkdJglFR04 )
+X (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/MWsL5Pl4ng0N6Fbbf9YXDCLW4bWRWk5K0c4nN2lhp1x3pyd0W7lCdLW6lZ3lsW1m3K655BtFMCVsFFT18grM4wW63WP0G8SVDXLN3BRDD42MVfwN7vJjsCnTB5sW8tphCX6N8g3rW5QNzKx4s4qfvW5q9DJV4RbxSVW7H4VKc7YGZwsW6H8G6w2_WlZyW4fyWct4YHSk5W3V7mjG3Gn_MJW3f8vCr1xQ6qdN7rnmPKwplhkW2sfZvz91ScQ9VZqmX62g0XrHW7XxQtm8JHLdMW50n8-41SyLMsW2ZGbTR7kKj1gN9k_cg4LjndgW7MXPW-41Qj_lW3llb__8f9DFPW1l41Sc2JSKXJW2CxYZP3C6B4fdwbKSb04 )
+YouTube (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/MWsL5Pl4ng0N6Fbbf9YXDCLW4bWRWk5K0c4nN2lhp1R3pyd0W7Y8-PT6lZ3q6W6L7gWD15KDDQW71LTT751_hm-W4K85wf2Mcr6NW8z5WTF8kVbHBW8CLn-b7-Ch5hV15-xv6VgN3mN9bd4L7bZ3fsW38tcKY7_5d0wW963j931WbG7nW5hz03d2Hw4nWW7Gzy6d7WdBMZW5HChFt4BmZ7WW5dRN491Yt9g8N3z7c-Dc3N8_W5wkGKq7GDKRKVJbtsK6y9XjNVRFqX51mkdjNW9fj50p90SKx0W5cQGQY6bCm-dW4P3LQ178FbMZW8dWcTp81hpMQW8ybbZJ3C4H7fW4Yfz9n61T8bVTR2R08Nf1gDW2D9dLC10LMFtVMxTG68y3yfXf3ybB9z04 )
+
+ngrok Inc., 2261 Market Street , STE 71467, San Francisco, California 94114, United States, 
+
+Unsubscribe (https://hs-21124867.s.hubspotemail.net/hs/preferences-center/en/direct?data=W2nXS-N30h-LHW1Zc_lS2-dp9kW4myxP52p9dTDW43GNFX3P9dPXW4fNM6J4p8vpwW3d36fb2vJbXwW3yYjnm1Xhyb1W38hxRT3LW1VsW25ph1q4cQhyMW2KD1Hl1QB-w_W3JXQvq20WxPMW2w0g222KFfDcW364-sb38xT5lW45z6ch2MnPBzW3GLKR_2v_sHqW1BgXB530rxmyW2WDK822vQsS7W1_f27G1Lk4L4W41Hk3c1ZrfcvW4tGDlM2HCTX7W2RT5vd32lKjSW4p9pk23brGpZW32m3Qg36BG_4W1V1fZV30pNynW4hw4r72CZ6j7W4tl1QQ2zt_S1W4pDwPq43Qd-kW329ygc3gnrz9W3QMwh838rz3NW45GWML2zyM26W32bmqd2TpPyMW49CHR73gpGqfW4rBHjt3NP1hQW1Qtn-k3gpBhLW1ZnP2P43Qgb0W32DJcM1X0bKpW2FY7gP25kTJbW3jft652RmYpXW1VnrgT30rVY6W2vYwYG3BWssQW1Svpvl1Q2RZ4W2MFZ9W47vBlzW4pkKW54kb6pTW49TPpQ3h-9fHW1XnZ4T41D28GW1Vbr_61Vy7pjW2MR0C-38v1C0W2sNXgK3QNLjFW2HWHw_4px12PW38Drv-3SywDbW3drX591_mNf9W2sVqmc1BHDBMW4r7wQj47Dfs9W2FYWCF34FldPW2nMLbD3K96dqW2FVcqj3QRF9B0&_hsenc=p2ANqtz--udnGUCyAFb5S0OZs1QfVwvWDEZiLdHKrWI1X6a-WKfJLxGBuZQhOV5ndZ1TX466xVQxv-z-XedEhwT1yoEkM6Ao-j6A&_hsmi=379601777 )
+Manage preferences (https://hs-21124867.s.hubspotemail.net/hs/preferences-center/en/page?data=W2nXS-N30h-LHW1Zc_lS2-dp9kW4myxP52p9dTDW43GNFX3P9dPXW4fNM6J4p8vpwW3d36fb2vJbXwW3yYjnm1Xhyb1W38hxRT3LW1VsW25ph1q4cQhyMW2KD1Hl1QB-w_W3JXQvq20WxPMW2w0g222KFfDcW364-sb38xT5lW45z6ch2MnPBzW3GLKR_2v_sHqW1BgXB530rxmyW2WDK822vQsS7W1_f27G1Lk4L4W41Hk3c1ZrfcvW4tGDlM2HCTX7W2RT5vd32lKjSW4p9pk23brGpZW32m3Qg36BG_4W1V1fZV30pNynW4hw4r72CZ6j7W4tl1QQ2zt_S1W4pDwPq43Qd-kW329ygc3gnrz9W3QMwh838rz3NW45GWML2zyM26W32bmqd2TpPyMW49CHR73gpGqfW4rBHjt3NP1hQW1Qtn-k3gpBhLW1ZnP2P43Qgb0W32DJcM1X0bKpW2FY7gP25kTJbW3jft652RmYpXW1VnrgT30rVY6W2vYwYG3BWssQW1Svpvl1Q2RZ4W2MFZ9W47vBlzW4pkKW54kb6pTW49TPpQ3h-9fHW1XnZ4T41D28GW1Vbr_61Vy7pjW2MR0C-38v1C0W2sNXgK3QNLjFW2HWHw_4px12PW38Drv-3SywDbW3drX591_mNf9W2sVqmc1BHDBMW4r7wQj47Dfs9W2FYWCF34FldPW2nMLbD3K96dqW2FVcqj3QRF9B0&_hsenc=p2ANqtz--udnGUCyAFb5S0OZs1QfVwvWDEZiLdHKrWI1X6a-WKfJLxGBuZQhOV5ndZ1TX466xVQxv-z-XedEhwT1yoEkM6Ao-j6A&_hsmi=379601777 )
+============================================================
+
+============================================================
+[메일 30]
+ID: 19c19aa9c86b15a2
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Sun Feb 01 2026 23:45:36 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 weaver의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 weaver의 액세스를 허용하지 않으셨다면 다른  
+사람이 내 Google 계정 데이터에 액세스하려는
+것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1769957136000?rfn%3D127%26rfnc%3D1%26eid%3D7344351534136811907%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9Fsti41vIZGOF_-w5fhKeXPHCBAay_TWdxZrxTyyccvjVjrj4u3L074l5mjrSkQ9gylidZqd027Vg0DO6gzB73i?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+weaver의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 31]
+ID: 19c1c053248fb822
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Mon Feb 02 2026 10:43:48 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하지 않으셨다면 다른 사람이 내
+Google 계정 데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1769996628000?rfn%3D127%26rfnc%3D1%26eid%3D-5898039513547174471%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9HYdN4hnDJzQo80c50uagQrUhlYV-KCoR-VieOcVhTce1I-5iOsq0WqRWiQvqcXXU2Ju7QQJ3VZWh-YQd5i6LrS?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+clasp – The Apps Script CLI의 데이터 액세스 권한을 언제든지 변경하실 수  
+있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 32]
+ID: 19c1cf5704777e6d
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Mon Feb 02 2026 15:06:10 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+Windows에서 새로 로그인함
+
+
+suntest225@gmail.com
+Windows 기기에서 내 Google 계정에 새로 로그인했습니다. 직접 로그인한 것이  
+맞다면 아무런 조치를 취하지 않아도 됩니다.
+본인이 아니라면 안내에 따라 계정을 보호하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1770012370851?rfn%3D325%26rfnc%3D1%26eid%3D397319460268628291%26et%3D0>
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 33]
+ID: 19c182ea32128ecb
+구분: 수신
+제목: 인선님, 안녕하세요. Gemini에 오신 것을 환영합니다
+보낸 사람: Google Gemini <google-gemini-noreply@google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Sun Feb 01 2026 16:50:35 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+
+
+최신 소식 등을 받아 보세요. Gemini 이메일을 구독해  
+보세요<https://c.gle/AHvOEDlWbYl5USQlr6zosctmQKbVgORhlk03oZPdqxAEYPJENwWPrxsqAFlUdQenSlaiXzV8gr5b-S23YDJfgNECzSpYjSvXmx6boZMIN9MU9KCQe_K4qM2GLd3d9BRmepo1tfJlExzYA3qBUEbM7tHCQqeTMEvA8A7QaWeKtgHUI4z-ycrnajDiYUylPY3Zy5Az-jVekMET5Nnrqa7tqf0U9UwMKdKY-LDQ4VW5UAo_3Rf5OIGmVliNYTZCVpPKHQwSA3QsYk8Tw0HOwhtjjLcp1VQMTrVk_MEDeBBPfJRQ9klDJ5yNL-rHCPf6c6qDqe2sLf3-7dSTJyC0XQpHUEQ9oDcC5fAvonCTYj8ZqV8RKecE4wmwUfG9eknQzFvoRMrPZvngvVuVneRH0dCXImIqhRvoJuzpC2eGp0hoD3siOu0VkGjs_l8DHwUk_77cg7e0elFFNKxjn5fdE29Fc2jc0_s3celIrzfTkb45qzO3ofXo_8woBQLo4nZgQvgnXDp89cLNb6fjfdUC2vBosGPxPuW18gd8cIk4ig>.
+
+Gemini에 오신 것을 환영합니다
+
+Google의 AI 어시스턴트인 Gemini로 창의력을 마음껏 발휘하고 생산성을  
+높이세요. 글쓰기, 계획, 학습 등에 도움을 받아 보세요.
+
+Gemini 사용해  
+보기<https://c.gle/AHvOEDmnA5MGBmpdia-nHBFeG0Yd2c6BS-k4gg-Na-2MUrd3Ye8YKh_RnwWPs66GHXzBBb0EiU_GV94LTVR-DwkYA3PEGIw9Kbh54eTUDpojNezC2tHutHk7y6NATu1KE6yDYO-oRx7unoluMyHvZv5XeyXfLEFrKZ7gRLPSBLqzQCJXw7h1w0C3FHlv95qNLQcnJ_1GhT0JDG6Su3JSov_RsGw_3QunglxP0zLHPNZtjz1BiZ3Mf4zMhMpUzx4P9yHin2xDm9grPCLBqJ7V9QZbNlA0myByxdDxS_28u2p_UrMfltfx8nb4Bpch1jlsU3w7sYhj5pAGXIwMrm1R8GBgubQxWNkOf5iSniP0cBFMMC-g91K1jA2KM2OYLuKmEoNRvnjctUC9lxq1WD4hl-rj1SJbwbx6j7BNSO7NZtg5_t1TDhrdkkU4gTGF6QQ9Np-u1q2ugR2ddxmNjCs>
+
+
+단 한 장의 사진으로 수많은 새로운 창작물을 만들어 보세요
+Google 최고의 이미지 편집 모델인 Nano Banana Pro를 사용해 다양한 장면을  
+상상하고, 창의적인 요소를 결합하며, 특정 부분을 편집하는 등 여러 작업을 할  
+수 있습니다.
+이미지 편집 사용해  
+보기<https://c.gle/AHvOEDmFU3emIittptUj6_IBDP75pcbwLEHIFwfcu6QkRmnK-qsSCS837bAc3yzjS0lRCpFJEenjeUOUSoB4VKJDG-WzBBCTPRGfOVkXdNVDQiHB3ok-_-CKd4QdXUE3vxxB1ABmpEsrzF1GM1VmZIAlWD-CN3fcTO0-VTD5XAlB_QakUl1In3ANpCp3aa1QwyZLmPyGFw3M4exz0-UwL200Gf4PaLDeaEoP7-OKGlaqc-F8UNrBDMTp966Za21LsH5VAU_1c3HhwY2ZJiIL0p9m65aYpKgRiKYzt6WoTtVNesYl3hZmTggOYyz-j12VAgyfHGoswmP2kcuu-uBtWV62pxA9WgHVI85V8TnPdvCqofwdcjgwGsVofTIoUAdBtWeDi-K87GjQSHGlqSfLM9Pm0rKKwHoPHJ2Rg_yf3Pk0AcayiG4Pz7lsziHPw5B1fDq-rrriuxx5l1VEZFbaWQgJnR-p7pxJ2KUF3_YThDKew_EtUIehD6KluSyO7R0Q9MmeU2MVbAKzU2FIGVI7wyrmweqNhav0CMsax6CnTO7ALwo7xlxD51b-doXpGLEIN0BeZw>
+
+
+
+
+음성으로 Gemini와 대화 주고받기
+
+Gemini와 Live로 대화하면서 새로운 주제를 탐색해 보고 아이디어에 대한  
+브레인스토밍도 해 보세요. Gemini 앱에서만 사용 가능합니다.1
+
+Gemini Live 사용해  
+보기<https://c.gle/AHvOEDnI_02k1svIaeIaDkAnYc-wzJ2QqUfcV0ErFVa3a3po84jJCKDcaJxvYqsXZV8A_goUacNhnSMD-OUCC_j0DnzrZ2fM8BG71-F8mNFd6htOQ4Qsgpf2db435TsV99JIMvcIDLrSTBW308deryrBRRnOiQF-H6b9PO2wHgf4uj0nTGtPd5gAutopdeyPNoEESlmjShhBKBV_y6eNVz7s_CpxvrD39o-R7aKDLqEPWRsznMEpHPL4N9shAp2wJ51CfirSI47JYFN8ehqW-YdFnmlHLhqUhx14reHZN9ZroTmNXaM1MfhhzAQgLW2ksUWJ7AFUnBcAdovL-N8k8NUz5fepN8ZXG_S7jWGAFKlY0wLcGqQXzMQqQI2df6snWKKl6qZbB5KThuJEoX90VYjneUToywVUDintr77QLZPb1R88jYJSNew8NQ8c9-nH9TGr1okQ40k5vl5IaYtA11uephSaS6vxY8rWsWLMnw>
+
+Gemini를 새로운 방법으로 활용해 보세요
+아이슬란드에 처음 여행 갈 때 미리 알아두면 좋은 정보는 어떤 게 있어?
+Gemini에서 이 프롬프트 사용해 보기  
+»<https://c.gle/AHvOEDndITj_MbPPuLHp8y1yGPputQGGNBfsh-0LUROZB6wINGSW0A4Ui-aSvo77WBk25LkWJL7dklzcMUGaJmprN09r-BD5mBuF4rOceeIiGaUvW02i7tyst_oNZInHsCopHgEBjVyLe4sSnyy28LrxIlSU4r2TzFKBlafR_elkP0fm5Y9imArZz01i74t-N_Ymyc95fWdQvn-7Y8ZIcFLGa-W2AdvAOBsiVBWsYs6OsX-SgSSb5xEjUxsaelhh5o-04xrlLuKCADMyT53cJOtI409PIPVhVDOsi2PfP_M6n9MoHxHBAvBAoITgztI5XhRCGZ5lat0yJjoOwz8diADLUKRjS9U6FoL1N1yRLN6qzyiGz5Ckt_WTKvFvrCkyHLuEkdiJuwN-0kfxamTDIu-oVmanCZPDsWWTaDWiG8xOCbJ9yjG85Atc9i7bbpBH4kYW6ouFXDa0886lLs5Jk2dFv7oasfS2lQ>
+
+햇살가득한 초원에서 알을 깨고 나오는 새끼 용을 호기심 많은 발광 나비들이  
+둘러싸고 있는 이미지를 만들어 줘.
+Gemini에서 이 프롬프트 사용해 보기  
+»<https://c.gle/AHvOEDnT4RoMPPLAqGIAeOh65Qg0_H4EGeFA3F3gOBYCEJ0jlqusaW1WdnKLIO2JYDNqAt7EwD2kbQKoP4ZRSY8H_y4-JoFWJWgbj4LG-cgFsbm31SBxrYCTd7UUL44X9kE18RmmAqsGevuEKj5roxl00R3vciy7DKF9iNnXMO4L4ZXVTF4xQ0JUpBdeBY9U0IFDqar09bMsY8MwD_FWbSRYjJ1-EgJ-Nl6u-ivgCp-MFt785-oUH2_bWIXvhhjt9SCEt1tdLo8opplNVUNzDk3rRAiMJb95CZ-91umFdSiHRVjLYVVPi956JZWDmEkBEocIG64kEf0ag5DtSC6atcJBrRN7G2s2Pp2uSISLDBcK4ZhOhtfpDxx1Oya4Bz14_hu4j5vKET8CSnQr4EXsdN4HTJvb4wPCqm0z8c_T7k7cgFfs-xD4Vxa1FZENZiZXpMQUPEs_AxR0fH8cIuuo1PP42DeUqpJAjA>
+
+올 여름에 마당에서 식물을 키워보고 싶어. 어떻게 시작하면 좋을까?
+Gemini에서 이 프롬프트 사용해 보기  
+»<https://c.gle/AHvOEDnb-8Vsg-TEnkRw-GxgfbYB9ELyrqrNAPFyS2lKxUxZdj_VfkmICehmPm57sRc4O8uHRyiyxfeb9L2pcbUSpXugdHiMULf3iVilshlkOJZo4z02Y9M0u5AgW4ColoZJ4uhz0aUn0nMCX-UB_qYoMNJiA77ozLf4YVuLwFqr9FdcgNHcL1vaw-r6WzOdLJXgMxqPHobnk40ciEeGyGIt1ah0WqX94shoU95LoZh5hPzPQDB-aksDJk_jJuZezsK4OOpHH1VRCJjJ0c9iMPI7Uq1O6LjdlEniBMKIillofYvQ9MDb6FR8llF63uZBBojPSuGbBJZczjE1fKfvOg4qIoksvrNlclsYZilIS3QWM5Mf1K_nILxgLAV8pvA8rTRnw6GiXEKK7hSuxLkbwva8RwvPtqWb_a2nmSaDvLToAaMhHC8cU5JlSzmXIXlh8eun8AHWL6USRkwMgWBsc1yqahKU2jgv4Q>
+
+
+원자와 분자가 어떻게 상호작용하는지 설명해 줘.
+Gemini에서 이 프롬프트 사용해 보기  
+»<https://c.gle/AHvOEDl-NxWg7nUimsYtu9vLbICsnCrCbVSFnR-E6mfXYMYE4qw02_oTDYZSDo0OR4_9NMjZlFO-ZHx57ZtgoCvSHQ7SVd2YeU6yCYE1yNmYaaWUHVqnj96u7AfBNZJJZWmuyQTlziP7XOHaLe0G6FVle5-ZRzpnjC6NQwXg4SdOnBClzMdNb-I978vwtBks6RYd1D-2wxs-wjxgEIojaqOoogxheu-XEouZOsg0qJ-YVCPkOpT91qWhuAf1Lp_fe-rNtQFfXjlmia0URc8YlPf-wBGch1qMrUsNbYmCcV0XXTbC18FEFcRDMVonr28tmcuQepwp4W9tZbqrp1FqQHilAkFYDPWC0eXhLWeecq4EzGsarB7tMQU_htmyaKyvD6zSeTwupUrnD_2RTHzw6Hpb_ZUuFyio62m9rqi0NET9stiNBPRMMQ8jCm0e1KDiQ3Zkrvz_DMNQNoYMREUZe4edl5bXP91hXw>
+
+Gemini와 대화하는 방법
+
+Gemini에게 최고의 대답을 얻으려면 다음 팁을 참고해 보세요.
+
+키워드가 아닌 요청 사항 제시
+
+Gemini에게 원하는 역할을 말해 보세요. 예를 들어 커리어 컨설턴트가 되어  
+달라고 말한 다음, 마치 친구에게 말하듯이 무엇을 원하는지 설명하세요.
+
+맥락 정보가 많을수록 더 나은 결과 제공
+
+Gemini에게 원하는 글의 스타일이나 형식에 대해 자세히 설명하고 예시도  
+제시하면 최고의 결과를 얻을 수 있습니다.
+
+대화하면서 대답 개선하기
+첫 번째 대답이 원하는 내용과 다른가요? 후속 질문을 통해 Gemini를 원하는  
+방향으로 이끌어 원하는 대답을 얻으세요.
+
+이러한 이메일을 계속 받고 싶으신가요?
+
+구독하면 다음과 같은 최신 소식을 받을 수 있습니다.
+
+유용한 팁과 정보
+
+글쓰기 튜토리얼
+
+모델 업데이트
+
+새 기능
+
+소식  
+받기<https://c.gle/AHvOEDk8qEPfHBd2E73w6ebK0-guOoB48hCqxXGTsTJEHadTr6Ot1qzWWgiM7FYkk90h3HvOSGlqt9KrXmnylR00Z2KeTWee2MO2Nt55S_SXOihJjI7XNincAD9fiZvFA_-4FfyF0uWnsxnXrdECPRpGT3WMXrlFHbzEmm2zI6N-ToMzk55hMlkbktBBTIGrGp6tZXAl-8sHrjXnZCxelE_-imZZ8k6uQUiio5LNS1MsICQrB1-i1_AGjimDRbc2nvq2iOXOA10evh1nL-b4CgHuzj6VqCOJvBS2EUv3FYFdhEJ1S7ICYv5-6xix_pby3BX3k9zS0oEYbvhz1l-YfflJDlTD3nc4oBSefrS2VBREX1mfMzs9brtDBuosFJUD-WS1ywJBIwZ1w5u1H4mmwODaRPWo147fZEOM17LKhcJHyYMC3LXVVJngYDThua80WJYpLYhVlskSsk6s4V-ivDW3BsXJNLWAwXBGA8PJ31US_b-R-eHbcvKUHWNC6mzMTLoS7LnqkM3HnHxg>
+
+
+
+팔로우하고 최신 소식을 받아보세요
+
+X에서 @geminiapp을  
+팔로우하세요<https://c.gle/AHvOEDmgrzFNj32tvOq3kZn7-KmvJ9xfTd4OV1itdbgY2eqUf7ZKA2zS0GDX0JyzjIC4PYZgOc09Jq7_QhVGYl4XIrwoyqzHUVC9jN9GYbDnNXVPot_ORE9-Vs4e0w>
+
+Instagram에서 @googlegemini를  
+팔로우하세요<https://c.gle/AHvOEDkBThFKIj-Esmp8bwsCYOD_oQd18O9bWxOCdnkcvzEmrYEeetsOv9EwIpVMEfiJx-kCO_-0XV27l0x0V-Vmbedn5SAWMJi1INNU6nRQHMGFzBpj9R2nqmH5jIEY5scuZP6HwwGERx1xdDvI>
+
+Discord에서 @gemini를  
+팔로우하세요<https://c.gle/AHvOEDnCRHUL4Ik9ksbOd_RrzItRP39QjjmKejlKfIjvnvc9tvCoAWq9ExkOviWplan8Px6_KnsvoS1UmHPGhh6gVWqxc4PyLw5JDfI0atrezNCqTZp8wJDdrJH4GRQC56wgGla9>
+
+
+© 2026 Google LLC 1600 Amphitheatre Parkway, Mountain View, CA 94043
+
+1 결과값은 설명을 목적으로 한 예시이며, 내용은 달라질 수 있습니다. 대답이  
+정확한지 다시 한번 확인하세요. 일부 기능 및 계정을 대상으로 지원됩니다.  
+인터넷에 연결되어 있어야 합니다. 이 기능은 일부 국가, 언어 및 만 18세  
+이상의 사용자에게만 제공됩니다.
+
+이 이메일은 Gemini 사용을 위해 가입하셨기 때문에 발송되었습니다. Gemini는  
+일부 지역에서 일부 언어로 제공됩니다.
+
+
+============================================================
+
+============================================================
+[메일 34]
+ID: 19c14916fa61354e
+구분: 수신
+제목: Need help importing data?
+보낸 사람: Neo4j Aura <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Sun Feb 01 2026 00:00:00 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+We're here to answer your data import question!
+
+
+
+ <https://neo4j.com/>
+
+
+
+Hi there,
+
+
+
+Are you stuck and need some help? We noticed you haven’t imported data into 
+your instance, so we want to make sure you have everything you need to begin 
+your graph project.
+
+
+
+If you’re looking to import your data, here are some resources to help you out:
+
+
+
+1. Check out our free data import guide 
+<https://workspace-preview.neo4j.io/guide/selection> inside of AuraDB.
+
+2. Watch this video <https://www.youtube.com/watch?v=2MaclMuLcBA> to learn 
+more about using the AuraDB data import tool.
+
+3. Review all the import methods 
+<https://neo4j.com/docs/getting-started/data-import/> you can use to import 
+various data formats.
+
+4. Learn about importing CSV data 
+<https://graphacademy.neo4j.com/courses/importing-data/> inside of our online 
+course,GraphAcademy.
+
+
+
+For more specific questions, be sure to reach out to our community 
+<https://community.neo4j.com/> or discord <https://discord.com/invite/neo4j> 
+with any concerns you have.
+
+
+
+Sincerely,
+
+The Aura DB Team
+
+
+
+
+ 
+
+
+© 2023 Neo4j, Inc.
+
+neo4j.com <https://neo4j.com/> | Privacy Policy 
+<https://neo4j.com/privacy-policy/> | Unsubscribe 
+<https://links.iterable.com/s/cu/Z9IsvpUc8M8RZ1oR55JDJz3fodn-H-IU22gCyz_Zq2IOlfpJMQ2LXKjbi2L4y3Q6dlIxQrJtNWetdfD2W9YkEnqGeLF8vUCFoUQ_akjQtiK0McKa8Tl1I0q9P8x15ye61fUS1Rk-FaUU8aWrGrUstGBL7pQIE_iHzQsf1wrl3KDidpZgNm9AYTLqd2o4bO4odUgE-TNPkaAtNm_Rs8IhsXAjIVF6IvTkjKZgJRZ5/GAeG6zaw5OI8lflxiMo0qqBMAQ1NiBCU/17>
+
+400 Concar Dr, San Mateo, CA 94402  <https://neo4j.com/contact-us/>
+
+
+
+
+
+
+ <https://www.facebook.com/neo4j.graph.database> <https://twitter.com/neo4j> 
+<https://www.linkedin.com/company/neo4j> <https://www.youtube.com/neo4j>
+============================================================
+
+============================================================
+[메일 35]
+ID: 19c11404eeb0be4d
+구분: 수신
+제목: Gemini 웹 앱을 사용하고 계십니다
+보낸 사람: Google Gemini <google-gemini-noreply@google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Sat Jan 31 2026 08:32:32 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+웹에서 Gemini 최대한 활용하기
+
+Google의 AI 어시스턴트, Gemini에 오신 것을 환영합니다. Gemini를 활용해  
+마음껏 창의력을 발휘하고 생산성을 높여 보세요. Gemini 웹  
+앱(gemini.google.com<https://gemini.google.com>)을 이용하여 글을 쓰고  
+창작하고 학습할 때 도움을 받을 수 있습니다. 웹에서 Gemini로 할 수 있는  
+작업에 관해 자세히  
+알아보세요<https://support.google.com/gemini/answer/13275745?hl=ko>.
+
+Gemini가 데이터를 처리하고 다른 서비스와 함께 작동하는 방식
+
+Gemini 활동 및 사용자 관리 설정
+
+채팅, Gemini와 공유한 자료(파일, 동영상, 화면, 사진 등), 오디오, 스크립트,  
+Gemini Live와의 대화 레코딩, 내가 제공한 의견, Gemini를 통해 방문한  
+웹사이트의 정보, 제품 사용 정보, 위치  
+정보<https://g.co/privacypolicy/location>는 Gemini 앱  
+활동<https://myactivity.google.com/product/gemini>에 저장됩니다(활동 기록  
+유지 설정이 켜져 있는 경우). 이 데이터는 전문 교육을 받은 서비스 제공업체의  
+검토를 거쳐 Google 서비스(Gemini  
+모델<https://deepmind.google/technologies/gemini/> 및 기타 생성형 AI 모델  
+포함)를 개선하는 데 사용됩니다. 또한 설정 및 지역에 따라 사용자 환경을  
+맞춤설정<https://support.google.com/gemini?p=gaa_on_personalization&hl=ko>하는  
+데도 사용됩니다. Google은 서비스 개선을 위해 사용자 활동을 사용할 때 인적  
+검토자의 도움을 받습니다. 검토를 위해 채팅을 서비스 제공업체로 전송할 때는  
+개인 정보 보호를 위해 먼저 계정에서 분리합니다. 언제든지 활동 기록  
+유지<https://myactivity.google.com/product/gemini?utm_source=gemini> 설정을  
+사용 중지할 수 있습니다. 검토되거나 사용되기를 원하지 않는 정보는 포함하지  
+마세요.
+
+다른 서비스와 연동되는 Gemini
+
+Gemini는 Google 지도, YouTube 등 다른 도구, 앱, 서비스에서 실시간 정보를  
+가져와 대답할 수 있습니다. Google Workspace 및 YouTube Music과 같은  
+서비스를 연결할 수도 있습니다. 도움이 되는 연결된 앱을 찾으면 Gemini는  
+대화에서 얻은 정보 및 기타 관련 정보를 해당 앱으로 전송하여 더 관련성 높은  
+대답을 생성합니다. 설정에서 앱을 관리할 수 있습니다. 자세히  
+알아보세요<https://support.google.com/gemini/answer/13695044?hl=ko&visit_id=638633132691845063-1690936925&p=faq_extensions&rd=1>.
+
+알아 두어야 할 내용
+
+Google 정책 또는 관련 법규에 따라 콘텐츠 삭제를  
+요청<https://support.google.com/gemini?p=gemini_pntos_removal_request&hl=ko>할  
+수 있습니다. 또한 정보를 내보낼<https://takeout.google.com/> 수도 있습니다.  
+Gemini의 대답을 의료, 법률, 금융 또는 기타 전문적 조언으로 신뢰해서는 안  
+됩니다. 의견<https://support.google.com/gemini?p=give_feedback&hl=ko>을  
+주시면 Gemini를 개선하는 데 도움이 됩니다.
+
+참고: Gemini  
+앱<https://support.google.com/gemini/answer/13594961#privacy_notice&zippy=%2Cwhat-are-gemini-apps?hl=ko>에는  
+Google 서비스 약관<https://policies.google.com/terms> 및 생성형 AI에 관한  
+금지된 사용  
+정책<https://policies.google.com/terms/generative-ai/use-policy>이  
+적용됩니다. Google에서는 Google  
+개인정보처리방침<https://policies.google.com/privacy> 및 Gemini 앱  
+개인정보처리방침<https://support.google.com/gemini/answer/13594961#privacy_notice?hl=ko>에  
+설명된 대로 사용자 데이터를 처리합니다. Gemini는 인물 등에 관한 정보를  
+제공할 때 실수를 할 수 있으니 대답을 다시 한번  
+확인하세요<https://support.google.com/gemini/answer/14143489?hl=ko>.  
+대한민국 사용자에게는 대한민국 위치 서비스  
+약관<https://www.google.com/intl/ko/policies/terms/location>이 적용됩니다.
+
+
+© 2026 Google LLC 1600 Amphitheatre Parkway, Mountain View, CA 94043
+
+본 이메일은 Gemini와 관련된 중요한 변경사항을 알려드리기 위해 전송된 필수  
+서비스 공지 이메일입니다.
+
+
+============================================================
+
+============================================================
+[메일 36]
+ID: 19c078096a267292
+구분: 수신
+제목: Webinar: Build Smarter GenAI Apps With Neo4j
+보낸 사람: "Andreas Kollegger, Neo4j" <webinar@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Jan 29 2026 11:06:33 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+<https://message.neo4j.com/dc/vsHuxQB9VB1_iHYldCUVXoQO-xFv7h9Rzxh49tvoRqCZ-GEkB6o_gOv1XGy1dltouDPnxxmTaiXRH3Q5JMKVzHsfuZER0UK1WY41qsdsfsw=/NzEwLVJSQy0zMzUAAAGfpnlGJDOYvvCFUoJsEtMPocAg43BpLc637UTNG4TXqHmJDu51vFsEEnUIZYYie885xrOAs8A=>
+Build Smarter GenAI Apps With Neo4j and GraphRAG
+Tuesday, February 10
+9:00 a.m. IST | 11:30 a.m. SGT/HKT/CST | 12:30 p.m. JST | 2:30 p.m. AEDT
+
+Hi 인선,
+<div id="jeto-root"> <p>Build GenAI applications you can trust by powering RAG with knowledge graphs for deeper context and real business impact. This session provides practical code examples you can apply immediately, along with best practices from AWS and Neo4j experts for building reliable and trustworthy GenAI and agentic apps.</p> <p>You&rsquo;ll learn:&nbsp;</p> <ul> <li>Why traditional RAG falls short when it comes to accuracy and trust</li> <li>How to combine vector search and knowledge graphs for rich context</li> <li>How to transform structured and unstructured data into connected, AI-ready knowledge</li> </ul> </div>
+Save My Spot <https://message.neo4j.com/dc/vsHuxQB9VB1_iHYldCUVXoQO-xFv7h9Rzxh49tvoRqCZ-GEkB6o_gOv1XGy1dltouDPnxxmTaiXRH3Q5JMKVzHsfuZER0UK1WY41qsdsfsw=/NzEwLVJSQy0zMzUAAAGfpnlGJDOYvvCFUoJsEtMPocAg43BpLc637UTNG4TXqHmJDu51vFsEEnUIZYYie885xrOAs8A=>
+Happy graphing,
+
+Andreas Kollegger 
+Director, Developer Advocacy
+Neo4j
+Want more webinars on-demand?
+
+
+Watch our large range of webinars on your own schedule. We're constantly adding new content and topics range from business use-cases to technical demos.
+Watch Neo4j Webinars On-Demand <https://message.neo4j.com/dc/tkdL1LgnFRJjCDlqRdJWrkmqoTf4HV1rB8kPvm7nAVGHNC88gWEB9v7bD5G63tod8Y1l-5bHpQQOrTGPWX8PMV1ViSeDfFV0uignPNvMJE4=/NzEwLVJSQy0zMzUAAAGfpnlGJDOYvvCFUoJsEtMPocAg43BpLc637UTNG4TXqHmJDu51vFsEEnUIZYYie885xrOAs8A=>
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfpnlGJa8khpvATXzt97FsAiubVSGprJsbnIhMao6xd6-8HhTJ8hbgOwyUd_ZOtIzj4e6Cqws=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfpnlGJWyROJLL6AOghm9loDWJ4BXceTVdG2o2CHjWIZab_8sApu0dfb83ep9QrKV19Y1nF_M=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfpnlGJV3FnOmizKIYw-mV9j-qibkeaBErHmpPX-jtgGh2lyexFqM9xGFD-uPG_2yTYUf7HUI=>    <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfpnlGJTJHSpl18K22Xinm7v65YI5HtjnrCVm65S7XFpAe3qMONyWmqhhrMp9mYTb5GUlQgHU=>
+<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfpnlGJcDnK56DXUb_xUQa_QZhW2qJm_GcRgBZLLO39-W1lRbOYOUbtk3sdHgOXvHfKL3LB6U=>
+© 2025 Neo4j, Inc.
+ Terms <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfpnlGJR0-gyoQC9n_uw_94RzjIxzyBqudXuLM5uwCfOAoroKDIsHH6cK_DW7DM2ml0JUcya8=> | Privacy Policy <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfpnlGJTHpzyC602cq97UDgSPGBi1v-UB5A1y1U0zy5w2bE6JlOVRvamlZDIdhSRd36PvjRDE=> | Manage Subscriptions <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfpnlGJQSb2kJe2el_i31bdhnEDmzGFHSwP06c_zX_cQniUZFBt_bTZ57H4jZ5KXca97ikjNY=> | Unsubscribe <https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGfpnlGJVUZXBebNhe4mv9Arn-LxIcs2nRfjlmdlIBmtUDYjfTWfcrQFBKz26YE3Y542wY7nKE=>
+ 
+ 400 Concar Dr, San Mateo, CA 94402
+
+This email was sent to suntest225@gmail.com. If you no longer wish to receive these emails you may unsubscribe here: https://go.neo4j.com/UnsubscribePage.html?mkt_unsubscribe=1&mkt_tok=NzEwLVJSQy0zMzUAAAGfpnlGJbLmG7SIgONYDkplfKWjo-0PE966nQjpE6CyeH1vQleuMNmAmBuw1MxebCAA3lUABVUXLyzZVpT45UER-g-yW9wbmp2M9b1aU27Nv1NY8RQ.
+
+============================================================
+
+============================================================
+[메일 37]
+ID: 19bfff8143fc8b60
+구분: 수신
+제목: From Entities to Connections: unraveling graph data modeling
+보낸 사람: The Neo4j Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Jan 28 2026 00:00:06 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Learn about graph data modeling vs. relational data modeling
+
+
+
+ <https://neo4j.com/>
+
+
+
+Before loading CSV data into your instance, there's one more crucial step you 
+need to take to complete the import process: data modeling.
+
+
+Rather than creating a model consisting of multiple tables and JOIN operations 
+using index lookups, data modeling with Neo4j works differently using 
+index-free adjacency. Start by identifying nodes and their respective 
+properties, and then define the relationships between the nodes.
+
+
+Check out our docs below which cover data modeling in more detail:
+
+Data Modeling Documentation 
+<https://neo4j.com/docs/getting-started/data-modeling/> 
+
+
+
+Graph data modeling in action
+
+Learn how Threatmapper, the fastest growing open-source security platform, 
+created a flexible schemaless data model to detect vulnerabilities across 
+100,000 Kubernetes nodes and EC2 Servers whilereducing resource usage by 70% 
+<https://www.deepfence.io/blog/scaling-threatmapper-detecting-threats-on-100k-servers-and-beyond?mkt_tok=NzEwLVJSQy0zMzUAAAGMjOTUqNV8zkQ48QIGML0WncTg8RGw8Yli0VruBu0k1OqpQLGI6fNqGxv04-pLsyGRytR0pdkuY_ihknPqXiPvtjDOXooyY0a0Cvy7gUwIEUBWIKM>
+.
+
+
+
+
+If you need help, reach out to our online community 
+<https://community.neo4j.com/>, refer to our documentation 
+<https://neo4j.com/docs/>, or reply to this email with your questions. 
+
+
+
+Sincerely,
+
+The AuraDB Team
+
+
+
+
+ 
+
+
+© 2023 Neo4j, Inc.
+
+neo4j.com <https://neo4j.com/> | Privacy Policy 
+<https://neo4j.com/privacy-policy/> | Unsubscribe 
+<https://links.iterable.com/s/cu/4FYAFVgbL7XloVOuCtSoHV9zaFNMeZQ1p-c-MTGtU3uHgwmJm4Hs4FGZX9H8XQglwJfS8FR_mhgNzgP9TPu2J51GgCdh5CmPJ8BR1e_TLzaVh9dK6jJZq8QsMwp3huUuOmnH3ScH7THSj66NhLjCbCqx3Q1FXPIxvnOpoTBEMjprrwhKR6n2AMN6Llym467xz5nkk0wynTKONglgtTQteWYPob4HechXDkUqiAZG/OxiqwGN0-7D--0mZoJaYbJsm3vTVAdfx/17>
+
+400 Concar Dr, San Mateo, CA 94402  <https://neo4j.com/contact-us/>
+
+
+
+
+
+
+ <https://www.facebook.com/neo4j.graph.database> <https://twitter.com/neo4j> 
+<https://www.linkedin.com/company/neo4j> <https://www.youtube.com/neo4j>
+============================================================
+
+============================================================
+[메일 38]
+ID: 19beb5eb19587e67
+구분: 수신
+제목: Expand your graph knowledge
+보낸 사람: The Neo4j Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Sat Jan 24 2026 00:00:08 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Our docs, video tutorials, and our online course are here to help you along 
+your graph journey
+
+
+
+ <https://neo4j.com/>
+
+
+
+Regardless of where you are along your journey - whether you’re still learning 
+the ropes or ready to start your own project - we understand certain graph 
+concepts take time to master.
+
+
+
+With that in mind, here are some additional resources to help you along your 
+journey:
+
+
+
+
+Getting Started Resources 
+<https://neo4j.com/docs/getting-started/appendix/getting-started-resources/>
+
+Documents on graph concepts, relational vs. graph databases, Cypher, and data 
+modeling.
+
+
+Aura DB Tutorials 
+<https://www.youtube.com/playlist?list=PL9Hl4pk2FsvVZaoIpfsfpdzEXxyUJlAYw>
+
+Learn how AuraDB works as you watch us import, model, and query custom 
+datasets.
+
+
+
+
+
+
+
+
+ 
+
+
+
+Video
+
+
+
+
+Learn how to import data into AuraDB using our data import tool:
+
+
+
+
+ <https://www.youtube.com/watch?v=2MaclMuLcBA> 
+
+
+
+ 
+
+
+
+If you want to learn about graphs in an interactive fashion, check out our 
+free online developer course,GraphAcademy. This covers everything from graph 
+fundamentals, all the way to using advanced Cypher to query your data. 
+
+
+
+Explore Graph Academy <https://graphacademy.neo4j.com/?ref=redirect> 
+
+
+
+If you need help, feel free to reach out to our online community 
+<https://community.neo4j.com/> or refer to our documentation 
+<https://neo4j.com/docs/>.
+
+
+
+Sincerely,
+
+The Aura DB Team
+
+
+
+
+ 
+
+
+© 2023 Neo4j, Inc.
+
+neo4j.com <https://neo4j.com/> | Privacy Policy 
+<https://neo4j.com/privacy-policy/> | Unsubscribe 
+<https://links.iterable.com/s/cu/NNAVudVrokFoopreVTyFAX0MhVYZltk1p4XZSYH3V3Dfy-xFHKNo7SIl0RwNjS3KQ2vApYNWdB-mGjLi53UE2RSqSJmHGvc_06hdkk5XxTaF89AqUbR0oG_JsswnLpyI-6pE6FGchN7N8_YoucP45OYNubjWma5Tg-epv4xx1BGSJ1KlFWoTgonql02m9Wbmq_SAdItk5ildYKWVDnQxhvOuN0VZTUm14fVycvqM/_L0vcAhZEoa9Ea8HfzdzG3uci-CiMUz6/17>
+
+400 Concar Dr, San Mateo, CA 94402  <https://neo4j.com/contact-us/>
+
+
+
+
+
+
+ <https://www.facebook.com/neo4j.graph.database> <https://twitter.com/neo4j> 
+<https://www.linkedin.com/company/neo4j> <https://www.youtube.com/neo4j>
+============================================================
+
+============================================================
+[메일 39]
+ID: 19be45751f50faf3
+구분: 수신
+제목: Hi suntest225@gmail.com, need help setting up your first endpoint?
+보낸 사람: ngrok team <team@m.ngrok.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Jan 22 2026 15:12:45 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Hey suntest225@gmail.com,
+
+Our last email showed you all the ways you can get connected with ngrok. If you haven’t gotten an endpoint online yet, we recommend starting there.
+
+Now that you’ve gotten more familiar with ngrok, let's go back over a few steps to put those nagging "is my endpoint exposed to the entire internet?" and "i'm tired of wiring up my services with auth for the nth time" thoughts out of your head forever.
+
+- Explore examples (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bJC3pyd0W95jsWP6lZ3nZVPvvwh3-XSbcW4zytds2tsDqdW65JnZr99SxZHW6jPM2W2v66zNW7VST2r8Z9CqkW5FpccH6ZMt1TW43LSkM6Fpkw7W67Xq2p8TBzwNW6xktlq1p3GQzN1366y6W5vvGW4c6lBQ7r9wwsW8hjrDs3fzlpLW2yBqks3W2sX-VjB3HP2HPxtjW5vDKSZ7dx4F0VfTqwJ26STKPW1p1qtK827Zc4W6hql8v2SnwttW3f1bBv1m012HW5-D4c82VDJRFW7RGCXD3cyN9lVhzRl21gq_fmW8CwvxG4VPQKQW2fjyB55THDk5W1nHgVG76XjH4W5lPK_74y3RlyW6vSzwm4ZRF1YW52Tzwp8RZb1mW8g3Ttn43_r2XW5-6D_f6RBNSFf1trBfg04 ) of just some of the network shapes you can build with ngrok.
+- Try out your first traffic policy (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bGx5n4LbW50kH_H6lZ3p9W4YpvWf2fysfVW89NKh_3FRvHgW2QHKPr3GbvFdW6YF6sh3lDlrPW8TyGxB4xy0tFW2S9BC194N_ymW4C822B1VFf4gW140DFh6M8D9jW7G5-q58_Q_8vW6lnRJ16nKtrsN6lB673y9bsLN3XGv1YrpWXGVH_5JF26JY2vW74XCfN8hkQsyW3Pj6R_60CGpHW7t1MW98c-TtDW1Y5MTV1R9glKN8wRQTn8H_FWW8msqG-9jRkd3VT_4SN3trD-DW1xZsn08Px6XtW5cDl663lsTHdN1_kYYzkCPTRN3yrg98-83RGW55LMDG53fP4hW4H1psq4k89_TW479zHH2nnrFXVNqDTM310dDXW6khdtz41jvmrMSkCb692GcsW74W90f1qCtB-W738Drr5lgX28f255ljj04 ) and then offload all your worries about OAuth (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bJC3pyd0W95jsWP6lZ3lHW8NymYM1LVKLqW5VmZpG728KT3W4SZR8R5McQcHW1vWsQQ6gTJ_GW36cfgP5-2n7pW2TRKCZ1WnjcdW4lCcrQ6Jwks6W2n1xqS6CS2DnN3x7SxpYvy4fVzDLDn4JS8NKW9jLpMj4LkJrWVjl6qS47KJm6W232Jxw5sppNFW6-nj2K2mBc1HW7sQ_vj56_LYCW7HRN613_6WG8W3tJQl_38NkFKW1y4TKm871j9bW6M1yzV1PtPdqW6Ms-hg7FR75KVRJvV739MnzBW5V14_F5n810yW6HHg0Q30GkzQW22TxrZ6_Y3YQW8FTmTy1YGjpjW4hj1C056qpqnF5CC_w0bdZyW865tl560FVRdW4VHqvn3HvlHrVFF7Q540m0vYf12_pz004 ) , IP restrictions (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bGx5n4LbW50kH_H6lZ3lyVXhhzF31s72VW36hQzt4-zZLcN3gRDtS-DqGTN7XJK9FydGD-W8s4-h56Ry2b6W8BQ7DY5GTq8XW2WfnG62DsGb2W8nLDW67sxsJ7W2FrLG826KblGW24GdPg3KbXSnW3RTQHG6j0XRHW5-yRDL7WMBLZW6tQPc-49F5l5W14SxV44N1P4_W2xcthL8ftdv5N1TqKwCsH3dBW8mHN7Z7m0VPdW4L7HHC8vJM-0W3fW6zf84yjN0W9c8S934zqyMfW3PyzF-1NW8ZSW1w-hyz2Vk_H5W32sNQC62MN_7W6Bp6m88CW-SWW4dnPrB5BMj_NW5Mjsyn7b53xNN94VQtx7l96BW2L4FGS4wyR9GW4dMX2r4jWhLCW4_rLgZ77gN6VW7BsLFx5THn3sW7HTr9n30lbYqdty9F804 ) , or rate limits (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bJC3pyd0W95jsWP6lZ3kNW5sQ9MH2y7W1GW2FrXL02flHGbW20cJR13kRCFLV6F36z42GSxSW6d-3pm8DD_YzW2K0cGM3K-5-TN7NDKJgkqtp7W9bXxMT2mZy_tW3yykSs99z99hW8854zW2NPD_PW7QDh6D4HSZTCVGtF3L9lsFPyW3X6qzK1wQTllW4hr66K7B_jQkW9lmJ_H6MGmLqW1gjWL77K55xgW45pK3T4lMF7YW1Fhp2W4zrb6bW5Mb6M_7qYfgWW9d9PKp50hPSzW8m6hkG460dvRW4l95lC6NwzGgW8s3NVD6NLzHGW88DmqW98VgBdV5gnkb13tKbTV_Xdjj6RBZF4W6B50Bc1qbJrSW55P6jC7j5TRRW84ct8Z6shJlMW91f5LV2WFLNgf8ybh6C04 ) .
+- Grab a static domain (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bJ03pyd0W7Y8-PT6lZ3mtN1DVWP85kGXlW7Z3g415R5LYrW6FnGFc1qSMdYW7-NB9S25mwvnW5Vy9X32NcGY1W7fCPwp62YjwjN92R0rYqRNf_W6DQljq6MTkmmW3NJ6Z02nsdpDW2hkN8r1MZqqkW3vZ7qn8DKjBmW3PCLVN8xtt-1W8YYLgk2j4_CwW3BHdQg95wF_4W7RnS0m8kMpy4W75Td8r549HzyW8y0H3N8425C4W4k7ymf6l-FhNW6DVKST5R5tLcW66VPMw7sY8G4W1d0jp55VcHSRW6Gjx_n2LxSVYVRYbfn2QBP9pVv_hrz6d1f6XW1_kMbY2J12BBW3j7Qh03jpzF4f8KPPhz04 ) to keep your APIs or apps in one easy-to-remember place.
+
+The docs (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bHK3pyd0W7lCdLW6lZ3nbW42Ssmy7lm3MkW3cmNRK2xqKKLW393JzK4bBBzJW49NCmx8KrMrqW2W7Pzy5zWc_DW3jHxLr16jKmBW8gb5Zv1nMNZHW8rQsy41s_Ld5W8w4Wpq7kVr6rW9cfYh62ZyKqHV5LscX6wzq8SW7gtmrk3CRMNMW8M6XvD53fRCjW19jwV71WPh9PW1sB1hG2GcgZ-W2b1kGC4S6_NzVtRxQP4PSnNYW34N_b35vjtPQW8Pzb1C59y4YwW652Pbb53T2bxW7DBxQL42wghNW6G77CK2pgVzPVChMdR3Ks5zNW5qvrtZ26NPMMf3By7Gv04 ) show off even more quickstarts to follow and dials to turn.
+
+You can always hop on Discord (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bHK3pyd0W7lCdLW6lZ3m8N7Rmr_Xs5YgdW7L_Ykf2RvFFqN8Jz1hl5PgNdW5LLN644LP367W5KwYN-8pLJscW3nMzWf483566W7fKdj28Z5WfQW4jHS__7s0X1HW42NVzQ5LcbRWW3NTKL26F4CLrW8fzrBT8smZ3NW30YL5p7qwzvGW53LWMj7g4DFSW8cDBw67MHlMpW820_6y8J1ghwW6nbnpM4TYHK7V4DDrC8d8nzpW4hbQxd7RhSmcW7c_0Mm3ljZtxW6fXF_t8lZ807W37gRzy7C9_59W8fSYGl87zpLXN4cD6S2LSC02W9lKB424Sqq7Zf98980M04 )  to chat with an ngrokker or someone else who's already made all their networking woes go bye-bye.
+
+<3
+Team @ ngrok
+
+View in browser (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bHq5n4LbW6N1X8z6lZ3lPW9bYjLb5QW6LZW8mqTpY6Dl8qCW84L2573nfL3vVG4f245vt3d1W1HKR2Z4mXNjFW6B5ngN8R35YRN3mN53rTHtZ0W3Ghn8h1XK0lxW1Ppbfj6nj1GqVcpmnL5WR-grW5W-YLY7r8FrkVxnRfd6p09vVW3-pvSm995jx3W3VGzg47_31VyW289nwJ4h6XQ7W2Pkqtp2n5zXnW40-rsc92SJ8JW8dtSNG43xFY_W8mPqP-15L-nrW4FPXfJ3Dx1k4W22TSGP9gNBJQVb74_k6jT3JpW7nt5pn6nbhTLN6nw6kW5PGlNW1Bf0GF5W5MXLW2VFwMz1BKgkDW6XwQhf1gHVQ0W3mxQFW2y69Z3W96jGD_7bytvhW5JS-5S51KQzWW7DXzlR4CqtcyW7WtjJs2hQVJkW4yLKdQ86_lHBW5KLmYZ6p7c0CW5qFRTh3xvdbQW3DL1Kc1HcWFtW5rhxNk5YkfqtW471g_329Q0hrf86G5cl04 )
+
+GitHub (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bHK3pyd0W7lCdLW6lZ3p-V6rHfT6bbDvMVghrFy45tkY_W4DrGrp67NM7LW4SHxVN7nw1N_W6RLXwT4PkJY_N8nPnwTs7ggrW1dp-p28p2P1nN6ZDllKVfzfxW33TkK294Ld2dW42x0-H5Lg2V5W2c4LP92Js4kNW5KHCg76YCnFyW5zGF_N2wqfDvW19ZWWV5JgV2dW4FDC9m2RnR3XW73WG1Q2XgsGdW2q3Ct58p4_bPW7PYx_F8TMq8kW5v01f790rJkgW6R55SK2BqP_jW6SnMxL3VNwqnW5CFpCs9jqgFbW2-PVnp8Kq7PKVt7_4v78X6Xkf46B8gH04 )
+LinkedIn (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bJ03pyd0W7Y8-PT6lZ3l8W45V3kh8l6yf-W3-t47688Y5NJW6cP4FQ8TZQhWW7330215qrzF0W2CQr881vj-j-VsZ0YS3R-M3NW28FWdP3WDxPgW26m2jl1kBZynW3XVVZC8Lh2c3W3FSvHz7M32dYW3_8Swm1Lk2Y5W5_rrkc3SCr78W3qZ8K-3lLk53W8PD1CW1n9BM2W4MZb-f6QnQvXW1xDBF45rnbMhW59Hs-Q7cPFrjN38-Bm-rwhrYN4r5VFPmQjvTW8DM6ql8KDVjfW1ggmHY4FfKhgW68jscw1nzGnYW1QwMRt4C0kVqV_hdzQ5sHNB_W5yWlHC6mqY6QW4dBJtF2VYKntdSddtv04 )
+X (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bHK3pyd0W7lCdLW6lZ3mbW3MZQLq24xzK5W2JKQj25gdgssVdgQxt1Wm33xW8tTtdb2rGs75N9frFBHfRjX3W7SYlXB9bnKSpW9fndzB3R4yfXN81hRYr8R4bCW5XBkFF6DZLvXVbk7pn6pmNKvW20bX-W2jy1XrW6RD_RL9hlpwlW7xy7ZH8h90RGW6bnNN0838Ss3V7w9YX6Tvn_9W4WT3SW61Vm_8W6GCPV71tNlYWDKwrnN60CSN1HzfqW4hFJnW4rQ9_m227GhWW3KJHR_8lw5whVV7PQN9kQ9q-W35cSTn2dRgx6W2_Lymw5wZ65pf6cKV-R04 )
+YouTube (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VVpqZv6H42H4N3lSK7yxhSZhW6rg8CD5JBKMsN9h9bJ03pyd0W7Y8-PT6lZ3mtW6-PZJw3__q-6Vl8QSt2gGyCLW6Vx1bg6nW2FNW7xqh__2wZWXgVgYJ6f8sl9JGW8HfcVX7cfpNZW2zQQNG2tJS-kVY-s9d30tDnLN5jw0lThj3nxW55C_Nq5pfKgwW8jMfHp4C9mwjW4zFfD93MNv0NW2mh86T4Ynqv4W1CrxXG8FJ3sWW7LdGxC8cdfRXVd1X0Q3kX6qsW16lw7W20tgp0VnDRKm1GGvQbW5rwb-_7hSTWGW29Zbpg79yjvjW41bYrj5NjMVFW7ktNWZ8VysgyW1VN7r87NDF2TW2QN2zq93XSgrW953qzQ8WBlYcW6Tjm4n2mVmh9f3R5MDl04 )
+
+ngrok Inc., 2261 Market Street , STE 71467, San Francisco, California 94114, United States, 
+
+Unsubscribe (https://hs-21124867.s.hubspotemail.net/hs/preferences-center/en/direct?data=W2nXS-N30h-B6W3_VrnL32bqvWW4hvbpX238zVjW3DTzyG4kMyM-W3j6S0X1Zt0t7W3F9ZM21VtmFTW4hFxZL1NBTd9W3XMKYz1Z9BHmW2MWdxy3DTtVMW2sKgK73P98GWW3T23xK2KXJ-nW2PtYQ23V-dkvW4krZ3L4pkJj5W1SdLkB2RTx7sW3_vF5x2Rs6WbW3Y2ZKp4hdsz-W32DLwj3M6WyGW2zsl7h38jtXdW2szmrz45xq5DW1NdGHD3C0gZxW2My6lh2PCbbgW1NzD3B2RwWkhW3JXr1q36p847W3T5pHF4cSH-2W3QP6Rf1BBYvSW1Lff0R3JZwXwW1VdX4b1ZvGHjW3K7-rm3XGjSsW3NTY353SzJ4KW21sXmj3hYVtcW49NmJf2qSYtlW4kcn903M3CfGW3Vyh8B3Swq0GW2KPZXr3-1yvcW1_r7312xRXXqW2MHcz72nT5W8W329YNR2F_p-QW2Ww0rR3M7Lf1W2-N6yy1NkCj1W4cs8fy45S_vzW2B0JKT34yKXWW30Hnlp3P28m_W30JcpJ43y4RKW3VNnS-4tx5BqW3QDrcf25k4_gW1YX1xb2FvNVXW2xH4rD3X-TjlW2zFKw82s-LfLW1Nz_Zv3df-ZhW3C7jss2KwCnlW3F4F1w2WywbLW2HTwc-34pNJdW2p2Z193Ccw2tW49RkcT2KVFjkW47QD_D3gsZgZW2KGBHL4hFW8S0&_hsenc=p2ANqtz-_7sTu0lasdFsQ3gXrA5OVuEHVR_mxiPrV71WAf3anX-oM4P4c05xrjtNlqaU2RbF9KVou33i3Oo6wddST7dBmrdWxXMg&_hsmi=375804271 )
+Manage preferences (https://hs-21124867.s.hubspotemail.net/hs/preferences-center/en/page?data=W2nXS-N30h-B6W3_VrnL32bqvWW4hvbpX238zVjW3DTzyG4kMyM-W3j6S0X1Zt0t7W3F9ZM21VtmFTW4hFxZL1NBTd9W3XMKYz1Z9BHmW2MWdxy3DTtVMW2sKgK73P98GWW3T23xK2KXJ-nW2PtYQ23V-dkvW4krZ3L4pkJj5W1SdLkB2RTx7sW3_vF5x2Rs6WbW3Y2ZKp4hdsz-W32DLwj3M6WyGW2zsl7h38jtXdW2szmrz45xq5DW1NdGHD3C0gZxW2My6lh2PCbbgW1NzD3B2RwWkhW3JXr1q36p847W3T5pHF4cSH-2W3QP6Rf1BBYvSW1Lff0R3JZwXwW1VdX4b1ZvGHjW3K7-rm3XGjSsW3NTY353SzJ4KW21sXmj3hYVtcW49NmJf2qSYtlW4kcn903M3CfGW3Vyh8B3Swq0GW2KPZXr3-1yvcW1_r7312xRXXqW2MHcz72nT5W8W329YNR2F_p-QW2Ww0rR3M7Lf1W2-N6yy1NkCj1W4cs8fy45S_vzW2B0JKT34yKXWW30Hnlp3P28m_W30JcpJ43y4RKW3VNnS-4tx5BqW3QDrcf25k4_gW1YX1xb2FvNVXW2xH4rD3X-TjlW2zFKw82s-LfLW1Nz_Zv3df-ZhW3C7jss2KwCnlW3F4F1w2WywbLW2HTwc-34pNJdW2p2Z193Ccw2tW49RkcT2KVFjkW47QD_D3gsZgZW2KGBHL4hFW8S0&_hsenc=p2ANqtz-_7sTu0lasdFsQ3gXrA5OVuEHVR_mxiPrV71WAf3anX-oM4P4c05xrjtNlqaU2RbF9KVou33i3Oo6wddST7dBmrdWxXMg&_hsmi=375804271 )
+============================================================
+
+============================================================
+[메일 40]
+ID: 19be390c837427ec
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Jan 22 2026 11:37:54 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하지 않으셨다면 다른 사람이 내
+Google 계정 데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1769049474000?rfn%3D127%26rfnc%3D1%26eid%3D8248210475954710342%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9GJawZqaBtBm2WKUzaTbcdqN13ANPmDeeP_0NuX34d0YmWMsjGw4gMjEOLIdC-GoVadqwj3pEE_T2H4B8IwNhlS?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+clasp – The Apps Script CLI의 데이터 액세스 권한을 언제든지 변경하실 수  
+있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 41]
+ID: 19bdee72f40b8644
+구분: 수신
+제목: 인선아 안뇽
+보낸 사람: "김예은" <iwreau@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Jan 21 2026 13:53:58 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+안뇽 인선
+
+============================================================
+
+============================================================
+[메일 42]
+ID: 19bd6c524f35b596
+구분: 수신
+제목: Seamlessly import data into AuraDB
+보낸 사람: The Neo4j Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Tue Jan 20 2026 00:00:02 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Data import resources
+
+
+
+ <https://neo4j.com/>
+
+
+
+Now that you understand the basics of graph, let’s walk you through how to 
+import CSV data into AuraDB with our data import guide. To get started, head 
+over to AuraDB and connect to your instance. After that, the guides selection 
+screen will appear, and you can begin your data import guide.
+
+
+
+Quick Tip: The connection URI and password are inside the file you downloaded 
+when you first created your instance.
+
+
+Start the Data Import Guide 
+<https://workspace-preview.neo4j.io/guide/selection> 
+
+
+
+Don’t have any data to play with? That’s OK! We have a dataset you can use 
+inside the guide.
+
+
+
+If you find the data import tool isn’t right for your unique needs, here are 
+some other resources to help you out:
+
+ * Learn about additional ways to load CSV 
+<https://neo4j.com/docs/aura/auradb/importing/importing-data/> data into your 
+database
+ * Learn how to import data from a RDBMS 
+<https://neo4j.com/docs/getting-started/appendix/tutorials/guide-import-relational-and-etl/>
+ * Learn how to connect your application using a variety of programming 
+languages <https://neo4j.com/docs/aura/auradb/connecting-applications/overview/>
+For additional data import or graph questions, ask our community 
+<https://community.neo4j.com/> or reply to this email with any of your 
+questions/concerns.
+
+
+
+Sincerely,
+
+The AuraDB Team
+
+
+
+
+ 
+
+
+© 2023 Neo4j, Inc.
+
+neo4j.com <https://neo4j.com/> | Privacy Policy 
+<https://neo4j.com/privacy-policy/> | Unsubscribe 
+<https://links.iterable.com/s/cu/JvTK3YWoiokwEVVCzvMBoBFnWw4MnCwZ3prEFtq8I1w6C1GWg4kKmo1UX4ufrfCskf_ZwjaJKWDffQL9uFPDJ-uZWhBriHCYCpd8PNgth_XR4Z6tdie4qBk12B5H5DcKRSYZq-fKrybCthzuOb6_2BavTQRqgCtPVAK1LXHgzBOyuBKWx2VWmV5TMc_qmiT1pF7KsTtv0Q9Qt0cN5gjbW5Ay0eMFbWrcVxpXd80K/_Ni0be35BF9nFCjrcvYXaMOH3EPn4t8V/16>
+
+400 Concar Dr, San Mateo, CA 94402  <https://neo4j.com/contact-us/>
+
+
+
+
+
+
+ <https://www.facebook.com/neo4j.graph.database> <https://twitter.com/neo4j> 
+<https://www.linkedin.com/company/neo4j> <https://www.youtube.com/neo4j>
+============================================================
+
+============================================================
+[메일 43]
+ID: 19bd580a5948fc64
+구분: 발신
+제목: 한글파일 첨부
+보낸 사람: "문인선" <suntest225@gmail.com>
+받는 사람: "ddyr1554@gmail.com" <ddyr1554@gmail.com>
+참조(CC): 
+날짜: Mon Jan 19 2026 18:05:35 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일:
+  1. Stirling삽입.JPG | image/jpeg | 72523 bytes
+  2. 지금부터 LLM에 대해서 설명을 시작하겠습니다.hwpx | application/haansofthwpx | 82794 bytes
+
+
+[본문]
+부탁하신 한글파일이랑 사진도 첨부해드려용~~~~
+
+============================================================
+
+============================================================
+[메일 44]
+ID: 19bd57fbfaa7c6b0
+구분: 발신
+제목: 광고!!
+보낸 사람: "문인선" <suntest225@gmail.com>
+받는 사람: "ddyr1554@gmail.com" <ddyr1554@gmail.com>
+참조(CC): 
+날짜: Mon Jan 19 2026 18:04:37 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+광고메시지입니당
+
+============================================================
+
+============================================================
+[메일 45]
+ID: 19bd57f4b49fc710
+구분: 발신
+제목: 발신 pdf
+보낸 사람: "문인선" <suntest225@gmail.com>
+받는 사람: "ddyr1554@gmail.com" <ddyr1554@gmail.com>
+참조(CC): 
+날짜: Mon Jan 19 2026 18:04:06 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일:
+  1. 01.pdf | application/pdf | 648842 bytes
+
+
+[본문]
+pdf 보내드려용 ~
+
+============================================================
+
+============================================================
+[메일 46]
+ID: 19bd57e9e5e3bf2d
+구분: 발신
+제목: 발신1
+보낸 사람: "문인선" <suntest225@gmail.com>
+받는 사람: "ddyr1554@gmail.com" <ddyr1554@gmail.com>
+참조(CC): 
+날짜: Mon Jan 19 2026 18:03:23 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+발신하기 위한 메일
+
+============================================================
+
+============================================================
+[메일 47]
+ID: 19bd57666b86f19e
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Mon Jan 19 2026 17:54:23 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 Gmail to Txt의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 Gmail to Txt의 액세스를 허용하지 않으셨다면  
+다른 사람이 내 Google 계정 데이터에
+액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1768812863000?rfn%3D127%26rfnc%3D1%26eid%3D4377250579138919645%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9HWx2WO7WN8w7k5RsRVoyi_Spv47ARdCuZGnVNloHLJn4sYR_Dkyp9jZaVdgfwJcJ2r1kUx6y0W1EugUBRZRXw?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+Gmail to Txt의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 48]
+ID: 19bd573792bc066c
+구분: 수신
+제목: 테스트용
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Mon Jan 19 2026 17:50:51 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일:
+  1. pdf,메일.hwpx | application/haansofthwpx | 1472294 bytes
+
+
+[본문]
+
+
+============================================================
+
+============================================================
+[메일 49]
+ID: 19bd5725475363e5
+구분: 수신
+제목: 논문 첨부
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Mon Jan 19 2026 17:49:44 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일:
+  1. Your Smartphone Knows Who You Are and What You're Doing - Bloomberg.pdf | application/pdf | 2208472 bytes
+
+
+[본문]
+
+
+============================================================
+
+============================================================
+[메일 50]
+ID: 19bd571c09cc00e1
+구분: 수신
+제목: 한글파일
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Mon Jan 19 2026 17:49:00 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일:
+  1. PDF Editor OpenSource 종류와 특징.hwpx | application/haansofthwpx | 1170569 bytes
+
+
+[본문]
+PDF Editor 오픈소스 관련 한글파일 첨부 메일
+
+============================================================
+
+============================================================
+[메일 51]
+ID: 19bcc7867efdc7e8
+구분: 수신
+제목: Easiest way to create a graph database
+보낸 사람: The Neo4j Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Sun Jan 18 2026 00:00:00 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Deploy a graph database in minutes. 
+
+
+
+ <https://neo4j.com/>
+
+Hey there,
+
+
+
+Here’s an insider tip: there are many ways to populate your graph database 
+instance. A fuss-free approach is to useNeo4j Data Importer, a no-code tool to 
+load data in your database.No complex query writing is required. 
+
+
+
+To get started, watch this video on how to import a Kaggle Star Wars database 
+into AuraDB:
+
+
+
+
+ <https://www.youtube.com/watch?v=fdPWH4P4V5A>
+
+You can find sample datasets from Kaggle.com 
+<https://www.kaggle.com/datasets/?utm_content=day3&utm_medium=email&utm_source=freeflow>
+,Github repository, 
+<https://github.com/neo4j-graph-examples/?utm_content=day3&utm_medium=email&utm_source=freeflow>
+ our console or bring your own to build the graph model you want. your content. 
+
+
+
+ <https://console.neo4j.io/#create-database>
+
+Pro tips:
+
+ * Username will be neo4j (no caps). 
+ * Password is auto generated. Download the auto-generated password within the 
+.txt file for every new database instance you create. In the file, you’ll find 
+your database URL username, password, and instance name.
+
+Alternatively, follow the step-by-step documentation 
+<https://neo4j.com/docs/aura/auradb/getting-started/create-database/?utm_content=day3&utm_medium=email&utm_source=freeflow>
+ to create an instance.
+
+
+
+Help and support
+
+Reach out to the Neo4j Community, 
+<https://community.neo4j.com/t5/neo4j-graph-platform/bd-p/graph_platform?utm_content=day3&utm_medium=email&utm_source=freeflow>
+ review ourFAQs 
+<https://neo4j.com/cloud/aura/faq/?utm_content=day3&utm_medium=email&utm_source=freeflow>
+, watch ourfun dataset videos 
+<https://neo4j.com/video/discover-aura-free-with-fun-datasets/?utm_content=day3&utm_medium=email&utm_source=freeflow>
+, andshare feedback 
+<https://aura.feedback.neo4j.com/questions-and-general-feedback/?utm_content=day3&utm_medium=email&utm_source=freeflow>
+. 
+
+All the best,
+The AuraDB Team
+
+
+
+
+ 
+
+© 2023 Neo4j, Inc.
+
+neo4j.com <https://neo4j.com/> | Privacy Policy 
+<https://neo4j.com/privacy-policy/> | Unsubscribe 
+<https://links.iterable.com/s/cu/UlgZwFJ4pOrH_D5AVc-KMPifpVsGKHiRdIuJK_bS-RfpvCYGNXDZv97FDm5G6G21lHzy94V2d2ru3XSaSU2uj7UbbhfyvHGspfVMkFBmSkGokVCW152yx9NYYDet3dG4bBxon-fzNjDrjuor7mgm5Dw4KWGAl8plxyV0hj8plcJ3oEfSLN6qo-CNmnsVWPZdtetqt6VfAvXt4mlfjvroWTEAhBwi5108txRLd1oB/LKmrD5QoQF3mB9esrmHyLY5p_lGFbB-x/16>
+
+400 Concar Dr, San Mateo, CA 94402
+
+
+
+
+
+
+ <https://www.facebook.com/neo4j.graph.database>  <https://twitter.com/neo4j> 
+<https://www.linkedin.com/company/neo4j> <https://www.youtube.com/neo4j>
+============================================================
+
+============================================================
+[메일 52]
+ID: 19bc22bbdca61aa1
+구분: 수신
+제목: Unlock the Full Potential of Neo4j Aura with GraphAcademy👋
+보낸 사람: The Neo4j Team <aura@neo4j.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Fri Jan 16 2026 00:00:04 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+We're excited to have you!
+
+
+
+ <https://neo4j.com/>
+
+
+
+Welcome to Neo4j, fellow graphista! 
+
+
+
+I’m Adam from the Developer Relations team, and I’m delighted to see that you 
+have taken the first step on an exciting journey by signing up for Neo4j Aura 
+I’m here to support you as you move forward.
+
+
+
+I understand how daunting it can feel to start with an empty database and not 
+know what to do next. This is where Neo4j GraphAcademy, our free, hands-on 
+training platform, comes in. GraphAcademy has more than 20 courses with 30+ 
+hours of free content written by experts, designed to help YOU make the most of 
+Neo4j.
+
+
+
+Whether you are a developer, a data scientist, or just passionate about data, 
+we invite you to join over 70,000 successful learners enrolling in 
+GraphAcademy. We haveBeginners Courses <https://graphacademy.neo4j.com/> 
+covering everything from Neo4j Fundamentals to modeling and importing data, a
+dedicated path for Data Scientists 
+<https://graphacademy.neo4j.com/categories/data-scientist/>, and a Building 
+Neo4j Applications series for Developers. 
+<https://graphacademy.neo4j.com/categories/developer/> For those interested in 
+Generative AI, we have courses explaininghow to leverage Knowledge Graphs to 
+ground Large Language Models (LLMS) in truth 
+<https://graphacademy.neo4j.com/categories/llms/>. 
+
+
+
+I have personally poured hundreds of hours and expertise into GraphAcademy, 
+and with over 70,000 successful learners so far, I'm confident it will provide 
+you with the skills and confidence needed to tackle any data challenge.
+
+
+Complete courses and earn free swag!
+
+These courses will set you along the path to Neo4j Certification 
+<https://graphacademy.neo4j.com/certification/>. Achieving a Neo4j 
+Certification is a great way to demonstrate your expertise and share your 
+success with peers. As a bonus, you'll receive a free limited edition t-shirt 
+to celebrate your accomplishment.
+
+
+
+Join the community
+
+GraphAcademy isn’t just about courses; it’s about becoming part of a global 
+community of developers and data enthusiasts. It's about sharing, learning, and 
+growing together.
+
+Join our Discord server <https://dev.neo4j.com/chat> or participate in 
+discussions on the community forums <https://dev.neo4j.com/forum> to 
+contribute, share your insights, learn from others, and help us grow together.
+
+
+
+Ready to build?
+
+Login to AuraDB <https://console.neo4j.io/?product=aura-db>. Get started with 
+a Free instance, and scale as you need with our Professional tier.
+
+
+
+I look forward to seeing you grow with us!
+
+
+
+Happy graphing,
+
+Adam and the AuraDB Team
+
+
+
+---
+
+
+
+We're dedicated to supporting your journey every step of the way. Should you 
+need any advice on where to start or have questions, don't hesitate to get in 
+touch. Our goal is to ensure your learning experience is both enjoyable and 
+rewarding.
+
+
+
+
+ 
+
+
+© 2024 Neo4j, Inc.
+
+neo4j.com <https://neo4j.com/> | Privacy Policy 
+<https://neo4j.com/privacy-policy/> | Unsubscribe 
+<https://links.iterable.com/s/cu/nT-dNVA3TdTA1mh8gDiW-yg2ocZZTWbOoLD3RRDsM01lVRifS1HXhtjEyshhEVx9CSsL9qNYKTpXEx1wvHy4cVq00jY-_sVZ6Q2pETg3Imxr_YBr0hIMyRHOv5bcjYsiELhSEgIlHq6Wm8gMvAUkico3exzhOc1EQRD3jLNjR4MHVtuA_qmFRLQIZgC0b_v8G_f3ocNYmEiXgfTnJby-TfoaLkdMO5ULs_qznYOi/CrxoS4w5bY0POYcRJdJ_w0QlJJ5Uf5Pb/16>
+
+400 Concar Dr, San Mateo, CA 94402
+
+
+
+
+ <https://www.facebook.com/neo4j.graph.database>  
+<https://twitter.com/neo4jhttps://twitter.com/> 
+<https://www.linkedin.com/company/neo4j> <https://www.youtube.com/neo4j>
+============================================================
+
+============================================================
+[메일 53]
+ID: 19bc068963cac70a
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Jan 15 2026 15:47:17 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 Gmail Drive Cats의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 Gmail Drive Cats의 액세스를 허용하지  
+않으셨다면 다른 사람이 내 Google 계정
+데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1768459637000?rfn%3D127%26rfnc%3D1%26eid%3D4512037089979625266%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9Eny4ixvF5kaFOI_j4y7rYHhjsZI0rXFtOc_dyhO-3ZPlkflHQpUUxGqaDaDBP7sypHKLbLXdplDy3swDfzabM?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+Gmail Drive Cats의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 54]
+ID: 19bc02d5f5cafd93
+구분: 수신
+제목: Welcome to ngrok!
+보낸 사람: ngrok team <team@m.ngrok.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Thu Jan 15 2026 14:42:37 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+Hey suntest225@gmail.com, and welcome to ngrok.
+
+Over the next few weeks, we’ll send you some tips and tricks to get started and explore everything ngrok can do for you. If you’d rather not hear from us, no hard feelings. The unsubscribe link is below.
+
+You came to ngrok to get something online, like your AI agent (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR6P3pyd0W8wLKSR6lZ3kTN4Vjt6Kv5r0tW19VJNg17PgBKVVq7Yp5TFyBlW57VH_b7CWfGKW17R0NZ407TpmW6F1h2279FzPzW6nGPZD933ktjVflDkd5X60z0W89-B1g3SGsC_V18L2B8rtdgRW1dgl9m6XxjhfW2twpYz5MQ1k-W4QyH8z7h0KwvW5WxHfl3w73rhW8y6Cpq4VY19cW50x8-R7vB7ZzW3WSYGC2hp_SCW1N3d-L5mNJRpVBCSFT1tt4XzW6vglFM4X2q2nW7rJ9zv7NtxsKW2YYHjG6Rlrx3W35qpMN1rYs2TW8DK9ZR2DscD4W5jyp4x6cV3d9W93wBHT7syf61VySR2B3dN7nJMSwMynq36M-f7J6_8x04 ) , API (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR743pyd0W95jsWP6lZ3pYW8sN8s41KPhwNW5qXw546hklwmW70qMWr5GBRHxVClZ_F78cn1vW50l8CX2N0wMLW92Dcx25HTB6QW5m87yG7_rFLtW5Lx3m33vDtbNW2jDg_b3TKHVvW1zN7w456QLXQW7fn2MZ3nSTKdW6ck65_3ZqTHPW727xTX8Y561WW4z5bmp1Gcr6-W6VzP0b3kRGG6V-pM8G1dNjpmMlBQKG9KDtSVMp2gK6WDczFW4NQgWv33z2zkW8TNlW93S1K7zN59pp4Dw_ylvW7qSf-q7xCnG_W8RS7x492twtWW8SgMwJ4Pxn5RN4FFCbFhdzNhW7hjJpj4JsrdqW5TD6LZ61FlSqW98JVST31WZwjW4mM91r8Rwl3hW3K0ML78hjz6Qf1fnh5604 ) , personal website, homelab, local game (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR6P3pyd0W8wLKSR6lZ3p5W4Jr4GL3yJz-nVV7D4X1c8_ZCW75mQH_5JxSK1W8x9-wZ7pFkQ2N3zyN3ZQScd7W3BjZPK75Hj0kVqkBx56fjmLWW2dH-Kd5pmz_mW2cVWQd2tWMDbW1KJrRl6zZlV3W2Y9gWT2cxprZW5dfrxd6jf4T_N4yqKStwHRmdW8LkjsG4_gCXfN5wSkHnsLhXJW5FX9d68hzRxHW56PblD7YgWYvW3-wTQR4PhbtGW6ywK9J9dFwp6N6nqdKjvvX5NW5GNgc_6KdkrmW8KB9SJ7CXcScW7hZkdW1-mzbRW4_Mvlr4ZZMs1W2Rzrft7hZ3-xW2ftW7T8-tK_XW1Wp_0S2K-vwzVmM3Qm76RqxLf97bxtb04 ) , or Raspberry Pi (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR6P3pyd0W8wLKSR6lZ3kCW5rcZ127N4r5_W8rZ4rR3st5s-W73P6-_44R23PV33hQJ6_xT23W5Tw36T6R6MRzW2-y9y72nGbP9W2RV7Mq50ng40VQK9pQ53hKLqW8vkrJM54_0tWW1vYwzt2Jv7VfW8Cp5bX8lSn5hVvwKHW2WxcbtW12r5908r9pjVW6Qnwxn26MLvjW5gjwzV1yC741VHCbPk6v0yHYW87nytJ5-Dp3gW7BPCgK81Q2KSW2MY84g5zZncBN1H1Y9VXwtnYW3SL2WK1rwg2NW8g6Gyf2L5Bj6W17fYT_1V3MdpW7Vz_083CD1BpW44_XRp8zB_1LW4zRZ-d5XD5XRW49Q6Dg58m3C3VX2qbJ6K00sQf743v8004 ) . Good news: We’re pretty good at that.
+
+Download the agent (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR6b3pyd0W7lCdLW6lZ3mqW1sykTr6yt2sWW36F5Hx6jKf_vW4ltj844mV7qDW5ftbCd4ncbkYW4wS5Hq7WLZqhW6ZTp-S9c9jrWN1KY4yz-sd2xN3hDM-1r2YDRW8-QMdp39-qQ8W8DnMTz56fVm_W5p9BQP2Gm198W6RBv4W3jYmbTW67r9502G4k26W2YXLqq3S_KCLW2YgT9h7lshwcW4R4Xf23bQl_mW2X5D4p1TV2RwW28jhtw6SlH7qW7dnTWK6WWcFTTw_7s7dMkRgVVn7MN31bQNPW2pvzq55WSJJfW5-dtmw39B1HjW4NLVsT3dYjf8f4Pq-7604 )  and follow the quickstart (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR6v3pyd0W7Y8-PT6lZ3kGW2mNY079hwDGYW2s3m9N5LM5WnN1RDDqZGQ9QKW3vl0QB5hR5c5W16bz4Q6kGPkXW36F-G45mgggBW2mXLTx5dvpqyW90HZ8w8rXSLlVxsbZg2T19BCW8pND-M2hnXGLW30lGDM8DxGKMVpSwPb3SlNysW2vpTYW1g80W1W6fj17Z5t_rDsMx4ZGn7CCCrN3rwLRW190hVW8dnCZk5MP5RqW7b29Rb4GrL4xW3FZYvW5qwcS_W87RxjY6Cc5xQW6CKHXr7ZN759W7MdHSg7LNM5QW3W7rqT8lh_qcN5cZPd5ryM3pW3CZxtn1MvVjxW8YQR6Q5Cddc5f86bhCn04 ) ... or, if you're feeling lucky, you can get right to it:
+
+ngrok http $PORT
+
+But getting your API, device, or K8s cluster online is only the first step. Once you put something online, you want to protect it with OAuth, rate limits, webhook verification, JWT validation, or some other way to filter who can see what you've built.
+
+For that (and more), there's Traffic Policy (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR505n4LbW50kH_H6lZ3kSW3KxQwb5kgWc3W6g_Nbw7Y6bPbVm9FGp4L_lpbW5Mw1pY2WqmnMW2vZc7c814W5vW9dp9qJ6qLVv9W2BP5r_5ScgZnW5yx7Qc13k_rzW3Z9F-L2dkMMkW2PNnmY8RyDDkW56pkqQ4h-2rjW7VTmy87tsr04N4dGHLcj0HszW5M72Cg64H1pRW5fDJw94_ht55W2yqn_52q8sQJW6jR75r6xHd1BW36KWyW8qlb3SVXvv0q7QMT1zW1pwgd21N6HnNW2b-zlz1mwgVpW5Xj9447QYJq9VPTX7V1FkV94W6s9j5j7j_G5vW2LDV717Rj_-5N4Pjtv0GZDXGW10YZY436qznwN6V-415JHczjW59Rxjp6sWXktW8YkkDB8qRJ30W1gtNr64vXyR9W62HQP3605QF7f54P96M04 ) . Try it out and explore the docs to see what else you can do.
+
+Have questions? Reply to this email to send a note to the product team or hit us up on Discord (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR6b3pyd0W7lCdLW6lZ3n1VLqyBl1kzg5NW4NHCP858VMv2VBgQw750fJcCW3f3SYy3KzVL_W98RPyl7bfdwyN4XxJNk8r3n9W6cL_ZQ8q82VMW32wh9y5Mcp4qW1Y49_h4YHtlvW3kS8P77q-sM6W1XpMGj714lycW21tS2K5s-dBSW6yNp4T1QvJnKW1qt64C3drXYYW84S_Yk3qq5WTW5VM90v2rlQCZN3jRSDnW3m9wW593rvh96XFcKVyBWsT49MBWDW4k_9Hz6syWmSW4R110x79hLrPW1Lp6Yl42SsKcW7FCl_T6__W4YW6JBzPQ74BCGldRjG0n04 ) or at support@ngrok.com (mailto:support@ngrok.com) .
+
+<3
+Team @ ngrok
+
+View in browser (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR5C5n4LbW69t95C6lZ3pfW8RZYxj8P7CfTW11rW1l6WCpgFW8MBh9Q1_8484W3Qw7fy45mTT5W1lb94L102jkPV-WKCj8hs3FrW2hqbfp5XkcrLW62dK772zgrhdW4hl4Vw3g49FyW3YXqpG6LP79KVxKdw01TxCVLMCwN6nW9SpcW8yBf4H1LR8ytW16CzFr34f94-W7CYQKx97zgWCW55WgXw8CT2qDW86jxdk25st2NN5P0Bk-ztGWmW6DGqKT11zK4hW1Z9rB86bCnsSVnjQTJ2sPBk3N891yD1Z17zWW99567G3_zt_SW1w1RTW7dfRR1W8RZMTg3XWjKDVQ5pGr3RVPDSW77zlvf6m92L_N7M6tFGH5BPMW90387V378qzQW1cSkFy2760BHW5r69RW8qnb-dW7Ps-d96qrcTqW8WN64F5-kvqKW3c-JY53WB9PnW3Y7Dr58V4SdMW98YRkj3VB3KTf3c2NVl04 )
+
+GitHub (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR6b3pyd0W7lCdLW6lZ3lXW7d_2g-15XJ1MW8CK6cM24g6JVW4vKjBs3Zx_gwW3Yfvn_4jd1GNW22_SHH5dRx05W8Fs8W596qqTWW54Fmxn8RScWjMHBC3MgPMcSW6N8ty68N8KWhW5NlwGk5_kmXxW1-2Knz4660SgW3Hl4pp5ZFXM1W3jD6fT8VDTGwW910wy77TRfmJW1rPcy132zK48W1vNgk4367gp4W98BYqh4-XYlRW6Jmdj78Cxx5GW6lNrcC3Yc4CvW3SHG8r8DH4_XW6jDhYm915x6rW7Mlmt37hwXwsW1kxPQ35CZ5nBN7CySvl2ZQNvdKTWSl04 )
+LinkedIn (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR6v3pyd0W7Y8-PT6lZ3p-W6r0-2T4s3NprN6nM08ML6zx_W2qJbzF7McBplW6fZQ6t6lZqGmW53k7LF1dsBWPW8H7bzY8jQNTpVGsm-78lBJM1W7knkCf6QsYTXW3T063n65dPFdW5Qknqd48SbzyW57mLj_4fJxc6W1dL-FG4b4cR_W6YhTMW3ZYWpYW3Z5QxX93ylKkW8yK1NT3DDG4mW7VJtpn2R6qHTW3bB0Dp7sMv4MN8qTnPD_XqlhW1w_Mf18NhsJHW3d6tYn7ttbbZW4yMvmG6G-7DlVgqX5N6cWl4qW5DrD-73Vgw94W2GgXPz2mrXYPW4PBnLW11WQlRN81ydRTqWyhDf84P54404 )
+X (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR6b3pyd0W7lCdLW6lZ3pTW6p-j5f1j9Q1RW3G9p9g1SLd06Vm97cQ2LxpygW5-hn0J4-9Y3PW7Hk4lf4jX6klW65ltzn7JMDRMW8ZTw5s3bXWlFW8Vvfq_9fLgL-W4w_cQm7yNW79W3MmHz81bXnbGN6NPqxH5lQGkW8CKqH04mRlSfW1_BpfR2SpQwnW52FdxF8Wd6YwW7Y-7-N3Nq1gBW7hZQvH3YyWlCW35Qbpx6-9VM-W3ltkJN5gBKk0W1NK65R7yGkMTW1bBqWl34kSWHW90mPLH1cBS16W8JnsK62LtC25N6gnNM6G1rgKW5-l86Z4WG2sFf5g2NVF04 )
+YouTube (https://d2v8tf04.na1.hubspotlinks.com/Ctc/5F+113/d2v8tf04/VWB_J-46Sz72N4BR1Y8ntByyW72Qs8N5JjH7GN8BHR6v3pyd0W7Y8-PT6lZ3pkW5cyXgp2gJvFsW9lzkM_8LJTdgW60hY204MFytrW2HN4hD5vFtVBW5PFlK04FF5hKW4hVKyw4sL1zNW7xNxc71mTvz-W5B2l5z55vSFDW3V8GjY2vJ9fwW6w0Rw66nfJWtW5LL4Mq1s_B8YW5xd3G459B5YZW710YJy14sz-MW58cFc_1BVBFrW44cbDF1b1MhSW7ltKxW9013P-W8CDX4z34YWKLW5rbw5X2_y3-kW2hDZ8w9ljnvNW10v9Zk2rctv0VTzJjf4Z-F36VXWGP_4HH8brVrlcr97-GwCvM-gFz7KkJYHW77nPK41SFYYRW502wVP3rG5fvf1dMS2C04 )
+
+ngrok Inc., 2261 Market Street , STE 71467, San Francisco, California 94114, United States, 
+
+Unsubscribe (https://hs-21124867.s.hubspotemail.net/hs/preferences-center/en/direct?data=W2nXS-N30h-MgW233XPj3QPcz8W49rv9F34gPsHW2PWqBV4tFH-2W3d7LS-3HddDMW45kh4_2xLwHyW2xX3gc2MwRjvW2KPGGW4cBFmgW4cMJTt2sZx1DW3SSJT22-BcnbW3_TyKZ4kvQcvW2PNpHS3BLg-kW1SkFQV1Bp7jdW3N_8pW3T25VPW3_WFKX3295QfW47xJRM45Dqf4W2v_1vP2p02jdW1_lx-B3ZHph-W2qSWsL2w1Wr9W3ZvMPh36FVn-W2vJBpm4kG9VLW2nSkXZ2RKj4SW3JZ3m22Wj9d0W235db13R6Yt8W1_2HSb1Qg5VwW1VgzVh3W4VB3W4fwB_n2vM21KW2qVcdr1Ssn9CW30pp0M2zt_HjW1BdXqr2Px1CLW3VS7Fr2t4dfQW3ZvRXm3GLgwLW3T50JY1NkJKWW45SwM-2B0fGJW3JGJPP2MSkhwW3GKRG44cvy_XW3_VqZJ3Cf3CFW1Z8jqt4thC1vW2vMX5K38ncjLW43py6_3M4p16W3GVxjG47QKRDW2FYZTm3_T9y6W2KYXXB49MxYzW49CB9K41t6KFW2H-RyK1BnJHZW1QfdyD4hxcP1W1SbDF91NxY_QW1_b9sK3z9c4-W30GZgb1Z69l6W2z-BvP2PmNDpW3jgqbZ22XgnhW2FGvVR1LxfV6W3jqhFv43xfwQW4mlhgl1XqJXcW1S2Gbz1NdFVSW3M6XJZ2MNZ130&_hsenc=p2ANqtz-_F1T_0PfDyDULl_NIwHIuUJmUMaIvQ1Y5kinADmMOLnYAd7wUhrz1ABBdWxUyzHi3k2ibQ9AnlZ6vYs_WR64wqTT2YyA&_hsmi=376641704 )
+Manage preferences (https://hs-21124867.s.hubspotemail.net/hs/preferences-center/en/page?data=W2nXS-N30h-MgW233XPj3QPcz8W49rv9F34gPsHW2PWqBV4tFH-2W3d7LS-3HddDMW45kh4_2xLwHyW2xX3gc2MwRjvW2KPGGW4cBFmgW4cMJTt2sZx1DW3SSJT22-BcnbW3_TyKZ4kvQcvW2PNpHS3BLg-kW1SkFQV1Bp7jdW3N_8pW3T25VPW3_WFKX3295QfW47xJRM45Dqf4W2v_1vP2p02jdW1_lx-B3ZHph-W2qSWsL2w1Wr9W3ZvMPh36FVn-W2vJBpm4kG9VLW2nSkXZ2RKj4SW3JZ3m22Wj9d0W235db13R6Yt8W1_2HSb1Qg5VwW1VgzVh3W4VB3W4fwB_n2vM21KW2qVcdr1Ssn9CW30pp0M2zt_HjW1BdXqr2Px1CLW3VS7Fr2t4dfQW3ZvRXm3GLgwLW3T50JY1NkJKWW45SwM-2B0fGJW3JGJPP2MSkhwW3GKRG44cvy_XW3_VqZJ3Cf3CFW1Z8jqt4thC1vW2vMX5K38ncjLW43py6_3M4p16W3GVxjG47QKRDW2FYZTm3_T9y6W2KYXXB49MxYzW49CB9K41t6KFW2H-RyK1BnJHZW1QfdyD4hxcP1W1SbDF91NxY_QW1_b9sK3z9c4-W30GZgb1Z69l6W2z-BvP2PmNDpW3jgqbZ22XgnhW2FGvVR1LxfV6W3jqhFv43xfwQW4mlhgl1XqJXcW1S2Gbz1NdFVSW3M6XJZ2MNZ130&_hsenc=p2ANqtz-_F1T_0PfDyDULl_NIwHIuUJmUMaIvQ1Y5kinADmMOLnYAd7wUhrz1ABBdWxUyzHi3k2ibQ9AnlZ6vYs_WR64wqTT2YyA&_hsmi=376641704 )
+============================================================
+
+============================================================
+[메일 55]
+ID: 19bbb944937785ff
+구분: 수신
+제목: a21
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Jan 14 2026 17:16:44 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+21
+
+============================================================
+
+============================================================
+[메일 56]
+ID: 19bbb941b86ecff7
+구분: 수신
+제목: a20
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Jan 14 2026 17:16:32 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+20
+
+============================================================
+
+============================================================
+[메일 57]
+ID: 19bbb91fdb1b8dfd
+구분: 수신
+제목: a12
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Jan 14 2026 17:14:13 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+12
+
+============================================================
+
+============================================================
+[메일 58]
+ID: 19bbb8fee0248d1e
+구분: 수신
+제목: a4
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: "suntest225@gmail.com" <suntest225@gmail.com>
+참조(CC): 
+날짜: Wed Jan 14 2026 17:11:58 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+4
+
+============================================================
+
+============================================================
+[메일 59]
+ID: 19bbb8fb690a0637
+구분: 수신
+제목: a3
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: "suntest225@gmail.com" <suntest225@gmail.com>
+참조(CC): 
+날짜: Wed Jan 14 2026 17:11:44 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+3
+
+============================================================
+
+============================================================
+[메일 60]
+ID: 19bbb8f351ccff2f
+구분: 수신
+제목: a2
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: "suntest225@gmail.com" <suntest225@gmail.com>
+참조(CC): 
+날짜: Wed Jan 14 2026 17:11:11 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+2
+
+============================================================
+
+============================================================
+[메일 61]
+ID: 19bbb8dbefb19c52
+구분: 수신
+제목: a1
+보낸 사람: "문인선" <ddyr1554@gmail.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Jan 14 2026 17:09:35 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+1
+
+============================================================
+
+============================================================
+[메일 62]
+ID: 19bbad670255aab0
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Jan 14 2026 13:49:32 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 clasp – The Apps Script CLI의 액세스를  
+허용하지 않으셨다면 다른 사람이 내
+Google 계정 데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1768366172000?rfn%3D127%26rfnc%3D1%26eid%3D6308389563736934603%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9E6LeRi6AGkvuTyjz8bFohbYvepADp87Q4zPK7UuSyeKx3pSaMKqfiGvz-X_oJ6QlEMS6s1hkikxlo9Y8_ad4DF?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+clasp – The Apps Script CLI의 데이터 액세스 권한을 언제든지 변경하실 수  
+있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 63]
+ID: 19bbbb45a893146a
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Jan 14 2026 17:51:56 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 Gmail Drive Cats의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 Gmail Drive Cats의 액세스를 허용하지  
+않으셨다면 다른 사람이 내 Google 계정
+데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1768380716000?rfn%3D127%26rfnc%3D1%26eid%3D-8648751755310419620%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9Ecg2c7HQeL53GDOs8W4F9BDVGnA7ItNorFMPtiCD_UI8e2zgckwu8PFCStviFQNC-8OMheCnR0K2aG5eD4_Kw?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+Gmail Drive Cats의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
+============================================================
+[메일 64]
+ID: 19bbbcd51a0e2e2f
+구분: 수신
+제목: 보안 알림
+보낸 사람: Google <no-reply@accounts.google.com>
+받는 사람: suntest225@gmail.com
+참조(CC): 
+날짜: Wed Jan 14 2026 18:19:12 GMT+0900 (한국 표준시)
+
+[첨부파일 정보]
+첨부파일: 없음
+
+
+[본문]
+[image: Google]
+일부 Google 계정 데이터에 대한 Gmail Drive Cats의 액세스를 허용하셨습니다
+
+
+suntest225@gmail.com
+
+일부 Google 계정 데이터에 대한 Gmail Drive Cats의 액세스를 허용하지  
+않으셨다면 다른 사람이 내 Google 계정
+데이터에 액세스하려는 것일 수도 있습니다.
+
+지금 잠시 시간을 내어 계정 활동 기록을 확인하고 계정 보안을 강화하세요.
+활동 확인
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/alert/nt/1768382352000?rfn%3D127%26rfnc%3D1%26eid%3D1520155983668641017%26et%3D0>
+Google 계정
+<https://accounts.google.com/AccountChooser?Email=suntest225@gmail.com&continue=https://myaccount.google.com/connections/overview/ASjxo9Ep3TykNA_UKjpvOLNLpVVcm8oODW7Hkn4j5458lQ28_1AX_qZUZXNDBnuUivuk6TSZPdOdcRI2EgVkDLlEdQQ?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue>에서
+Gmail Drive Cats의 데이터 액세스 권한을 언제든지 변경하실 수 있습니다.
+다음 페이지에서 보안 활동도 확인할 수 있습니다.
+https://myaccount.google.com/notifications
+이 이메일은 Google 계정 및 서비스의 중요한 변경사항을 알려드리기 위해  
+발송되었습니다.
+© 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+============================================================
+
