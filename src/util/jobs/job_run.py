@@ -13,11 +13,11 @@ from config.settings import GRAPH_BUILD_SCRIPT, GRAPHRAG_ROOT, BASE_DIR
 
 # 백그라운드: 메일 텍스트를 그래프 데이터 JSON으로 변환
 def build_graph_json(job_id, env):
-    print(f"[JOB][mail2json] START job_id={job_id}")
-    print(f"[JOB][mail2json] cwd={os.getcwd()}")
-    print(f"[JOB][mail2json] sys.executable={sys.executable}")
-    print(f"[JOB][mail2json] GRAPH_BUILD_SCRIPT={GRAPH_BUILD_SCRIPT}")
-    print(f"[JOB][mail2json] script_exists={os.path.exists(GRAPH_BUILD_SCRIPT)}")
+    print(f"[JOB][parquet2json] START job_id={job_id}")
+    print(f"[JOB][parquet2json] cwd={os.getcwd()}")
+    print(f"[JOB][parquet2json] sys.executable={sys.executable}")
+    print(f"[JOB][parquet2json] GRAPH_BUILD_SCRIPT={GRAPH_BUILD_SCRIPT}")
+    print(f"[JOB][parquet2json] script_exists={os.path.exists(GRAPH_BUILD_SCRIPT)}")
 
     update_job(job_id, progress=5, message="메일 텍스트를 그래프 데이터 JSON으로 변환 중")
     append_job_log(job_id, "[START] build_graph_json")
@@ -27,7 +27,7 @@ def build_graph_json(job_id, env):
     append_job_log(job_id, f"[INFO] script_exists={os.path.exists(GRAPH_BUILD_SCRIPT)}")
 
     cmd = [sys.executable, "-u", "-X", "utf8", GRAPH_BUILD_SCRIPT]
-    print(f"[JOB][mail2json] CMD={cmd}")
+    print(f"[JOB][parquet2json] CMD={cmd}")
     append_job_log(job_id, f"[CMD] {cmd}")
 
     try:
@@ -42,10 +42,10 @@ def build_graph_json(job_id, env):
 
         append_job_log(job_id, "[END] build_graph_json success")
         update_job(job_id, progress=15, message="그래프 데이터 JSON 생성 완료")
-        print(f"[JOB][mail2json] SUCCESS job_id={job_id}")
+        print(f"[JOB][parquet2json] SUCCESS job_id={job_id}")
 
     except Exception as e:
-        print(f"[JOB][mail2json][ERROR] job_id={job_id} error={e}")
+        print(f"[JOB][parquet2json][ERROR] job_id={job_id} error={e}")
         traceback.print_exc()
         append_job_log(job_id, f"[ERROR] build_graph_json failed: {e}")
         raise
