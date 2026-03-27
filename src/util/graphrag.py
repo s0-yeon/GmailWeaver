@@ -81,11 +81,11 @@ def run_graph_update_pipeline(job_id):
 
         # 인덱싱이 끝난 후 그래프 시각화용 JSON 생성
         print(f"[PIPELINE][UPDATE] calling build_graph_json job_id={job_id}")
-        build_graph_json(job_id, env)
+        build_graphrag_update(job_id, env) 
         print(f"[PIPELINE][UPDATE] build_graph_json DONE job_id={job_id}")
         # 그래프라그 업데이트 시작
         print(f"[PIPELINE][UPDATE] calling build_graphrag_update job_id={job_id}")
-        build_graphrag_update(job_id, env)
+        build_graph_json(job_id, env)
         print(f"[PIPELINE][UPDATE] build_graphrag_update DONE job_id={job_id}")
 
         # 모든 작업이 성공적으로 끝났으면 상태를 done으로 변경

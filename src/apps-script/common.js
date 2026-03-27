@@ -1,6 +1,6 @@
 // src/apps-script/common.js
-var TunnelURL = "https://laevorotatory-nonnutritively-nelle.ngrok-free.dev";
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzuZ8CJdGBVGp2kqqmqwm43yW_wVoeDex6efJnpEe7fCTQXXtueEl2SVSFjvtrW-sB4/exec";
+var TunnelURL = "https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec";
 
 const OLIVE = "#c6d8a5";
 
@@ -22,6 +22,18 @@ function _webpageBtn() {
         .setOpenLink(
             CardService.newOpenLink()
                 .setUrl(WEBAPP_URL)
+                .setOpenAs(CardService.OpenAs.FULL_SIZE)
+        );
+}
+
+// 그래프 시각화 버튼
+function _graphBtn() {
+    return CardService.newTextButton()
+        .setText("그래프")
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+        .setOpenLink(
+            CardService.newOpenLink()
+                .setUrl(TunnelURL+"/graph-view")
                 .setOpenAs(CardService.OpenAs.FULL_SIZE)
         );
 }
@@ -77,6 +89,7 @@ function _buildHomeCard() {
         )
         .addSection(mainSection)
         .addSection(searchSection)
+        .addSection(CardService.newCardSection().addWidget(_graphBtn())) // 그래프 보기 버튼
         .build();
 }
 
