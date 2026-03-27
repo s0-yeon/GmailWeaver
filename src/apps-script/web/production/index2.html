@@ -1,130 +1,287 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:* https://api.example.com https://*.googleapis.com; frame-src 'self' https://mail.google.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <title>Labels | GmailWeaver</title>
 
-    <title>Dashboard 2 - Gentelella</title>    <!-- Compiled CSS (includes Bootstrap, Font Awesome, and all vendor styles) -->
+    <style>
+      .site_title_text {
+        font-size: 1.2rem; font-weight: 700; color: #fff;
+        letter-spacing: 0.5px; text-decoration: none;
+        display: flex; align-items: center; gap: 8px;
+      }
+      .site_title_text i { font-size: 1.3rem; color: #26B99A; }
+
+      .gw-label-bar {
+        display: flex; align-items: center; gap: 8px;
+        padding: 16px 24px 0 24px; flex-wrap: wrap;
+        border-bottom: 2px solid #e8e8e8; background: #fff;
+      }
+      .gw-label-tab {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 8px 18px; border-radius: 20px 20px 0 0;
+        border: 1px solid #e0e0e0; border-bottom: none;
+        background: #f4f6f8; color: #73879C; font-size: 0.88rem;
+        cursor: pointer; transition: background 0.15s, color 0.15s;
+        user-select: none; position: relative; bottom: -2px;
+      }
+      .gw-label-tab:hover { background: #e8f7f4; color: #26B99A; }
+      .gw-label-tab:hover .gw-tab-delete { opacity: 1; }
+      .gw-label-tab.active {
+        background: #fff; color: #2A3F54; font-weight: 600;
+        border-color: #e8e8e8; border-bottom-color: #fff;
+      }
+      .gw-label-tab.active:hover .gw-tab-delete { opacity: 1; }
+      .gw-label-tab .gw-unread-badge {
+        background: #26B99A; color: #fff; font-size: 0.72rem;
+        padding: 1px 6px; border-radius: 10px; font-weight: 600;
+      }
+      /* 탭 X 버튼 */
+      .gw-tab-delete {
+        opacity: 0;
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 16px; height: 16px; border-radius: 50%;
+        background: rgba(0,0,0,0.12); color: #666;
+        font-size: 0.65rem; margin-left: 2px;
+        transition: opacity 0.15s, background 0.15s;
+        flex-shrink: 0;
+      }
+      .gw-tab-delete:hover { background: #e74c3c; color: #fff; }
+
+      .gw-add-label-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 34px; height: 34px; border-radius: 50%;
+        border: 2px dashed #ccc; background: transparent;
+        color: #aaa; font-size: 1.2rem; cursor: pointer;
+        transition: border-color 0.15s, color 0.15s; flex-shrink: 0;
+      }
+      .gw-add-label-btn:hover { border-color: #26B99A; color: #26B99A; }
+
+      .gw-refresh-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 34px; height: 34px; border-radius: 50%;
+        border: 1px solid #e0e0e0; background: transparent;
+        color: #aaa; font-size: 0.95rem; cursor: pointer;
+        transition: border-color 0.15s, color 0.15s;
+        flex-shrink: 0; margin-left: auto;
+      }
+      .gw-refresh-btn:hover { border-color: #26B99A; color: #26B99A; }
+      .gw-refresh-btn.spinning i { animation: spin 0.8s linear infinite; }
+
+      /* ── 미니 확인 팝업 ── */
+      .gw-confirm-popup {
+        position: fixed; z-index: 10000;
+        background: #fff; border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+        padding: 16px 20px; min-width: 220px;
+        border: 1px solid #e0e0e0;
+      }
+      .gw-confirm-popup p {
+        font-size: 0.88rem; color: #2A3F54; margin-bottom: 12px; line-height: 1.5;
+      }
+      .gw-confirm-popup .gw-confirm-actions {
+        display: flex; gap: 8px; justify-content: flex-end;
+      }
+      .gw-confirm-popup button {
+        padding: 5px 14px; border-radius: 6px; border: none;
+        font-size: 0.82rem; cursor: pointer; transition: background 0.15s;
+      }
+      .gw-confirm-cancel { background: #f4f6f8; color: #73879C; border: 1px solid #e0e0e0 !important; }
+      .gw-confirm-cancel:hover { background: #e8e8e8; }
+      .gw-confirm-delete { background: #e74c3c; color: #fff; }
+      .gw-confirm-delete:hover { background: #c0392b; }
+
+      .gw-modal-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,0.35); z-index: 9999;
+        align-items: center; justify-content: center;
+      }
+      .gw-modal-overlay.show { display: flex; }
+      .gw-modal {
+        background: #fff; border-radius: 12px; padding: 32px;
+        width: 480px; max-width: 95vw;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      }
+      .gw-modal h5 { font-size: 1.1rem; font-weight: 700; color: #2A3F54; margin-bottom: 8px; }
+      .gw-modal p { font-size: 0.88rem; color: #73879C; margin-bottom: 20px; }
+      .gw-modal input[type="text"] {
+        width: 100%; padding: 10px 14px; border: 2px solid #e0e0e0;
+        border-radius: 8px; font-size: 0.95rem; outline: none;
+        transition: border-color 0.2s; margin-bottom: 12px; box-sizing: border-box;
+      }
+      .gw-modal input[type="text"]:focus { border-color: #26B99A; }
+      .gw-modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+      .gw-btn { padding: 9px 22px; border-radius: 8px; border: none; font-size: 0.9rem; cursor: pointer; transition: background 0.15s; }
+      .gw-btn-primary { background: #26B99A; color: #fff; }
+      .gw-btn-primary:hover { background: #1a9e82; }
+      .gw-btn-secondary { background: #f4f6f8; color: #73879C; border: 1px solid #e0e0e0; }
+      .gw-btn-secondary:hover { background: #e8e8e8; }
+
+      .gw-label-content {
+        display: flex; height: calc(100vh - 190px); overflow: hidden;
+      }
+      .gw-mail-list {
+        width: 360px; min-width: 280px; border-right: 1px solid #e8e8e8;
+        overflow-y: auto; background: #fff; flex-shrink: 0;
+      }
+      .gw-mail-list-header {
+        padding: 14px 20px; border-bottom: 1px solid #f0f0f0;
+        font-size: 0.82rem; color: #aaa; background: #fafafa;
+        display: flex; align-items: center; justify-content: space-between;
+      }
+      .gw-list-refresh-btn {
+        font-size: 0.78rem; color: #bbb; cursor: pointer;
+        padding: 2px 8px; border-radius: 10px;
+        border: 1px solid #e0e0e0; background: transparent;
+        transition: color 0.15s, border-color 0.15s;
+      }
+      .gw-list-refresh-btn:hover { color: #26B99A; border-color: #26B99A; }
+
+      .gw-mail-item {
+        padding: 14px 20px; border-bottom: 1px solid #f4f4f4;
+        cursor: pointer; transition: background 0.12s;
+        position: relative;
+      }
+      .gw-mail-item:hover { background: #f4f6f8; }
+      .gw-mail-item:hover .gw-mail-remove { opacity: 1; }
+      .gw-mail-item.active { background: #e8f7f4; border-left: 3px solid #26B99A; }
+      .gw-mail-item.unread .gw-mail-subject { font-weight: 700; color: #2A3F54; }
+      .gw-mail-subject { font-size: 0.9rem; color: #2A3F54; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .gw-mail-from { font-size: 0.78rem; color: #73879C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+      .gw-mail-snippet { font-size: 0.76rem; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .gw-mail-date { font-size: 0.72rem; color: #bbb; }
+      /* 메일 아이템 X 버튼 */
+      .gw-mail-remove {
+        opacity: 0;
+        position: absolute; top: 10px; right: 12px;
+        width: 20px; height: 20px; border-radius: 50%;
+        background: rgba(0,0,0,0.08); color: #999;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.7rem; cursor: pointer;
+        transition: opacity 0.15s, background 0.15s;
+        z-index: 1;
+      }
+      .gw-mail-remove:hover { background: #e74c3c; color: #fff; }
+
+      .gw-mail-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #fafafa; }
+      .gw-mail-body-header { padding: 18px 28px 14px 28px; border-bottom: 1px solid #e8e8e8; background: #fff; }
+      .gw-mail-body-subject { font-size: 1.1rem; font-weight: 700; color: #2A3F54; margin-bottom: 6px; }
+      .gw-mail-body-meta { font-size: 0.82rem; color: #73879C; }
+      .gw-mail-body-actions { padding: 10px 28px; border-bottom: 1px solid #f0f0f0; background: #fff; display: flex; gap: 10px; align-items: center; }
+      .gw-gmail-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 6px 16px; background: #f4f6f8; border: 1px solid #e0e0e0;
+        border-radius: 20px; font-size: 0.82rem; color: #2A3F54;
+        cursor: pointer; text-decoration: none;
+        transition: background 0.15s, border-color 0.15s;
+      }
+      .gw-gmail-btn:hover { background: #e8f7f4; border-color: #26B99A; color: #26B99A; }
+      .gw-mail-body-content {
+        flex: 1; overflow-y: auto; padding: 28px;
+        white-space: pre-wrap; font-size: 0.92rem; line-height: 1.8;
+        color: #2A3F54; word-break: break-word;
+      }
+
+      .gw-empty {
+        flex: 1; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; color: #bbb; padding: 40px;
+      }
+      .gw-empty i { font-size: 3rem; margin-bottom: 16px; color: #e0e0e0; }
+      .gw-empty p { font-size: 0.95rem; }
+
+      .gw-spinner {
+        width: 20px; height: 20px; border: 3px solid #e0e0e0;
+        border-top-color: #26B99A; border-radius: 50%;
+        animation: spin 0.8s linear infinite; display: inline-block;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      .gw-smart-search {
+        padding: 12px 24px; background: #f4f6f8;
+        border-bottom: 1px solid #e8e8e8;
+        display: flex; gap: 8px; align-items: center;
+      }
+      .gw-smart-search input {
+        flex: 1; padding: 8px 14px; border: 1px solid #e0e0e0;
+        border-radius: 20px; font-size: 0.88rem; outline: none;
+        transition: border-color 0.2s;
+      }
+      .gw-smart-search input:focus { border-color: #26B99A; }
+      .gw-smart-search button {
+        padding: 8px 18px; background: #26B99A; color: #fff;
+        border: none; border-radius: 20px; font-size: 0.85rem;
+        cursor: pointer; transition: background 0.15s; white-space: nowrap;
+      }
+      .gw-smart-search button:hover { background: #1a9e82; }
+      .gw-search-hint { font-size: 0.75rem; color: #aaa; padding: 4px 24px 8px 24px; background: #f4f6f8; }
+
+      .gw-cache-badge {
+        font-size: 0.72rem; color: #bbb;
+        padding: 1px 6px; border-radius: 8px; background: #f0f0f0;
+      }
+    </style>
+
     <script type="module" src="/src/main-minimal.js"></script>
   </head>
 
   <body class="nav-md page-index2">
     <div class="container body">
       <div class="main_container">
-        <aside class="col-md-3 left_col" aria-label="Sidebar navigation">
+
+        <!-- Sidebar -->
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
           <div class="left_col scroll-view">
             <div class="navbar nav_title border-0">
-              <a href="index.html" class="site_title"><img src="images/logo.svg" alt="Gentelella Alela!" class="logo-full logo-main" loading="lazy"><img src="images/logo-icon.svg" alt="Gentelella" class="logo-icon" loading="lazy"></a>
+              <a href="index.html" class="site_title site_title_text">
+                <i class="bi bi-envelope-heart-fill"></i>
+                Olive
+              </a>
             </div>
-
             <div class="clearfix"></div>
-
-            <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="images/img.jpg" alt="User profile photo" class="img-circle profile_img" loading="lazy">
+                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h4>John Doe</h4>
+                <h4 id="google-profile-name">-</h4>
               </div>
             </div>
-            <!-- /menu profile quick info -->
-
             <br />
-
-            <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
-                <h3>General</h3>
                 <ul class="nav side-menu">
-                  <li><a href="https://dashboardpack.com/?utm_source=gentelella&utm_medium=sidebar&utm_campaign=premium" target="_blank"><i class="bi bi-stars"></i> Go Pro <span class="badge bg-warning">Pro</span></a></li>
-                  <li><a><i class="bi bi-house"></i> Home <span class="bi bi-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="index.html">Dashboard 1</a></li>
-                      <li><a href="index2.html">Dashboard 2</a></li>
-                      <li><a href="index3.html">Dashboard 3</a></li>
-                      <li><a href="index4.html">Dashboard 4</a></li>
-                    </ul>
-                  <li><a><i class="bi bi-pencil-square"></i> Forms <span class="bi bi-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="form.html">General Form</a></li>
-                      <li><a href="form_advanced.html">Advanced Components</a></li>
-                      <li><a href="form_validation.html">Form Validation</a></li>
-                      <li><a href="form_wizards.html">Form Wizard</a></li>
-                      <li><a href="form_upload.html">Form Upload</a></li>
-                      <li><a href="form_buttons.html">Form Buttons</a></li>
-                    </ul>
-                  <li><a><i class="bi bi-display"></i> UI Elements <span class="badge bg-danger">Hot</span> <span class="bi bi-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="general_elements.html">General Elements</a></li>
-                      <li><a href="media_gallery.html">Media Gallery</a></li>
-                      <li><a href="typography.html">Typography</a></li>
-                      <li><a href="icons.html">Icons</a></li>
-                      <li><a href="widgets.html">Widgets</a></li>
-                      <li><a href="invoice.html">Invoice</a></li>
-                      <li><a href="inbox.html">Inbox</a></li>
-                      <li><a href="calendar.html">Calendar</a></li>
-                    </ul>
-                  <li><a><i class="bi bi-table"></i> Tables <span class="bi bi-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="tables.html">Tables</a></li>
-                      <li><a href="tables_dynamic.html">Table Dynamic</a></li>
-                    </ul>
-                  <li><a><i class="bi bi-bar-chart"></i> Data Presentation <span class="badge bg-success">New</span> <span class="bi bi-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="chartjs.html">Chart.js</a></li>
-                      <li><a href="echarts.html">ECharts <span class="badge bg-info">Updated</span></a></li>
-                      <li><a href="other_charts.html">Other Charts</a></li>
-                    </ul>
-                  <li><a><i class="bi bi-layout-split"></i>Layouts <span class="bi bi-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="fixed_sidebar.html">Fixed Sidebar</a></li>
-                      <li><a href="fixed_footer.html">Fixed Footer</a></li>
-                    </ul>
+                  <li><a href="index.html"><i class="bi bi-house"></i> Home</a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> Search</a></li>
+                  <li><a href="index2.html"><i class="bi bi-tags"></i> Labels</a></li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> Calendar</a></li>
+                  
                 </ul>
               </div>
               <div class="menu_section">
-                <h3>Live On</h3>
+                <h3>My Account</h3>
                 <ul class="nav side-menu">
-                  <li><a><i class="bi bi-file-earmark-text"></i> Additional Pages <span class="bi bi-chevron-down"></span></a>
+                  <li>
+                    <a><i class="bi bi-bar-chart"></i> Statistics<span class="bi bi-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="e_commerce.html">E-commerce</a></li>
-                      <li><a href="projects.html">Projects</a></li>
-                      <li><a href="project_detail.html">Project Detail</a></li>
-                      <li><a href="contacts.html">Contacts</a></li>
-                      <li><a href="profile.html">Profile</a></li>
+                      <li><a href="chartjs.html">Chart.js</a></li>
+                      <li><a href="echarts.html">ECharts</a></li>
+                      <li><a href="other_charts.html">Other Charts</a></li>
                     </ul>
-                  <li><a><i class="bi bi-window-stack"></i> Extras <span class="bi bi-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="page_403.html">403 Error</a></li>
-                      <li><a href="page_404.html">404 Error</a></li>
-                      <li><a href="page_500.html">500 Error</a></li>
-                      <li><a href="plain_page.html">Plain Page</a></li>
-                      <li><a href="login.html">Login Page</a></li>
-                      <li><a href="pricing_tables.html">Pricing Tables</a></li>
-                    </ul>
-                  <li><a><i class="bi bi-diagram-3"></i> Multilevel Menu <span class="bi bi-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        <li><a href="#level1_1">Level One</a></li>
-                        <li><a>Level One<span class="bi bi-chevron-down"></span></a>
-                          <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Level Two</a>
-                            <li><a href="#level2_1">Level Two</a>
-                            <li><a href="#level2_2">Level Two</a>
-                          </ul>
-                        <li><a href="#level1_2">Level One</a></li>
-                    </ul>
-                  <li><a href="landing.html"><i class="bi bi-laptop"></i> Landing Page <span class="badge bg-info">Updated</span></a></li>
+                  </li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> Contacts</a></li>
+                  <li><a href="profile.html"><i class="bi bi-person-circle"></i> Profile</a></li>
                 </ul>
               </div>
-
             </div>
-            <!-- /sidebar menu -->
-
-            <!-- /menu footer buttons -->
             <div class="sidebar-footer hidden-small">
               <a data-bs-toggle="tooltip" data-bs-placement="top" title="Settings">
                 <span class="fas fa-cog" aria-hidden="true"></span>
@@ -139,623 +296,603 @@
                 <span class="fas fa-power-off" aria-hidden="true"></span>
               </a>
             </div>
-            <!-- /menu footer buttons -->
           </div>
-        </div>
+        </aside>
 
-        <!-- top navigation -->
+        <!-- Top Navigation -->
         <div class="top_nav">
-            <div class="nav_menu d-flex align-items-center justify-content-between">
-                <div class="nav toggle">
-                  <a id="menu_toggle"><i class="fas fa-bars"></i></a>
-                </div>
-                <nav class="nav navbar-nav ms-auto">
-                <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fas fa-bars"></i></a>
+            </div>
+            <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
                 <li class="nav-item dropdown">
-                    <a href="#" role="button" class="dropdown-toggle info-number" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="fas fa-envelope"></i>
-                      <span class="badge bg-green">6</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end list-unstyled msg_list dropdown-menu-lg" role="menu" aria-labelledby="navbarDropdown1">
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      <li class="nav-item">
-                        <div class="text-center">
-                          <a class="dropdown-item">
-                            <strong>See All Alerts</strong>
-                            <i class="fas fa-angle-right"></i>
-                          </a>
-                        </div>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#" role="button" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                      <img src="images/img.jpg" alt="">John Doe
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end dropdown-usermenu dropdown-menu-sm" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item"  href="#" role="button"> Profile</a>
-                        <a class="dropdown-item"  href="#" role="button">
-                          <span class="badge bg-red float-end">50%</span>
-                          <span>Settings</span>
-                        </a>
-                    <a class="dropdown-item"  href="#" role="button">Help</a>
-                      <a class="dropdown-item"  href="login.html"><i class="fas fa-sign-out-alt float-end"></i> Log Out</a>
-                    </div>
+                  <a href="#" role="button" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle" style="font-size: 1.4rem; vertical-align: middle;"></i>
+                    <span id="google-nav-name" style="margin-left: 6px;">-</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end dropdown-usermenu dropdown-menu-sm" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="profile.html">Profile</a>
+                    <a class="dropdown-item" href="#">Settings</a>
+                    <a class="dropdown-item" href="#">Help</a>
+                    <a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt float-end"></i> Log Out</a>
+                  </div>
                 </li>
               </ul>
-              </nav>
-            </div>
-          </div>
-        <!-- /top navigation -->
-
-        <!-- page content -->
-        <main class="right_col" role="main" aria-label="Main content">
-          <!-- top tiles -->
-          <div class="row g-3 mb-4">
-            <div class="col-xl-3 col-md-6">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center">
-                  <div class="flex-shrink-0 me-3">
-                    <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center avatar-md">
-                      <i class="fas fa-user-plus text-primary fs-5"></i>
-                    </div>
-                  </div>
-                  <div class="flex-grow-1">
-                    <div class="small text-muted mb-1">New Sign ups</div>
-                    <div class="h4 mb-1 fw-bold">179</div>
-                    <div class="small text-muted">Active registrations</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center">
-                  <div class="flex-shrink-0 me-3">
-                    <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center avatar-md">
-                      <i class="far fa-comments text-success fs-5"></i>
-                    </div>
-                  </div>
-                  <div class="flex-grow-1">
-                    <div class="small text-muted mb-1">Messages</div>
-                    <div class="h4 mb-1 fw-bold">1,254</div>
-                    <div class="small text-muted">Customer inquiries</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center">
-                  <div class="flex-shrink-0 me-3">
-                    <div class="rounded-circle bg-info bg-opacity-10 d-flex align-items-center justify-content-center avatar-md">
-                      <i class="fas fa-chart-column text-info fs-5"></i>
-                    </div>
-                  </div>
-                  <div class="flex-grow-1">
-                    <div class="small text-muted mb-1">Analytics</div>
-                    <div class="h4 mb-1 fw-bold">892</div>
-                    <div class="small text-muted">Reports generated</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center">
-                  <div class="flex-shrink-0 me-3">
-                    <div class="rounded-circle bg-warning bg-opacity-10 d-flex align-items-center justify-content-center avatar-md">
-                      <i class="far fa-square-check text-warning fs-5"></i>
-                    </div>
-                  </div>
-                  <div class="flex-grow-1">
-                    <div class="small text-muted mb-1">Tasks Complete</div>
-                    <div class="h4 mb-1 fw-bold">423</div>
-                    <div class="small text-muted">Finished today</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- /top tiles -->
-
-            <div class="row">
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h4>Transaction Summary <small>Weekly progress</small></h4>
-                    <div class="filter d-flex align-items-center gap-2">
-                      <div class="input-group" id="startDatePicker" data-td-target-input="nearest" data-td-target-toggle="nearest" style="max-width: 160px;">
-                        <input type="text" class="form-control" id="startDateInput" data-td-target="#startDatePicker" placeholder="Start date" readonly />
-                        <span class="input-group-text" data-td-target="#startDatePicker" data-td-toggle="datetimepicker">
-                          <i class="fas fa-calendar"></i>
-                        </span>
-                      </div>
-                      <span class="mx-1">to</span>
-                      <div class="input-group" id="endDatePicker" data-td-target-input="nearest" data-td-target-toggle="nearest" style="max-width: 160px;">
-                        <input type="text" class="form-control" id="endDateInput" data-td-target="#endDatePicker" placeholder="End date" readonly />
-                        <span class="input-group-text" data-td-target="#endDatePicker" data-td-toggle="datetimepicker">
-                          <i class="fas fa-calendar"></i>
-                        </span>
-                      </div>
-    
-                    </div>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <div class="col-md-9 col-sm-12">
-                      <div class="demo-container" style="height:280px">
-                        <div id="chart_plot_02" class="demo-placeholder"></div>
-                      </div>
-                      <div class="tiles">
-                        <div class="col-md-4 tile">
-                          <span>Total Sessions</span>
-                          <h4>231,809</h4>
-                          <span class="sparkline11 graph"></span>
-                        </div>
-                        <div class="col-md-4 tile">
-                          <span>Total Revenue</span>
-                          <h4>$231,809</h4>
-                          <span class="sparkline22 graph"></span>
-                        </div>
-                        <div class="col-md-4 tile">
-                          <span>Total Users</span>
-                          <h4>187,245</h4>
-                          <span class="sparkline11 graph"></span>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <!-- Top Performance Stats -->
-                    <div class="col-md-3 col-sm-12">
-                      <div class="row g-3">
-                        <!-- Top Agent Card -->
-                        <div class="col-12">
-                          <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-transparent border-0 pb-0">
-                              <h6 class="mb-0 fw-bold">🏆 Top Agent</h6>
-                            </div>
-                            <div class="card-body pt-2">
-                              <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 me-3">
-                                  <img src="images/img.jpg" alt="Top Agent" class="rounded-circle avatar-sm" loading="lazy" style="object-fit: cover;">
-                                </div>
-                                <div class="flex-grow-1">
-                                  <div class="fw-semibold mb-1">Sarah Johnson</div>
-                                  <div class="text-success fw-bold">$4,850</div>
-                                  <div class="small text-muted">18 sales today</div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Team Progress Card -->
-                        <div class="col-12">
-                          <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-transparent border-0 pb-0">
-                              <h6 class="mb-0 fw-bold">👥 Team Progress</h6>
-                            </div>
-                            <div class="card-body pt-2">
-                              <div class="mb-3">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                  <span class="small fw-medium">Daily Goal</span>
-                                  <span class="small text-muted">87%</span>
-                                </div>
-                                <div class="progress progress-xs">
-                                  <div class="progress-bar bg-success" style="width: 87%"></div>
-                                </div>
-                              </div>
-                              <div class="mb-3">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                  <span class="small fw-medium">Weekly Target</span>
-                                  <span class="small text-muted">65%</span>
-                                </div>
-                                <div class="progress progress-xs">
-                                  <div class="progress-bar bg-info" style="width: 65%"></div>
-                                </div>
-                              </div>
-                              <div class="mb-0">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                  <span class="small fw-medium">Monthly KPI</span>
-                                  <span class="small text-muted">72%</span>
-                                </div>
-                                <div class="progress progress-xs">
-                                  <div class="progress-bar bg-warning" style="width: 72%"></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Quick Stats Card -->
-                        <div class="col-12">
-                          <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-transparent border-0 pb-0">
-                              <h6 class="mb-0 fw-bold">📊 Quick Stats</h6>
-                            </div>
-                            <div class="card-body pt-2">
-                              <div class="row text-center">
-                                <div class="col-6 border-end">
-                                  <div class="text-primary fw-bold">8</div>
-                                  <div class="small text-muted">Active Agents</div>
-                                </div>
-                                <div class="col-6">
-                                  <div class="text-success fw-bold">24</div>
-                                  <div class="small text-muted">Deals Today</div>
-                                </div>
-                              </div>
-                              <hr class="my-3">
-                              <div class="row text-center">
-                                <div class="col-6 border-end">
-                                  <div class="text-info fw-bold">94%</div>
-                                  <div class="small text-muted">Satisfaction</div>
-                                </div>
-                                <div class="col-6">
-                                  <div class="text-warning fw-bold">2.3h</div>
-                                  <div class="small text-muted">Avg. Response</div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-
-            <div class="row">
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h4>Weekly Summary <small>Activity shares</small></h4>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Settings 1</a>
-                            <a class="dropdown-item" href="#">Settings 2</a>
-                          </div>
-                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <div class="row">
-                      <!-- Weekly Sales Trend -->
-                      <div class="col-md-8">
-                        <h4>Weekly Sales Trend</h4>
-                        <div id="weeklySalesChart" class="chart-height-md"></div>
-                      </div>
-
-                      <!-- Sales Distribution -->
-                      <div class="col-md-4">
-                        <h4>Sales Distribution</h4>
-                        <div id="salesDistributionChart" class="chart-height-md"></div>
-                      </div>
-                    </div>
-
-                    <div class="row" style="margin-top: 20px;">
-                      <!-- Daily Activity -->
-                      <div class="col-md-6">
-                        <h4>Daily Activity</h4>
-                        <div id="dailyActivityChart" class="chart-height-md"></div>
-                      </div>
-
-                      <!-- Performance Metrics -->
-                      <div class="col-md-6">
-                        <h4>Performance Metrics</h4>
-                        <div id="performanceMetricsChart" class="chart-height-md"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-
-            <div class="row">
-              <div class="col-md-4">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h4>Recent Activity <small>Timeline</small></h4>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Settings 1</a>
-                            <a class="dropdown-item" href="#">Settings 2</a>
-                          </div>
-                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <div class="d-flex align-items-center mb-3">
-                      <div class="rounded-circle bg-green text-white d-flex align-items-center justify-content-center me-3 avatar-xs">
-                        <i class="fas fa-check"></i>
-                      </div>
-                      <div>
-                        <div><strong>Order #1247 Completed</strong></div>
-                        <small class="text-muted">Customer payment processed successfully</small><br>
-                        <small class="text-muted">2 hours ago</small>
-                      </div>
-                    </div>
-                    
-                    <div class="d-flex align-items-center mb-3">
-                      <div class="rounded-circle bg-blue text-white d-flex align-items-center justify-content-center me-3 avatar-xs">
-                        <i class="fas fa-user-plus"></i>
-                      </div>
-                      <div>
-                        <div><strong>New User Registration</strong></div>
-                        <small class="text-muted">Sarah Miller joined the platform</small><br>
-                        <small class="text-muted">4 hours ago</small>
-                      </div>
-                    </div>
-                    
-                    <div class="d-flex align-items-center mb-3">
-                      <div class="rounded-circle bg-yellow text-white d-flex align-items-center justify-content-center me-3 avatar-xs">
-                        <i class="fas fa-exclamation-triangle"></i>
-                      </div>
-                      <div>
-                        <div><strong>System Maintenance</strong></div>
-                        <small class="text-muted">Scheduled maintenance tonight at 2 AM</small><br>
-                        <small class="text-muted">6 hours ago</small>
-                      </div>
-                    </div>
-                    
-                    <div class="d-flex align-items-center">
-                      <div class="rounded-circle bg-blue text-white d-flex align-items-center justify-content-center me-3 avatar-xs">
-                        <i class="fas fa-database"></i>
-                      </div>
-                      <div>
-                        <div><strong>Daily Backup Complete</strong></div>
-                        <small class="text-muted">All data successfully backed up</small><br>
-                        <small class="text-muted">8 hours ago</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h4>Customer Reviews <small>Feedback</small></h4>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Settings 1</a>
-                            <a class="dropdown-item" href="#">Settings 2</a>
-                          </div>
-                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <div class="mb-4">
-                      <div class="d-flex align-items-center mb-2">
-                        <img src="images/img.jpg" alt="Customer" class="img-circle avatar-sm" loading="lazy">
-                        <div class="ms-3">
-                          <div><strong>John Anderson</strong></div>
-                          <div class="text-warning">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="text-muted">"Excellent service and fast delivery. The product quality exceeded my expectations. Highly recommended!"</p>
-                    </div>
-                    
-                    <div class="mb-4">
-                      <div class="d-flex align-items-center mb-2">
-                        <img src="images/user.png" alt="Customer" class="img-circle avatar-sm" loading="lazy">
-                        <div class="ms-3">
-                          <div><strong>Maria Garcia</strong></div>
-                          <div class="text-warning">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="text-muted">"Great product quality. Customer support was very helpful and responsive."</p>
-                    </div>
-                    
-                    <div class="row text-center">
-                      <div class="col-6">
-                        <h3 class="green"><i class="fas fa-star"></i> 4.8</h3>
-                        <p>Average Rating</p>
-                      </div>
-                      <div class="col-6">
-                        <h3 class="blue"><i class="fas fa-comments"></i> 1,247</h3>
-                        <p>Total Reviews</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h4>System Monitor <small>Status</small></h4>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Settings 1</a>
-                            <a class="dropdown-item" href="#">Settings 2</a>
-                          </div>
-                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <div class="mb-3">
-                      <div class="d-flex justify-content-between mb-2">
-                        <span><strong>Server Load</strong></span>
-                        <span class="green">Normal</span>
-                      </div>
-                      <div class="progress progress_sm">
-                        <div class="progress-bar bg-green" style="width: 35%"></div>
-                      </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                      <div class="d-flex justify-content-between mb-2">
-                        <span><strong>Memory Usage</strong></span>
-                        <span class="orange">Moderate</span>
-                      </div>
-                      <div class="progress progress_sm">
-                        <div class="progress-bar bg-yellow" style="width: 68%"></div>
-                      </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                      <div class="d-flex justify-content-between mb-2">
-                        <span><strong>Disk Space</strong></span>
-                        <span class="green">Good</span>
-                      </div>
-                      <div class="progress progress_sm">
-                        <div class="progress-bar bg-green" style="width: 45%"></div>
-                      </div>
-                    </div>
-                    
-                    <hr>
-                    
-                    <div class="row">
-                      <div class="col-sm-6 col-xs-6">
-                        <div class="text-center">
-                          <h2 class="green">99.9%</h4>
-                          <p>System Uptime</p>
-                        </div>
-                      </div>
-                      <div class="col-sm-6 col-xs-6">
-                        <div class="text-center">
-                          <h2 class="blue">247ms</h4>
-                          <p>Response Time</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div class="text-center">
-                      <span class="badge bg-success">
-                        <i class="fas fa-check"></i> All Systems Operational
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </nav>
           </div>
         </div>
-        <!-- /page content -->
 
-        <!-- footer content -->
+        <!-- Page Content -->
+        <main class="right_col" role="main" aria-label="Main content" style="padding: 0;">
+
+          <div class="gw-label-bar" id="label-bar">
+            <button class="gw-add-label-btn" id="add-label-btn" title="라벨 추가">
+              <i class="fas fa-plus"></i>
+            </button>
+            <span style="font-size:0.82rem; color:#bbb;" id="label-loading">
+              <span class="gw-spinner"></span> 라벨 불러오는 중...
+            </span>
+            <button class="gw-refresh-btn" id="refresh-btn" title="애드온에서 추가한 라벨 반영" style="display:none;">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+
+          <div class="gw-smart-search" id="smart-search-bar" style="display:none;">
+            <i class="fas fa-magic" style="color:#26B99A;"></i>
+            <input type="text" id="smart-query" placeholder="예: 보안 관련 메일을 이 라벨에 추가해줘" autocomplete="off">
+            <button id="smart-search-btn">메일 추가</button>
+          </div>
+          <div class="gw-search-hint" id="search-hint" style="display:none;">
+            GraphRAG로 조건에 맞는 메일을 검색해 현재 라벨에 자동 분류합니다.
+          </div>
+
+          <div class="gw-label-content">
+            <div class="gw-mail-list" id="mail-list">
+              <div class="gw-empty">
+                <i class="bi bi-tags"></i>
+                <p>라벨을 선택하세요</p>
+              </div>
+            </div>
+            <div class="gw-mail-body" id="mail-body">
+              <div class="gw-empty">
+                <i class="bi bi-envelope-open"></i>
+                <p>메일을 선택하면 본문이 표시됩니다</p>
+              </div>
+            </div>
+          </div>
+
+        </main>
+
         <footer>
           <div class="float-end">
-            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+            GmailWeaver &mdash; Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
           </div>
           <div class="clearfix"></div>
         </footer>
-        <!-- /footer content -->
+
       </div>
-    </div>    <!-- Compiled JavaScript (Bootstrap and vendor scripts) -->
-    
-    <!-- Initialize linked Tempus Dominus pickers for date range -->
-    <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        // Only initialize if TempusDominus is available AND the elements exist
-        if (typeof TempusDominus !== 'undefined') {
-            const startElement = document.getElementById('startDatePicker');
-            const endElement = document.getElementById('endDatePicker');
-            
-            // Check if the required elements exist on this page
-            if (startElement && endElement) {
-                const startPicker = new TempusDominus(startElement, {
-                    display: { components: { clock: false } },
-                    localization: { format: 'MM/dd/yyyy' }
-                });
-                const endPicker = new TempusDominus(endElement, {
-                    display: { components: { clock: false } },
-                    localization: { format: 'MM/dd/yyyy' }
-                });
-                
-                // Link pickers
-                startElement.addEventListener('change.td', function(e) {
-                    endPicker.updateOptions({ restrictions: { minDate: e.detail.date } });
-                });
-                endElement.addEventListener('change.td', function(e) {
-                    startPicker.updateOptions({ restrictions: { maxDate: e.detail.date } });
-                });
-                
-            } else {
+    </div>
+
+    <!-- 라벨 추가 모달 -->
+    <div class="gw-modal-overlay" id="add-label-modal">
+      <div class="gw-modal">
+        <h5><i class="bi bi-tag-fill" style="color:#26B99A;"></i> 새 라벨 만들기</h5>
+        <p>Gmail에 새 라벨을 생성합니다. 이미 있는 이름이면 기존 라벨이 사용됩니다.</p>
+        <input type="text" id="new-label-name" placeholder="라벨 이름 (예: 프로젝트, 중요, 광고)">
+        <div class="gw-modal-actions">
+          <button class="gw-btn gw-btn-secondary" id="cancel-label-btn">취소</button>
+          <button class="gw-btn gw-btn-primary" id="confirm-label-btn">만들기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 미니 확인 팝업 (동적 생성) -->
+    <div id="gw-confirm-popup" class="gw-confirm-popup" style="display:none;"></div>
+
+    <script>
+      const FLASK_URL = 'http://127.0.0.1:80';
+      const LABEL_CACHE_KEY = 'gw_label_cache';
+      const LABEL_CACHE_TTL = 60 * 60 * 1000;
+      const MAIL_CACHE_PREFIX = 'gw_mail_cache_';
+      const MAIL_CACHE_TTL = 30 * 60 * 1000;
+
+      // ── 이름 처리 ──
+      const params = new URLSearchParams(window.location.search);
+      const nameParam = params.get('name');
+      const name = nameParam
+        ? decodeURIComponent(nameParam)
+        : (sessionStorage.getItem('gw_user_name') || '-');
+      if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
+      document.getElementById('google-profile-name').textContent = name;
+      document.getElementById('google-nav-name').textContent = name;
+
+      let labels = [];
+      let activeLabel = null;
+      let messages = [];
+      let activeMessageId = null;
+
+      // ── 유틸 ──
+      function getTimeAgo(ms) {
+        const sec = Math.floor((Date.now() - ms) / 1000);
+        if (sec < 60) return '방금 전 기준';
+        if (sec < 3600) return Math.floor(sec / 60) + '분 전 기준';
+        return Math.floor(sec / 3600) + '시간 전 기준';
+      }
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+      function extractName(from) {
+        const m = from.match(/^(.+?)\s*<.+>$/);
+        return m ? m[1].trim() : from;
+      }
+
+      // ── 미니 확인 팝업 ──
+      function showConfirmPopup(anchorEl, message, onConfirm) {
+        const popup = document.getElementById('gw-confirm-popup');
+        popup.innerHTML = `
+          <p>${escapeHtml(message)}</p>
+          <div class="gw-confirm-actions">
+            <button class="gw-confirm-cancel">취소</button>
+            <button class="gw-confirm-delete">삭제</button>
+          </div>
+        `;
+
+        // 위치: anchor 아래에 표시
+        const rect = anchorEl.getBoundingClientRect();
+        popup.style.display = 'block';
+        popup.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+        popup.style.left = Math.min(rect.left + window.scrollX, window.innerWidth - 240) + 'px';
+
+        popup.querySelector('.gw-confirm-cancel').addEventListener('click', () => {
+          popup.style.display = 'none';
+        });
+        popup.querySelector('.gw-confirm-delete').addEventListener('click', () => {
+          popup.style.display = 'none';
+          onConfirm();
+        });
+
+        // 바깥 클릭 시 닫기
+        setTimeout(() => {
+          document.addEventListener('click', function handler(e) {
+            if (!popup.contains(e.target)) {
+              popup.style.display = 'none';
+              document.removeEventListener('click', handler);
             }
+          });
+        }, 10);
+      }
+
+      // ── 캐시 ──
+      function getCachedLabels() {
+        try {
+          const raw = localStorage.getItem(LABEL_CACHE_KEY);
+          if (!raw) return null;
+          const { data, savedAt } = JSON.parse(raw);
+          if (Date.now() - savedAt > LABEL_CACHE_TTL) { localStorage.removeItem(LABEL_CACHE_KEY); return null; }
+          return { data, savedAt };
+        } catch { return null; }
+      }
+      function setCachedLabels(data) {
+        try { localStorage.setItem(LABEL_CACHE_KEY, JSON.stringify({ data, savedAt: Date.now() })); } catch {}
+      }
+      function getCachedMessages(labelName) {
+        try {
+          const raw = localStorage.getItem(MAIL_CACHE_PREFIX + labelName);
+          if (!raw) return null;
+          const { data, savedAt } = JSON.parse(raw);
+          if (Date.now() - savedAt > MAIL_CACHE_TTL) { localStorage.removeItem(MAIL_CACHE_PREFIX + labelName); return null; }
+          return { data, savedAt };
+        } catch { return null; }
+      }
+      function setCachedMessages(labelName, data) {
+        try { localStorage.setItem(MAIL_CACHE_PREFIX + labelName, JSON.stringify({ data, savedAt: Date.now() })); } catch {}
+      }
+      function clearCache(labelName) {
+        if (labelName) {
+          localStorage.removeItem(MAIL_CACHE_PREFIX + labelName);
+        } else {
+          localStorage.removeItem(LABEL_CACHE_KEY);
+          Object.keys(localStorage).filter(k => k.startsWith(MAIL_CACHE_PREFIX)).forEach(k => localStorage.removeItem(k));
         }
-    });
+      }
+
+      // ── API ──
+      async function callLabelsProxy(action, extra = {}) {
+        const res = await fetch(`${FLASK_URL}/labels-proxy`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action, ...extra })
+        });
+        return res.json();
+      }
+
+      // ── 라벨 목록 로드 (stale-while-revalidate) ──
+      async function loadLabels(forceRefresh = false) {
+        const cached = forceRefresh ? null : getCachedLabels();
+        if (cached) {
+          labels = cached.data;
+          renderLabelTabs();
+          document.getElementById('refresh-btn').style.display = 'inline-flex';
+          if (labels.length > 0 && !activeLabel) selectLabel(labels[0].name);
+          fetchAndUpdateLabels(); // 백그라운드 갱신
+        } else {
+          document.getElementById('label-loading').style.display = 'inline';
+          document.getElementById('refresh-btn').style.display = 'none';
+          document.querySelectorAll('.gw-label-tab').forEach(el => el.remove());
+          await fetchAndUpdateLabels(true);
+        }
+      }
+
+      async function fetchAndUpdateLabels(showLoading = false) {
+        try {
+          const data = await callLabelsProxy('getLabels');
+          if (!data.ok) throw new Error(data.error || '라벨 로드 실패');
+          const prevActive = activeLabel;
+          labels = data.labels || [];
+          setCachedLabels(labels);
+          renderLabelTabs();
+          document.getElementById('refresh-btn').style.display = 'inline-flex';
+          if (!prevActive && labels.length > 0) selectLabel(labels[0].name);
+        } catch (e) {
+          if (showLoading) {
+            document.getElementById('label-loading').innerHTML =
+              '<span style="color:#e74c3c;"><i class="fas fa-exclamation-circle"></i> ' + escapeHtml(e.message) + '</span>';
+          }
+        }
+      }
+
+      // ── 라벨 탭 렌더 ──
+      function renderLabelTabs() {
+        const bar = document.getElementById('label-bar');
+        document.querySelectorAll('.gw-label-tab').forEach(el => el.remove());
+        document.getElementById('label-loading').style.display = 'none';
+
+        const refreshBtn = document.getElementById('refresh-btn');
+        labels.forEach(label => {
+          const tab = document.createElement('button');
+          tab.className = 'gw-label-tab' + (activeLabel === label.name ? ' active' : '');
+          tab.dataset.label = label.name;
+          tab.innerHTML = `
+            <i class="bi bi-tag"></i>
+            ${escapeHtml(label.name)}
+            ${label.unreadCount > 0 ? `<span class="gw-unread-badge">${label.unreadCount}</span>` : ''}
+            <span class="gw-tab-delete" title="라벨 삭제"><i class="fas fa-times"></i></span>
+          `;
+
+          // 라벨 탭 클릭 (X 버튼 제외)
+          tab.addEventListener('click', (e) => {
+            if (e.target.closest('.gw-tab-delete')) return;
+            selectLabel(label.name);
+          });
+
+          // X 버튼 클릭 → 확인 팝업
+          tab.querySelector('.gw-tab-delete').addEventListener('click', (e) => {
+            e.stopPropagation();
+            showConfirmPopup(
+              e.currentTarget,
+              `"${label.name}" 라벨을 삭제할까요?\n메일은 받은편지함에 유지됩니다.`,
+              () => deleteLabel(label.name)
+            );
+          });
+
+          bar.insertBefore(tab, refreshBtn);
+        });
+      }
+
+      // ── 라벨 삭제 ──
+      async function deleteLabel(labelName) {
+        try {
+          const data = await callLabelsProxy('deleteLabel', { labelName });
+          if (!data.ok) throw new Error(data.error || '삭제 실패');
+
+          // 캐시 갱신 + 탭 제거
+          clearCache(labelName);
+          localStorage.removeItem(LABEL_CACHE_KEY);
+
+          // 다음 라벨로 이동
+          const idx = labels.findIndex(l => l.name === labelName);
+          labels = labels.filter(l => l.name !== labelName);
+          setCachedLabels(labels);
+
+          if (activeLabel === labelName) {
+            activeLabel = null;
+            document.getElementById('mail-list').innerHTML = `<div class="gw-empty"><i class="bi bi-tags"></i><p>라벨을 선택하세요</p></div>`;
+            document.getElementById('mail-body').innerHTML = `<div class="gw-empty"><i class="bi bi-envelope-open"></i><p>메일을 선택하면 본문이 표시됩니다</p></div>`;
+            document.getElementById('smart-search-bar').style.display = 'none';
+            document.getElementById('search-hint').style.display = 'none';
+          }
+
+          renderLabelTabs();
+
+          // 삭제된 라벨이 active였으면 첫 번째 라벨 선택
+          if (!activeLabel && labels.length > 0) {
+            selectLabel(labels[Math.min(idx, labels.length - 1)].name);
+          }
+        } catch (e) {
+          alert('라벨 삭제 실패: ' + e.message);
+        }
+      }
+
+      // ── 라벨 선택 ──
+      async function selectLabel(labelName, forceRefresh = false) {
+        activeLabel = labelName;
+        activeMessageId = null;
+
+        document.querySelectorAll('.gw-label-tab').forEach(t => {
+          t.classList.toggle('active', t.dataset.label === labelName);
+        });
+
+        document.getElementById('smart-search-bar').style.display = 'flex';
+        document.getElementById('search-hint').style.display = 'block';
+
+        const cached = forceRefresh ? null : getCachedMessages(labelName);
+        if (cached) {
+          messages = cached.data;
+          renderMailList(cached.savedAt);
+          document.getElementById('mail-body').innerHTML = `
+            <div class="gw-empty"><i class="bi bi-envelope-open"></i><p>메일을 선택하면 본문이 표시됩니다</p></div>
+          `;
+          fetchAndUpdateMessages(labelName); // 백그라운드 갱신
+        } else {
+          document.getElementById('mail-list').innerHTML = `
+            <div class="gw-mail-list-header"><span>불러오는 중...</span></div>
+            <div style="padding:32px; text-align:center;"><span class="gw-spinner"></span></div>
+          `;
+          document.getElementById('mail-body').innerHTML = `
+            <div class="gw-empty"><i class="bi bi-envelope-open"></i><p>메일을 선택하면 본문이 표시됩니다</p></div>
+          `;
+          await fetchAndUpdateMessages(labelName);
+        }
+      }
+
+      async function fetchAndUpdateMessages(labelName) {
+        try {
+          const data = await callLabelsProxy('getLabelMessages', { labelName, maxResults: 30 });
+          if (!data.ok) throw new Error(data.error || '메일 로드 실패');
+          if (activeLabel !== labelName) return;
+          messages = data.messages || [];
+          setCachedMessages(labelName, messages);
+          renderMailList(Date.now());
+        } catch (e) {
+          if (activeLabel === labelName) {
+            document.getElementById('mail-list').innerHTML = `
+              <div class="gw-empty"><i class="fas fa-exclamation-circle"></i><p>${escapeHtml(e.message)}</p></div>
+            `;
+          }
+        }
+      }
+
+      // ── 메일 목록 렌더 ──
+      function renderMailList(savedAt = null) {
+        const list = document.getElementById('mail-list');
+        if (messages.length === 0) {
+          list.innerHTML = `
+            <div class="gw-mail-list-header"><span>${escapeHtml(activeLabel)} · 메일 없음</span></div>
+            <div class="gw-empty"><i class="bi bi-inbox"></i><p>이 라벨에 메일이 없습니다</p></div>
+          `;
+          return;
+        }
+
+        const cacheTag = savedAt ? ` <span class="gw-cache-badge">${getTimeAgo(savedAt)}</span>` : '';
+        list.innerHTML = `
+          <div class="gw-mail-list-header">
+            <span>${escapeHtml(activeLabel)} · ${messages.length}개${cacheTag}</span>
+            <button class="gw-list-refresh-btn" id="list-refresh-btn">
+              <i class="fas fa-sync-alt"></i> 새로고침
+            </button>
+          </div>
+        `;
+
+        document.getElementById('list-refresh-btn').addEventListener('click', () => {
+          clearCache(activeLabel);
+          selectLabel(activeLabel, true);
+        });
+
+        messages.forEach(msg => {
+          const item = document.createElement('div');
+          item.className = 'gw-mail-item' + (msg.isUnread ? ' unread' : '') + (msg.id === activeMessageId ? ' active' : '');
+          item.dataset.id = msg.id;
+          const date = new Date(msg.date).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+          item.innerHTML = `
+            <span class="gw-mail-remove" title="라벨에서 제거"><i class="fas fa-times"></i></span>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+              <div class="gw-mail-subject" style="flex:1; margin-bottom:0; padding-right:8px;">${escapeHtml(msg.subject)}</div>
+              <div class="gw-mail-date" style="flex-shrink:0;">${date}</div>
+            </div>
+            <div class="gw-mail-from">${escapeHtml(extractName(msg.from))}</div>
+            <div class="gw-mail-snippet">${escapeHtml(msg.snippet)}</div>
+          `;
+
+          // 메일 클릭 (X 제외)
+          item.addEventListener('click', (e) => {
+            if (e.target.closest('.gw-mail-remove')) return;
+            loadMessage(msg.id);
+          });
+
+          // X 버튼 → 확인 팝업
+          item.querySelector('.gw-mail-remove').addEventListener('click', (e) => {
+            e.stopPropagation();
+            showConfirmPopup(
+              e.currentTarget,
+              `이 메일을 "${activeLabel}" 라벨에서 제거할까요?\n메일은 받은편지함에 유지됩니다.`,
+              () => removeMailFromLabel(msg.id, msg.subject)
+            );
+          });
+
+          list.appendChild(item);
+        });
+      }
+
+      // ── 메일 라벨에서 제거 ──
+      async function removeMailFromLabel(messageId, subject) {
+        try {
+          const data = await callLabelsProxy('removeLabelFromMessage', {
+            labelName: activeLabel,
+            messageId
+          });
+          if (!data.ok) throw new Error(data.error || '제거 실패');
+
+          // 목록에서 즉시 제거 + 캐시 갱신
+          messages = messages.filter(m => m.id !== messageId);
+          setCachedMessages(activeLabel, messages);
+          renderMailList(Date.now());
+
+          if (activeMessageId === messageId) {
+            activeMessageId = null;
+            document.getElementById('mail-body').innerHTML = `
+              <div class="gw-empty"><i class="bi bi-envelope-open"></i><p>메일을 선택하면 본문이 표시됩니다</p></div>
+            `;
+          }
+        } catch (e) {
+          alert('제거 실패: ' + e.message);
+        }
+      }
+
+      // ── 메일 본문 로드 ──
+      async function loadMessage(messageId) {
+        activeMessageId = messageId;
+        document.querySelectorAll('.gw-mail-item').forEach(el => {
+          el.classList.toggle('active', el.dataset.id === messageId);
+        });
+
+        document.getElementById('mail-body').innerHTML = `
+          <div class="gw-empty"><span class="gw-spinner"></span></div>
+        `;
+
+        try {
+          const data = await callLabelsProxy('getMessage', { messageId });
+          if (!data.ok) throw new Error(data.error || '메일 로드 실패');
+          const msg = data.message;
+          const date = new Date(msg.date).toLocaleString('ko-KR');
+
+          document.getElementById('mail-body').innerHTML = `
+            <div class="gw-mail-body-header">
+              <div class="gw-mail-body-subject">${escapeHtml(msg.subject)}</div>
+              <div class="gw-mail-body-meta">
+                <b>보낸 사람:</b> ${escapeHtml(msg.from)} &nbsp;·&nbsp;
+                <b>받는 사람:</b> ${escapeHtml(msg.to)} &nbsp;·&nbsp;
+                ${date}
+              </div>
+            </div>
+            <div class="gw-mail-body-actions">
+              <a class="gw-gmail-btn" href="${escapeHtml(msg.gmailUrl)}" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-external-link-alt"></i> Gmail에서 보기
+              </a>
+            </div>
+            <div class="gw-mail-body-content">${escapeHtml(msg.body)}</div>
+          `;
+        } catch (e) {
+          document.getElementById('mail-body').innerHTML = `
+            <div class="gw-empty"><i class="fas fa-exclamation-circle"></i><p>${escapeHtml(e.message)}</p></div>
+          `;
+        }
+      }
+
+      // ── 🔄 새로고침 버튼 ──
+      document.getElementById('refresh-btn').addEventListener('click', async () => {
+        const btn = document.getElementById('refresh-btn');
+        btn.classList.add('spinning');
+        clearCache();
+        await loadLabels(true);
+        btn.classList.remove('spinning');
+      });
+
+      // ── 라벨 추가 모달 ──
+      document.getElementById('add-label-btn').addEventListener('click', () => {
+        document.getElementById('new-label-name').value = '';
+        document.getElementById('add-label-modal').classList.add('show');
+        setTimeout(() => document.getElementById('new-label-name').focus(), 100);
+      });
+      document.getElementById('cancel-label-btn').addEventListener('click', () => {
+        document.getElementById('add-label-modal').classList.remove('show');
+      });
+      document.getElementById('add-label-modal').addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('show');
+      });
+      document.getElementById('new-label-name').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('confirm-label-btn').click();
+      });
+
+      document.getElementById('confirm-label-btn').addEventListener('click', async () => {
+        const labelName = document.getElementById('new-label-name').value.trim();
+        if (!labelName) return;
+
+        const btn = document.getElementById('confirm-label-btn');
+        btn.disabled = true;
+        btn.textContent = '생성 중...';
+
+        try {
+          const data = await callLabelsProxy('createLabel', { labelName });
+          if (!data.ok) throw new Error(data.error || '라벨 생성 실패');
+          document.getElementById('add-label-modal').classList.remove('show');
+          clearCache();
+          activeLabel = null;
+          await loadLabels(true);
+          selectLabel(labelName);
+        } catch (e) {
+          alert('라벨 생성 실패: ' + e.message);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = '만들기';
+        }
+      });
+
+      // ── GraphRAG 스마트 검색 ──
+      document.getElementById('smart-search-btn').addEventListener('click', async () => {
+        const query = document.getElementById('smart-query').value.trim();
+        if (!query || !activeLabel) return;
+
+        const btn = document.getElementById('smart-search-btn');
+        btn.disabled = true;
+        btn.textContent = '검색 중...';
+
+        try {
+          const jobRes = await fetch(`${FLASK_URL}/run-query-async`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: query + ' 해당하는 메일의 ID만 목록으로 답해줘.', resMethod: 'local', resType: 'text' })
+          });
+          const { jobId } = await jobRes.json();
+          btn.textContent = '분석 중...';
+
+          let answer = '';
+          for (let i = 0; i < 60; i++) {
+            await new Promise(r => setTimeout(r, 2000));
+            const statusRes = await fetch(`${FLASK_URL}/job-status/${jobId}`);
+            const status = await statusRes.json();
+            if (status.status === 'done') { answer = status.result; break; }
+            if (status.status === 'error') throw new Error(status.result);
+          }
+
+          const messageIds = [...new Set((answer.match(/[0-9a-f]{16}/g) || []))];
+          if (messageIds.length === 0) {
+            alert('조건에 맞는 메일 ID를 찾지 못했습니다.\n검색어를 더 구체적으로 입력해보세요.');
+            return;
+          }
+
+          btn.textContent = `${messageIds.length}개 라벨 적용 중...`;
+          const labelRes = await callLabelsProxy('addLabelBySearch', { labelName: activeLabel, messageIds });
+          if (!labelRes.ok) throw new Error(labelRes.error);
+
+          alert(`✅ ${labelRes.addedCount}개 메일에 "${activeLabel}" 라벨이 적용되었습니다.`);
+          document.getElementById('smart-query').value = '';
+          clearCache(activeLabel);
+          await selectLabel(activeLabel, true);
+
+        } catch (e) {
+          alert('오류: ' + e.message);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = '메일 추가';
+        }
+      });
+
+      // ── 초기화 ──
+      loadLabels();
     </script>
   </body>
 </html>

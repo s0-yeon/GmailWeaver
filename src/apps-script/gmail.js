@@ -15,44 +15,48 @@ function onSyncAll(e) {
 // Gmail 동기화
 function _runSync(mode) {
   try {
-    var props = PropertiesService.getUserProperties();
+    // 사용자 속성에서 마지막 동기화 시간 가져옴
+    var props = PropertiesService.getUserProperties(); 
     var lastSyncMs = Number(props.getProperty("GW_LAST_SYNC_MS")||"0");
-    var threads = [];
+    
+    // 공통 변수
+    var threads = []; // 스레드 목록
+    var myEmail = Session.getActiveUser().getEmail(); // 발신자 구분에 사용
+    var allText = ""; // 서버로 전송할 메일 본문
+    var count = 0; // 메일 수
+    var allAttachments = []; // 첨부파일 목록
 
-    var myEmail = Session.getActiveUser().getEmail();
-    var allText = "";
-    var count = 0;
-    var allAttachments = []; 
-
+    // 전체 갱신할 때
     if (mode === "rewrite") {
       var queryAll = "in:inbox OR in:sent";
       threads = GmailApp.search(queryAll, 0, 200);
 
-      threads.forEach(function(thread) {
-        thread.getMessages().forEach(function(msg) {
+      threads.forEach(function(thread) { // 각 스레드 순회
+        thread.getMessages().forEach(function(msg) { // 스레드 속 메일 순회
           count++;
-          allText += _buildMessageText(msg, myEmail, count) + "\n";
+          allText += _buildMessageText(msg, myEmail, count) + "\n"; // 메일 본문 내용 추가
           allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));
         });
       });
 
-      if (count === 0){
+      if (count === 0){ // 전송할 메일 없을 때 팝업
         return _toast("📭 전송할 메일이 없습니다.");
       }
 
       var filenameAll = "mail_latest.txt"
 
+      // 서버에 /upload 엔드포인트로 post 전송
       var resAll = UrlFetchApp.fetch(TunnelURL + "/upload", {
         method: "post",
         contentType: "application/json",
         payload: JSON.stringify({
-          filename: filenameAll,
-          content: allText,
-          attachment: allAttachments,
-          syncmode: "rewrite",
+          filename: filenameAll, // 파일명
+          content: allText, // 본문
+          attachment: allAttachments, // 첨부파일
+          syncmode: "rewrite", // 처리방식
           gmail_id: myEmail
         }),
-        muteHttpExceptions: true
+        muteHttpExceptions: true // HTTP 오류 에러 말고 응답으로 수신
       });
 
       var codeAll = resAll.getResponseCode();
@@ -62,6 +66,7 @@ function _runSync(mode) {
         throw new Error("upload failed: " + codeAll + " / " + textAll);
       }
 
+      // 메일 전송 성공 시 동기화 시간 저장
       props.setProperty("GW_LAST_SYNC_MS", String(Date.now()));
 
       Logger.log("upload success: " + codeAll + " / " + textAll);
@@ -71,15 +76,16 @@ function _runSync(mode) {
       return _toast("✅ " + count + "개 메일, 첨부 " + allAttachments.length + "개를 서버로 전송했습니다.");
     }
 
+    // 새로운 메일만 추가할 때
     var queryNew = "in:inbox OR in:sent";
     threads = GmailApp.search(queryNew, 0, 200);
 
-    var newMessages = [];
+    var newMessages = []; // 새로운 메일 메시지들 저장할 변수
 
     threads.forEach(function(thread) {
       thread.getMessages().forEach(function(msg) {
         var msgTime = msg.getDate().getTime();
-        if (msgTime > lastSyncMs) {
+        if (msgTime > lastSyncMs) { // 마지막 동기화 시간보다 나중인 메일만 선택해서 저장
           newMessages.push(msg);
         }
       });
@@ -101,9 +107,10 @@ function _runSync(mode) {
       return _toast("📭 새로 추가할 메일이 없습니다.");
     }
 
-    // append 누를 때마다 새로운 파일
+    // append 누를 때마다 새로운 input 파일로 생성
     var filename = "inc_" + _dateToYmdHms(new Date()) + ".txt";
 
+    // 서버에 /upload 엔드포인트로 post 전송
     var resNew = UrlFetchApp.fetch(TunnelURL + "/upload", {
       method: "post",
       contentType: "application/json",
@@ -126,20 +133,20 @@ function _runSync(mode) {
 
     var dataNew = {};
     try {
-      dataNew = JSON.parse(textNew);
+      dataNew = JSON.parse(textNew); // 서버 응답 문자열 json으로 파싱 (밑에서 전체갱신으로 바꼈는지 아닌지 확인하기 위해 if문에 사용하기 위함)
     } catch (err) {
       throw new Error("응답 JSON 파싱 실패: " + textNew);
     }
 
-    // 동기화 시간 저장
+    // 서버에 메일 전송 성공 시 동기화 시간 저장
     props.setProperty("GW_LAST_SYNC_MS", String(Date.now()));
 
     Logger.log("upload success: " + codeNew + " / " + textNew);
     Logger.log("메일 수: " + count);
     Logger.log("첨부 전송 개수: " + allAttachments.length);
 
-    if (dataNew.fallback_to_rewrite) {
-      return _toast("기존 인덱스가 없어 전체 인덱싱을 먼저 실행합니다.");
+    if (dataNew.fallback_to_rewrite) { // 새로운 메일만 추가 눌렀는데 인덱싱 안돼있어서 인덱싱 모드로 바뀌었으면
+      return _toast("✅ 기존 인덱스가 없어 전체 인덱싱을 먼저 실행합니다.");
     }
     return _toast("✅ " + count + "개 새 메일을 서버로 전송했습니다.");
 } catch (err) {
@@ -175,7 +182,7 @@ function onApplyLabelToMessage(e) {
   }
 }
 
-// 추출 및 캘린더 등록
+// 일정 추출 및 캘린더 등록
 function onExtractAndAddCalendar(e) {
   var parameters = (e && e.commonEventObject && e.commonEventObject.parameters) || {};
   var messageId  = parameters.messageId || "";
@@ -242,6 +249,7 @@ function _buildCalendarConfirmCard(messageId, events, subject) {
   var preview = CardService.newTextParagraph()
     .setText(previewLines.join("<br/>"));
 
+  // 제목 입력란
   var titleInput = CardService.newTextInput()
     .setFieldName("manualTitle")
     .setTitle("일정 제목")
@@ -271,12 +279,13 @@ function _buildCalendarConfirmCard(messageId, events, subject) {
 
 // 입력한 제목으로 캘린더 저장
 function onSaveCalendarWithManualTitle(e) { 
-  var inputs     = (e && e.commonEventObject && e.commonEventObject.formInputs) || {};
+  var inputs     = (e && e.commonEventObject && e.commonEventObject.formInputs) || {}; // 제목 입력창에 입력한 값
   var parameters = (e && e.commonEventObject && e.commonEventObject.parameters) || {};
 
   var messageId = parameters.messageId || "";
   if (!messageId) return _toast("메시지 ID를 찾을 수 없습니다.");
 
+  // 입력란이 비어있으면 빈 문자열로 처리
   var manualTitle = (inputs.manualTitle && inputs.manualTitle.stringInputs)
     ? String(inputs.manualTitle.stringInputs.value[0] || "").trim()
     : "";
@@ -296,12 +305,13 @@ function onSaveCalendarWithManualTitle(e) {
   var events = (payload && payload.events) ? payload.events : [];
   if (!events.length) return _toast("📅 저장할 일정이 없습니다.");
 
-  var cal = CalendarApp.getDefaultCalendar();
+  var cal = CalendarApp.getDefaultCalendar(); // 기본 캘린더
   var added = 0;
 
   events.forEach(function(ev, idx) {
     try {
       var start = new Date(ev.startTime);
+      // end 타임 없으면 시작 시간 +1로 설정
       var end   = ev.endTime ? new Date(ev.endTime) : new Date(start.getTime() + 3600000);
 
       // 첫 이벤트는 입력 제목 적용, 나머지는 원래 제목 유지
@@ -386,6 +396,13 @@ function _buildMessageText(msg, myEmail, mailIndex) {
   }
 
   var body = msg.getPlainBody() || "";
+  // 본문 input txt 필요없는 요소 줄이기
+  body = body.replace(/\r\n/g, "\n"); // \r\n (윈도우 방식) -> \n 변경
+  body = body.replace(/\[image:[^\]]*\]/gi, ""); // [image: ] 제거
+  body = body.replace(/[ \t]+/g, " "); // 연속 스페이스, 탭 -> 1개
+  body = body.replace(/\n{2,}/g, "\n"); // 연속 줄바꿈 -> 1줄 줄바꿈
+  body = body.replace(/ \n/g, "\n"); // 줄 끝 스페이스 제거
+  body = body.replace(/\n /g, "\n"); // 줄 시작 스페이스 제거
 
   return [
     "============================================================",
@@ -442,13 +459,13 @@ function _buildAttachmentPayload(msg) {
           name: name,
           mime: mime,
           data_base64: dataBase64
-        });
+        });  
       }
   });
   
   return payload;  
 }
-
+// Date 객체 YYYY-MM-DD_HHmmss 형식으로 변환
 function _dateToYmdHms(d) {
   var pad = function(n) { return String(n).padStart(2, "0"); };
   return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) +

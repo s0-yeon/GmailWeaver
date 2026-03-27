@@ -56,6 +56,16 @@ function initCalendar() {
       height: 'auto',
 
       events: function(fetchInfo, successCallback, failureCallback) {
+        const cacheKey = `gw_cal_${fetchInfo.startStr}_${fetchInfo.endStr}`;
+        const cached = sessionStorage.getItem(cacheKey);
+        
+        // 캐시 있으면 즉시 반환
+        if (cached) {
+          successCallback(JSON.parse(cached));
+          return;
+        }
+
+        // 캐시 없으면 API 호출
         fetch('/calendar-events', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -66,7 +76,12 @@ function initCalendar() {
           })
         })
         .then(res => res.json())
-        .then(data => successCallback(data.events || []))
+        .then(data => {
+          const events = data.events || [];
+          // 캐시 저장
+          sessionStorage.setItem(cacheKey, JSON.stringify(events));
+          successCallback(events);
+        })
         .catch(err => failureCallback(err));
       },
 
