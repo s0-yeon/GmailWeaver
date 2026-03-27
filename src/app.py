@@ -546,6 +546,7 @@ def upload():
     if not gmail_id:
         return jsonify({"ok": False, "error": "gmail_id가 비어있습니다."}), 400
     
+    print("user gmail id =", gmail_id)
     # append인데 기존 인덱스가 없으면 rewrite로 전환
     fallback_to_rewrite = False
     sync_mode = requested_mode
@@ -668,7 +669,7 @@ def upload():
         if attachment_texts_by_mail:
             final_content = _merge_attachments_into_mail_blocks(content, attachment_texts_by_mail)
         # 이 전에 새로운 메일 추가해서 생긴 증분 텍스트 파일들 삭제
-        _delete_incremental_files()
+        _delete_incremental_files(paths)
 
         # 지금까지의 메일 데이터들 다 합친 mail_latest.txt 파일 생성
         with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
@@ -751,9 +752,9 @@ def upload():
             print(f"[CLEAN] update_output 삭제 완료: {update_dir}")
         else:
             print(f"[CLEAN] update_output 없음: {update_dir}")
-        start_graph_pipeline_background(job_id, env) # GraphRAG 파이프라인 함수 실행
+        start_graph_pipeline_background(job_id,paths, env) # GraphRAG 파이프라인 함수 실행
     else:
-        start_graph_update_pipeline_background(job_id, env)
+        start_graph_update_pipeline_background(job_id,paths, env)
 
     return jsonify({
             "ok": True,

@@ -8,26 +8,27 @@ import networkx as nx
 
 from util.jobs.job_store import update_job, append_job_log
 from util.graphrag_progress import parse_graphrag_progress  # 현재 버전에서는 실시간 파싱에 사용 안 함
-from config.settings import GRAPH_BUILD_SCRIPT, GRAPHRAG_ROOT, BASE_DIR
+from util.user_path import user_graphrag_init
+# from config.settings import GRAPH_BUILD_SCRIPT, GRAPHRAG_ROOT, BASE_DIR
 
 
 # 백그라운드: 메일 텍스트를 그래프 데이터 JSON으로 변환
-def build_graph_json(job_id, env):
+def build_graph_json(job_id, paths, env):
     print(f"[JOB][mail2json] START job_id={job_id}")
     print(f"[JOB][mail2json] cwd={os.getcwd()}")
     print(f"[JOB][mail2json] sys.executable={sys.executable}")
-    print(f"[JOB][mail2json] GRAPH_BUILD_SCRIPT={GRAPH_BUILD_SCRIPT}")
-    print(f"[JOB][mail2json] script_exists={os.path.exists(GRAPH_BUILD_SCRIPT)}")
+    print(f"[JOB][mail2json] GRAPH_BUILD_SCRIPT={paths.GRAPH_BUILD_SCRIPT}")
+    print(f"[JOB][mail2json] script_exists={os.path.exists(paths.GRAPH_BUILD_SCRIPT)}")
 
     update_job(job_id, progress=5, message="메일 텍스트를 그래프 데이터 JSON으로 변환 중")
     append_job_log(job_id, "[START] build_graph_json")
     append_job_log(job_id, f"[INFO] cwd={os.getcwd()}")
     append_job_log(job_id, f"[INFO] sys.executable={sys.executable}")
-    append_job_log(job_id, f"[INFO] GRAPH_BUILD_SCRIPT={GRAPH_BUILD_SCRIPT}")
-    append_job_log(job_id, f"[INFO] script_exists={os.path.exists(GRAPH_BUILD_SCRIPT)}")
+    append_job_log(job_id, f"[INFO] GRAPH_BUILD_SCRIPT={paths.GRAPH_BUILD_SCRIPT}")
+    append_job_log(job_id, f"[INFO] script_exists={os.path.exists(paths.GRAPH_BUILD_SCRIPT)}")
 
     # GraphRAG CLI 실행 명령어 구성
-    cmd = [sys.executable, "-u", "-X", "utf8", GRAPH_BUILD_SCRIPT]
+    cmd = [sys.executable, "-u", "-X", "utf8", paths.GRAPH_BUILD_SCRIPT]
     print(f"[JOB][mail2json] CMD={cmd}")
     append_job_log(job_id, f"[CMD] {cmd}")
 
@@ -53,19 +54,21 @@ def build_graph_json(job_id, env):
 
 
 # 백그라운드: GraphRAG 인덱싱
-def build_graphrag_index(job_id, env):
+def build_graphrag_index(job_id, paths,env):
     print(f"[JOB][graphrag] START job_id={job_id}")
     print(f"[JOB][graphrag] cwd={os.getcwd()}")
     print(f"[JOB][graphrag] sys.executable={sys.executable}")
-    print(f"[JOB][graphrag] GRAPHRAG_ROOT={GRAPHRAG_ROOT}")
-    print(f"[JOB][graphrag] root_exists={os.path.exists(GRAPHRAG_ROOT)}")
+    print(f"[JOB][graphrag] GRAPHRAG_ROOT={paths.GRAPHRAG_ROOT}")
+    print(f"[JOB][graphrag] root_exists={os.path.exists(paths.GRAPHRAG_ROOT)}")
 
     update_job(job_id, progress=20, message="GraphRAG 인덱싱 시작")
     append_job_log(job_id, "[START] build_graphrag_index")
     append_job_log(job_id, f"[INFO] cwd={os.getcwd()}")
     append_job_log(job_id, f"[INFO] sys.executable={sys.executable}")
-    append_job_log(job_id, f"[INFO] GRAPHRAG_ROOT={GRAPHRAG_ROOT}")
-    append_job_log(job_id, f"[INFO] root_exists={os.path.exists(GRAPHRAG_ROOT)}")
+    append_job_log(job_id, f"[INFO] GRAPHRAG_ROOT={paths.GRAPHRAG_ROOT}")
+    append_job_log(job_id, f"[INFO] root_exists={os.path.exists(paths.GRAPHRAG_ROOT)}")
+
+    user_graphrag_init(paths)
 
     # GraphRAG CLI 실행 명령어 구성
     cmd = [
@@ -74,7 +77,7 @@ def build_graphrag_index(job_id, env):
         "-X", "utf8",
         "-m", "graphrag",  # graphrag 모듈 실행
         "index",           # graphrag 모듈의 index 명령
-        "--root", GRAPHRAG_ROOT
+        "--root", paths.GRAPHRAG_ROOT
     ]
 
     env = env.copy()
@@ -107,19 +110,19 @@ def build_graphrag_index(job_id, env):
         raise
 
 # 백그라운드: GraphRAG 업데이트 (증분)
-def build_graphrag_update(job_id, env):
+def build_graphrag_update(job_id,paths, env):
     print(f"[JOB][graphrag-update] START job_id={job_id}")
     print(f"[JOB][graphrag-update] cwd={os.getcwd()}")
     print(f"[JOB][graphrag-update] sys.executable={sys.executable}")
-    print(f"[JOB][graphrag-update] GRAPHRAG_ROOT={GRAPHRAG_ROOT}")
-    print(f"[JOB][graphrag-update] root_exists={os.path.exists(GRAPHRAG_ROOT)}")
+    print(f"[JOB][graphrag-update] GRAPHRAG_ROOT={paths.GRAPHRAG_ROOT}")
+    print(f"[JOB][graphrag-update] root_exists={os.path.exists(paths.GRAPHRAG_ROOT)}")
 
     update_job(job_id, progress=20, message="GraphRAG 인덱싱 시작")
     append_job_log(job_id, "[START] build_graphrag_index")
     append_job_log(job_id, f"[INFO] cwd={os.getcwd()}")
     append_job_log(job_id, f"[INFO] sys.executable={sys.executable}")
-    append_job_log(job_id, f"[INFO] GRAPHRAG_ROOT={GRAPHRAG_ROOT}")
-    append_job_log(job_id, f"[INFO] root_exists={os.path.exists(GRAPHRAG_ROOT)}")
+    append_job_log(job_id, f"[INFO] GRAPHRAG_ROOT={paths.GRAPHRAG_ROOT}")
+    append_job_log(job_id, f"[INFO] root_exists={os.path.exists(paths.GRAPHRAG_ROOT)}")
     
     # GraphRAG CLI 실행 명령어 구성
     cmd = [
@@ -128,7 +131,7 @@ def build_graphrag_update(job_id, env):
         "-X", "utf8",
         "-m", "graphrag",  # graphrag 모듈 실행
         "update",          # graphrag 모듈 update 명령
-        "--root", GRAPHRAG_ROOT
+        "--root", paths.GRAPHRAG_ROOT
     ]
 
     env = env.copy()
@@ -155,8 +158,8 @@ def build_graphrag_update(job_id, env):
         print(f"[JOB][graphrag-update] SUCCESS job_id={job_id}")
 
         # 새로운 데이터 graphml과 현재 존재하는 output graphml 병합
-        output_graphml = os.path.join(GRAPHRAG_ROOT, "output", "graph.graphml")
-        update_output_dir = os.path.join(GRAPHRAG_ROOT, "update_output")
+        output_graphml = os.path.join(paths.GRAPHRAG_ROOT, "output", "graph.graphml")
+        update_output_dir = os.path.join(paths.GRAPHRAG_ROOT, "update_output")
         latest = sorted(os.listdir(update_output_dir))[-1]
         delta_graphml = os.path.join(update_output_dir, latest, "delta", "graph.graphml")
         
@@ -173,7 +176,7 @@ def build_graphrag_update(job_id, env):
         raise
 
 # 전체 파이프라인 실행 (index 기준)
-def run_graph_pipeline(job_id, env): 
+def run_graph_pipeline(job_id, paths,env): 
     print(f"[JOB][pipeline] START job_id={job_id}")
     append_job_log(job_id, "[START] run_graph_pipeline")
 
@@ -181,9 +184,9 @@ def run_graph_pipeline(job_id, env):
         update_job(job_id, progress=0, status="running", message="작업 시작")
 
         # 1단계: JSON 생성
-        build_graph_json(job_id, env) 
+        build_graph_json(job_id, paths, env) 
         # 2단계: GraphRAG 인덱싱
-        build_graphrag_index(job_id, env)
+        build_graphrag_index(job_id,paths, env)
 
         update_job(job_id, progress=100, status="done", message="인덱싱 완료")
         append_job_log(job_id, "[END] run_graph_pipeline success")
@@ -197,7 +200,7 @@ def run_graph_pipeline(job_id, env):
         traceback.print_exc()
 
 # 업데이트 파이프라인 실행
-def run_graph_update_pipeline(job_id, env):
+def run_graph_update_pipeline(job_id, paths, env):
     print(f"[JOB][update-pipeline] START job_id={job_id}")
     append_job_log(job_id, "[START] run_graph_update_pipeline")
 
@@ -205,9 +208,9 @@ def run_graph_update_pipeline(job_id, env):
         update_job(job_id, progress=0, status="running", message="업데이트 작업 시작")
 
         # 1단계: json 생성 
-        build_graph_json(job_id, env)
+        build_graph_json(job_id,paths, env)
         # 2단계: graphrag 업데이트
-        build_graphrag_update(job_id, env)
+        build_graphrag_update(job_id,paths, env)
 
         update_job(job_id, progress=100, status="done", message="업데이트 완료")
         append_job_log(job_id, "[END] run_graph_update_pipeline success")
@@ -221,14 +224,14 @@ def run_graph_update_pipeline(job_id, env):
         traceback.print_exc()
 
 # 백그라운드 전체 파이프라인 실행 (index 기준)
-def start_graph_pipeline_background(job_id, env):
+def start_graph_pipeline_background(job_id,paths, env):
     print(f"[JOB][pipeline] BACKGROUND START job_id={job_id}")
     append_job_log(job_id, "[INFO] background thread starting")
 
      # 새로운 스레드 생성
     t = threading.Thread(
         target=run_graph_pipeline,  # 실행할 함수 : 그래프라그 파이프라인 (인덱싱) 실헹 함수
-        args=(job_id, env.copy()),
+        args=(job_id, paths, env.copy()),
         daemon=True,                # app.py 종료 시 같이 종료
     )
     t.start() # 스레드 실행 (비동기 시작)
@@ -238,13 +241,13 @@ def start_graph_pipeline_background(job_id, env):
     return t
 
 # 백그라운드 스레드 시작 - 업데이트
-def start_graph_update_pipeline_background(job_id, env):
+def start_graph_update_pipeline_background(job_id,paths, env):
     print(f"[JOB][update-pipeline] BACKGROUND START job_id={job_id}")
     append_job_log(job_id, "[INFO] update background thread starting")
 
     t = threading.Thread(
         target=run_graph_update_pipeline, # 실행할 함수 : 그래프라그 업데이트파이프라인 실행 함수
-        args=(job_id, env.copy()),
+        args=(job_id,paths, env.copy()),
         daemon=True,                      # app.py 종료 시 같이 종료
     )
     t.start() # 스레드 실행 (비동기 시작)

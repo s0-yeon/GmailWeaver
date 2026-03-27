@@ -1,8 +1,11 @@
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# config/setting.py -> src/config/setting.py
 # 여기서 3번 올라가면 프로젝트 루트
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+GRAPHRAG_SETTINGS_DIR = os.path.join(BASE_DIR,"parquet_template","settings.yaml")
+GRAPHRAG_PROMPTS_DIR = os.path.join(BASE_DIR,"parquet_template", "prompts")
+# config/setting.py -> src/config/setting.py
+
 
 # 경로 상수 정의
 
