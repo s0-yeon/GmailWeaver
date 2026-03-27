@@ -28,7 +28,12 @@ def build_graph_json(job_id, paths, env):
     append_job_log(job_id, f"[INFO] script_exists={os.path.exists(paths.GRAPH_BUILD_SCRIPT)}")
 
     # GraphRAG CLI 실행 명령어 구성
-    cmd = [sys.executable, "-u", "-X", "utf8", paths.GRAPH_BUILD_SCRIPT]
+    cmd = [
+        sys.executable, "-u", "-X", "utf8", 
+        paths.GRAPH_BUILD_SCRIPT,
+        "--base-dir", paths.BASE_DIR,
+        "--gmail-id", paths.GMAIL_ID
+        ]
     print(f"[JOB][mail2json] CMD={cmd}")
 
     append_job_log(job_id, f"[CMD] {cmd}")
