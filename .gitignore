@@ -22,6 +22,9 @@ src/parquet/input/attachment/
 src/parquet/input/*
 !src/parquet/input/.gitkeep
 
+user_data/*
+!user_data/.gitkeep
+
 # Python cache
 __pycache__/
 *.pyc
