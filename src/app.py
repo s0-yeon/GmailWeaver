@@ -117,7 +117,7 @@ def _convert_to_calendar_json(text):
             response_format = {"type": "json_object"},  # JSON Mode 활성화
             messages = [
                 {
-                    "role": "system",
+                    "role": "system", # system 메시지: 모델의 역할과 출력 형식을 고정
                     "content": (
                         "너는 이메일 내용을 분석해서 캘린더 일정을 추출하는 도우미야."
                         "날짜/시간/일정 정보를 추출해서 반드시 JSON으로만 응답해. "
@@ -137,6 +137,7 @@ def _convert_to_calendar_json(text):
                 }
             ]
         )
+        # json.loads()로 파이썬 dict로 변환해서 반환
         return json.loads(response.choices[0].message.content)
     
     except Exception as e:
@@ -436,9 +437,9 @@ def _is_index_ready():
         return False
 
 # 엔드포인트: POST /extract-calendar
-@app.route('/extract-calendar', methods=['POST'])
+@app.route('/extract-calendar', methods=['POST']) #→ GraphRAG를 완전히 우회하고 OpenAI에 직접 메일을 던지는 전용 엔드포인트를 만듦
 def extract_calendar():     # 이메일 제목 + 본문에서 일정 이벤트를 추출하여 반환
-    data = request.json or {}
+    data = request.json or {} 
     subject = data.get('subject', '')
     body = data.get('body', '')
     result = _convert_to_calendar_json(f"제목: {subject}\n\n{body}")    # 제목과 본문을 합쳐 컨텍스트 제공
@@ -791,7 +792,7 @@ def dashboard(path):
         path = 'production/' + path
     return send_from_directory(dist_dir, path)
 
-# dist 루트 정적 파일 서빙 (assets, js, fonts)
+# dist 루트 정적 파일 서빙 (assets, js, fonts) 
 @app.route('/assets/<path:path>')
 def static_assets(path):
     dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'assets')
@@ -819,7 +820,7 @@ def calendar_events():
     except Exception:
         return jsonify({"events": [], "error": res.text[:200]}), 200
 
-# 엔드포인트: POST /labels-proxy (Apps Script 라벨 프록시)
+# 엔드포인트: POST /labels-proxy (Apps Script 라벨 프록시-클라이언트의 요청을 대신 전해주는 중간 대리자)
 @app.route('/labels-proxy', methods=['POST'])
 def labels_proxy():
     data = request.json or {}

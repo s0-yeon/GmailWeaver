@@ -10,9 +10,10 @@
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-    <title>Labels | GmailWeaver</title>
+    <title>Labels | Olive</title>
 
     <style>
+      /* 사이드바 로고 텍스트 */
       .site_title_text {
         font-size: 1.2rem; font-weight: 700; color: #fff;
         letter-spacing: 0.5px; text-decoration: none;
@@ -20,11 +21,13 @@
       }
       .site_title_text i { font-size: 1.3rem; color: #26B99A; }
 
+      /* 라벨 탭 바 (상단 탭 영역) */
       .gw-label-bar {
         display: flex; align-items: center; gap: 8px;
         padding: 16px 24px 0 24px; flex-wrap: wrap;
         border-bottom: 2px solid #e8e8e8; background: #fff;
       }
+      /* 라벨 탭: 비활성 / 호버 / 활성 상태 */
       .gw-label-tab {
         display: inline-flex; align-items: center; gap: 6px;
         padding: 8px 18px; border-radius: 20px 20px 0 0;
@@ -40,11 +43,12 @@
         border-color: #e8e8e8; border-bottom-color: #fff;
       }
       .gw-label-tab.active:hover .gw-tab-delete { opacity: 1; }
+      /* 읽지 않은 메일 수 뱃지 */
       .gw-label-tab .gw-unread-badge {
         background: #26B99A; color: #fff; font-size: 0.72rem;
         padding: 1px 6px; border-radius: 10px; font-weight: 600;
       }
-      /* 탭 X 버튼 */
+      /* 탭 X 버튼: 호버 시에만 표시 */
       .gw-tab-delete {
         opacity: 0;
         display: inline-flex; align-items: center; justify-content: center;
@@ -56,6 +60,7 @@
       }
       .gw-tab-delete:hover { background: #e74c3c; color: #fff; }
 
+      /* 라벨 추가 버튼 (점선 원형) */
       .gw-add-label-btn {
         display: inline-flex; align-items: center; justify-content: center;
         width: 34px; height: 34px; border-radius: 50%;
@@ -65,6 +70,7 @@
       }
       .gw-add-label-btn:hover { border-color: #26B99A; color: #26B99A; }
 
+      /* 라벨 새로고침 버튼 */
       .gw-refresh-btn {
         display: inline-flex; align-items: center; justify-content: center;
         width: 34px; height: 34px; border-radius: 50%;
@@ -76,7 +82,7 @@
       .gw-refresh-btn:hover { border-color: #26B99A; color: #26B99A; }
       .gw-refresh-btn.spinning i { animation: spin 0.8s linear infinite; }
 
-      /* ── 미니 확인 팝업 ── */
+      /* 미니 확인 팝업 (삭제 시 등장) */
       .gw-confirm-popup {
         position: fixed; z-index: 10000;
         background: #fff; border-radius: 10px;
@@ -99,6 +105,7 @@
       .gw-confirm-delete { background: #e74c3c; color: #fff; }
       .gw-confirm-delete:hover { background: #c0392b; }
 
+      /* 라벨 추가 모달 */
       .gw-modal-overlay {
         display: none; position: fixed; inset: 0;
         background: rgba(0,0,0,0.35); z-index: 9999;
@@ -125,9 +132,11 @@
       .gw-btn-secondary { background: #f4f6f8; color: #73879C; border: 1px solid #e0e0e0; }
       .gw-btn-secondary:hover { background: #e8e8e8; }
 
+      /* 메인 콘텐츠: 메일 목록 + 본문 2단 레이아웃 */
       .gw-label-content {
         display: flex; height: calc(100vh - 190px); overflow: hidden;
       }
+      /* 좌측: 메일 목록 패널 */
       .gw-mail-list {
         width: 360px; min-width: 280px; border-right: 1px solid #e8e8e8;
         overflow-y: auto; background: #fff; flex-shrink: 0;
@@ -145,6 +154,7 @@
       }
       .gw-list-refresh-btn:hover { color: #26B99A; border-color: #26B99A; }
 
+      /* 메일 아이템: 호버/활성/읽지않음 상태 */
       .gw-mail-item {
         padding: 14px 20px; border-bottom: 1px solid #f4f4f4;
         cursor: pointer; transition: background 0.12s;
@@ -158,7 +168,7 @@
       .gw-mail-from { font-size: 0.78rem; color: #73879C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
       .gw-mail-snippet { font-size: 0.76rem; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .gw-mail-date { font-size: 0.72rem; color: #bbb; }
-      /* 메일 아이템 X 버튼 */
+      /* 메일 아이템 X 버튼: 호버 시에만 표시 */
       .gw-mail-remove {
         opacity: 0;
         position: absolute; top: 10px; right: 12px;
@@ -171,6 +181,7 @@
       }
       .gw-mail-remove:hover { background: #e74c3c; color: #fff; }
 
+      /* 우측: 메일 본문 패널 */
       .gw-mail-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #fafafa; }
       .gw-mail-body-header { padding: 18px 28px 14px 28px; border-bottom: 1px solid #e8e8e8; background: #fff; }
       .gw-mail-body-subject { font-size: 1.1rem; font-weight: 700; color: #2A3F54; margin-bottom: 6px; }
@@ -190,6 +201,7 @@
         color: #2A3F54; word-break: break-word;
       }
 
+      /* 빈 상태 플레이스홀더 */
       .gw-empty {
         flex: 1; display: flex; flex-direction: column;
         align-items: center; justify-content: center; color: #bbb; padding: 40px;
@@ -197,6 +209,7 @@
       .gw-empty i { font-size: 3rem; margin-bottom: 16px; color: #e0e0e0; }
       .gw-empty p { font-size: 0.95rem; }
 
+      /* 로딩 스피너 */
       .gw-spinner {
         width: 20px; height: 20px; border: 3px solid #e0e0e0;
         border-top-color: #26B99A; border-radius: 50%;
@@ -204,6 +217,7 @@
       }
       @keyframes spin { to { transform: rotate(360deg); } }
 
+      /* GraphRAG 스마트 검색 바 */
       .gw-smart-search {
         padding: 12px 24px; background: #f4f6f8;
         border-bottom: 1px solid #e8e8e8;
@@ -223,12 +237,14 @@
       .gw-smart-search button:hover { background: #1a9e82; }
       .gw-search-hint { font-size: 0.75rem; color: #aaa; padding: 4px 24px 8px 24px; background: #f4f6f8; }
 
+      /* 캐시 기준 시간 뱃지 */
       .gw-cache-badge {
         font-size: 0.72rem; color: #bbb;
         padding: 1px 6px; border-radius: 8px; background: #f0f0f0;
       }
     </style>
 
+    <!-- Vite 진입점: 공통 SCSS + JS 번들링 -->
     <script type="module" src="/src/main-minimal.js"></script>
   </head>
 
@@ -236,7 +252,7 @@
     <div class="container body">
       <div class="main_container">
 
-        <!-- Sidebar -->
+        <!-- 사이드바 -->
         <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
           <div class="left_col scroll-view">
             <div class="navbar nav_title border-0">
@@ -246,6 +262,7 @@
               </a>
             </div>
             <div class="clearfix"></div>
+            <!-- 사용자 프로필 (이름은 JS에서 동적 주입) -->
             <div class="profile clearfix">
               <div class="profile_pic">
                 <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
@@ -256,6 +273,7 @@
               </div>
             </div>
             <br />
+            <!-- 사이드바 네비게이션 -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
                 <ul class="nav side-menu">
@@ -298,6 +316,7 @@
             </div>
           </div>
         </aside>
+        <!-- /사이드바 -->
 
         <!-- Top Navigation -->
         <div class="top_nav">
@@ -305,6 +324,7 @@
             <div class="nav toggle">
               <a id="menu_toggle"><i class="fas fa-bars"></i></a>
             </div>
+            <!-- 유저 프로필 드롭다운 -->
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
                 <li class="nav-item dropdown">
@@ -323,22 +343,27 @@
             </nav>
           </div>
         </div>
+        <!-- /Top Navigation -->
 
         <!-- Page Content -->
         <main class="right_col" role="main" aria-label="Main content" style="padding: 0;">
 
+          <!-- 상단 라벨 탭 바: 탭 목록 + 추가/새로고침 버튼 -->
           <div class="gw-label-bar" id="label-bar">
             <button class="gw-add-label-btn" id="add-label-btn" title="라벨 추가">
               <i class="fas fa-plus"></i>
             </button>
+            <!-- 라벨 로딩 중 표시 (로드 완료 후 숨김) -->
             <span style="font-size:0.82rem; color:#bbb;" id="label-loading">
               <span class="gw-spinner"></span> 라벨 불러오는 중...
             </span>
+            <!-- 애드온에서 추가한 라벨 반영용 새로고침 버튼 (로드 완료 후 표시) -->
             <button class="gw-refresh-btn" id="refresh-btn" title="애드온에서 추가한 라벨 반영" style="display:none;">
               <i class="fas fa-sync-alt"></i>
             </button>
           </div>
 
+          <!-- GraphRAG 스마트 검색 바: 라벨 선택 시 표시 -->
           <div class="gw-smart-search" id="smart-search-bar" style="display:none;">
             <i class="fas fa-magic" style="color:#26B99A;"></i>
             <input type="text" id="smart-query" placeholder="예: 보안 관련 메일을 이 라벨에 추가해줘" autocomplete="off">
@@ -348,13 +373,16 @@
             GraphRAG로 조건에 맞는 메일을 검색해 현재 라벨에 자동 분류합니다.
           </div>
 
+          <!-- 2단 레이아웃: 좌측 메일 목록 | 우측 메일 본문 -->
           <div class="gw-label-content">
+            <!-- 좌측: 라벨별 메일 목록 -->
             <div class="gw-mail-list" id="mail-list">
               <div class="gw-empty">
                 <i class="bi bi-tags"></i>
                 <p>라벨을 선택하세요</p>
               </div>
             </div>
+            <!-- 우측: 선택한 메일 본문 -->
             <div class="gw-mail-body" id="mail-body">
               <div class="gw-empty">
                 <i class="bi bi-envelope-open"></i>
@@ -364,10 +392,11 @@
           </div>
 
         </main>
+        <!-- /Page Content -->
 
         <footer>
           <div class="float-end">
-            GmailWeaver &mdash; Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+            Olive &mdash; Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
           </div>
           <div class="clearfix"></div>
         </footer>
@@ -388,17 +417,17 @@
       </div>
     </div>
 
-    <!-- 미니 확인 팝업 (동적 생성) -->
+    <!-- 삭제 확인 팝업 (JS에서 동적으로 내용 채움) -->
     <div id="gw-confirm-popup" class="gw-confirm-popup" style="display:none;"></div>
 
     <script>
-      const FLASK_URL = 'http://127.0.0.1:80';
+      const FLASK_URL = 'http://127.0.0.1:80'; //라벨 캐시 : 1시간
       const LABEL_CACHE_KEY = 'gw_label_cache';
       const LABEL_CACHE_TTL = 60 * 60 * 1000;
-      const MAIL_CACHE_PREFIX = 'gw_mail_cache_';
+      const MAIL_CACHE_PREFIX = 'gw_mail_cache_'; //메일 캐시: 30분, 라벨명별로 키 구분
       const MAIL_CACHE_TTL = 30 * 60 * 1000;
 
-      // ── 이름 처리 ──
+      // URL 파라미터 → sessionStorage → 기본값 순으로 사용자 이름 결정
       const params = new URLSearchParams(window.location.search);
       const nameParam = params.get('name');
       const name = nameParam
@@ -408,29 +437,35 @@
       document.getElementById('google-profile-name').textContent = name;
       document.getElementById('google-nav-name').textContent = name;
 
+      // 전역 상태
       let labels = [];
       let activeLabel = null;
       let messages = [];
       let activeMessageId = null;
 
-      // ── 유틸 ──
+      // util
+      // 캐시 저장 시각 → "N분 전 기준" 문자열 변환
       function getTimeAgo(ms) {
         const sec = Math.floor((Date.now() - ms) / 1000);
         if (sec < 60) return '방금 전 기준';
         if (sec < 3600) return Math.floor(sec / 60) + '분 전 기준';
         return Math.floor(sec / 3600) + '시간 전 기준';
       }
+
+      // XSS 방지용 HTML 이스케이프
       function escapeHtml(str) {
         return String(str || '')
           .replace(/&/g, '&amp;').replace(/</g, '&lt;')
           .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       }
+      // "이름 <email@...>" 형식에서 이름만 추출
       function extractName(from) {
         const m = from.match(/^(.+?)\s*<.+>$/);
         return m ? m[1].trim() : from;
       }
 
-      // ── 미니 확인 팝업 ──
+      // 미니 확인 팝업 
+      // anchorEl 아래에 팝업을 띄우고, 확인 시 onConfirm 실행
       function showConfirmPopup(anchorEl, message, onConfirm) {
         const popup = document.getElementById('gw-confirm-popup');
         popup.innerHTML = `
@@ -455,7 +490,7 @@
           onConfirm();
         });
 
-        // 바깥 클릭 시 닫기
+        // 팝업 바깥 클릭 시 닫기 (10ms 딜레이로 현재 클릭 이벤트와 충돌 방지)
         setTimeout(() => {
           document.addEventListener('click', function handler(e) {
             if (!popup.contains(e.target)) {
@@ -466,7 +501,8 @@
         }, 10);
       }
 
-      // ── 캐시 ──
+      // cache
+      // 라벨 목록 캐시 읽기 (TTL 초과 시 삭제 후 null 반환)
       function getCachedLabels() {
         try {
           const raw = localStorage.getItem(LABEL_CACHE_KEY);
@@ -479,6 +515,7 @@
       function setCachedLabels(data) {
         try { localStorage.setItem(LABEL_CACHE_KEY, JSON.stringify({ data, savedAt: Date.now() })); } catch {}
       }
+      // 라벨별 메일 목록 캐시 읽기
       function getCachedMessages(labelName) {
         try {
           const raw = localStorage.getItem(MAIL_CACHE_PREFIX + labelName);
@@ -491,6 +528,7 @@
       function setCachedMessages(labelName, data) {
         try { localStorage.setItem(MAIL_CACHE_PREFIX + labelName, JSON.stringify({ data, savedAt: Date.now() })); } catch {}
       }
+      // 캐시 삭제: labelName 지정 시 해당 라벨만, 없으면 전체 삭제
       function clearCache(labelName) {
         if (labelName) {
           localStorage.removeItem(MAIL_CACHE_PREFIX + labelName);
@@ -500,7 +538,7 @@
         }
       }
 
-      // ── API ──
+      // API: Flask /labels-proxy 경유
       async function callLabelsProxy(action, extra = {}) {
         const res = await fetch(`${FLASK_URL}/labels-proxy`, {
           method: 'POST',
@@ -510,7 +548,8 @@
         return res.json();
       }
 
-      // ── 라벨 목록 로드 (stale-while-revalidate) ──
+      // 라벨 목록 로드 (stale-while-revalidate 전략) 
+      // 캐시 있으면 즉시 렌더 후 백그라운드에서 갱신, 없으면 API 직접 호출
       async function loadLabels(forceRefresh = false) {
         const cached = forceRefresh ? null : getCachedLabels();
         if (cached) {
@@ -545,7 +584,7 @@
         }
       }
 
-      // ── 라벨 탭 렌더 ──
+      // 라벨 탭 렌더링 
       function renderLabelTabs() {
         const bar = document.getElementById('label-bar');
         document.querySelectorAll('.gw-label-tab').forEach(el => el.remove());
@@ -563,13 +602,13 @@
             <span class="gw-tab-delete" title="라벨 삭제"><i class="fas fa-times"></i></span>
           `;
 
-          // 라벨 탭 클릭 (X 버튼 제외)
+          // 탭 클릭 시 라벨 선택 (X 버튼 클릭은 제외)
           tab.addEventListener('click', (e) => {
             if (e.target.closest('.gw-tab-delete')) return;
             selectLabel(label.name);
           });
 
-          // X 버튼 클릭 → 확인 팝업
+          // X 버튼: 확인 팝업 → 삭제
           tab.querySelector('.gw-tab-delete').addEventListener('click', (e) => {
             e.stopPropagation();
             showConfirmPopup(
@@ -583,7 +622,7 @@
         });
       }
 
-      // ── 라벨 삭제 ──
+      // 라벨 삭제
       async function deleteLabel(labelName) {
         try {
           const data = await callLabelsProxy('deleteLabel', { labelName });
@@ -598,6 +637,7 @@
           labels = labels.filter(l => l.name !== labelName);
           setCachedLabels(labels);
 
+          // 삭제된 라벨이 현재 활성 탭이면 본문/목록 초기화
           if (activeLabel === labelName) {
             activeLabel = null;
             document.getElementById('mail-list').innerHTML = `<div class="gw-empty"><i class="bi bi-tags"></i><p>라벨을 선택하세요</p></div>`;
@@ -608,7 +648,7 @@
 
           renderLabelTabs();
 
-          // 삭제된 라벨이 active였으면 첫 번째 라벨 선택
+          // 삭제 후 인접한 라벨 자동 선택
           if (!activeLabel && labels.length > 0) {
             selectLabel(labels[Math.min(idx, labels.length - 1)].name);
           }
@@ -617,7 +657,8 @@
         }
       }
 
-      // ── 라벨 선택 ──
+      // 라벨 선택 
+      // 캐시 있으면 즉시 렌더 후 백그라운드 갱신, 없으면 API 직접 호출
       async function selectLabel(labelName, forceRefresh = false) {
         activeLabel = labelName;
         activeMessageId = null;
@@ -653,6 +694,7 @@
         try {
           const data = await callLabelsProxy('getLabelMessages', { labelName, maxResults: 30 });
           if (!data.ok) throw new Error(data.error || '메일 로드 실패');
+          // 탭 전환 도중 응답이 오면 무시
           if (activeLabel !== labelName) return;
           messages = data.messages || [];
           setCachedMessages(labelName, messages);
@@ -666,7 +708,7 @@
         }
       }
 
-      // ── 메일 목록 렌더 ──
+      // 메일 목록 렌더링
       function renderMailList(savedAt = null) {
         const list = document.getElementById('mail-list');
         if (messages.length === 0) {
@@ -677,6 +719,7 @@
           return;
         }
 
+        // 캐시 기준 시간 뱃지
         const cacheTag = savedAt ? ` <span class="gw-cache-badge">${getTimeAgo(savedAt)}</span>` : '';
         list.innerHTML = `
           <div class="gw-mail-list-header">
@@ -687,6 +730,7 @@
           </div>
         `;
 
+        // 목록 새로고침: 해당 라벨 캐시 삭제 후 재로드
         document.getElementById('list-refresh-btn').addEventListener('click', () => {
           clearCache(activeLabel);
           selectLabel(activeLabel, true);
@@ -727,7 +771,7 @@
         });
       }
 
-      // ── 메일 라벨에서 제거 ──
+      //메일을 라벨에서 제거 (목록에서 즉시 삭제 + 캐시 갱신)
       async function removeMailFromLabel(messageId, subject) {
         try {
           const data = await callLabelsProxy('removeLabelFromMessage', {
@@ -741,6 +785,7 @@
           setCachedMessages(activeLabel, messages);
           renderMailList(Date.now());
 
+          // 현재 열린 메일이 제거된 경우 본문 초기화
           if (activeMessageId === messageId) {
             activeMessageId = null;
             document.getElementById('mail-body').innerHTML = `
@@ -752,9 +797,10 @@
         }
       }
 
-      // ── 메일 본문 로드 ──
+      // 메일 본문 로드 
       async function loadMessage(messageId) {
         activeMessageId = messageId;
+        // 선택된 아이템 강조
         document.querySelectorAll('.gw-mail-item').forEach(el => {
           el.classList.toggle('active', el.dataset.id === messageId);
         });
@@ -792,7 +838,7 @@
         }
       }
 
-      // ── 🔄 새로고침 버튼 ──
+      // 전체 새로고침 버튼: 모든 캐시 삭제 후 라벨 재로드
       document.getElementById('refresh-btn').addEventListener('click', async () => {
         const btn = document.getElementById('refresh-btn');
         btn.classList.add('spinning');
@@ -801,7 +847,7 @@
         btn.classList.remove('spinning');
       });
 
-      // ── 라벨 추가 모달 ──
+      // 라벨 추가 모달
       document.getElementById('add-label-btn').addEventListener('click', () => {
         document.getElementById('new-label-name').value = '';
         document.getElementById('add-label-modal').classList.add('show');
@@ -810,9 +856,11 @@
       document.getElementById('cancel-label-btn').addEventListener('click', () => {
         document.getElementById('add-label-modal').classList.remove('show');
       });
+      // 모달 바깥 클릭 시 닫기
       document.getElementById('add-label-modal').addEventListener('click', function(e) {
         if (e.target === this) this.classList.remove('show');
       });
+      // Enter 키로 모달 확인
       document.getElementById('new-label-name').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') document.getElementById('confirm-label-btn').click();
       });
@@ -841,7 +889,7 @@
         }
       });
 
-      // ── GraphRAG 스마트 검색 ──
+      /// GraphRAG 스마트 검색: 조건에 맞는 메일 ID를 추출해 라벨 일괄 적용
       document.getElementById('smart-search-btn').addEventListener('click', async () => {
         const query = document.getElementById('smart-query').value.trim();
         if (!query || !activeLabel) return;
@@ -851,6 +899,7 @@
         btn.textContent = '검색 중...';
 
         try {
+          // 1. 비동기 쿼리 시작 → Job ID 발급
           const jobRes = await fetch(`${FLASK_URL}/run-query-async`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -859,6 +908,7 @@
           const { jobId } = await jobRes.json();
           btn.textContent = '분석 중...';
 
+          // 2. 폴링: 최대 60회(2초 간격) 완료 대기
           let answer = '';
           for (let i = 0; i < 60; i++) {
             await new Promise(r => setTimeout(r, 2000));
@@ -868,12 +918,14 @@
             if (status.status === 'error') throw new Error(status.result);
           }
 
+          // 3. 답변에서 16자리 16진수 메일 ID 추출 (중복 제거)
           const messageIds = [...new Set((answer.match(/[0-9a-f]{16}/g) || []))];
           if (messageIds.length === 0) {
             alert('조건에 맞는 메일 ID를 찾지 못했습니다.\n검색어를 더 구체적으로 입력해보세요.');
             return;
           }
 
+          // 4. 추출된 ID들에 라벨 일괄 적용
           btn.textContent = `${messageIds.length}개 라벨 적용 중...`;
           const labelRes = await callLabelsProxy('addLabelBySearch', { labelName: activeLabel, messageIds });
           if (!labelRes.ok) throw new Error(labelRes.error);
@@ -891,7 +943,7 @@
         }
       });
 
-      // ── 초기화 ──
+      // 초기화: 페이지 로드 시 라벨 목록 로드
       loadLabels();
     </script>
   </body>
