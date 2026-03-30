@@ -1,106 +1,69 @@
 -Goal-
 Given a text document and a list of entity types, identify all entities
-and the relationships between them. Output both entities and relationships
-in a single pass using the specified formats.
+and the relationships between them. Output both using the specified formats.
+The input may be an email, a structured table, or plain text — adapt accordingly.
 
 -Steps-
 1. Identify Entities: Extract entities of the following types: `[{entity_types}]`.
-   For each entity, use this format:
-   `("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter}<description>)`
+   Format: `("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter}<description>)`
    * Email:        `Subject: <subj> | Tone: <tone> | Attachments: <files/None> | Summary: <1-sentence>`
    * Person:       `Name: <name> | Account: <email/Unknown>`
    * Topic:        `Priority: <high/mid/low> | Summary: <1-sentence>`
-   * Event:        `Schedule: <YYYY-MM-DD HH:MM> | Location: <place> | Status: <confirmed/tentative>`
+   * Event:        `Schedule: <YYYY-MM-DD HH:MM> | Location: <place/None> | Status: <confirmed/tentative>`
    * Organization: `Context: <dept> | Team: <team>`
 
-2. Identify Relationships: Based on the identified entities, extract clearly supported
-   relationships using these types:
-   `[SENT_BY, SENT_TO, CC_TO, DISCUSSED, BELONGS_TO, SCHEDULED_FOR, WAS_ATTACHED_TO]`
-   Use this format:
-   `("relationship"{tuple_delimiter}<source>{tuple_delimiter}<target>{tuple_delimiter}<type>{tuple_delimiter}<description_in_Korean>{tuple_delimiter}<strength_1_10>)`
+2. Identify Relationships: Extract only relationships that are clearly supported by the text.
+   Format: `("relationship"{tuple_delimiter}<source>{tuple_delimiter}<target>{tuple_delimiter}<type>{tuple_delimiter}<description_in_Korean>{tuple_delimiter}<strength_1_10>)`
 
-   Relationship directions are fixed as follows — do not reverse them:
-   | Type             | Source        | Target        |
-   |------------------|---------------|---------------|
-   | SENT_BY          | Email         | Person        |
-   | SENT_TO          | Email         | Person        |
-   | CC_TO            | Email         | Person        |
-   | DISCUSSED        | Email         | Topic         |
-   | BELONGS_TO       | Person        | Organization  |
-   | SCHEDULED_FOR    | Email         | Event         |
-   | WAS_ATTACHED_TO  | Topic/File    | Email         |
+   Relationship directions are fixed — do not reverse them:
+   | Type            | Source       | Target       | When to use                        |
+   |-----------------|--------------|--------------|------------------------------------|
+   | SENT_BY         | Email        | Person       | Email의 발신자                       
+   | SENT_TO         | Email        | Person       | Email의 직접 수신자                  |
+   | CC_TO           | Email        | Person       | Email의 참조 수신자                  |
+   | DISCUSSED       | Email        | Topic        | Email 본문에서 다루는 주제            |
+   | BELONGS_TO      | Person       | Organization | 사람의 소속 조직 (Organization만 가능)|
+   | SCHEDULED_FOR   | Email        | Event        | Email에 언급된 일정                  |
+   | ATTENDS         | Person       | Event        | 사람이 이벤트에 참여 (Email 없을 때)   |
+   | WAS_ATTACHED_TO | Topic/File   | Email        | 파일/토픽이 Email에 첨부됨            |
+
+   Rules:
+   * BELONGS_TO target은 반드시 Organization 타입이어야 한다. Topic/Event는 불가.
+   * Email 엔티티가 없으면 SENT_BY, SENT_TO, CC_TO, SCHEDULED_FOR는 사용하지 않는다.
+   * 텍스트에서 명확히 지지되지 않는 관계는 생성하지 않는다.
 
 3. Constraints:
-   * If the same entity appears multiple times in the text, extract it only once.
-   * If the sender is unknown, use `Account: Unknown`.
-   * Keep descriptions concise.
-   * Relationship descriptions must be written in Korean.
-   * Output as a single list delimited by `{record_delimiter}`.
-   * End with `{completion_delimiter}`.
+   * Do not create duplicate entities.
+   * If the sender's email is unknown, use `Account: Unknown`.
+   * If location is unknown, use `Location: None`.
+   * Relationship descriptions MUST be in Korean.
+   * Output as a single list delimited by {record_delimiter}.
+   * End with {completion_delimiter}.
 
 -Examples-
-Example 1
-Entity_types: Email, Person, Organization, Topic
-Text: 김민준(minjun.kim@vocarush.io)이 박서연(seoyeon.park@vocarush.io)에게
-'[Vocarush] 4월 스프린트 계획 확정' 메일을 보냈다. sprint_plan.pdf가 첨부되었고
-공식적인 톤이었다. 김민준은 Vocarush의 Product팀 소속이다.
-
-Output:
-("entity"{tuple_delimiter}[VOCARUSH] 4월 스프린트 계획 확정{tuple_delimiter}Email{tuple_delimiter}Subject: [Vocarush] 4월 스프린트 계획 확정 | Tone: Formal | Attachments: sprint_plan.pdf | Summary: 4월 스프린트 계획을 공유하는 메일)
-{record_delimiter}
-("entity"{tuple_delimiter}김민준{tuple_delimiter}Person{tuple_delimiter}Name: 김민준 | Account: minjun.kim@vocarush.io)
-{record_delimiter}
-("entity"{tuple_delimiter}박서연{tuple_delimiter}Person{tuple_delimiter}Name: 박서연 | Account: seoyeon.park@vocarush.io)
-{record_delimiter}
-("entity"{tuple_delimiter}VOCARUSH{tuple_delimiter}Organization{tuple_delimiter}Context: Product | Team: Product Team)
-{record_delimiter}
-("relationship"{tuple_delimiter}[VOCARUSH] 4월 스프린트 계획 확정{tuple_delimiter}김민준{tuple_delimiter}SENT_BY{tuple_delimiter}이메일의 발신자는 김민준이다.{tuple_delimiter}10)
-{record_delimiter}
-("relationship"{tuple_delimiter}[VOCARUSH] 4월 스프린트 계획 확정{tuple_delimiter}박서연{tuple_delimiter}SENT_TO{tuple_delimiter}이메일의 수신자는 박서연이다.{tuple_delimiter}10)
-{record_delimiter}
-("relationship"{tuple_delimiter}김민준{tuple_delimiter}VOCARUSH{tuple_delimiter}BELONGS_TO{tuple_delimiter}김민준은 VOCARUSH 조직에 소속되어 있다.{tuple_delimiter}9)
-{completion_delimiter}
+(기존 Example 1, 2, 3 유지)
 
 ---
 
-Example 2
-Entity_types: Email, Person, Event
-Text: 이수아가 '사용자 인터뷰 일정' 메일을 보냈다.
-인터뷰는 2026년 4월 3일 오후 2시 강남 사무실에서 진행된다.
+Example 4  ← 핵심 추가: 테이블 입력 + Email 없는 케이스
+Entity_types: Person, Topic, Event
+Text:
+회차 | 날짜 | 학생 | 과목 | 수업내용
+1 | 2026-03-06 | 이수아 | Python | OT 및 파이썬 소개
+2 | 2026-03-20 | 이수아 | Python | (휴강)
 
 Output:
-("entity"{tuple_delimiter}사용자 인터뷰 일정{tuple_delimiter}Email{tuple_delimiter}Subject: 사용자 인터뷰 일정 | Tone: Casual | Attachments: None | Summary: 인터뷰 일정을 안내하는 메일)
-{record_delimiter}
 ("entity"{tuple_delimiter}이수아{tuple_delimiter}Person{tuple_delimiter}Name: 이수아 | Account: Unknown)
 {record_delimiter}
-("entity"{tuple_delimiter}사용자 인터뷰{tuple_delimiter}Event{tuple_delimiter}Schedule: 2026-04-03 14:00 | Location: 강남 사무실 | Status: confirmed)
+("entity"{tuple_delimiter}Python{tuple_delimiter}Topic{tuple_delimiter}Priority: mid | Summary: 이수아의 파이썬 수업 과목)
 {record_delimiter}
-("relationship"{tuple_delimiter}사용자 인터뷰 일정{tuple_delimiter}이수아{tuple_delimiter}SENT_BY{tuple_delimiter}이메일의 발신자는 이수아이다.{tuple_delimiter}10)
+("entity"{tuple_delimiter}OT 및 파이썬 소개{tuple_delimiter}Event{tuple_delimiter}Schedule: 2026-03-06 00:00 | Location: None | Status: confirmed)
 {record_delimiter}
-("relationship"{tuple_delimiter}사용자 인터뷰 일정{tuple_delimiter}사용자 인터뷰{tuple_delimiter}SCHEDULED_FOR{tuple_delimiter}메일을 통해 인터뷰 일정이 안내되었다.{tuple_delimiter}10)
-{completion_delimiter}
-
----
-
-Example 3
-Entity_types: Email, Person, Topic
-Text: 최지훈(jihoon.choi@vocarush.io)이 팀 전체에 '[긴급] 서버 장애 대응 방안' 메일을 보냈다.
-메일에서는 서버 다운타임 원인 분석과 긴급 패치 배포 계획이 주요하게 논의되었다. 톤은 격식체였다.
-
-Output:
-("entity"{tuple_delimiter}[긴급] 서버 장애 대응 방안{tuple_delimiter}Email{tuple_delimiter}Subject: [긴급] 서버 장애 대응 방안 | Tone: Formal | Attachments: None | Summary: 서버 장애 원인 분석과 패치 계획을 공유하는 긴급 메일)
+("entity"{tuple_delimiter}휴강{tuple_delimiter}Event{tuple_delimiter}Schedule: 2026-03-20 00:00 | Location: None | Status: tentative)
 {record_delimiter}
-("entity"{tuple_delimiter}최지훈{tuple_delimiter}Person{tuple_delimiter}Name: 최지훈 | Account: jihoon.choi@vocarush.io)
+("relationship"{tuple_delimiter}이수아{tuple_delimiter}OT 및 파이썬 소개{tuple_delimiter}ATTENDS{tuple_delimiter}이수아가 해당 수업에 참여한다.{tuple_delimiter}9)
 {record_delimiter}
-("entity"{tuple_delimiter}서버 다운타임 원인 분석{tuple_delimiter}Topic{tuple_delimiter}Priority: high | Summary: 서버 장애의 근본 원인을 파악하는 분석 작업)
-{record_delimiter}
-("entity"{tuple_delimiter}긴급 패치 배포 계획{tuple_delimiter}Topic{tuple_delimiter}Priority: high | Summary: 장애 해소를 위한 패치 배포 일정 및 방안)
-{record_delimiter}
-("relationship"{tuple_delimiter}[긴급] 서버 장애 대응 방안{tuple_delimiter}최지훈{tuple_delimiter}SENT_BY{tuple_delimiter}이메일의 발신자는 최지훈이다.{tuple_delimiter}10)
-{record_delimiter}
-("relationship"{tuple_delimiter}[긴급] 서버 장애 대응 방안{tuple_delimiter}서버 다운타임 원인 분석{tuple_delimiter}DISCUSSED{tuple_delimiter}메일 본문에서 서버 다운타임 원인 분석을 주요 주제로 다룬다.{tuple_delimiter}9)
-{record_delimiter}
-("relationship"{tuple_delimiter}[긴급] 서버 장애 대응 방안{tuple_delimiter}긴급 패치 배포 계획{tuple_delimiter}DISCUSSED{tuple_delimiter}메일 본문에서 긴급 패치 배포 계획을 주요 주제로 다룬다.{tuple_delimiter}9)
+("relationship"{tuple_delimiter}이수아{tuple_delimiter}휴강{tuple_delimiter}ATTENDS{tuple_delimiter}이수아의 수업이 해당 일자에 휴강된다.{tuple_delimiter}7)
 {completion_delimiter}
 
 ---
