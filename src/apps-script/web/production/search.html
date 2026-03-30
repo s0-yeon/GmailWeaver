@@ -13,10 +13,10 @@
     <link rel="apple-touch-icon" href="images/apple-touch-icon.svg" sizes="180x180">
     <link rel="manifest" href="site.webmanifest">
     <meta name="theme-color" content="rgb(42, 63, 84)">
-    <title>Search | GmailWeaver</title>
+    <title>Search | Olive</title>
     <script type="module" src="/src/main-minimal.js"></script>
     <style>
-      /* 로고 텍스트 */
+      /* 사이드바 로고 텍스트 */
       .site_title_text {
         font-size: 1.2rem;
         font-weight: 700;
@@ -39,6 +39,7 @@
         width: 100%;
         position: relative;
       }
+      /* 둥근 검색 입력창 + 우측 버튼 */
       .gw-search-box input {
         width: 100%;
         padding: 15px 56px 15px 24px;
@@ -72,7 +73,7 @@
       .gw-search-box button:hover { background: #1a9e82; }
       .gw-search-box button i { color: white; font-size: 1rem; }
 
-      /* 최근 검색어 */
+      /* 최근 검색어 태그 바 */
       .gw-recent-searches {
         margin-top: 12px;
         display: flex;
@@ -86,6 +87,7 @@
         margin-right: 4px;
         white-space: nowrap;
       }
+      /* 태그 X 버튼 */
       .gw-recent-tag {
         display: inline-flex;
         align-items: center;
@@ -116,6 +118,7 @@
         color: #e74c3c;
         background: #fee;
       }
+      /* 전체 삭제 링크 */
       .gw-recent-clear {
         font-size: 0.78rem;
         color: #bbb;
@@ -125,7 +128,7 @@
       }
       .gw-recent-clear:hover { color: #e74c3c; }
 
-      /* 결과 영역 */
+      /* 검색 결과 영역 */
       .gw-result-wrapper {
         padding: 0 32px 40px 32px;
       }
@@ -192,7 +195,7 @@
     <div class="container body">
       <div class="main_container">
 
-        <!-- Sidebar -->
+        <!-- 사이드바 -->
         <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
           <div class="left_col scroll-view">
             <div class="navbar nav_title border-0">
@@ -202,6 +205,7 @@
               </a>
             </div>
             <div class="clearfix"></div>
+            <!-- 사용자 프로필 (이름은 JS에서 동적 주입) -->
             <div class="profile clearfix">
               <div class="profile_pic">
                 <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
@@ -212,6 +216,7 @@
               </div>
             </div>
             <br />
+            <!-- 사이드바 네비게이션 -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
                 <ul class="nav side-menu">
@@ -254,6 +259,7 @@
             </div>
           </div>
         </aside>
+        <!-- /사이드바 -->
 
         <!-- Top Navigation -->
         <div class="top_nav">
@@ -261,6 +267,7 @@
             <div class="nav toggle">
               <a id="menu_toggle"><i class="fas fa-bars"></i></a>
             </div>
+            <!-- 유저 프로필 드롭다운 -->
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
                 <li class="nav-item dropdown">
@@ -279,12 +286,13 @@
             </nav>
           </div>
         </div>
+        <!-- /Top Navigation -->
 
         <!-- Page Content -->
         <main class="right_col" role="main" aria-label="Main content">
           <div class="">
 
-            <!-- 상단 검색창 -->
+            <!-- 검색창 + 최근 검색어 바 -->
             <div class="gw-search-top">
               <div class="gw-search-box">
                 <input type="text" id="search-input" placeholder="메일에 대해 궁금한 것을 검색하세요..." autocomplete="off">
@@ -293,7 +301,7 @@
                 </button>
               </div>
 
-              <!-- 최근 검색어 -->
+              <!-- 최근 검색어 (localStorage에서 로드, 없으면 숨김) -->
               <div class="gw-recent-searches" id="recent-searches-bar" style="display:none;">
                 <span class="gw-recent-label"><i class="fas fa-history me-1"></i>최근 검색:</span>
                 <div id="recent-tags"></div>
@@ -301,7 +309,7 @@
               </div>
             </div>
 
-            <!-- 결과 -->
+            <!-- 검색 결과 (초기: 빈 상태, 검색 후: 로딩 → 결과/에러) -->
             <div class="gw-result-wrapper">
               <div id="result-container">
                 <div class="gw-empty">
@@ -313,10 +321,11 @@
 
           </div>
         </main>
+        <!-- /Page Content -->
 
         <footer>
           <div class="float-end">
-            GmailWeaver &mdash; Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+            Olive &mdash; Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
           </div>
           <div class="clearfix"></div>
         </footer>
@@ -326,10 +335,11 @@
 
     <script>
       const FLASK_URL = 'http://127.0.0.1:80';
+      // 최근 검색어: localStorage 키, 최대 8개 유지
       const RECENT_KEY = 'gw_recent_searches';
       const MAX_RECENT = 8;
 
-      // ── 이름 처리 ──
+      // URL 파라미터 → sessionStorage → 기본값 순으로 사용자 이름 결정
       const params = new URLSearchParams(window.location.search);
       const nameParam = params.get('name');
       const name = nameParam
@@ -339,15 +349,16 @@
       document.getElementById('google-profile-name').textContent = name;
       document.getElementById('google-nav-name').textContent = name;
 
-      // 검색창에 쿼리 복원
+      // URL ?q= 파라미터가 있으면 검색창에 자동 복원
       const query = params.get('q');
       if (query) document.getElementById('search-input').value = decodeURIComponent(query);
 
-      // ── 최근 검색어 관리 ──
+      // 최근 검색어 관리 (localStorage)
       function getRecents() {
         try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; }
         catch { return []; }
       }
+      // 검색 시 맨 앞에 추가, 중복 제거, MAX_RECENT 초과 시 잘라냄
       function saveRecent(q) {
         let recents = getRecents().filter(r => r !== q);
         recents.unshift(q);
@@ -363,11 +374,13 @@
         localStorage.removeItem(RECENT_KEY);
         renderRecents();
       }
+      // 최근 검색어 태그 렌더링
       function renderRecents() {
         const recents = getRecents();
         const bar = document.getElementById('recent-searches-bar');
         const tagsEl = document.getElementById('recent-tags');
 
+        // 검색어 없으면 바 숨김
         if (recents.length === 0) {
           bar.style.display = 'none';
           return;
@@ -381,7 +394,7 @@
           </span>
         `).join('');
 
-        // 태그 클릭 → 검색
+        // 태그 클릭 → 검색창에 채우고 검색 실행 (X 버튼 제외)
         tagsEl.querySelectorAll('.gw-recent-tag').forEach(tag => {
           tag.addEventListener('click', function(e) {
             if (e.target.classList.contains('gw-tag-del')) return;
@@ -390,7 +403,7 @@
             runSearch(q);
           });
         });
-        // 삭제 버튼
+        // X 버튼: 해당 검색어만 삭제
         tagsEl.querySelectorAll('.gw-tag-del').forEach(btn => {
           btn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -401,10 +414,10 @@
 
       document.getElementById('clear-recent').addEventListener('click', clearRecents);
 
-      // 최근 검색어 초기 렌더
+      // 페이지 로드 시 최근 검색어 초기 렌더
       renderRecents();
 
-      // ── 검색 이동 ──
+      // ── 검색 실행 ──
       function doSearch() {
         const q = document.getElementById('search-input').value.trim();
         if (!q) return;
@@ -415,14 +428,19 @@
         if (e.key === 'Enter') doSearch();
       });
 
-      // ── 유틸 ──
+      // util
+
+      // XSS 방지: HTML 특수문자 이스케이프
       function escapeHtml(str) {
         return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       }
+
+      // HTML 속성값(data-* 등)에 사용하는 이스케이프
       function escapeAttr(str) {
         return String(str).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
       }
 
+      // 로딩 상태 렌더링
       function showLoading(q) {
         document.getElementById('result-container').innerHTML = `
           <div class="gw-query-label">검색어: <strong>${escapeHtml(q)}</strong></div>
@@ -432,12 +450,14 @@
           </div>
         `;
       }
+      // 결과 카드 렌더링
       function showResult(q, text) {
         document.getElementById('result-container').innerHTML = `
           <div class="gw-query-label">검색어: <strong>${escapeHtml(q)}</strong></div>
           <div class="gw-result-card">${escapeHtml(text)}</div>
         `;
       }
+      // 에러 메시지 렌더링
       function showError(q, msg) {
         document.getElementById('result-container').innerHTML = `
           <div class="gw-query-label">검색어: <strong>${escapeHtml(q)}</strong></div>
@@ -445,7 +465,7 @@
         `;
       }
 
-      // ── Job 폴링 ──
+      // Job 폴링: 2초 간격, 최대 60회(2분) 대기 
       async function pollJob(jobId, q, interval = 2000, maxTries = 60) {
         for (let i = 0; i < maxTries; i++) {
           await new Promise(r => setTimeout(r, interval));
@@ -459,12 +479,13 @@
         showError(q, '응답 시간이 초과되었습니다. 다시 시도해주세요.');
       }
 
-      // ── GraphRAG 검색 ──
+      // GraphRAG 비동기 검색: Job ID 발급 → 폴링
       async function runSearch(q) {
         showLoading(q);
         saveRecent(q);
         renderRecents();
         try {
+          // 비동기 쿼리 시작
           const res = await fetch(`${FLASK_URL}/run-query-async`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -472,6 +493,7 @@
           });
           const data = await res.json();
           if (!data.jobId) { showError(q, '검색 요청에 실패했습니다.'); return; }
+          // Job 완료까지 폴링
           await pollJob(data.jobId, q);
         } catch (e) {
           showError(q, '서버에 연결할 수 없습니다. Flask 서버가 실행 중인지 확인하세요.');

@@ -5,9 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="images/favicon.ico" type="image/ico" />
-    <title>Calendar | GmailWeaver</title>
+    <title>Calendar | Olive</title>
+    <!-- FullCalendar 초기화 및 이벤트 핸들러 (main-calendar.js) -->
     <script type="module" src="/src/main-calendar.js"></script>
     <style>
+      /* 사이드바 로고 텍스트 스타일 */
       .site_title_text {
         font-size: 1.2rem;
         font-weight: 700;
@@ -20,7 +22,7 @@
       }
       .site_title_text i { font-size: 1.3rem; color: #26B99A; }
 
-      /* Calendar-specific styles */
+      /* 캘린더 레이아웃 */
       .calendar-container {
         background: white;
         border-radius: 8px;
@@ -49,6 +51,8 @@
         background-color: #1a7f72 !important;
         border-color: #1a7f72 !important;
       }
+
+      /* 이벤트 셀 스타일 */
       .fc-event {
         border-radius: 4px !important;
         padding: 2px 4px !important;
@@ -60,8 +64,11 @@
         transform: translateY(-1px) !important;
         transition: all 0.2s ease !important;
       }
+      /* 오늘 날짜 셀 하이라이트 */
       .fc-day-today { background-color: rgba(38, 185, 154, 0.1) !important; }
       .fc-daygrid-event { margin: 1px 2px !important; }
+
+      /*  모달 / 폼 스타일  */
       .modal-lg { max-width: 600px !important; }
       .form-label { font-weight: 600; color: #34495E; margin-bottom: 0.5rem; }
       .form-control:focus, .form-select:focus {
@@ -70,6 +77,7 @@
       }
       .text-danger { color: #E74C3C !important; }
       .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem; border-radius: 0.375rem; }
+      /*  모바일 반응형  */
       @media (max-width: 768px) {
         .calendar-container { padding: 10px; }
         .fc-toolbar { flex-direction: column !important; gap: 10px !important; }
@@ -83,7 +91,7 @@
     <div class="container body">
       <div class="main_container">
 
-        <!-- Sidebar -->
+        <!-- 사이드바 -->
         <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
           <div class="left_col scroll-view">
             <div class="navbar nav_title border-0">
@@ -93,6 +101,7 @@
               </a>
             </div>
             <div class="clearfix"></div>
+            <!-- 사용자 프로필 (이름은 JS에서 동적 주입) -->
             <div class="profile clearfix">
               <div class="profile_pic">
                 <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
@@ -103,6 +112,7 @@
               </div>
             </div>
             <br />
+            <!-- 사이드바 메뉴 -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
                 <ul class="nav side-menu">
@@ -144,7 +154,7 @@
             </div>
           </div>
         </aside>
-        <!-- /Sidebar -->
+        <!-- /사이드바 -->
 
         <!-- Top Navigation -->
         <div class="top_nav">
@@ -154,6 +164,7 @@
             </div>
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <!-- 메일 알림 드롭다운 -->
                 <li class="nav-item dropdown">
                   <a href="#" role="button" class="dropdown-toggle info-number" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-envelope"></i>
@@ -167,6 +178,7 @@
                         <span class="message">Team standup meeting scheduled for 2:00 PM today...</span>
                       </a>
                     </li>
+                    <!-- 유저 프로필 드롭다운 (이름은 JS에서 동적 주입) -->
                     <li class="nav-item">
                       <div class="text-center">
                         <a class="dropdown-item"><strong>See All Messages</strong><i class="fas fa-angle-right"></i></a>
@@ -235,6 +247,7 @@
                   </div>
                   <div class="x_content">
                     <div class="row">
+                      <!-- 캘린더 뷰 전환 버튼 (window.calendar는 main-calendar.js에서 전역 노출) -->
                       <div class="col-md-12 mb-3">
                         <div class="d-flex flex-wrap gap-2">
                           <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#CalenderModalNew">
@@ -257,6 +270,7 @@
                           </button>
                         </div>
                       </div>
+                      <!-- FullCalendar 렌더링 대상 DOM -->
                       <div class="col-md-12">
                         <div id='calendar' class="calendar-container"></div>
                       </div>
@@ -279,7 +293,7 @@
       </div>
     </div>
 
-    <!-- New Event Modal -->
+    <!-- 새 이벤트 생성 모달 -->
     <div id="CalenderModalNew" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="newEventModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -357,7 +371,7 @@
       </div>
     </div>
 
-    <!-- Edit Event Modal -->
+    <!-- 이벤트 수정 모달 -->
     <div id="CalenderModalEdit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -436,7 +450,7 @@
       </div>
     </div>
 
-    <!-- Event Details Modal -->
+    <!-- 이벤트 상세 보기 모달 -->
     <div id="EventDetailsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="eventDetailsLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -444,6 +458,7 @@
             <h4 class="modal-title" id="eventDetailsLabel"><i class="fas fa-calendar-alt me-2"></i>Event Details</h4>
             <button type="button" class="btn-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+          <!-- 내용은 main-calendar.js의 showEventDetails()에서 동적 주입 -->
           <div class="modal-body" id="eventDetailsContent"></div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-primary" id="editEventBtn"><i class="fas fa-edit me-1"></i> Edit Event</button>
@@ -454,7 +469,7 @@
     </div>
 
     <script>
-      // ── 이름 처리 (sessionStorage) ──
+      // URL 파라미터 → sessionStorage → 기본값 순으로 사용자 이름 결정
       const params = new URLSearchParams(window.location.search);
       const nameParam = params.get('name');
       const name = nameParam
@@ -465,18 +480,19 @@
       document.getElementById('google-profile-name').textContent = name;
       document.getElementById('google-nav-name').textContent = name;
 
-      // ── 검색창 → search.html로 이동 ──
+      // 검색창 입력값을 search.html로 전달
       function doCalendarSearch() {
         const q = document.getElementById('calendar-search-input').value.trim();
         if (!q) return;
         window.location.href = 'search.html?q=' + encodeURIComponent(q);
       }
-
+      
       document.getElementById('calendar-search-btn').addEventListener('click', doCalendarSearch);
       document.getElementById('calendar-search-input').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') doCalendarSearch();
       });
 
+      // 새로고침 버튼: gw_cal_ 세션 캐시 전체 삭제 후 이벤트 재요청
       document.getElementById('refresh-calendar-btn').addEventListener('click', function() {
         Object.keys(sessionStorage)
           .filter(k => k.startsWith('gw_cal_'))

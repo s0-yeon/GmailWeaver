@@ -4,8 +4,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 보안 정책: 허용된 출처에서만 스크립트/스타일/폰트 등 리소스 로드 -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:* https://api.example.com https://*.googleapis.com; frame-src 'self' https://www.youtube.com https://player.vimeo.com; media-src 'self' https: blob:; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <!-- 카메라/마이크/위치 권한 차단 -->
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
@@ -13,9 +15,11 @@
     <link rel="apple-touch-icon" href="images/apple-touch-icon.svg" sizes="180x180">
     <link rel="manifest" href="site.webmanifest">
     <meta name="theme-color" content="rgb(42, 63, 84)">
-    <title>Home | GmailWeaver</title>
+    <title>Home | Olive</title>
+    <!-- Vite 진입점: 공통 SCSS + JS 번들링 -->
     <script type="module" src="/src/main-minimal.js"></script>
     <style>
+      /* 사이드바 로고 텍스트 스타일 */
       .site_title_text {
         font-size: 1.2rem;
         font-weight: 700;
@@ -28,6 +32,7 @@
       }
       .site_title_text i { font-size: 1.3rem; color: #26B99A; }
 
+      /* 홈 메인 콘텐츠 레이아웃 */
       .gw-home-wrapper {
         display: flex;
         flex-direction: column;
@@ -49,6 +54,7 @@
         margin-bottom: 40px;
         text-align: center;
       }
+      /* 검색창 (둥근 입력창 + 우측 버튼) */
       .gw-search-box {
         width: 100%;
         max-width: 680px;
@@ -68,6 +74,8 @@
         border-color: #26B99A;
         box-shadow: 0 2px 16px rgba(38,185,154,0.15);
       }
+
+      /* 검색 버튼: 입력창 우측 끝에 고정 */
       .gw-search-box button {
         position: absolute;
         right: 8px;
@@ -99,7 +107,7 @@
     <div class="container body">
       <div class="main_container">
 
-        <!-- Sidebar -->
+        <!-- 사이드바 -->
         <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
           <div class="left_col scroll-view">
             <div class="navbar nav_title border-0">
@@ -160,6 +168,7 @@
             </div>
           </div>
         </aside>
+        <!-- /사이드바 -->
 
         <!-- Top Navigation -->
         <div class="top_nav">
@@ -167,6 +176,7 @@
             <div class="nav toggle">
               <a id="menu_toggle"><i class="fas fa-bars"></i></a>
             </div>
+            <!-- 유저 프로필 드롭다운 (이름은 JS에서 동적 주입) -->
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
                 <li class="nav-item dropdown">
@@ -185,12 +195,15 @@
             </nav>
           </div>
         </div>
+        <!-- /Top Navigation -->
 
-        <!-- Page Content -->
+        <!-- 홈 검색화면 -->
         <main class="right_col" role="main" aria-label="Main content">
           <div class="gw-home-wrapper">
+            <!-- 이름은 JS에서 동적 주입 -->
             <div class="gw-greeting" id="home-greeting">반갑습니다!</div>
             <div class="gw-subtitle">무엇이든 물어보세요.</div>
+            <!-- 검색창: 입력 후 search.html로 이동 -->
             <div class="gw-search-box">
               <input type="text" id="home-search-input" placeholder="메일에 대해 궁금한 것을 검색하세요..." autocomplete="off">
               <button id="home-search-btn" type="button">
@@ -200,10 +213,11 @@
             <p class="gw-search-hint">Enter 또는 버튼을 눌러 검색</p>
           </div>
         </main>
+        <!-- /Page Content -->
 
         <footer>
           <div class="float-end">
-            GmailWeaver &mdash; Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+            Olive &mdash; Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
           </div>
           <div class="clearfix"></div>
         </footer>
@@ -212,7 +226,7 @@
     </div>
 
     <script>
-      // ── 이름 처리: URL 파라미터 우선, 없으면 sessionStorage 사용 ──
+      // URL 파라미터 → sessionStorage → 기본값 순으로 사용자 이름 결정
       const params = new URLSearchParams(window.location.search);
       const nameParam = params.get('name');
       const name = nameParam
@@ -223,14 +237,14 @@
         sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
       }
 
-      // 이름 주입
+      // 사이드바 + 네비바 + 인사말에 이름 주입
       document.getElementById('google-profile-name').textContent = name;
       document.getElementById('google-nav-name').textContent = name;
       if (name !== '-') {
         document.getElementById('home-greeting').textContent = name + '님, 반갑습니다!';
       }
 
-      // ── 검색 실행 ──
+      // 검색창 입력값을 search.html로 전달
       function doSearch() {
         const q = document.getElementById('home-search-input').value.trim();
         if (!q) return;

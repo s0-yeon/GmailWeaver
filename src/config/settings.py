@@ -16,3 +16,5 @@ PARQUET_DIR = os.path.join(BASE_DIR, "src", "parquet", "output") # output 폴더
 ENTITIES_PATH = os.path.join(PARQUET_DIR, "entities.parquet") # 노드 데이터: 엔티티 목록
 RELATIONSHIPS_PATH = os.path.join(PARQUET_DIR, "relationships.parquet") # 엣지 데이터: 엔티티 간 관계
 COMMUNITIES_PATH = os.path.join(PARQUET_DIR, "communities.parquet") # 커뮤니티 데이터: 군집화한 노드 그룹 정보
+MAIL_STATICS_PATH = os.path.join(PARQUET_DIR, "mail_contact_stats.json")
+UPDATE_DIR = os.path.join(GRAPHRAG_ROOT, "update_output")
