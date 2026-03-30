@@ -86,8 +86,8 @@ storage:
 ## only turn this on if running `graphrag index` with custom settings
 ## we normally use `graphrag update` with the defaults
 update_index_storage:
-  # type: file # or blob
-  # base_dir: "update_output"
+  type: file # or blob
+  base_dir: "update_output"
 
 ### Workflow settings ###
 
