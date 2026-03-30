@@ -2,7 +2,10 @@
 
 import pandas as pd
 import json
+import argparse
+import os
 from config.settings import *
+from util.user_path import UserPaths
 
 # pandas에서 읽은 값을 JSON으로 저장 가능한 타입으로 변환
 def _convert(val):
@@ -97,23 +100,29 @@ def _build_edges(rel_df: pd.DataFrame) -> list[dict]:
  
 # job_run.py에서 subprocess로 이 파일을 실행하면 여기서 시작
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--base-dir", required=True)
+    parser.add_argument("--gmail-id", required=True)
+    args = parser.parse_args()
+
+    paths = UserPaths(args.base_dir, args.gmail_id)
     print("parquet → JSON 변환 시작\n")
  
     # 인덱싱이 안된 경우
-    if not os.path.exists(ENTITIES_PATH):
-        print(f"[ERROR] 파일 없음: {ENTITIES_PATH}")
+    if not os.path.exists(paths.ENTITIES_PATH):
+        print(f"[ERROR] 파일 없음: {paths.ENTITIES_PATH}")
         return
  
-    if not os.path.exists(RELATIONSHIPS_PATH):
-        print(f"[ERROR] 파일 없음: {RELATIONSHIPS_PATH}")
+    if not os.path.exists(paths.RELATIONSHIPS_PATH):
+        print(f"[ERROR] 파일 없음: {paths.RELATIONSHIPS_PATH}")
         return
  
-    entities_df = pd.read_parquet(ENTITIES_PATH) # entities.parquet 에서 pandas DataFrame으로 메모리 로드
-    rel_df = pd.read_parquet(RELATIONSHIPS_PATH) # relationships.parquet 에서 pandas DataFrame으로 메모리 로드
+    entities_df = pd.read_parquet(paths.ENTITIES_PATH) # entities.parquet 에서 pandas DataFrame으로 메모리 로드
+    rel_df = pd.read_parquet(paths.RELATIONSHIPS_PATH) # relationships.parquet 에서 pandas DataFrame으로 메모리 로드
     # 커뮤니티는 없을수도 있으니까 None로 둠
     communities_df = None # 커뮤니티는 없을수도 있음
-    if os.path.exists(COMMUNITIES_PATH):
-        communities_df = pd.read_parquet(COMMUNITIES_PATH) # communities.parquet 에서 pandas DataFrame으로 메모리 로드
+    if os.path.exists(paths.COMMUNITIES_PATH):
+        communities_df = pd.read_parquet(paths.COMMUNITIES_PATH) # communities.parquet 에서 pandas DataFrame으로 메모리 로드
  
     # 노드/엣지 생성
     print("노드 생성 중...")
@@ -122,18 +131,18 @@ def main():
     print("\n엣지 생성 중...")
     edges = _build_edges(rel_df)     # relationships → 엣지 리스트
 
-    os.makedirs(os.path.dirname(GRAPH_JSON_PATH), exist_ok=True) # src/json안에 저장
+    os.makedirs(os.path.dirname(paths.GRAPH_JSON_PATH), exist_ok=True) # src/json안에 저장
  
     graph_data = {
         "nodes": nodes,             # 전체 노드
         "edges": edges,             # 전체 엣지
     }
 
-    with open(GRAPH_JSON_PATH, "w", encoding="utf-8") as f: # 쓰기 모드로 한글 깨짐 방지
+    with open(paths.GRAPH_JSON_PATH, "w", encoding="utf-8") as f: # 쓰기 모드로 한글 깨짐 방지
         json.dump(graph_data, f, ensure_ascii=False, indent=2)
 
     print(f"\n완료")
-    print(f"저장 경로 : {GRAPH_JSON_PATH}")
+    print(f"저장 경로 : {paths.GRAPH_JSON_PATH}")
     print(f"노드 수   : {len(nodes)}")
     print(f"엣지 수   : {len(edges)}")
  

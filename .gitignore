@@ -1,6 +1,7 @@
 .DS_store/
 .clasp.json
 dist
+.idea/
 node_modules/
 src/parquet/.env
 .vscode/
@@ -10,6 +11,7 @@ gmailweaver-venv/
 src/parquet/output/
 src/parquet/cache/
 src/parquet/logs/
+src/parquet/json/
 src/parquet/update_output/
 src/parquet/output.lancedb/
 src/parquet/output/lancedb/
@@ -19,4 +21,11 @@ src/parquet/input/attachment/
 # 개인정보 보호: input 폴더는 유지(구조만), 내용물은 무시
 src/parquet/input/*
 !src/parquet/input/.gitkeep
+
+user_data/*
+!user_data/.gitkeep
+
+# Python cache
+__pycache__/
+*.pyc
 

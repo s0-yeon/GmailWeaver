@@ -8,12 +8,13 @@ function onSmartSearch(e) {    // e: Apps Script 이벤트 객체. e.commonEvent
     if (!query) return _toast("메시지를 입력해주세요.");     // 검색어 비어있으면 토스트 알림 띄우기
     var jobId;    // jobId(작업 번호)
 
+    var myEmail = Session.getActiveUser().getEmail();
     try {
         var res = UrlFetchApp.fetch(TunnelURL + "/run-query-async", {   // Flask 서버의 run-query-async로 POST 요청
             method: "post",   
             contentType: "application/json",
             headers: { "ngrok-skip-browser-warning": "1" },   // ngrok이 브라우저에 경고 페이지를 띄우는 것을 방지하는 헤더
-            payload: JSON.stringify({ message: query, resMethod: "global", resType: "structured" })    // '구조화'로 응답 형식 지정
+            payload: JSON.stringify({ message: query, resMethod: "global", resType: "structured", gmail_id: myEmail })    // '구조화'로 응답 형식 지정
         });
         jobId = JSON.parse(res.getContentText()).jobId;     // 서버 응답 객체(res)에서 텍스트를 추출하여 JSON 객체로 변환한 후, 그 객체에서 jobId 값을 추출
     } catch (err) { return _toast("⚠️ 서버 연결 실패: " + err.message); }

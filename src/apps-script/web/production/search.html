@@ -360,6 +360,7 @@
       document.getElementById('google-profile-name').textContent = name;
       document.getElementById('google-nav-name').textContent = name;
 
+      window.currentUserName = name;
       // URL ?q= 파라미터가 있으면 검색창에 자동 복원
       const query = params.get('q');
       if (query) document.getElementById('search-input').value = decodeURIComponent(query);
@@ -495,12 +496,19 @@
         showLoading(q);
         saveRecent(q);
         renderRecents();
+
+        console.log("currentUserName =", window.currentUserName);
+        console.log("gmailId =", window.currentUserName + "@gmail.com");
+        console.log("query =", q);
+
         try {
+          const gmailId = window.currentUserName + "@gmail.com";
+
           // 비동기 쿼리 시작
           const res = await fetch(`${FLASK_URL}/run-query-async`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: q, resMethod: 'local', resType: 'text' })
+            body: JSON.stringify({ message: q, resMethod: 'local', resType: 'text',gmail_id: gmailId })
           });
           const data = await res.json();
           if (!data.jobId) { showError(q, '검색 요청에 실패했습니다.'); return; }

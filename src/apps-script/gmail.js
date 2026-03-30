@@ -53,7 +53,8 @@ function _runSync(mode) {
           filename: filenameAll, // 파일명
           content: allText, // 본문
           attachment: allAttachments, // 첨부파일
-          syncmode: "rewrite" // 처리방식
+          syncmode: "rewrite", // 처리방식
+          gmail_id: myEmail
         }),
         muteHttpExceptions: true // HTTP 오류 에러 말고 응답으로 수신
       });
@@ -117,7 +118,8 @@ function _runSync(mode) {
           filename: filename,
           content: allText,
           attachment: allAttachments,
-          syncmode: "append"
+          syncmode: "append",
+          gmail_id: myEmail
       }),
       muteHttpExceptions: true
     });
@@ -383,7 +385,7 @@ function _buildMessageText(msg, myEmail, mailIndex) {
 
       if (!isSupported) {
         status = "업로드 제외: 형식 미지원";
-      } else if (size > 5 * 1024 * 1024) {
+      } else if (size > 10 * 1024 * 1024) {
         status = "업로드 제외: 용량 초과";
       } else {
         status = "업로드 포함";
@@ -431,7 +433,7 @@ function _buildAttachmentPayload(msg) {
   var atts = msg.getAttachments({ includeInlineImages: false });  // 본문에 인라인 이미지로 삽입된 경우 제외
   var id = msg.getId();
   var payload = []; 
-  var MAX_ATTACHMENT_SIZE = 5 * 1024 * 1024; // 5MB 크기 제한
+  var MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024; // 10MB 크기 제한
 
   atts.forEach(function(att, i) {
     var name = att.getName() || ("attachment_" + (i + 1));
