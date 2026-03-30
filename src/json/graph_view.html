@@ -10,11 +10,13 @@
   <svg id="graph" style="width:100vw;height:100vh;"></svg>
   <script>
     const COLORS = {
-      PERSON: "#60a5fa", // 사람 = 파란색
-      ORGANIZATION: "#34d399", // 조직, 기관 = 초록색
-      GEO: "#fbbf24", // 지역 = 노란색
-      EVENT: "#f87171", // 이벤트 = 빨간색
-      unknown: "#c9d1d9" // 나머지 = 회색
+      EMAIL: "#f87171",        // 빨강
+      PERSON: "#fb923c",       // 주황
+      TOPIC: "#fbbf24",        // 노랑
+      ORGANIZATION: "#34d399", // 초록
+      LABEL: "#60a5fa",        // 파랑
+      EVENT: "#a78bfa",        // 보라
+      unknown: "#c9d1d9"       // 회색
     };
 
     // Flask /graph-data 엔드포인트에서 노드와 엣지 데이터 fetch
@@ -37,7 +39,7 @@
             .id(d => d.label) // 엣지의 source와 target가 label 기준으로 연결
             .distance(80)) // 연결 노드 사이의 거리
           .force("charge", d3.forceManyBody().strength(-15)) // 노드들 간의 밀어내는 힘
-          .force("collide", d3.forceCollide(35)); // 노드들 겹치지 않도록 함
+          .force("collide", d3.forceCollide(30)); // 노드들 겹치지 않도록 함
 
         // 엣지 그리기
         const link = g.append("g")
