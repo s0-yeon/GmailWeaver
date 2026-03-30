@@ -41,7 +41,7 @@
                 <img src="images/img.jpg" alt="User" class="img-circle profile_img" loading="lazy">
               </div>
               <div class="profile_info">
-                <span>Welcome,</span>
+                <span data-i18n="sidebar.welcome">Welcome,</span>
                 <h4>John Doe</h4>
               </div>
             </div>
@@ -89,7 +89,7 @@
                     <ul class="nav child_menu">
                       <li><a href="chartjs.html">Chart.js</a></li>
                       <li><a href="echarts.html">ECharts <span class="badge bg-info">Updated</span></a></li>
-                      <li><a href="other_charts.html">Other Charts</a></li>
+                      <li><a href="other_charts.html"><span data-i18n="nav.other_charts">Other Charts</span></a></li>
                     </ul>
                   <li><a><i class="bi bi-layout-split"></i>Layouts <span class="bi bi-chevron-down"></span></a>
                     <ul class="nav child_menu">
@@ -136,16 +136,16 @@
             </div>
 
             <div class="sidebar-footer hidden-small">
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Settings">
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Settings" data-i18n-title="sidebar.settings">
                 <span class="fas fa-cog" aria-hidden="true"></span>
               </a>
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="FullScreen">
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="FullScreen" data-i18n-title="sidebar.fullscreen">
                 <span class="fas fa-expand" aria-hidden="true"></span>
               </a>
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Lock">
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Lock" data-i18n-title="sidebar.lock">
                 <span class="fas fa-eye-slash" aria-hidden="true"></span>
               </a>
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Logout" href="login.html">
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Logout" data-i18n-title="sidebar.logout" href="login.html">
                 <span class="fas fa-power-off" aria-hidden="true"></span>
               </a>
             </div>
@@ -223,15 +223,26 @@
                     </li>
                   </ul>
                 </li>
-                <li class="nav-item dropdown">
+                                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color:inherit;">
+                    <i class="bi bi-translate" style="font-size: 1.2rem; vertical-align: middle;"></i>
+                    <span id="current-lang" style="margin-left: 4px; font-size: 0.9rem;">KO</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ko" data-i18n="lang.ko">🇰🇷 한국어</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="en" data-i18n="lang.en">🇺🇸 English</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ja" data-i18n="lang.ja">🇯🇵 日本語</a></li>
+                  </ul>
+                </li>
+<li class="nav-item dropdown">
                   <a href="#" role="button" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="images/img.jpg" alt="">John Doe
                   </a>
                   <div class="dropdown-menu dropdown-menu-end dropdown-usermenu dropdown-menu-sm" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#" role="button">Profile</a>
-                    <a class="dropdown-item" href="#" role="button">Settings</a>
-                    <a class="dropdown-item" href="#" role="button">Help</a>
-                    <a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt float-end"></i> Log Out</a>
+                    <a class="dropdown-item" href="#" role="button" data-i18n="topnav.settings">Settings</a>
+                    <a class="dropdown-item" href="#" role="button" data-i18n="topnav.help">Help</a>
+                    <a class="dropdown-item" href="login.html" data-i18n="topnav.logout"><i class="fas fa-sign-out-alt float-end"></i> Log Out</a>
                   </div>
                 </li>
               </ul>
@@ -252,7 +263,7 @@
             <!-- Section: Line Charts -->
             <div class="row">
               <div class="col-12">
-                <h4 class="text-muted mb-3"><i class="fas fa-chart-line me-2"></i>Line Charts</h4>
+                <h4 class="text-muted mb-3"><i class="fas fa-chart-line me-2"></i><span data-i18n="page.chartjs.line_charts">Line Charts</span></h4>
               </div>
             </div>
 
@@ -325,7 +336,7 @@
             <!-- Section: Bar Charts -->
             <div class="row">
               <div class="col-12">
-                <h4 class="text-muted mb-3 mt-3"><i class="fas fa-chart-bar me-2"></i>Bar Charts</h4>
+                <h4 class="text-muted mb-3 mt-3"><i class="fas fa-chart-bar me-2"></i><span data-i18n="page.chartjs.bar_charts">Bar Charts</span></h4>
               </div>
             </div>
 
@@ -398,7 +409,7 @@
             <!-- Section: Circular Charts -->
             <div class="row">
               <div class="col-12">
-                <h4 class="text-muted mb-3 mt-3"><i class="fas fa-chart-pie me-2"></i>Circular Charts</h4>
+                <h4 class="text-muted mb-3 mt-3"><i class="fas fa-chart-pie me-2"></i><span data-i18n="page.chartjs.circular_charts">Circular Charts</span></h4>
               </div>
             </div>
 

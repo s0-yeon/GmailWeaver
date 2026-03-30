@@ -1,5 +1,6 @@
 // Form Upload.html specific JavaScript with Uppy integration (jQuery-free)
 
+import './utils/i18n.js';
 // Bootstrap 5
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;

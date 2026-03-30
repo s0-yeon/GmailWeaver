@@ -170,6 +170,12 @@ export default defineConfig({
     open: '/production/index.html',
     port: 3000,
     host: true,
+    proxy: {
+      '/graph-data': 'http://127.0.0.1:80',
+      '/graph-render.js': 'http://127.0.0.1:80',
+      '/run-query-async': 'http://127.0.0.1:80',
+      '/job-status': 'http://127.0.0.1:80',
+    },
     watch: {
       usePolling: false,
       interval: 100,

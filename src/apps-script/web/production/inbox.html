@@ -30,7 +30,7 @@
                 <img src="images/img.jpg" alt="User profile photo" class="img-circle profile_img" loading="lazy">
               </div>
               <div class="profile_info">
-                <span>Welcome,</span>
+                <span data-i18n="sidebar.welcome">Welcome,</span>
                 <h4>John Doe</h4>
               </div>
             </div>
@@ -80,7 +80,7 @@
                     <ul class="nav child_menu">
                       <li><a href="chartjs.html">Chart.js</a></li>
                       <li><a href="echarts.html">ECharts <span class="badge bg-info">Updated</span></a></li>
-                      <li><a href="other_charts.html">Other Charts</a></li>
+                      <li><a href="other_charts.html"><span data-i18n="nav.other_charts">Other Charts</span></a></li>
                     </ul>
                   <li><a><i class="bi bi-layout-split"></i>Layouts <span class="bi bi-chevron-down"></span></a>
                     <ul class="nav child_menu">
@@ -129,16 +129,16 @@
 
             <!-- /menu footer buttons -->
             <div class="sidebar-footer hidden-small">
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Settings">
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Settings" data-i18n-title="sidebar.settings">
                 <span class="fas fa-cog" aria-hidden="true"></span>
               </a>
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="FullScreen">
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="FullScreen" data-i18n-title="sidebar.fullscreen">
                 <span class="fas fa-expand" aria-hidden="true"></span>
               </a>
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Lock">
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Lock" data-i18n-title="sidebar.lock">
                 <span class="fas fa-eye-slash" aria-hidden="true"></span>
               </a>
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Logout" href="login.html">
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Logout" data-i18n-title="sidebar.logout" href="login.html">
                 <span class="fas fa-power-off" aria-hidden="true"></span>
               </a>
             </div>
@@ -245,7 +245,7 @@
               <div class="title_right">
                 <div class="col-md-5 col-sm-5 mb-3 float-end top_search">
                   <div class="input-group search-bar-fix">
-                    <input type="text" class="form-control" placeholder="Search emails...">
+                    <input type="text" class="form-control" placeholder="Search emails..." data-i18n-placeholder="page.inbox.search_placeholder">
                     <button class="btn btn-outline-secondary" type="button">
                       <i class="fas fa-search"></i>
                     </button>

@@ -1,0 +1,206 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "search": "検索",
+    "labels": "ラベル",
+    "calendar": "カレンダー",
+    "my_account": "マイアカウント",
+    "statistics": "統計",
+    "other_charts": "その他のチャート",
+    "contacts": "連絡先",
+    "profile": "プロフィール",
+    "graph_viz": "グラフ表示"
+  },
+  "sidebar": {
+    "welcome": "ようこそ、",
+    "settings": "設定",
+    "fullscreen": "全画面",
+    "lock": "ロック",
+    "logout": "ログアウト"
+  },
+  "topnav": {
+    "profile": "プロフィール",
+    "settings": "設定",
+    "help": "ヘルプ",
+    "logout": "ログアウト"
+  },
+  "lang": {
+    "label": "言語",
+    "ko": "🇰🇷 한국어",
+    "en": "🇺🇸 English",
+    "ja": "🇯🇵 日本語"
+  },
+  "footer": {
+    "template_by": "Bootstrap 管理テンプレート by"
+  },
+  "badge": {
+    "updated": "更新済"
+  },
+  "page": {
+    "index": {
+      "greeting": "ようこそ！",
+      "subtitle": "何でもお気軽にどうぞ。",
+      "search_placeholder": "メールについて検索...",
+      "search_hint": "Enterキーまたはボタンを押して検索"
+    },
+    "search": {
+      "search_placeholder": "メールについて検索...",
+      "recent_label": "最近の検索:",
+      "clear_all": "すべて削除",
+      "empty": "クエリを入力してメールを分析してください。",
+      "loading": "メールを分析中...",
+      "search_query_label": "クエリ:",
+      "no_result": "結果が見つかりません。",
+      "error_timeout": "タイムアウトしました。再試行してください。",
+      "error_connect": "サーバーに接続できません。Flaskが起動しているか確認してください。",
+      "error_failed": "検索リクエストに失敗しました。"
+    },
+    "labels": {
+      "title": "ラベル管理",
+      "add_label": "+ ラベル追加",
+      "no_labels": "ラベルがありません。",
+      "loading": "ラベルを読み込み中...",
+      "apply_btn": "適用",
+      "delete_btn": "削除"
+    },
+    "calendar": {
+      "title": "イベントカレンダー",
+      "subtitle": "日付をクリックしてイベントを追加、イベントをクリックして編集",
+      "new_event": "新しいイベント",
+      "month_view": "月表示",
+      "week_view": "週表示",
+      "day_view": "日表示",
+      "today": "今日",
+      "reload": "更新",
+      "export": "カレンダーをエクスポート",
+      "import": "イベントをインポート",
+      "modal_create": "新しいイベントを作成",
+      "modal_edit": "イベントを編集",
+      "modal_detail": "イベント詳細",
+      "label_title": "イベントタイトル",
+      "label_color": "イベントカラー",
+      "label_start": "開始日時",
+      "label_end": "終了日時",
+      "label_allday": "終日イベント",
+      "label_desc": "説明",
+      "label_location": "場所",
+      "label_category": "カテゴリ",
+      "color_green": "緑",
+      "color_blue": "青",
+      "color_red": "赤",
+      "color_orange": "オレンジ",
+      "color_purple": "紫",
+      "color_dark": "濃いグレー",
+      "cat_select": "カテゴリを選択...",
+      "cat_meeting": "ミーティング",
+      "cat_conference": "カンファレンス",
+      "cat_workshop": "ワークショップ",
+      "cat_personal": "個人",
+      "cat_deadline": "締め切り",
+      "cat_other": "その他",
+      "btn_cancel": "キャンセル",
+      "btn_save": "イベントを保存",
+      "btn_save_changes": "変更を保存",
+      "btn_delete": "イベントを削除",
+      "btn_edit": "イベントを編集",
+      "btn_close": "閉じる"
+    },
+    "inbox": {
+      "title": "受信トレイ",
+      "subtitle": "メール管理",
+      "search_placeholder": "メールを検索...",
+      "compose": "作成",
+      "reply": "返信",
+      "forward": "転送",
+      "print": "印刷",
+      "delete": "削除",
+      "to_label": "宛先:",
+      "subject_label": "件名:",
+      "attach": "添付",
+      "draft": "下書き",
+      "send": "送信"
+    },
+    "profile": {
+      "title": "ユーザープロフィール",
+      "subtitle": "プロフェッショナルダッシュボード",
+      "search_placeholder": "プロフィールを検索...",
+      "edit_profile": "プロフィールを編集",
+      "share": "共有",
+      "projects_completed": "完了プロジェクト",
+      "team_members": "チームメンバー",
+      "awards_won": "受賞",
+      "hours_worked": "作業時間",
+      "contact_info": "連絡先情報",
+      "technical_skills": "技術スキル",
+      "recent_activity": "最近の活動",
+      "performance": "パフォーマンスダッシュボード",
+      "tab_projects": "現在のプロジェクト",
+      "tab_achievements": "実績",
+      "tab_activity": "アクティビティ",
+      "week": "週",
+      "month": "月",
+      "year": "年"
+    },
+    "contacts": {
+      "title": "連絡先",
+      "search_placeholder": "連絡先を検索...",
+      "add_contact": "連絡先を追加",
+      "name": "名前",
+      "email": "メール",
+      "phone": "電話番号",
+      "company": "会社"
+    },
+    "chartjs": {
+      "title": "Chart.js サンプル",
+      "line_charts": "折れ線グラフ",
+      "bar_charts": "棒グラフ",
+      "circular_charts": "円グラフ"
+    },
+    "echarts": {
+      "title": "ECharts",
+      "subtitle": "チャートサンプル"
+    },
+    "login": {
+      "title": "ログイン",
+      "username": "ユーザー名",
+      "password": "パスワード",
+      "remember": "ログイン状態を保持",
+      "submit": "ログイン",
+      "forgot": "パスワードをお忘れですか？",
+      "register": "アカウントを作成"
+    },
+    "error": {
+      "403_title": "アクセス禁止",
+      "403_desc": "このページへのアクセス権がありません。",
+      "404_title": "ページが見つかりません",
+      "404_desc": "リクエストされたページは存在しません。",
+      "500_title": "サーバーエラー",
+      "500_desc": "サーバーでエラーが発生しました。",
+      "go_home": "ホームへ戻る"
+    },
+    "tables": {
+      "title": "テーブル",
+      "search": "検索...",
+      "export": "エクスポート",
+      "print": "印刷"
+    },
+    "forms": {
+      "title": "フォーム",
+      "submit": "送信",
+      "reset": "リセット",
+      "cancel": "キャンセル",
+      "save": "保存"
+    },
+    "general": {
+      "loading": "読み込み中...",
+      "no_data": "データがありません。",
+      "confirm": "確認",
+      "cancel": "キャンセル",
+      "close": "閉じる",
+      "save": "保存",
+      "edit": "編集",
+      "delete": "削除",
+      "back": "戻る"
+    }
+  }
+}

@@ -354,3 +354,9 @@ import './modules/maps.js';
 // Import echarts module for echarts.html
 import './modules/echarts.js';
 
+// web/src/graph-viz.js 그래프시각화
+import { loadGraphViz } from './graph-viz.js';
+window.loadGraphViz = loadGraphViz; // HTML에서 호출 가능하게
+
+// 다국어 지원 (i18n)
+import './utils/i18n.js';

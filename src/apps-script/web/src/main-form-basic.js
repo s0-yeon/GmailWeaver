@@ -1,5 +1,6 @@
 // jQuery-free main.js for form_advanced.html - modern alternatives
 
+import './utils/i18n.js';
 // Bootstrap 5 - No jQuery dependency needed
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;

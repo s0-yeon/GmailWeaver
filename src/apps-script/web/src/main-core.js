@@ -1,5 +1,6 @@
 // CORE ESSENTIALS - Only what every page needs (jQuery-free)
 
+import './utils/i18n.js';
 // Import and expose security utilities globally
 import { sanitizeHtml, sanitizeText, setSafeInnerHTML } from './utils/security.js';
 window.sanitizeHtml = sanitizeHtml;

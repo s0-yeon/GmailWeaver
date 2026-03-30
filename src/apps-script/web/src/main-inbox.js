@@ -1,5 +1,6 @@
 // Inbox.html specific JavaScript with Quill rich text editor
 
+import './utils/i18n.js';
 // Import security utilities
 import { sanitizeHtml } from './utils/security.js';
 
