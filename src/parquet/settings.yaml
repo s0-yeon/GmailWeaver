@@ -125,3 +125,20 @@ global_search:
 
 drift_search:
   prompt: "prompts/drift_search_system_prompt.txt"
+
+# 노드가 10개 이상인 경우 클러스터가 더 분화된다. 이는 그래프를 더욱 파편화하므로 일단 주석 처리한다.
+# cluster_graph:
+#   max_cluster_size: 10
+
+embed_graph:
+  enabled: false # if true, will generate node2vec embeddings for nodes
+
+umap:
+  enabled: false # if true, will generate UMAP embeddings for nodes
+
+snapshots:
+  graphml: true
+  raw_entities: false
+  top_level_nodes: false
+  embeddings: false
+  transient: false
