@@ -19,3 +19,4 @@ MAIL_BLOCK_SEP = "============================================================" 
 # RELATIONSHIPS_PATH = os.path.join(PARQUET_DIR, "relationships.parquet") # 엣지 데이터: 엔티티 간 관계
 # COMMUNITIES_PATH = os.path.join(PARQUET_DIR, "communities.parquet") # 커뮤니티 데이터: 군집화한 노드 그룹 정보
 
+

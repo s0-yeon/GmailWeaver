@@ -34,6 +34,8 @@ class UserPaths:
         self.ENTITIES_PATH = os.path.join(self.PARQUET_DIR, "entities.parquet") # 노드 데이터: 엔티티 목록
         self.RELATIONSHIPS_PATH = os.path.join(self.PARQUET_DIR, "relationships.parquet") # 엣지 데이터: 엔티티 간 관계
         self.COMMUNITIES_PATH = os.path.join(self.PARQUET_DIR, "communities.parquet") # 커뮤니티 데이터: 군집화한 노드 그룹 정보
+        self.MAIL_STATICS_PATH = os.path.join(self.PARQUET_DIR, "mail_contact_stats.json")
+        self.UPDATE_DIR = os.path.join(self.GRAPHRAG_ROOT, "update_output")
 
 
 

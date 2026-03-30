@@ -138,14 +138,14 @@ export default defineConfig({
         // Theme comparison page (for testing)
         theme_comparison: 'production/theme-comparison.html',
 
-        // GmailWeaver custom pages
-        search: 'production/search.html'
+        // 올리브를 위한 서치 페이지 추가
+        search: 'production/search.html' 
       }
     },
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
+        drop_console: true, //함수가 tree-shaking으로 제거되는 문제 해결
         drop_debugger: true,
         unsafe_comps: true,
         passes: 3,

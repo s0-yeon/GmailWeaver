@@ -19,7 +19,7 @@
   ],
   "addOns": {
     "common": {
-      "name": "🫒 Olive",
+      "name": "🫒 Olive", 
       "logoUrl": "https://cdn-icons-png.flaticon.com/512/7830/7830615.png",
       "layoutProperties": {
         "primaryColor": "#465822",

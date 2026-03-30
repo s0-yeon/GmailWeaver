@@ -1,4 +1,5 @@
 // apps-script/web/main-calendar.js
+
 import DOMPurify from 'dompurify';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
@@ -9,17 +10,21 @@ import './js/helpers/smartresize.js';
 import './js/sidebar.js';
 import './js/init.js';
 
+// FullCalendar 핵심 + 플러그인 import
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
+// 전역 노출 (HTML 인라인 스크립트에서 접근 가능하도록)
 window.FullCalendar = { Calendar, dayGridPlugin, interactionPlugin, timeGridPlugin };
 globalThis.FullCalendar = { Calendar, dayGridPlugin, interactionPlugin, timeGridPlugin };
 
+// 현재 캘린더 인스턴스 / 선택된 이벤트 전역 상태
 let currentCalendar = null;
 let selectedEvent = null;
 
+// Date 객체 → datetime-local input 형식 (YYYY-MM-DDTHH:mm) 변환
 function formatDateForInput(date) {
   if (!date) return '';
   const d = new Date(date);
@@ -31,10 +36,12 @@ function formatDateForInput(date) {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
+// 이벤트 고유 ID 생성 (타임스탬프 + 랜덤 문자열)
 function generateEventId() {
   return 'event_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 }
 
+// FullCalendar 초기화 및 렌더링
 function initCalendar() {
   const calendarEl = document.getElementById('calendar');
 
@@ -55,6 +62,7 @@ function initCalendar() {
       droppable: true,
       height: 'auto',
 
+      // 이벤트 데이터 fetch (세션 캐시 우선, 없으면 Flask API 호출)
       events: function(fetchInfo, successCallback, failureCallback) {
         const cacheKey = `gw_cal_${fetchInfo.startStr}_${fetchInfo.endStr}`;
         const cached = sessionStorage.getItem(cacheKey);
@@ -85,15 +93,18 @@ function initCalendar() {
         .catch(err => failureCallback(err));
       },
 
+      // 날짜 범위 선택 시 새 이벤트 모달 오픈
       select: function(selectInfo) {
         openNewEventModal(selectInfo);
       },
 
+      // 이벤트 클릭 시 상세 보기 모달 오픈
       eventClick: function(eventClickInfo) {
         selectedEvent = eventClickInfo.event;
         showEventDetails(eventClickInfo.event);
       },
 
+      // 이벤트 마운트 시 툴팁 등록(마우스를 올렸을 때 뜨는 작은 설명 박스)
       eventDidMount: function(info) {
         info.el.setAttribute('title', info.event.title);
         if (info.event.extendedProps.description) {
@@ -104,9 +115,11 @@ function initCalendar() {
     });
 
     currentCalendar.render();
+    // 외부 접근용 전역 노출
     window.calendar = currentCalendar;
     globalThis.calendar = currentCalendar;
 
+    // 동적으로 추가된 툴팁 초기화
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el));
   }
@@ -114,13 +127,14 @@ function initCalendar() {
   setupModalHandlers();
 }
 
-// DOM 준비 여부에 따라 실행
+// DOM 준비 여부에 따라 initCalendar 실행 시점 결정
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initCalendar);
 } else {
   initCalendar();
 }
 
+// 새 이벤트 생성 모달 오픈 (선택 범위 있으면 날짜 자동 입력)
 function openNewEventModal(selectInfo) {
   const modal = new bootstrap.Modal(document.getElementById('CalenderModalNew'));
   if (selectInfo) {
@@ -135,6 +149,7 @@ function openNewEventModal(selectInfo) {
   modal.show();
 }
 
+// 이벤트 상세 정보 모달 표시 (DOMPurify로 XSS 방지)
 function showEventDetails(event) {
   const modal = new bootstrap.Modal(document.getElementById('EventDetailsModal'));
   const contentEl = document.getElementById('eventDetailsContent');
@@ -144,6 +159,7 @@ function showEventDetails(event) {
   const endDate = event.end ? event.end.toLocaleDateString() : '';
   const endTime = event.end && !event.allDay ? event.end.toLocaleTimeString() : '';
 
+  // 사용자 입력값 살균 처리(위험한 입력값 제거)
   const safeTitle = DOMPurify.sanitize(event.title || '');
   const safeDescription = event.extendedProps.description ? DOMPurify.sanitize(event.extendedProps.description) : '';
   const safeLocation = event.extendedProps.location ? DOMPurify.sanitize(event.extendedProps.location) : '';
@@ -162,6 +178,7 @@ function showEventDetails(event) {
   modal.show();
 }
 
+// 이벤트 수정 모달 오픈 (기존 값 자동 입력)
 function openEditEventModal(event) {
   const modal = new bootstrap.Modal(document.getElementById('CalenderModalEdit'));
   document.getElementById('editEventTitle').value = event.title || '';
@@ -175,7 +192,9 @@ function openEditEventModal(event) {
   modal.show();
 }
 
+// 모달 버튼 이벤트 핸들러 일괄 등록
 function setupModalHandlers() {
+  // 새 이벤트 저장: 캘린더에 즉시 반영 후 Flask → Google Calendar로 전송
   document.getElementById('saveNewEvent').addEventListener('click', function() {
     const form = document.getElementById('newEventForm');
     if (form.checkValidity()) {
@@ -216,6 +235,7 @@ function setupModalHandlers() {
     }
   });
 
+  // 이벤트 수정 저장: FullCalendar 인스턴스 직접 업데이트
   document.getElementById('saveEditEvent').addEventListener('click', function() {
     if (selectedEvent) {
       const form = document.getElementById('editEventForm');
@@ -238,6 +258,7 @@ function setupModalHandlers() {
     }
   });
 
+  // 이벤트 삭제: 확인 후 캘린더에서 제거 및 Google Calendar 동기화
   document.getElementById('deleteEvent').addEventListener('click', function() {
     if (selectedEvent && confirm('Are you sure you want to delete this event?')) {
       const eventId = selectedEvent.id;
@@ -255,7 +276,7 @@ function setupModalHandlers() {
       showToast('Event deleted successfully!', 'success');
     }
   });
-
+  // 상세 모달 → 수정 모달 전환 (모달 중첩 방지를 위해 300ms 딜레이)
   document.getElementById('editEventBtn').addEventListener('click', function() {
     if (selectedEvent) {
       bootstrap.Modal.getInstance(document.getElementById('EventDetailsModal')).hide();
@@ -263,17 +284,20 @@ function setupModalHandlers() {
     }
   });
 
+   // 새 이벤트 모달 닫힐 때 폼 초기화
   document.getElementById('CalenderModalNew').addEventListener('hidden.bs.modal', function() {
     document.getElementById('newEventForm').classList.remove('was-validated');
     document.getElementById('newEventForm').reset();
   });
 
+  // 수정 모달 닫힐 때 폼 초기화 및 선택 이벤트 해제
   document.getElementById('CalenderModalEdit').addEventListener('hidden.bs.modal', function() {
     document.getElementById('editEventForm').classList.remove('was-validated');
     selectedEvent = null;
   });
 }
 
+// 우측 상단 토스트 알림 표시 (success / error / info)
 function showToast(message, type = 'info') {
   const toastContainer = document.querySelector('.toast-container') || createToastContainer();
   const toastId = 'toast_' + Date.now();
@@ -290,9 +314,11 @@ function showToast(message, type = 'info') {
   const toastElement = document.getElementById(toastId);
   const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
   toast.show();
+   // 토스트 숨겨지면 DOM에서 제거 (메모리 누수 방지)
   toastElement.addEventListener('hidden.bs.toast', function() { toastElement.remove(); });
 }
 
+// 토스트 컨테이너가 없을 때 동적 생성
 function createToastContainer() {
   const container = document.createElement('div');
   container.className = 'toast-container position-fixed top-0 end-0 p-3';
