@@ -1,0 +1,155 @@
+-Goal-
+Given a text document and a list of already-extracted entities, identify all valid relationships among those entities.
+Each relationship must use exactly one of the predefined relationship types below.
+Only output relationships that are clearly supported by the text and the provided entities.
+
+-Relationship Types-
+Use only the following relationship types:
+
+- SENT_BY:
+  Direction: EMAIL -> PERSON
+  Meaning: the person is the sender of the email
+
+- SENT_TO:
+  Direction: EMAIL -> PERSON
+  Meaning: the person is a direct recipient of the email
+
+- CC_TO:
+  Direction: EMAIL -> PERSON
+  Meaning: the person is cc'd on the email
+
+- DISCUSSED:
+  Direction: EMAIL -> TOPIC or EMAIL -> EVENT
+  Meaning: the email discusses the topic or mentions / explains the event as part of its content
+
+- BELONGS_TO:
+  Direction: PERSON -> ORGANIZATION or LABEL -> EMAIL
+  Meaning:
+  - PERSON -> ORGANIZATION: the person belongs to, works in, or is affiliated with the organization
+  - LABEL -> EMAIL: the label is assigned to the email
+
+- SCHEDULED_FOR:
+  Direction: EVENT -> EMAIL
+  Meaning: the event is scheduled, announced, confirmed, or coordinated through the email
+
+- WAS_ATTACHED_TO:
+  Direction: EMAIL -> ATTACHMENT-LIKE ENTITY
+  Meaning: a file/document entity was attached to the email
+  Note: only use this type if a corresponding attachment-like entity is present in the provided entity list
+
+-Important Rules-
+1. Use only the entities explicitly provided in {entities}. Do not create new entities.
+2. Assign exactly one relationship type per output line.
+3. If no predefined type fits clearly, skip the pair.
+4. Do not infer weak or speculative relationships.
+5. The same source-target pair may appear more than once only if each line uses a different valid relationship type and each is clearly supported by the text.
+6. Respect direction strictly.
+7. DISCUSSED is for email content about a Topic or Event. Do not use DISCUSSED for PERSON-ORGANIZATION, LABEL-EMAIL, or sender/recipient relations.
+8. BELONGS_TO is only for:
+   - PERSON -> ORGANIZATION
+   - LABEL -> EMAIL
+   Do not use it for any other pair.
+9. SCHEDULED_FOR is only for EVENT -> EMAIL.
+10. WAS_ATTACHED_TO is only valid when the attachment/file/document is already present as an extracted entity.
+11. If the provided entity list contains no attachment-like entity, do not output WAS_ATTACHED_TO.
+12. relationship_strength must be an integer from 1 to 10:
+   - 9-10: explicit and direct in the text
+   - 7-8: strongly supported but slightly indirect
+   - 4-6: plausible but less central
+   - 1-3: weak; usually skip unless still explicit
+
+-Steps-
+1. Review the entity list in {entities} and the source text.
+2. Identify all source-target pairs that match one of the allowed relationship patterns above.
+3. For each valid pair, extract:
+   - source_entity
+   - target_entity
+   - relationship_type
+   - relationship_description
+   - relationship_strength
+4. Write the relationship_description in Korean in one sentence, grounded in the text.
+5. Return output in Korean as a single list. Use **{record_delimiter}** as the list delimiter.
+6. When finished, output {completion_delimiter}
+
+Format each relationship as:
+("relationship"{tuple_delimiter}<source_entity>{tuple_delimiter}<target_entity>{tuple_delimiter}<relationship_type>{tuple_delimiter}<relationship_description>{tuple_delimiter}<relationship_strength>)
+
+-Examples-
+
+1. Example 1:
+Entities:
+- [VOCARUSH] 4월 스프린트 계획 확정 (EMAIL)
+- 김민준 (PERSON)
+- 박서연 (PERSON)
+- VOCARUSH (ORGANIZATION)
+- PLANNING_SPRINT (LABEL)
+- 4월 스프린트 계획 (TOPIC)
+
+Text:
+김민준(minjun.kim@vocarush.io)이 박서연(seoyeon.park@vocarush.io)에게 '[Vocarush] 4월 스프린트 계획 확정'이라는 제목으로 이메일을 보냈다.
+첨부파일로 sprint_plan_april.pdf가 포함되어 있었으며, 어조는 공식적이었다.
+이 이메일에는 'Planning', 'Sprint' 레이블이 지정되어 있다.
+김민준은 Vocarush의 Product팀 소속이다.
+이 메일의 핵심 내용은 4월 스프린트 계획 확정과 공유이다.
+
+Output:
+("relationship"{tuple_delimiter}[VOCARUSH] 4월 스프린트 계획 확정{tuple_delimiter}김민준{tuple_delimiter}SENT_BY{tuple_delimiter}해당 이메일의 발신자는 김민준이다.{tuple_delimiter}10)
+{record_delimiter}
+("relationship"{tuple_delimiter}[VOCARUSH] 4월 스프린트 계획 확정{tuple_delimiter}박서연{tuple_delimiter}SENT_TO{tuple_delimiter}해당 이메일의 직접 수신자는 박서연이다.{tuple_delimiter}10)
+{record_delimiter}
+("relationship"{tuple_delimiter}[VOCARUSH] 4월 스프린트 계획 확정{tuple_delimiter}4월 스프린트 계획{tuple_delimiter}DISCUSSED{tuple_delimiter}이 이메일은 4월 스프린트 계획 확정 내용을 주요 주제로 다룬다.{tuple_delimiter}9)
+{record_delimiter}
+("relationship"{tuple_delimiter}PLANNING_SPRINT{tuple_delimiter}[VOCARUSH] 4월 스프린트 계획 확정{tuple_delimiter}BELONGS_TO{tuple_delimiter}Planning과 Sprint 레이블이 해당 이메일에 지정되어 있다.{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}김민준{tuple_delimiter}VOCARUSH{tuple_delimiter}BELONGS_TO{tuple_delimiter}김민준은 Vocarush 조직에 소속된 인물이다.{tuple_delimiter}8)
+{completion_delimiter}
+
+2. Example 2:
+Entities:
+- RE: 사용자 인터뷰 일정 조율 (EMAIL)
+- 이수아 (PERSON)
+- 사용자 인터뷰 준비 (TOPIC)
+- 사용자 인터뷰 (EVENT)
+
+Text:
+이수아(sua.lee@vocarush.io)가 팀 전체에 'Re: 사용자 인터뷰 일정 조율'이라는 제목으로 회신했다. 첨부파일은 없으며 어조는 캐주얼했다.
+이메일 본문에서 사용자 인터뷰의 중요성과 준비 방법이 논의되었고, 우선순위는 높음으로 판단된다.
+인터뷰는 2026년 4월 3일 오후 2시, 서울 강남구 Vocarush 사무실에서 진행될 예정이며 확정된 일정이다.
+
+Output:
+("relationship"{tuple_delimiter}RE: 사용자 인터뷰 일정 조율{tuple_delimiter}이수아{tuple_delimiter}SENT_BY{tuple_delimiter}해당 이메일의 발신자는 이수아이다.{tuple_delimiter}10)
+{record_delimiter}
+("relationship"{tuple_delimiter}RE: 사용자 인터뷰 일정 조율{tuple_delimiter}사용자 인터뷰 준비{tuple_delimiter}DISCUSSED{tuple_delimiter}이 이메일은 사용자 인터뷰 준비와 관련된 내용을 주요하게 다룬다.{tuple_delimiter}9)
+{record_delimiter}
+("relationship"{tuple_delimiter}RE: 사용자 인터뷰 일정 조율{tuple_delimiter}사용자 인터뷰{tuple_delimiter}DISCUSSED{tuple_delimiter}이 이메일은 사용자 인터뷰 일정과 관련 내용을 설명한다.{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}사용자 인터뷰{tuple_delimiter}RE: 사용자 인터뷰 일정 조율{tuple_delimiter}SCHEDULED_FOR{tuple_delimiter}사용자 인터뷰 일정은 이 이메일을 통해 조율되고 확정된다.{tuple_delimiter}8)
+{completion_delimiter}
+
+3. Example 3:
+Entities:
+- 프로젝트 회의 일정 안내 (EMAIL)
+- 최지유 (PERSON)
+- 김현수 (PERSON)
+- 주간 회의 (EVENT)
+
+Text:
+최지유가 김현수를 참조(CC)에 포함하여 '프로젝트 회의 일정 안내' 메일을 보냈다.
+메일에는 다음 주 화요일 오전 10시 주간 회의 일정이 포함되어 있다.
+
+Output:
+("relationship"{tuple_delimiter}프로젝트 회의 일정 안내{tuple_delimiter}최지유{tuple_delimiter}SENT_BY{tuple_delimiter}해당 이메일의 발신자는 최지유이다.{tuple_delimiter}10)
+{record_delimiter}
+("relationship"{tuple_delimiter}프로젝트 회의 일정 안내{tuple_delimiter}김현수{tuple_delimiter}CC_TO{tuple_delimiter}김현수는 이 이메일의 참조 수신자이다.{tuple_delimiter}10)
+{record_delimiter}
+("relationship"{tuple_delimiter}프로젝트 회의 일정 안내{tuple_delimiter}주간 회의{tuple_delimiter}DISCUSSED{tuple_delimiter}이 이메일은 주간 회의 일정을 내용으로 다룬다.{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}주간 회의{tuple_delimiter}프로젝트 회의 일정 안내{tuple_delimiter}SCHEDULED_FOR{tuple_delimiter}주간 회의 일정은 이 이메일을 통해 안내된다.{tuple_delimiter}8)
+{completion_delimiter}
+
+-Real Data-
+Entities:
+{entities}
+Text:
+{input_text}
+Output:
