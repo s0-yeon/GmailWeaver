@@ -1,0 +1,5 @@
+Summarize the key content of the attached file.
+Reflect the entire document in a balanced way so that no important information is missed.
+Always include specific figures and proper nouns such as dates, amounts, names, and schedules.
+Always include organization names, institution names, and dates if present.
+Keep it concise within 300 characters in Korean.

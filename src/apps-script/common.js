@@ -1,6 +1,6 @@
 // src/apps-script/common.js
-var TunnelURL = "https://transpalmar-christine-noneducatory.ngrok-free.dev";
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz3bAOxML5BZSSJcMFM1or5jY8K4NVwliHk_Rbe9jXYVBXbYM05Fl-1bPG1909_38hZ/exec";
+var TunnelURL = "https://laevorotatory-nonnutritively-nelle.ngrok-free.dev";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec";
 
 const OLIVE = "#c6d8a5";
 
