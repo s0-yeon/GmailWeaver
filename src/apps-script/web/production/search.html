@@ -485,11 +485,13 @@
         saveRecent(q);
         renderRecents();
         try {
+          const gmailId = window.currentUserEmail;
+
           // 비동기 쿼리 시작
           const res = await fetch(`${FLASK_URL}/run-query-async`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: q, resMethod: 'local', resType: 'text' })
+            body: JSON.stringify({ message: q, resMethod: 'local', resType: 'text',gmail_id: gmailId })
           });
           const data = await res.json();
           if (!data.jobId) { showError(q, '검색 요청에 실패했습니다.'); return; }
