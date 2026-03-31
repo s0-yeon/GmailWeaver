@@ -385,6 +385,14 @@ def _split_mail_blocks(text):
 
     return blocks
 
+def _renumber_mail_blocks(text: str) -> str:
+    blocks = _split_mail_blocks(text)
+    result = []
+    for i, block in enumerate(blocks, start=1):
+        renumbered = re.sub(r'\[메일 \d+\]', f'[메일 {i}]', block)
+        result.append(renumbered)
+    return "\n".join(result) + "\n"
+
 # 메일 id들 추출해서 집합으로 반환
 def _extract_message_ids(text):
     # re.MULTILINE: ^/$가 각 줄의 시작/끝에 매칭되도록 설정
@@ -768,7 +776,7 @@ def upload():
         # 첨부 병합 없이 메일 본문만 저장 (첨부 요약+병합은 백그라운드에서 처리)
         _delete_incremental_files(paths)
         with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
-            f.write(content.rstrip() + "\n")
+            f.write(_renumber_mail_blocks(content.rstrip()))
         saved_mail_path = paths.MAIL_LATEST_PATH
         added_count = len(_split_mail_blocks(content))
         added_count = len(_split_mail_blocks(content))
@@ -817,7 +825,7 @@ def upload():
 
             updated_content = inc_content + "\n" + existing_text
             with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
-                f.write(updated_content.strip() + "\n")
+                f.write(_renumber_mail_blocks(updated_content.strip()))
 
             saved_mail_path = inc_path
             _save_mail_contact_stats(append_blocks, paths, mode="append")
