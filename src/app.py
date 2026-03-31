@@ -153,7 +153,7 @@ def _summarize_attachment(text: str, filename: str) -> str:
     if pure_len < 500:
         return text
 
-    prompt_path = os.path.join("src", "parquet", "prompts", "summarize_attachment.txt")
+    prompt_path = os.path.join("parquet_template", "prompts", "summarize_attachment.txt")
     with open(prompt_path, "r", encoding="utf-8") as f:
         prompt = f.read().strip()
 
