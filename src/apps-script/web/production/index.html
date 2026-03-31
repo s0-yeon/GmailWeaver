@@ -229,6 +229,65 @@
         66%  { transform: translate(-25px, 20px) scale(0.95); }
         100% { transform: translate(0, 0) scale(1); }
       }
+
+    #tooltip {
+      position: fixed;
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid rgba(2, 0, 0, 0.2);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: sans-serif;
+      line-height: 1.6;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      max-width: 260px; /* 최대 너비 */
+      z-index: 9999;
+    }
+
+    #tooltip.visible { opacity: 1; } /* visible 클래스 붙으면 툴팁 보임*/
+
+    .tt-type { /*엔티티 타입 표시*/
+      font-size: 10px;
+      color: #888888;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 3px;
+    }
+    .tt-label { /*노드 이름 표시*/
+      font-size: 14px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 2px;
+    }
+    .tt-desc { /*description 표시*/
+      font-size: 11px;
+      color: #444;
+      margin-top: 6px;
+      line-height: 1.5;
+      /* 너무 길면 3줄로 자르기 */
+      display: -webkit-box;
+      -webkit-line-clamp: 3; /* 최대 3줄만 */
+      -webkit-box-orient: vertical;
+      overflow: hidden; /* 3줄 넘으면 숨김 */
+    }
+    .tt-meta { /* human_readable, 노드 연결 수, 가중치 등 */
+      font-size: 10px;
+      color: #aaa;
+      margin-top: 5px;
+    }
+    .tt-divider { /* 노드와 엣지 툴팁 구분선 */
+      border: none;
+      border-top: 1px solid #eeeeee;
+      margin: 7px 0;
+    }
+    .tt-arrow { /* 엣지 방향 */
+      font-size: 12px;
+      color: #333;
+      word-break: break-all;
+    }
     </style>
   </head>
 
@@ -335,6 +394,7 @@
 
           <div id="graph-section" style="display:none; width:100%; height:calc(100vh - 80px); position:relative;">
             <svg id="graph" width="100%" height="100%"></svg>
+            <div id="tooltip"></div>
           </div>
         </main>
 
