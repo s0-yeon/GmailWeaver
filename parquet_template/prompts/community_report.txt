@@ -1,146 +1,187 @@
+You are an AI assistant that helps a human analyst explore and understand 
+a personal email archive. Your goal is to produce structured summaries of 
+email communities that help the user quickly grasp who is involved, what 
+topics recur, and why this group of emails matters.
 
-You are an AI assistant that helps a human analyst to perform general information discovery. Information discovery is the process of identifying and assessing relevant information associated with certain entities (e.g., organizations and individuals) within a network.
+-Goal-
+Write a comprehensive report of a community, given a list of entities that 
+belong to the community as well as their relationships. The community is 
+derived from a personal Gmail archive and may be centered around a label, 
+a person, an organization, or a recurring topic. The report will help the 
+user understand the nature and importance of this email cluster.
 
-# Goal
-Write a comprehensive report of a community, given a list of entities that belong to the community as well as their relationships and optional associated claims. The report will be used to inform decision-makers about information associated with the community and their potential impact. The content of this report includes an overview of the community's key entities, their legal compliance, technical capabilities, reputation, and noteworthy claims.
-
-# Report Structure
+-Report Structure-
 
 The report should include the following sections:
 
-- TITLE: community's name that represents its key entities - title should be short but specific. When possible, include representative named entities in the title.
-- SUMMARY: An executive summary of the community's overall structure, how its entities are related to each other, and significant information associated with its entities.
-- IMPACT SEVERITY RATING: a float score between 0-10 that represents the severity of IMPACT posed by entities within the community.  IMPACT is the scored importance of a community.
-- RATING EXPLANATION: Give a single sentence explanation of the IMPACT severity rating.
-- DETAILED FINDINGS: A list of 5-10 key insights about the community. Each insight should have a short summary followed by multiple paragraphs of explanatory text grounded according to the grounding rules below. Be comprehensive.
+- TITLE: A short but specific name for the community. Prefer using a label 
+  name, person name, or organization name when available. Write in Korean.
 
-Return output as a well-formed JSON-formatted string with the following format:
+- SUMMARY: An executive summary written in Korean describing:
+  (1) what kind of community this is (label-based, person-based, 
+      org-based, or topic-based — pick the single most dominant type)
+  (2) who the key participants are
+  (3) what the emails in this cluster are generally about
+  Keep it under 3 sentences.
+
+- CATEGORY: Classify this community into exactly one of the following 
+  top-level categories. This field is used for hierarchical clustering — 
+  choose the category that best reflects the primary purpose of the emails 
+  in this cluster.
+  - "트랜잭션" : 인증코드, 결제, 구독, 보안 알림 등 자동 발송 이메일
+  - "프로젝트/학습" : 과제, 개발, 교육, 협업 등 실질적 업무/학습
+  - "서비스 커뮤니케이션" : 온보딩, 마케팅, 공지, 약관 등 정보성 이메일
+  - "대인 커뮤니케이션" : 사람 간 직접 주고받는 이메일
+
+- PURPOSE: 이 커뮤니티의 핵심 기능/목적을 한 문장으로 명시하라.
+  다른 커뮤니티와 구별되는 고유한 특성을 포함할 것.
+  (예: "OpenAI 서비스 로그인을 위한 일회성 인증코드 수신",
+       "VocaRush 게임 개발 프로젝트 관련 팀 커뮤니케이션")
+
+- IMPORTANCE RATING: A float score between 0-10 representing how 
+  significant this email cluster is to the user's activity.
+  Score according to the following criteria:
+  - 8-10: 사람 간 직접 소통, 반복적 프로젝트 협업, 중요한 의사결정 포함
+  - 5-7:  구독/결제 관리, 서비스 공지 등 주기적으로 확인이 필요한 이메일
+  - 2-4:  자동 발송 트랜잭션 이메일 (인증코드, 보안 알림 등)
+  - 0-1:  마케팅, 광고, 일회성 알림 등 거의 무시해도 되는 이메일
+
+- RATING EXPLANATION: A single sentence in Korean explaining the score.
+
+- DETAILED FINDINGS: A list of 3-5 key insights about the community. 
+  Each insight should have a short summary followed by an explanatory 
+  paragraph grounded in the data. Write findings in Korean.
+  Focus on the following angles when applicable:
+  1. Community identity — what label, person, or topic anchors this cluster
+  2. Key emails — the most significant emails and what they contain
+  3. People and relationships — who sends to whom, and what roles they play
+  4. Recurring topics — what subjects or themes appear repeatedly
+  5. Events and schedules — any time-based information found in the emails
+  6. Organizations involved — what companies or teams appear
+
+Return output as a well-formed JSON-formatted string with the following 
+format:
     {{
         "title": <report_title>,
         "summary": <executive_summary>,
-        "rating": <impact_severity_rating>,
+        "category": <top_level_category>,
+        "purpose": <single_sentence_purpose>,
+        "rating": <importance_rating>,
         "rating_explanation": <rating_explanation>,
         "findings": [
             {{
-                "summary":<insight_1_summary>,
-                "explanation": <insight_1_explanation>
-            }},
-            {{
-                "summary":<insight_2_summary>,
-                "explanation": <insight_2_explanation>
+                "summary": <insight_summary>,
+                "explanation": <insight_explanation>
             }}
         ]
     }}
 
-# Grounding Rules
+-Grounding Rules-
 
 Points supported by data should list their data references as follows:
 
-"This is an example sentence supported by multiple data references [Data: <dataset name> (record ids); <dataset name> (record ids)]."
+"This is an example sentence supported by data references 
+[Data: <dataset name> (record ids); <dataset name> (record ids)]."
 
-Do not list more than 5 record ids in a single reference. Instead, list the top 5 most relevant record ids and add "+more" to indicate that there are more.
+Do not list more than 5 record ids in a single reference. Instead, list 
+the top 5 most relevant record ids and add "+more" to indicate that there 
+are more.
 
-For example:
-"Person X is the owner of Company Y and subject to many allegations of wrongdoing [Data: Reports (1), Entities (5, 7); Relationships (23); Claims (7, 2, 34, 64, 46, +more)]."
+Do not include information where the supporting evidence is not provided.
 
-where 1, 5, 7, 23, 2, 34, 46, and 64 represent the id (not the index) of the relevant data record.
+Additional rules:
+* 엔티티는 반복적으로 의미를 가지는 개념만 추출한다.
+  즉, 다른 이메일에서도 동일한 의미로 재등장할 수 있는 것만 포함한다.
+  * 다음은 엔티티에서 제외한다:
+    - 인증코드, OTP, 임시 토큰 등 일회성 숫자/문자열
+    - 파일명 내 일련번호 (예: 과제4-최지유-2471239.pdf의 2471239)
+    - 특정 날짜/시간 값
+    - invoice 번호, 주문 번호 등 트랜잭션 식별자
+  * 다음은 엔티티로 포함한다:
+    - 발신자/수신자 이메일 주소 (반복 등장하는 경우)
+    - 프로젝트명, 서비스명, 조직명
+    - 반복적으로 언급되는 주제어
 
-Do not include information where the supporting evidence for it is not provided.
-
-
-# Example Input
+- Example Input -
 -----------
 Text:
 
 Entities
 
 id,entity,description
-5,VERDANT OASIS PLAZA,Verdant Oasis Plaza is the location of the Unity March
-6,HARMONY ASSEMBLY,Harmony Assembly is an organization that is holding a march at Verdant Oasis Plaza
+1,ChatGPT 코드는 146672입니다,Subject: ChatGPT 코드는 146672입니다 | 
+  Tone: Automated | Attachments: None | 
+  Summary: ChatGPT 인증 코드를 전달하는 자동 발송 메일
+2,noreply@tm.openai.com,Name: Unknown | Account: noreply@tm.openai.com
+3,gpttitti@hansung.ac.kr,Name: Unknown | Account: gpttitti@hansung.ac.kr
+4,지피티,Category: 지피티
 
 Relationships
 
 id,source,target,description
-37,VERDANT OASIS PLAZA,UNITY MARCH,Verdant Oasis Plaza is the location of the Unity March
-38,VERDANT OASIS PLAZA,HARMONY ASSEMBLY,Harmony Assembly is holding a march at Verdant Oasis Plaza
-39,VERDANT OASIS PLAZA,UNITY MARCH,The Unity March is taking place at Verdant Oasis Plaza
-40,VERDANT OASIS PLAZA,TRIBUNE SPOTLIGHT,Tribune Spotlight is reporting on the Unity march taking place at Verdant Oasis Plaza
-41,VERDANT OASIS PLAZA,BAILEY ASADI,Bailey Asadi is speaking at Verdant Oasis Plaza about the march
-43,HARMONY ASSEMBLY,UNITY MARCH,Harmony Assembly is organizing the Unity March
+1,ChatGPT 코드는 146672입니다,noreply@tm.openai.com,
+  이메일의 발신자는 noreply@tm.openai.com이다.
+2,ChatGPT 코드는 146672입니다,gpttitti@hansung.ac.kr,
+  이메일의 수신자는 gpttitti@hansung.ac.kr이다.
+3,ChatGPT 코드는 146672입니다,지피티,
+  이메일에 지피티 라벨이 지정되어 있다.
 
 Output:
 {{
-    "title": "Verdant Oasis Plaza and Unity March",
-    "summary": "The community revolves around the Verdant Oasis Plaza, which is the location of the Unity March. The plaza has relationships with the Harmony Assembly, Unity March, and Tribune Spotlight, all of which are associated with the march event.",
-    "rating": 5.0,
-    "rating_explanation": "The impact severity rating is moderate due to the potential for unrest or conflict during the Unity March.",
+    "title": "지피티 — OpenAI 자동 발송 클러스터",
+    "summary": "OpenAI의 noreply 주소에서 gpttitti@hansung.ac.kr로 자동 
+      발송된 인증코드 이메일 클러스터다. 사용자가 '지피티' 라벨로 분류해 
+      두었으며, 모든 이메일이 트랜잭션 목적의 단방향 자동 발송이다.",
+    "category": "트랜잭션",
+    "purpose": "ChatGPT 로그인을 위한 일회성 인증코드를 수신하는 
+      자동화 채널",
+    "rating": 2.5,
+    "rating_explanation": "자동 발송 인증코드 이메일로만 구성되어 있어 
+      사용자의 실질적 활동을 반영하지 않는다.",
     "findings": [
         {{
-            "summary": "Verdant Oasis Plaza as the central location",
-            "explanation": "Verdant Oasis Plaza is the central entity in this community, serving as the location for the Unity March. This plaza is the common link between all other entities, suggesting its significance in the community. The plaza's association with the march could potentially lead to issues such as public disorder or conflict, depending on the nature of the march and the reactions it provokes. [Data: Entities (5), Relationships (37, 38, 39, 40, 41,+more)]"
+            "summary": "'지피티' 라벨로 묶인 자동 발송 클러스터",
+            "explanation": "모든 이메일이 '지피티' 라벨을 공유하며, 
+              사용자가 의도적으로 분류한 그룹이다. 
+              [Data: Entities (4); Relationships (3)]"
         }},
         {{
-            "summary": "Harmony Assembly's role in the community",
-            "explanation": "Harmony Assembly is another key entity in this community, being the organizer of the march at Verdant Oasis Plaza. The nature of Harmony Assembly and its march could be a potential source of threat, depending on their objectives and the reactions they provoke. The relationship between Harmony Assembly and the plaza is crucial in understanding the dynamics of this community. [Data: Entities(6), Relationships (38, 43)]"
+            "summary": "OpenAI noreply 주소에서 발송",
+            "explanation": "noreply@tm.openai.com에서 발송된 자동 알림이며, 
+              인증코드 전달 외의 목적이 없다. 
+              [Data: Entities (1, 2); Relationships (1)]"
         }},
         {{
-            "summary": "Unity March as a significant event",
-            "explanation": "The Unity March is a significant event taking place at Verdant Oasis Plaza. This event is a key factor in the community's dynamics and could be a potential source of threat, depending on the nature of the march and the reactions it provokes. The relationship between the march and the plaza is crucial in understanding the dynamics of this community. [Data: Relationships (39)]"
-        }},
-        {{
-            "summary": "Role of Tribune Spotlight",
-            "explanation": "Tribune Spotlight is reporting on the Unity March taking place in Verdant Oasis Plaza. This suggests that the event has attracted media attention, which could amplify its impact on the community. The role of Tribune Spotlight could be significant in shaping public perception of the event and the entities involved. [Data: Relationships (40)]"
+            "summary": "단일 수신자: gpttitti@hansung.ac.kr",
+            "explanation": "모든 이메일의 수신자가 동일하며 CC나 다른 
+              수신자는 없다. [Data: Entities (3); Relationships (2)]"
         }}
     ]
 }}
 
+- Real Data
 
-# Real Data
-
-Use the following text for your answer. Do not make anything up in your answer.
+Use the following text for your answer. Do not make anything up in your 
+answer.
 
 Text:
 {input_text}
 
-The report should include the following sections:
-
-- TITLE: community's name that represents its key entities - title should be short but specific. When possible, include representative named entities in the title.
-- SUMMARY: An executive summary of the community's overall structure, how its entities are related to each other, and significant information associated with its entities.
-- IMPACT SEVERITY RATING: a float score between 0-10 that represents the severity of IMPACT posed by entities within the community.  IMPACT is the scored importance of a community.
-- RATING EXPLANATION: Give a single sentence explanation of the IMPACT severity rating.
-- DETAILED FINDINGS: A list of 5-10 key insights about the community. Each insight should have a short summary followed by multiple paragraphs of explanatory text grounded according to the grounding rules below. Be comprehensive.
-
-Return output as a well-formed JSON-formatted string with the following format:
+Return output as a well-formed JSON-formatted string with the following 
+format:
     {{
         "title": <report_title>,
         "summary": <executive_summary>,
-        "rating": <impact_severity_rating>,
+        "category": <top_level_category>,
+        "purpose": <single_sentence_purpose>,
+        "rating": <importance_rating>,
         "rating_explanation": <rating_explanation>,
         "findings": [
             {{
-                "summary":<insight_1_summary>,
-                "explanation": <insight_1_explanation>
-            }},
-            {{
-                "summary":<insight_2_summary>,
-                "explanation": <insight_2_explanation>
+                "summary": <insight_summary>,
+                "explanation": <insight_explanation>
             }}
         ]
     }}
-
-# Grounding Rules
-
-Points supported by data should list their data references as follows:
-
-"This is an example sentence supported by multiple data references [Data: <dataset name> (record ids); <dataset name> (record ids)]."
-
-Do not list more than 5 record ids in a single reference. Instead, list the top 5 most relevant record ids and add "+more" to indicate that there are more.
-
-For example:
-"Person X is the owner of Company Y and subject to many allegations of wrongdoing [Data: Reports (1), Entities (5, 7); Relationships (23); Claims (7, 2, 34, 64, 46, +more)]."
-
-where 1, 5, 7, 23, 2, 34, 46, and 64 represent the id (not the index) of the relevant data record.
-
-Do not include information where the supporting evidence for it is not provided.
 
 Output:

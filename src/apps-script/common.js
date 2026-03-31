@@ -1,7 +1,12 @@
 // src/apps-script/common.js
+<<<<<<< HEAD
 
 var TunnelURL = "https://interatrial-tana-wishfully.ngrok-free.dev";    // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwAk_JabdKuGUHIVcaKeEnY1DUiYb0uqkiu-KdUG67Zf1U3D8k-F06RGS5043k_fZS8MQ/exec";   // Apps Script Web App으로 배포된 URL
+=======
+var TunnelURL = "https://transpalmar-christine-noneducatory.ngrok-free.dev";    // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz3bAOxML5BZSSJcMFM1or5jY8K4NVwliHk_Rbe9jXYVBXbYM05Fl-1bPG1909_38hZ/exec";   // Apps Script Web App으로 배포된 URL
+>>>>>>> 66112d27226d7988265b25492ea5ed9b0f135199
 
 const OLIVE = "#c6d8a5";
 

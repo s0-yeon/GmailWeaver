@@ -15,7 +15,11 @@
     "https://www.googleapis.com/auth/calendar"
   ],
   "urlFetchWhitelist": [
+<<<<<<< HEAD
     "https://interatrial-tana-wishfully.ngrok-free.dev/"
+=======
+    "https://transpalmar-christine-noneducatory.ngrok-free.dev/"
+>>>>>>> 66112d27226d7988265b25492ea5ed9b0f135199
   ],
   "addOns": {
     "common": {
