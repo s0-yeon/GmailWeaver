@@ -63,7 +63,11 @@ input:
   file_pattern: ".*\\.txt$$"
 
 chunks:
+<<<<<<< HEAD
   size: 1200
+=======
+  size: 2000
+>>>>>>> 103361371591463db6f9d27caa2b2a944835fae2
   overlap: 200
   group_by_columns: [id]
 
@@ -113,6 +117,25 @@ community_reports:
   max_length: 2000
   max_input_length: 8000
 
+<<<<<<< HEAD
+=======
+cluster_graph:
+  max_cluster_size: 20
+
+embed_graph:
+  enabled: false # if true, will generate node2vec embeddings for nodes
+
+umap:
+  enabled: false # if true, will generate UMAP embeddings for nodes
+
+snapshots:
+  graphml: true
+  raw_entities: false
+  top_level_nodes: false
+  embeddings: false
+  transient: false
+
+>>>>>>> 103361371591463db6f9d27caa2b2a944835fae2
 local_search:
   prompt: "prompts/local_search_system_prompt.txt"
   text_unit_prop: 0.3
@@ -125,3 +148,8 @@ global_search:
 
 drift_search:
   prompt: "prompts/drift_search_system_prompt.txt"
+<<<<<<< HEAD
+=======
+
+  
+>>>>>>> 103361371591463db6f9d27caa2b2a944835fae2
