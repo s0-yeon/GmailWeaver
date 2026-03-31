@@ -1,6 +1,7 @@
 // Dedicated entry point for tables_dynamic.html
 // Ensures proper DataTables initialization without conflicts
 
+import './utils/i18n.js';
 // Import security utilities
 import './utils/security.js';
 

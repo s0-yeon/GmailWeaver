@@ -1,101 +1,117 @@
 // =============================================================================
-// Gentelella CSS Variables
+// GmailWeaver — Luxury Forest Green Design System
 // =============================================================================
-// This file defines all CSS custom properties (variables) for the template.
-// Use these variables instead of hardcoded color values for consistency.
 
 :root {
   // =========================================================================
-  // Brand Colors
+  // Brand Colors — Deep Forest Green Palette
   // =========================================================================
-  --gt-primary: #1abb9c;           // Primary green/teal
-  --gt-primary-dark: #26b99a;      // Darker shade of primary
-  --gt-secondary: #2a3f54;         // Dark blue (sidebar, headers)
-  --gt-accent: #3498db;            // Blue accent
+  --gt-primary: #1a9e6e;           // Emerald green (주 브랜드 색)
+  --gt-primary-dark: #157a56;      // 깊은 초록
+  --gt-primary-light: #22c78a;     // 밝은 민트 그린
+  --gt-primary-glow: rgba(26, 158, 110, 0.18);  // 글로우 효과용
+  --gt-secondary: #e74c3c;         // 깊은 포레스트 다크 (사이드바)
+  --gt-secondary-mid: #f05e50;     // 사이드바 중간 톤
+  --gt-accent: #34d399;            // 라이트 민트 (포인트)
+  --gt-accent-gold: #d4a843;       // 골드 포인트 (고급감)
 
   // =========================================================================
   // Semantic Colors
   // =========================================================================
-  --gt-success: #1abb9c;           // Same as primary
-  --gt-info: #3498db;              // Blue
-  --gt-warning: #f39c12;           // Orange
-  --gt-danger: #e74c3c;            // Red
-  --gt-purple: #9b59b6;            // Purple
+  --gt-success: #1a9e6e;
+  --gt-info: #0ea5a0;              // 틸 블루
+  --gt-warning: #d4a843;
+  --gt-danger: #e05252;
+  --gt-purple: #7c6fcd;
 
   // =========================================================================
-  // Neutral Colors
+  // Neutral Colors — 따뜻한 그린 베이스 중립색
   // =========================================================================
   --gt-white: #ffffff;
   --gt-black: #000000;
-  --gt-dark: #34495e;              // Dark text
-  --gt-gray-900: #333333;
-  --gt-gray-800: #555555;
-  --gt-gray-700: #666666;
-  --gt-gray-600: #73879c;          // Muted text
-  --gt-gray-500: #777777;
-  --gt-gray-400: #999999;
-  --gt-gray-300: #cccccc;
-  --gt-gray-200: #dddddd;
-  --gt-gray-100: #e6e6e6;
-  --gt-gray-50: #f7f7f7;
+  --gt-dark: #1b2e22;
+  --gt-gray-900: #1e2d24;
+  --gt-gray-800: #374840;
+  --gt-gray-700: #4f6358;
+  --gt-gray-600: #6b8278;
+  --gt-gray-500: #8a9e96;
+  --gt-gray-400: #aabdb5;
+  --gt-gray-300: #c8d8d2;
+  --gt-gray-200: #deeae5;
+  --gt-gray-100: #edf5f1;
+  --gt-gray-50: #f4faf7;
 
   // =========================================================================
   // Background Colors
   // =========================================================================
-  --gt-body-bg: #f7f7f7;
+  --gt-body-bg: #f0f7f3;           // 연한 그린 바디 배경
   --gt-content-bg: #ffffff;
-  --gt-sidebar-bg: #2a3f54;
-  --gt-sidebar-active-bg: #1abb9c;
+  --gt-sidebar-bg: #0f2419;        // 딥 포레스트
+  --gt-sidebar-active-bg: #1a9e6e;
   --gt-panel-bg: #ffffff;
   --gt-input-bg: #ffffff;
+  --gt-header-bg: #ffffff;
 
   // =========================================================================
   // Border Colors
   // =========================================================================
-  --gt-border-color: #e6e9ed;
-  --gt-border-light: #dee2e6;
-  --gt-border-dark: #d9dee4;
+  --gt-border-color: #d8ebe3;
+  --gt-border-light: #e8f2ec;
+  --gt-border-dark: #c0d9cc;
 
   // =========================================================================
   // Text Colors
   // =========================================================================
-  --gt-text-primary: #73879c;
-  --gt-text-dark: #34495e;
-  --gt-text-muted: #999999;
+  --gt-text-primary: #4f6358;
+  --gt-text-dark: #1b2e22;
+  --gt-text-muted: #8a9e96;
   --gt-text-light: #ffffff;
-  --gt-link-color: #1abb9c;
-  --gt-link-hover: #26b99a;
+  --gt-link-color: #1a9e6e;
+  --gt-link-hover: #157a56;
 
-  // =========================================================================
-  // Component-specific Colors
   // =========================================================================
   // Sidebar
-  --gt-sidebar-text: #e7e7e7;
-  --gt-sidebar-heading: #f7f7f7;
-  --gt-sidebar-hover-bg: rgba(255, 255, 255, 0.1);
-
-  // Navigation
-  --gt-nav-bg: #ededed;
-  --gt-nav-active: #1abb9c;
-
-  // Tables
-  --gt-table-border: #dee2e6;
-  --gt-table-striped: rgba(0, 0, 0, 0.02);
-  --gt-table-hover: rgba(0, 0, 0, 0.04);
-
-  // Forms
-  --gt-input-border: #cccccc;
-  --gt-input-focus-border: #1abb9c;
-  --gt-input-placeholder: #999999;
-
-  // Alerts & Notifications
-  --gt-alert-success-bg: #dff0d8;
-  --gt-alert-info-bg: #d9edf7;
-  --gt-alert-warning-bg: #fcf8e3;
-  --gt-alert-danger-bg: #f2dede;
+  // =========================================================================
+  --gt-sidebar-text: #b8d9c8;
+  --gt-sidebar-heading: rgba(255,255,255,0.28);
+  --gt-sidebar-hover-bg: rgba(52, 211, 153, 0.10);
+  --gt-sidebar-active-text: #ffffff;
+  --gt-sidebar-icon: #4d9470;
+  --gt-sidebar-profile-bg: rgba(255,255,255,0.06);
+  --gt-sidebar-profile-border: rgba(52, 211, 153, 0.15);
 
   // =========================================================================
-  // Spacing (for reference)
+  // Navigation
+  // =========================================================================
+  --gt-nav-bg: #f4faf7;
+  --gt-nav-active: #1a9e6e;
+  --gt-nav-border: #d8ebe3;
+
+  // =========================================================================
+  // Tables
+  // =========================================================================
+  --gt-table-border: #d8ebe3;
+  --gt-table-striped: rgba(26, 158, 110, 0.04);
+  --gt-table-hover: rgba(26, 158, 110, 0.08);
+
+  // =========================================================================
+  // Forms
+  // =========================================================================
+  --gt-input-border: #c8d8d2;
+  --gt-input-focus-border: #1a9e6e;
+  --gt-input-focus-shadow: 0 0 0 3px rgba(26, 158, 110, 0.15);
+  --gt-input-placeholder: #8a9e96;
+
+  // =========================================================================
+  // Alerts
+  // =========================================================================
+  --gt-alert-success-bg: #d4f0e6;
+  --gt-alert-info-bg: #d0f0ee;
+  --gt-alert-warning-bg: #fdf3dc;
+  --gt-alert-danger-bg: #fde8e8;
+
+  // =========================================================================
+  // Spacing
   // =========================================================================
   --gt-spacing-xs: 5px;
   --gt-spacing-sm: 10px;
@@ -104,36 +120,41 @@
   --gt-spacing-xl: 30px;
 
   // =========================================================================
-  // Typography
+  // Typography — 고급 폰트 스택
   // =========================================================================
-  --gt-font-family: 'Helvetica Neue', Roboto, Arial, 'Droid Sans', sans-serif;
+  --gt-font-family: 'Inter', 'Pretendard', 'Helvetica Neue', Arial, sans-serif;
   --gt-font-size-base: 13px;
   --gt-font-size-sm: 12px;
   --gt-font-size-lg: 15px;
-  --gt-line-height: 1.471;
+  --gt-line-height: 1.6;
+  --gt-letter-spacing: -0.01em;
 
   // =========================================================================
-  // Shadows
+  // Shadows — 그린 틴트 그림자 (고급감)
   // =========================================================================
-  --gt-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --gt-shadow-md: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  --gt-shadow-lg: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  --gt-shadow-sm: 0 1px 3px rgba(15, 36, 25, 0.06);
+  --gt-shadow-md: 0 4px 12px rgba(15, 36, 25, 0.10), 0 1px 3px rgba(15, 36, 25, 0.06);
+  --gt-shadow-lg: 0 8px 24px rgba(15, 36, 25, 0.12), 0 3px 8px rgba(15, 36, 25, 0.08);
+  --gt-shadow-glow: 0 0 20px rgba(26, 158, 110, 0.25);
+  --gt-shadow-card: 0 2px 8px rgba(15, 36, 25, 0.07), 0 0 1px rgba(15, 36, 25, 0.04);
 
   // =========================================================================
   // Transitions
   // =========================================================================
-  --gt-transition-fast: 150ms ease-in-out;
-  --gt-transition-normal: 300ms ease-in-out;
-  --gt-transition-slow: 500ms ease-in-out;
+  --gt-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --gt-transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --gt-transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
 
   // =========================================================================
-  // Border Radius
+  // Border Radius — 더 둥글게 (모던 고급감)
   // =========================================================================
-  --gt-radius-sm: 2px;
-  --gt-radius-md: 4px;
-  --gt-radius-lg: 6px;
-  --gt-radius-xl: 10px;
+  --gt-radius-sm: 4px;
+  --gt-radius-md: 8px;
+  --gt-radius-lg: 12px;
+  --gt-radius-xl: 16px;
+  --gt-radius-2xl: 24px;
   --gt-radius-round: 50%;
+  --gt-radius-pill: 9999px;
 
   // =========================================================================
   // Z-index Scale
@@ -145,41 +166,50 @@
   --gt-z-modal: 1050;
   --gt-z-popover: 1060;
   --gt-z-tooltip: 1070;
+
+  // =========================================================================
+  // Gradients — 시그니처 그린 그라디언트
+  // =========================================================================
+  --gt-gradient-primary: linear-gradient(135deg, #1a9e6e 0%, #0f7a52 100%);
+  --gt-gradient-sidebar: linear-gradient(180deg, #1a3d2a 0%, #122b1d 60%, #0e2218 100%);
+  --gt-gradient-accent: linear-gradient(135deg, #22c78a 0%, #1a9e6e 100%);
+  --gt-gradient-gold: linear-gradient(135deg, #d4a843 0%, #b8892c 100%);
+  --gt-gradient-card: linear-gradient(145deg, #ffffff 0%, #f4faf7 100%);
 }
 
 // =============================================================================
-// SCSS Variables (for use in SCSS files)
+// SCSS Variables
 // =============================================================================
-// These map to the CSS custom properties for SCSS operations
 
-$gt-primary: #1abb9c;
-$gt-primary-dark: #26b99a;
-$gt-secondary: #2a3f54;
-$gt-accent: #3498db;
+$gt-primary: #1a9e6e;
+$gt-primary-dark: #157a56;
+$gt-primary-light: #22c78a;
+$gt-secondary: #e74c3c;
+$gt-accent: #34d399;
+$gt-accent-gold: #d4a843;
 
-$gt-success: #1abb9c;
-$gt-info: #3498db;
-$gt-warning: #f39c12;
-$gt-danger: #e74c3c;
-$gt-purple: #9b59b6;
+$gt-success: #1a9e6e;
+$gt-info: #0ea5a0;
+$gt-warning: #d4a843;
+$gt-danger: #e05252;
+$gt-purple: #7c6fcd;
 
 $gt-white: #ffffff;
 $gt-black: #000000;
-$gt-dark: #34495e;
-$gt-gray-600: #73879c;
-$gt-gray-200: #dddddd;
-$gt-gray-100: #e6e6e6;
-$gt-gray-50: #f7f7f7;
+$gt-dark: #1b2e22;
+$gt-gray-600: #6b8278;
+$gt-gray-200: #deeae5;
+$gt-gray-100: #edf5f1;
+$gt-gray-50: #f4faf7;
 
-$gt-body-bg: #f7f7f7;
-$gt-sidebar-bg: #2a3f54;
-$gt-border-color: #e6e9ed;
+$gt-body-bg: #f0f7f3;
+$gt-sidebar-bg: #0f2419;
+$gt-border-color: #d8ebe3;
 
-// Color utility classes map
 $color-classes: (
   'green': $gt-primary,
-  'aero': #9cc2cb,
-  'blue': $gt-accent,
+  'aero': #6bb8a0,
+  'blue': #0ea5a0,
   'red': $gt-danger,
   'purple': $gt-purple,
   'dark': $gt-dark

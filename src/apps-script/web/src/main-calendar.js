@@ -1,5 +1,6 @@
 // apps-script/web/main-calendar.js
 
+import './utils/i18n.js';
 import DOMPurify from 'dompurify';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;

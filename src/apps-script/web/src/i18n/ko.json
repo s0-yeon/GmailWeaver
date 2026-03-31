@@ -1,0 +1,206 @@
+{
+  "nav": {
+    "home": "홈",
+    "search": "검색",
+    "labels": "라벨",
+    "calendar": "캘린더",
+    "my_account": "내 계정",
+    "statistics": "통계",
+    "other_charts": "기타 차트",
+    "contacts": "연락처",
+    "profile": "프로필",
+    "graph_viz": "그래프 시각화"
+  },
+  "sidebar": {
+    "welcome": "환영합니다,",
+    "settings": "설정",
+    "fullscreen": "전체화면",
+    "lock": "잠금",
+    "logout": "로그아웃"
+  },
+  "topnav": {
+    "profile": "프로필",
+    "settings": "설정",
+    "help": "도움말",
+    "logout": "로그아웃"
+  },
+  "lang": {
+    "label": "언어",
+    "ko": "🇰🇷 한국어",
+    "en": "🇺🇸 English",
+    "ja": "🇯🇵 日本語"
+  },
+  "footer": {
+    "template_by": "Bootstrap Admin 템플릿"
+  },
+  "badge": {
+    "updated": "업데이트"
+  },
+  "page": {
+    "index": {
+      "greeting": "반갑습니다!",
+      "subtitle": "무엇이든 물어보세요.",
+      "search_placeholder": "메일에 대해 궁금한 것을 검색하세요...",
+      "search_hint": "Enter 또는 버튼을 눌러 검색"
+    },
+    "search": {
+      "search_placeholder": "메일에 대해 궁금한 것을 검색하세요...",
+      "recent_label": "최근 검색:",
+      "clear_all": "전체 삭제",
+      "empty": "검색어를 입력해 메일을 분석하세요.",
+      "loading": "메일을 분석하고 있습니다...",
+      "search_query_label": "검색어:",
+      "no_result": "결과가 없습니다.",
+      "error_timeout": "응답 시간이 초과되었습니다. 다시 시도해주세요.",
+      "error_connect": "서버에 연결할 수 없습니다. Flask 서버가 실행 중인지 확인하세요.",
+      "error_failed": "검색 요청에 실패했습니다."
+    },
+    "labels": {
+      "title": "라벨 관리",
+      "add_label": "+ 라벨 추가",
+      "no_labels": "라벨이 없습니다.",
+      "loading": "라벨을 불러오는 중...",
+      "apply_btn": "적용",
+      "delete_btn": "삭제"
+    },
+    "calendar": {
+      "title": "이벤트 캘린더",
+      "subtitle": "날짜를 클릭해 이벤트를 추가하고, 이벤트를 클릭해 편집하세요",
+      "new_event": "새 이벤트",
+      "month_view": "월 보기",
+      "week_view": "주 보기",
+      "day_view": "일 보기",
+      "today": "오늘",
+      "reload": "새로고침",
+      "export": "캘린더 내보내기",
+      "import": "이벤트 가져오기",
+      "modal_create": "새 이벤트 만들기",
+      "modal_edit": "이벤트 편집",
+      "modal_detail": "이벤트 상세",
+      "label_title": "이벤트 제목",
+      "label_color": "이벤트 색상",
+      "label_start": "시작 일시",
+      "label_end": "종료 일시",
+      "label_allday": "종일 이벤트",
+      "label_desc": "설명",
+      "label_location": "장소",
+      "label_category": "카테고리",
+      "color_green": "초록",
+      "color_blue": "파랑",
+      "color_red": "빨강",
+      "color_orange": "주황",
+      "color_purple": "보라",
+      "color_dark": "진한 회색",
+      "cat_select": "카테고리 선택...",
+      "cat_meeting": "회의",
+      "cat_conference": "컨퍼런스",
+      "cat_workshop": "워크샵",
+      "cat_personal": "개인",
+      "cat_deadline": "마감",
+      "cat_other": "기타",
+      "btn_cancel": "취소",
+      "btn_save": "이벤트 저장",
+      "btn_save_changes": "변경사항 저장",
+      "btn_delete": "이벤트 삭제",
+      "btn_edit": "이벤트 편집",
+      "btn_close": "닫기"
+    },
+    "inbox": {
+      "title": "받은편지함",
+      "subtitle": "이메일 관리",
+      "search_placeholder": "메일 검색...",
+      "compose": "편지 쓰기",
+      "reply": "답장",
+      "forward": "전달",
+      "print": "인쇄",
+      "delete": "삭제",
+      "to_label": "받는 사람:",
+      "subject_label": "제목:",
+      "attach": "첨부",
+      "draft": "임시저장",
+      "send": "보내기"
+    },
+    "profile": {
+      "title": "사용자 프로필",
+      "subtitle": "프로페셔널 대시보드",
+      "search_placeholder": "프로필 검색...",
+      "edit_profile": "프로필 편집",
+      "share": "공유",
+      "projects_completed": "완료된 프로젝트",
+      "team_members": "팀 멤버",
+      "awards_won": "수상",
+      "hours_worked": "작업 시간",
+      "contact_info": "연락처 정보",
+      "technical_skills": "기술 스택",
+      "recent_activity": "최근 활동",
+      "performance": "성과 대시보드",
+      "tab_projects": "현재 프로젝트",
+      "tab_achievements": "성과",
+      "tab_activity": "활동 피드",
+      "week": "주",
+      "month": "월",
+      "year": "연"
+    },
+    "contacts": {
+      "title": "연락처",
+      "search_placeholder": "연락처 검색...",
+      "add_contact": "연락처 추가",
+      "name": "이름",
+      "email": "이메일",
+      "phone": "전화번호",
+      "company": "회사"
+    },
+    "chartjs": {
+      "title": "Chart.js 예제",
+      "line_charts": "선 차트",
+      "bar_charts": "막대 차트",
+      "circular_charts": "원형 차트"
+    },
+    "echarts": {
+      "title": "ECharts",
+      "subtitle": "다양한 차트 예제"
+    },
+    "login": {
+      "title": "로그인",
+      "username": "사용자명",
+      "password": "비밀번호",
+      "remember": "로그인 상태 유지",
+      "submit": "로그인",
+      "forgot": "비밀번호를 잊으셨나요?",
+      "register": "계정 만들기"
+    },
+    "error": {
+      "403_title": "접근 금지",
+      "403_desc": "이 페이지에 접근할 권한이 없습니다.",
+      "404_title": "페이지를 찾을 수 없음",
+      "404_desc": "요청하신 페이지가 존재하지 않습니다.",
+      "500_title": "서버 오류",
+      "500_desc": "서버에서 오류가 발생했습니다.",
+      "go_home": "홈으로 돌아가기"
+    },
+    "tables": {
+      "title": "테이블",
+      "search": "검색...",
+      "export": "내보내기",
+      "print": "인쇄"
+    },
+    "forms": {
+      "title": "폼",
+      "submit": "제출",
+      "reset": "초기화",
+      "cancel": "취소",
+      "save": "저장"
+    },
+    "general": {
+      "loading": "불러오는 중...",
+      "no_data": "데이터가 없습니다.",
+      "confirm": "확인",
+      "cancel": "취소",
+      "close": "닫기",
+      "save": "저장",
+      "edit": "편집",
+      "delete": "삭제",
+      "back": "뒤로"
+    }
+  }
+}

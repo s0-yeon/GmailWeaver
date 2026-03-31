@@ -106,22 +106,43 @@
   <body class="nav-md page-theme-comparison">
     <div class="container body">
       <div class="main_container">
-        <!-- Minimal sidebar for navigation -->
-        <aside class="col-md-3 left_col">
+        <!-- Sidebar -->
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
           <div class="left_col scroll-view">
             <div class="navbar nav_title border-0">
-              <a href="index.html" class="site_title">
-                <img src="images/logo.svg" alt="Gentelella" class="logo-full logo-main" loading="lazy">
-                <img src="images/logo-icon.svg" alt="Gentelella" class="logo-icon" loading="lazy">
+              <a href="index.html" class="site_title site_title_text">
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
+                Olive
               </a>
             </div>
             <div class="clearfix"></div>
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
+              </div>
+              <div class="profile_info">
+                <span data-i18n="sidebar.welcome">Welcome,</span>
+                <h4 id="google-profile-name">-</h4>
+              </div>
+            </div>
             <br />
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
-                <h3>Theme Testing</h3>
                 <ul class="nav side-menu">
-                  <li><a href="index.html"><i class="bi bi-arrow-left"></i> Back to Dashboard</a></li>
+                  <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span></a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span></a></li>
+                  <li><a href="index2.html"><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span></a></li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span></a></li>
+                  <li>
+                    <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="chartjs.html">Chart.js</a></li>
+                      <li><a href="echarts.html">ECharts <span class="badge bg-info">Updated</span></a></li>
+                      <li><a href="other_charts.html"><span data-i18n="nav.other_charts">Other Charts</span></a></li>
+                    </ul>
+                  </li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span></a></li>
+                  <li><a href="profile.html"><i class="bi bi-person-circle"></i> <span data-i18n="nav.profile">Profile</span></a></li>
                 </ul>
               </div>
             </div>

@@ -53,8 +53,12 @@ function initSidebar() {
     const li = target.parentElement;
     const submenu = li.querySelector('ul.child_menu');
 
-    // If this link has no submenu, allow normal navigation
+    // If this link has no submenu, highlight briefly then navigate
     if (!submenu) {
+      DOM.selectAll('#sidebar-menu li.active', sidebarMenu).forEach(el => {
+        if (!el.querySelector('ul.child_menu')) DOM.removeClass(el, 'active');
+      });
+      DOM.addClass(li, 'active');
       return true;
     }
 

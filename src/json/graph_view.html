@@ -2,13 +2,21 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <!-- d3.js 라이브러리 (시각화에 사용)-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+  <!-- 공유 렌더링 함수 (graph-viz.js와 동일한 로직) -->
+  <script src="/graph-render.js"></script>
 </head>
 <body>
-    <!-- 그래프 그려지는 svg 영역 = 화면 전체-->
   <svg id="graph" style="width:100vw;height:100vh;"></svg>
   <script>
+<<<<<<< HEAD
+    fetch(window.location.origin + '/graph-data')
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        renderGraph(document.getElementById('graph'), data);
+      })
+      .catch(function(err) { console.error('그래프 로드 실패:', err); });
+=======
     const COLORS = {
       EMAIL: "#f87171",        // 빨강
       PERSON: "#fb923c",       // 주황
@@ -101,6 +109,7 @@
           node.attr("transform", d => `translate(${d.x},${d.y})`);
         });
       });
+>>>>>>> 82753b4c44f5adfd649cd87debc751da61efc443
   </script>
 </body>
 </html>

@@ -1,0 +1,206 @@
+{
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "labels": "Labels",
+    "calendar": "Calendar",
+    "my_account": "My Account",
+    "statistics": "Statistics",
+    "other_charts": "Other Charts",
+    "contacts": "Contacts",
+    "profile": "Profile",
+    "graph_viz": "Graph Viz"
+  },
+  "sidebar": {
+    "welcome": "Welcome,",
+    "settings": "Settings",
+    "fullscreen": "FullScreen",
+    "lock": "Lock",
+    "logout": "Logout"
+  },
+  "topnav": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "help": "Help",
+    "logout": "Log Out"
+  },
+  "lang": {
+    "label": "Language",
+    "ko": "🇰🇷 한국어",
+    "en": "🇺🇸 English",
+    "ja": "🇯🇵 日本語"
+  },
+  "footer": {
+    "template_by": "Bootstrap Admin Template by"
+  },
+  "badge": {
+    "updated": "Updated"
+  },
+  "page": {
+    "index": {
+      "greeting": "Welcome!",
+      "subtitle": "Ask me anything.",
+      "search_placeholder": "Search your emails...",
+      "search_hint": "Press Enter or click the button to search"
+    },
+    "search": {
+      "search_placeholder": "Search your emails...",
+      "recent_label": "Recent:",
+      "clear_all": "Clear all",
+      "empty": "Enter a query to analyze your emails.",
+      "loading": "Analyzing your emails...",
+      "search_query_label": "Query:",
+      "no_result": "No results found.",
+      "error_timeout": "Request timed out. Please try again.",
+      "error_connect": "Unable to connect to server. Make sure Flask is running.",
+      "error_failed": "Search request failed."
+    },
+    "labels": {
+      "title": "Label Manager",
+      "add_label": "+ Add Label",
+      "no_labels": "No labels found.",
+      "loading": "Loading labels...",
+      "apply_btn": "Apply",
+      "delete_btn": "Delete"
+    },
+    "calendar": {
+      "title": "Event Calendar",
+      "subtitle": "Click dates to add events, click events to edit",
+      "new_event": "New Event",
+      "month_view": "Month View",
+      "week_view": "Week View",
+      "day_view": "Day View",
+      "today": "Today",
+      "reload": "Reload",
+      "export": "Export Calendar",
+      "import": "Import Events",
+      "modal_create": "Create New Event",
+      "modal_edit": "Edit Event",
+      "modal_detail": "Event Details",
+      "label_title": "Event Title",
+      "label_color": "Event Color",
+      "label_start": "Start Date & Time",
+      "label_end": "End Date & Time",
+      "label_allday": "All Day Event",
+      "label_desc": "Description",
+      "label_location": "Location",
+      "label_category": "Category",
+      "color_green": "Green",
+      "color_blue": "Blue",
+      "color_red": "Red",
+      "color_orange": "Orange",
+      "color_purple": "Purple",
+      "color_dark": "Dark Gray",
+      "cat_select": "Select category...",
+      "cat_meeting": "Meeting",
+      "cat_conference": "Conference",
+      "cat_workshop": "Workshop",
+      "cat_personal": "Personal",
+      "cat_deadline": "Deadline",
+      "cat_other": "Other",
+      "btn_cancel": "Cancel",
+      "btn_save": "Save Event",
+      "btn_save_changes": "Save Changes",
+      "btn_delete": "Delete Event",
+      "btn_edit": "Edit Event",
+      "btn_close": "Close"
+    },
+    "inbox": {
+      "title": "Inbox",
+      "subtitle": "Email Management",
+      "search_placeholder": "Search emails...",
+      "compose": "COMPOSE",
+      "reply": "Reply",
+      "forward": "Forward",
+      "print": "Print",
+      "delete": "Delete",
+      "to_label": "To:",
+      "subject_label": "Subject:",
+      "attach": "Attach",
+      "draft": "Draft",
+      "send": "Send"
+    },
+    "profile": {
+      "title": "User Profile",
+      "subtitle": "Professional Dashboard",
+      "search_placeholder": "Search profile...",
+      "edit_profile": "Edit Profile",
+      "share": "Share",
+      "projects_completed": "Projects Completed",
+      "team_members": "Team Members",
+      "awards_won": "Awards Won",
+      "hours_worked": "Hours Worked",
+      "contact_info": "Contact Information",
+      "technical_skills": "Technical Skills",
+      "recent_activity": "Recent Activity",
+      "performance": "Performance Dashboard",
+      "tab_projects": "Current Projects",
+      "tab_achievements": "Achievements",
+      "tab_activity": "Activity Feed",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year"
+    },
+    "contacts": {
+      "title": "Contacts",
+      "search_placeholder": "Search contacts...",
+      "add_contact": "Add Contact",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "company": "Company"
+    },
+    "chartjs": {
+      "title": "Chart.js Examples",
+      "line_charts": "Line Charts",
+      "bar_charts": "Bar Charts",
+      "circular_charts": "Circular Charts"
+    },
+    "echarts": {
+      "title": "ECharts",
+      "subtitle": "Chart Examples"
+    },
+    "login": {
+      "title": "Login",
+      "username": "Username",
+      "password": "Password",
+      "remember": "Remember me",
+      "submit": "Log In",
+      "forgot": "Forgot your password?",
+      "register": "Create an account"
+    },
+    "error": {
+      "403_title": "Access Forbidden",
+      "403_desc": "You don't have permission to access this page.",
+      "404_title": "Page Not Found",
+      "404_desc": "The page you requested does not exist.",
+      "500_title": "Server Error",
+      "500_desc": "An error occurred on the server.",
+      "go_home": "Go to Home"
+    },
+    "tables": {
+      "title": "Tables",
+      "search": "Search...",
+      "export": "Export",
+      "print": "Print"
+    },
+    "forms": {
+      "title": "Forms",
+      "submit": "Submit",
+      "reset": "Reset",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "general": {
+      "loading": "Loading...",
+      "no_data": "No data available.",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "close": "Close",
+      "save": "Save",
+      "edit": "Edit",
+      "delete": "Delete",
+      "back": "Back"
+    }
+  }
+}

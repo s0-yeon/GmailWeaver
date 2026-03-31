@@ -196,66 +196,45 @@
       <div class="main_container">
 
         <!-- 사이드바 -->
+        <!-- Sidebar -->
         <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
           <div class="left_col scroll-view">
             <div class="navbar nav_title border-0">
               <a href="index.html" class="site_title site_title_text">
-                <i class="bi bi-envelope-heart-fill"></i>
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
                 Olive
               </a>
             </div>
             <div class="clearfix"></div>
-            <!-- 사용자 프로필 (이름은 JS에서 동적 주입) -->
             <div class="profile clearfix">
               <div class="profile_pic">
                 <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
               </div>
               <div class="profile_info">
-                <span>Welcome,</span>
                 <h4 id="google-profile-name">-</h4>
               </div>
             </div>
             <br />
-            <!-- 사이드바 네비게이션 -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
                 <ul class="nav side-menu">
-                  <li><a href="index.html"><i class="bi bi-house"></i> Home</a></li>
-                  <li><a href="search.html"><i class="bi bi-search"></i> Search</a></li>
-                  <li><a href="index2.html"><i class="bi bi-tags"></i> Labels</a></li>
-                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> Calendar</a></li>
-                  
-                </ul>
-              </div>
-              <div class="menu_section">
-                <h3>My Account</h3>
-                <ul class="nav side-menu">
+                  <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="index2.html"><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span><span class="bi bi-chevron-right"></span></a></li>
                   <li>
-                    <a><i class="bi bi-bar-chart"></i> Statistics<span class="bi bi-chevron-down"></span></a>
+                    <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
                     <ul class="nav child_menu">
+                      <li><a href="index.html#graph-viz"><i class="bi bi-diagram-3"></i> <span data-i18n="nav.graph_viz">Graph Viz</span></a></li>
                       <li><a href="chartjs.html">Chart.js</a></li>
                       <li><a href="echarts.html">ECharts <span class="badge bg-info">Updated</span></a></li>
-                      <li><a href="other_charts.html">Other Charts</a></li>
+                      <li><a href="other_charts.html"><span data-i18n="nav.other_charts">Other Charts</span></a></li>
                     </ul>
                   </li>
-                  <li><a href="contacts.html"><i class="bi bi-people"></i> Contacts</a></li>
-                  <li><a href="profile.html"><i class="bi bi-person-circle"></i> Profile</a></li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="profile.html"><i class="bi bi-person-circle"></i> <span data-i18n="nav.profile">Profile</span><span class="bi bi-chevron-right"></span></a></li>
                 </ul>
               </div>
-            </div>
-            <div class="sidebar-footer hidden-small">
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Settings">
-                <span class="fas fa-cog" aria-hidden="true"></span>
-              </a>
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="FullScreen">
-                <span class="fas fa-expand" aria-hidden="true"></span>
-              </a>
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Lock">
-                <span class="fas fa-eye-slash" aria-hidden="true"></span>
-              </a>
-              <a data-bs-toggle="tooltip" data-bs-placement="top" title="Logout" href="login.html">
-                <span class="fas fa-power-off" aria-hidden="true"></span>
-              </a>
             </div>
           </div>
         </aside>
@@ -270,17 +249,16 @@
             <!-- 유저 프로필 드롭다운 -->
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
-                <li class="nav-item dropdown">
-                  <a href="#" role="button" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-person-circle" style="font-size: 1.4rem; vertical-align: middle;"></i>
-                    <span id="google-nav-name" style="margin-left: 6px;">-</span>
+                                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color:inherit;">
+                    <i class="bi bi-translate" style="font-size: 1.2rem; vertical-align: middle;"></i>
+                    <span id="current-lang" style="margin-left: 4px; font-size: 0.9rem;">KO</span>
                   </a>
-                  <div class="dropdown-menu dropdown-menu-end dropdown-usermenu dropdown-menu-sm" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="profile.html" role="button">Profile</a>
-                    <a class="dropdown-item" href="#" role="button">Settings</a>
-                    <a class="dropdown-item" href="#" role="button">Help</a>
-                    <a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt float-end"></i> Log Out</a>
-                  </div>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ko" data-i18n="lang.ko">🇰🇷 한국어</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="en" data-i18n="lang.en">🇺🇸 English</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ja" data-i18n="lang.ja">🇯🇵 日本語</a></li>
+                  </ul>
                 </li>
               </ul>
             </nav>
@@ -295,7 +273,7 @@
             <!-- 검색창 + 최근 검색어 바 -->
             <div class="gw-search-top">
               <div class="gw-search-box">
-                <input type="text" id="search-input" placeholder="메일에 대해 궁금한 것을 검색하세요..." autocomplete="off">
+                <input type="text" id="search-input" placeholder="메일에 대해 궁금한 것을 검색하세요..." data-i18n-placeholder="page.search.search_placeholder" autocomplete="off">
                 <button id="search-btn" type="button">
                   <i class="fas fa-search"></i>
                 </button>
@@ -303,9 +281,9 @@
 
               <!-- 최근 검색어 (localStorage에서 로드, 없으면 숨김) -->
               <div class="gw-recent-searches" id="recent-searches-bar" style="display:none;">
-                <span class="gw-recent-label"><i class="fas fa-history me-1"></i>최근 검색:</span>
+                <span class="gw-recent-label"><i class="fas fa-history me-1"></i><span data-i18n="page.search.recent_label">최근 검색:</span></span>
                 <div id="recent-tags"></div>
-                <span class="gw-recent-clear" id="clear-recent">전체 삭제</span>
+                <span class="gw-recent-clear" id="clear-recent" data-i18n="page.search.clear_all">전체 삭제</span>
               </div>
             </div>
 
@@ -314,7 +292,7 @@
               <div id="result-container">
                 <div class="gw-empty">
                   <i class="bi bi-search"></i>
-                  <p>검색어를 입력해 메일을 분석하세요.</p>
+                  <p data-i18n="page.search.empty">검색어를 입력해 메일을 분석하세요.</p>
                 </div>
               </div>
             </div>
@@ -347,7 +325,7 @@
         : (sessionStorage.getItem('gw_user_name') || '-');
       if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
       document.getElementById('google-profile-name').textContent = name;
-      document.getElementById('google-nav-name').textContent = name;
+      
 
       window.currentUserName = name;
       // URL ?q= 파라미터가 있으면 검색창에 자동 복원

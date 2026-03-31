@@ -354,3 +354,5 @@ import './modules/maps.js';
 // Import echarts module for echarts.html
 import './modules/echarts.js';
 
+// 다국어 지원 (i18n)
+import './utils/i18n.js';

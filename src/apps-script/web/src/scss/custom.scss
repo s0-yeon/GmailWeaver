@@ -1150,9 +1150,9 @@ body .site_title {
   width: 100%;
   color: var(--gt-gray-100);
   margin-left: 0;
-  line-height: 59px;
-  display: block;
-  height: 55px;
+  display: flex;
+  align-items: center;
+  height: 57px;
   margin: 0;
   padding-left: 10px;
 }

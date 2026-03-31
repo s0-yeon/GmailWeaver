@@ -50,11 +50,12 @@ def _build_nodes(entities_df: pd.DataFrame, communities_df: pd.DataFrame | None)
     # entities.parquet의 각 행(= 엔티티 하나)을 순회
     for _, row in entities_df.iterrows():
 
-        nid = str(row.get("id", row.get("entity_id", _))) # 노드 id 추출
- 
+        # 엣지의 source/target이 title(이름)을 사용하므로 노드 ID도 title로 통일
+        nid = str(row.get("title", row.get("name", row.get("id", _))))
+
         node = {
             "id":                nid,
-            "label":             _convert(row.get("name", row.get("title", nid))), # 그래프 노드 안에 표시될 이름 (name,title,nid 순서로 결정)
+            "label":             nid, # 그래프 노드 안에 표시될 이름
             "entity_type":       _convert(row.get("entity_type", row.get("type", None))), # 엔티티 종류
             "description":       _convert(row.get("description", None)), # 엔티티 설명
             "human_readable_id": _convert(row.get("human_readable_id", None)), # GraphRAG가 부여한 숫자 형태의 ID
