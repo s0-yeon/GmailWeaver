@@ -499,12 +499,12 @@ def _save_mail_contact_stats(blocks: list[str],paths, mode: str = "rewrite"):
 # 인덱스 여부 확인
 def _is_index_ready(paths):
 
-    graph_path = os.path.join(paths.GRAPHRAG_ROOT, "output", "graph.graphml")
+    #graph_path = os.path.join(paths.GRAPHRAG_ROOT, "output", "graph.graphml")
     stats_path = os.path.join(paths.GRAPHRAG_ROOT, "output", "stats.json")
 
     try:
          # 동기화된 메일 텍스트, graphml 파일, 인덱싱 통계 파일이 존재하는지 확인
-        required_paths = [paths.MAIL_LATEST_PATH, graph_path, stats_path]
+        required_paths = [paths.MAIL_LATEST_PATH, stats_path]
 
         for path in required_paths:
             if not os.path.exists(path):
@@ -676,10 +676,6 @@ def upload():
 
     # 3) 원본 메일 텍스트 저장
     with open(file_path, "w", encoding="utf-8") as f:
-        f.write(content)
-
-  # 4) mail_latest.txt 초기화
-    with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
         f.write(content)
 
     extracted_count = 0
