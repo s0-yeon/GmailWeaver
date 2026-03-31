@@ -45,7 +45,7 @@
           .force("link", d3.forceLink(data.edges)
             .id(d => d.label) // 엣지의 source와 target가 label 기준으로 연결
             .distance(80)) // 연결 노드 사이의 거리
-          .force("charge", d3.forceManyBody().strength(-15)) // 노드들 간의 밀어내는 힘
+          .force("charge", d3.forceManyBody().strength(-200)) // 노드들 간의 밀어내는 힘
           .force("collide", d3.forceCollide(30)); // 노드들 겹치지 않도록 함
 
         // 엣지 그리기
