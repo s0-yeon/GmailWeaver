@@ -95,7 +95,7 @@ skip_workflows: []
 extract_graph:
   prompt: "prompts/entity_extraction.txt"
   entity_types: [Email, Person, Topic, Label, Event, Organization]
-  max_gleanings: 0
+  max_gleanings: 1
 
 summarize_descriptions:
   prompt: "prompts/summarize_descriptions.txt"
@@ -105,7 +105,7 @@ extract_claims:
   enabled: false
   prompt: "prompts/claim_extraction.txt"
   description: "Any claims or facts that could be relevant to information discovery."
-  max_gleanings: 0
+  max_gleanings: 1
 
 community_reports:
   graph_prompt: "prompts/community_report.txt"

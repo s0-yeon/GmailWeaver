@@ -22,7 +22,8 @@ def _summarize_attachment_text(text: str,paths, filename: str) -> str:
     if pure_len < 500:
         return text  # 짧은 텍스트는 요약 없이 그대로 반환
 
-    prompt_path = os.path.join(paths.GRAPHRAG_ROOT, "prompts", "summarize_attachment.txt")
+    prompt_path = os.path.join( "parquet_template", "prompts", "summarize_attachment.txt")
+
     with open(prompt_path, "r", encoding="utf-8") as f:
         prompt = f.read().strip()
 

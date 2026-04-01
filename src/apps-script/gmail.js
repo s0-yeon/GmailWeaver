@@ -29,8 +29,7 @@ function _runSync(mode) {
     // 전체 갱신할 때
     if (mode === "rewrite") {
       var queryAll = "in:inbox OR in:sent";
-      threads = GmailApp.search(queryAll, 0, 3);
-
+      threads = GmailApp.search(queryAll, 0, 200);
       threads.forEach(function (thread) {
         // 각 스레드 순회
         thread.getMessages().forEach(function (msg) {
@@ -76,13 +75,7 @@ function _runSync(mode) {
       Logger.log("메일 수: " + count);
       Logger.log("첨부 전송 개수: " + allAttachments.length);
 
-      return _toast(
-        "✅ " +
-          count +
-          "개 메일, 첨부 " +
-          allAttachments.length +
-          "개를 서버로 전송했습니다.",
-      );
+      return _toast("✅ " + count + "개 메일 전송 완료. 첨부파일 내용은 메일 인덱싱 후 자동 처리됩니다.");
     }
 
     // 새로운 메일만 추가할 때
@@ -159,7 +152,7 @@ function _runSync(mode) {
       // 새로운 메일만 추가 눌렀는데 인덱싱 안돼있어서 인덱싱 모드로 바뀌었으면
       return _toast("✅ 기존 인덱스가 없어 전체 인덱싱을 먼저 실행합니다.");
     }
-    return _toast("✅ " + count + "개 새 메일을 서버로 전송했습니다.");
+    return _toast("✅ " + count + "개 새 메일 전송 완료. 첨부파일 내용은 메일 내용 인덱싱 후 자동 처리됩니다.");
   } catch (err) {
     return _toast("⚠️ 동기화 실패: " + err.message);
   }
@@ -530,6 +523,7 @@ function _buildAttachmentPayload(msg) {
 
   return payload;
 }
+
 // Date 객체 YYYY-MM-DD_HHmmss 형식으로 변환
 function _dateToYmdHms(d) {
   var pad = function (n) {
@@ -546,4 +540,87 @@ function _dateToYmdHms(d) {
     pad(d.getMinutes()) +
     pad(d.getSeconds())
   );
+}
+
+// 10분 트리거: 첨부파일 원본을 서버로 전송
+// Apps Script 트리거에서 자동 실행됨 (사용자 인터랙션 없음)
+function _runAttachmentSync() {
+  try {
+    var myEmail = Session.getActiveUser().getEmail();
+    var queryAll = "in:inbox OR in:sent";
+    var threads = GmailApp.search(queryAll, 0, 200);
+    var allAttachments = [];
+    var MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024;
+
+    threads.forEach(function(thread) {
+      thread.getMessages().forEach(function(msg) {
+        var id = msg.getId();
+        var atts = msg.getAttachments({ includeInlineImages: false });
+
+        atts.forEach(function(att, i) {
+          var name = att.getName() || ("attachment_" + (i + 1));
+          var mime = att.getContentType() || "application/octet-stream";
+          var size = att.getSize();
+          var lowerName = name.toLowerCase();
+
+          var isSupported = lowerName.endsWith(".pdf") || lowerName.endsWith(".docx") ||
+                            lowerName.endsWith(".hwp") || lowerName.endsWith(".pptx") ||
+                            lowerName.endsWith(".xlsx") || lowerName.endsWith(".csv") ||
+                            lowerName.endsWith(".txt");
+
+          // base64 인코딩 후 payload에 추가
+          if (isSupported && size <= MAX_ATTACHMENT_SIZE) {
+            var dataBase64 = Utilities.base64Encode(att.getBytes());
+            allAttachments.push({
+              mail_id: id,
+              name: name,
+              mime: mime,
+              data_base64: dataBase64
+            });
+          }
+        });
+      });
+    });
+
+    if (allAttachments.length === 0) {
+      Logger.log("[AttachmentSync] 전송할 첨부파일 없음");
+      return;
+    }
+
+    // /upload-attachments 엔드포인트로 전송 (메일 본문 없이 첨부만)
+    var res = UrlFetchApp.fetch(TunnelURL + "/upload-attachments", {
+      method: "post",
+      contentType: "application/json",
+      headers: { "ngrok-skip-browser-warning": "1" },
+      payload: JSON.stringify({
+        gmail_id: myEmail,
+        attachments: allAttachments
+      }),
+      muteHttpExceptions: true
+    });
+
+    Logger.log("[AttachmentSync] 전송 완료: " + allAttachments.length + "개 / " + res.getResponseCode());
+
+  } catch (err) {
+    Logger.log("[AttachmentSync] 오류: " + err.message);
+  }
+}
+
+// 10분 트리거 등록 (최초 1회만 실행하면 됨)
+// Apps Script 편집기에서 수동으로 한 번 실행해서 등록
+function registerAttachmentTrigger() {
+  // 기존 트리거 중복 방지: 같은 함수명 트리거가 있으면 삭제 후 재등록
+  ScriptApp.getProjectTriggers().forEach(function(trigger) {
+    if (trigger.getHandlerFunction() === "_runAttachmentSync") {
+      ScriptApp.deleteTrigger(trigger);
+    }
+  });
+
+  // 10분마다 _runAttachmentSync 실행
+  ScriptApp.newTrigger("_runAttachmentSync")
+    .timeBased()
+    .everyMinutes(10)
+    .create();
+
+  Logger.log("[Trigger] _runAttachmentSync 10분 트리거 등록 완료");
 }

@@ -15,35 +15,57 @@ The input may be an email, a structured table, or plain text — adapt according
 
    Grounding rules:
    * 엔티티는 반복적으로 의미를 가지는 개념만 추출한다.
-      즉, 다른 이메일에서도 동일한 의미로 재등장할 수 있는 것만 포함한다.
-      * 다음은 엔티티에서 제외한다:
-      - 인증코드, OTP, 임시 토큰 등 일회성 숫자/문자열
-      - 파일명 내 일련번호 (예: 과제4-최지유-2471239.pdf의 2471239)
-      - 특정 날짜/시간 값
-      - invoice 번호, 주문 번호 등 트랜잭션 식별자
-      * 다음은 엔티티로 포함한다:
-      - 발신자/수신자 이메일 주소 (반복 등장하는 경우)
-      - 프로젝트명, 서비스명, 조직명
-      - 반복적으로 언급되는 주제어
+     즉, 다른 이메일에서도 동일한 의미로 재등장할 수 있는 것만 포함한다.
+     * 다음은 엔티티에서 제외한다:
+     - 인증코드, OTP, 임시 토큰 등 일회성 숫자/문자열
+     - 파일명 내 일련번호 (예: 과제4-최지유-2471239.pdf의 2471239)
+     - 특정 날짜/시간 값
+     - invoice 번호, 주문 번호 등 트랜잭션 식별자
+     * 다음은 엔티티로 포함한다:
+     - 발신자/수신자 이메일 주소 (반복 등장하는 경우)
+     - 프로젝트명, 서비스명, 조직명
+     - 반복적으로 언급되는 주제어
+
+   * NONE 엔티티 금지: 이름, 타입, 설명 중 하나라도 None이거나 
+     의미있는 값을 채울 수 없는 경우 해당 엔티티를 생성하지 않는다.
+     모든 필드가 유효한 값을 가질 때만 엔티티를 출력한다.
+
+   * 동일 인물 중복 추출 금지: 이름이 다르더라도 동일한 이메일 주소를
+     가진 경우 하나의 Person 엔티티만 생성한다. 가장 구체적인 이름
+     (실명 > 닉네임 > 이메일 주소)을 title로 사용한다.
+     예) '최지유'와 'gpttitti@hansung.ac.kr'이 같은 사람이면
+     '최지유' 하나만 추출한다.
 
    Topic extraction rules:
-   * Topic은 해당 메일을 관통하는 맥락적 주제여야 한다. (예: "Claude Pro 구독 결제", "웹 개발 과외 일정 조율")
-   * 단순 파일명(.pdf, .txt, .html 등), 코드명, 기술 스택명(Python, Flask, CSS 등)은 Topic으로 추출하지 않는다.
+   * Topic은 해당 메일을 관통하는 맥락적 주제여야 한다.
+     (예: "Claude Pro 구독 결제", "웹 개발 과외 일정 조율")
+   * 단순 파일명(.pdf, .txt, .html 등), 코드명,
+     기술 스택명(Python, Flask, CSS 등)은 Topic으로 추출하지 않는다.
    * 메일 본문에서 명확히 논의되는 주제가 없으면 Topic을 생성하지 않는다.
+   * 동일한 맥락의 주제는 하나의 Topic으로 통합한다.
+     예) '과제5'와 '플라스크 전화번호관리 과제'가 같은 내용이면
+     더 구체적인 이름 하나만 추출한다.
 
    Event extraction rules:
    * Event는 반드시 명시적인 날짜 또는 시간 정보가 텍스트에 존재해야 한다.
    * 'Schedule' 필드를 채울 수 없는 경우 Event 엔티티를 생성하지 않는다.
-   * 수업 제목, 콘텐츠 이름, 회차 제목 등은 일정 정보가 없으면 Event로 추출하지 않는다.
+   * 수업 제목, 콘텐츠 이름, 회차 제목 등은 일정 정보가 없으면
+     Event로 추출하지 않는다.
 
    Label extraction rules:
-   * LABEL 엔티티는 반드시 mail_latest.txt의 '[라벨 정보]' 필드에 명시된 값만 추출한다.
-   * '[라벨 정보]' 필드의 값이 "없음"이거나 필드 자체가 없으면 LABEL 엔티티를 생성하지 않는다.
+   * LABEL 엔티티는 반드시 텍스트의 '[라벨 정보]' 필드에 명시된 값만 추출한다.
+   * '[라벨 정보]' 필드의 값이 "없음"이거나 필드 자체가 없으면
+     LABEL 엔티티를 생성하지 않는다.
    * 라벨이 쉼표로 구분된 여러 값인 경우 각각 별도의 LABEL 엔티티로 추출한다.
-     예) 'Recent-Labeled, 캘린더' → Label 엔티티 2개: 'Recent-Labeled', '캘린더'
-   * 본문, 제목, 첨부파일명, 링크 등 다른 필드에서 LABEL을 추론하거나 생성하지 않는다.
+     예) 'Recent-Labeled, 캘린더' → Label 엔티티 2개
+   * 본문, 제목, 첨부파일명, 링크 등 다른 필드에서 LABEL을 추론하거나
+     생성하지 않는다.
+   * 첨부파일명은 절대 LABEL로 추출하지 않는다.
+     예) '과제5-플라스크를 이용한 전화번호관리-최종.pptx'는
+     LABEL이 아니라 첨부파일명이다.
 
-2. Identify Relationships: Extract only relationships that are clearly supported by the text.
+2. Identify Relationships: Extract only relationships that are clearly
+   supported by the text.
    Format: '("relationship"{tuple_delimiter}<source>{tuple_delimiter}<target>{tuple_delimiter}<type>{tuple_delimiter}<description_in_Korean>{tuple_delimiter}<strength_1_10>)'
 
    Relationship directions are fixed — do not reverse them:
@@ -59,11 +81,16 @@ The input may be an email, a structured table, or plain text — adapt according
    | LABELED_AS    | Email        | Label        | Email에 지정된 분류 라벨              |
 
    Rules:
-   * BELONGS_TO target must be an Organization type. Topic/Event are not allowed.
-   * LABELED_AS target must be a Label entity extracted solely from the '[라벨 정보]' field.
-   * LABELED_AS must be created for each Label entity extracted — one relationship per label.
-   * Do not use SENT_BY, SENT_TO, CC_TO, or SCHEDULED_FOR if no Email entity exists.
-   * Do not create relationships that are not clearly supported by the text.
+   * BELONGS_TO target must be an Organization type.
+     Topic/Event are not allowed.
+   * LABELED_AS target must be a Label entity extracted solely from
+     the '[라벨 정보]' field.
+   * LABELED_AS must be created for each Label entity extracted —
+     one relationship per label.
+   * Do not use SENT_BY, SENT_TO, CC_TO, or SCHEDULED_FOR if no
+     Email entity exists.
+   * Do not create relationships that are not clearly supported by
+     the text.
    * Relationship descriptions MUST be in Korean.
 
 3. Constraints:
@@ -74,9 +101,9 @@ The input may be an email, a structured table, or plain text — adapt according
    * Output as a single list delimited by {record_delimiter}.
    * End with {completion_delimiter}.
 
--Examples-
-
 ---
+
+-Examples-
 Example 1
 Entity_types: Email, Person, Organization, Topic, Label
 Text:

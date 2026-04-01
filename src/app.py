@@ -14,6 +14,7 @@ import base64
 import requests
 import shutil
 import zlib
+import traceback 
 
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, send_from_directory
@@ -31,6 +32,7 @@ from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
 from util.user_path import UserPaths
+from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_low_affinity_person_stats,get_high_affinity_person_stats
 
 # 환경변수 로드
 load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: GraphRAG 설정(settings.yaml)과 API 키가 같은 디렉터리에 위치하기 때문
@@ -40,9 +42,7 @@ app = Flask(__name__)   # Flask 앱 객체 생성. 해당 파일이 서버의 �
 CORS(app)   # Cross-Origin Resource Sharing 허용 (다른 환경에서 이 서버의 API를 호출할 수 있도록)
 
 # Apps Script Web App URL (캘린더, 라벨 등 모든 프록시에서 공통 사용)
-
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxQN-o7ZKI-daT-D-8h9YLo63IUefp9ShJGpZxWEPwuh1A6gH6kNMrzwP07o46eh6WE/exec"
-
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzuZ8CJdGBVGp2kqqmqwm43yW_wVoeDex6efJnpEe7fCTQXXtueEl2SVSFjvtrW-sB4/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지 (utf-8 인코딩 및 대체 문자 처리)
@@ -156,7 +156,7 @@ def _summarize_attachment(text: str, filename: str) -> str:
     if pure_len < 500:
         return text
 
-    prompt_path = os.path.join("src", "parquet", "prompts", "summarize_attachment.txt")
+    prompt_path = os.path.join( "parquet_template", "prompts", "summarize_attachment.txt")
     with open(prompt_path, "r", encoding="utf-8") as f:
         prompt = f.read().strip()
 
@@ -388,6 +388,14 @@ def _split_mail_blocks(text):
 
     return blocks
 
+def _renumber_mail_blocks(text: str) -> str:
+    blocks = _split_mail_blocks(text)
+    result = []
+    for i, block in enumerate(blocks, start=1):
+        renumbered = re.sub(r'\[메일 \d+\]', f'[메일 {i}]', block)
+        result.append(renumbered)
+    return "\n".join(result) + "\n"
+
 # 메일 id들 추출해서 집합으로 반환
 def _extract_message_ids(text):
     # re.MULTILINE: ^/$가 각 줄의 시작/끝에 매칭되도록 설정
@@ -494,7 +502,8 @@ def _save_mail_contact_stats(blocks: list[str],paths, mode: str = "rewrite"):
             add(name, email, "received")
 
     # json 파일에 저장
-    os.makedirs(os.path.dirname(paths.MAIL_STATICS_PATH), exist_ok=True)    
+    os.makedirs(os.path.dirname(paths.MAIL_STATICS_PATH), exist_ok=True)
+
     with open(paths.MAIL_STATICS_PATH, "w", encoding="utf-8") as f:
         json.dump(stats, f, ensure_ascii=False, indent=2) # indent=2 : 사람이 읽기 쉽게 들여쓰기 적용
 
@@ -526,6 +535,166 @@ def _is_index_ready(paths):
         # 예상치 못한 오류는 인덱스 불완전으로 판단함
         print(f"[INDEX READY] invalid index state: {e}")
         return False
+
+# 백그라운드: 첨부파일 텍스트 추출 → 요약 → attachment_latest.txt 저장 → graphrag update
+def _run_attachment_pipeline(job_id: str, paths, attachments: list, env: dict):
+    from util.jobs.job_run import build_graphrag_update, build_graph_json
+
+    print(f"[JOB][attachment] START job_id={job_id}")
+    update_job(job_id, status="running", progress=0, message="첨부파일 텍스트 추출 중")
+
+    try:
+        attachment_texts_by_mail: dict[str, list[dict]] = {}
+
+        # 1) 첨부파일 저장 + 텍스트 추출
+        for file_info in attachments:
+            f_name = file_info.get("name") or "attachment.bin"
+            mime = (file_info.get("mime") or "").lower()
+            mail_id = str(file_info.get("mail_id") or "").strip()
+
+            if not mail_id:
+                continue
+
+            try:
+                saved_path, original_name = _save_attachment_from_base64(file_info, paths.ATTACHMENT_DIR)
+                ext = os.path.splitext(original_name)[-1].lower()
+                file_text = ""
+
+                if ext == ".pdf" or "pdf" in mime:
+                    file_text = _extract_text_from_pdf(saved_path)
+                elif ext == ".docx":
+                    file_text = _extract_text_from_docx(saved_path)
+                elif ext == ".hwp":
+                    file_text = _extract_text_from_hwp(saved_path)
+                elif ext == ".txt" or "plain" in mime:
+                    file_text = _extract_text_from_txt(saved_path)
+                elif ext == ".pptx":
+                    file_text = _extract_text_from_pptx(saved_path)
+                elif ext == ".xlsx":
+                    file_text = _extract_text_from_xlsx(saved_path)
+                elif ext == ".csv":
+                    file_text = _extract_text_from_csv(saved_path)
+
+                if file_text and file_text.strip():
+                    attachment_texts_by_mail.setdefault(mail_id, []).append({
+                        "name": original_name,
+                        "text": file_text.strip()
+                    })
+
+            except Exception as e:
+                print(f"[JOB][attachment] extract error {f_name}: {e}")
+
+        update_job(job_id, progress=30, message="첨부파일 요약 중")
+
+        # 2) 요약
+        summarized_by_mail: dict[str, list[dict]] = {}
+        for mail_id, items in attachment_texts_by_mail.items():
+            summarized_by_mail[mail_id] = [
+                {
+                    "name": item["name"],
+                    "text": _summarize_attachment(item["text"], item["name"])
+                }
+                for item in items
+            ]
+
+        update_job(job_id, progress=50, message="attachment_latest.txt 저장 중")
+
+        # 3) attachment_latest.txt 저장
+        # rewrite면 전체 덮어쓰기, 아니면 mail_id 기준으로 병합
+        _write_attachment_file(paths, summarized_by_mail)
+
+        update_job(job_id, progress=60, message="graphrag update 실행 중")
+
+        # 4) graphrag update → json 생성
+        build_graphrag_update(job_id, paths, env)
+        build_graph_json(job_id, paths, env)
+
+        update_job(job_id, progress=100, status="done", message="첨부파일 인덱싱 완료")
+        print(f"[JOB][attachment] SUCCESS job_id={job_id}")
+
+    except Exception as e:
+        error_msg = f"{type(e).__name__}: {e}"
+        update_job(job_id, status="failed", message=error_msg)
+        print(f"[JOB][attachment][ERROR] job_id={job_id} error={error_msg}")
+        traceback.print_exc()
+
+# attachment_latest.txt 저장
+# rewrite 모드(mail_latest.txt가 새로 생긴 경우)면 전체 덮어쓰기
+# 아니면 기존 파일에서 mail_id 기준으로 병합(이미 있는 mail_id는 갱신, 없는건 추가)
+def _write_attachment_file(paths, summarized_by_mail: dict[str, list[dict]]):
+    att_path = os.path.join(paths.MAIL_DIR, "attachment_latest.txt")
+
+    existing: dict[str, list[dict]] = {}
+    if os.path.exists(att_path):
+        try:
+            with open(att_path, "r", encoding="utf-8") as f:
+                raw = f.read()
+            existing = _parse_attachment_file(raw)
+        except Exception as e:
+            print(f"[AttachmentFile] 기존 파일 파싱 실패, 덮어씀: {e}")
+
+    existing.update(summarized_by_mail)
+
+    # mail_latest.txt에서 Subject 추출
+    subjects: dict[str, str] = {}
+    if os.path.exists(paths.MAIL_LATEST_PATH):
+        with open(paths.MAIL_LATEST_PATH, "r", encoding="utf-8") as f:
+            mail_content = f.read()
+        for block in mail_content.split(MAIL_BLOCK_SEP):
+            id_m = re.search(r"^ID:\s*(.+?)$", block, re.MULTILINE)
+            sub_m = re.search(r"^Subject:\s*(.+?)$", block, re.MULTILINE)
+            if id_m and sub_m:
+                subjects[id_m.group(1).strip()] = sub_m.group(1).strip()
+
+    # 파일마다 블록 분리해서 저장
+    lines = []
+    for mail_id, items in existing.items():
+        for item in items:
+            lines.append("[첨부파일 요약]")
+            lines.append(f"ID: {mail_id}")
+            subject = subjects.get(mail_id, "")
+            if subject:
+                lines.append(f"제목: {subject}")
+            lines.append(f"[File name] {item['name']}")
+            lines.append(item['text'])
+            lines.append(MAIL_BLOCK_SEP)
+
+    with open(att_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+    print(f"[AttachmentFile] 저장 완료 → {att_path} ({len(existing)}개 메일)")
+
+
+# attachment_latest.txt 파싱 → {mail_id: [{name, text}]} 형태로 반환
+def _parse_attachment_file(raw: str) -> dict[str, list[dict]]:
+    result: dict[str, list[dict]] = {}
+    blocks = raw.split(MAIL_BLOCK_SEP)
+
+    for block in blocks:
+        block = block.strip()
+        if not block:
+            continue
+
+        m = re.search(r"^ID:\s*(.+?)$", block, re.MULTILINE)
+        if not m:
+            continue
+        mail_id = m.group(1).strip()
+
+        items = []
+        # [File name] 기준으로 분리
+        file_blocks = re.split(r"^\[File name\]", block, flags=re.MULTILINE)
+        for fb in file_blocks[1:]:  # 첫 번째는 ID 블록이라 스킵
+            fb_lines = fb.strip().splitlines()
+            if not fb_lines:
+                continue
+            name = fb_lines[0].strip()
+            text = "\n".join(fb_lines[1:]).strip()
+            items.append({"name": name, "text": text})
+
+        if items:
+            result[mail_id] = items
+
+    return result
 
 # 엔드포인트: POST /extract-calendar
 @app.route('/extract-calendar', methods=['POST'])
@@ -667,8 +836,6 @@ def upload():
         fallback_to_rewrite = True
 
     # 2) 저장 디렉토리 준비
-
-
     os.makedirs(paths.MAIL_DIR, exist_ok=True)
 
     # rewrite면 기존 첨부파일 먼저 전부 삭제
@@ -688,74 +855,15 @@ def upload():
     saved_attachment_paths = []
     attachment_texts_by_mail: dict[str, list[dict]] = {}
 
-    # 5) 첨부 저장 + 텍스트 추출 + mail_id별 묶기
-    if attachments:
-        extracted_full_text = f"\n\n{MAIL_BLOCK_SEP}\n"
-        extracted_full_text += "[System] attachment data extract section\n"
+    # 4) 첨부파일 메타데이터만 기록 (원본은 10분 트리거에서 별도 전송)
+    # data_base64 없이 name, mime, mail_id만 수신하므로 텍스트 추출 없이 카운트만 집계
+    for file_info in attachments:
+        f_name = file_info.get("name") or "attachment.bin"
+        mail_id = str(file_info.get("mail_id") or "").strip()
+        if f_name and mail_id:
+            extracted_count += 1  # 첨부파일 수신 카운트 (제목 기준)
 
-        for file_info in attachments:
-            f_name = file_info.get("name") or "attachment.bin"  
-            mime = (file_info.get("mime") or "").lower()        
-            mail_id = str(file_info.get("mail_id") or "").strip()
-
-            try:
-                # base64 → 서버 로컬 파일 저장
-                saved_path, original_name = _save_attachment_from_base64(file_info, paths.ATTACHMENT_DIR)
-                saved_attachment_paths.append(saved_path)
-
-                ext = os.path.splitext(original_name)[-1].lower()
-                file_text = ""
-
-                # MIME type 제한
-                if ext == ".pdf" or mime in ("application/pdf", "application/haansoftpdf"):     
-                    file_text = _extract_text_from_pdf(saved_path)
-                elif ext == ".docx" or mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                    file_text = _extract_text_from_docx(saved_path)
-                elif ext == ".hwp" or mime in ("application/x-hwp", "application/haansofthwp"): # 추가
-                    file_text = _extract_text_from_hwp(saved_path)
-                elif ext == ".txt" or mime == "text/plain":
-                    file_text = _extract_text_from_txt(saved_path)
-                elif ext == ".pptx" or mime == "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-                    file_text = _extract_text_from_pptx(saved_path)
-                elif ext == ".xlsx" or mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                    file_text = _extract_text_from_xlsx(saved_path)
-                elif ext == ".csv" or mime in ("text/csv", "application/csv"):
-                    file_text = _extract_text_from_csv(saved_path)
-                else:
-                    failed_attachments.append({
-                        "name": original_name,
-                        "reason": f"unsupported type: ext={ext}, mime={mime}"
-                    })
-                    continue
-
-                if file_text and file_text.strip():
-                    if mail_id:
-                        # 텍스트만 저장, 요약은 백그라운드에서 처리
-                        attachment_texts_by_mail.setdefault(mail_id, []).append({
-                            "name": original_name,
-                            "text": file_text.strip()
-                        })
-                    else:
-                        failed_attachments.append({
-                            "name": original_name,
-                            "reason": "mail_id missing"
-                        })
-                    extracted_count += 1
-                else:
-                    failed_attachments.append({
-                        "name": original_name,
-                        "reason": "text extraction returned empty"
-                    })
-                    continue
-
-            except Exception as e:
-                failed_attachments.append({
-                    "name": f_name,
-                    "reason": str(e)
-                })
-                print(f"[UPLOAD][ATTACHMENT ERROR] {f_name}: {e}")  
-
-    # 7) 파이프라인 실행
+    # 5) 파이프라인 실행
     print(f"[UPLOAD] Received filename: {filename}")
     print(f"[UPLOAD] Content length: {len(content)}")
     print(f"[UPLOAD] Attachment count received: {len(attachments)}")
@@ -773,7 +881,7 @@ def upload():
         # 첨부 병합 없이 메일 본문만 저장 (첨부 요약+병합은 백그라운드에서 처리)
         _delete_incremental_files(paths)
         with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
-            f.write(content.rstrip() + "\n")
+            f.write(_renumber_mail_blocks(content.rstrip()))
         saved_mail_path = paths.MAIL_LATEST_PATH
 
         added_count = len(_split_mail_blocks(content))
@@ -801,12 +909,6 @@ def upload():
                 skipped_count += 1
                 continue
 
-            if msg_id in attachment_texts_by_mail:
-                block = _merge_attachments_into_mail_blocks(
-                    block,
-                    {msg_id: attachment_texts_by_mail[msg_id]}
-                ).strip()
-
             append_blocks.append(block.strip())
             existing_ids.add(msg_id)
 
@@ -825,7 +927,7 @@ def upload():
 
             updated_content = inc_content + "\n" + existing_text
             with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
-                f.write(updated_content.strip() + "\n")
+                f.write(_renumber_mail_blocks(updated_content.strip()))
 
             saved_mail_path = inc_path
 
@@ -863,7 +965,8 @@ def upload():
         else:
             print(f"[CLEAN] update_output 없음: {update_dir}")
 
-        start_graph_pipeline_background(job_id,paths, env, attachment_texts_by_mail) # GraphRAG 파이프라인 함수 실행
+        # 첨부는 트리거에서 처리하므로 전달하지 않음
+        start_graph_pipeline_background(job_id, paths, env)
 
     else:
         start_graph_update_pipeline_background(job_id,paths, env)
@@ -986,7 +1089,50 @@ def labels_proxy():
 
 import urllib.request
 
-# /dashboard/marker-icon.png 경로로 들어오는 요청을 처리하는 Flask 라우트
+
+# 엔드포인트: POST /upload-attachments
+# 10분 트리거에서 호출 - 첨부파일 원본만 수신해서 백그라운드로 처리
+@app.route("/upload-attachments", methods=["POST"])
+def upload_attachments():
+    # 1) 데이터 수신
+    data = request.json or {}
+    gmail_id = (data.get("gmail_id") or "").strip().lower()
+    attachments = data.get("attachments") or []
+
+    if not gmail_id:
+        return jsonify({"ok": False, "error": "gmail_id가 비어있습니다."}), 400
+    if not attachments:
+        return jsonify({"ok": False, "error": "attachments가 비어있습니다."}), 400
+
+    # 2) 인덱싱/업데이트 중이면 거절 (graphrag 동시 실행 방지)
+    # 10분 트리거가 다음번에 재시도함
+    running_jobs = [j for j in get_all_jobs().values()
+                    if j.get("status") == "running"
+                    and j.get("job_type") in ("index", "update")]
+    if running_jobs:
+        print(f"[upload-attachments] 인덱싱 진행 중 → 요청 거절, 다음 트리거에서 재시도")
+        return jsonify({"ok": False, "error": "인덱싱 진행 중, 다음 트리거에서 재시도됩니다."}), 409
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+
+    # 3) 즉시 200 응답 (Apps Script 타임아웃 방지)
+    job_id = str(uuid.uuid4())[:8]
+    create_job(job_id, job_type="attachment")
+    update_job(job_id, message="첨부파일 수신 완료, 백그라운드 처리 시작")
+
+    env = os.environ.copy()
+    env["PYTHONUNBUFFERED"] = "1"
+
+    # 4) 백그라운드에서 처리
+    t = threading.Thread(
+        target=_run_attachment_pipeline,
+        args=(job_id, paths, attachments, env),
+        daemon=True
+    )
+    t.start()
+
+    return jsonify({"ok": True, "job_id": job_id, "attachment_count": len(attachments)})
+
 @app.route('/dashboard/marker-icon.png')
 def marker_icon():
     url = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png'
@@ -1003,6 +1149,122 @@ def marker_shadow():
         data = r.read()
     from flask import Response
     return Response(data, mimetype='image/png')
+
+
+# 웹앱용 가라데이터 라우트
+@app.route("/mail-stats", methods=["POST"])
+def send_mail_stats():
+    data = request.json or {}
+
+    gmail_id = data.get("gmail_id", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+
+    print(f"[MAIL_STATS] gmail_id={gmail_id}")
+    print(f"[MAIL_STATS] path={paths.USER_ROOT}")
+
+    return jsonify({
+        "gmail_id": gmail_id,
+        "data": get_mail_stats()
+    })
+
+@app.route("/keyword-stats", methods=["POST"])
+def send_keyword_stats():
+    data = request.json or {}
+
+    gmail_id = data.get("gmail_id", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+
+    print(f"[MAIL_STATS] gmail_id={gmail_id}")
+    print(f"[MAIL_STATS] path={paths.USER_ROOT}")
+
+    return jsonify({
+        "gmail_id": gmail_id,
+        "data": get_keyword_stats()
+    })
+
+@app.route("/high_affinity_person_stats", methods=["POST"])
+def send_high_affinity_person_stats():
+    data = request.json or {}
+
+    gmail_id = data.get("gmail_id", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+
+    print(f"[MAIL_STATS] gmail_id={gmail_id}")
+    print(f"[MAIL_STATS] path={paths.USER_ROOT}")
+
+    return jsonify({
+        "gmail_id": gmail_id,
+        "data": get_high_affinity_person_stats()
+    })
+
+@app.route("/low_affinity_person_stats", methods=["POST"])
+def send_low_affinity_person_stats():
+    data = request.json or {}
+
+    gmail_id = data.get("gmail_id", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+
+    print(f"[MAIL_STATS] gmail_id={gmail_id}")
+    print(f"[MAIL_STATS] path={paths.USER_ROOT}")
+
+    return jsonify({
+        "gmail_id": gmail_id,
+        "data": get_low_affinity_person_stats()
+    })
+
+@app.route("/user_rating_stats", methods=["POST"])
+def send_user_rating_stats():
+    data = request.json or {}
+
+    gmail_id = data.get("gmail_id", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+
+    print(f"[MAIL_STATS] gmail_id={gmail_id}")
+    print(f"[MAIL_STATS] path={paths.USER_ROOT}")
+
+    return jsonify({
+        "gmail_id": gmail_id,
+        "data": get_user_rating_stats()
+    })
+
+@app.route("/mail_sync_stats", methods=["POST"])
+def send_mail_sync_stats():
+    data = request.json or {}
+
+    gmail_id = data.get("gmail_id", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+
+    print(f"[MAIL_STATS] gmail_id={gmail_id}")
+    print(f"[MAIL_STATS] path={paths.USER_ROOT}")
+
+    return jsonify({
+        "gmail_id": gmail_id,
+        "data": get_mail_sync_stats()
+    })
 
 
 # 서버 진입점
