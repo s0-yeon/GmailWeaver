@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:*; frame-src 'self' https://mail.google.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <title>라벨 초원 | Olive</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+    <script type="module" src="/src/main-minimal.js"></script>
+
+    <style>
+      .site_title_text {
+        font-size: 1.2rem; font-weight: 700; color: #fff;
+        letter-spacing: 0.5px; text-decoration: none;
+        display: flex; align-items: center; gap: 8px;
+      }
+
+      /* ── 컨트롤 바 ── */
+      .l2-ctrl-bar {
+        display: flex; align-items: center; gap: 12px;
+        padding: 11px 22px; background: #fff;
+        border-bottom: 1px solid #ddeee6; flex-wrap: wrap;
+      }
+      .l2-page-title {
+        font-size: 1rem; font-weight: 800; color: #1b4332;
+        display: flex; align-items: center; gap: 8px;
+      }
+      .l2-badge {
+        font-size: 0.68rem;
+        background: linear-gradient(135deg, #40916c, #52b788);
+        color: #fff; border-radius: 20px; padding: 2px 8px;
+        font-weight: 700;
+      }
+      .l2-load-btn {
+        background: linear-gradient(135deg, #40916c, #52b788);
+        color: #fff; border: none; border-radius: 20px;
+        padding: 7px 18px; font-size: 0.85rem; font-weight: 700;
+        cursor: pointer; transition: opacity 0.2s, transform 0.1s;
+        box-shadow: 0 2px 8px rgba(64,145,108,0.35);
+        display: flex; align-items: center; gap: 6px;
+      }
+      .l2-load-btn:hover  { opacity: 0.88; transform: translateY(-1px); }
+      .l2-load-btn:active { transform: translateY(0); }
+      .l2-load-btn:disabled { opacity: 0.38; cursor: not-allowed; transform: none; }
+      .l2-ctrl-group {
+        display: flex; align-items: center; gap: 6px;
+        font-size: 0.82rem; color: #52796f;
+        background: #f0f7f3; border: 1px solid #c9e3d6;
+        border-radius: 20px; padding: 5px 14px;
+      }
+      .l2-ctrl-group input[type=number] {
+        width: 38px; border: none; background: transparent;
+        text-align: center; font-size: 0.85rem;
+        color: #1b4332; font-weight: 700; outline: none;
+      }
+      .l2-status { font-size: 0.79rem; color: #52b788; margin-left: auto; font-weight: 600; }
+
+      /* ── 범례 ── */
+      .l2-legend-bar {
+        display: none; align-items: center; gap: 20px;
+        padding: 7px 22px; background: #f7fbf8;
+        border-bottom: 1px solid #d8eee3;
+        font-size: 0.76rem; color: #52796f; flex-wrap: wrap;
+      }
+      .l2-legend-bar.show { display: flex; }
+      .l2-dot { display: inline-block; border-radius: 50%; vertical-align: middle; margin-right: 4px; }
+
+      /* ── 메인 레이아웃 ── */
+      .l2-main {
+        display: flex; height: calc(100vh - 148px);
+        min-height: 400px; overflow: hidden;
+      }
+
+      /* ── 초원 캔버스 ── */
+      .l2-canvas {
+        flex: 1; min-width: 0; position: relative; overflow: hidden;
+        background: #d5e9d8;
+        transition: flex 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #l2Svg { display: block; width: 100%; height: 100%; overflow: visible; }
+      #l2Svg g { overflow: visible; }
+
+      /* ── 이메일 뷰어 패널 ── */
+      .l2-reader {
+        width: 0; max-width: 0; overflow: hidden;
+        background: #fff; border-left: 2px solid #c9e3d6;
+        transition: max-width 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex; flex-direction: column; flex-shrink: 0;
+      }
+      .l2-reader.open { max-width: 44%; width: 44%; }
+
+      .l2-rdr-header {
+        padding: 16px 20px; background: #f0f7f3;
+        border-bottom: 1px solid #d8eee3;
+        display: flex; align-items: flex-start; gap: 10px; flex-shrink: 0;
+      }
+      .l2-rdr-meta { flex: 1; min-width: 0; }
+      .l2-rdr-subject {
+        font-size: 0.95rem; font-weight: 700; color: #1b4332;
+        margin-bottom: 5px; overflow: hidden;
+        text-overflow: ellipsis; white-space: nowrap;
+      }
+      .l2-rdr-line {
+        font-size: 0.78rem; color: #52796f; margin-top: 2px;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      }
+      .l2-rdr-close {
+        flex-shrink: 0; background: #fff; border: 1px solid #c9e3d6;
+        border-radius: 20px; color: #52796f; cursor: pointer;
+        padding: 5px 12px; font-size: 0.78rem; font-weight: 700;
+        transition: background 0.15s, color 0.15s, border-color 0.15s;
+        white-space: nowrap;
+      }
+      .l2-rdr-close:hover { background: #ffe5e5; color: #e74c3c; border-color: #f5c6c6; }
+
+      .l2-rdr-body {
+        flex: 1; overflow-y: auto; padding: 20px 24px;
+        font-size: 0.88rem; line-height: 1.85; color: #2d3a1e;
+        white-space: pre-wrap; word-break: break-word; background: #fff;
+      }
+      .l2-rdr-body::-webkit-scrollbar { width: 5px; }
+      .l2-rdr-body::-webkit-scrollbar-track { background: transparent; }
+      .l2-rdr-body::-webkit-scrollbar-thumb { background: #c9e3d6; border-radius: 3px; }
+
+      .l2-rdr-actions {
+        padding: 11px 20px; border-top: 1px solid #e8f0eb;
+        display: flex; gap: 8px; flex-shrink: 0; background: #f7fbf8;
+      }
+      .l2-rdr-btn {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 6px 14px; border-radius: 20px;
+        border: 1px solid #c9e3d6; background: #fff; color: #40916c;
+        cursor: pointer; font-size: 0.78rem; font-weight: 700;
+        text-decoration: none; transition: background 0.15s, border-color 0.15s;
+      }
+      .l2-rdr-btn:hover { background: #e8f5ec; border-color: #52b788; }
+
+      /* ── 브레드크럼 ── */
+      .l2-bc {
+        position: absolute; top: 12px; left: 12px;
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(82,183,136,0.4);
+        border-radius: 20px; padding: 5px 16px;
+        font-size: 0.78rem; color: #52796f;
+        display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+        z-index: 10; max-width: 70%;
+        box-shadow: 0 2px 10px rgba(27,67,50,0.1);
+      }
+      .l2-bc-item { cursor: pointer; color: #40916c; font-weight: 700; transition: color 0.15s; }
+      .l2-bc-item:hover { color: #1b4332; }
+      .l2-bc-sep { color: #b7d5c4; }
+
+      /* ── 힌트 ── */
+      .l2-hint {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 12px; pointer-events: none;
+      }
+      .l2-hint.hidden { display: none; }
+      .l2-hint-icon { font-size: 3.5rem; opacity: 0.4; }
+      .l2-hint-text { font-size: 0.92rem; color: #40916c; font-weight: 600; opacity: 0.7; }
+
+      /* ── 로딩 ── */
+      .l2-loading {
+        display: none; position: absolute; inset: 0;
+        background: rgba(220, 240, 228, 0.82);
+        backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+        align-items: center; justify-content: center;
+        flex-direction: column; gap: 14px; z-index: 20;
+      }
+      .l2-loading.on { display: flex; }
+      .l2-spinner {
+        width: 42px; height: 42px;
+        border: 3px solid rgba(82,183,136,0.25);
+        border-top-color: #40916c;
+        border-radius: 50%; animation: l2spin 0.75s linear infinite;
+      }
+      .l2-loading-text { font-size: 0.88rem; color: #2d6a4f; font-weight: 700; }
+      @keyframes l2spin { to { transform: rotate(360deg); } }
+      @keyframes l2breathe {
+        0%, 100% { transform: scale(1); }
+        50%       { transform: scale(0.972); }
+      }
+
+      /* ── 툴팁 ── */
+      .l2-tip {
+        position: fixed; background: #fff;
+        border: 1px solid #c9e3d6; border-radius: 12px;
+        padding: 11px 15px; font-size: 0.78rem; color: #2d3a1e;
+        pointer-events: none; opacity: 0; transition: opacity 0.15s;
+        z-index: 99999; max-width: 240px;
+        box-shadow: 0 6px 24px rgba(27,67,50,0.15); line-height: 1.55;
+      }
+      .l2-tip.on { opacity: 1; }
+
+      /* ── D3 원 인터랙션 ── */
+      .l2c-label { cursor: pointer; transition: filter 0.2s, rx 0.3s, ry 0.3s; }
+      .l2c-label:hover { filter: brightness(1.08) saturate(1.15); }
+      .l2c-mail  { cursor: pointer; transition: filter 0.15s; }
+      .l2c-mail:hover { filter: brightness(1.1) drop-shadow(0 2px 8px rgba(27,67,50,0.3)); }
+      .l2-star { transition: fill 0.2s, opacity 0.2s; }
+      .l2-star:hover { opacity: 0.75; }
+      .l2c-sel {
+        stroke: #1b4332 !important; stroke-width: 3px !important;
+        filter: drop-shadow(0 0 10px rgba(27,67,50,0.5)) !important;
+      }
+    </style>
+  </head>
+
+  <body class="nav-md page-label2">
+    <div class="container body">
+      <div class="main_container">
+
+        <!-- ── 사이드바 ── -->
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title site_title_text">
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
+                Olive
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
+              </div>
+              <div class="profile_info">
+                <span data-i18n="sidebar.welcome">Welcome,</span>
+                <h4 id="google-profile-name">-</h4>
+              </div>
+            </div>
+            <br />
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li class="active">
+                    <a><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="index2.html"><i class="bi bi-tag"></i> 라벨 목록</a></li>
+                      <li class="active"><a href="label2.html"><i class="bi bi-circle-half"></i> 라벨 초원 ✦</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li>
+                    <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="index.html#graph-viz"><i class="bi bi-diagram-3"></i> <span data-i18n="nav.graph_viz">Graph Viz</span></a></li>
+                      <li><a href="chartjs.html">Chart.js</a></li>
+                      <li><a href="echarts.html">ECharts <span class="badge bg-info">Updated</span></a></li>
+                      <li><a href="other_charts.html"><span data-i18n="nav.other_charts">Other Charts</span></a></li>
+                      <li><a href="api_test.html"><i class="bi bi-terminal"></i> API Test <span class="badge bg-warning text-dark">Dev</span></a></li>
+                    </ul>
+                  </li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="profile.html"><i class="bi bi-person-circle"></i> <span data-i18n="nav.profile">Profile</span><span class="bi bi-chevron-right"></span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- ── Top Navigation ── -->
+        <div class="top_nav">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+            <div class="nav toggle"><a id="menu_toggle"><i class="fas fa-bars"></i></a></div>
+            <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle" id="langDropdown"
+                     data-bs-toggle="dropdown" aria-expanded="false"
+                     style="text-decoration:none; color:inherit;">
+                    <i class="bi bi-translate" style="font-size:1.2rem;vertical-align:middle;"></i>
+                    <span id="current-lang" style="margin-left:4px;font-size:0.9rem;">KO</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ko">🇰🇷 한국어</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="en">🇺🇸 English</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ja">🇯🇵 日本語</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        <!-- ── Page Content ── -->
+        <main class="right_col" role="main" style="padding:0;">
+
+          <!-- 컨트롤 바 -->
+          <div class="l2-ctrl-bar">
+            <div class="l2-page-title">
+              🌿 라벨 초원
+              <span class="l2-badge">BETA</span>
+            </div>
+            <button class="l2-load-btn" id="l2LoadBtn">
+              <i class="bi bi-cloud-download"></i> 라벨 불러오기
+            </button>
+            <div class="l2-ctrl-group">
+              <span>라벨당 최대</span>
+              <input type="number" id="l2MaxPer" value="10" min="1" max="20">
+              <span>개 메일</span>
+            </div>
+            <span class="l2-status" id="l2Status">라벨 불러오기 버튼을 눌러주세요.</span>
+          </div>
+
+          <!-- 범례 -->
+          <div class="l2-legend-bar" id="l2Legend">
+            <span><span class="l2-dot" style="width:13px;height:13px;background:#52b788;border:2px solid #40916c;"></span>라벨 (클릭 → 확대)</span>
+            <span><span class="l2-dot" style="width:13px;height:13px;background:#95d5b2;border:2px solid #74c69d;"></span>하위 라벨</span>
+            <span><span class="l2-dot" style="width:8px;height:8px;background:#fff;border:2px solid #52b788;"></span>메일 (클릭 → 본문)</span>
+            <span style="color:#aac6b4;">· 배경 클릭 → 전체 보기</span>
+          </div>
+
+          <!-- 메인 -->
+          <div class="l2-main">
+            <!-- 초원 캔버스 -->
+            <div class="l2-canvas" id="l2Canvas">
+              <svg id="l2Svg" style="overflow:visible;"></svg>
+              <div class="l2-bc" id="l2BC">🌿 전체 라벨</div>
+              <div class="l2-hint" id="l2Hint">
+                <div class="l2-hint-icon">🌿</div>
+                <div class="l2-hint-text">라벨 불러오기를 눌러 초원을 펼쳐보세요</div>
+              </div>
+              <div class="l2-loading" id="l2Loading">
+                <div class="l2-spinner"></div>
+                <div class="l2-loading-text">초원을 불러오는 중…</div>
+              </div>
+            </div>
+
+            <!-- 이메일 뷰어 -->
+            <div class="l2-reader" id="l2Reader">
+              <div class="l2-rdr-header">
+                <div class="l2-rdr-meta">
+                  <div class="l2-rdr-subject" id="l2RdrSubject">제목</div>
+                  <div class="l2-rdr-line" id="l2RdrFrom"></div>
+                  <div class="l2-rdr-line" id="l2RdrDate"></div>
+                  <div class="l2-rdr-line" id="l2RdrLabel" style="color:#40916c;font-weight:700;"></div>
+                </div>
+                <button class="l2-rdr-close" id="l2RdrClose">
+                  <i class="bi bi-x-lg"></i> 닫기
+                </button>
+              </div>
+              <div class="l2-rdr-body" id="l2RdrBody">본문을 불러오는 중…</div>
+              <div class="l2-rdr-actions">
+                <a class="l2-rdr-btn" id="l2GmailLink" href="#" target="_blank" rel="noopener">
+                  <i class="bi bi-box-arrow-up-right"></i> Gmail에서 열기
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </main>
+
+        <footer>
+          <div class="float-end">Olive &mdash; GmailWeaver</div>
+          <div class="clearfix"></div>
+        </footer>
+      </div>
+    </div>
+
+    <div class="l2-tip" id="l2Tip"></div>
+
+    <script>
+    (function () {
+      'use strict';
+
+      const FLASK_URL = 'http://127.0.0.1:80';
+
+      /* ── 초원 팔레트 ── */
+      const PALETTE = [
+        { fill: '#52b788', stroke: '#40916c', text: '#1b4332' },
+        { fill: '#e9c46a', stroke: '#c9a227', text: '#5a3e04' },
+        { fill: '#f4a261', stroke: '#e07040', text: '#6b2d05' },
+        { fill: '#a7c957', stroke: '#6a994e', text: '#2d4a0e' },
+        { fill: '#457b9d', stroke: '#2e6282', text: '#0a2a40' },
+        { fill: '#74c69d', stroke: '#52b788', text: '#1b4332' },
+        { fill: '#bc6c25', stroke: '#9a5210', text: '#3d1a00' },
+        { fill: '#b5e48c', stroke: '#76c442', text: '#1a4d00' },
+        { fill: '#6a994e', stroke: '#4a7a30', text: '#0d2b00' },
+        { fill: '#e76f51', stroke: '#c45535', text: '#5c1a05' },
+        { fill: '#d9ed92', stroke: '#99cc6c', text: '#2a5a00' },
+        { fill: '#90e0ef', stroke: '#48cae4', text: '#03436b' },
+      ];
+
+      let l2svg, l2g, l2zoom;
+      let l2W = 800, l2H = 500;
+      let l2Root = null;
+      let l2BCStack = [];
+
+      /* ── 초기화 ── */
+      window.addEventListener('load', () => {
+        const params = new URLSearchParams(window.location.search);
+        const nameParam = params.get('name');
+        const name = nameParam
+          ? decodeURIComponent(nameParam)
+          : (sessionStorage.getItem('gw_user_name') || '-');
+        if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
+        document.getElementById('google-profile-name').textContent = name;
+
+        const canvas = document.getElementById('l2Canvas');
+        l2W = canvas.clientWidth  || 800;
+        l2H = canvas.clientHeight || 500;
+
+        l2svg = d3.select('#l2Svg').attr('width', l2W).attr('height', l2H);
+        l2g   = l2svg.append('g');
+
+        l2zoom = d3.zoom().scaleExtent([0.2, 18])
+          .on('zoom', e => l2g.attr('transform', e.transform));
+        l2svg.call(l2zoom);
+
+        l2svg.on('click', e => {
+          if (e.target === l2svg.node() || e.target.tagName === 'rect') {
+            if (l2Root) l2ZoomTo(l2Root);
+            l2BCStack = [];
+            renderBC();
+          }
+        });
+
+        document.getElementById('l2RdrClose').addEventListener('click', closeReader);
+        document.getElementById('l2LoadBtn').addEventListener('click', loadAll);
+
+        new ResizeObserver(() => {
+          const w = canvas.clientWidth, h = canvas.clientHeight;
+          if (w > 0 && h > 0) {
+            l2W = w; l2H = h;
+            l2svg.attr('width', w).attr('height', h);
+          }
+        }).observe(canvas);
+      });
+
+      /* ── API ── */
+      async function callProxy(action, extra = {}) {
+        const res = await fetch(`${FLASK_URL}/labels-proxy`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action, ...extra }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      }
+
+      /* ── 전체 로드 ── */
+      async function loadAll() {
+        const max = Math.min(Number(document.getElementById('l2MaxPer').value) || 10, 20);
+        setStatus('초원 씨앗을 심는 중…');
+        document.getElementById('l2LoadBtn').disabled = true;
+        document.getElementById('l2Loading').classList.add('on');
+        document.getElementById('l2Hint').classList.add('hidden');
+
+        try {
+          const labelsData = await callProxy('getLabels');
+          if (!labelsData.ok) throw new Error(labelsData.error || '라벨 로드 실패');
+          const labels = labelsData.labels || [];
+
+          if (labels.length === 0) {
+            setStatus('⚠️ 라벨이 없습니다.');
+            document.getElementById('l2Hint').classList.remove('hidden');
+            return;
+          }
+
+          setStatus(`🌱 ${labels.length}개 라벨 메일 불러오는 중…`);
+
+          const results = await Promise.all(labels.map(async label => {
+            try {
+              const md = await callProxy('getLabelMessages', { labelName: label.name, maxResults: max });
+              return { name: label.name, messages: md.ok ? (md.messages || []) : [], unreadCount: label.unreadCount || 0 };
+            } catch { return { name: label.name, messages: [], unreadCount: 0 }; }
+          }));
+
+          const total = results.reduce((s, l) => s + l.messages.length, 0);
+          setStatus(`🌿 ${labels.length}개 라벨 · ${total}개 메일 · 클릭해서 탐색하세요`);
+          document.getElementById('l2Legend').classList.add('show');
+          render(buildHierarchy(results));
+
+        } catch (e) {
+          setStatus('❌ ' + (e.message || e));
+          document.getElementById('l2Hint').classList.remove('hidden');
+        } finally {
+          document.getElementById('l2Loading').classList.remove('on');
+          document.getElementById('l2LoadBtn').disabled = false;
+        }
+      }
+
+      /* ── 계층 구조 빌드 ── */
+      function buildHierarchy(labelData) {
+        const root = { name: 'root', _isRoot: true, children: [] };
+        labelData.forEach(label => {
+          const parts = label.name.split('/');
+          let cur = root;
+          parts.forEach((part, i) => {
+            const full = parts.slice(0, i + 1).join('/');
+            let node = cur.children.find(c => c._full === full);
+            if (!node) {
+              node = { name: part, _full: full, _isLabel: true, children: [] };
+              cur.children.push(node);
+            }
+            if (i === parts.length - 1) {
+              label.messages.forEach(msg => {
+                node.children.push({
+                  name: msg.subject, _isMail: true, _label: label.name,
+                  value: 1, id: msg.id, from: msg.from, date: msg.date,
+                  subject: msg.subject, snippet: msg.snippet, isUnread: msg.isUnread,
+                });
+              });
+            }
+            cur = node;
+          });
+        });
+        (function fix(n) {
+          if (!n.children || n.children.length === 0) { n.value = 1; delete n.children; }
+          else n.children.forEach(fix);
+        }(root));
+        return root;
+      }
+
+      /* ── 팔레트 인덱스 ── */
+      function palIdx(node) {
+        let top = node;
+        while (top.depth > 1) top = top.parent;
+        return top.parent ? top.parent.children.indexOf(top) % PALETTE.length : 0;
+      }
+
+      /* ── D3 렌더링 ── */
+      function render(hierData) {
+        l2g.selectAll('*').remove();
+        l2Root = null; l2BCStack = []; renderBC();
+
+        const root = d3.hierarchy(hierData)
+          .sum(d => d.value || 0)
+          .sort((a, b) => (b.value || 0) - (a.value || 0));
+
+        const pack = d3.pack()
+          .size([l2W - 10, l2H - 10])
+          .padding(d => d.depth === 0 ? 18 : d.depth === 1 ? 10 : 4);
+
+        pack(root);
+        l2Root = root;
+
+        /* 배경 hit rect */
+        l2g.append('rect')
+          .attr('x', -l2W * 3).attr('y', -l2H * 3)
+          .attr('width', l2W * 7).attr('height', l2H * 7)
+          .attr('fill', 'transparent');
+
+        const nodes = root.descendants().filter(d => d.depth > 0);
+
+        /* 라벨 원마다 숨쉬기 딜레이를 위해 깊이-1 인덱스 계산 */
+        const labelNodes = nodes.filter(d => !d.data._isMail && d.depth === 1);
+        labelNodes.forEach((d, i) => { d._breathIdx = i; });
+
+        const nodeG = l2g.selectAll('.l2-ng')
+          .data(nodes).enter().append('g')
+          .attr('class', 'l2-ng')
+          .attr('transform', d => `translate(${d.x + 5},${d.y + 5})`)
+          .style('transform-origin', '0 0')
+          .style('animation', d => {
+            if (d.data._isMail || d.depth !== 1) return null;
+            const dur  = 3.2 + (d._breathIdx % 5) * 0.45;
+            const del  = (d._breathIdx % 7) * 0.61;
+            return `l2breathe ${dur}s ease-in-out ${del}s infinite`;
+          });
+
+        /* ── 원 (라벨은 ellipse로 유기적, 메일도 ellipse) ── */
+        nodeG.each(function(d) {
+          const g = d3.select(this);
+          const isMail = d.data._isMail;
+          const p = PALETTE[palIdx(d)];
+
+          /* 타원 비율: 라벨은 약간 납작하게, 메일은 더 납작하게 */
+          const rx = isMail ? d.r * 1.08 : d.r;
+          const ry = isMail ? d.r * 0.88 : d.r * 0.95;
+
+          const fill = isMail
+            ? (d.data.isUnread ? '#ffffff' : '#f0faf4')
+            : (d.depth === 1 ? p.fill : d3.color(p.fill).brighter(0.4 * (d.depth - 1)).formatHex());
+
+          const stroke = isMail
+            ? (d.data.isUnread ? '#40916c' : '#aed4bf')
+            : (d.depth === 1 ? p.stroke : d3.color(p.stroke).brighter(0.3).formatHex());
+
+          const sw = isMail ? (d.data.isUnread ? 2.5 : 1.5) : (d.depth === 1 ? 2.5 : 1.8);
+
+          const ellipse = g.append('ellipse')
+            .attr('class', 'l2c' + (isMail ? ' l2c-mail' : ' l2c-label'))
+            .attr('rx', rx).attr('ry', ry)
+            .attr('fill', fill)
+            .attr('stroke', stroke)
+            .attr('stroke-width', sw)
+            .style('filter', isMail ? 'none' : (() => {
+              const c = d3.color(stroke);
+              const sz = d.depth === 1 ? 10 : 5;
+              return `drop-shadow(0 ${sz/2}px ${sz}px rgba(${c.r},${c.g},${c.b},0.38))`;
+            })())
+            .on('mouseover', showTip).on('mousemove', moveTip).on('mouseout', hideTip)
+            .on('click', function(event, d) {
+              event.stopPropagation();
+              if (d.data._isMail) selectMail(this, d);
+              else { l2BCStack.push(d); renderBC(); l2ZoomTo(d); }
+            });
+        });
+
+        /* ── 라벨 이름 pill: 원 위에 떠있는 태그 ── */
+        nodeG.filter(d => !d.data._isMail && d.r >= 18).each(function(d) {
+          const g = d3.select(this);
+          const p = PALETTE[palIdx(d)];
+          const name = d.data.name || '';
+          const mailCnt = d.leaves ? d.leaves().filter(l => l.data._isMail).length : 0;
+
+          const fsize  = Math.max(10, Math.min(15, d.r * 0.28));
+          const maxCh  = Math.max(4, Math.floor(d.r * 0.9 / (fsize * 0.55)));
+          const label  = name.length > maxCh ? name.slice(0, maxCh) + '…' : name;
+          const pillW  = Math.max(label.length * fsize * 0.6 + 20, 40);
+          const pillH  = fsize + 10;
+
+          /* pill 위치: 원의 상단 바깥쪽으로 떠있음 */
+          const pillY  = -(d.r * 0.95) - pillH * 0.6;
+
+          const pillG = g.append('g')
+            .attr('transform', `translate(0, ${pillY})`)
+            .style('pointer-events', 'none');
+
+          /* pill 배경 */
+          pillG.append('rect')
+            .attr('x', -pillW / 2).attr('y', -pillH / 2)
+            .attr('width', pillW).attr('height', pillH)
+            .attr('rx', pillH / 2)
+            .attr('fill', '#fff')
+            .attr('stroke', p.stroke)
+            .attr('stroke-width', 1.5);
+
+          /* pill 텍스트 */
+          pillG.append('text')
+            .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+            .style('font-size', fsize + 'px')
+            .style('font-weight', '800')
+            .style('fill', p.text)
+            .style('letter-spacing', '-0.01em')
+            .text(label);
+
+          /* 메일 수 배지 (pill 오른쪽 끝) */
+          if (mailCnt > 0) {
+            const bfsize = Math.max(8, Math.min(10, fsize * 0.75));
+            pillG.append('circle')
+              .attr('cx', pillW / 2 + 10).attr('cy', 0)
+              .attr('r', bfsize + 2)
+              .attr('fill', p.stroke);
+            pillG.append('text')
+              .attr('x', pillW / 2 + 10).attr('y', 0)
+              .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+              .style('font-size', bfsize + 'px').style('font-weight', '800')
+              .style('fill', '#fff')
+              .text(mailCnt);
+          }
+
+          /* 즐겨찾기 별 (원 내부 상단 왼쪽) */
+          if (d.r >= 30) {
+            const starSize = Math.max(10, Math.min(18, d.r * 0.22));
+            const starX = -(d.r * 0.58);
+            const starY = -(d.r * 0.62);
+            g.append('text')
+              .attr('x', starX).attr('y', starY)
+              .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+              .style('font-size', starSize + 'px')
+              .style('pointer-events', 'all')
+              .style('cursor', 'pointer')
+              .style('user-select', 'none')
+              .style('fill', '#f4c430')
+              .attr('class', 'l2-star')
+              .text('★')
+              .on('click', function(event) {
+                event.stopPropagation();
+                const el = d3.select(this);
+                const fav = el.attr('data-fav') === '1';
+                el.attr('data-fav', fav ? '0' : '1')
+                  .style('fill', fav ? '#ccc' : '#f4c430')
+                  .style('opacity', fav ? '0.4' : '1');
+              })
+              .on('mouseover', null).on('mousemove', null).on('mouseout', null);
+          }
+        });
+
+        /* ── 메일 원 안 제목 텍스트 ── */
+        nodeG.filter(d => d.data._isMail && d.r >= 14).each(function(d) {
+          const g = d3.select(this);
+          const fsize = Math.max(7, Math.min(12, d.r * 0.32));
+          const maxCh = Math.max(2, Math.floor(d.r * 1.9 / (fsize * 0.58)));
+          const subj  = (d.data.subject || '');
+          const txt   = subj.length > maxCh ? subj.slice(0, maxCh) + '…' : subj;
+          const color = d.data.isUnread ? '#1b5e38' : '#52796f';
+
+          g.append('text')
+            .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+            .attr('dy', d.data.isUnread ? -2 : 0)
+            .style('font-size', fsize + 'px')
+            .style('font-weight', d.data.isUnread ? '700' : '500')
+            .style('fill', color)
+            .style('pointer-events', 'none')
+            .text(txt);
+
+          /* 읽지 않음: 하단에 작은 점 */
+          if (d.data.isUnread) {
+            g.append('circle')
+              .attr('cx', 0).attr('cy', d.r * 0.48)
+              .attr('r', Math.min(3, d.r * 0.12))
+              .attr('fill', '#40916c')
+              .style('pointer-events', 'none');
+          }
+        });
+
+        l2ZoomTo(root);
+        renderBC();
+      }
+
+      /* ── 줌 ── */
+      function l2ZoomTo(d) {
+        const scale = Math.min(l2W, l2H) / (2.2 * d.r);
+        const tx = l2W / 2 - scale * (d.x + 5);
+        const ty = l2H / 2 - scale * (d.y + 5);
+        l2svg.transition().duration(620).ease(d3.easeCubicInOut)
+          .call(l2zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+      }
+
+      /* ── 메일 선택 ── */
+      async function selectMail(circleEl, d) {
+        d3.selectAll('.l2c').classed('l2c-sel', false);
+        d3.select(circleEl).classed('l2c-sel', true);
+        document.getElementById('l2Reader').classList.add('open');
+        document.getElementById('l2RdrSubject').textContent = d.data.subject || '(제목 없음)';
+        document.getElementById('l2RdrFrom').textContent    = '📨 ' + (d.data.from || '');
+        document.getElementById('l2RdrDate').textContent    = '📅 ' + fmtDate(d.data.date);
+        document.getElementById('l2RdrLabel').textContent   = '🏷 ' + (d.data._label || '');
+        document.getElementById('l2RdrBody').textContent    = '🌱 본문 불러오는 중…';
+        document.getElementById('l2GmailLink').href = '#';
+        try {
+          const res = await callProxy('getMessage', { messageId: d.data.id });
+          if (res.ok && res.message) {
+            document.getElementById('l2RdrBody').textContent = res.message.body || '(본문 없음)';
+            document.getElementById('l2GmailLink').href = res.message.gmailUrl || '#';
+          } else {
+            document.getElementById('l2RdrBody').textContent = d.data.snippet || '(본문을 불러올 수 없습니다)';
+          }
+        } catch (e) {
+          document.getElementById('l2RdrBody').textContent = d.data.snippet || ('오류: ' + e.message);
+        }
+      }
+
+      function closeReader() {
+        document.getElementById('l2Reader').classList.remove('open');
+        d3.selectAll('.l2c').classed('l2c-sel', false);
+      }
+
+      /* ── 브레드크럼 ── */
+      function renderBC() {
+        const bc = document.getElementById('l2BC');
+        if (!bc) return;
+        if (l2BCStack.length === 0) { bc.innerHTML = '🌿 전체 라벨'; return; }
+        let html = '<span class="l2-bc-item" data-idx="-1">🌿</span>';
+        l2BCStack.forEach((node, i) => {
+          html += '<span class="l2-bc-sep"> › </span>';
+          html += `<span class="l2-bc-item" data-idx="${i}">${esc(node.data.name)}</span>`;
+        });
+        bc.innerHTML = html;
+        bc.querySelectorAll('.l2-bc-item').forEach(el => {
+          el.addEventListener('click', () => {
+            const idx = parseInt(el.dataset.idx, 10);
+            if (idx < 0) { l2BCStack = []; if (l2Root) l2ZoomTo(l2Root); }
+            else { l2BCStack = l2BCStack.slice(0, idx + 1); l2ZoomTo(l2BCStack[l2BCStack.length - 1]); }
+            renderBC();
+          });
+        });
+      }
+
+      /* ── 툴팁 ── */
+      function showTip(event, d) {
+        const tip = document.getElementById('l2Tip');
+        let html = '';
+        if (d.data._isMail) {
+          const badge = d.data.isUnread
+            ? '<span style="display:inline-block;background:#52b788;color:#fff;font-size:0.68rem;padding:1px 7px;border-radius:10px;margin-left:5px;font-weight:700;">NEW</span>'
+            : '';
+          html  = `<div style="font-weight:700;color:#1b4332;margin-bottom:5px">${esc(d.data.subject || '(제목없음)')}${badge}</div>`;
+          html += `<div style="color:#52796f;font-size:0.75rem">📨 ${esc(d.data.from || '')}</div>`;
+          html += `<div style="color:#52796f;font-size:0.75rem">📅 ${fmtDate(d.data.date)}</div>`;
+          if (d.data.snippet) html += `<div style="margin-top:7px;color:#7a9e8e;font-size:0.72rem;border-top:1px solid #e8f0eb;padding-top:6px">${esc(d.data.snippet)}…</div>`;
+          html += `<div style="margin-top:6px;color:#52b788;font-size:0.72rem;font-weight:700;">클릭하면 본문 보기 →</div>`;
+        } else {
+          const cnt = d.leaves ? d.leaves().filter(l => l.data._isMail).length : 0;
+          html  = `<div style="font-weight:700;color:#1b4332;margin-bottom:5px">🏷 ${esc(d.data._full || d.data.name)}</div>`;
+          html += `<div style="color:#52796f;font-size:0.75rem">📧 메일 ${cnt}개</div>`;
+          if (d.children) html += `<div style="margin-top:5px;color:#52b788;font-size:0.72rem;font-weight:700;">클릭하면 확대 →</div>`;
+        }
+        tip.innerHTML = html;
+        tip.classList.add('on');
+        tip.style.left = (event.clientX + 16) + 'px';
+        tip.style.top  = (event.clientY + 14) + 'px';
+      }
+      function moveTip(event) {
+        const tip = document.getElementById('l2Tip');
+        tip.style.left = (event.clientX + 16) + 'px';
+        tip.style.top  = (event.clientY + 14) + 'px';
+      }
+      function hideTip() { document.getElementById('l2Tip').classList.remove('on'); }
+
+      /* ── 유틸 ── */
+      function setStatus(msg) { const el = document.getElementById('l2Status'); if (el) el.textContent = msg; }
+      function fmtDate(iso) {
+        if (!iso) return '';
+        try { return new Date(iso).toLocaleDateString('ko-KR', { year:'numeric', month:'short', day:'numeric' }); }
+        catch { return iso; }
+      }
+      function esc(s) {
+        return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+    }());
+    </script>
+  </body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>ECharts Chart Bootstrap Examples | Gentelella Alela! by Colorlib</title>    <!-- Compiled CSS (includes Bootstrap, Font Awesome, and all vendor styles) -->
+    <script type="module" src="/src/main-minimal.js"></script>
+  </head>
+
+  <body class="nav-md page-echarts">
+    <div class="container body">
+      <div class="main_container">
+        <!-- Sidebar -->
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title site_title_text">
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
+                Olive
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
+              </div>
+              <div class="profile_info">
+                <span data-i18n="sidebar.welcome">Welcome,</span>
+                <h4 id="google-profile-name">-</h4>
+              </div>
+            </div>
+            <br />
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="index2.html"><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li>
+                    <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="chartjs.html">Chart.js</a></li>
+                      <li><a href="echarts.html">ECharts <span class="badge bg-info">Updated</span></a></li>
+                      <li><a href="other_charts.html"><span data-i18n="nav.other_charts">Other Charts</span></a></li>
+                      <li><a href="api_test.html"><i class="bi bi-terminal"></i> API Test <span class="badge bg-warning text-dark">Dev</span></a></li>
+                    </ul>
+                  </li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="profile.html"><i class="bi bi-person-circle"></i> <span data-i18n="nav.profile">Profile</span><span class="bi bi-chevron-right"></span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+            <div class="nav_menu d-flex align-items-center justify-content-between">
+                <div class="nav toggle">
+                  <a id="menu_toggle"><i class="fas fa-bars"></i></a>
+                </div>
+                <nav class="nav navbar-nav ms-auto">
+                <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                    <a href="#" role="button" class="dropdown-toggle info-number" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fas fa-envelope"></i>
+                      <span class="badge bg-green">6</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end list-unstyled msg_list dropdown-menu-lg" role="menu" aria-labelledby="navbarDropdown1">
+                      <li class="nav-item">
+                        <a class="dropdown-item">
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
+                        </a>
+                      <li class="nav-item">
+                        <a class="dropdown-item">
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
+                        </a>
+                      <li class="nav-item">
+                        <a class="dropdown-item">
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
+                        </a>
+                      <li class="nav-item">
+                        <a class="dropdown-item">
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
+                        </a>
+                      <li class="nav-item">
+                        <div class="text-center">
+                          <a class="dropdown-item">
+                            <strong>See All Alerts</strong>
+                            <i class="fas fa-angle-right"></i>
+                          </a>
+                        </div>
+                    </ul>
+                </li>
+              </ul>
+              </nav>
+            </div>
+          </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <main class="right_col" role="main" aria-label="Main content">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Echarts <small>Some examples to get you started</small></h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 mb-3 float-end top_search">
+                  <div class="input-group search-bar-fix">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <button class="btn btn-outline-secondary" type="button">
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-8 col-sm-8">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Bar Graph</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div id="mainb" class="chart-height-lg"></div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Mini Pie</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div id="echart_mini_pie" class="chart-height-lg"></div>
+
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 col-sm-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Pie Graph</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div id="echart_pie" class="chart-height-lg"></div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Pie Area</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div id="echart_pie2" class="chart-height-lg"></div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Donut Graph</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div id="echart_donut" class="chart-height-lg"></div>
+
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-md-6 col-sm-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Scatter Graph</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div id="echart_scatter" class="chart-height-lg"></div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Line Graph</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div id="echart_line" class="chart-height-lg"></div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Horizontal Bar</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div id="echart_bar_horizontal" class="chart-lg"></div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-8 col-sm-8">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>World Map</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div id="echart_world_map" class="chart-lg"></div>
+
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 col-sm-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Pyramid</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div id="echart_pyramid" class="chart-xl"></div>
+                  
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Sonar</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div id="echart_sonar" class="chart-lg"></div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="float-end">
+            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>    <!-- Compiled JavaScript (Bootstrap and vendor scripts) -->
+    
+	
+  </body>
+</html>

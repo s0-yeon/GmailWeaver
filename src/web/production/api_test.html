@@ -1,0 +1,617 @@
+<!--통계 api 응답 확인 테스트용 html-->>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/favicon.ico" type="image/ico" />
+    <title>API Test | GmailWeaver</title>
+    <style>
+      .at-card {
+        background: #fff;
+        border-radius: 12px;
+        border: 1px solid #e3e8ef;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        padding: 28px 32px;
+        margin-bottom: 24px;
+      }
+      .at-card h5 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #2d3a4b;
+        margin-bottom: 18px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f3f7;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .at-input-row {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+      }
+      .at-input-row .form-group {
+        flex: 1;
+        min-width: 220px;
+        margin-bottom: 0;
+      }
+      .at-input-row label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #52596a;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .at-input-row input {
+        height: 40px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+      }
+      .at-btn {
+        height: 40px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 0.88rem;
+        padding: 0 22px;
+        white-space: nowrap;
+      }
+      .at-status-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
+        font-size: 0.82rem;
+      }
+      .at-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 11px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.78rem;
+      }
+      .at-badge.idle    { background: #f0f3f7; color: #8a9ab5; }
+      .at-badge.loading { background: #fff3cd; color: #856404; }
+      .at-badge.ok      { background: #d1e7dd; color: #0a6640; }
+      .at-badge.err     { background: #f8d7da; color: #842029; }
+      .at-spinner {
+        width: 14px; height: 14px;
+        border: 2px solid rgba(0,0,0,0.12);
+        border-top-color: #856404;
+        border-radius: 50%;
+        animation: at-spin 0.7s linear infinite;
+        display: inline-block;
+      }
+      @keyframes at-spin { to { transform: rotate(360deg); } }
+
+      /* Response viewer */
+      .at-response {
+        margin-top: 18px;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #e3e8ef;
+      }
+      .at-response-header {
+        background: #f7f9fc;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #e3e8ef;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #52596a;
+      }
+      .at-response-body {
+        background: #1e2433;
+        color: #a8d8a8;
+        padding: 18px 20px;
+        font-family: 'Fira Code', 'Consolas', monospace;
+        font-size: 0.82rem;
+        line-height: 1.7;
+        max-height: 480px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      .at-response-body::-webkit-scrollbar { width: 5px; }
+      .at-response-body::-webkit-scrollbar-track { background: transparent; }
+      .at-response-body::-webkit-scrollbar-thumb { background: #3a4560; border-radius: 3px; }
+      .at-response-body.empty { color: #5a6a7e; font-style: italic; }
+      .at-copy-btn {
+        background: none;
+        border: 1px solid #c7d0df;
+        border-radius: 6px;
+        color: #52596a;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 2px 10px;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .at-copy-btn:hover { background: #e8edf5; }
+
+      /* Pipeline diagram */
+      .at-pipeline {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      .at-pipe-node {
+        background: #f0f3f7;
+        border: 1.5px solid #d0d8e8;
+        border-radius: 10px;
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #3a4560;
+        white-space: nowrap;
+      }
+      .at-pipe-node.active { background: #d1e7dd; border-color: #52b788; color: #0a6640; }
+      .at-pipe-node.err    { background: #f8d7da; border-color: #dc3545; color: #842029; }
+      .at-pipe-arrow {
+        color: #b0bcd0;
+        font-size: 1.1rem;
+        padding: 0 6px;
+        font-weight: 300;
+      }
+
+      /* History table */
+      .at-history { font-size: 0.82rem; }
+      .at-history th { font-weight: 700; color: #52596a; }
+      .at-history td { vertical-align: middle; }
+      .at-history tr.selected td { background: #f0f7ff; }
+
+      /* Stats — 나에게 메일을 가장 많이 보낸 사람 */
+      .at-stats-title {
+        font-size: 1rem; font-weight: 700; color: #2d3a4b;
+        margin-bottom: 18px; padding-bottom: 10px;
+        border-bottom: 2px solid #f0f3f7;
+        display: flex; align-items: center; gap: 8px;
+      }
+      .at-top-sender {
+        display: flex; align-items: center; gap: 16px;
+        background: linear-gradient(135deg, #eaf4ff 0%, #f0fff4 100%);
+        border: 1.5px solid #b6d4fe;
+        border-radius: 12px; padding: 16px 22px; margin-bottom: 20px;
+      }
+      .at-top-sender-rank {
+        font-size: 2rem; line-height: 1;
+      }
+      .at-top-sender-info { flex: 1; }
+      .at-top-sender-name { font-size: 1.1rem; font-weight: 800; color: #1a2a3a; }
+      .at-top-sender-email { font-size: 0.78rem; color: #52596a; }
+      .at-top-sender-count {
+        font-size: 1.5rem; font-weight: 800; color: #0a6640;
+        background: #d1e7dd; border-radius: 8px; padding: 4px 14px;
+      }
+      .at-bar-list { list-style: none; padding: 0; margin: 0; }
+      .at-bar-item {
+        display: flex; align-items: center; gap: 10px;
+        margin-bottom: 10px; font-size: 0.84rem;
+      }
+      .at-bar-label { width: 140px; white-space: nowrap; overflow: hidden;
+        text-overflow: ellipsis; color: #3a4560; font-weight: 600; }
+      .at-bar-track {
+        flex: 1; background: #f0f3f7; border-radius: 20px;
+        height: 14px; overflow: hidden;
+      }
+      .at-bar-fill {
+        height: 100%; border-radius: 20px;
+        background: linear-gradient(90deg, #52b788, #1b7a4a);
+        transition: width 0.6s cubic-bezier(.4,0,.2,1);
+      }
+      .at-bar-fill.rank1 { background: linear-gradient(90deg, #f7b731, #e67e22); }
+      .at-bar-count { width: 28px; text-align: right; color: #52596a; font-weight: 700; }
+    </style>
+    <script type="module" src="/src/main-minimal.js"></script>
+  </head>
+
+  <body class="nav-md page-api-test">
+    <div class="container body">
+      <div class="main_container">
+
+        <!-- ── 사이드바 ── -->
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title site_title_text">
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
+                Olive
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
+              </div>
+              <div class="profile_info">
+                <span data-i18n="sidebar.welcome">Welcome,</span>
+                <h4 id="google-profile-name">-</h4>
+              </div>
+            </div>
+            <br />
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li>
+                    <a><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="index2.html"><i class="bi bi-tag"></i> 라벨 목록</a></li>
+                      <li><a href="label2.html"><i class="bi bi-circle-half"></i> 라벨 초원 ✦</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li class="active">
+                    <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="index.html#graph-viz"><i class="bi bi-diagram-3"></i> <span data-i18n="nav.graph_viz">Graph Viz</span></a></li>
+                      <li><a href="chartjs.html">Chart.js</a></li>
+                      <li><a href="echarts.html">ECharts <span class="badge bg-info">Updated</span></a></li>
+                      <li><a href="other_charts.html"><span data-i18n="nav.other_charts">Other Charts</span></a></li>
+                      <li class="active"><a href="api_test.html"><i class="bi bi-terminal"></i> API Test <span class="badge bg-warning text-dark">Dev</span></a></li>
+                    </ul>
+                  </li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="profile.html"><i class="bi bi-person-circle"></i> <span data-i18n="nav.profile">Profile</span><span class="bi bi-chevron-right"></span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- ── Top Nav ── -->
+        <div class="top_nav">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fas fa-bars"></i></a>
+            </div>
+            <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle" id="langDropdown"
+                     data-bs-toggle="dropdown" aria-expanded="false"
+                     style="text-decoration:none; color:inherit;">
+                    <i class="bi bi-translate" style="font-size: 1.2rem; vertical-align: middle;"></i>
+                    <span id="current-lang" style="margin-left: 4px; font-size: 0.9rem;">KO</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ko">🇰🇷 한국어</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="en">🇺🇸 English</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ja">🇯🇵 日本語</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        <!-- ── Main ── -->
+        <main class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3><i class="bi bi-terminal me-2"></i>API Test <span class="badge bg-warning text-dark" style="font-size:0.6em;vertical-align:middle;">Dev</span></h3>
+              </div>
+              <div class="title_right">
+                <small class="text-muted">Flask 라우터 파이프라인 테스트</small>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- ── 파이프라인 다이어그램 ── -->
+            <div class="at-card">
+              <h5><i class="bi bi-diagram-2"></i> 파이프라인</h5>
+              <div class="at-pipeline" id="atPipeline">
+                <div class="at-pipe-node" id="pAddon">🔌 Addon (Apps Script)</div>
+                <div class="at-pipe-arrow">→</div>
+                <div class="at-pipe-node" id="pBrowser">🖥 URL ?gmail_id=</div>
+                <div class="at-pipe-arrow">→</div>
+                <div class="at-pipe-node" id="pFlask">⚙️ Flask /mail-stats</div>
+                <div class="at-pipe-arrow">→</div>
+                <div class="at-pipe-node" id="pData">📊 가라데이터 응답</div>
+              </div>
+            </div>
+
+            <!-- ── /mail-stats 테스트 ── -->
+            <div class="at-card">
+              <h5><i class="bi bi-send"></i> POST /mail-stats</h5>
+
+              <div class="at-input-row">
+                <div class="form-group">
+                  <label for="atGmailId">gmail_id</label>
+                  <input type="text" id="atGmailId" class="form-control"
+                         placeholder="예) user@gmail.com"
+                         value="">
+                </div>
+                <button class="btn btn-success at-btn" id="atSendBtn" onclick="sendMailStats()">
+                  <i class="bi bi-play-fill me-1"></i> 요청 보내기
+                </button>
+                <button class="btn btn-outline-secondary at-btn" onclick="clearResult()">
+                  <i class="bi bi-trash me-1"></i> 초기화
+                </button>
+              </div>
+
+              <div class="at-status-row">
+                <span>상태:</span>
+                <span class="at-badge idle" id="atBadge">— 대기중</span>
+                <span class="text-muted" id="atElapsed"></span>
+              </div>
+
+              <div class="at-response" id="atResponseWrap" style="display:none;">
+                <div class="at-response-header">
+                  <span id="atResLabel">Response</span>
+                  <button class="at-copy-btn" onclick="copyResponse()">📋 복사</button>
+                </div>
+                <pre class="at-response-body" id="atResponseBody"></pre>
+              </div>
+            </div>
+
+            <!-- ── 나에게 메일을 가장 많이 보낸 사람 ── -->
+            <div class="at-card" id="atStatsCard" style="display:none;">
+              <div class="at-stats-title">
+                <i class="bi bi-bar-chart-fill"></i> 나에게 메일을 가장 많이 보낸 사람
+              </div>
+              <div id="atTopSender"></div>
+              <ul class="at-bar-list" id="atBarList"></ul>
+            </div>
+
+            <!-- ── 요청 히스토리 ── -->
+            <div class="at-card">
+              <h5><i class="bi bi-clock-history"></i> 요청 히스토리</h5>
+              <div class="table-responsive">
+                <table class="table table-hover at-history">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>시각</th>
+                      <th>gmail_id</th>
+                      <th>상태</th>
+                      <th>소요시간</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="atHistoryBody">
+                    <tr>
+                      <td colspan="6" class="text-center text-muted py-3" style="font-size:0.82rem;">
+                        아직 요청 없음
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+          <div class="pull-right">GmailWeaver Dev Tools</div>
+          <div class="clearfix"></div>
+        </footer>
+
+      </div>
+    </div>
+
+    <script>
+      /* ── 상태 ── */
+      const FLASK_BASE = 'http://127.0.0.1:80';
+      let history = [];
+      let selectedIdx = null;
+
+      /* ── gmail_id 자동 채우기: URL 파라미터 → sessionStorage 순으로 fallback ── */
+      (function() {
+        const params = new URLSearchParams(window.location.search);
+        const gid = params.get('gmail_id') || sessionStorage.getItem('gw_gmail_id') || '';
+        if (gid) {
+          document.getElementById('atGmailId').value = gid;
+          // gmail_id가 있으면 페이지 로드 즉시 자동 요청
+          window.addEventListener('DOMContentLoaded', function() {}, false);
+          setTimeout(sendMailStats, 0);
+        }
+      })();
+
+      /* ── /mail-stats 요청 ── */
+      async function sendMailStats() {
+        const gmailId = document.getElementById('atGmailId').value.trim();
+        if (!gmailId) {
+          alert('gmail_id를 입력하세요.');
+          document.getElementById('atGmailId').focus();
+          return;
+        }
+
+        setBadge('loading');
+        setPipeline('loading');
+        document.getElementById('atResponseWrap').style.display = 'none';
+        document.getElementById('atSendBtn').disabled = true;
+        document.getElementById('atElapsed').textContent = '';
+
+        const t0 = performance.now();
+
+        try {
+          const res = await fetch(FLASK_BASE + '/mail-stats', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gmail_id: gmailId })
+          });
+
+          const elapsed = ((performance.now() - t0) / 1000).toFixed(3);
+          const ok = res.ok;
+          const json = await res.json().catch(() => null);
+          const text = json ? JSON.stringify(json, null, 2) : '(파싱 실패)';
+
+          showResponse(text, res.status, ok);
+          setBadge(ok ? 'ok' : 'err', res.status);
+          setPipeline(ok ? 'ok' : 'err');
+          document.getElementById('atElapsed').textContent = elapsed + 's';
+
+          if (ok && json && json.data) renderMailStats(json.data);
+
+          addHistory(gmailId, res.status, ok, elapsed + 's', text);
+        } catch (e) {
+          const elapsed = ((performance.now() - t0) / 1000).toFixed(3);
+          showResponse('네트워크 오류:\n' + e.message, null, false);
+          setBadge('err', 'ERR');
+          setPipeline('err');
+          document.getElementById('atElapsed').textContent = elapsed + 's';
+          addHistory(gmailId, 'ERR', false, elapsed + 's', 'Network Error: ' + e.message);
+        } finally {
+          document.getElementById('atSendBtn').disabled = false;
+        }
+      }
+
+      /* ── 엔터키 지원 ── */
+      document.getElementById('atGmailId').addEventListener('keydown', e => {
+        if (e.key === 'Enter') sendMailStats();
+      });
+
+      function clearResult() {
+        document.getElementById('atResponseWrap').style.display = 'none';
+        document.getElementById('atStatsCard').style.display = 'none';
+        setBadge('idle');
+        setPipeline('idle');
+        document.getElementById('atElapsed').textContent = '';
+      }
+
+      /* ── 응답 표시 ── */
+      function showResponse(text, status, ok) {
+        const wrap = document.getElementById('atResponseWrap');
+        const body = document.getElementById('atResponseBody');
+        const label = document.getElementById('atResLabel');
+        wrap.style.display = 'block';
+        body.textContent = text;
+        body.className = 'at-response-body' + (text ? '' : ' empty');
+        label.textContent = status
+          ? `Response  HTTP ${status} ${ok ? '✓' : '✗'}`
+          : 'Response';
+      }
+
+      /* ── 배지 ── */
+      function setBadge(state, code) {
+        const el = document.getElementById('atBadge');
+        el.className = 'at-badge ' + state;
+        if (state === 'idle')    { el.innerHTML = '— 대기중'; }
+        if (state === 'loading') { el.innerHTML = '<span class="at-spinner"></span> 요청 중…'; }
+        if (state === 'ok')      { el.textContent = '✓ 성공 ' + (code || ''); }
+        if (state === 'err')     { el.textContent = '✗ 실패 ' + (code || ''); }
+      }
+
+      /* ── 파이프라인 노드 ── */
+      function setPipeline(state) {
+        const ids = ['pAddon', 'pBrowser', 'pFlask', 'pData'];
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          el.classList.remove('active', 'err');
+          if (state === 'ok')                          el.classList.add('active');
+          if (state === 'err' && id !== 'pAddon')      el.classList.add('err');
+        });
+      }
+
+      function setPipelineNode(id, state) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.remove('active', 'err');
+        if (state === 'active' || state === 'loading') el.classList.add('active');
+        if (state === 'err')                           el.classList.add('err');
+      }
+
+      /* ── 나에게 메일을 가장 많이 보낸 사람 통계 렌더링 ── */
+      function renderMailStats(data) {
+        const card = document.getElementById('atStatsCard');
+        const topEl = document.getElementById('atTopSender');
+        const barEl = document.getElementById('atBarList');
+
+        // received 기준 정렬
+        const sorted = Object.entries(data)
+          .map(([email, v]) => ({ email, name: v.name || email, received: v.received || 0 }))
+          .sort((a, b) => b.received - a.received);
+
+        if (sorted.length === 0) return;
+
+        const max = sorted[0].received;
+
+        // 1위 하이라이트
+        const top = sorted[0];
+        topEl.innerHTML = `
+          <div class="at-top-sender">
+            <div class="at-top-sender-rank">🥇</div>
+            <div class="at-top-sender-info">
+              <div class="at-top-sender-name">${escHtml(top.name)}</div>
+              <div class="at-top-sender-email">${escHtml(top.email)}</div>
+            </div>
+            <div class="at-top-sender-count">${top.received}통</div>
+          </div>`;
+
+        // 전체 바 리스트
+        barEl.innerHTML = sorted.map((item, i) => `
+          <li class="at-bar-item">
+            <span class="at-bar-label" title="${escHtml(item.email)}">${escHtml(item.name)}</span>
+            <div class="at-bar-track">
+              <div class="at-bar-fill ${i === 0 ? 'rank1' : ''}"
+                   style="width:${max > 0 ? Math.round(item.received / max * 100) : 0}%"></div>
+            </div>
+            <span class="at-bar-count">${item.received}</span>
+          </li>`).join('');
+
+        card.style.display = 'block';
+      }
+
+      /* ── 복사 ── */
+      function copyResponse() {
+        const text = document.getElementById('atResponseBody').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = document.querySelector('.at-copy-btn');
+          btn.textContent = '✓ 복사됨';
+          setTimeout(() => btn.textContent = '📋 복사', 1500);
+        });
+      }
+
+      /* ── 히스토리 ── */
+      function addHistory(gmailId, status, ok, elapsed, responseText) {
+        history.unshift({ gmailId, status, ok, elapsed, responseText, time: new Date() });
+        renderHistory();
+      }
+
+      function renderHistory() {
+        const tbody = document.getElementById('atHistoryBody');
+        if (history.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3" style="font-size:0.82rem;">아직 요청 없음</td></tr>';
+          return;
+        }
+        tbody.innerHTML = history.map((h, i) => `
+          <tr class="${selectedIdx === i ? 'selected' : ''}" style="cursor:pointer;" onclick="selectHistory(${i})">
+            <td>${history.length - i}</td>
+            <td>${h.time.toLocaleTimeString('ko-KR')}</td>
+            <td><code style="font-size:0.8rem;">${escHtml(h.gmailId)}</code></td>
+            <td><span class="badge ${h.ok ? 'bg-success' : 'bg-danger'}">${h.status}</span></td>
+            <td>${h.elapsed}</td>
+            <td><button class="btn btn-xs btn-outline-secondary" style="font-size:0.75rem;padding:2px 8px;" onclick="event.stopPropagation();selectHistory(${i})">보기</button></td>
+          </tr>
+        `).join('');
+      }
+
+      function selectHistory(i) {
+        selectedIdx = i;
+        const h = history[i];
+        document.getElementById('atGmailId').value = h.gmailId;
+        showResponse(h.responseText, h.status, h.ok);
+        setBadge(h.ok ? 'ok' : 'err', h.status);
+        renderHistory();
+      }
+
+      function escHtml(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      }
+    </script>
+  </body>
+</html>
