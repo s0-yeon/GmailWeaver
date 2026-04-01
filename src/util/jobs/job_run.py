@@ -11,14 +11,9 @@ import networkx as nx
 from util.jobs.job_store import update_job, append_job_log
 from util.graphrag_progress import parse_graphrag_progress  # 현재 버전에서는 실시간 파싱에 사용 안 함
 from util.user_path import user_graphrag_init
-<<<<<<< HEAD
-from config.settings import MAIL_BLOCK_SEP
-
-=======
 # from config.settings import GRAPH_BUILD_SCRIPT, GRAPHRAG_ROOT, BASE_DIR
 
 from config.settings import MAIL_BLOCK_SEP
->>>>>>> 66112d27226d7988265b25492ea5ed9b0f135199
 
 
 # 첨부파일 텍스트 요약 (공백/줄바꿈 제외 500자 미만이면 원문 그대로 반환)
@@ -268,21 +263,15 @@ def build_graphrag_update(job_id,paths, env):
 
 # 전체 파이프라인 실행 (index 기준)
 
-<<<<<<< HEAD
-def run_graph_pipeline(job_id, paths,env, attachment_texts_by_mail=None):
-=======
+
 def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None):
->>>>>>> 66112d27226d7988265b25492ea5ed9b0f135199
     print(f"[JOB][pipeline] START job_id={job_id}")
     append_job_log(job_id, "[START] run_graph_pipeline")
 
     user_graphrag_init(paths)
     try:
         update_job(job_id, progress=0, status="running", message="작업 시작")
-<<<<<<< HEAD
-=======
 
->>>>>>> 66112d27226d7988265b25492ea5ed9b0f135199
         # 첨부파일 요약 후 mail_latest.txt에 병합 (백그라운드에서 처리)
         if attachment_texts_by_mail:
             print(f"[JOB][summarize] START job_id={job_id}")
@@ -300,19 +289,11 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None):
                 ]
 
             # 요약된 첨부 내용을 mail_latest.txt 각 블록에 삽입
-<<<<<<< HEAD
-            _merge_summarized_attachments(paths.MAIL_LATEST_PATH, summarized_by_mail, paths)
-            print(f"[JOB][summarize] DONE job_id={job_id}")
-
-        build_graphrag_index(job_id,paths, env)  # 1단계: GraphRAG 인덱싱
-        build_graph_json(job_id,paths, env)  # 2단계: JSON 생성
-=======
             _merge_summarized_attachments(paths.MAIL_LATEST_PATH, summarized_by_mail)
             print(f"[JOB][summarize] DONE job_id={job_id}")
 
         build_graphrag_index(job_id,paths, env)
         build_graph_json(job_id,paths, env)
->>>>>>> 66112d27226d7988265b25492ea5ed9b0f135199
 
 
         update_job(job_id, progress=100, status="done", message="인덱싱 완료")
@@ -384,10 +365,7 @@ def start_graph_update_pipeline_background(job_id,paths, env):
         target=run_graph_update_pipeline, # 실행할 함수 : 그래프라그 업데이트파이프라인 실행 함수
         args=(job_id,paths, env.copy()),
         daemon=True,                      # app.py 종료 시 같이 종료
-<<<<<<< HEAD
 
-=======
->>>>>>> 66112d27226d7988265b25492ea5ed9b0f135199
     )
     t.start()  # 스레드 실행 (비동기 시작)
 

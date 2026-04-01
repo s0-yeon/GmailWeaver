@@ -3,366 +3,211 @@
  * 의존성: window.d3 (v7)
  */
 (function (global) {
-
-  const PALETTE = {
-    EMAIL:        { fill: "#f87171", glow: "#ff4444", dark: "#c0392b" },
-    PERSON:       { fill: "#fb923c", glow: "#ff7700", dark: "#d35400" },
-    TOPIC:        { fill: "#fbbf24", glow: "#ffcc00", dark: "#d4a017" },
-    ORGANIZATION: { fill: "#34d399", glow: "#00ffaa", dark: "#1a9e6e" },
-    LABEL:        { fill: "#60a5fa", glow: "#4488ff", dark: "#2563eb" },
-    EVENT:        { fill: "#a78bfa", glow: "#9966ff", dark: "#7c3aed" },
-    unknown:      { fill: "#94a3b8", glow: "#aabbcc", dark: "#64748b" },
+  const COLORS = {
+    EMAIL: "#f87171", // 빨강
+    PERSON: "#fb923c", // 주황
+    TOPIC: "#fbbf24", // 노랑
+    ORGANIZATION: "#34d399", // 초록
+    LABEL: "#60a5fa", // 파랑
+    EVENT: "#a78bfa", // 보라
+    unknown: "#c9d1d9", // 회색
   };
-
-  function getPalette(d) {
-    var key = (d.entity_type || d.type || "").toString().trim().toUpperCase();
-    return PALETTE[key] || PALETTE.unknown;
-  }
-
   function renderGraph(svgEl, data) {
-    var d3 = global.d3;
-    if (!d3) { console.error("[graph-render] d3 없음"); return; }
-    if (!data || !Array.isArray(data.nodes) || !Array.isArray(data.edges)) {
-      console.error("[graph-render] 데이터 형식 오류", data); return;
+    // 툴팁 헬퍼
+    const tip = document.getElementById("tooltip");
+
+    function showTip(html, event) {
+      // 툴팁 보여주는 함수
+      tip.innerHTML = html;
+      tip.classList.add("visible");
+      moveTip(event);
     }
 
-    var W = svgEl.clientWidth  || global.innerWidth;
-    var H = svgEl.clientHeight || global.innerHeight;
-
-    var svg = d3.select(svgEl);
-    svg.selectAll("*").remove();
-
-    // ── 다크 배경 ──────────────────────────────────────────────────
-    svg.style("background", "linear-gradient(135deg,#0d1f16 0%,#0a1a10 60%,#060e08 100%)");
-
-    // ── SVG defs (필터·그라디언트·마커) ───────────────────────────
-    var defs = svg.append("defs");
-
-    // 글로우 필터 (노드용)
-    Object.entries(PALETTE).forEach(function(entry) {
-      var key = entry[0], pal = entry[1];
-      var f = defs.append("filter")
-        .attr("id", "glow-" + key)
-        .attr("x", "-60%").attr("y", "-60%")
-        .attr("width", "220%").attr("height", "220%");
-      f.append("feGaussianBlur")
-        .attr("in", "SourceGraphic").attr("stdDeviation", "6").attr("result", "blur");
-      var merge = f.append("feMerge");
-      merge.append("feMergeNode").attr("in", "blur");
-      merge.append("feMergeNode").attr("in", "blur");
-      merge.append("feMergeNode").attr("in", "SourceGraphic");
-    });
-
-    // 강한 글로우 필터 (hover용)
-    var hf = defs.append("filter").attr("id", "glow-hover")
-      .attr("x", "-80%").attr("y", "-80%").attr("width", "260%").attr("height", "260%");
-    hf.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "12").attr("result", "b");
-    var hm = hf.append("feMerge");
-    hm.append("feMergeNode").attr("in", "b");
-    hm.append("feMergeNode").attr("in", "b");
-    hm.append("feMergeNode").attr("in", "SourceGraphic");
-
-    // 엣지 글로우
-    var ef = defs.append("filter").attr("id", "glow-edge")
-      .attr("x", "-20%").attr("y", "-200%").attr("width", "140%").attr("height", "500%");
-    ef.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "2.5").attr("result", "b");
-    var em = ef.append("feMerge");
-    em.append("feMergeNode").attr("in", "b");
-    em.append("feMergeNode").attr("in", "SourceGraphic");
-
-    // 라디얼 그라디언트 (각 노드 타입)
-    Object.entries(PALETTE).forEach(function(entry) {
-      var key = entry[0];
-      var rg = defs.append("radialGradient")
-        .attr("id", "grad-" + key)
-        .attr("cx", "35%").attr("cy", "30%").attr("r", "65%");
-      rg.append("stop").attr("offset", "0%").attr("stop-color", "#ffffff").attr("stop-opacity", "0.35");
-      rg.append("stop").attr("offset", "45%").attr("stop-color", pal.fill).attr("stop-opacity", "1");
-      rg.append("stop").attr("offset", "100%").attr("stop-color", pal.dark).attr("stop-opacity", "1");
-    });
-
-    // 화살표 마커
-    defs.append("marker")
-      .attr("id", "arrow").attr("viewBox", "0 -4 10 8")
-      .attr("refX", 28).attr("refY", 0)
-      .attr("markerWidth", 6).attr("markerHeight", 6)
-      .attr("orient", "auto")
-      .append("path").attr("d", "M0,-4L10,0L0,4").attr("fill", "rgba(52,211,153,0.5)");
-
-    // ── 배경 그리드 ───────────────────────────────────────────────
-    var gridG = svg.append("g").attr("class", "grid").attr("pointer-events", "none");
-    var gridSpacing = 60;
-    for (var gx = 0; gx < W * 3; gx += gridSpacing) {
-      gridG.append("line")
-        .attr("x1", gx - W).attr("y1", -H).attr("x2", gx - W).attr("y2", H * 2)
-        .attr("stroke", "rgba(52,211,153,0.04)").attr("stroke-width", 1);
-    }
-    for (var gy = 0; gy < H * 3; gy += gridSpacing) {
-      gridG.append("line")
-        .attr("x1", -W).attr("y1", gy - H).attr("x2", W * 2).attr("y2", gy - H)
-        .attr("stroke", "rgba(52,211,153,0.04)").attr("stroke-width", 1);
+    function moveTip(event) {
+      // 툴팁 위치 마우스 커서 근처로 이동
+      const pad = 16;
+      let x = event.clientX + pad; // 기본: 커서 오른쪽
+      let y = event.clientY + pad; // 기본: 커서 아래쪽
+      if (x + 280 > window.innerWidth) x = event.clientX - 280 - pad; // 화면 오른쪽 끝에 걸리면 커서 왼쪽으로 방향 전환
+      if (y + 160 > window.innerHeight) y = event.clientY - 160 - pad; // 화면 아래쪽 끝에 걸리면 커서 위쪽으로 방향 전환
+      tip.style.left = x + "px";
+      tip.style.top = y + "px";
     }
 
-    // ── 메인 그룹 ─────────────────────────────────────────────────
-    var g = svg.append("g");
+    function hideTip() {
+      tip.classList.remove("visible");
+    } // 툴팁 숨기기
 
-    // 줌/패닝
-    var zoom = d3.zoom()
-      .scaleExtent([0.1, 4])
-      .on("zoom", function (e) {
-        g.attr("transform", e.transform);
-        gridG.attr("transform", e.transform);
-      });
-    svg.call(zoom);
-    svg.call(zoom.transform, d3.zoomIdentity.translate(W / 2, H / 2).scale(0.6));
+    // description을 3줄 분량(120자)으로 자르기
+    function shortDesc(text, maxLen = 120) {
+      if (!text) return "";
+      return text.length > maxLen
+        ? text.slice(0, maxLen).trimEnd() + "…"
+        : text; // 120자 초과분은 숨김
+    }
 
-    // ── 데이터 준비 ───────────────────────────────────────────────
-    var nodes = data.nodes.map(function (d) { return Object.assign({}, d); });
-    var edges = data.edges.map(function (d) { return Object.assign({}, d); });
+    function edgeWidth(weight) {
+      // 엣지 두께 계산
+      if (weight == null) return 1.5;
+      return Math.min(6, 1 + weight * 0.2);
+    }
 
-    // 연결 수로 노드 크기 결정
-    var degreeMap = {};
-    nodes.forEach(function(d) { degreeMap[d.id] = 0; });
-    edges.forEach(function(e) {
-      var s = typeof e.source === "object" ? e.source.id : e.source;
-      var t = typeof e.target === "object" ? e.target.id : e.target;
-      degreeMap[s] = (degreeMap[s] || 0) + 1;
-      degreeMap[t] = (degreeMap[t] || 0) + 1;
-    });
-    var maxDeg = Math.max(1, d3.max(Object.values(degreeMap)));
-    var rScale = d3.scaleSqrt().domain([0, maxDeg]).range([14, 38]);
+    const w = window.innerWidth;
+    const h = window.innerHeight;
 
-    // ── 시뮬레이션 ────────────────────────────────────────────────
-    var simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(edges).id(function(d){ return d.id; }).distance(function(d){
-        var s = typeof d.source === "object" ? d.source.id : d.source;
-        var t = typeof d.target === "object" ? d.target.id : d.target;
-        return 80 + rScale(degreeMap[s] || 0) + rScale(degreeMap[t] || 0);
-      }))
-      .force("charge", d3.forceManyBody().strength(-320))
-      .force("collide", d3.forceCollide(function(d){ return rScale(degreeMap[d.id] || 0) + 18; }))
-      .force("center", d3.forceCenter(0, 0))
-      .alphaDecay(0.018);
+    const svg = d3.select("#graph"); // svg 요소
+    const g = svg.append("g"); // 그래프 담을 태그
 
-    // ── 엣지 ─────────────────────────────────────────────────────
-    var linkG = g.append("g").attr("class", "links");
+    const zoom = d3.zoom().on("zoom", (e) => g.attr("transform", e.transform));
+    svg.call(zoom); // svg에 줌 이벤트 등록
+    svg.call(
+      zoom.transform,
+      d3.zoomIdentity.translate(w / 2, h / 2).scale(0.5),
+    ); // 초기 줌 레벨 = 0.5 (그래프 전체가 보이도록)
 
-    // 엣지 글로우 레이어
-    var linkGlow = linkG.selectAll(".link-glow")
-      .data(edges).join("line")
-      .attr("class", "link-glow")
-      .attr("stroke", "rgba(52,211,153,0.12)")
-      .attr("stroke-width", 6)
-      .attr("filter", "url(#glow-edge)");
+    // 노드들 간의 힘 설정 (움직임)
+    const simulation = d3
+      .forceSimulation(data.nodes)
+      .force(
+        "link",
+        d3
+          .forceLink(data.edges)
+          .id((d) => d.label) // 엣지의 source와 target가 label 기준으로 연결
+          .distance(80),
+      )
+      .force("charge", d3.forceManyBody().strength(-200)) // 노드들 간의 밀어내는 힘
+      .force("collide", d3.forceCollide(30)); // 노드들 겹치지 않도록 함
 
-    // 실제 엣지
-    var link = linkG.selectAll(".link")
-      .data(edges).join("line")
-      .attr("class", "link")
-      .attr("stroke", "rgba(52,211,153,0.28)")
-      .attr("stroke-width", 1.5)
-      .attr("marker-end", "url(#arrow)");
-
-    // ── 노드 그룹 ─────────────────────────────────────────────────
-    var nodeG = g.append("g").attr("class", "nodes");
-
-    var node = nodeG.selectAll(".node")
-      .data(nodes).join("g")
-      .attr("class", "node")
+    // 엣지 그리기
+    const link = g
+      .append("g")
+      .selectAll("line")
+      .data(data.edges) // 엣지 데이터 바인딩
+      .join("line") // 선 생성
+      .attr("stroke", "#aaaaaa") // 엣지 색상
+      .attr("stroke-width", (d) =>
+        d.weight == null ? 1.5 : Math.min(6, 1 + d.weight * 0.2),
+      ) // 두께
+      .attr("stroke-opacity", 0.6) // 투명도
       .style("cursor", "pointer")
-      .call(d3.drag()
-        .on("start", function(e, d) {
-          if (!e.active) simulation.alphaTarget(0.3).restart();
-          d.fx = d.x; d.fy = d.y;
-        })
-        .on("drag", function(e, d) { d.fx = e.x; d.fy = e.y; })
-        .on("end", function(e, d) {
-          if (!e.active) simulation.alphaTarget(0);
-          d.fx = null; d.fy = null;
-        })
-      );
-
-    // 외부 링 (pulse)
-    node.append("circle")
-      .attr("class", "node-ring")
-      .attr("r", function(d) { return rScale(degreeMap[d.id] || 0) + 8; })
-      .attr("fill", "none")
-      .attr("stroke", function(d) { return getPalette(d).fill; })
-      .attr("stroke-width", 1.5)
-      .attr("stroke-opacity", 0.25);
-
-    // 글로우 원
-    node.append("circle")
-      .attr("class", "node-glow")
-      .attr("r", function(d) { return rScale(degreeMap[d.id] || 0) + 4; })
-      .attr("fill", function(d) { return getPalette(d).glow; })
-      .attr("fill-opacity", 0.18)
-      .attr("filter", function(d) {
-        var key = (d.entity_type || d.type || "unknown").toString().trim().toUpperCase();
-        return "url(#glow-" + (PALETTE[key] ? key : "unknown") + ")";
-      });
-
-    // 메인 원
-    node.append("circle")
-      .attr("class", "node-circle")
-      .attr("r", function(d) { return rScale(degreeMap[d.id] || 0); })
-      .attr("fill", function(d) {
-        var key = (d.entity_type || d.type || "unknown").toString().trim().toUpperCase();
-        return "url(#grad-" + (PALETTE[key] ? key : "unknown") + ")";
-      })
-      .attr("stroke", function(d) { return getPalette(d).fill; })
-      .attr("stroke-width", 1.8)
-      .attr("stroke-opacity", 0.7);
-
-    // 라벨
-    node.append("text")
-      .attr("class", "node-label")
-      .text(function(d) {
-        var label = d.label || d.id || "";
-        return label.length > 12 ? label.slice(0, 11) + "…" : label;
-      })
-      .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "middle")
-      .attr("font-size", function(d) { return Math.max(9, Math.min(12, rScale(degreeMap[d.id]||0) * 0.4)); })
-      .attr("font-family", "'Inter','Helvetica Neue',Arial,sans-serif")
-      .attr("font-weight", "600")
-      .attr("fill", "#ffffff")
-      .attr("pointer-events", "none");
-
-    // 타입 레이블 (노드 아래)
-    node.append("text")
-      .attr("class", "node-type")
-      .text(function(d) { return (d.entity_type || d.type || "").toUpperCase(); })
-      .attr("text-anchor", "middle")
-      .attr("y", function(d) { return rScale(degreeMap[d.id] || 0) + 14; })
-      .attr("font-size", 8)
-      .attr("font-family", "'Inter','Helvetica Neue',Arial,sans-serif")
-      .attr("font-weight", "700")
-      .attr("letter-spacing", "0.06em")
-      .attr("fill", function(d) { return getPalette(d).fill; })
-      .attr("fill-opacity", 0.75)
-      .attr("pointer-events", "none");
-
-    // ── 툴팁 ─────────────────────────────────────────────────────
-    var tooltip = d3.select(svgEl.parentNode || document.body)
-      .append("div")
-      .style("position", "absolute")
-      .style("pointer-events", "none")
-      .style("background", "rgba(10,26,16,0.92)")
-      .style("border", "1px solid rgba(52,211,153,0.3)")
-      .style("border-radius", "10px")
-      .style("padding", "10px 14px")
-      .style("font-family", "'Inter',sans-serif")
-      .style("font-size", "12px")
-      .style("color", "#e2f5ec")
-      .style("backdrop-filter", "blur(8px)")
-      .style("box-shadow", "0 8px 24px rgba(0,0,0,0.5)")
-      .style("opacity", 0)
-      .style("transition", "opacity 0.15s")
-      .style("z-index", 9999)
-      .style("max-width", "200px");
-
-    // ── 호버 인터랙션 ─────────────────────────────────────────────
-    var linkedSet = {};
-    edges.forEach(function(e) {
-      var s = typeof e.source === "object" ? e.source.id : e.source;
-      var t = typeof e.target === "object" ? e.target.id : e.target;
-      var key = s + "||" + t;
-      linkedSet[key] = true; linkedSet[t + "||" + s] = true;
-    });
-
-    function isLinked(a, b) { return a === b || linkedSet[a + "||" + b]; }
-
-    node
-      .on("mouseover", function(event, d) {
-        // 연결 안된 노드 dim
-        node.style("opacity", function(o) { return isLinked(d.id, o.id) ? 1 : 0.15; });
-        link.style("opacity", function(o) {
-          var s = typeof o.source === "object" ? o.source.id : o.source;
-          var t = typeof o.target === "object" ? o.target.id : o.target;
-          return (s === d.id || t === d.id) ? 1 : 0.05;
-        }).attr("stroke", function(o) {
-          var s = typeof o.source === "object" ? o.source.id : o.source;
-          var t = typeof o.target === "object" ? o.target.id : o.target;
-          return (s === d.id || t === d.id) ? "rgba(52,211,153,0.9)" : "rgba(52,211,153,0.1)";
-        }).attr("stroke-width", function(o) {
-          var s = typeof o.source === "object" ? o.source.id : o.source;
-          var t = typeof o.target === "object" ? o.target.id : o.target;
-          return (s === d.id || t === d.id) ? 2.5 : 1.5;
-        });
-        linkGlow.style("opacity", function(o) {
-          var s = typeof o.source === "object" ? o.source.id : o.source;
-          var t = typeof o.target === "object" ? o.target.id : o.target;
-          return (s === d.id || t === d.id) ? 1 : 0;
-        });
-
-        // 호버 노드 강조
-        d3.select(this).select(".node-circle")
-          .attr("filter", "url(#glow-hover)")
-          .attr("stroke-width", 3)
-          .attr("stroke-opacity", 1);
-        d3.select(this).select(".node-ring")
-          .attr("stroke-opacity", 0.6)
-          .attr("r", function(d) { return rScale(degreeMap[d.id] || 0) + 14; });
-
-        // 툴팁
-        var deg = degreeMap[d.id] || 0;
-        tooltip
-          .html(
-            "<div style='color:" + getPalette(d).fill + ";font-weight:700;font-size:13px;margin-bottom:6px'>" +
-            (d.label || d.id) + "</div>" +
-            "<div style='color:rgba(200,230,216,0.7);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px'>" +
-            (d.entity_type || d.type || "unknown") + "</div>" +
-            "<div style='margin-top:6px;color:#94d4b4'>연결: <b>" + deg + "</b>개</div>"
+      .on("mouseover", (event, d) => {
+        // 엣지 위에 마우스 올렸을 때 엣지 불투명하게 강조
+        d3.select(event.currentTarget)
+          .attr("stroke", "#aaaaaa")
+          .attr(
+            "stroke-width",
+            d.weight == null ? 1.5 : Math.min(6, 1 + d.weight * 0.2),
           )
-          .style("opacity", 1);
+          .attr("stroke-opacity", 1);
+
+        // 툴팁에 표시할 데이터
+        const src = d.source.label ?? d.source;
+        const tgt = d.target.label ?? d.target;
+        const desc = shortDesc(d.description);
+        const wt = d.weight != null ? `가중치 ${d.weight}` : "";
+
+        showTip(
+          `
+                <div class="tt-type">엣지</div>
+                <div class="tt-arrow">${src} → ${tgt}</div>
+                ${desc ? `<hr class="tt-divider"><div class="tt-desc">${desc}</div>` : ""}
+                ${wt ? `<div class="tt-meta">${wt}</div>` : ""}
+              `,
+          event,
+        );
       })
-      .on("mousemove", function(event) { // eslint-disable-line no-unused-vars
-        var rect = svgEl.getBoundingClientRect();
-        tooltip
-          .style("left", (event.clientX - rect.left + 14) + "px")
-          .style("top",  (event.clientY - rect.top  - 10) + "px");
-      })
-      .on("mouseout", function() {
-        node.style("opacity", 1);
-        link.style("opacity", 1)
-          .attr("stroke", "rgba(52,211,153,0.28)")
-          .attr("stroke-width", 1.5);
-        linkGlow.style("opacity", 1);
-        d3.select(this).select(".node-circle")
-          .attr("filter", null)
-          .attr("stroke-width", 1.8)
-          .attr("stroke-opacity", 0.7);
-        d3.select(this).select(".node-ring")
-          .attr("stroke-opacity", 0.25)
-          .attr("r", function(d) { return rScale(degreeMap[d.id] || 0) + 8; });
-        tooltip.style("opacity", 0);
+
+      .on("mousemove", moveTip) // 마우스가 엣지 위에서 움직일 때 툴팁도 이동
+      .on("mouseout", (event, d) => {
+        // 마우스가 엣지 위에서 벗어날 때
+        d3.select(event.currentTarget).attr("stroke-opacity", 0.6); // 투명도 복원
+        hideTip();
       });
 
-    // ── Pulse 애니메이션 (CSS keyframes를 SVG animate로) ──────────
-    node.select(".node-ring").each(function(d) {
-      var delay = Math.random() * 2000;
-      var el = d3.select(this);
-      var baseR = rScale(degreeMap[d.id] || 0) + 8;
-      (function pulse() {
-        el.transition().duration(1200).delay(delay)
-          .attr("r", baseR + 10).attr("stroke-opacity", 0)
-          .transition().duration(0)
-          .attr("r", baseR).attr("stroke-opacity", 0.25)
-          .on("end", function() { delay = 0; pulse(); });
-      })();
-    });
+    // 노드 그리기
+    const node = g
+      .append("g")
+      .selectAll("g")
+      .data(data.nodes) // 노드 데이터 바인딩
+      .join("g") // 각 노드마다 g 요소 생성
+      .call(
+        d3
+          .drag() // 드래그 이벤트 등록
+          .on("start", (e, d) => {
+            // 드래그하면 simulation 재시작
+            if (!e.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y; // 고정된 노드 위치
+          })
+          .on("drag", (e, d) => {
+            d.fx = e.x;
+            d.fy = e.y;
+          }) // 노드 위치 마우스 위치로 업데이트
+          .on("end", (e, d) => {
+            // 드래그 끝나면 노드 고정 끝. 자유롭게 움직임.
+            if (!e.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+          }),
+      );
+    // 노드
+    node
+      .append("circle")
+      .attr("r", 30) // 원 크기 (반지름)
+      .attr("fill", (d) => COLORS[d.entity_type] || COLORS.unknown) // 타입별 색상
+      .attr("stroke", "#fff") // 테두리 = 흰색
+      .attr("stroke-width", 1.5) // 테두리 두께
+      .style("cursor", "pointer")
+      .on("mouseover", (event, d) => {
+        // 노드 위에 마우스 올렸을 때
+        d3.select(event.currentTarget) // 노드 강조: 원 확대 + 밝기 증가
+          .attr("r", 36)
+          .attr("filter", "brightness(1.25)");
 
-    // ── 틱 ───────────────────────────────────────────────────────
-    simulation.on("tick", function () {
-      function lx(d) { return typeof d.source === "object" ? d.source.x : 0; }
-      function ly(d) { return typeof d.source === "object" ? d.source.y : 0; }
-      function tx(d) { return typeof d.target === "object" ? d.target.x : 0; }
-      function ty(d) { return typeof d.target === "object" ? d.target.y : 0; }
+        const desc = shortDesc(d.description);
+        const degree = d.degree != null ? `연결 수 ${d.degree}` : "";
+        const id =
+          d.human_readable_id != null
+            ? `#${d.human_readable_id}`
+            : (d.id ?? "");
 
-      link.attr("x1", lx).attr("y1", ly).attr("x2", tx).attr("y2", ty);
-      linkGlow.attr("x1", lx).attr("y1", ly).attr("x2", tx).attr("y2", ty);
-      node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        showTip(
+          `
+              <div class="tt-type">${d.entity_type ?? "unknown"}</div>
+              <div class="tt-label">${d.label ?? d.id}</div>
+              ${desc ? `<hr class="tt-divider"><div class="tt-desc">${desc}</div>` : ""}
+              <div class="tt-meta">${[id, degree].filter(Boolean).join(" · ")}</div>
+            `,
+          event,
+        );
+      })
+      .on("mousemove", moveTip) // 노드 위에서 마우스 움직일 때 툴팁도 이동
+      .on("mouseout", (event) => {
+        // 마우스가 노드 벗어나면 원래 크기로 복구 + 툴팁 숨김
+        d3.select(event.currentTarget).attr("r", 30).attr("filter", null);
+        hideTip();
+      });
+
+    // 노드 안에 텍스트 표시
+    node
+      .append("text")
+      .text((d) => d.label || d.id) // label 없으면 id 표시
+      .attr("text-anchor", "middle") // 가로 중앙 정렬
+      .attr("dominant-baseline", "middle") // 세로 중앙 정렬
+      .attr("font-size", 10) // 글자 크기
+      .attr("fill", "#333") // 글자 색상
+      .style("pointer-events", "none");
+
+    // 시뮬레이션 틱마다 노드와 엣지 위치 업데이트
+    simulation.on("tick", () => {
+      // 엣지 양 끝점 위치 업데이트
+      link
+        .attr("x1", (d) => d.source.x) // 처음 노드 x좌표
+        .attr("y1", (d) => d.source.y) // 처음 노드 y좌표
+        .attr("x2", (d) => d.target.x) // 나중 노드 x좌표
+        .attr("y2", (d) => d.target.y); // 나중 노드 y좌표
+      // 노드위치 업데이트
+      node.attr("transform", (d) => `translate(${d.x},${d.y})`);
     });
   }
 
