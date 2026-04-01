@@ -1004,54 +1004,6 @@ def marker_shadow():
     from flask import Response
     return Response(data, mimetype='image/png')
 
-def get_mail_stats(): # 메일 송수신
-    return {
-        "ae-best-care-market14@deals.aliexpress.com": {
-            "name": "AliExpress",
-            "sent": 0,
-            "received": 3
-        },
-        "notifications@github.com": {
-            "name": "uzichoi",
-            "sent": 1,
-            "received": 12
-        },
-        "inews11@seoul.go.kr": {
-            "name": "서울시청",
-            "sent": 0,
-            "received": 2
-        },
-        "team@company.com": {
-            "name": "프로젝트팀",
-            "sent": 7,
-            "received": 5
-        },
-        "friend123@gmail.com": {
-            "name": "김민수",
-            "sent": 4,
-            "received": 6
-        }
-    }
-
-# 웹앱용 가라데이터 라우트
-@app.route("/mail-stats", methods=["POST"])
-def send_mail_stats():
-    data = request.json or {}
-
-    gmail_id = data.get("gmail_id", "").strip()
-
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-
-    paths = UserPaths(BASE_DIR, gmail_id)
-
-    print(f"[MAIL_STATS] gmail_id={gmail_id}")
-    print(f"[MAIL_STATS] path={paths.USER_ROOT}")
-
-    return jsonify({
-        "gmail_id": gmail_id,
-        "data": get_mail_stats()
-    })
 
 # 서버 진입점
 if __name__ == '__main__':
