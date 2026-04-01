@@ -14,7 +14,7 @@
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/calendar"
   ],
-  "urlFetchWhitelist": ["https://transpalmar-christine-noneducatory.ngrok-free.dev/"],
+  "urlFetchWhitelist": ["https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev/"],
   "addOns": {
     "common": {
       "name": "🫒 Olive",

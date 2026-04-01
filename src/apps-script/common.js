@@ -1,5 +1,5 @@
 // src/apps-script/common.js
-var TunnelURL = "https://transpalmar-christine-noneducatory.ngrok-free.dev"; // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
+var TunnelURL = "https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev"; // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
 const WEBAPP_URL =
   "https://script.google.com/macros/s/AKfycbz3bAOxML5BZSSJcMFM1or5jY8K4NVwliHk_Rbe9jXYVBXbYM05Fl-1bPG1909_38hZ/exec"; // Apps Script Web App으로 배포된 URL
 
