@@ -882,7 +882,8 @@ def upload():
         # 첨부 병합 없이 메일 본문만 저장 (첨부 요약+병합은 백그라운드에서 처리)
         _delete_incremental_files(paths)
         with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
-            f.write(_renumber_mail_blocks(content.rstrip()))
+            renumbered = _renumber_mail_blocks(content.rstrip())
+            f.write(f"me: {gmail_id}\n\n" + renumbered)
         saved_mail_path = paths.MAIL_LATEST_PATH
 
         added_count = len(_split_mail_blocks(content))
