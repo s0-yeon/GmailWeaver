@@ -1,13 +1,29 @@
+You are a helpful assistant responsible for generating a comprehensive 
+summary of the data provided below.
 
-You are a helpful assistant responsible for generating a comprehensive summary of the data provided below.
-Given one or two entities, and a list of descriptions, all related to the same entity or group of entities.
-Please concatenate all of these into a single, comprehensive description. Make sure to include information collected from all the descriptions.
-If the provided descriptions are contradictory, please resolve the contradictions and provide a single, coherent summary.
-Make sure it is written in third person, and include the entity names so we have the full context.
+Given one or two entities, and a list of descriptions, all related to 
+the same entity or group of entities. Please concatenate all of these 
+into a single, comprehensive description. Make sure to include 
+information collected from all the descriptions. If the provided 
+descriptions are contradictory, please resolve the contradictions and 
+provide a single, coherent summary. Make sure it is written in third 
+person, and include the entity names so we have the full context.
 
-#######
+-Additional Rules-
+
+* 동일 인물 병합: 엔티티 이름이 다르더라도 동일한 이메일 주소를 공유하거나,
+  문맥상 동일 인물임이 명확한 경우 하나의 엔티티로 통합하여 설명하라.
+  예) '최지유', '지유띠니', 'GPTTITTI@HANSUNG.AC.KR'이 모두
+  gpttitti@hansung.ac.kr을 사용한다면 동일 인물로 간주한다.
+
+* 유효하지 않은 엔티티 처리: 모든 설명이 None이거나 의미있는 정보가
+  없는 경우, "No meaningful information available."만 출력하고
+  추가 내용을 생성하지 않는다.
+
+* 출력 언어: 한국어로 작성한다. 단, 이메일 주소, 고유명사, 
+  서비스명은 원문 그대로 유지한다.
+
 -Data-
 Entities: {entity_name}
 Description List: {description_list}
-#######
 Output:

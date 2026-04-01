@@ -29,8 +29,8 @@ function _runSync(mode) {
     // 전체 갱신할 때
     if (mode === "rewrite") {
       var queryAll = "in:inbox OR in:sent";
-      threads = GmailApp.search(queryAll, 0, 3);
-
+      threads = GmailApp.search(queryAll, 0, 50);
+      
       threads.forEach(function (thread) {
         // 각 스레드 순회
         thread.getMessages().forEach(function (msg) {
