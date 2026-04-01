@@ -94,7 +94,7 @@ skip_workflows: []
 
 extract_graph:
   prompt: "prompts/entity_extraction.txt"
-  entity_types: [Myself, Email, Person, Organization, Topic, Label, Event, Attachment]
+  entity_types: [Email, Person, Topic, Label, Event, Organization]
   max_gleanings: 1
 
 summarize_descriptions:
