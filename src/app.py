@@ -31,6 +31,7 @@ from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
 from util.user_path import UserPaths
+from util.database.db_reader import get_mail_stats, get_keyword_stats
 
 # 환경변수 로드
 load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: GraphRAG 설정(settings.yaml)과 API 키가 같은 디렉터리에 위치하기 때문
@@ -1000,6 +1001,46 @@ def marker_shadow():
         data = r.read()
     from flask import Response
     return Response(data, mimetype='image/png')
+
+# 웹앱용 가라데이터 라우트
+@app.route("/mail-stats", methods=["POST"])
+def send_mail_stats():
+    data = request.json or {}
+
+    gmail_id = data.get("gmail_id", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+
+    print(f"[MAIL_STATS] gmail_id={gmail_id}")
+    print(f"[MAIL_STATS] path={paths.USER_ROOT}")
+
+    return jsonify({
+        "gmail_id": gmail_id,
+        "data": get_mail_stats()
+    })
+
+@app.route("/keyword-stats", methods=["POST"])
+def send_keyword_stats():
+    data = request.json or {}
+
+    gmail_id = data.get("gmail_id", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+
+    print(f"[MAIL_STATS] gmail_id={gmail_id}")
+    print(f"[MAIL_STATS] path={paths.USER_ROOT}")
+
+    return jsonify({
+        "gmail_id": gmail_id,
+        "data": get_keyword_stats()
+    })
+
 
 # 서버 진입점
 if __name__ == '__main__':
