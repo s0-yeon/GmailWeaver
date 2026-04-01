@@ -21,7 +21,7 @@ def _summarize_attachment_text(text: str, filename: str) -> str:
     if pure_len < 500:
         return text  # 짧은 텍스트는 요약 없이 그대로 반환
 
-    prompt_path = os.path.join("src", "parquet", "prompts", "summarize_attachment.txt")
+    prompt_path = os.path.join( "parquet_template", "prompts", "summarize_attachment.txt")
     with open(prompt_path, "r", encoding="utf-8") as f:
         prompt = f.read().strip()
 
@@ -285,7 +285,7 @@ def run_graph_pipeline(job_id, paths,env, attachment_texts_by_mail=None):
                 ]
 
             # 요약된 첨부 내용을 mail_latest.txt 각 블록에 삽입
-            _merge_summarized_attachments(paths.MAIL_LATEST_PATH, summarized_by_mail, paths)
+            _merge_summarized_attachments(paths.MAIL_LATEST_PATH, summarized_by_mail)
             print(f"[JOB][summarize] DONE job_id={job_id}")
 
         build_graphrag_index(job_id,paths, env)  # 1단계: GraphRAG 인덱싱
