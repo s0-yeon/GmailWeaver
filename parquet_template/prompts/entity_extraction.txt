@@ -5,15 +5,23 @@ The input may be an email, a structured table, or plain text — adapt according
 
 -Steps-
 1. Identify Entities: Extract entities of the following types: '[{entity_types}]'.
-   Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter}<description>)'
-   * Email:        'Subject: <subj> | Tone: <tone> | Attachments: <files/None> | Summary: <1-sentence>'
-   * Person:       'Name: <name> | Account: <email/Unknown>'
-   * Topic:        'Domain: <분야> | Priority: <high/mid/low> | Summary: <이 메일이 다루는 핵심 주제 1문장>'
+  Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter}<description>)'
+   * Myself:       'Account: <my_account> | Role: <user_role>
+   * Email:        'Subject: <subject/mail_id> | Tone: <tone> | Summary: <1-sentence>'
+   * Person:       'Account: <email>'
+   * Organization: 'Context: <dept> | Team: <team>'
+   * Topic:        'Priority: <high/mid/low> | Summary: <이 메일이 다루는 핵심 주제 1문장>'
    * Label:        'Category: <label_name>'
    * Event:        'Schedule: <YYYY-MM-DD HH:MM> | Location: <place/None> | Status: <confirmed/tentative>'
-   * Organization: 'Context: <dept> | Team: <team>'
+   * Attachment:   'Filename: <name> | Type: <file_type> | Summary: <content_summary>'
 
-   Grounding rules:
+  Myself extraction rules:
+   * mail_latest.txt에서 텍스트에서 정확히 1개의 Myself 엔티티를 생성한다.
+   * Myself 엔티티는 유일하다.
+   * Role은 해당 메일에서의 역할: "Sender" (발신자), "Recipient" (수신자), "Self" (자기 자신)
+   * Primary_account는 메일 주소 형식으로 명시된 경우 해당 주소, 없으면 "gpttitti@hansung.ac.kr"
+
+  Grounding rules:
    * 엔티티는 반복적으로 의미를 가지는 개념만 추출한다.
      즉, 다른 이메일에서도 동일한 의미로 재등장할 수 있는 것만 포함한다.
      * 다음은 엔티티에서 제외한다:
@@ -36,7 +44,7 @@ The input may be an email, a structured table, or plain text — adapt according
      예) '최지유'와 'gpttitti@hansung.ac.kr'이 같은 사람이면
      '최지유' 하나만 추출한다.
 
-   Topic extraction rules:
+  Topic extraction rules:
    * Topic은 해당 메일을 관통하는 맥락적 주제여야 한다.
      (예: "Claude Pro 구독 결제", "웹 개발 과외 일정 조율")
    * 단순 파일명(.pdf, .txt, .html 등), 코드명,
@@ -46,13 +54,13 @@ The input may be an email, a structured table, or plain text — adapt according
      예) '과제5'와 '플라스크 전화번호관리 과제'가 같은 내용이면
      더 구체적인 이름 하나만 추출한다.
 
-   Event extraction rules:
+  Event extraction rules:
    * Event는 반드시 명시적인 날짜 또는 시간 정보가 텍스트에 존재해야 한다.
    * 'Schedule' 필드를 채울 수 없는 경우 Event 엔티티를 생성하지 않는다.
    * 수업 제목, 콘텐츠 이름, 회차 제목 등은 일정 정보가 없으면
      Event로 추출하지 않는다.
 
-   Label extraction rules:
+  Label extraction rules:
    * LABEL 엔티티는 반드시 텍스트의 '[라벨 정보]' 필드에 명시된 값만 추출한다.
    * '[라벨 정보]' 필드의 값이 "없음"이거나 필드 자체가 없으면
      LABEL 엔티티를 생성하지 않는다.
@@ -71,9 +79,11 @@ The input may be an email, a structured table, or plain text — adapt according
    Relationship directions are fixed — do not reverse them:
    | Type          | Source       | Target       | When to use                         |
    |---------------|--------------|--------------|-------------------------------------|
-   | SENT_BY       | Person       | Person       | Email의 발신자                        |
-   | SENT_TO       | Person       | Person       | Email의 직접 수신자                   |
-   | CC_TO         | Person       | Person       | Email의 참조 수신자                   |
+   | SENT_TO       | Myself       | Email        | 내가 수신한 메일 |
+   | SENT_BY       | Myself       | Email        | 내가 발신한 메일 |
+   | SENT_MYSELF   | Myself       | Email        | 자신에게 보낸 메일 |
+   | AFFILIATED_WITH | Person     | Organization | 소속 관계 |
+   | SCHEDULES     | Email        | Event        | 일정 관련 |
    | DISCUSSED     | Email        | Topic        | Email 본문에서 다루는 맥락적 주제      |
    | BELONGS_TO    | Person       | Organization | 사람의 소속 조직 (Organization만 가능) |
    | SCHEDULED_FOR | Email        | Event        | Email에 언급된 일정                   |

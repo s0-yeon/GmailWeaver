@@ -1129,8 +1129,8 @@
       async function postStat(endpoint, gmailId) {
         const res = await fetch(endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ gmail_id: gmailId })
+          headers: { 'Content-Type': 'application/json' }, //내가 보내는게 json이야~
+          body: JSON.stringify({ gmail_id: gmailId }) // json 객체 생성
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
@@ -1150,7 +1150,7 @@
           });
           return;
         }
-
+        
         // 다섯 API 병렬 호출
         const [senderResult, kwResult, afResult, syncResult, ratingResult] = await Promise.allSettled([
           postStat('/mail-stats', gmailId),

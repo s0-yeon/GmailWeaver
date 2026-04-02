@@ -29,13 +29,13 @@ function _runSync(mode) {
     // 전체 갱신할 때
     if (mode === "rewrite") {
       var queryAll = "in:inbox OR in:sent";
-      threads = GmailApp.search(queryAll, 0, 200);
+      threads = GmailApp.search(queryAll, 0, 50);
       threads.forEach(function (thread) {
         // 각 스레드 순회
         thread.getMessages().forEach(function (msg) {
           // 스레드 속 메일 순회
           count++;
-          allText += _buildMessageText(msg, myEmail, count) + "\n"; // 메일 본문 내용 추가
+          allText += _buildMessageText(msg, myEmail, count) + "\n\n"; // 메일 본문 내용 추가
           allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));
         });
       });
@@ -102,7 +102,7 @@ function _runSync(mode) {
     // 새로운 메일만 추가할 때 처리
     newMessages.forEach(function (msg) {
       count++;
-      allText += _buildMessageText(msg, myEmail, count) + "\n";
+      allText += _buildMessageText(msg, myEmail, count) + "\n\n";
       allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));
     });
 
@@ -359,102 +359,109 @@ function onSaveCalendarWithManualTitle(e) {
 }
 
 // 공통 유틸
+// 발신인, 수신인, 참조인 등 Person type 정규화
+function _parsePerson(raw) {
+  if (!raw || !raw.trim()) return null;
+  var match = raw.match(/^"?([^"<]+?)"?\s*<([^>]+)>$/);
+  if (match) {
+    var name = match[1]   
+      .replace(/\(.*?\)/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    var account = match[2].trim().toLowerCase();
+    return { name: name, account: account };
+  } else {               
+    var account = raw.trim().toLowerCase();
+    return { name: account, account: account };
+  }
+}
+
+// 복수 CC 처리
+function _parsePersonList(raw) {
+  if (!raw || !raw.trim()) return [];
+  return raw.split(',')
+    .map(function(s) { return _parsePerson(s.trim()); })
+    .filter(function(p) { return p !== null; });
+}
+
+// Person type 포맷팅
+function _formatPerson(p) {
+  if (!p) return "없음";  
+  if (p.name !== p.account) return p.name + " <" + p.account + ">";   // 이름 + 계정 형태 
+  return "<" + p.account + ">";   // 계정만 있는 형태
+} 
+
 // 메일 1개의 TXT 블록 생성
 function _buildMessageText(msg, myEmail, mailIndex) {
   // 1) 기본 정보
-  var id = msg.getId(); // 메시지 ID
-  var from = msg.getFrom() || ""; // 송신인
-  var to = msg.getTo() || ""; // 수신인
-  var cc = msg.getCc() || ""; // 참조
-  var subject = msg.getSubject() || "(제목 없음)"; // 메시지 제목
+  var id = msg.getId();
+  var fromRaw = msg.getFrom();
+  var from = _parsePerson(fromRaw);
+  var direction = (from && from.account === myEmail.toLowerCase()) ? "발신" : "수신";
+  var to = _parsePersonList(msg.getTo());
+  var ccRaw = msg.getCc();
+  var cc = _parsePersonList(ccRaw);
+  var subject = msg.getSubject() || "(제목 없음)";
   var date = Utilities.formatDate(
-    // 날짜
     msg.getDate(),
     Session.getScriptTimeZone(),
-    "yyyy-MM-dd HH:mm:ss", // 문자열로 정규화
+    "yyyy-MM-dd HH:mm:ss"
   );
 
-  // 2) 수신/발신 구분
-  var direction = from.includes(myEmail) ? "발신" : "수신";
+  // 3) 라벨 정보 
+  var thread     = msg.getThread();
+  var userLabels = thread.getLabels().map(function(l) { return l.getName(); });
+  var labelInfo  = userLabels.length > 0 ? userLabels.join(", ") : "없음";
 
-  // 3) 라벨 정보 처리
-  var thread = msg.getThread();
-  var userLabels = thread.getLabels().map(function (label) {
-    return label.getName();
-  });
-
-  var labelInfo = userLabels.length > 0 ? userLabels.join(", ") : "없음";
-
-  // 4) 첨부파일 처리
-  var atts = msg.getAttachments({ includeInlineImages: false }); // 본문에 인라인 이미지로 삽입된 경우 제외
-  var attachmentInfo = ""; // 첨부파일 정보. TXT 기록용
+  // 4) 첨부파일
+  var atts = msg.getAttachments({ includeInlineImages: false });
+  var attachmentInfo;
 
   if (atts.length === 0) {
-    attachmentInfo = "첨부파일: 없음";
+    attachmentInfo = "없음";
   } else {
-    attachmentInfo =
-      "첨부파일:\n" +
-      atts
-        .map(function (a, i) {
-          var name = a.getName() || "attachment_" + (i + 1);
-          var mime = a.getContentType() || "application/octet-stream";
-          var size = a.getSize();
-          var lowerName = name.toLowerCase();
-
-          // 확장자 및 MIME 타입 체크 확장
-          var isSupported =
-            lowerName.endsWith(".pdf") ||
-            lowerName.endsWith(".docx") ||
-            lowerName.endsWith(".hwp") ||
-            lowerName.endsWith(".pptx") ||
-            lowerName.endsWith(".xlsx") ||
-            lowerName.endsWith(".csv") ||
-            lowerName.endsWith(".txt");
-
-          var status = "";
-
-          if (!isSupported) {
-            status = "업로드 제외: 형식 미지원";
-          } else if (size > 10 * 1024 * 1024) {
-            status = "업로드 제외: 용량 초과";
-          } else {
-            status = "업로드 포함";
-          }
-
-          return (
-            "- " +
-            name +
-            " (" +
-            (size / 1024).toFixed(1) +
-            " KB) [" +
-            status +
-            "]"
-          );
-        })
-        .join("\n");
+    attachmentInfo = atts.map(function(a, i) {
+      var name  = a.getName() || "attachment_" + (i + 1);
+      var size  = a.getSize();
+      var lower = name.toLowerCase();
+      var supported = [".pdf",".docx",".hwp",".pptx",".xlsx",".csv",".txt"]
+        .some(function(ext) { return lower.endsWith(ext); });
+      var status = !supported           ? "제외: 형식 미지원"
+                 : size > 10*1024*1024  ? "제외: 용량 초과"
+                 :                        "포함";
+      return "- " + name + " (" + (size/1024).toFixed(1) + " KB) [" + status + "]";
+    }).join("\n");
   }
 
-  var body = msg.getPlainBody() || "";
   // 본문 input txt 필요없는 요소 줄이기
-  body = body.replace(/\r\n/g, "\n"); // \r\n (윈도우 방식) -> \n 변경
-  body = body.replace(/\[image:[^\]]*\]/gi, ""); // [image: ] 제거
-  body = body.replace(/[ \t]+/g, " "); // 연속 스페이스, 탭 -> 1개
-  body = body.replace(/\n{2,}/g, "\n"); // 연속 줄바꿈 -> 1줄 줄바꿈
-  body = body.replace(/ \n/g, "\n"); // 줄 끝 스페이스 제거
-  body = body.replace(/\n /g, "\n"); // 줄 시작 스페이스 제거
+  var body = (msg.getPlainBody() || "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\[image:[^\]]*\]/gi, "")
+    .replace(/<https?:\/\/[^>]+>/g, "")    // <URL> 형태 제거
+    .replace(/https?:\/\/\S+/g, "")        // 일반 URL 제거
+    .replace(/unsubscribe[\s\S]*$/i, "")   // footer 제거
+    .replace(/opt.out[\s\S]*$/i, "")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/ \n/g, "\n")
+    .replace(/\n /g, "\n")
+    .trim();
+
+  var ccStr = cc.length > 0 ? cc.map(_formatPerson).join(", ") : "없음";
 
   return [
     "============================================================",
     "[메일 " + mailIndex + "]",
+    "",
     "ID: " + id,
-    "구분: " + direction,
     "제목: " + subject,
-    "발신인: " + from,
-    "수신인: " + to,
-    "참조(CC): " + cc,
+    "구분: " + direction,
     "날짜: " + date,
     "",
-
+    "발신인: " + _formatPerson(from),
+    "수신인: " + (to.length > 0 ? to.map(_formatPerson).join(", ") : "없음"),
+    "참조(CC): " + ccStr,
+    "",
     "[라벨 정보]",
     labelInfo,
     "",
@@ -463,7 +470,6 @@ function _buildMessageText(msg, myEmail, mailIndex) {
     "",
     "[메일 본문]",
     body,
-    "============================================================",
   ].join("\n");
 }
 

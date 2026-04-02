@@ -1,5 +1,4 @@
 // src/apps-script/common.js
-
 var TunnelURL = "https://detainable-thumbless-arnav.ngrok-free.dev"; // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
 const WEBAPP_URL =
   "https://script.google.com/macros/s/AKfycbxQN-o7ZKI-daT-D-8h9YLo63IUefp9ShJGpZxWEPwuh1A6gH6kNMrzwP07o46eh6WE/exec"; // Apps Script Web App으로 배포된 URL
