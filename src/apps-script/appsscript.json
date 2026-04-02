@@ -15,11 +15,7 @@
     "https://www.googleapis.com/auth/calendar",
     "https://www.googleapis.com/auth/script.scriptapp"
   ],
-
-  "urlFetchWhitelist": [
-    "https://laevorotatory-nonnutritively-nelle.ngrok-free.dev/"
-  ],
-
+  "urlFetchWhitelist": ["https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev/"],
   "addOns": {
     "common": {
       "name": "🫒 Olive",
