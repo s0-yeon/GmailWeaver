@@ -360,7 +360,26 @@
         <!-- /footer content -->
       </div>
     </div>    <!-- Compiled JavaScript (Bootstrap and vendor scripts) -->
-    
-	
+
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const gmailId = sessionStorage.getItem('gw_gmail_id');
+        if (!gmailId) return;
+        try {
+          const res = await fetch('/mail-stats', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gmail_id: gmailId })
+          });
+          if (!res.ok) return;
+          const json = await res.json();
+          console.log('[mail-stats] 응답:', json);
+          // TODO: json.data를 차트에 반영
+        } catch (err) {
+          console.error('[mail-stats] 오류:', err);
+        }
+      });
+    </script>
+
   </body>
 </html>

@@ -394,5 +394,33 @@
         </footer>
       </div>
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const gmailId = sessionStorage.getItem('gw_gmail_id');
+        if (!gmailId) {
+          console.warn('[mail-stats] gw_gmail_id가 sessionStorage에 없습니다.');
+          return;
+        }
+
+        try {
+          const res = await fetch('/mail-stats', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gmail_id: gmailId })
+          });
+
+          if (!res.ok) {
+            console.error('[mail-stats] 요청 실패:', res.status);
+            return;
+          }
+
+          const json = await res.json();
+          console.log('[mail-stats] 응답:', json);
+          // TODO: json.data를 차트에 반영
+        } catch (err) {
+          console.error('[mail-stats] 오류:', err);
+        }
+      });
+    </script>
   </body>
 </html>

@@ -16,9 +16,7 @@
     "https://www.googleapis.com/auth/script.scriptapp"
   ],
 
-  "urlFetchWhitelist": [
-    "https://laevorotatory-nonnutritively-nelle.ngrok-free.dev/"
-  ],
+  "urlFetchWhitelist": ["https://detainable-thumbless-arnav.ngrok-free.dev/"],
 
   "addOns": {
     "common": {
