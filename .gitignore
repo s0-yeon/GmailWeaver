@@ -21,6 +21,7 @@ src/parquet/input/attachment/
 # 개인정보 보호: input 폴더는 유지(구조만), 내용물은 무시
 src/parquet/input/*
 !src/parquet/input/.gitkeep
+
 user_data/*
 !user_data/.gitkeep
 

@@ -4,53 +4,44 @@
 ### LLM settings ###
 ## There are a number of settings to tune the threading and token limits for LLM calls - check the docs.
 
-encoding_model: cl100k_base # this needs to be matched to your model!
+encoding_model: o200k_base  # cl100k_base에서 변경 (gpt-4o-mini 모델과 토크나이저 일치)
 
 models:
   default_chat_model:
     type: openai_chat
-    model: gpt-4o-mini
+    model: ${GRAPHRAG_LLM_MODEL} 
     api_key: ${GRAPHRAG_API_KEY}
-    model_supports_json: true
+    model_supports_json: true # JSON 출력 여부 지원
+    concurrent_requests: 15   # 동시에 보낼 수 있는 최대 요청 수. API Limit 주의
+    async_mode: threaded      # 멀티스레딩 방식으로 비동기 처리
+    retry_strategy: native    # 요청 실패 시 재시도 전략. 서버 응답에 따라 최적으로 자동 재시도
+    max_retries: -1           # set to -1 for dynamic retry logic (most optimal setting based on server response)
+    # tokens_per_minute: 180000   # 분당 토큰/요청 제한
+    # requests_per_minute: 0 
+    temperature: 0    # 답변의 일관성과 재현성 확보 (RAG에서는 보통 0을 권장)
 
   default_embedding_model:
     type: openai_embedding
-    model: text-embedding-3-small
+    model: ${GRAPHRAG_EMBEDDING_MODEL}
     api_key: ${GRAPHRAG_API_KEY}
+    model_supports_json: true 
+    concurrent_requests: 15
+    async_mode: threaded     
+    retry_strategy: native   
+    max_retries: -1          
+    # tokens_per_minute: 180000   
+    # requests_per_minute: 0 
 
-llm:
-  api_key: ${GRAPHRAG_API_KEY} # set this in the generated .env file
-  type: openai_chat # or azure_openai_chat
-  model: gpt-4o-mini
-  model_supports_json: true # recommended if this is available for your model.
-  # audience: "https://cognitiveservices.azure.com/.default"
-  # api_base: https://<instance>.openai.azure.com
-  # api_version: 2024-02-15-preview
-  # organization: <organization_id>
-  # deployment_name: <azure_model_deployment_name>
-
-parallelization:
-  stagger: 0.3
-  num_threads: 2
-
-async_mode: threaded # or asyncio
-
-embeddings:
-  async_mode: threaded # or asyncio
-  vector_store:
+vector_store:
+  default_vector_store:
     type: lancedb
-    db_uri: "output/lancedb"
+    db_uri: output/lancedb
     container_name: default
-    overwrite: true
-  llm:
-    api_key: ${GRAPHRAG_API_KEY}
-    type: openai_embedding # or azure_openai_embedding
-    model: text-embedding-3-small
-    # api_base: https://<instance>.openai.azure.com
-    # api_version: 2024-02-15-preview
-    # audience: "https://cognitiveservices.azure.com/.default"
-    # organization: <organization_id>
-    # deployment_name: <azure_model_deployment_name>
+    overwrite: True
+
+embed_text:
+  model_id: default_embedding_model
+  vector_store_id: default_vector_store
 
 ### Input settings ###
 
@@ -62,8 +53,8 @@ input:
   file_pattern: ".*\\.txt$$"
 
 chunks:
-  size: 2000
-  overlap: 200
+  size: 600 # 2000에서 하향
+  overlap: 100  
   group_by_columns: [id]
 
 ### Storage settings ###
@@ -93,27 +84,31 @@ update_index_storage:
 skip_workflows: []
 
 extract_graph:
+  chat_model_id: default_chat_model
   prompt: "prompts/entity_extraction.txt"
-  entity_types: [Myself, Email, Person, Organization, Topic, Label, Event, Attachment]
-  max_gleanings: 1
+  entity_types: [Myself, Email, Person, Organization, Topic, Label, Event, Attachment]  # 추출하고자 하는 핵심 도메인 개체 정의
+  max_gleanings: 1  # 0에서 상향
 
 summarize_descriptions:
+  chat_model_id: default_chat_model
   prompt: "prompts/summarize_descriptions.txt"
-  max_length: 300
+  max_length: 400   # 300에서 상향
 
 extract_claims:
+  chat_model_id: default_chat_model
   enabled: false
   prompt: "prompts/claim_extraction.txt"
   description: "Any claims or facts that could be relevant to information discovery."
   max_gleanings: 1
 
 community_reports:
+  chat_model_id: default_chat_model
   graph_prompt: "prompts/community_report.txt"
-  max_length: 2000
-  max_input_length: 8000
+  max_length: 2000        # 생성되는 커뮤니티 요약 리포트의 최대 토큰 수 (출력 제한)
+  max_input_length: 8000  # Context Window에 포함될 최대 토큰 수 (입력 제한)
 
 cluster_graph:
-  max_cluster_size: 20
+  max_cluster_size: 15  # 20에서 하향
 
 embed_graph:
   enabled: false # if true, will generate node2vec embeddings for nodes
@@ -129,14 +124,41 @@ snapshots:
   transient: false
 
 local_search:
+  chat_model_id: default_chat_model
+  embedding_model_id: default_embedding_model
   prompt: "prompts/local_search_system_prompt.txt"
-  text_unit_prop: 0.3
-  max_context_tokens: 1000
+  text_unit_prop: 0.5           # 전체 Contetxt Window에서 Source Doucument가 차지하는 비율. 50%
+  community_prop: 0.1           # Context Window에서 Community Report가 차지하는 비율. 10%
+  conversation_history_max_turns: 0           # 검색 시 고려할 이전 대화의 최대 턴 수. 0이므로 현재 질문만 처리
+  conversation_history_user_turns_only: True  # 검색 시 사용자의 질문 이력만 포함
+  top_k_mapped_entities: 30     # 질문 시 벡터 검색으로 추출할 엔티티의 최대 개수
+  top_k_relationships: 30       # 추출된 엔티티간 엣지의 최대 개수
+  include_entity_rank: true     # 엔티티 중요도를 Context에 포함
+  include_relationship_weight: true   # 엣지의 강도 포함
+  include_community_rank: False       # 커뮤니티 랭크 미포함
+  embedding_vectorstore_key: EntityVectorStoreKey.ID  # ID는 고유 식별자. TITL은 엔티티의 이름
+  max_context_tokens: 6000      # Context Window의 최대 토큰
 
 global_search:
+  chat_model_id: default_chat_model
   map_prompt: "prompts/global_search_map_system_prompt.txt"
   reduce_prompt: "prompts/global_search_reduce_system_prompt.txt"
   knowledge_prompt: "prompts/global_search_knowledge_system_prompt.txt"
+  use_community_summary: False      # False는 커뮤니티의 전체 상세 리포트 사용. Ture는 짧은 요약본만 사용
+  shuffle_data: True                # Context 조립 전 순서 섞기 (Lost in the middle 현상 방지)
+  include_community_rank: True      # 커뮤니티의 중요도(계층 수준 등) 포함
+  include_community_weight: true    # 커뮤니티의 가중치(언급 횟수 등) 포함
+  community_weight_name: "occurrence weight"  # 가중치의 이름 설정. "출현 빈도 가중치"
+  normalize_community_weight: True  # 가중치 정규화 (0~1)
+  # max_tokens: 12_000  
 
 drift_search:
+  chat_model_id: default_chat_model
+  embedding_model_id: default_embedding_model
   prompt: "prompts/drift_search_system_prompt.txt"
+#   reduce_prompt: "prompts/drift_search_reduce_prompt.txt"
+
+# basic_search:
+#   chat_model_id: default_chat_model
+#   embedding_model_id: default_embedding_model
+#   prompt: "prompts/basic_search_system_prompt.txt"
