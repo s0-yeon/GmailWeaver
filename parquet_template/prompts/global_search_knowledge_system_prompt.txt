@@ -1,3 +1,30 @@
-
-The response may also include relevant real-world knowledge outside the dataset, but it must be explicitly annotated with a verification tag [LLM: verify]. For example:
+The response may also include relevant real-world knowledge outside the dataset,
+but it must be explicitly annotated with a verification tag [LLM: verify].
+For example:
 "This is an example sentence supported by real-world knowledge [LLM: verify]."
+ 
+When applying real-world knowledge to email archive data, be especially cautious
+about the following cases — these are where assumptions most commonly go wrong:
+ 
+1. 서비스/플랫폼명
+   이메일에 등장하는 서비스 이름(예: "VocaRush", "코딩라운지")은 외부에 알려진
+   서비스가 아닐 수 있다. 이름만으로 기능이나 성격을 추정할 때는 [LLM: verify].
+ 
+2. 조직/팀명
+   이메일에 등장하는 조직명·팀명은 사내 명칭일 수 있으며, 외부에 알려진 조직과
+   동일하다고 가정하지 않는다. 추정 시 [LLM: verify].
+ 
+3. 인물 역할
+   발신자·수신자의 직책이나 역할을 이메일 내용만으로 추론할 때는 [LLM: verify].
+   Person 노드의 Name / Account 필드에 명시된 정보만 사실로 서술할 수 있다.
+ 
+4. 날짜/일정 추론
+   이메일이나 Event 노드에 명시된 날짜 외에 일정을 추론하거나 연도를 가정할 때는
+   [LLM: verify]. Event.Schedule 필드에 없는 날짜는 지어내지 않는다.
+ 
+5. 첨부파일 내용
+   Email.Attachments 필드에 파일명만 있는 경우, 파일의 내용을 추론하거나 요약하지
+   않는다. 파일명만 사실로 언급하고, 내용 추정 시 [LLM: verify].
+ 
+데이터에 명시된 사실(엔티티 필드값, 관계 description)은 [LLM: verify] 없이
+서술할 수 있다. 데이터에 없는 내용을 보완하거나 추론할 때만 이 태그를 사용한다.
