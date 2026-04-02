@@ -389,33 +389,34 @@ function _formatPerson(p) {
   if (!p) return "없음";  
   if (p.name !== p.account) return p.name + " <" + p.account + ">";   // 이름 + 계정 형태 
   return "<" + p.account + ">";   // 계정만 있는 형태
-}
+} 
 
 // 메일 1개의 TXT 블록 생성
 function _buildMessageText(msg, myEmail, mailIndex) {
-  var id      = msg.getId();
-  var from    = _parsePerson(msg.getFrom());
-  var to      = _parsePerson(msg.getTo());
-  var ccRaw   = msg.getCc();
-  var cc      = _parsePersonList(ccRaw);
+  // 1) 기본 정보
+  var id = msg.getId();
+  var fromRaw = msg.getFrom();
+  var from = _parsePerson(fromRaw);
+  var direction = (from && from.account === myEmail.toLowerCase()) ? "발신" : "수신";
+  var to = _parsePersonList(msg.getTo());
+  var ccRaw = msg.getCc();
+  var cc = _parsePersonList(ccRaw);
   var subject = msg.getSubject() || "(제목 없음)";
-  var date    = Utilities.formatDate(
+  var date = Utilities.formatDate(
     msg.getDate(),
     Session.getScriptTimeZone(),
     "yyyy-MM-dd HH:mm:ss"
   );
 
-  // myEmail과 일치하면 이름 주입
-  if (to && to.account === myEmail.toLowerCase() && to.name === to.account) {
-    to.name = myEmail; // 실명을 모르면 계정 그대로, 알면 여기서 고정값으로 교체
-  }
-
+  // 3) 라벨 정보 
   var thread     = msg.getThread();
   var userLabels = thread.getLabels().map(function(l) { return l.getName(); });
   var labelInfo  = userLabels.length > 0 ? userLabels.join(", ") : "없음";
 
+  // 4) 첨부파일
   var atts = msg.getAttachments({ includeInlineImages: false });
   var attachmentInfo;
+
   if (atts.length === 0) {
     attachmentInfo = "없음";
   } else {
@@ -432,9 +433,14 @@ function _buildMessageText(msg, myEmail, mailIndex) {
     }).join("\n");
   }
 
+  // 본문 input txt 필요없는 요소 줄이기
   var body = (msg.getPlainBody() || "")
     .replace(/\r\n/g, "\n")
     .replace(/\[image:[^\]]*\]/gi, "")
+    .replace(/<https?:\/\/[^>]+>/g, "")    // <URL> 형태 제거
+    .replace(/https?:\/\/\S+/g, "")        // 일반 URL 제거
+    .replace(/unsubscribe[\s\S]*$/i, "")   // footer 제거
+    .replace(/opt.out[\s\S]*$/i, "")
     .replace(/[ \t]+/g, " ")
     .replace(/\n{3,}/g, "\n\n")
     .replace(/ \n/g, "\n")
@@ -449,10 +455,11 @@ function _buildMessageText(msg, myEmail, mailIndex) {
     "",
     "ID: " + id,
     "제목: " + subject,
-    "날짜 " + date,
+    "구분: " + direction,
+    "날짜: " + date,
     "",
     "발신인: " + _formatPerson(from),
-    "수신인: " + _formatPerson(to),
+    "수신인: " + (to.length > 0 ? to.map(_formatPerson).join(", ") : "없음"),
     "참조(CC): " + ccStr,
     "",
     "[라벨 정보]",
