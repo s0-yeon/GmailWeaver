@@ -12,9 +12,14 @@
     "https://www.googleapis.com/auth/drive.addons.metadata.readonly",
     "https://www.googleapis.com/auth/script.external_request",
     "https://www.googleapis.com/auth/userinfo.email",
-    "https://www.googleapis.com/auth/calendar"
+    "https://www.googleapis.com/auth/calendar",
+    "https://www.googleapis.com/auth/script.scriptapp"
   ],
-  "urlFetchWhitelist": ["https://transpalmar-christine-noneducatory.ngrok-free.dev/"],
+
+  "urlFetchWhitelist": [
+    "https://laevorotatory-nonnutritively-nelle.ngrok-free.dev/"
+  ],
+
   "addOns": {
     "common": {
       "name": "🫒 Olive",
