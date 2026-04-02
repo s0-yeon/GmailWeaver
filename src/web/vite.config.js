@@ -144,7 +144,13 @@ export default defineConfig({
         label2: 'production/label2.html',
 
         // API 파이프라인 테스트 (Dev)
-        api_test: 'production/api_test.html'
+        api_test: 'production/api_test.html',
+
+        // 그래프 시각화
+        graph_viz: 'production/graph-viz.html',
+
+        // 메일 통계 요약
+        recap: 'production/recap.html'
       }
     },
     minify: 'terser',
