@@ -50,3 +50,8 @@ def get_job(job_id):
         if not job:
             return None
         return dict(job)    # 복사본(dict(job))을 반환
+    
+# 전체 Job 조회 함수
+def get_all_jobs():
+    with _jobs_lock:
+        return {job_id: dict(job) for job_id, job in _jobs.items()}
