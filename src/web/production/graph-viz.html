@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:* https://api.example.com https://*.googleapis.com https://*.ngrok-free.dev https://*.ngrok-free.app https://*.ngrok.io; frame-src 'self'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <title>Graph Viz | GmailWeaver</title>
+    <script type="module" src="/src/main-minimal.js"></script>
+    <style>
+      .site_title_text {
+        font-size: 1.2rem; font-weight: 700; color: #fff;
+        letter-spacing: 0.5px; text-decoration: none;
+        display: flex; align-items: center; gap: 8px;
+      }
+      .site_title_text i { font-size: 1.3rem; color: #26B99A; }
+
+      #graph-section {
+        width: 100%;
+        height: calc(100vh - 80px);
+        position: relative;
+      }
+      #graph { display: block; width: 100%; height: 100%; }
+    </style>
+  </head>
+
+  <body class="nav-md page-graph-viz">
+    <div class="container body">
+      <div class="main_container">
+
+        <!-- Sidebar -->
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title site_title_text">
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
+                Olive
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
+              </div>
+              <div class="profile_info">
+                <span data-i18n="sidebar.welcome">Welcome,</span>
+                <h4 id="google-profile-name">-</h4>
+              </div>
+            </div>
+            <br />
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li>
+                    <a><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="index2.html"><i class="bi bi-tag"></i> 라벨 목록</a></li>
+                      <li><a href="label2.html"><i class="bi bi-circle-half"></i> 라벨 초원 ✦</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li class="active">
+                    <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li class="active"><a href="graph-viz.html"><i class="bi bi-diagram-3"></i> <span data-i18n="nav.graph_viz">Graph Viz</span></a></li>
+                      <li><a href="recap.html"><i class="bi bi-clipboard-data"></i> Recap</a></li>
+                      <li><a href="api_test.html"><i class="bi bi-terminal"></i> API Test <span class="badge bg-warning text-dark">Dev</span></a></li>
+                    </ul>
+                  </li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span><span class="bi bi-chevron-right"></span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Top Navigation -->
+        <div class="top_nav">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fas fa-bars"></i></a>
+            </div>
+            <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color:inherit;">
+                    <i class="bi bi-translate" style="font-size: 1.2rem; vertical-align: middle;"></i>
+                    <span id="current-lang" style="margin-left: 4px; font-size: 0.9rem;">KO</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ko">🇰🇷 한국어</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="en">🇺🇸 English</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ja">🇯🇵 日本語</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        <!-- Page Content -->
+        <main class="right_col" role="main" style="padding:0;">
+          <div id="graph-section">
+            <svg id="graph" width="100%" height="100%"></svg>
+          </div>
+        </main>
+
+        <footer>
+          <div class="float-end">
+            GmailWeaver &mdash; Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+
+      </div>
+    </div>
+
+    <script>
+      // 이름/gmail_id 처리
+      const params = new URLSearchParams(window.location.search);
+      const nameParam = params.get('name');
+      const name = nameParam
+        ? decodeURIComponent(nameParam)
+        : (sessionStorage.getItem('gw_user_name') || '-');
+      if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
+
+      const gmailIdParam = params.get('gmail_id');
+      if (gmailIdParam) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+
+      document.getElementById('google-profile-name').textContent = name;
+
+      // 그래프 로드
+      function _loadScript(src) {
+        return new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          s.src = src; s.onload = resolve; s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      }
+
+      window.addEventListener('load', function() {
+        var gmailId = sessionStorage.getItem('gw_gmail_id') || (name + '@gmail.com');
+        _loadScript('https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js')
+          .then(function() { return _loadScript('/graph-render.js'); })
+          .then(function() {
+            return fetch('/graph-data?gmail_id=' + encodeURIComponent(gmailId));
+          })
+          .then(function(res) { return res.json(); })
+          .then(function(data) { renderGraph(document.getElementById('graph'), data); })
+          .catch(function(err) { console.error('그래프 로드 실패:', err); });
+      });
+    </script>
+  </body>
+</html>

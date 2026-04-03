@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Gentelella Alela! | Vector Maps</title>
+
+  <!-- Compiled CSS (includes Bootstrap, Font Awesome, and all vendor styles) -->
+  <script type="module" src="/src/main-core.js"></script>
+</head>
+
+
+<body class="nav-md page-maps">
+
+  <div class="container body">
+
+
+    <div class="main_container">
+
+        <!-- Sidebar -->
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title site_title_text">
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
+                Olive
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
+              </div>
+              <div class="profile_info">
+                <span data-i18n="sidebar.welcome">Welcome,</span>
+                <h4 id="google-profile-name">-</h4>
+              </div>
+            </div>
+            <br />
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="index2.html"><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li>
+                    <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="api_test.html"><i class="bi bi-terminal"></i> API Test <span class="badge bg-warning text-dark">Dev</span></a></li>
+                    </ul>
+                  </li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span><span class="bi bi-chevron-right"></span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- top navigation -->
+      <div class="top_nav">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fas fa-bars"></i></a>
+              </div>
+              <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle info-number" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-envelope"></i>
+                    <span class="badge bg-green">6</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end list-unstyled msg_list dropdown-menu-lg" role="menu" aria-labelledby="navbarDropdown1">
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    <li class="nav-item">
+                      <div class="text-center">
+                        <a class="dropdown-item">
+                          <strong>See All Alerts</strong>
+                          <i class="fas fa-angle-right"></i>
+                        </a>
+                      </div>
+                  </ul>
+                </li>
+                                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color:inherit;">
+                    <i class="bi bi-translate" style="font-size: 1.2rem; vertical-align: middle;"></i>
+                    <span id="current-lang" style="margin-left: 4px; font-size: 0.9rem;">KO</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ko" data-i18n="lang.ko">🇰🇷 한국어</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="en" data-i18n="lang.en">🇺🇸 English</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ja" data-i18n="lang.ja">🇯🇵 日本語</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      <!-- /top navigation -->
+
+      <!-- page content -->
+
+
+      <main class="right_col" role="main" aria-label="Main content">
+        <div class="">
+          <div class="page-title">
+            <div class="title_left">
+              <h3>Vector Maps <small>Leaflet.js</small></h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h4>World Map</h4>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div id="leaflet-map" style="height: 500px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- /page content -->
+
+      <!-- footer content -->
+      <footer>
+        <div class="float-end">
+          Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+        </div>
+        <div class="clearfix"></div>
+      </footer>
+      <!-- /footer content -->
+    </div>
+  </div>
+
+  <script>
+    // Initialize Leaflet map when page loads
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        // Load the charts module which includes Leaflet
+        const charts = await loadModule('charts');
+        
+        // Initialize the Leaflet map
+        const map = L.map('leaflet-map').setView([40.7128, -74.0060], 4);
+        
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Add some sample markers
+        const cities = [
+          { name: 'New York', lat: 40.7128, lng: -74.0060 },
+          { name: 'London', lat: 51.5074, lng: -0.1278 },
+          { name: 'Tokyo', lat: 35.6762, lng: 139.6503 },
+          { name: 'Sydney', lat: -33.8688, lng: 151.2093 },
+          { name: 'São Paulo', lat: -23.5505, lng: -46.6333 }
+        ];
+        
+        cities.forEach(city => {
+          L.marker([city.lat, city.lng])
+            .addTo(map)
+            .bindPopup(`<b>${city.name}</b><br>Sample location marker`);
+        });
+        
+      } catch (error) {
+        document.getElementById('leaflet-map').innerHTML = 
+          '<div class="d-flex align-items-center justify-content-center h-100"><div class="text-center"><i class="fas fa-map fa-3x text-muted mb-3"></i><p class="text-muted">Map failed to load</p></div></div>';
+      }
+    });
+  </script>
+
+</body>
+
+</html>
