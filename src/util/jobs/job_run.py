@@ -266,7 +266,7 @@ def build_graphrag_update(job_id,paths, env):
 # 전체 파이프라인 실행 (index 기준)
 
 
-def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None):
+def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None, added_count=0):
     print(f"[JOB][pipeline] START job_id={job_id}")
     append_job_log(job_id, "[START] run_graph_pipeline")
 
@@ -306,7 +306,8 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None):
                 user_account_id=paths.GMAIL_ID,
                 started_at=time_result["started_at"],
                 ended_at=time_result["ended_at"],
-                index_time=formatted_time
+                index_time=formatted_time,
+                my_mail_count=added_count
             )
 
 
@@ -352,7 +353,7 @@ def run_graph_update_pipeline(job_id, paths, env):
 
 # 백그라운드 전체 파이프라인 실행 (index 기준)
 
-def start_graph_pipeline_background(job_id,paths, env, attachment_texts_by_mail=None):
+def start_graph_pipeline_background(job_id,paths, env, attachment_texts_by_mail=None, added_count=0):
     print(f"[JOB][pipeline] BACKGROUND START job_id={job_id}")
     append_job_log(job_id, "[INFO] background thread starting")
 
@@ -360,7 +361,7 @@ def start_graph_pipeline_background(job_id,paths, env, attachment_texts_by_mail=
     t = threading.Thread(
 
         target=run_graph_pipeline,  # 실행할 함수: 그래프라그 파이프라인 (인덱싱) 실행 함수
-        args=(job_id, paths, env.copy(), attachment_texts_by_mail),
+        args=(job_id, paths, env.copy(), attachment_texts_by_mail, added_count),
         daemon=True,                # app.py 종료 시 같이 종료
     )
     t.start()  # 스레드 실행 (비동기 시작)

@@ -919,10 +919,10 @@ def upload():
             print(f"[CLEAN] update_output 없음: {update_dir}")
 
         # 첨부는 트리거에서 처리하므로 전달하지 않음
-        start_graph_pipeline_background(job_id, paths, env)
+        start_graph_pipeline_background(job_id, paths, env,added_count=added_count)
 
     else:
-        start_graph_update_pipeline_background(job_id,paths, env)
+        start_graph_update_pipeline_background(job_id,paths, env,added_count=added_count)
 
     return jsonify({
             "ok": True,
