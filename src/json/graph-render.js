@@ -6,10 +6,11 @@
   const COLORS = {
     EMAIL: "#f87171", // 빨강
     PERSON: "#fb923c", // 주황
-    TOPIC: "#fbbf24", // 노랑
+    TOPIC: "#FFE14A", // 노랑
     ORGANIZATION: "#34d399", // 초록
     LABEL: "#60a5fa", // 파랑
     EVENT: "#a78bfa", // 보라
+    ATTACHMENT:   "#94A3B8", // 회청
     unknown: "#c9d1d9", // 회색
   };
   function renderGraph(svgEl, data) {
@@ -75,7 +76,7 @@
           .id((d) => d.label) // 엣지의 source와 target가 label 기준으로 연결
           .distance(80),
       )
-      .force("charge", d3.forceManyBody().strength(-200)) // 노드들 간의 밀어내는 힘
+      .force("charge", d3.forceManyBody().strength(-800)) // 노드들 간의 밀어내는 힘
       .force("collide", d3.forceCollide(30)); // 노드들 겹치지 않도록 함
 
     // 엣지 그리기
