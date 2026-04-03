@@ -87,7 +87,6 @@ extract_graph:
   chat_model_id: default_chat_model
   prompt: "prompts/entity_extraction.txt"
   entity_types: [
-      Myself,
       Email,
       Person,
       Organization,
