@@ -14,7 +14,8 @@ from util.user_path import user_graphrag_init
 # from config.settings import GRAPH_BUILD_SCRIPT, GRAPHRAG_ROOT, BASE_DIR
 
 from config.settings import MAIL_BLOCK_SEP
-
+from util.extract_statics import start_timer,end_timer,format_elapsed_time
+from util.database.db_writer import create_user
 
 # 첨부파일 텍스트 요약 (공백/줄바꿈 제외 500자 미만이면 원문 그대로 반환)
 def _summarize_attachment_text(text: str,paths, filename: str) -> str:
@@ -265,7 +266,7 @@ def build_graphrag_update(job_id,paths, env):
 # 전체 파이프라인 실행 (index 기준)
 
 
-def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None):
+def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None, added_count=0):
     print(f"[JOB][pipeline] START job_id={job_id}")
     append_job_log(job_id, "[START] run_graph_pipeline")
 
@@ -293,8 +294,21 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None):
             _merge_summarized_attachments(paths.MAIL_LATEST_PATH, summarized_by_mail)
             print(f"[JOB][summarize] DONE job_id={job_id}")
 
+        timer = start_timer() #인덱싱 시간 측정용, 측정 시작
         build_graphrag_index(job_id,paths, env)
+        time_result = end_timer(timer) #인덱싱 시간 측정용, 측정 끝
+
         build_graph_json(job_id,paths, env)
+
+        formatted_time = format_elapsed_time(time_result["elapsed_sec"])
+
+        create_user(
+                user_account_id=paths.GMAIL_ID,
+                started_at=time_result["started_at"],
+                ended_at=time_result["ended_at"],
+                index_time=formatted_time,
+                my_mail_count=added_count
+            )
 
 
         update_job(job_id, progress=100, status="done", message="인덱싱 완료")
@@ -339,7 +353,7 @@ def run_graph_update_pipeline(job_id, paths, env):
 
 # 백그라운드 전체 파이프라인 실행 (index 기준)
 
-def start_graph_pipeline_background(job_id,paths, env, attachment_texts_by_mail=None):
+def start_graph_pipeline_background(job_id,paths, env, attachment_texts_by_mail=None, added_count=0):
     print(f"[JOB][pipeline] BACKGROUND START job_id={job_id}")
     append_job_log(job_id, "[INFO] background thread starting")
 
@@ -347,7 +361,7 @@ def start_graph_pipeline_background(job_id,paths, env, attachment_texts_by_mail=
     t = threading.Thread(
 
         target=run_graph_pipeline,  # 실행할 함수: 그래프라그 파이프라인 (인덱싱) 실행 함수
-        args=(job_id, paths, env.copy(), attachment_texts_by_mail),
+        args=(job_id, paths, env.copy(), attachment_texts_by_mail, added_count),
         daemon=True,                # app.py 종료 시 같이 종료
     )
     t.start()  # 스레드 실행 (비동기 시작)
