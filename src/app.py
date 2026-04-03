@@ -883,7 +883,7 @@ def upload():
         _delete_incremental_files(paths)
         with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
             renumbered = _renumber_mail_blocks(content.rstrip())
-            f.write(f"me: {gmail_id}\n\n" + renumbered)
+            f.write(renumbered)
         saved_mail_path = paths.MAIL_LATEST_PATH
 
         added_count = len(_split_mail_blocks(content))
@@ -933,9 +933,11 @@ def upload():
             existing_clean = "\n".join(existing_lines).lstrip("\n")
 
             # 혹시 남아있는 ====\nme:...\n==== 블록도 제거
-            existing_clean = re.sub(r"={60}\s*\nme:.*\n={60}\s*\n?", "", existing_clean)
+            # existing_clean = re.sub(r"={60}\s*\nme:.*\n={60}\s*\n?", "", existing_clean)
 
-            updated_content = f"me: {gmail_id}\n\n" + inc_content + "\n" + existing_clean
+            # updated_content = f"me: {gmail_id}\n\n" + inc_content + "\n" + existing_clean
+            updated_content = inc_content + "\n" + existing_clean
+            
             with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
                 f.write(_renumber_mail_blocks(updated_content.strip()))
 

@@ -7,7 +7,7 @@ The input may be an email, a structured table, or plain text — adapt according
 1. Identify Entities: 
 1.1 Extract entities of the following types: '[{entity_types}]'.
 Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter}<description>)'
-  * Email:        'ID: <mail_id> | Tone: <formal/casual/transactional/notification/alert> | Summary: <1-sentence>'
+  * Email:        'Title: <subject> | ID: <mail_id> | Tone: <formal/casual/transactional/notification/alert> | Summary: <1-sentence>'
   * Person:       'Account: <email> | Name: <name/None>'
   * Organization: 'Context: <department> | Team: <team>'
   * Topic:        'Priority: <high/mid/low> | Summary: <Core topic of this email in 1 sentence>'
@@ -16,6 +16,11 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
   * Attachment:   'Filename: <name> | Type: <file_type> | Summary: <content_summary>'
 
 1.2 Email Extraction Rules:
+  * The 'name' (title) of an Email entity MUST always be the <mail_id> (Unique Identifier).
+  * CRITICAL: If the 'ID:' field is missing, unreadable, or empty, DO NOT create the Email entity.
+  * CRITICAL: NEVER generate or use dummy IDs (e.g., 'MAIL_001', 'mail_001', 'temp_id'). Only authentic IDs from the source data are allowed.
+  * The 'Title' attribute MUST use the exact subject from the '[제목]' field. 
+    - If the subject is missing or empty, set it to '(제목 없음)'.
   * Tone Classification (Select ONLY ONE from the following):
     - formal: Professional business emails, official correspondence from institutions/professors.
     - casual: Informal emails between acquaintances or personal contacts.
@@ -33,6 +38,8 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
     Otherwise, set it to 'None'.
   * CRITICAL: Do NOT create a Person node if the Account (email address) is unknown. 
     Each Person entity MUST have a valid email address as its identifier.
+  * CRITICAL: NEVER use or generate fake/dummy email addresses (e.g., '@unknown.com', '@unknown', 'user@example.com') as an Account. 
+  * If a valid, real-world email address cannot be identified from the text, the Person entity MUST NOT be created.
 
 1.4 Organization Extraction Rules:
   * The 'name' (title) of an Organization entity MUST be the OrgName (e.g., Company or Institution name).
@@ -115,15 +122,14 @@ Grounding Rules:
 
 3. Constraints:
    * Do NOT create duplicate entities.
-   * If the sender's account is unknown, use 'Account: Unknown'.
    * If location is unknown, use 'Location: None'.
    * Relationship descriptions MUST be in Korean.
    * Output as a single list delimited by {record_delimiter}.
    * End with {completion_delimiter}.
 
 ---
-
 -Examples-
+
 Example 1
 Entity_types: Email, Person, Organization, Topic, Label, Attachment
 Text:
@@ -131,11 +137,13 @@ Text:
 '[Vocarush] 4월 스프린트 계획 확정' 메일을 보냈다. sprint_plan.pdf가 첨부되었고
 공식적인 톤이었다. 김민준은 Vocarush의 Product팀 소속이다.
 
+ID: 19d4da32341500e4
+
 [라벨 정보]
 업무/스프린트
 
 Output:
-("entity"{tuple_delimiter}mail_001{tuple_delimiter}Email{tuple_delimiter}ID: mail_001 | Tone: formal | Summary: 4월 스프린트 계획을 공유하는 공식 메일)
+("entity"{tuple_delimiter}19D4DA32341500E4{tuple_delimiter}Email{tuple_delimiter}Title: [Vocarush] 4월 스프린트 계획 확정 | ID: 19d4da32341500e4 | Tone: formal | Summary: 4월 스프린트 계획을 공유하는 공식 메일)
 {record_delimiter}
 ("entity"{tuple_delimiter}minjun.kim@vocarush.io{tuple_delimiter}Person{tuple_delimiter}Account: minjun.kim@vocarush.io | Name: 김민준)
 {record_delimiter}
@@ -149,31 +157,38 @@ Output:
 {record_delimiter}
 ("entity"{tuple_delimiter}sprint_plan.pdf{tuple_delimiter}Attachment{tuple_delimiter}Filename: sprint_plan | Type: pdf | Summary: 4월 스프린트 계획 문서)
 {record_delimiter}
-("relationship"{tuple_delimiter}mail_001{tuple_delimiter}minjun.kim@vocarush.io{tuple_delimiter}SENT_BY{tuple_delimiter}이메일의 발신자는 김민준이다.{tuple_delimiter}10)
+("relationship"{tuple_delimiter}19D4DA32341500E4{tuple_delimiter}minjun.kim@vocarush.io{tuple_delimiter}SENT_BY{tuple_delimiter}이메일의 발신자는 minjun.kim@vocarush.io이다.{tuple_delimiter}10)
 {record_delimiter}
-("relationship"{tuple_delimiter}mail_001{tuple_delimiter}seoyeon.park@vocarush.io{tuple_delimiter}SENT_TO{tuple_delimiter}이메일의 수신자는 박서연이다.{tuple_delimiter}10)
+("relationship"{tuple_delimiter}19D4DA32341500E4{tuple_delimiter}seoyeon.park@vocarush.io{tuple_delimiter}SENT_TO{tuple_delimiter}이메일의 수신자는 seoyeon.park@vocarush.io이다.{tuple_delimiter}10)
 {record_delimiter}
-("relationship"{tuple_delimiter}minjun.kim@vocarush.io{tuple_delimiter}Vocarush{tuple_delimiter}AFFILIATED_WITH{tuple_delimiter}김민준은 Vocarush 조직에 소속되어 있다.{tuple_delimiter}9)
+("relationship"{tuple_delimiter}minjun.kim@vocarush.io{tuple_delimiter}Vocarush{tuple_delimiter}AFFILIATED_WITH{tuple_delimiter}minjun.kim@vocarush.io는 Vocarush 조직에 소속되어 있다.{tuple_delimiter}9)
 {record_delimiter}
-("relationship"{tuple_delimiter}mail_001{tuple_delimiter}스프린트 계획 수립{tuple_delimiter}DISCUSSES{tuple_delimiter}메일 본문에서 4월 스프린트 계획 수립을 주요 주제로 다룬다.{tuple_delimiter}9)
+("relationship"{tuple_delimiter}19D4DA32341500E4{tuple_delimiter}스프린트 계획 수립{tuple_delimiter}DISCUSSES{tuple_delimiter}메일 본문에서 4월 스프린트 계획 수립을 주요 주제로 다룬다.{tuple_delimiter}9)
 {record_delimiter}
-("relationship"{tuple_delimiter}mail_001{tuple_delimiter}업무/스프린트{tuple_delimiter}LABELED_AS{tuple_delimiter}이메일에 업무/스프린트 라벨이 지정되어 있다.{tuple_delimiter}10)
+("relationship"{tuple_delimiter}19D4DA32341500E4{tuple_delimiter}업무/스프린트{tuple_delimiter}LABELED_AS{tuple_delimiter}이메일에 업무/스프린트 라벨이 지정되어 있다.{tuple_delimiter}10)
 {record_delimiter}
-("relationship"{tuple_delimiter}mail_001{tuple_delimiter}sprint_plan.pdf{tuple_delimiter}HAS_ATTACHMENT{tuple_delimiter}이메일에 스프린트 계획 문서가 첨부되어 있다.{tuple_delimiter}10)
+("relationship"{tuple_delimiter}19D4DA32341500E4{tuple_delimiter}sprint_plan.pdf{tuple_delimiter}HAS_ATTACHMENT{tuple_delimiter}이메일에 스프린트 계획 문서가 첨부되어 있다.{tuple_delimiter}10)
 {completion_delimiter}
 
 ---
 Example 2
 Entity_types: Email, Person, Event, Label
 Text:
-이수아가 '3월 미팅 안내' 메일을 보냈다.
-3월 15일 10시에 공학관에서 만나자!!
+support@mail.anthropic.com이 gpttitti@hansung.ac.kr에게
+'Re: 수락' 메일을 보냈다. 발신인 표시명은 Winston from Anthropic이었다.
+3월 15일 10시에 공학관에서 만나자는 일정도 포함되어 있었다.
+
+ID: 19d4a5b4a4703a36
 
 [라벨 정보]
 Recent-Labeled, 캘린더
 
 Output:
-("entity"{tuple_delimiter}mail_002{tuple_delimiter}Email{tuple_delimiter}ID: mail_002 | Tone: casual | Summary: 3월 15일 공학관 미팅 일정을 안내하는 메일)
+("entity"{tuple_delimiter}19D4A5B4A4703A36{tuple_delimiter}Email{tuple_delimiter}Title: Re: 수락 | ID: 19d4a5b4a4703a36 | Tone: formal | Summary: 환불 처리 완료를 안내하는 자동화 메일)
+{record_delimiter}
+("entity"{tuple_delimiter}support@mail.anthropic.com{tuple_delimiter}Person{tuple_delimiter}Account: support@mail.anthropic.com | Name: Winston from Anthropic)
+{record_delimiter}
+("entity"{tuple_delimiter}gpttitti@hansung.ac.kr{tuple_delimiter}Person{tuple_delimiter}Account: gpttitti@hansung.ac.kr | Name: None)
 {record_delimiter}
 ("entity"{tuple_delimiter}공학관 미팅{tuple_delimiter}Event{tuple_delimiter}EventName: 공학관 미팅 | Schedule: 2026-03-15 10:00 | Location: 공학관 | Status: confirmed)
 {record_delimiter}
@@ -181,11 +196,15 @@ Output:
 {record_delimiter}
 ("entity"{tuple_delimiter}캘린더{tuple_delimiter}Label{tuple_delimiter}Category: 캘린더)
 {record_delimiter}
-("relationship"{tuple_delimiter}mail_002{tuple_delimiter}공학관 미팅{tuple_delimiter}SCHEDULES{tuple_delimiter}메일을 통해 공학관 미팅 일정이 안내되었다.{tuple_delimiter}10)
+("relationship"{tuple_delimiter}19D4A5B4A4703A36{tuple_delimiter}support@mail.anthropic.com{tuple_delimiter}SENT_BY{tuple_delimiter}이메일의 발신자는 support@mail.anthropic.com이다.{tuple_delimiter}10)
 {record_delimiter}
-("relationship"{tuple_delimiter}mail_002{tuple_delimiter}Recent-Labeled{tuple_delimiter}LABELED_AS{tuple_delimiter}이메일에 Recent-Labeled 라벨이 지정되어 있다.{tuple_delimiter}10)
+("relationship"{tuple_delimiter}19D4A5B4A4703A36{tuple_delimiter}gpttitti@hansung.ac.kr{tuple_delimiter}SENT_TO{tuple_delimiter}이메일의 수신자는 gpttitti@hansung.ac.kr이다.{tuple_delimiter}10)
 {record_delimiter}
-("relationship"{tuple_delimiter}mail_002{tuple_delimiter}캘린더{tuple_delimiter}LABELED_AS{tuple_delimiter}이메일에 캘린더 라벨이 지정되어 있다.{tuple_delimiter}10)
+("relationship"{tuple_delimiter}19D4A5B4A4703A36{tuple_delimiter}공학관 미팅{tuple_delimiter}SCHEDULES{tuple_delimiter}메일을 통해 공학관 미팅 일정이 안내되었다.{tuple_delimiter}10)
+{record_delimiter}
+("relationship"{tuple_delimiter}19D4A5B4A4703A36{tuple_delimiter}Recent-Labeled{tuple_delimiter}LABELED_AS{tuple_delimiter}이메일에 Recent-Labeled 라벨이 지정되어 있다.{tuple_delimiter}10)
+{record_delimiter}
+("relationship"{tuple_delimiter}19D4A5B4A4703A36{tuple_delimiter}캘린더{tuple_delimiter}LABELED_AS{tuple_delimiter}이메일에 캘린더 라벨이 지정되어 있다.{tuple_delimiter}10)
 {completion_delimiter}
 
 ---
