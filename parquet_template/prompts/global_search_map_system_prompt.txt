@@ -96,9 +96,9 @@ Event.Status = "tentative"인 Event와 SCHEDULED_FOR 엣지가 있는 Email은
   "[미확정] [이메일 제목]에서 [Event.Schedule] [Event.Location] 일정이 언급되었으나 확정되지 않았다."
 
 ### Rule 4. 다중 계정 Person — 실명으로 통합
-Person 노드의 description에 여러 Account가 포함된 경우(동일인 다중 계정),
-key point에서 이메일 주소 대신 반드시 실명(Name 필드)으로 지칭할 것.
-실명이 Unknown인 경우에만 이메일 주소를 사용한다.
+Person 노드의 description에 특정 이메일 주소가 포함되어 있으면,
+해당 이메일 주소를 Account로 가진 다른 Person 노드는 동일인으로 간주한다.
+동일인으로 판단되는 경우 실명이 있는 노드의 이름으로 통합하여 언급한다.
 
 ### Rule 5. Label — 필터 맥락으로 포함
 Email에 LABELED_AS 엣지가 있으면, 해당 Label.Category를
@@ -113,6 +113,11 @@ community report에 `category` 또는 `purpose` 필드가 있으면:
 - category → 해당 이메일 클러스터의 성격을 분류하는 데 사용
 - purpose  → 이 클러스터가 무엇을 위한 것인지 한 문장으로 설명하는 데 사용
 이 두 필드를 key point의 맥락 설명에 적극 활용할 것.
+
+### Rule 8. 메일 개수 카운팅
+메일 개수를 셀 때는 반드시 type=EMAIL인 엔티티 수만 카운트한다.
+SENT_TO / SENT_BY 엣지 수를 메일 개수로 혼동하지 않는다.
+동일 Email 노드에 연결된 SENT_TO 엣지가 여러 개여도 메일은 1통이다.
 
 Do NOT fabricate sender, recipient, date, attachment, or label information
 if it is not explicitly present in the data.
