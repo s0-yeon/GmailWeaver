@@ -95,16 +95,6 @@ function _buildGmailMessageCard(e) {
 
   if (accessToken) GmailApp.setCurrentMessageAccessToken(accessToken);
 
-  // 섹션 1: 웹페이지 + 서버 전송
-  var serverBtn = CardService.newTextButton()
-    .setText("ㅤㅤ☁ 이 메일을 서버로 전송ㅤㅤ")
-    .setTextButtonStyle(CardService.TextButtonStyle.OUTLINED)
-    .setOnClickAction(
-      CardService.newAction()
-        .setFunctionName("onUploadSingleMessage")
-        .setParameters({ messageId: messageId || "" }),
-    );
-
   var webSection = CardService.newCardSection()
     .addWidget(_webpageBtn())
     .addWidget(serverBtn);

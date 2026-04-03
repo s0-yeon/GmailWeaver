@@ -1024,14 +1024,30 @@ def calendar_events():
 def labels_proxy():
     data = request.json or {}
     try:
-        res = requests.post(WEBAPP_URL, json=data, allow_redirects=True)
-        print("[labels] status:", res.status_code)
-        try:
-            return jsonify(res.json())
-        except Exception:
-            return jsonify({"ok": False, "error": res.text[:200]}), 200
+        res = requests.post(WEBAPP_URL, json=data, allow_redirects=False, timeout=30)
+        print("[labels] 1차 status:", res.status_code)
+
+        # 302 처리
+        if res.status_code in (301, 302, 303, 307, 308):
+            location = res.headers.get("Location")
+            print("[labels] redirect →", location)
+            res = requests.post(location, json=data, allow_redirects=False, timeout=30)
+            print("[labels] 2차 status:", res.status_code)
+
+        # HTML 오류 감지 (한 번만)
+        content_type = res.headers.get("Content-Type", "")
+        if "text/html" in content_type:
+            msg = re.search(r'class="errorMessage"[^>]*>(.*?)</div>', res.text, re.DOTALL)
+            error_text = msg.group(1).strip() if msg else res.text[300:800]
+            print("[labels] GAS 오류 메시지:", error_text)
+            return jsonify({"ok": False, "error": error_text}), 200
+
+        return jsonify(res.json())
+
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+    
+
 
 import urllib.request
 
