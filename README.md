@@ -45,7 +45,7 @@ Flask Server
 
 ---
 
-# GmailWeaver Development Guide 
+# GmailWeaver Development Guide
 
 ## Python Environment
 
@@ -59,16 +59,21 @@ py -3.11 -m venv gmailweaver-venv
 ```
 
 ### 가상환경 활성화
+
 ```bash
 ./gmailweaver-venv/Scripts/activate
 ```
+
 ### Python 환경 확인
+
 ```bash
 which python
 ```
+
 프로젝트 내 가상환경 경로가 출력되면 정상적으로 활성화된 것이다.
 
 ### 가상환경 내 GraphRAG 설치
+
 ```bash
 pip install graphrag==2.1.0
 ```
@@ -78,35 +83,42 @@ pip install graphrag==2.1.0
 ## Required Libraries
 
 다음 라이브러리를 사용한다.
+
 - openai: OpenAI API 호출
 - python-dotenv: 환경 변수(.env) 로드
 - Flask: 서버 프레임워크
 - flask-cors: CORS 설정
-- PyMuPDF: PDF 읽고 텍스트 추출 
+- PyMuPDF: PDF 읽고 텍스트 추출
 - python-docx: DOCS 파일 읽고 수정
 - olefile: HWP 파일 읽고 수정
 - python-pptx: PPTX 파일 읽고 수정
 - openyxl: XLSX 파일 읽고 수정
 
 ### 설치 및 확인
+
 ```bash
 pip install flask flask-cors python-dotenv openai pymupdf python-docx python-pptx openpyxl requests
 pip list
 ```
+
 ---
 
 ## Apps Script CLI (clasp)
+
 Gmail Add-on 개발을 위해 **clasp CLI**를 사용한다.
+
 ```bash
 clasp login
 clasp clone <script-id>
 ```
 
 ### 주요 명령어
+
 ```bash
 clasp push    # 로컬 → Apps Script 반영
 clasp pull    # Apps Script → 로컬 반영
 ```
+
 ---
 
 # Run
@@ -118,6 +130,7 @@ clasp pull    # Apps Script → 로컬 반영
 ```bash
 ngrok http 80
 ```
+
 이때 생성된 Forwarding URL이 자신의 터널링 주소이다.
 
 ## 2. Apps Script 설정 수정
@@ -125,21 +138,25 @@ ngrok http 80
 다음 파일에서 자신의 환경에 맞게 주소를 수정한다.
 
 ### common.json
+
 - 'TunnelURL'을 자신의 **Tunnerling URL**로 변경
 - 'WEBAPP_URL'을 자신의 **Web App URL**로 변경
 
 ### appsscript.json
+
 - 'urlFetchWhitelist'을 자신의 **Tunnerling URL**로 변경
-이때 맨 끝에 '/' 문자를 반드시 추가하여 "...ngrok-free.dev/"와 같은 형태로 만든다.
+  이때 맨 끝에 '/' 문자를 반드시 추가하여 "...ngrok-free.dev/"와 같은 형태로 만든다.
 
 ---
 
 ## 3. GraphRAG 서버 실행
 
 프로젝트 루트에서 서버를 실행한다.
+
 ```bash
 python src/app.py
 ```
+
 서버가 정상 실행되면 Flask 서버가 localhost에서 동작한다.
 
 ---
@@ -147,9 +164,11 @@ python src/app.py
 ## 4. Apps Script 코드 반영
 
 ./src/apps-script 디렉토리에서 다음 명령어를 실행한다.
+
 ```bash
 clasp push
 ```
+
 로컬에서 수정한 코드가 Apps Script 프로젝트에 반영된다.
 
 ---
@@ -169,3 +188,20 @@ clasp push
 - ngrok
 - clasp
 - Gmail 계정
+
+---
+
+# WEB 띄우기
+
+- css,js 와 html 통합
+
+```bash
+npm install
+npx vite build
+```
+
+- 번역 라이브러리 설치
+
+```bash
+pip install python-i18n
+```

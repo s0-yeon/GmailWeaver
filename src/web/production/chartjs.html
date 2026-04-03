@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/favicon.ico" type="image/ico" />
+    <title>Chart.js Examples | Gentelella</title>
+    <style>
+      /* Chart panel styling */
+      .page-chartjs .x_panel .x_content {
+        min-height: 350px;
+        padding: 15px 20px 20px 20px;
+      }
+      .page-chartjs .x_panel {
+        margin-bottom: 25px;
+      }
+      .page-chartjs canvas {
+        max-height: 320px !important;
+      }
+    </style>
+    <script type="module" src="/src/main-minimal.js"></script>
+  </head>
+
+  <body class="nav-md page-chartjs">
+    <div class="container body">
+      <div class="main_container">
+        <!-- Sidebar -->
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title site_title_text">
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
+                Olive
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
+              </div>
+              <div class="profile_info">
+                <span data-i18n="sidebar.welcome">Welcome,</span>
+                <h4 id="google-profile-name">-</h4>
+              </div>
+            </div>
+            <br />
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span></a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span></a></li>
+                  <li><a href="index2.html"><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span></a></li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span></a></li>
+                  <li>
+                    <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="api_test.html"><i class="bi bi-terminal"></i> API Test <span class="badge bg-warning text-dark">Dev</span></a></li>
+                    </ul>
+                  </li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <div class="top_nav">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fas fa-bars"></i></a>
+            </div>
+            <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle info-number" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-envelope"></i>
+                    <span class="badge bg-green">6</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end list-unstyled msg_list dropdown-menu-lg" role="menu" aria-labelledby="navbarDropdown1">
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <div class="text-center">
+                        <a class="dropdown-item">
+                          <strong>See All Alerts</strong>
+                          <i class="fas fa-angle-right"></i>
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+                                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color:inherit;">
+                    <i class="bi bi-translate" style="font-size: 1.2rem; vertical-align: middle;"></i>
+                    <span id="current-lang" style="margin-left: 4px; font-size: 0.9rem;">KO</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ko" data-i18n="lang.ko">🇰🇷 한국어</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="en" data-i18n="lang.en">🇺🇸 English</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ja" data-i18n="lang.ja">🇯🇵 日本語</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        <main class="right_col" role="main" aria-label="Main content">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Chart.js Examples</h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- Section: Line Charts -->
+            <div class="row">
+              <div class="col-12">
+                <h4 class="text-muted mb-3"><i class="fas fa-chart-line me-2"></i><span data-i18n="page.chartjs.line_charts">Line Charts</span></h4>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Line Chart</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="lineChart" data-chart="line"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Area Chart (Filled)</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="areaChart" data-chart="area"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Multi-Series Line Chart</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="multiLineChart" data-chart="multiLine"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Smooth Line Chart</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="smoothLineChart" data-chart="smoothLine"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- Section: Bar Charts -->
+            <div class="row">
+              <div class="col-12">
+                <h4 class="text-muted mb-3 mt-3"><i class="fas fa-chart-bar me-2"></i><span data-i18n="page.chartjs.bar_charts">Bar Charts</span></h4>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Vertical Bar Chart</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="barChart" data-chart="bar"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Horizontal Bar Chart</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="horizontalBarChart" data-chart="horizontalBar"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Grouped Bar Chart</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="groupedBarChart" data-chart="groupedBar"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Stacked Bar Chart</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="stackedBarChart" data-chart="stackedBar"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- Section: Circular Charts -->
+            <div class="row">
+              <div class="col-12">
+                <h4 class="text-muted mb-3 mt-3"><i class="fas fa-chart-pie me-2"></i><span data-i18n="page.chartjs.circular_charts">Circular Charts</span></h4>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Pie Chart</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="pieChart" data-chart="pie"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Doughnut Chart</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="doughnutChart" data-chart="doughnut"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Polar Area Chart</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="polarAreaChart" data-chart="polarArea"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h4>Radar Chart</h4>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="radarChart" data-chart="radar"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </main>
+
+        <footer>
+          <div class="float-end">
+            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const gmailId = sessionStorage.getItem('gw_gmail_id');
+        if (!gmailId) {
+          console.warn('[mail-stats] gw_gmail_id가 sessionStorage에 없습니다.');
+          return;
+        }
+
+        try {
+          const res = await fetch('/mail-stats', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gmail_id: gmailId })
+          });
+
+          if (!res.ok) {
+            console.error('[mail-stats] 요청 실패:', res.status);
+            return;
+          }
+
+          const json = await res.json();
+          console.log('[mail-stats] 응답:', json);
+          // TODO: json.data를 차트에 반영
+        } catch (err) {
+          console.error('[mail-stats] 오류:', err);
+        }
+      });
+    </script>
+  </body>
+</html>

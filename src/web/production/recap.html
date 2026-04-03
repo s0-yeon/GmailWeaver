@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:*; frame-src 'self'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <title>Recap | GmailWeaver</title>
+    <script type="module" src="/src/main-minimal.js"></script>
+    <style>
+      .site_title_text {
+        font-size: 1.2rem; font-weight: 700; color: #fff;
+        letter-spacing: 0.5px; text-decoration: none;
+        display: flex; align-items: center; gap: 8px;
+      }
+
+      /* ── 페이지 배경 ── */
+      .right_col { background: #f3f7f5; }
+
+      /* ── 히어로 배너 ── */
+      .rc-hero {
+        background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 50%, #40916c 100%);
+        padding: 36px 40px 80px;
+        position: relative;
+        overflow: hidden;
+      }
+      .rc-hero::before {
+        content: '';
+        position: absolute; inset: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .rc-hero-inner { position: relative; z-index: 1; }
+      .rc-hero-label {
+        font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;
+        color: #95d5b2; text-transform: uppercase; margin-bottom: 8px;
+      }
+      .rc-hero-title {
+        font-size: 2rem; font-weight: 800; color: #fff;
+        margin-bottom: 6px; letter-spacing: -0.02em;
+      }
+      .rc-hero-sub {
+        font-size: 0.9rem; color: #b7e4c7; font-weight: 400;
+      }
+      /* 히어로 오른쪽 배지들 */
+      .rc-hero-badges {
+        position: absolute; right: 40px; top: 50%;
+        transform: translateY(-50%);
+        display: flex; gap: 14px;
+      }
+      .rc-hero-badge {
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 16px; padding: 14px 20px;
+        text-align: center; backdrop-filter: blur(6px);
+        min-width: 90px;
+      }
+      .rc-hero-badge-num {
+        font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1;
+      }
+      .rc-hero-badge-label {
+        font-size: 0.7rem; color: #b7e4c7; margin-top: 4px; font-weight: 600;
+      }
+
+      /* ── 컨텐츠 영역 (히어로와 겹치게) ── */
+      .rc-content {
+        margin-top: -44px;
+        padding: 0 32px 40px;
+        position: relative; z-index: 2;
+      }
+
+      /* ── 카드 ── */
+      .rc-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 28px 32px;
+        margin-bottom: 22px;
+        box-shadow: 0 4px 24px rgba(27,67,50,0.09);
+        border: 1px solid rgba(200,230,215,0.6);
+      }
+      .rc-card-header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 24px;
+      }
+      .rc-card-title {
+        font-size: 1rem; font-weight: 800; color: #1b4332;
+        display: flex; align-items: center; gap: 9px;
+      }
+      .rc-card-title-icon {
+        width: 34px; height: 34px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1rem;
+      }
+      .rc-card-badge {
+        font-size: 0.72rem; font-weight: 700; padding: 3px 10px;
+        border-radius: 20px; background: #d8f3dc; color: #2d6a4f;
+      }
+
+      /* ── 로딩 / 에러 ── */
+      .rc-loading {
+        display: flex; align-items: center; gap: 12px;
+        color: #52b788; font-weight: 600; font-size: 0.88rem;
+        padding: 20px 0;
+      }
+      .rc-spinner {
+        width: 22px; height: 22px;
+        border: 2.5px solid rgba(82,183,136,0.2);
+        border-top-color: #40916c;
+        border-radius: 50%; animation: rcspin 0.7s linear infinite; flex-shrink: 0;
+      }
+      @keyframes rcspin { to { transform: rotate(360deg); } }
+      .rc-error {
+        color: #e74c3c; font-size: 0.85rem; font-weight: 600;
+        padding: 16px; background: #fff5f5; border-radius: 10px;
+        border: 1px solid #fecaca;
+      }
+
+      /* ── 1위 하이라이트 카드 ── */
+      .rc-rank1-card {
+        background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+        border: 2px solid #fcd34d;
+        border-radius: 16px; padding: 20px 24px;
+        display: flex; align-items: center; gap: 18px;
+        margin-bottom: 24px;
+        position: relative; overflow: hidden;
+      }
+      .rc-rank1-card::after {
+        content: '🥇';
+        position: absolute; right: -8px; top: -10px;
+        font-size: 5rem; opacity: 0.12; transform: rotate(15deg);
+        pointer-events: none;
+      }
+      .rc-rank1-avatar {
+        width: 56px; height: 56px; border-radius: 50%;
+        background: linear-gradient(135deg, #f7b731, #e67e22);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.4rem; font-weight: 800; color: #fff;
+        flex-shrink: 0; box-shadow: 0 4px 14px rgba(247,183,49,0.5);
+      }
+      .rc-rank1-info { flex: 1; min-width: 0; }
+      .rc-rank1-tag {
+        font-size: 0.68rem; font-weight: 700; color: #92620a;
+        background: #fef3c7; border-radius: 20px; padding: 2px 8px;
+        display: inline-block; margin-bottom: 5px; letter-spacing: 0.5px;
+      }
+      .rc-rank1-name {
+        font-size: 1.15rem; font-weight: 800; color: #1a2a3a;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .rc-rank1-email {
+        font-size: 0.75rem; color: #7a8a9a; margin-top: 2px;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .rc-rank1-count {
+        text-align: center; flex-shrink: 0;
+      }
+      .rc-rank1-num {
+        font-size: 2rem; font-weight: 800;
+        background: linear-gradient(135deg, #f7b731, #e67e22);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text; line-height: 1;
+      }
+      .rc-rank1-unit {
+        font-size: 0.72rem; color: #7a8a9a; font-weight: 600; margin-top: 2px;
+      }
+
+      /* ── 바 리스트 ── */
+      .rc-bar-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+      .rc-bar-item {
+        display: grid;
+        grid-template-columns: 28px 1fr auto;
+        align-items: center; gap: 12px;
+      }
+      .rc-bar-rank {
+        font-size: 0.78rem; font-weight: 800; color: #adb5bd;
+        text-align: center;
+      }
+      .rc-bar-rank.top { color: #f7b731; }
+      .rc-bar-inner { display: flex; flex-direction: column; gap: 4px; }
+      .rc-bar-name {
+        font-size: 0.82rem; font-weight: 700; color: #2d3a4b;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .rc-bar-track {
+        background: #f0f4f0; border-radius: 20px;
+        height: 10px; overflow: hidden;
+      }
+      .rc-bar-fill {
+        height: 100%; border-radius: 20px;
+        background: linear-gradient(90deg, #74c69d, #40916c);
+        width: 0;
+        transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .rc-bar-fill.rank1 { background: linear-gradient(90deg, #fcd34d, #f59e0b); }
+      .rc-bar-fill.rank2 { background: linear-gradient(90deg, #a5b4fc, #818cf8); }
+      .rc-bar-fill.rank3 { background: linear-gradient(90deg, #86efac, #4ade80); }
+      .rc-bar-count {
+        font-size: 0.85rem; font-weight: 800; color: #40916c;
+        text-align: right; white-space: nowrap;
+      }
+
+      /* ── 2열 그리드 ── */
+      .rc-grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+      }
+      @media (max-width: 900px) { .rc-grid2 { grid-template-columns: 1fr; } }
+
+      /* ── 워드 클라우드 ── */
+      .rc-wc-wrap {
+        width: 100%;
+        padding: 18px 14px 14px;
+        border-radius: 14px;
+        background: #fafbff;
+        border: 1.5px solid #e8edf5;
+        margin-top: 4px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 10px 14px;
+        min-height: 200px;
+      }
+      .rc-wc-word {
+        display: inline-block;
+        font-weight: 800;
+        line-height: 1.2;
+        cursor: default;
+        border-radius: 6px;
+        padding: 2px 6px;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+        opacity: 0;
+        transform: scale(0.6);
+      }
+      .rc-wc-word.show {
+        opacity: 1;
+        transform: scale(1);
+      }
+      .rc-wc-word:hover {
+        transform: scale(1.15) !important;
+        z-index: 10;
+        position: relative;
+      }
+      .rc-wc-count {
+        font-size: 0.65em;
+        font-weight: 600;
+        margin-left: 3px;
+        vertical-align: super;
+        opacity: 0.7;
+      }
+
+      /* ── 친밀도 링 ── */
+      .rc-af-ring-wrap {
+        position: relative; flex-shrink: 0;
+        width: 52px; height: 52px;
+      }
+      .rc-af-ring-wrap svg { width: 52px; height: 52px; }
+      .rc-af-ring-bg {
+        fill: none; stroke: #f0f0f4; stroke-width: 5;
+      }
+      .rc-af-ring-fill {
+        fill: none; stroke-width: 5;
+        stroke-linecap: round;
+        transform: rotate(-90deg); transform-origin: 50% 50%;
+        transition: stroke-dashoffset 1.1s cubic-bezier(0.22,1,0.36,1);
+      }
+      .rc-af-ring-pct {
+        position: absolute; inset: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.62rem; font-weight: 800; color: #2d3748;
+        line-height: 1;
+      }
+      .rc-af-info { flex: 1; min-width: 0; }
+      .rc-af-name {
+        font-size: 0.88rem; font-weight: 800; color: #1a2a3a;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        margin-bottom: 5px;
+      }
+      .rc-af-track {
+        height: 7px; border-radius: 20px; background: #f0f0f4; overflow: hidden;
+      }
+      .rc-af-fill {
+        height: 100%; border-radius: 20px; width: 0;
+        transition: width 1.1s cubic-bezier(0.22,1,0.36,1);
+      }
+      .rc-af-email {
+        font-size: 0.7rem; color: #aab0bc; margin-top: 4px;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .rc-af-score {
+        font-size: 0.78rem; font-weight: 800; flex-shrink: 0;
+        text-align: right; min-width: 34px;
+      }
+
+      /* ── 친밀도 도넛 차트 ── */
+      .rc-af-donut-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        padding: 20px 0;
+      }
+      .rc-af-chart-container {
+        position: relative;
+        width: 280px;
+        height: 280px;
+        flex-shrink: 0;
+      }
+      .rc-af-donut-svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg); 
+      }
+      .rc-af-donut-bg {
+        fill: none;
+        stroke: #f0f0f4;
+        stroke-width: 35;
+      }
+      .rc-af-donut-segment {
+        fill: none;
+        stroke-width: 35;
+        stroke-linecap: round;
+        transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        cursor: pointer;
+      }
+      .rc-af-donut-segment:hover {
+        stroke-width: 40;
+        filter: brightness(1.1);
+      }
+      .rc-af-center-info {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        pointer-events: none;
+      }
+      .rc-af-center-num {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #1b4332;
+        line-height: 1;
+      }
+      .rc-af-center-label {
+        font-size: 0.8rem;
+        color: #7a8a9a;
+        margin-top: 4px;
+        font-weight: 600;
+      }
+      .rc-af-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-width: 280px;
+      }
+      .rc-af-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: rgba(240, 240, 244, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .rc-af-legend-item:hover {
+        background: rgba(240, 240, 244, 0.6);
+        transform: translateX(4px);
+      }
+      .rc-af-legend-rank {
+        font-size: 1.2rem;
+        min-width: 28px;
+        text-align: center;
+      }
+      .rc-af-legend-color {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        flex-shrink: 0;
+      }
+      .rc-af-legend-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .rc-af-legend-name {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #1a2a3a;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .rc-af-legend-email {
+        font-size: 0.7rem;
+        color: #aab0bc;
+        margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .rc-af-legend-score {
+        font-size: 0.9rem;
+        font-weight: 800;
+        text-align: right;
+        min-width: 50px;
+      }
+
+      /* ── 동기화 타일 ── */
+      .rc-sync-tiles {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+        padding: 4px 0;
+      }
+      .rc-sync-tile {
+        border-radius: 16px; padding: 18px 12px 14px;
+        text-align: center; position: relative; overflow: hidden;
+      }
+      .rc-sync-tile::before {
+        content: ''; position: absolute; inset: 0; opacity: 0.07;
+        background: radial-gradient(circle at 70% 20%, #fff 0%, transparent 65%);
+      }
+      .rc-sync-tile--blue   { background: linear-gradient(145deg,#1d4ed8,#3b82f6); color:#fff; }
+      .rc-sync-tile--violet { background: linear-gradient(145deg,#6d28d9,#8b5cf6); color:#fff; }
+      .rc-sync-tile--teal   { background: linear-gradient(145deg,#0f766e,#14b8a6); color:#fff; }
+      .rc-sync-tile-icon { font-size: 1.5rem; margin-bottom: 8px; }
+      .rc-sync-tile-num {
+        font-size: 1.55rem; font-weight: 900; letter-spacing: -0.03em;
+        line-height: 1; margin-bottom: 6px;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      }
+      .rc-sync-date { font-size: 0.92rem !important; letter-spacing: 0 !important; }
+      .rc-sync-tile-label {
+        font-size: 0.68rem; font-weight: 700; opacity: 0.82;
+        letter-spacing: 0.4px; text-transform: uppercase;
+      }
+
+      /* ── 만족도 게이지 ── */
+      .rc-gauge-wrap {
+        position: relative; text-align: center; padding: 8px 0 0;
+      }
+      .rc-gauge-svg { width: 100%; max-width: 240px; display: block; margin: 0 auto; }
+      .rc-gauge-center {
+        margin-top: -18px; /* SVG 반원 아래 여백 당기기 */
+      }
+      .rc-gauge-num {
+        font-size: 2.8rem; font-weight: 900; letter-spacing: -0.04em;
+        background: linear-gradient(135deg, #f87171, #fbbf24, #4ade80);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text; line-height: 1;
+        transition: all 0.1s;
+      }
+      .rc-gauge-sub { font-size: 0.8rem; color: #94a3b8; font-weight: 600; margin-top: 2px; }
+      .rc-gauge-label { font-size: 0.72rem; color: #94a3b8; margin-top: 4px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+      .rc-gauge-stars {
+        text-align: center; font-size: 1.4rem; letter-spacing: 4px;
+        margin-top: 14px; min-height: 28px;
+      }
+
+      /* ── 반응형 ── */
+      @media (max-width: 768px) {
+        .rc-hero { padding: 28px 20px 70px; }
+        .rc-hero-badges { display: none; }
+        .rc-content { padding: 0 16px 32px; }
+        .rc-card { padding: 20px; }
+        .rc-af-donut-wrap {
+          flex-direction: column;
+          gap: 30px;
+       }
+        .rc-af-chart-container {
+          width: 240px;
+          height: 240px;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="nav-md page-recap">
+    <div class="container body">
+      <div class="main_container">
+
+        <!-- ── 사이드바 ── -->
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title site_title_text">
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
+                Olive
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
+              </div>
+              <div class="profile_info">
+                <span data-i18n="sidebar.welcome">Welcome,</span>
+                <h4 id="google-profile-name">-</h4>
+              </div>
+            </div>
+            <br />
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li>
+                    <a><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="index2.html"><i class="bi bi-tag"></i> 라벨 목록</a></li>
+                      <li><a href="label2.html"><i class="bi bi-circle-half"></i> 라벨 초원 ✦</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li class="active">
+                    <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="graph-viz.html"><i class="bi bi-diagram-3"></i> <span data-i18n="nav.graph_viz">Graph Viz</span></a></li>
+                      <li class="active"><a href="recap.html"><i class="bi bi-clipboard-data"></i> Recap</a></li>
+                      <li><a href="api_test.html"><i class="bi bi-terminal"></i> API Test <span class="badge bg-warning text-dark">Dev</span></a></li>
+                    </ul>
+                  </li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span><span class="bi bi-chevron-right"></span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- ── Top Navigation ── -->
+        <div class="top_nav">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+            <div class="nav toggle"><a id="menu_toggle"><i class="fas fa-bars"></i></a></div>
+            <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle" id="langDropdown"
+                     data-bs-toggle="dropdown" aria-expanded="false"
+                     style="text-decoration:none; color:inherit;">
+                    <i class="bi bi-translate" style="font-size:1.2rem;vertical-align:middle;"></i>
+                    <span id="current-lang" style="margin-left:4px;font-size:0.9rem;">KO</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ko">🇰🇷 한국어</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="en">🇺🇸 English</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ja">🇯🇵 日本語</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        <!-- ── Page Content ── -->
+        <main class="right_col" role="main" style="padding:0; overflow-y:auto;">
+
+          <!-- 히어로 배너 -->
+          <div class="rc-hero">
+            <div class="rc-hero-inner">
+              <div class="rc-hero-label">Mail Analytics</div>
+              <div class="rc-hero-title">📊 Recap</div>
+              <div class="rc-hero-sub" id="rcHeroSub">내 메일함 통계 한눈에 보기</div>
+            </div>
+            <div class="rc-hero-badges">
+              <div class="rc-hero-badge">
+                <div class="rc-hero-badge-num" id="rcHeroTotal">—</div>
+                <div class="rc-hero-badge-label">총 연락처</div>
+              </div>
+              <div class="rc-hero-badge">
+                <div class="rc-hero-badge-num" id="rcHeroTop">—</div>
+                <div class="rc-hero-badge-label">최다 수신</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 컨텐츠 -->
+          <div class="rc-content">
+
+            <!-- ── 1행: 수신/발신 2열 ── -->
+            <div class="rc-grid2">
+
+              <!-- 나에게 가장 많이 보낸 사람 -->
+              <div class="rc-card">
+                <div class="rc-card-header">
+                  <div class="rc-card-title">
+                    <div class="rc-card-title-icon" style="background:#fff9e6;">📨</div>
+                    나에게 많이 보낸 사람
+                  </div>
+                  <span class="rc-card-badge" id="rcSenderBadge" style="display:none;"></span>
+                </div>
+                <div id="rcSenderLoading" class="rc-loading">
+                  <div class="rc-spinner"></div> 데이터를 불러오는 중…
+                </div>
+                <div id="rcSenderError" class="rc-error" style="display:none;"></div>
+                <div id="rcSenderContent" style="display:none;">
+                  <div id="rcTopSender"></div>
+                  <ul class="rc-bar-list" id="rcBarList"></ul>
+                </div>
+              </div>
+
+              <!-- 내가 가장 많이 보낸 사람 -->
+              <div class="rc-card">
+                <div class="rc-card-header">
+                  <div class="rc-card-title">
+                    <div class="rc-card-title-icon" style="background:#e8f4fd;">📤</div>
+                    내가 많이 보낸 사람
+                  </div>
+                  <span class="rc-card-badge" id="rcMySentBadge" style="display:none;"></span>
+                </div>
+                <div id="rcMySentLoading" class="rc-loading">
+                  <div class="rc-spinner"></div> 데이터를 불러오는 중…
+                </div>
+                <div id="rcMySentError" class="rc-error" style="display:none;"></div>
+                <div id="rcMySentContent" style="display:none;">
+                  <div id="rcTopMySent"></div>
+                  <ul class="rc-bar-list" id="rcMySentBarList"></ul>
+                </div>
+              </div>
+
+            </div><!-- ── 1행 끝 ── -->
+
+            <!-- ── 2열 그리드 시작 ── -->
+            <div class="rc-grid2">
+
+              <!-- 키워드 통계 -->
+              <div class="rc-card">
+                <div class="rc-card-header">
+                  <div class="rc-card-title">
+                    <div class="rc-card-title-icon" style="background:#f0faf4;">✦</div>
+                    메일 속 주요 키워드
+                  </div>
+                  <span class="rc-card-badge" id="rcKwBadge" style="display:none;"></span>
+                </div>
+                <div id="rcKwLoading" class="rc-loading">
+                  <div class="rc-spinner"></div> 키워드 분석 중…
+                </div>
+                <div id="rcKwError" class="rc-error" style="display:none;"></div>
+                <div id="rcKwContent" style="display:none;">
+                  <div class="rc-wc-wrap" id="rcKwCanvas"></div>
+                </div>
+              </div>
+
+              <!-- 친밀도 통계 (도넛 차트) -->
+              <div class="rc-card">
+                <div class="rc-card-header">
+                  <div class="rc-card-title">
+                    <div class="rc-card-title-icon" style="background:#fff0f6;">💌</div>
+                    친밀도
+                  </div>
+                  <span class="rc-card-badge" id="rcAfBadge" style="display:none;"></span>
+                </div>
+                <div id="rcAfLoading" class="rc-loading">
+                  <div class="rc-spinner"></div> 친밀도 분석 중…
+                </div>
+                <div id="rcAfError" class="rc-error" style="display:none;"></div>
+                <div id="rcAfContent" style="display:none;">
+                  <div class="rc-af-donut-wrap">
+                    <div class="rc-af-chart-container">
+                      <svg class="rc-af-donut-svg" viewBox="0 0 200 200" id="rcAfDonutSvg">
+                        <circle class="rc-af-donut-bg" cx="100" cy="100" r="82.5"></circle>
+                      </svg>
+                      <div class="rc-af-center-info">
+                        <div class="rc-af-center-num" id="rcAfCenterNum">-</div>
+                        <div class="rc-af-center-label">TOP 친밀도</div>
+                      </div>
+                    </div>
+                    <div class="rc-af-legend" id="rcAfLegend"></div>
+                  </div>
+                </div>
+              </div>
+             
+
+            </div><!-- ── 2열 그리드 끝 ── -->
+
+            <!-- ── 3행: 동기화 + 만족도 ── -->
+            <div class="rc-grid2">
+
+              <!-- 메일 동기화 통계 -->
+              <div class="rc-card rc-sync-card">
+                <div class="rc-card-header">
+                  <div class="rc-card-title">
+                    <div class="rc-card-title-icon" style="background:#eff6ff;">🔄</div>
+                    메일 동기화 현황
+                  </div>
+                </div>
+                <div id="rcSyncLoading" class="rc-loading">
+                  <div class="rc-spinner"></div> 동기화 정보 불러오는 중…
+                </div>
+                <div id="rcSyncError" class="rc-error" style="display:none;"></div>
+                <div id="rcSyncContent" style="display:none;">
+                  <div class="rc-sync-tiles">
+                    <div class="rc-sync-tile rc-sync-tile--blue">
+                      <div class="rc-sync-tile-icon">📬</div>
+                      <div class="rc-sync-tile-num" id="rcSyncCount">—</div>
+                      <div class="rc-sync-tile-label">동기화된 메일</div>
+                    </div>
+                    <div class="rc-sync-tile rc-sync-tile--violet">
+                      <div class="rc-sync-tile-icon">⏱</div>
+                      <div class="rc-sync-tile-num" id="rcSyncTime">—</div>
+                      <div class="rc-sync-tile-label">동기화 소요</div>
+                    </div>
+                    <div class="rc-sync-tile rc-sync-tile--teal">
+                      <div class="rc-sync-tile-icon">📅</div>
+                      <div class="rc-sync-tile-num rc-sync-date" id="rcSyncDate">—</div>
+                      <div class="rc-sync-tile-label">마지막 동기화</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Olive 만족도 -->
+              <div class="rc-card">
+                <div class="rc-card-header">
+                  <div class="rc-card-title">
+                    <div class="rc-card-title-icon" style="background:#fef9ec;">⭐</div>
+                    Olive 사용자 만족도
+                  </div>
+                </div>
+                <div id="rcRatingLoading" class="rc-loading">
+                  <div class="rc-spinner"></div> 만족도 불러오는 중…
+                </div>
+                <div id="rcRatingError" class="rc-error" style="display:none;"></div>
+                <div id="rcRatingContent" style="display:none;">
+                  <div class="rc-gauge-wrap">
+                    <svg class="rc-gauge-svg" viewBox="0 0 200 120">
+                      <defs>
+                        <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stop-color="#f87171"/>
+                          <stop offset="50%" stop-color="#fbbf24"/>
+                          <stop offset="100%" stop-color="#4ade80"/>
+                        </linearGradient>
+                      </defs>
+                      <path d="M 20 100 A 80 80 0 0 1 180 100"
+                        fill="none" stroke="#f0f0f6" stroke-width="16" stroke-linecap="round"/>
+                      <path id="rcGaugeFill"
+                        d="M 20 100 A 80 80 0 0 1 180 100"
+                        fill="none" stroke-width="16" stroke-linecap="round"
+                        stroke="url(#gaugeGrad)"
+                        stroke-dasharray="251.3"
+                        stroke-dashoffset="251.3"
+                        style="transition: stroke-dashoffset 1.4s cubic-bezier(0.22,1,0.36,1);"/>
+                      <circle cx="20"  cy="100" r="3.5" fill="#cbd5e1"/>
+                      <circle cx="100" cy="20"  r="3.5" fill="#cbd5e1"/>
+                      <circle cx="180" cy="100" r="3.5" fill="#cbd5e1"/>
+                      <text x="13"  y="116" font-size="9" fill="#94a3b8" font-weight="700">0</text>
+                      <text x="93"  y="14"  font-size="9" fill="#94a3b8" font-weight="700">50</text>
+                      <text x="172" y="116" font-size="9" fill="#94a3b8" font-weight="700">100</text>
+                    </svg>
+                    <div class="rc-gauge-center">
+                      <div class="rc-gauge-num" id="rcGaugeNum">0</div>
+                      <div class="rc-gauge-sub">/ 100점</div>
+                      <div class="rc-gauge-label" id="rcGaugeLabel">만족도</div>
+                    </div>
+                  </div>
+                  <div class="rc-gauge-stars" id="rcGaugeStars"></div>
+                </div>
+              </div>
+
+            </div><!-- ── 3행 끝 ── -->
+
+          </div>
+        </main>
+
+        <footer>
+          <div class="float-end">GmailWeaver &mdash; Olive</div>
+          <div class="clearfix"></div>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      // 이름/gmail_id 처리
+      const params = new URLSearchParams(window.location.search);
+      const nameParam = params.get('name');
+      const name = nameParam
+        ? decodeURIComponent(nameParam)
+        : (sessionStorage.getItem('gw_user_name') || '-');
+      if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
+
+      const gmailIdParam = params.get('gmail_id');
+      if (gmailIdParam) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+
+      document.getElementById('google-profile-name').textContent = name;
+
+      function esc(s) {
+        return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      function initials(nameStr) {
+        const parts = nameStr.trim().split(/\s+/);
+        return parts.length >= 2
+          ? (parts[0][0] + parts[1][0]).toUpperCase()
+          : nameStr.slice(0, 2).toUpperCase();
+      }
+
+      const AVATAR_COLORS = [
+        ['#fcd34d','#f59e0b'], ['#a5b4fc','#818cf8'],
+        ['#86efac','#4ade80'], ['#f9a8d4','#ec4899'],
+        ['#67e8f9','#06b6d4'], ['#fca5a5','#ef4444'],
+      ];
+
+      /* ids: { badge, topEl, barList, loadingEl, errorEl, contentEl }
+         field: 'received' | 'sent'
+         tag: 1위 뱃지 텍스트, unit: 단위 텍스트 */
+      function renderMailStats(data, field, ids, tag, unit) {
+        const sorted = Object.entries(data)
+          .map(([email, v]) => ({ email, name: v.name || email, count: v[field] || 0 }))
+          .filter(x => x.count > 0)
+          .sort((a, b) => b.count - a.count);
+
+        document.getElementById(ids.loadingEl).style.display = 'none';
+
+        if (sorted.length === 0) {
+          const err = document.getElementById(ids.errorEl);
+          err.style.display = ''; err.textContent = '데이터가 없습니다.';
+          return;
+        }
+
+        const max = sorted[0].count;
+        const top = sorted[0];
+
+        // 히어로 배지 (received 기준으로만 업데이트)
+        if (field === 'received') {
+          document.getElementById('rcHeroTotal').textContent = sorted.length;
+          document.getElementById('rcHeroTop').textContent = top.count + '통';
+          document.getElementById('rcHeroSub').textContent = (name !== '-' ? name + '님의 ' : '') + '메일함 통계';
+        }
+
+        document.getElementById(ids.badge).textContent = sorted.length + '명';
+        document.getElementById(ids.badge).style.display = '';
+
+        const [c1, c2] = AVATAR_COLORS[0];
+        document.getElementById(ids.topEl).innerHTML = `
+          <div class="rc-rank1-card">
+            <div class="rc-rank1-avatar" style="background:linear-gradient(135deg,${c1},${c2});">
+              ${esc(initials(top.name))}
+            </div>
+            <div class="rc-rank1-info">
+              <div class="rc-rank1-tag">🏆 ${tag}</div>
+              <div class="rc-rank1-name">${esc(top.name)}</div>
+              <div class="rc-rank1-email">${esc(top.email)}</div>
+            </div>
+            <div class="rc-rank1-count">
+              <div class="rc-rank1-num">${top.count}</div>
+              <div class="rc-rank1-unit">${unit}</div>
+            </div>
+          </div>`;
+
+        document.getElementById(ids.barList).innerHTML = sorted.map((item, i) => {
+          const rankClass = i === 0 ? 'rank1' : i === 1 ? 'rank2' : i === 2 ? 'rank3' : '';
+          const rankLabel = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
+          const pct = max > 0 ? Math.round(item.count / max * 100) : 0;
+          return `
+            <li class="rc-bar-item">
+              <div class="rc-bar-rank ${i < 3 ? 'top' : ''}">${rankLabel}</div>
+              <div class="rc-bar-inner">
+                <div class="rc-bar-name" title="${esc(item.email)}">${esc(item.name)}</div>
+                <div class="rc-bar-track">
+                  <div class="rc-bar-fill ${rankClass}" data-pct="${pct}" data-scope="${ids.barList}"></div>
+                </div>
+              </div>
+              <div class="rc-bar-count">${item.count}통</div>
+            </li>`;
+        }).join('');
+
+        document.getElementById(ids.contentEl).style.display = '';
+
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          document.querySelectorAll(`#${ids.barList} .rc-bar-fill`).forEach(el => {
+            el.style.width = el.dataset.pct + '%';
+          });
+        }));
+      }
+
+      function renderSenderStats(data) {
+        renderMailStats(data, 'received',
+          { badge: 'rcSenderBadge', topEl: 'rcTopSender', barList: 'rcBarList',
+            loadingEl: 'rcSenderLoading', errorEl: 'rcSenderError', contentEl: 'rcSenderContent' },
+          'TOP RECEIVER', '통 받음');
+        renderMailStats(data, 'sent',
+          { badge: 'rcMySentBadge', topEl: 'rcTopMySent', barList: 'rcMySentBarList',
+            loadingEl: 'rcMySentLoading', errorEl: 'rcMySentError', contentEl: 'rcMySentContent' },
+          'TOP SENT', '통 보냄');
+      }
+
+      /* ── 워드 클라우드 색상 팔레트 ── */
+      const WC_COLORS = [
+        '#1b4332','#2d6a4f','#40916c',
+        '#e63946','#457b9d','#e07b39',
+        '#7b2d8b','#1d6fa0','#b5451b',
+        '#2c6e49',
+      ];
+
+      function renderKeywordStats(data) {
+        const keywords = (data.keywords || []).slice().sort((a, b) => b.count - a.count).slice(0, 10); /*키워드 갯수*/
+        if (keywords.length === 0) return;
+
+        const max = keywords[0].count;
+        const min = keywords[keywords.length - 1].count;
+
+        document.getElementById('rcKwBadge').textContent = keywords.length + '개 키워드';
+        document.getElementById('rcKwBadge').style.display = '';
+
+        const wrap = document.getElementById('rcKwCanvas');
+        wrap.innerHTML = '';
+
+        keywords.forEach((kw, idx) => {
+          // log scale → 글자 크기 (14 ~ 46px)
+          const norm = max === min ? 1 : Math.log1p(kw.count - min) / Math.log1p(max - min);
+          const fs = Math.round(14 + norm * 32);
+          const color = WC_COLORS[idx % WC_COLORS.length];
+
+          const el = document.createElement('span');
+          el.className = 'rc-wc-word';
+          el.style.cssText = `font-size:${fs}px; color:${color}; transition-delay:${(idx * 0.06).toFixed(2)}s;`;
+          el.title = `${kw.word}: ${kw.count}회`;
+          el.innerHTML = `${esc(kw.word)}<sup class="rc-wc-count">${kw.count}</sup>`;
+          wrap.appendChild(el);
+          requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+        });
+      }
+
+      /* ── 친밀도 렌더 (DOMContentLoaded 밖에 선언) ── */
+      function renderAffinityStats(data) {
+        const list = (Array.isArray(data) ? data : []).slice(0, 7);
+        if (list.length === 0) return;
+        
+        const sorted = [...list].sort((a, b) => (b.affinity ?? 0) - (a.affinity ?? 0));
+        const totalAffinity = sorted.reduce((sum, item) => sum + (item.affinity ?? 0), 0);
+        
+        const badge = document.getElementById('rcAfBadge');
+        badge.textContent = sorted.length + '명';
+        badge.style.display = '';
+
+        const AF_COLORS = [
+          '#ec4899','#a78bfa','#f97316',
+          '#06b6d4','#10b981','#f59e0b','#ef4444',
+        ];
+        const RANK_LABELS = ['🥇','🥈','🥉'];
+
+        // 중앙 숫자 업데이트
+        const topScore = sorted[0].affinity ?? 0;
+        document.getElementById('rcAfCenterNum').textContent = Math.round(topScore * 100) + '%';
+
+        // SVG 도넛 차트 생성
+        const svg = document.getElementById('rcAfDonutSvg');
+        const radius = 82.5;
+        const circumference = 2 * Math.PI * radius;
+        
+        let currentOffset = 0;
+
+        sorted.forEach((item, i) => {
+          const score = item.affinity ?? 0;
+          const percentage = totalAffinity > 0 ? score / totalAffinity : 0;
+          const segmentLength = circumference * percentage;
+          const color = AF_COLORS[i % AF_COLORS.length];
+
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('class', 'rc-af-donut-segment');
+          circle.setAttribute('cx', '100');
+          circle.setAttribute('cy', '100');
+          circle.setAttribute('r', radius.toString());
+          circle.setAttribute('stroke', color);
+          circle.setAttribute('stroke-dasharray', `${segmentLength} ${circumference}`);
+          circle.setAttribute('stroke-dashoffset', (-currentOffset).toString());
+          circle.style.transition = 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
+          
+          // 호버 효과
+          circle.addEventListener('mouseenter', () => {
+            document.querySelectorAll('.rc-af-legend-item').forEach((el, idx) => {
+              if (idx === i) {
+                el.style.background = 'rgba(240, 240, 244, 0.8)';
+                el.style.transform = 'translateX(6px) scale(1.02)';
+              } else {
+                el.style.opacity = '0.5';
+              }
+            });
+          });
+          
+          circle.addEventListener('mouseleave', () => {
+            document.querySelectorAll('.rc-af-legend-item').forEach(el => {
+              el.style.background = 'rgba(240, 240, 244, 0.3)';
+              el.style.transform = 'translateX(0) scale(1)';
+              el.style.opacity = '1';
+            });
+          });
+
+          svg.appendChild(circle);
+          currentOffset += segmentLength;
+        });
+
+        // 범례 생성
+        document.getElementById('rcAfLegend').innerHTML = sorted.map((item, i) => {
+          const score = item.affinity ?? 0;
+          const color = AF_COLORS[i % AF_COLORS.length];
+          const rankLabel = i < 3 ? RANK_LABELS[i] : (i + 1);
+          const percentage = Math.round(score * 100);
+
+          return `
+            <div class="rc-af-legend-item" data-index="${i}">
+              <div class="rc-af-legend-rank">${rankLabel}</div>
+              <div class="rc-af-legend-color" style="background:${color};"></div>
+              <div class="rc-af-legend-info">
+                <div class="rc-af-legend-name">${esc(item.name || item.email)}</div>
+                <div class="rc-af-legend-email">${esc(item.email || '')}</div>
+              </div>
+              <div class="rc-af-legend-score" style="color:${color};">${percentage}%</div>
+            </div>`;
+        }).join('');
+
+        // 범례 호버 효과
+        document.querySelectorAll('.rc-af-legend-item').forEach((el, idx) => {
+          el.addEventListener('mouseenter', () => {
+            const segments = document.querySelectorAll('.rc-af-donut-segment');
+            segments.forEach((seg, i) => {
+              if (i === idx) {
+                seg.style.strokeWidth = '40';
+                seg.style.filter = 'brightness(1.1)';
+              } else {
+                seg.style.opacity = '0.4';
+              }
+            });
+          });
+
+          el.addEventListener('mouseleave', () => {
+            const segments = document.querySelectorAll('.rc-af-donut-segment');
+            segments.forEach(seg => {
+              seg.style.strokeWidth = '35';
+              seg.style.filter = 'none';
+              seg.style.opacity = '1';
+            });
+          });
+        });
+
+        // 애니메이션 트리거
+        requestAnimationFrame(() => {
+          const segments = document.querySelectorAll('.rc-af-donut-segment');
+          segments.forEach(seg => {
+            seg.style.strokeDashoffset = seg.getAttribute('stroke-dashoffset');
+          });
+        });
+      }
+
+      /* ── 동기화 통계 렌더링 ── */
+      function renderSyncStats(data) {
+        // sync_time "2-30" → "2시간 30분"
+        function fmtTime(t) {
+          if (!t) return '—';
+          const [h, m] = String(t).split('-');
+          if (m === undefined) return h + '분';
+          return (parseInt(h) ? h + '시간 ' : '') + (parseInt(m) ? m + '분' : '');
+        }
+        // sync_update_date "2026-04-22" → "26.04.22"
+        function fmtDate(d) {
+          if (!d) return '—';
+          const parts = String(d).split('-');
+          if (parts.length === 3) return parts[0].slice(2) + '.' + parts[1] + '.' + parts[2];
+          return d;
+        }
+
+        // 숫자 카운트업 애니메이션
+        function countUp(el, target, duration = 900) {
+          const start = performance.now();
+          function tick(now) {
+            const p = Math.min((now - start) / duration, 1);
+            const ease = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(ease * target).toLocaleString();
+            if (p < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+
+        const count = data.mail_count || 0;
+        const countEl = document.getElementById('rcSyncCount');
+        countUp(countEl, count);
+        // 단위 표시 (애니메이션 끝나면 "통" 추가)
+        setTimeout(() => { countEl.textContent = count.toLocaleString() + '통'; }, 940);
+
+        document.getElementById('rcSyncTime').textContent = fmtTime(data.sync_time);
+        document.getElementById('rcSyncDate').textContent = fmtDate(data.sync_update_date);
+        document.getElementById('rcSyncLoading').style.display = 'none';
+        document.getElementById('rcSyncContent').style.display = '';
+      }
+
+      /* ── 만족도 게이지 렌더링 ── */
+      function renderRatingStats(data) {
+        const score = Math.min(100, Math.max(0, data.total_rating || 0));
+        // 반원 둘레 = π * r = π * 80 ≈ 251.3
+        const ARC = 251.3;
+        const offset = ARC * (1 - score / 100);
+
+        // 숫자 카운트업
+        const numEl = document.getElementById('rcGaugeNum');
+        const start = performance.now();
+        function countTick(now) {
+          const p = Math.min((now - start) / 1200, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          numEl.textContent = Math.round(ease * score);
+          if (p < 1) requestAnimationFrame(countTick);
+        }
+        requestAnimationFrame(countTick);
+
+        // 게이지 채우기
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          document.getElementById('rcGaugeFill').style.strokeDashoffset = offset;
+        }));
+
+        // 별 표시 (20점 당 별 1개, 최대 5개)
+        const stars = Math.round(score / 20);
+        const starsEl = document.getElementById('rcGaugeStars');
+        starsEl.innerHTML = '';
+        let html = '';
+        for (let i = 0; i < 5; i++) {
+          html += `<span style="opacity:${i < stars ? 1 : 0.2};transition:opacity 0.3s ${i*0.12}s;">⭐</span>`;
+        }
+        // 별 순차 등장
+        setTimeout(() => { starsEl.innerHTML = html; }, 400);
+
+        // 레이블 문구
+        const label = score >= 90 ? '매우 만족 🎉' : score >= 70 ? '만족 😊' : score >= 50 ? '보통 😐' : '개선 필요 😅';
+        document.getElementById('rcGaugeLabel').textContent = label;
+
+        document.getElementById('rcRatingLoading').style.display = 'none';
+        document.getElementById('rcRatingContent').style.display = '';
+      }
+
+      async function postStat(endpoint, gmailId) {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }, //내가 보내는게 json이야~
+          body: JSON.stringify({ gmail_id: gmailId }) // json 객체 생성
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        const gmailId = sessionStorage.getItem('gw_gmail_id');
+
+        if (!gmailId) {
+          ['rcSenderLoading','rcKwLoading','rcAfLoading'].forEach(id => {
+            document.getElementById(id).style.display = 'none';
+          });
+          ['rcSenderError','rcKwError','rcAfError'].forEach(id => {
+            const el = document.getElementById(id);
+            el.style.display = '';
+            el.textContent = 'gmail_id가 없습니다. 먼저 로그인해주세요.';
+          });
+          return;
+        }
+        
+        // 다섯 API 병렬 호출
+        const [senderResult, kwResult, afResult, syncResult, ratingResult] = await Promise.allSettled([
+          postStat('/mail-stats', gmailId),
+          postStat('/keyword-stats', gmailId),
+          postStat('/high_affinity_person_stats', gmailId),
+          postStat('/mail_sync_stats', gmailId),
+          postStat('/user_rating_stats', gmailId),
+        ]);
+
+        // ── 발신자/수신자 통계 ──
+        if (senderResult.status === 'fulfilled' && senderResult.value.data && Object.keys(senderResult.value.data).length > 0) {
+          renderSenderStats(senderResult.value.data);
+        } else {
+          document.getElementById('rcSenderLoading').style.display = 'none';
+          document.getElementById('rcMySentLoading').style.display = 'none';
+          const msg = senderResult.status === 'rejected'
+            ? '불러오기 실패: ' + senderResult.reason.message : '데이터가 없습니다.';
+          ['rcSenderError','rcMySentError'].forEach(id => {
+            const el = document.getElementById(id); el.style.display = ''; el.textContent = msg;
+          });
+        }
+
+        // ── 키워드 통계 ──
+        document.getElementById('rcKwLoading').style.display = 'none';
+        if (kwResult.status === 'fulfilled' && kwResult.value.data) {
+          renderKeywordStats(kwResult.value.data);
+          document.getElementById('rcKwContent').style.display = '';
+        } else {
+          const err = document.getElementById('rcKwError');
+          err.style.display = '';
+          err.textContent = kwResult.status === 'rejected'
+            ? '불러오기 실패: ' + kwResult.reason.message
+            : '데이터가 없습니다.';
+        }
+
+        // ── 친밀도 통계 ──
+        document.getElementById('rcAfLoading').style.display = 'none';
+        if (afResult.status === 'fulfilled' && afResult.value.data) {
+          renderAffinityStats(afResult.value.data);
+          document.getElementById('rcAfContent').style.display = '';
+        } else {
+          const err = document.getElementById('rcAfError');
+          err.style.display = '';
+          err.textContent = afResult.status === 'rejected'
+            ? '불러오기 실패: ' + afResult.reason.message
+            : '데이터가 없습니다.';
+        }
+
+        // ── 동기화 통계 ──
+        if (syncResult.status === 'fulfilled' && syncResult.value.data) {
+          renderSyncStats(syncResult.value.data);
+        } else {
+          document.getElementById('rcSyncLoading').style.display = 'none';
+          const err = document.getElementById('rcSyncError');
+          err.style.display = '';
+          err.textContent = syncResult.status === 'rejected'
+            ? '불러오기 실패: ' + syncResult.reason.message : '데이터가 없습니다.';
+        }
+
+        // ── 만족도 통계 ──
+        if (ratingResult.status === 'fulfilled' && ratingResult.value.data) {
+          renderRatingStats(ratingResult.value.data);
+        } else {
+          document.getElementById('rcRatingLoading').style.display = 'none';
+          const err = document.getElementById('rcRatingError');
+          err.style.display = '';
+          err.textContent = ratingResult.status === 'rejected'
+            ? '불러오기 실패: ' + ratingResult.reason.message : '데이터가 없습니다.';
+        }
+      });
+    </script>
+  </body>
+</html>

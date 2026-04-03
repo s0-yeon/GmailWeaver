@@ -42,7 +42,9 @@ app = Flask(__name__)   # Flask 앱 객체 생성. 해당 파일이 서버의 �
 CORS(app)   # Cross-Origin Resource Sharing 허용 (다른 환경에서 이 서버의 API를 호출할 수 있도록)
 
 # Apps Script Web App URL (캘린더, 라벨 등 모든 프록시에서 공통 사용)
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwAk_JabdKuGUHIVcaKeEnY1DUiYb0uqkiu-KdUG67Zf1U3D8k-F06RGS5043k_fZS8MQ/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzuZ8CJdGBVGp2kqqmqwm43yW_wVoeDex6efJnpEe7fCTQXXtueEl2SVSFjvtrW-sB4/exec"
+
+
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지 (utf-8 인코딩 및 대체 문자 처리)
 if hasattr(sys.stdout, "reconfigure"):
@@ -822,7 +824,7 @@ def upload():
         _delete_incremental_files(paths)
         with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
             renumbered = _renumber_mail_blocks(content.rstrip())
-            f.write(f"me: {gmail_id}\n\n" + renumbered)
+            f.write(renumbered)
         saved_mail_path = paths.MAIL_LATEST_PATH
 
         added_count = len(_split_mail_blocks(content))
@@ -873,9 +875,10 @@ def upload():
             existing_clean = "\n".join(existing_lines).lstrip("\n")
 
             # 혹시 남아있는 ====\nme:...\n==== 블록도 제거
-            existing_clean = re.sub(r"={60}\s*\nme:.*\n={60}\s*\n?", "", existing_clean)
+            # existing_clean = re.sub(r"={60}\s*\nme:.*\n={60}\s*\n?", "", existing_clean)
 
-            updated_content = f"me: {gmail_id}\n\n" + inc_content + "\n" + existing_clean
+            # updated_content = f"me: {gmail_id}\n\n" + inc_content + "\n" + existing_clean
+            updated_content = inc_content + "\n" + existing_clean
             with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
                 f.write(_renumber_mail_blocks(updated_content.strip()))
 
@@ -992,7 +995,7 @@ def index_status():     # GraphRAG 인덱싱 완료 여부 반환
 @app.route('/dashboard/', defaults={'path': 'production/index.html'})
 @app.route('/dashboard/<path:path>')
 def dashboard(path):
-    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist')
+    dist_dir = os.path.join(os.path.dirname(__file__), 'web', 'dist')
     # /dashboard/index2.html 요청 → production/index2.html로 매핑
     if not path.startswith('production/') and path.endswith('.html'):
         path = 'production/' + path
@@ -1001,17 +1004,17 @@ def dashboard(path):
 # dist 루트 정적 파일 서빙 (assets, js, fonts)
 @app.route('/assets/<path:path>')
 def static_assets(path):
-    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'assets')
+    dist_dir = os.path.join(os.path.dirname(__file__), 'web', 'dist', 'assets')
     return send_from_directory(dist_dir, path)
 
 @app.route('/js/<path:path>')
 def static_js(path):
-    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'js')
+    dist_dir = os.path.join(os.path.dirname(__file__), 'web', 'dist', 'js')
     return send_from_directory(dist_dir, path)
 
 @app.route('/fonts/<path:path>')
 def static_fonts(path):
-    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'fonts')
+    dist_dir = os.path.join(os.path.dirname(__file__), 'web', 'dist', 'fonts')
     return send_from_directory(dist_dir, path)
 
 # 엔드포인트: POST /calendar-events (Apps Script 캘린더 프록시)
@@ -1031,16 +1034,33 @@ def calendar_events():
 def labels_proxy():
     data = request.json or {}
     try:
-        res = requests.post(WEBAPP_URL, json=data, allow_redirects=True)
-        print("[labels] status:", res.status_code)
-        try:
-            return jsonify(res.json())
-        except Exception:
-            return jsonify({"ok": False, "error": res.text[:200]}), 200
+        res = requests.post(WEBAPP_URL, json=data, allow_redirects=False, timeout=30)
+        print("[labels] 1차 status:", res.status_code)
+
+        # 302 처리
+        if res.status_code in (301, 302, 303, 307, 308):
+            location = res.headers.get("Location")
+            print("[labels] redirect →", location)
+            res = requests.post(location, json=data, allow_redirects=False, timeout=30)
+            print("[labels] 2차 status:", res.status_code)
+
+        # HTML 오류 감지 (한 번만)
+        content_type = res.headers.get("Content-Type", "")
+        if "text/html" in content_type:
+            msg = re.search(r'class="errorMessage"[^>]*>(.*?)</div>', res.text, re.DOTALL)
+            error_text = msg.group(1).strip() if msg else res.text[300:800]
+            print("[labels] GAS 오류 메시지:", error_text)
+            return jsonify({"ok": False, "error": error_text}), 200
+
+        return jsonify(res.json())
+
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+    
+
 
 import urllib.request
+
 
 # 엔드포인트: POST /upload-attachments
 # 10분 트리거에서 호출 - 첨부파일 원본만 수신해서 백그라운드로 처리
@@ -1093,6 +1113,7 @@ def marker_icon():
     from flask import Response
     return Response(data, mimetype='image/png')
 
+# /dashboard/marker-shadow.png 경로로 들어오는 요청을 처리하는 Flask 라우트
 @app.route('/dashboard/marker-shadow.png')
 def marker_shadow():
     url = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png'
@@ -1100,6 +1121,7 @@ def marker_shadow():
         data = r.read()
     from flask import Response
     return Response(data, mimetype='image/png')
+
 
 # 웹앱용 가라데이터 라우트
 @app.route("/mail-stats", methods=["POST"])

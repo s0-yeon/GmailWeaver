@@ -1,7 +1,7 @@
 // src/apps-script/common.js
-var TunnelURL = "https://transpalmar-christine-noneducatory.ngrok-free.dev"; // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
+var TunnelURL = "https://detainable-thumbless-arnav.ngrok-free.dev"; // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
 const WEBAPP_URL =
-  "https://script.google.com/macros/s/AKfycbz3bAOxML5BZSSJcMFM1or5jY8K4NVwliHk_Rbe9jXYVBXbYM05Fl-1bPG1909_38hZ/exec"; // Apps Script Web App으로 배포된 URL
+  "https://script.google.com/macros/s/AKfycbxQN-o7ZKI-daT-D-8h9YLo63IUefp9ShJGpZxWEPwuh1A6gH6kNMrzwP07o46eh6WE/exec"; // Apps Script Web App으로 배포된 URL
 
 const OLIVE = "#c6d8a5";
 
@@ -94,16 +94,6 @@ function _buildGmailMessageCard(e) {
   var messageId = e.messageMetadata ? e.messageMetadata.messageId : null;
 
   if (accessToken) GmailApp.setCurrentMessageAccessToken(accessToken);
-
-  // 섹션 1: 웹페이지 + 서버 전송
-  var serverBtn = CardService.newTextButton()
-    .setText("ㅤㅤ☁ 이 메일을 서버로 전송ㅤㅤ")
-    .setTextButtonStyle(CardService.TextButtonStyle.OUTLINED)
-    .setOnClickAction(
-      CardService.newAction()
-        .setFunctionName("onUploadSingleMessage")
-        .setParameters({ messageId: messageId || "" }),
-    );
 
   var webSection = CardService.newCardSection()
     .addWidget(_webpageBtn())
