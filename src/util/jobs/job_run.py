@@ -14,7 +14,8 @@ from util.user_path import user_graphrag_init
 # from config.settings import GRAPH_BUILD_SCRIPT, GRAPHRAG_ROOT, BASE_DIR
 
 from config.settings import MAIL_BLOCK_SEP
-
+from util.extract_statics import start_timer,end_timer,format_elapsed_time
+from util.database.db_writer import create_user
 
 # 첨부파일 텍스트 요약 (공백/줄바꿈 제외 500자 미만이면 원문 그대로 반환)
 def _summarize_attachment_text(text: str,paths, filename: str) -> str:
@@ -293,8 +294,20 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None):
             _merge_summarized_attachments(paths.MAIL_LATEST_PATH, summarized_by_mail)
             print(f"[JOB][summarize] DONE job_id={job_id}")
 
+        timer = start_timer() #인덱싱 시간 측정용, 측정 시작
         build_graphrag_index(job_id,paths, env)
+        time_result = end_timer(timer) #인덱싱 시간 측정용, 측정 끝
+
         build_graph_json(job_id,paths, env)
+
+        formatted_time = format_elapsed_time(time_result["elapsed_sec"])
+
+        create_user(
+                user_account_id=paths.GMAIL_ID,
+                started_at=time_result["started_at"],
+                ended_at=time_result["ended_at"],
+                index_time=formatted_time
+            )
 
 
         update_job(job_id, progress=100, status="done", message="인덱싱 완료")

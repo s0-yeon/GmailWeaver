@@ -3,6 +3,7 @@ import re
 import json
 import time
 import traceback
+from datetime import datetime
 from dotenv import load_dotenv
 from openai import OpenAI
 # Job 이용 공통함수 import
@@ -11,6 +12,29 @@ from util.jobs.job_store import *
 load_dotenv("src/parquet/.env")
 
 client = OpenAI(api_key=os.getenv("GRAPHRAG_API_KEY"))
+
+def start_timer():
+    return {
+        "started_at": datetime.now(),
+        "start_perf": time.perf_counter()
+    }
+
+def end_timer(timer):
+    ended_at = datetime.now()
+    elapsed_sec = time.perf_counter() - timer["start_perf"]
+
+    return {
+        "started_at": timer["started_at"],
+        "ended_at": ended_at,
+        "elapsed_sec": round(elapsed_sec, 2)
+    }
+
+def format_elapsed_time(seconds: float) -> str:
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    secs = seconds % 60  # 소수 포함
+
+    return f"{hours:02d}:{minutes:02d}:{secs:05.2f}"
 
 # 이름+메일주소 형식에서 이름과 메일주소 분리하여 반환
 def _parse_contact(raw: str) -> tuple[str, str]:
