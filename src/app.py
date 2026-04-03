@@ -33,7 +33,7 @@ from util.jobs.job_run import start_graph_pipeline_background, start_graph_updat
 from config.settings import *
 from util.user_path import UserPaths
 from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_low_affinity_person_stats,get_high_affinity_person_stats
-
+from util.extract_statics import start_statics_pipeline_background
 # 환경변수 로드
 load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: GraphRAG 설정(settings.yaml)과 API 키가 같은 디렉터리에 위치하기 때문
 
@@ -42,8 +42,8 @@ app = Flask(__name__)   # Flask 앱 객체 생성. 해당 파일이 서버의 �
 CORS(app)   # Cross-Origin Resource Sharing 허용 (다른 환경에서 이 서버의 API를 호출할 수 있도록)
 
 # Apps Script Web App URL (캘린더, 라벨 등 모든 프록시에서 공통 사용)
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzuZ8CJdGBVGp2kqqmqwm43yW_wVoeDex6efJnpEe7fCTQXXtueEl2SVSFjvtrW-sB4/exec"
 
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz3bAOxML5BZSSJcMFM1or5jY8K4NVwliHk_Rbe9jXYVBXbYM05Fl-1bPG1909_38hZ/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지 (utf-8 인코딩 및 대체 문자 처리)
@@ -451,65 +451,6 @@ def _read_json_file(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
-
-# 이름+메일주소 형식에서 이름과 메일주소 분리하여 반환
-def _parse_contact(raw: str) -> tuple[str, str]:
-        m = re.search(r"^(.*?)\s*<([^>]+)>", raw.strip())
-        if m:
-            name  = m.group(1).strip().strip('"')
-            email = m.group(2).strip().lower()
-        else:
-            name  = ""
-            email = raw.strip().lower()
-        return name, email
-
-# 메일 블록에서 특정 필드 값 추출
-def _extract_field(block: str, label: str) -> str:
-        m = re.search(rf"^{label}:\s*(.+)$", block, re.MULTILINE)
-        return m.group(1).strip() if m else ""
-
-# 메일 발신 수신 횟수 계정별로 저장
-def _save_mail_contact_stats(blocks: list[str],paths, mode: str = "rewrite"):
-    
-    # 새로운 메일만 추가된 거라 이미 횟수 저장한 json 파일이 존재할 때 
-    if mode == "append" and os.path.exists(paths.MAIL_STATICS_PATH):
-        with open(paths.MAIL_STATICS_PATH, "r", encoding="utf-8") as f:
-            stats = json.load(f)
-    else: # 전체 갱신 모드일 때 빈 딕셔너리로 초기화해서 새로 횟수 셈
-        stats = {}
-    # 송수신 횟수 누적
-    def add(name: str, email: str, direction: str):
-        if not email or email in ("-", ""):
-            return
-        # 이메일 처음 등장하면 name, sent, received 초기화
-        stats.setdefault(email, {"name": name, "sent": 0, "received": 0})
-        # 이름이 있을 때 덮어씀
-        if name:
-            stats[email]["name"] = name
-        stats[email][direction] += 1
-    # 블록 순회하며 횟수 집계
-    for block in blocks:
-        direction = _extract_field(block, "구분") # 발신 또는 수신
-        from_raw  = _extract_field(block, "발신인") # 발신인 원문
-        to_raw    = _extract_field(block, "수신인") # 수신인 원문 
-
-        if direction == "발신":
-            # 수신인 여러명이면 ,로 구분
-            for addr in to_raw.split(","):
-                name, email = _parse_contact(addr)
-                add(name, email, "sent")
-        elif direction == "수신":
-            name, email = _parse_contact(from_raw)
-            add(name, email, "received")
-
-    # json 파일에 저장
-    os.makedirs(os.path.dirname(paths.MAIL_STATICS_PATH), exist_ok=True)
-
-    with open(paths.MAIL_STATICS_PATH, "w", encoding="utf-8") as f:
-        json.dump(stats, f, ensure_ascii=False, indent=2) # indent=2 : 사람이 읽기 쉽게 들여쓰기 적용
-
-    print(f"[STATS] ({mode}) 계정 {len(stats)}개 집계 완료 → {paths.MAIL_STATICS_PATH}")
-    
 # 인덱스 여부 확인
 def _is_index_ready(paths):
 
@@ -888,8 +829,9 @@ def upload():
 
         added_count = len(_split_mail_blocks(content))
 
-        added_count = len(_split_mail_blocks(content))
-        _save_mail_contact_stats(_split_mail_blocks(content), paths, mode="rewrite")
+        job_id = str(uuid.uuid4())[:8]
+        create_job(job_id, job_type="statics")
+        start_statics_pipeline_background(job_id,_split_mail_blocks(content), paths, mode="rewrite")
 
     # 새 메일만 추가 append 모드
     else:
@@ -937,13 +879,15 @@ def upload():
 
             # updated_content = f"me: {gmail_id}\n\n" + inc_content + "\n" + existing_clean
             updated_content = inc_content + "\n" + existing_clean
-            
             with open(paths.MAIL_LATEST_PATH, "w", encoding="utf-8") as f:
                 f.write(_renumber_mail_blocks(updated_content.strip()))
 
             saved_mail_path = inc_path
 
-            _save_mail_contact_stats(append_blocks, paths, mode="append")
+            job_id = str(uuid.uuid4())[:8]
+            create_job(job_id, job_type="statics")
+
+            start_statics_pipeline_background(job_id,append_blocks, paths, mode="append")
 
         else:
             saved_mail_path = ""
@@ -1051,7 +995,7 @@ def index_status():     # GraphRAG 인덱싱 완료 여부 반환
 @app.route('/dashboard/', defaults={'path': 'production/index.html'})
 @app.route('/dashboard/<path:path>')
 def dashboard(path):
-    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist')
+    dist_dir = os.path.join(os.path.dirname(__file__), 'web', 'dist')
     # /dashboard/index2.html 요청 → production/index2.html로 매핑
     if not path.startswith('production/') and path.endswith('.html'):
         path = 'production/' + path
@@ -1060,17 +1004,17 @@ def dashboard(path):
 # dist 루트 정적 파일 서빙 (assets, js, fonts)
 @app.route('/assets/<path:path>')
 def static_assets(path):
-    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'assets')
+    dist_dir = os.path.join(os.path.dirname(__file__), 'web', 'dist', 'assets')
     return send_from_directory(dist_dir, path)
 
 @app.route('/js/<path:path>')
 def static_js(path):
-    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'js')
+    dist_dir = os.path.join(os.path.dirname(__file__), 'web', 'dist', 'js')
     return send_from_directory(dist_dir, path)
 
 @app.route('/fonts/<path:path>')
 def static_fonts(path):
-    dist_dir = os.path.join(os.path.dirname(__file__), 'apps-script', 'web', 'dist', 'fonts')
+    dist_dir = os.path.join(os.path.dirname(__file__), 'web', 'dist', 'fonts')
     return send_from_directory(dist_dir, path)
 
 # 엔드포인트: POST /calendar-events (Apps Script 캘린더 프록시)
@@ -1090,16 +1034,33 @@ def calendar_events():
 def labels_proxy():
     data = request.json or {}
     try:
-        res = requests.post(WEBAPP_URL, json=data, allow_redirects=True)
-        print("[labels] status:", res.status_code)
-        try:
-            return jsonify(res.json())
-        except Exception:
-            return jsonify({"ok": False, "error": res.text[:200]}), 200
+        res = requests.post(WEBAPP_URL, json=data, allow_redirects=False, timeout=30)
+        print("[labels] 1차 status:", res.status_code)
+
+        # 302 처리
+        if res.status_code in (301, 302, 303, 307, 308):
+            location = res.headers.get("Location")
+            print("[labels] redirect →", location)
+            res = requests.post(location, json=data, allow_redirects=False, timeout=30)
+            print("[labels] 2차 status:", res.status_code)
+
+        # HTML 오류 감지 (한 번만)
+        content_type = res.headers.get("Content-Type", "")
+        if "text/html" in content_type:
+            msg = re.search(r'class="errorMessage"[^>]*>(.*?)</div>', res.text, re.DOTALL)
+            error_text = msg.group(1).strip() if msg else res.text[300:800]
+            print("[labels] GAS 오류 메시지:", error_text)
+            return jsonify({"ok": False, "error": error_text}), 200
+
+        return jsonify(res.json())
+
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+    
+
 
 import urllib.request
+
 
 # 엔드포인트: POST /upload-attachments
 # 10분 트리거에서 호출 - 첨부파일 원본만 수신해서 백그라운드로 처리
@@ -1152,6 +1113,7 @@ def marker_icon():
     from flask import Response
     return Response(data, mimetype='image/png')
 
+# /dashboard/marker-shadow.png 경로로 들어오는 요청을 처리하는 Flask 라우트
 @app.route('/dashboard/marker-shadow.png')
 def marker_shadow():
     url = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png'
@@ -1159,6 +1121,7 @@ def marker_shadow():
         data = r.read()
     from flask import Response
     return Response(data, mimetype='image/png')
+
 
 # 웹앱용 가라데이터 라우트
 @app.route("/mail-stats", methods=["POST"])

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Gentelella Alela! | </title>    <!-- Compiled CSS (includes Bootstrap, Font Awesome, and all vendor styles) -->
+    <script type="module" src="/src/main-minimal.js"></script>
+
+    <!-- Modernised Button App styles -->
+    <style>
+      .btn-app {
+        @apply btn; /* fallback: mimic Bootstrap .btn */
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        position: relative;
+        padding: 1rem 0.9rem;
+        margin: 0 0.5rem 0.9rem 0;
+        min-width: 100px;
+        color: #fff;
+        background-color: var(--bs-primary);
+        border-radius: 0.5rem;
+        transition: background-color .2s, box-shadow .2s;
+      }
+      .btn-app .fas {
+        font-size: 1.35rem;
+      }
+      .btn-app .badge {
+        position: absolute;
+        top: -0.5rem;
+        right: -0.5rem;
+        border-radius: 50%;
+        padding: 0.4em 0.6em;
+      }
+      .btn-app:hover {
+        background-color: var(--bs-primary-dark,#0b5ed7);
+        box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,.15);
+        color: #fff;
+      }
+    </style>
+</head>
+
+<body class="nav-md page-form-buttons">
+  <div class="container body">
+    <div class="main_container">
+        <!-- Sidebar -->
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title site_title_text">
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
+                Olive
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
+              </div>
+              <div class="profile_info">
+                <span data-i18n="sidebar.welcome">Welcome,</span>
+                <h4 id="google-profile-name">-</h4>
+              </div>
+            </div>
+            <br />
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="index2.html"><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span><span class="bi bi-chevron-right"></span></a></li>
+                  <li>
+                    <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="api_test.html"><i class="bi bi-terminal"></i> API Test <span class="badge bg-warning text-dark">Dev</span></a></li>
+                    </ul>
+                  </li>
+                  <li><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span><span class="bi bi-chevron-right"></span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- top navigation -->
+      <div class="top_nav">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fas fa-bars"></i></a>
+              </div>
+              <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle info-number" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-envelope"></i>
+                    <span class="badge bg-green">6</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end list-unstyled msg_list dropdown-menu-lg" role="menu" aria-labelledby="navbarDropdown1">
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    <li class="nav-item">
+                      <div class="text-center">
+                        <a class="dropdown-item">
+                          <strong>See All Alerts</strong>
+                          <i class="fas fa-angle-right"></i>
+                        </a>
+                      </div>
+                  </ul>
+                </li>
+                                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color:inherit;">
+                    <i class="bi bi-translate" style="font-size: 1.2rem; vertical-align: middle;"></i>
+                    <span id="current-lang" style="margin-left: 4px; font-size: 0.9rem;">KO</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ko" data-i18n="lang.ko">🇰🇷 한국어</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="en" data-i18n="lang.en">🇺🇸 English</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ja" data-i18n="lang.ja">🇯🇵 日本語</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      <!-- /top navigation -->
+
+      <!-- page content -->
+      <main class="right_col" role="main" aria-label="Main content">
+        <div class="">
+          <div class="page-title">
+            <div class="title_left">
+              <h3>Form Buttons</h3>
+            </div>
+
+            <div class="title_right">
+              <div class="col-md-5 col-sm-5 mb-3 float-end top_search">
+                <div class="input-group search-bar-fix">
+                  <input type="text" class="form-control" placeholder="Search for...">
+                  <button class="btn btn-outline-secondary" type="button">
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="clearfix"></div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h4>Default Buttons </h4>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i
+                          class="fas fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        <li><a href="#">Settings 2</a>
+                      </ul>
+                    <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <button type="button" class="btn btn-secondary">Default</button>
+
+                  <button type="button" class="btn btn-primary">Primary</button>
+
+                  <button type="button" class="btn btn-success">Success</button>
+
+                  <button type="button" class="btn btn-info">Info</button>
+
+                  <button type="button" class="btn btn-warning">Warning</button>
+
+                  <button type="button" class="btn btn-danger">Danger</button>
+
+                  <button type="button" class="btn btn-dark">Dark</button>
+
+                  <button type="button" class="btn btn-link">Link</button>
+                </div>
+              </div>
+
+
+              <div class="x_panel">
+                <div class="x_title">
+                  <h4>Rounded Button</h4>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i
+                          class="fas fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        <li><a href="#">Settings 2</a>
+                      </ul>
+                    <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <button type="button" class="btn btn-round btn-secondary">Default</button>
+                  <button type="button" class="btn btn-round btn-primary">Primary</button>
+                  <button type="button" class="btn btn-round btn-success">Success</button>
+                  <button type="button" class="btn btn-round btn-info">Info</button>
+                  <button type="button" class="btn btn-round btn-warning">Warning</button>
+                  <button type="button" class="btn btn-round btn-danger">Danger</button>
+                </div>
+              </div>
+
+              <div class="x_panel">
+                <div class="x_title">
+                  <h4>Button Dropdown</h4>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i
+                          class="fas fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        <li><a href="#">Settings 2</a>
+                      </ul>
+                    <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                  
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">
+                      Default
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                  </div>
+
+                  
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">
+                      Primary
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                  </div>
+
+                  
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">
+                      Success
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="x_panel">
+                <div class="x_title">
+                  <h4>Split Button Dropdown</h4>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i
+                          class="fas fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        <li><a href="#">Settings 2</a>
+                      </ul>
+                    <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                  <!-- Split button -->
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-danger">Action</button>
+                    <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                  </div>
+
+                  <!-- Split button -->
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-danger">Action</button>
+                    <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                  </div>
+
+                  <!-- Split button -->
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-danger">Action</button>
+                    <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+
+              <div class="x_panel">
+                <div class="x_title">
+                  <h4>Button App Design</h4>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i
+                          class="fas fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        <li><a href="#">Settings 2</a>
+                      </ul>
+                    <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <p>Add the class <code>.btn .btn-app</code> tag</p>
+                  <a class="btn btn-app">
+                    <i class="bi bi-pencil-square"></i> Edit
+                  </a>
+                  <a class="btn btn-app">
+                    <i class="fas fa-play"></i> Play
+                  </a>
+                  <a class="btn btn-app">
+                    <i class="fas fa-pause"></i> Pause
+                  </a>
+                  <a class="btn btn-app">
+                    <i class="fas fa-save"></i> Save
+                  </a>
+                  <a class="btn btn-app">
+                    <span class="badge bg-red">6</span>
+                    <i class="fas fa-bullhorn"></i> Notifications
+                  </a>
+                  <a class="btn btn-app">
+                    <i class="fas fa-repeat"></i> Repeat
+                  </a>
+                  <a class="btn btn-app">
+                    <span class="badge bg-green">211</span>
+                    <i class="fas fa-users"></i> Users
+                  </a>
+                  <a class="btn btn-app">
+                    <span class="badge bg-orange">32</span>
+                    <i class="fas fa-inbox"></i> Orders
+                  </a>
+                  <a class="btn btn-app">
+                    <span class="badge bg-orange">12</span>
+                    <i class="fas fa-envelope"></i> Inbox
+                  </a>
+                  <a class="btn btn-app">
+                    <span class="badge bg-blue">102</span>
+                    <i class="fas fa-heart"></i> Likes
+                  </a>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+              <div class="x_panel">
+                <div class="x_title">
+                  <h4>Button Sizes</h4>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i
+                          class="fas fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        <li><a href="#">Settings 2</a>
+                      </ul>
+                    <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="buttons">
+                    <!-- Standard button -->
+                    <button type="button" class="btn btn-secondary btn-lg">Large Button</button>
+                    <button type="button" class="btn btn-secondary">Default Button</button>
+                    <button type="button" class="btn btn-secondary btn-sm">Small Button</button>
+                    <br>
+
+                    <button type="button" class="btn btn-success btn-lg">Large Button</button>
+                    <button type="button" class="btn btn-success">Default Button</button>
+                    <button type="button" class="btn btn-success btn-sm">Small Button</button>
+                    <br>
+
+                    <button type="button" class="btn btn-info btn-lg">Large Button</button>
+                    <button type="button" class="btn btn-info">Default Button</button>
+                    <button type="button" class="btn btn-info btn-sm">Small Button</button>
+                    <br>
+                  </div>
+                </div>
+
+              </div>
+
+
+              <div class="x_panel">
+                <div class="x_title">
+                  <h4>Button Groups</h4>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fas fa-chevron-up"></i></a>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i
+                          class="fas fa-wrench"></i></a>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="#">Settings 1</a>
+                              <a class="dropdown-item" href="#">Settings 2</a>
+                            </div>
+                    <li><a class="btn-btn-close-link"><i class="fas fa-times"></i></a>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="row">
+                    <div class="col-md-6">
+                    <div class="btn-group">
+                      <button class="btn btn-secondary" type="button">Left</button>
+                      <button class="btn btn-secondary" type="button">Middle</button>
+                      <button class="btn btn-secondary" type="button">Right</button>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="...">
+                      <button class="btn btn-secondary" type="button">Left</button>
+                      <button class="btn btn-secondary" type="button">Middle</button>
+                      <button class="btn btn-secondary" type="button">Right</button>
+                    </div>
+                  </div>
+                  </div>
+                  <p class="text-muted">Vertical button groups</p>
+                  <div class="row">
+                    <div class="btn-group-vertical">
+                      <button class="btn btn-secondary" type="button">Top</button>
+                      <button class="btn btn-secondary" type="button">Middle</button>
+                      <button class="btn btn-secondary" type="button">Bottom</button>
+                    </div>
+                  </div>
+                  <p class="text-muted">Nested button groups</p>
+                  <div class="row">
+                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                      <button type="button" class="btn btn-secondary">1</button>
+                      <button type="button" class="btn btn-secondary">2</button>
+                      <button type="button" class="btn btn-secondary">3</button>
+
+                      <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
+                          data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Dropdown
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                          <a class="dropdown-item" href="#">Dropdown link</a>
+                          <a class="dropdown-item" href="#">Dropdown link</a>
+                          <a class="dropdown-item" href="#">Dropdown link</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p class="text-muted">Multiple button groups</p>
+                  <div class="row">
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                      <div class="btn-group me-2" role="group" aria-label="First group">
+                        <button type="button" class="btn btn-secondary">1</button>
+                        <button type="button" class="btn btn-secondary">2</button>
+                        <button type="button" class="btn btn-secondary">3</button>
+                        <button type="button" class="btn btn-secondary">4</button>
+                      </div>
+                      <div class="btn-group me-2" role="group" aria-label="Second group">
+                        <button type="button" class="btn btn-secondary">5</button>
+                        <button type="button" class="btn btn-secondary">6</button>
+                        <button type="button" class="btn btn-secondary">7</button>
+                      </div>
+                      <div class="btn-group" role="group" aria-label="Third group">
+                        <button type="button" class="btn btn-secondary">8</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p class="text-muted">Group Radio</p>
+                  <div class="row">
+                    <div class="btn-group form-check" data-bs-toggle="buttons">
+                      <label class="btn btn-secondary">
+                        <input type="radio" class="join-btn" name="options" id="option1"> Option 1
+                      </label>
+                      <label class="btn btn-secondary">
+                        <input type="radio" name="options" class="join-btn" id="option2"> Option 2
+                      </label>
+                      <label class="btn btn-secondary">
+                        <input type="radio" name="options" class="join-btn" id="option3"> Option 3
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /page content -->
+
+      <!-- footer content -->
+      <footer>
+        <div class="float-end">
+          Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+        </div>
+        <div class="clearfix"></div>
+      </footer>
+      <!-- /footer content -->
+    </div>
+  </div>    <!-- Compiled JavaScript (Bootstrap and vendor scripts) -->
+    
+</body>
+
+</html>
