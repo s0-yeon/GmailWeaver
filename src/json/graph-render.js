@@ -5,8 +5,8 @@
 (function (global) {
   const COLORS = {
     EMAIL: "#f87171", // 빨강
-    PERSON: "#fb923c", // 주황
-    TOPIC: "#FFE14A", // 노랑
+    PERSON: "#ffa255", // 주황
+    TOPIC: "#eef616", // 노랑
     ORGANIZATION: "#34d399", // 초록
     LABEL: "#60a5fa", // 파랑
     EVENT: "#a78bfa", // 보라
