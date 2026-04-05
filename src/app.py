@@ -544,6 +544,7 @@ def _run_attachment_pipeline(job_id: str, paths, attachments: list, env: dict):
         # 3) attachment_latest.txt 저장
         # rewrite면 전체 덮어쓰기, 아니면 mail_id 기준으로 병합
         _write_attachment_file(paths, summarized_by_mail)
+        _build_mail_csv(paths)    
 
         update_job(job_id, progress=60, message="graphrag update 실행 중")
 
@@ -637,6 +638,52 @@ def _parse_attachment_file(raw: str) -> dict[str, list[dict]]:
             result[mail_id] = items
 
     return result
+
+# mail_latest.txt + attachment_latest.txt → mail_latest.csv 생성
+def _build_mail_csv(paths) -> str:
+    # 1) mail_latest.txt 파싱 → {mail_id: block_text}
+    mail_text = _read_latest_text(paths)
+    mail_blocks: dict[str, str] = {}
+
+    for block in _split_mail_blocks(mail_text):
+        mail_id = _extract_mail_id_from_block(block)
+        if mail_id:
+            mail_blocks[mail_id] = block.strip()
+    
+    # 2) attachment_latest.txt 파싱 → {mail_id: [{name, text}]}
+    att_path = os.path.join(paths.MAIL_DIR, "attachment_latest.txt")
+    attachment_map: dict[str, list[dict]] = {}
+    if os.path.exists(att_path):
+        try:
+            with open(att_path, "r", encoding="utf-8") as f:
+                attachment_map = _parse_attachment_file(f.read())
+        except Exception as e:
+            print(f"[CSV] attachment 파싱 실패, 무시하고 계속: {e}")
+    
+    # 3) 두 dict 병합 → CSV row
+    rows = []
+    for mail_id, block_text in mail_blocks.items():
+        text = block_text
+
+        # 첨부파일 요약이 있으면 메일 블록 하단에 이어붙임
+        if mail_id in attachment_map:
+            att_section = "\n\n[첨부파일 요약]\n"
+            for item in attachment_map[mail_id]:
+                att_section += f"[File name] {item['name']}\n{item['text']}\n"
+            text = text + att_section.rstrip()
+
+        rows.append({"id": mail_id, "text": text})
+
+    # 4) CSV 저장
+    csv_path = os.path.join(paths.MAIL_DIR, "mail_latest.csv")
+    with open(csv_path, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=["id", "text"])
+        writer.writeheader()
+        writer.writerows(rows)
+
+    print(f"[CSV] 생성 완료 → {csv_path} ({len(rows)}개 메일)")
+    return csv_path
+
 
 # 엔드포인트: POST /extract-calendar
 @app.route('/extract-calendar', methods=['POST'])
@@ -922,10 +969,13 @@ def upload():
             print(f"[CLEAN] update_output 없음: {update_dir}")
 
         # 첨부는 트리거에서 처리하므로 전달하지 않음
+        _build_mail_csv(paths)    
         start_graph_pipeline_background(job_id, paths, env,added_count=added_count)
 
-    else:
-        start_graph_update_pipeline_background(job_id,paths, env,added_count=added_count)
+    else:   # sync_mode == "append"
+        _build_mail_csv(paths)    
+        # start_graph_update_pipeline_background(job_id,paths, env,added_count=added_count)
+        start_graph_update_pipeline_background(job_id, paths, env)  # added_count 제거
 
     return jsonify({
             "ok": True,
