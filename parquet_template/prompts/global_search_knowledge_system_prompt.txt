@@ -23,8 +23,8 @@ about the following cases — these are where assumptions most commonly go wrong
    [LLM: verify]. Event.Schedule 필드에 없는 날짜는 지어내지 않는다.
  
 5. 첨부파일 내용
-   Email.Attachments 필드에 파일명만 있는 경우, 파일의 내용을 추론하거나 요약하지
-   않는다. 파일명만 사실로 언급하고, 내용 추정 시 [LLM: verify].
+   Attachment 엔티티에 Filename만 사실로 언급하고, 파일의 내용을 추론하거나 
+   요약하지 않는다. 내용 추정 시 [LLM: verify].
  
 데이터에 명시된 사실(엔티티 필드값, 관계 description)은 [LLM: verify] 없이
 서술할 수 있다. 데이터에 없는 내용을 보완하거나 추론할 때만 이 태그를 사용한다.
