@@ -4,12 +4,12 @@ and the relationships between them. Output both using the specified formats.
 The input may be an email, a structured table, or plain text — adapt accordingly.
 
 -Steps-
-1. Identify Entities: 
+1. Identify Entities:
 1.1 Extract entities of the following types: '[{entity_types}]'.
 Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter}<description>)'
   * Email:        'Title: <subject> | ID: <mail_id> | Date: <YYYY-MM-DD HH:MM> | Tone: <formal/casual/transactional/notification/alert> | Summary: <1-sentence>'
   * Person:       'Account: <email> | Name: <name/None>'
-  * Organization: 'Context: <department> | Team: <team>'
+  * Organization: 'OrgName: <organization_name> | Department: <department/None>'
   * Topic:        'Priority: <high/mid/low> | Summary: <Core topic of this email in 1 sentence>'
   * Label:        'Category: <label_name>'
   * Event:        'EventName: <Event Name> | Schedule: <YYYY-MM-DD HH:MM> | Location: <place/None> | Status: <confirmed/tentative>'
@@ -19,12 +19,11 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
   * The 'name' (title) of an Email entity MUST always be the <mail_id> (Unique Identifier).
   * CRITICAL: If the 'ID:' field is missing, unreadable, or empty, DO NOT create the Email entity.
   * CRITICAL: NEVER generate or use dummy IDs (e.g., 'MAIL_001', 'mail_001', 'temp_id'). Only authentic IDs from the source data are allowed.
-  * The 'Title' attribute MUST use the exact subject from the '[제목]' field. 
+  * The 'Title' attribute MUST use the exact subject from the '[제목]' field.
     - If the subject is missing or empty, set it to '(제목 없음)'.
   * Date Attribute: Use the exact value from the 'Date (날짜):' field.
     - Format: YYYY-MM-DD HH:MM (Include up to minutes; exclude seconds).
     - If the date field is missing or unreadable, set it to 'None'.
-If the date field is missing or unreadable, set it to 'None'.
   * Tone Classification (Select ONLY ONE from the following):
     - formal: Professional business emails, official correspondence from institutions/professors.
     - casual: Informal emails between acquaintances or personal contacts.
@@ -35,39 +34,53 @@ If the date field is missing or unreadable, set it to 'None'.
   * Summary MUST be a concise, one-sentence description of the email content.
 
 1.3 Person Extraction Rules:
-  * The 'name' (title) of a Person entity MUST always be the Account (email address). 
+  * The 'name' (title) of a Person entity MUST always be the Account (email address).
     Do NOT use the display name as the entity name, even if it is available.
   * Integrate multiple Person mentions with the same Account into a single entity.
-  * The 'Name' attribute (property) should only be filled if a display name is explicitly mentioned. 
+  * The 'Name' attribute (property) should only be filled if a display name is explicitly mentioned.
     Otherwise, set it to 'None'.
-  * CRITICAL: Do NOT create a Person node if the Account (email address) is unknown. 
+  * CRITICAL: Do NOT create a Person node if the Account (email address) is unknown.
     Each Person entity MUST have a valid email address as its identifier.
-  * CRITICAL: NEVER use or generate fake/dummy email addresses (e.g., '@unknown.com', '@unknown', 'user@example.com') as an Account. 
+  * CRITICAL: NEVER use or generate fake/dummy email addresses (e.g., '@unknown.com', '@unknown', 'user@example.com') as an Account.
   * If a valid, real-world email address cannot be identified from the text, the Person entity MUST NOT be created.
 
 1.4 Organization Extraction Rules:
-  * The 'name' (title) of an Organization entity MUST be the OrgName (e.g., Company or Institution name).
+  * The 'name' (title) of an Organization entity MUST be the OrgName.
+  * The entity format MUST be: 'OrgName: <organization_name> | Department: <department/None>'
   * Extract ONLY organizations, institutions, or companies explicitly mentioned in the text.
+    * CRITICAL: Do NOT classify the following as Organization:
+    - Hotels
+    - Cafes
+    - Buildings
+    - Physical locations
+    - Meeting venues
+  * Extract ONLY organizations explicitly mentioned in the text.
   * CRITICAL: Do NOT create or hallucinate organization entities based on inference or context alone if the specific name is not present.
   * The 'Department' attribute should be filled ONLY if explicitly stated; otherwise, set it to 'None'.
   * If multiple departments belong to the same Organization, they should be linked to a single Organization entity.
 
-Topic Extraction Rules:
+1.5 Topic Extraction Rules:
   * Extract ONLY contextual themes that represent the core purpose of the email.
     - Examples: "Claude Pro Refund Processing", "Web Tutoring Schedule Coordination".
-  * The 'name' (title) MUST be a concise noun phrase summarizing the theme.
+  * The 'name' (title) MUST be a concise and reusable noun phrase summarizing the theme.
+    - Prefer a stable and generalizable topic name rather than a one-off or overly specific phrase.
+    - Avoid including excessive details such as exact dates, identifiers, or long descriptive phrases.
     - Examples: "Claude Pro Refund", "Flask Assignment Submission".
   * Do NOT extract the following as Topics:
     - Technical terms, file names, or coding stacks (e.g., Python, Flask, CSS).
     - One-time codes, alerts, or emails lacking substantive discussion.
+    - Pure system notifications, OTP messages, or security alerts without meaningful context.
   * Consolidate multiple mentions of the same context into a single, more specific Topic entity.
+    - If similar topics appear, prefer a single normalized form instead of multiple variants.
   * Priority Classification (Assign based on context):
     - high: Requires immediate response or action (e.g., deadlines, urgent requests, payment errors).
     - mid: General information exchange or ongoing discussions.
     - low: Simple notifications, newsletters, or automated system emails.
-  * CRITICAL: Do NOT create a Topic entity if there is no clearly discussed subject in the body text.
+  * CRITICAL: Do NOT create a Topic entity if there is no clearly discussed subject in the email content.
+    - Use the body text as the primary source.
+    - The subject line may be used as supporting evidence ONLY when the body is too short or minimal.
 
-Event Extraction Rules:
+1.6. Event Extraction Rules:
   * The 'name' (title) of an Event entity MUST be the EventName.
   * The entity format MUST be: 'EventName: <event_title> | Schedule: <YYYY-MM-DD HH:MM> | Location: <place/None> | Status: <confirmed/tentative>'
   * Extract ONLY if explicit date or time information is present in the text.
@@ -76,7 +89,7 @@ Event Extraction Rules:
   * If the 'Status' cannot be clearly determined from the context, mark it as 'tentative'.
   * Name (title) must strictly use the 'EventName' value.
 
-Label Extraction Rules:
+1.7. Label Extraction Rules:
   * The 'name' (title) of a Label entity MUST be the Category.
   * Extract ONLY the values explicitly listed in the '[라벨 정보]' (Label Info) field.
   * CRITICAL: Do NOT create a Label entity if the '[라벨 정보]' field is "없음" (None) or if the field is missing.
@@ -86,7 +99,7 @@ Label Extraction Rules:
   * NEVER extract attachment file names as Labels.
   * The entity format MUST be: 'Category: <label_name>'
 
-Grounding Rules:
+1.8. Grounding Rules:
 * Do NOT extract the following as entities:
   - One-time codes, OTPs, temporary tokens, or any ephemeral numeric/alphanumeric strings.
   - Serial numbers or sequence identifiers within filenames.
