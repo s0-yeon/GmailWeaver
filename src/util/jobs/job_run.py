@@ -247,7 +247,15 @@ def build_graphrag_update(job_id,paths, env):
         # 새로운 데이터 graphml과 현재 존재하는 output graphml 병합
         output_graphml = os.path.join(paths.GRAPHRAG_ROOT, "output", "graph.graphml")
         update_output_dir = os.path.join(paths.GRAPHRAG_ROOT, "update_output")
+        
+        # latest = sorted(os.listdir(update_output_dir))[-1]
+        if not os.path.exists(update_output_dir):
+            print(f"[JOB][graphrag-update] update_output 없음 — 새 문서 없음으로 처리")
+            append_job_log(job_id, "[INFO] update_output not found, no new documents")
+            return  # 정상 종료
+
         latest = sorted(os.listdir(update_output_dir))[-1]
+
         delta_graphml = os.path.join(update_output_dir, latest, "delta", "graph.graphml")
 
         if os.path.exists(delta_graphml):
