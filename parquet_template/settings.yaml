@@ -46,11 +46,13 @@ embed_text:
 ### Input settings ###
 
 input:
-  type: file # or blob
-  file_type: text # or csv
+  type: file
+  file_type: csv
   base_dir: "input"
   file_encoding: utf-8
-  file_pattern: ".*\\.txt$$"
+  file_pattern: ".*\\.csv$$"
+  source_column: "id"
+  text_column: "text"
 
 chunks:
   size: 600 # 2000에서 하향
