@@ -427,14 +427,16 @@ def _delete_incremental_files(paths):
     os.makedirs(paths.MAIL_DIR, exist_ok=True)
 
     for name in os.listdir(paths.MAIL_DIR):
-        # "inc_"로 시작하고 ".txt"로 끝나는 파일 찾아서 삭제
+        # inc_*.txt뿐만 아니라 inc_*.csv도 삭제
 
-        if name.startswith("inc_") and name.endswith(".txt"):
+        is_inc_txt = name.startswith("inc_") and name.endswith(".txt")
+        is_inc_csv = name.startswith("inc_") and name.endswith(".csv")
+
+        if is_inc_txt or is_inc_csv:
             path = os.path.join(paths.MAIL_DIR, name)
             try:
                 os.remove(path)
             except Exception as e:
-                # 삭제 실패 시 오류 남기고 계속 함
                 print(f"[UPLOAD] failed to remove incremental file: {path} / {e}")
 
 
@@ -640,7 +642,8 @@ def _parse_attachment_file(raw: str) -> dict[str, list[dict]]:
     return result
 
 # mail_latest.txt + attachment_latest.txt → mail_latest.csv 생성
-def _build_mail_csv(paths) -> str:
+# def _build_mail_csv(paths) -> str:
+def _build_mail_csv(paths, mode="rewrite", new_ids=None) -> str:
     # 1) mail_latest.txt 파싱 → {mail_id: block_text}
     mail_text = _read_latest_text(paths)
     mail_blocks: dict[str, str] = {}
@@ -674,8 +677,16 @@ def _build_mail_csv(paths) -> str:
 
         rows.append({"id": mail_id, "text": text})
 
-    # 4) CSV 저장
-    csv_path = os.path.join(paths.MAIL_DIR, "mail_latest.csv")
+    # 4) mode에 따라 저장 대상 결정
+    # append 모드이고 new_ids가 있으면 새 메일만 필터링해서 inc_*.csv 생성
+    # rewrite 모드이면 전체를 mail_latest.csv로 저장
+    if mode == "append" and new_ids:
+        rows = [r for r in rows if r["id"] in new_ids]
+        csv_name = f"inc_{datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S')}.csv"
+    else:
+        csv_name = "mail_latest.csv"
+
+    csv_path = os.path.join(paths.MAIL_DIR, csv_name)
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=["id", "text"])
         writer.writeheader()
@@ -912,7 +923,6 @@ def upload():
             # 시간 기반 파일명으로 증분파일 저장
             inc_path = _build_incremental_path(filename, paths)
 
-
             with open(inc_path, "w", encoding="utf-8") as f:
                 f.write(inc_content)
 
@@ -931,6 +941,13 @@ def upload():
 
             saved_mail_path = inc_path
 
+            # 새로 추가된 메일의 ID 집합 수집
+            new_ids = set()
+            for block in append_blocks:
+                mid = _extract_mail_id_from_block(block)
+                if mid:
+                    new_ids.add(mid)
+
             job_id = str(uuid.uuid4())[:8]
             create_job(job_id, job_type="statics")
 
@@ -938,6 +955,7 @@ def upload():
 
         else:
             saved_mail_path = ""
+            new_ids = set()  # append_blocks 없을 때 빈 set으로 초기화
 
     print("[UPLOAD] added:", added_count)
     print("[UPLOAD] skipped:", skipped_count)
@@ -973,7 +991,7 @@ def upload():
         start_graph_pipeline_background(job_id, paths, env,added_count=added_count)
 
     else:   # sync_mode == "append"
-        _build_mail_csv(paths)    
+        _build_mail_csv(paths, mode="append", new_ids=new_ids)  
         # start_graph_update_pipeline_background(job_id,paths, env,added_count=added_count)
         start_graph_update_pipeline_background(job_id, paths, env)  # added_count 제거
 
