@@ -637,7 +637,7 @@ def _parse_attachment_file(raw: str) -> dict[str, list[dict]]:
             items.append({"name": name, "text": text})
 
         if items:
-            result[mail_id] = items
+            result.setdefault(mail_id, []).extend(items)
 
     return result
 
