@@ -7,7 +7,7 @@ The input may be an email, a structured table, or plain text — adapt according
 1. Identify Entities: 
 1.1 Extract entities of the following types: '[{entity_types}]'.
 Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter}<description>)'
-  * Email:        'Title: <subject> | ID: <mail_id> | Tone: <formal/casual/transactional/notification/alert> | Summary: <1-sentence>'
+  * Email:        'Title: <subject> | ID: <mail_id> | Date: <YYYY-MM-DD HH:MM> | Tone: <formal/casual/transactional/notification/alert> | Summary: <1-sentence>'
   * Person:       'Account: <email> | Name: <name/None>'
   * Organization: 'Context: <department> | Team: <team>'
   * Topic:        'Priority: <high/mid/low> | Summary: <Core topic of this email in 1 sentence>'
@@ -21,6 +21,10 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
   * CRITICAL: NEVER generate or use dummy IDs (e.g., 'MAIL_001', 'mail_001', 'temp_id'). Only authentic IDs from the source data are allowed.
   * The 'Title' attribute MUST use the exact subject from the '[제목]' field. 
     - If the subject is missing or empty, set it to '(제목 없음)'.
+  * Date Attribute: Use the exact value from the 'Date (날짜):' field.
+    - Format: YYYY-MM-DD HH:MM (Include up to minutes; exclude seconds).
+    - If the date field is missing or unreadable, set it to 'None'.
+If the date field is missing or unreadable, set it to 'None'.
   * Tone Classification (Select ONLY ONE from the following):
     - formal: Professional business emails, official correspondence from institutions/professors.
     - casual: Informal emails between acquaintances or personal contacts.
