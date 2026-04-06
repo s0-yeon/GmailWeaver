@@ -147,7 +147,7 @@ ID: 19d4da32341500e4
 업무/스프린트
 
 Output:
-("entity"{tuple_delimiter}19D4DA32341500E4{tuple_delimiter}Email{tuple_delimiter}Title: [Vocarush] 4월 스프린트 계획 확정 | ID: 19d4da32341500e4 | Tone: formal | Summary: 4월 스프린트 계획을 공유하는 공식 메일)
+("entity"{tuple_delimiter}19D4DA32341500E4{tuple_delimiter}Email{tuple_delimiter}Title: [Vocarush] 4월 스프린트 계획 확정 | ID: 19d4da32341500e4 | Date: 2026-04-02 18:02 | Tone: formal | Summary: 4월 스프린트 계획을 공유하는 공식 메일)
 {record_delimiter}
 ("entity"{tuple_delimiter}minjun.kim@vocarush.io{tuple_delimiter}Person{tuple_delimiter}Account: minjun.kim@vocarush.io | Name: 김민준)
 {record_delimiter}
@@ -188,7 +188,7 @@ ID: 19d4a5b4a4703a36
 Recent-Labeled, 캘린더
 
 Output:
-("entity"{tuple_delimiter}19D4A5B4A4703A36{tuple_delimiter}Email{tuple_delimiter}Title: Re: 수락 | ID: 19d4a5b4a4703a36 | Tone: formal | Summary: 환불 처리 완료를 안내하는 자동화 메일)
+("entity"{tuple_delimiter}19D4A5B4A4703A36{tuple_delimiter}Email{tuple_delimiter}Title: Re: 수락 | ID: 19d4a5b4a4703a36 | Date: 2026-04-02 03:43 | Tone: formal | Summary: 환불 처리 완료를 안내하는 자동화 메일)
 {record_delimiter}
 ("entity"{tuple_delimiter}support@mail.anthropic.com{tuple_delimiter}Person{tuple_delimiter}Account: support@mail.anthropic.com | Name: Winston from Anthropic)
 {record_delimiter}
