@@ -111,7 +111,7 @@ def _extract_date_range(message: str):
         target_year = year - int(m.group(1))
         return f"{target_year}-01-01", f"{target_year}-12-31"
 
-    # 패턴16: N달 전
+    # 패턴16: N달 전 (해당 월 전체)
     m = re.search(r'(\d+)\s*달\s*전', message)
     if m:
         months_ago = int(m.group(1))
@@ -120,10 +120,10 @@ def _extract_date_range(message: str):
         while month <= 0:
             month += 12
             y -= 1
-        date = datetime.datetime(y, month, today.day).strftime('%Y-%m-%d')
-        return date, date
+        last_day = calendar.monthrange(y, month)[1]
+        return f"{y}-{month:02d}-01", f"{y}-{month:02d}-{last_day:02d}"
 
-    # 패턴17: N개월 전
+        # 패턴17: N개월 전 (해당 월 전체)
     m = re.search(r'(\d+)\s*개월\s*전', message)
     if m:
         months_ago = int(m.group(1))
@@ -132,8 +132,8 @@ def _extract_date_range(message: str):
         while month <= 0:
             month += 12
             y -= 1
-        date = datetime.datetime(y, month, today.day).strftime('%Y-%m-%d')
-        return date, date
+        last_day = calendar.monthrange(y, month)[1]
+        return f"{y}-{month:02d}-01", f"{y}-{month:02d}-{last_day:02d}"
 
     # 패턴18: 2026년 3월 22일
     m = re.search(r'(\d{4})\s*년\s*(\d+)\s*월\s*(\d+)\s*일', message)
@@ -236,6 +236,7 @@ def run_date_range_query(message: str, paths) -> str:
     start_date, end_date = date_range
     start_time = time.time()  # 시작 시간 측정
     emails = _filter_emails_by_date(paths, start_date, end_date) # parquet에서 날짜 범위에 해당하는 이메일 필터링
+    print(f"[DEBUG] filtered emails count: {len(emails)}") 
 
     if not emails: # 해당 기간 이메일 없으면 바로 없다고 메시지 반환
         print(f'date_query execution_time : {time.time() - start_time}')
@@ -264,6 +265,11 @@ def run_date_range_query(message: str, paths) -> str:
                     "당신은 이메일 데이터를 분석하는 어시스턴트입니다. "
                     "아래 제공된 이메일 목록을 기반으로 사용자 질문에 한국어로 답변하세요. "
                     "제공된 데이터 외의 내용은 추측하지 마세요."
+                    "날짜 필터링은 이미 완료되었습니다. "
+                    "제공된 이메일 목록이 곧 사용자가 요청한 기간의 전체 결과입니다. "
+                    "날짜 범위를 임의로 재해석하거나 변경하지 마세요. "
+                    "목록이 비어있지 않다면 반드시 모든 이메일을 답변에 포함하세요."
+                    "이메일 목록의 첫 번째부터 마지막까지 순서대로 전부 나열하세요."
                 )
             },
             {
