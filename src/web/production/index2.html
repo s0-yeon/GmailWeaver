@@ -134,7 +134,7 @@
 
       /* 메인 콘텐츠: 메일 목록 + 본문 2단 레이아웃 */
       .gw-label-content {
-        display: flex; height: calc(100vh - 190px); overflow: hidden;
+        display: flex; height: calc(100vh - 260px); overflow: hidden;
       }
       /* 좌측: 메일 목록 패널 */
       .gw-mail-list {
@@ -236,6 +236,58 @@
       }
       .gw-smart-search button:hover { background: #1a9e82; }
       .gw-search-hint { font-size: 0.75rem; color: #aaa; padding: 4px 24px 8px 24px; background: #f4f6f8; }
+
+      /* 질의 패널 */
+      .gw-query-panel {
+        padding: 14px 24px 10px 24px;
+        background: #fff;
+        border-bottom: 2px solid #e8f7f4;
+      }
+      .gw-query-input-row {
+        display: flex; gap: 8px; align-items: center;
+      }
+      .gw-query-input-row input {
+        flex: 1; padding: 10px 18px;
+        border: 2px solid #e0e0e0; border-radius: 24px;
+        font-size: 0.9rem; outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      }
+      .gw-query-input-row input:focus {
+        border-color: #26B99A;
+        box-shadow: 0 1px 8px rgba(38,185,154,0.15);
+      }
+      .gw-query-input-row button {
+        padding: 10px 22px; background: #26B99A; color: #fff;
+        border: none; border-radius: 24px; font-size: 0.88rem; font-weight: 600;
+        cursor: pointer; transition: background 0.15s; white-space: nowrap;
+        display: flex; align-items: center; gap: 6px;
+      }
+      .gw-query-input-row button:hover { background: #1a9e82; }
+      .gw-query-input-row button:disabled { opacity: 0.55; cursor: not-allowed; }
+      .gw-query-result {
+        margin-top: 10px;
+        display: none;
+      }
+      .gw-query-result.show { display: block; }
+      .gw-query-result-label {
+        font-size: 0.78rem; color: #aaa; margin-bottom: 6px;
+      }
+      .gw-query-result-label strong { color: #2A3F54; }
+      .gw-query-result-loading {
+        display: flex; align-items: center; gap: 10px;
+        color: #73879C; font-size: 0.88rem; padding: 8px 0;
+      }
+      .gw-query-result-card {
+        background: #f8fffe; border: 1px solid #d0ede8;
+        border-radius: 10px; padding: 14px 18px;
+        font-size: 0.9rem; line-height: 1.8; color: #2A3F54;
+        white-space: pre-wrap; word-break: break-word;
+        max-height: 220px; overflow-y: auto;
+      }
+      .gw-query-result-error {
+        color: #e74c3c; font-size: 0.88rem; padding: 8px 0;
+      }
 
       /* 캐시 기준 시간 뱃지 */
       .gw-cache-badge {
@@ -343,6 +395,17 @@
             <button class="gw-refresh-btn" id="refresh-btn" title="애드온에서 추가한 라벨 반영" style="display:none;">
               <i class="fas fa-sync-alt"></i>
             </button>
+          </div>
+
+          <!-- AI 질의 패널: 항상 표시 -->
+          <div class="gw-query-panel">
+            <div class="gw-query-input-row">
+              <input type="text" id="label-query-input" placeholder="라벨 메일에 대해 궁금한 것을 질의하세요... (예: 보안 관련 메일 요약해줘)" autocomplete="off">
+              <button id="label-query-btn" type="button">
+                <i class="fas fa-magic"></i> 질의하기
+              </button>
+            </div>
+            <div class="gw-query-result" id="label-query-result"></div>
           </div>
 
           <!-- GraphRAG 스마트 검색 바: 라벨 선택 시 표시 -->
@@ -922,6 +985,78 @@
         } finally {
           btn.disabled = false;
           btn.textContent = '메일 추가';
+        }
+      });
+
+      // ── AI 질의 기능 ──
+      function labelQueryShowLoading(q) {
+        const el = document.getElementById('label-query-result');
+        el.className = 'gw-query-result show';
+        el.innerHTML = `
+          <div class="gw-query-result-label">질의: <strong>${escapeHtml(q)}</strong></div>
+          <div class="gw-query-result-loading">
+            <span class="gw-spinner"></span>
+            <span>메일을 분석하고 있습니다...</span>
+          </div>
+        `;
+      }
+      function labelQueryShowResult(q, text) {
+        const el = document.getElementById('label-query-result');
+        el.className = 'gw-query-result show';
+        el.innerHTML = `
+          <div class="gw-query-result-label">질의: <strong>${escapeHtml(q)}</strong></div>
+          <div class="gw-query-result-card">${escapeHtml(text)}</div>
+        `;
+      }
+      function labelQueryShowError(q, msg) {
+        const el = document.getElementById('label-query-result');
+        el.className = 'gw-query-result show';
+        el.innerHTML = `
+          <div class="gw-query-result-label">질의: <strong>${escapeHtml(q)}</strong></div>
+          <div class="gw-query-result-error"><i class="fas fa-exclamation-circle me-1"></i>${escapeHtml(msg)}</div>
+        `;
+      }
+
+      async function runLabelQuery(q) {
+        if (!q) return;
+        const btn = document.getElementById('label-query-btn');
+        btn.disabled = true;
+        labelQueryShowLoading(q);
+
+        try {
+          const gmailId = (sessionStorage.getItem('gw_user_name') || '') + '@gmail.com';
+          const res = await fetch(`${FLASK_URL}/run-query-async`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: q, resMethod: 'local', resType: 'text', gmail_id: gmailId })
+          });
+          const data = await res.json();
+          if (!data.jobId) { labelQueryShowError(q, '질의 요청에 실패했습니다.'); return; }
+
+          // 2초 간격 폴링, 최대 60회
+          for (let i = 0; i < 60; i++) {
+            await new Promise(r => setTimeout(r, 2000));
+            const statusRes = await fetch(`${FLASK_URL}/job-status/${data.jobId}`);
+            const status = await statusRes.json();
+            if (status.status === 'done') { labelQueryShowResult(q, status.result || '결과가 없습니다.'); return; }
+            if (status.status === 'error') { labelQueryShowError(q, status.result || '오류가 발생했습니다.'); return; }
+          }
+          labelQueryShowError(q, '응답 시간이 초과되었습니다. 다시 시도해주세요.');
+        } catch (e) {
+          labelQueryShowError(q, '서버에 연결할 수 없습니다. Flask 서버가 실행 중인지 확인하세요.');
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      document.getElementById('label-query-btn').addEventListener('click', () => {
+        const q = document.getElementById('label-query-input').value.trim();
+        runLabelQuery(q);
+      });
+      document.getElementById('label-query-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const q = document.getElementById('label-query-input').value.trim();
+          runLabelQuery(q);
         }
       });
 

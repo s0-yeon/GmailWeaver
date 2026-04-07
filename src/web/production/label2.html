@@ -530,6 +530,7 @@
 
       /* ── D3 렌더링 ── */
       function render(hierData) {
+
         l2g.selectAll('*').remove();
         l2Root = null; l2BCStack = []; renderBC();
 
@@ -537,9 +538,10 @@
           .sum(d => d.value || 0)
           .sort((a, b) => (b.value || 0) - (a.value || 0));
 
-        const pack = d3.pack()
-          .size([l2W - 10, l2H - 10])
-          .padding(d => d.depth === 0 ? 24 : d.depth === 1 ? 18 : 6);
+      const SPREAD = 1.8;
+      const pack = d3.pack()
+        .size([(l2W - 10) * SPREAD, (l2H - 10) * SPREAD])
+        .padding(d => d.depth === 0 ? 24 : d.depth === 1 ? 18 : 10);
 
         pack(root);
         l2Root = root;
@@ -559,14 +561,7 @@
         const nodeG = l2g.selectAll('.l2-ng')
           .data(nodes).enter().append('g')
           .attr('class', 'l2-ng')
-          .attr('transform', d => `translate(${d.x + 5},${d.y + 5})`)
-          .style('transform-origin', '0 0')
-          .style('animation', d => {
-            if (d.data._isMail || d.depth !== 1) return null;
-            const dur  = 3.2 + (d._breathIdx % 5) * 0.45;
-            const del  = (d._breathIdx % 7) * 0.61;
-            return `l2breathe ${dur}s ease-in-out ${del}s infinite`;
-          });
+          .attr('transform', d => `translate(${d.x + 5},${d.y + 5})`);
 
         /* ── 원 (라벨은 ellipse로 유기적, 메일도 ellipse) ── */
         nodeG.each(function(d) {
@@ -605,13 +600,16 @@
               if (d.data._isMail) selectMail(this, d);
               else { l2BCStack.push(d); renderBC(); l2ZoomTo(d); }
             });
+
         });
 
-        /* ── 라벨 이름 pill: 원 위에 떠있는 태그 ── */
-        nodeG.filter(d => !d.data._isMail && d.r >= 18).each(function(d) {
-          const g = d3.select(this);
-          const p = PALETTE[palIdx(d)];
-          const name = d.data.name || '';
+                /* ── 라벨 pill: 모든 원 위에 올라오는 별도 최상단 레이어 ── */
+        const pillLayer = l2g.append('g').attr('class', 'l2-pill-layer');
+        const pillGroups = [];
+
+        nodes.filter(d => !d.data._isMail && d.r >= 18).forEach(d => {
+          const p      = PALETTE[palIdx(d)];
+          const name   = d.data.name || '';
           const mailCnt = d.leaves ? d.leaves().filter(l => l.data._isMail).length : 0;
 
           const fsize  = Math.max(10, Math.min(15, d.r * 0.28));
@@ -619,15 +617,12 @@
           const label  = name.length > maxCh ? name.slice(0, maxCh) + '…' : name;
           const pillW  = Math.max(label.length * fsize * 0.6 + 20, 40);
           const pillH  = fsize + 10;
+          const pillOff = pillH * 0.6;  // ← 나중에 tick에서 재사용
 
-          /* pill 위치: 원 내부 상단 (원 안에 들어오도록) */
-          const pillY  = -(d.r * 0.72);
-
-          const pillG = g.append('g')
-            .attr('transform', `translate(0, ${pillY})`)
+          const pillG = pillLayer.append('g')
+            .attr('transform', `translate(${d.x + 5},${d.y + 5 - d.r - pillOff})`)
             .style('pointer-events', 'none');
 
-          /* pill 배경 */
           pillG.append('rect')
             .attr('x', -pillW / 2).attr('y', -pillH / 2)
             .attr('width', pillW).attr('height', pillH)
@@ -636,7 +631,6 @@
             .attr('stroke', p.stroke)
             .attr('stroke-width', 1.5);
 
-          /* pill 텍스트 */
           pillG.append('text')
             .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
             .style('font-size', fsize + 'px')
@@ -645,7 +639,6 @@
             .style('letter-spacing', '-0.01em')
             .text(label);
 
-          /* 메일 수 배지 (pill 오른쪽 끝) */
           if (mailCnt > 0) {
             const bfsize = Math.max(8, Math.min(10, fsize * 0.75));
             pillG.append('circle')
@@ -660,32 +653,8 @@
               .text(mailCnt);
           }
 
-          /* 즐겨찾기 별 (원 내부 상단 왼쪽) */
-          if (d.r >= 30) {
-            const starSize = Math.max(10, Math.min(18, d.r * 0.22));
-            const starX = -(d.r * 0.58);
-            const starY = -(d.r * 0.62);
-            g.append('text')
-              .attr('x', starX).attr('y', starY)
-              .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
-              .style('font-size', starSize + 'px')
-              .style('pointer-events', 'all')
-              .style('cursor', 'pointer')
-              .style('user-select', 'none')
-              .style('fill', '#f4c430')
-              .attr('class', 'l2-star')
-              .text('★')
-              .on('click', function(event) {
-                event.stopPropagation();
-                const el = d3.select(this);
-                const fav = el.attr('data-fav') === '1';
-                el.attr('data-fav', fav ? '0' : '1')
-                  .style('fill', fav ? '#ccc' : '#f4c430')
-                  .style('opacity', fav ? '0.4' : '1');
-              })
-              .on('mouseover', null).on('mousemove', null).on('mouseout', null);
-          }
-        });
+          pillGroups.push({ g: pillG, d, pillOff });  // ← tick용으로 저장
+        });       
 
         /* ── 메일 원 안 제목 텍스트 ── */
         nodeG.filter(d => d.data._isMail && d.r >= 14).each(function(d) {
@@ -727,7 +696,6 @@
         l2svg.transition().duration(620).ease(d3.easeCubicInOut)
           .call(l2zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
       }
-
       /* ── 메일 선택 ── */
       async function selectMail(circleEl, d) {
         d3.selectAll('.l2c').classed('l2c-sel', false);
