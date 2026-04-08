@@ -21,6 +21,18 @@ and format.
 - If the data tables do not contain sufficient information to answer the question,
   respond explicitly that the information is not available.
 - Do NOT make anything up.
+- When the user asks for a LIST of items (e.g., emails on a specific date, 
+  all emails from a sender), you MUST enumerate ALL matching records found 
+  in the data tables — do NOT stop at the first match.
+- If multiple Email entities share the same date prefix (YYYY-MM-DD), 
+  ALL of them must be included in the response.
+- Before generating any response, scan ALL rows in the provided data tables
+  completely. Do not stop scanning after finding the first match.
+- Pay equal attention to ALL entities in the data tables,
+  regardless of their position in the list.
+- Do NOT skip or ignore any entity that matches the query condition.
+- When answering date range queries, do NOT limit the response to the most recent matches.
+  ALL emails within the specified date range MUST be included regardless of recency.
 
 ------------------------------------------------------------
 ---EVIDENCE AND CITATION RULES---
@@ -34,6 +46,8 @@ Points supported by data MUST list their data references as follows:
 - If more than 5 records are relevant, list the top 5 most relevant record ids
   and add "+more" to indicate additional supporting records.
 - Record ids refer to the record ID, NOT the index.
+- When citing Email entities, use the exact ID value from the 'ID:' field
+  in the entity description. Do NOT paraphrase or abbreviate the ID.
 
 Example:
 
@@ -51,6 +65,10 @@ Relationships (23); Claims (2, 7, 34, 46, 64, +more)]."
 ------------------------------------------------------------
 ---Data tables---
 
+Note: Email entities contain date information in the format
+'Date: YYYY-MM-DD HH:MM' within their description field.
+When filtering by date, match against this field.
+
 {context_data}
 
 ------------------------------------------------------------
@@ -61,3 +79,8 @@ Relationships (23); Claims (2, 7, 34, 46, 64, +more)]."
 - Style the response in Markdown.
 - If no supported answer can be produced, clearly state that the available data
   does not contain sufficient information to answer the question.
+- Do NOT generate verbose preambles or restate the question.
+- Begin the answer directly with the relevant data.
+- Omit sections that have no supporting data — do not write empty headers.
+- Respond in the same language as the user's question.
+- Korean questions MUST be answered in Korean.
