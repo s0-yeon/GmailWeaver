@@ -1,5 +1,4 @@
 # src/app.py
-
 import datetime
 import os
 import re
@@ -15,6 +14,7 @@ import requests
 import shutil
 import zlib
 import traceback 
+import urllib.request
 
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, send_from_directory
@@ -1136,7 +1136,164 @@ def labels_proxy():
     
 
 
-import urllib.request
+
+
+# 라벨 서치 프롬포트: 사용자 의도를 "action"(라벨 적용) vs "query"(정보 질문)으로 분류
+LABEL_SEARCH_PROMPT = """\
+너는 Gmail 라벨 관리 어시스턴트야. 사용자의 요청을 분석해서 정확히 다음 두 가지 중 하나로 분류해.
+
+■ "action" — 메일을 검색하거나 라벨을 붙이는 작업 요청
+  · 특징: 동작을 수행해달라는 명령형 요청
+  · 예시: "상상빌리지 메일을 테스트 라벨에 넣어줘"
+          "회의 관련 메일 찾아서 업무 라벨로 분류해줘"
+          "장학금 안내 메일에 중요 라벨 달아줘"
+
+■ "query" — 라벨·메일 내용에 대한 정보 조회·질문
+  · 특징: 무언가를 물어보거나 현황을 알고 싶은 요청
+  · 예시: "테스트 라벨에 어떤 메일이 있어?"
+          "상상빌리지 기숙사 신청 결과가 어떻게 됐어?"
+          "이번 달 회의 일정 알려줘"
+          "어떤 라벨들이 있어?"
+
+반드시 JSON 형식으로만 응답해. 다른 텍스트 없이: {"intent": "action"} 또는 {"intent": "query"}
+"""
+
+# 엔드포인트: POST /label-route (라벨 서치 프롬포트로 의도 분류)
+@app.route("/label-route", methods=["POST"])
+def label_route():
+    data = request.json or {}
+    user_input = data.get("userInput", "").strip()
+    label_names = data.get("labels", [])  # 현재 라벨 목록 (컨텍스트용)
+
+    if not user_input:
+        return jsonify({"ok": False, "error": "userInput이 비어있습니다."}), 400
+
+    system_content = LABEL_SEARCH_PROMPT
+    if label_names:
+        system_content += f"\n\n현재 사용자의 라벨 목록: {', '.join(label_names)}"
+
+    try:
+        client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": system_content},
+                {"role": "user", "content": user_input}
+            ],
+            response_format={"type": "json_object"},
+            temperature=0
+        )
+        result = json.loads(response.choices[0].message.content)
+        intent = result.get("intent", "query")
+        if intent not in ("action", "query"):
+            intent = "query"
+        return jsonify({"ok": True, "intent": intent})
+
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+# 엔드포인트: POST /label-query (라벨 특화 질의 - OpenAI Function Calling)
+@app.route("/label-query", methods=["POST"])
+def label_query():
+    data = request.json or {}
+    user_input = data.get("userInput", "").strip()
+
+    if not user_input:
+        return jsonify({"ok": False, "error": "userInput이 비어있습니다."}), 400
+
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "search_emails",
+                "description": "사용자 요청에서 Gmail 검색 키워드와 적용할 라벨명을 추출합니다.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "Gmail 검색에 사용할 키워드 (예: 상상빌리지 기숙사 신청)"
+                        },
+                        "label_to_apply": {
+                            "type": "string",
+                            "description": "검색된 메일에 적용할 라벨명 (예: 테스트). 언급이 없으면 빈 문자열."
+                        }
+                    },
+                    "required": ["query", "label_to_apply"]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "apply_label",
+                "description": "선택된 메일 ID 목록에 라벨을 적용합니다.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "message_ids": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": "라벨을 적용할 메일 ID 목록"
+                        },
+                        "label_name": {
+                            "type": "string",
+                            "description": "적용할 라벨명"
+                        }
+                    },
+                    "required": ["message_ids", "label_name"]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "trash_emails",
+                "description": "삭제하거나 휴지통으로 이동할 메일의 검색 키워드를 추출합니다. '삭제해줘', '지워줘', '휴지통으로 이동해줘' 같은 요청에 사용합니다.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "삭제할 메일을 찾기 위한 Gmail 검색 키워드 (예: 상상빌리지 기숙사)"
+                        }
+                    },
+                    "required": ["query"]
+                }
+            }
+        }
+    ]
+
+    try:
+        client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "사용자의 Gmail 메일 관리 요청을 분석하여 적절한 함수를 호출하세요. "
+                        "메일을 검색해서 라벨을 붙이거나 찾는 요청이면 search_emails를 사용하세요. "
+                        "이미 선택된 메일에 라벨만 적용하는 요청이면 apply_label을 사용하세요. "
+                        "메일을 삭제하거나 휴지통으로 이동하는 요청이면 trash_emails를 사용하세요."
+                    )
+                },
+                {"role": "user", "content": user_input}
+            ],
+            tools=tools,
+            tool_choice="required"
+        )
+        tool_call = response.choices[0].message.tool_calls[0]
+        action = tool_call.function.name
+        params = json.loads(tool_call.function.arguments)
+
+        return jsonify({"ok": True, "action": action, "params": params})
+
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
 
 
 # 엔드포인트: POST /upload-attachments
