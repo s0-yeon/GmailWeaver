@@ -21,7 +21,7 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
   * CRITICAL: NEVER generate or use dummy IDs (e.g., 'MAIL_001', 'mail_001', 'temp_id'). Only authentic IDs from the source data are allowed.
   * The 'Title' attribute MUST use the exact subject from the '[제목]' field.
     - If the subject is missing or empty, set it to '(제목 없음)'.
-  * Date Attribute: Use the exact value from the 'Date (날짜):' field.
+  * Date Attribute: Use the exact value from the '날짜:' field.
     - Format: YYYY-MM-DD HH:MM (Include up to minutes; exclude seconds).
     - If the date field is missing or unreadable, set it to 'None'.
   * Tone Classification (Select ONLY ONE from the following):
@@ -31,11 +31,15 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
     - notification: Service alerts, newsletters, marketing updates.
     - alert: Security codes, password resets, urgent warnings.
   * CRITICAL: No values other than the five specified above (formal, casual, transactional, notification, alert) are allowed.
+  * If Tone cannot be clearly determined, select the closest matching value. 'None' is strictly forbidden.
   * Summary MUST be a concise, one-sentence description of the email content.
 
 1.3 Person Extraction Rules:
   * The 'name' (title) of a Person entity MUST always be the Account (email address).
     Do NOT use the display name as the entity name, even if it is available.
+* CRITICAL: NEVER include the display name in the entity name field. Display names belong ONLY in the 'Name' attribute of the description.
+    - Wrong: ("entity"{tuple_delimiter}최지유<cjiyou1090@gmail.com>{tuple_delimiter}Person{tuple_delimiter}...)
+    - Correct: ("entity"{tuple_delimiter}cjiyou1090@gmail.com{tuple_delimiter}Person{tuple_delimiter}Account: cjiyou1090@gmail.com | Name: 최지유)
   * Integrate multiple Person mentions with the same Account into a single entity.
   * The 'Name' attribute (property) should only be filled if a display name is explicitly mentioned.
     Otherwise, set it to 'None'.
@@ -72,6 +76,7 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
     - Pure system notifications, OTP messages, or security alerts without meaningful context.
   * Consolidate multiple mentions of the same context into a single, more specific Topic entity.
     - If similar topics appear, prefer a single normalized form instead of multiple variants.
+    - For recurring automated emails (e.g., OTP, security alerts), use a single generalized Topic such as '인증코드 수신' rather than creating one Topic per email.
   * Priority Classification (Assign based on context):
     - high: Requires immediate response or action (e.g., deadlines, urgent requests, payment errors).
     - mid: General information exchange or ongoing discussions.
@@ -93,6 +98,7 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
   * The 'name' (title) of a Label entity MUST be the Category.
   * Extract ONLY the values explicitly listed in the '[라벨 정보]' (Label Info) field.
   * CRITICAL: Do NOT create a Label entity if the '[라벨 정보]' field is "없음" (None) or if the field is missing.
+  * CRITICAL: Strings representing the absence of a value, such as '없음', 'None', or 'null', MUST NEVER be used as the Category name for a Label entity.
   * Multiple labels separated by commas MUST be extracted as separate, individual Label entities.
     - Example: 'Recent-Labeled, 캘린더' → Create two distinct Label entities.
   * Do NOT infer or generate labels from other fields such as email body, subject, or attachment names.
@@ -106,6 +112,8 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
   - Transaction identifiers such as invoice numbers, order numbers, or tracking IDs.
 * CRITICAL: Only extract entities that represent meaningful, persistent concepts, people, organizations, or events.
 * CRITICAL: An entity MUST NOT be created if any of its core fields (name, type, or description) cannot be populated with a valid, meaningful value.
+* CRITICAL: Strings representing absence of value such as 'None', 'NONE', 'null', '없음', '-' MUST NOT be used as entity names under any type.
+* CRITICAL: Do NOT create entities whose name consists solely of a person's display name without a valid email address. A Person entity without an Account is invalid and must not be created.
 
 2. Identify Relationships: 
   Relationship directions are fixed — do NOT reverse them.
@@ -124,6 +132,12 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
   | HAS_ATTACHMENT  | Email        | Attachment   | 이메일에 첨부된 파일                    |
 
    Rules:
+    * CRITICAL: Each relationship MUST have exactly ONE type from the allowed list.
+      NEVER combine multiple types in a single relationship field (e.g., 'SENT_TO\nSENT_BY' is strictly forbidden).
+      If a relationship could be multiple types, create separate relationship entries for each type.
+    * Self-mail rule: If the sender and receiver are the same email address, create TWO separate relationships:
+      - Email → SENT_BY → Person
+      - Email → SENT_TO → Person
    * AFFILIATED_WITH target MUST be an Organization type. Topic/Event are NOT allowed.
    * LABELED_AS target MUST be a Label entity extracted solely from the '[라벨 정보]' field.
    * LABELED_AS MUST be created for each Label entity extracted — one relationship per label.
@@ -145,6 +159,7 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
    * End with {completion_delimiter}.
 
 ---
+
 -Examples-
 
 Example 1
@@ -155,6 +170,7 @@ Text:
 공식적인 톤이었다. 김민준은 Vocarush의 Product팀 소속이다.
 
 ID: 19d4da32341500e4
+날짜: 2026-04-02 18:02
 
 [라벨 정보]
 업무/스프린트
@@ -196,6 +212,7 @@ support@mail.anthropic.com이 gpttitti@hansung.ac.kr에게
 3월 15일 10시에 공학관에서 만나자는 일정도 포함되어 있었다.
 
 ID: 19d4a5b4a4703a36
+날짜: 2026-04-02 03:43
 
 [라벨 정보]
 Recent-Labeled, 캘린더
@@ -222,6 +239,29 @@ Output:
 ("relationship"{tuple_delimiter}19D4A5B4A4703A36{tuple_delimiter}Recent-Labeled{tuple_delimiter}LABELED_AS{tuple_delimiter}이메일에 Recent-Labeled 라벨이 지정되어 있다.{tuple_delimiter}10)
 {record_delimiter}
 ("relationship"{tuple_delimiter}19D4A5B4A4703A36{tuple_delimiter}캘린더{tuple_delimiter}LABELED_AS{tuple_delimiter}이메일에 캘린더 라벨이 지정되어 있다.{tuple_delimiter}10)
+{completion_delimiter}
+
+---
+Example 3
+Entity_types: Email, Person, Label
+Text:
+gpttitti@hansung.ac.kr이 자기 자신에게 'sisi'라는 제목의 메일을 보냈다.
+발신인 표시명은 최지유였다.
+
+ID: 19d615cb9c3d0153
+날짜: 2026-04-06 14:55
+
+[라벨 정보]
+없음
+
+Output:
+("entity"{tuple_delimiter}19D615CB9C3D0153{tuple_delimiter}Email{tuple_delimiter}Title: sisi | ID: 19d615cb9c3d0153 | Date: 2026-04-06 14:55 | Tone: casual | Summary: 발신인과 수신인이 동일한 자기 자신에게 보낸 메일)
+{record_delimiter}
+("entity"{tuple_delimiter}gpttitti@hansung.ac.kr{tuple_delimiter}Person{tuple_delimiter}Account: gpttitti@hansung.ac.kr | Name: 최지유)
+{record_delimiter}
+("relationship"{tuple_delimiter}19D615CB9C3D0153{tuple_delimiter}gpttitti@hansung.ac.kr{tuple_delimiter}SENT_BY{tuple_delimiter}이메일의 발신자는 gpttitti@hansung.ac.kr이다.{tuple_delimiter}10)
+{record_delimiter}
+("relationship"{tuple_delimiter}19D615CB9C3D0153{tuple_delimiter}gpttitti@hansung.ac.kr{tuple_delimiter}SENT_TO{tuple_delimiter}이메일의 수신자도 gpttitti@hansung.ac.kr로, 자기 자신에게 보낸 메일이다.{tuple_delimiter}10)
 {completion_delimiter}
 
 ---

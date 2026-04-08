@@ -38,15 +38,6 @@ The report should include the following sections:
   (예: "OpenAI 서비스 로그인을 위한 일회성 인증코드 수신",
        "VocaRush 게임 개발 프로젝트 관련 팀 커뮤니케이션")
 
-- DATE_RANGE: 커뮤니티 내 이메일들의 날짜 범위.
-  Email.Date 필드 기준 가장 오래된 것 ~ 가장 최근 것.
-  Format: "YYYY-MM-DD ~ YYYY-MM-DD"
-  Email이 1개인 경우 동일한 날짜를 양쪽에 쓴다.
-  Email.Date가 모두 None이면 null로 설정한다.
-
-- EMAIL_COUNT: 이 커뮤니티에 포함된 Email 엔티티 수 (정수).
-  SENT_TO/SENT_BY 엣지 수가 아닌 Email 노드 수만 카운트.
-
 - IMPORTANCE RATING: A float score between 0-10 representing how 
   significant this email cluster is to the user's activity.
   Score according to the following criteria:
@@ -57,9 +48,7 @@ The report should include the following sections:
 
 - RATING EXPLANATION: A single sentence in Korean explaining the score.
 
-- DETAILED FINDINGS: A list of 2-5 key insights about the community. 
-  Email 엔티티가 1개인 커뮤니티는 2개로 충분하다.
-  동일한 사실을 다른 표현으로 반복하지 않는다.
+- DETAILED FINDINGS: A list of 3-5 key insights about the community. 
   Each insight should have a short summary followed by an explanatory 
   paragraph grounded in the data. Write findings in Korean.
   Focus on the following angles when applicable:
@@ -67,16 +56,8 @@ The report should include the following sections:
   2. Key emails — the most significant emails and what they contain
   3. People and relationships — who sends to whom, and what roles they play
   4. Recurring topics — what subjects or themes appear repeatedly
-  5. 날짜 및 일정
-    - Email.Date 기준 이메일 수신/발신 시점 분포
-    - 본문에서 언급된 Event.Schedule (약속, 마감 등)
-    - Event.Status = tentative인 미확정 일정 여부
-    위 세 가지를 반드시 구분하여 서술할 것.
-    이메일 수신일과 본문 속 일정을 혼동하지 않는다.
+  5. Events and schedules — any time-based information found in the emails
   6. Organizations involved — what companies or teams appear
-  7. 첨부파일 — HAS_ATTACHMENT 관계가 있는 경우,
-      어떤 이메일에 어떤 파일이 첨부되었는지 findings에 포함한다.
-      파일명만 사실로 언급하고 내용을 추론하지 않는다.
 
 Return output as a well-formed JSON-formatted string with the following 
 format:
@@ -85,8 +66,6 @@ format:
         "summary": <executive_summary>,
         "category": <top_level_category>,
         "purpose": <single_sentence_purpose>,
-        "date_range": <"YYYY-MM-DD ~ YYYY-MM-DD" or null>,
-        "email_count": <integer>,
         "rating": <importance_rating>,
         "rating_explanation": <rating_explanation>,
         "findings": [
@@ -111,15 +90,6 @@ are more.
 Do not include information where the supporting evidence is not provided.
 
 Additional rules:
-* Email.Tone은 반드시 아래 5개 중 하나여야 한다:
-  formal / casual / transactional / notification / alert
-  "Automated" 등 다른 값이 입력으로 들어오더라도
-  위 5개 중 가장 적합한 값으로 해석하여 사용한다.
-
-* Attachment 엔티티와 HAS_ATTACHMENT 관계가 데이터에 존재하는 경우,
-  반드시 findings에 포함한다.
-  파일명(Filename)만 사실로 언급하고 내용을 추론하지 않는다.
-
 * 엔티티는 반복적으로 의미를 가지는 개념만 추출한다.
   즉, 다른 이메일에서도 동일한 의미로 재등장할 수 있는 것만 포함한다.
   * 다음은 엔티티에서 제외한다:
@@ -139,8 +109,8 @@ Text:
 Entities
 
 id,entity,description
-1,ChatGPT 코드는 146672입니다,Title: ChatGPT 코드는 146672입니다 | 
-  ID: 19d4xx... | Date: 2026-03-01 | Tone: alert |
+1,ChatGPT 코드는 146672입니다,Subject: ChatGPT 코드는 146672입니다 | 
+  Tone: Automated | Attachments: None | 
   Summary: ChatGPT 인증 코드를 전달하는 자동 발송 메일
 2,noreply@tm.openai.com,Name: Unknown | Account: noreply@tm.openai.com
 3,gpttitti@hansung.ac.kr,Name: Unknown | Account: gpttitti@hansung.ac.kr
@@ -165,8 +135,6 @@ Output:
     "category": "트랜잭션",
     "purpose": "ChatGPT 로그인을 위한 일회성 인증코드를 수신하는 
       자동화 채널",
-    "date_range": "2026-03-01 ~ 2026-03-01",  
-    "email_count": 1,
     "rating": 2.5,
     "rating_explanation": "자동 발송 인증코드 이메일로만 구성되어 있어 
       사용자의 실질적 활동을 반영하지 않는다.",
@@ -206,8 +174,6 @@ format:
         "summary": <executive_summary>,
         "category": <top_level_category>,
         "purpose": <single_sentence_purpose>,
-        "date_range": <"YYYY-MM-DD ~ YYYY-MM-DD" or null>,
-        "email_count": <integer>,
         "rating": <importance_rating>,
         "rating_explanation": <rating_explanation>,
         "findings": [
