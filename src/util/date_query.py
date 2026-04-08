@@ -3,8 +3,6 @@ import re
 import time
 import datetime
 import calendar
-import pandas as pd
-import openai
 
 def _extract_date_range(message: str):
     today = datetime.datetime.now()
@@ -185,6 +183,7 @@ def _extract_date_range(message: str):
 
 # parquet에서 날짜 범위에 맞는 이메일 필터링
 def _filter_emails_by_date(paths, start_date: str, end_date: str) -> list:
+    import pandas as pd
     entity_path = os.path.join(paths.GRAPHRAG_ROOT, 'output', 'entities.parquet')
     df = pd.read_parquet(entity_path)
 
@@ -229,6 +228,7 @@ def _filter_emails_by_date(paths, start_date: str, end_date: str) -> list:
 
 # 질의에서 날짜 범위 측정하여 parquet 에서 날짜 필터링 하여 llm 답변
 def run_date_range_query(message: str, paths) -> str:
+    import openai
     date_range = _extract_date_range(message) # 질의에서 날짜 범위 추출, 날짜 패턴 없으면 None 반환
     if not date_range:
         return None  # 날짜 쿼리 아니면 graphrag로 넘긴다
