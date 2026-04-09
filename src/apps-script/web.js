@@ -17,8 +17,14 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  if (!e || !e.postData || !e.postData.contents) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: false, error: "postData가 없습니다. 올바른 POST 요청이 필요합니다." }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
   const data = JSON.parse(e.postData.contents);
   const action = data.action;
+  Logger.log("받은 action: " + action);
   const calendar = CalendarApp.getDefaultCalendar();
 
   // ── 캘린더: 일정 조회 ──
@@ -237,7 +243,11 @@ function doPost(e) {
       }
     });
     return ContentService.createTextOutput(
-      JSON.stringify({ ok: true, labelName: label.getName(), appliedCount: appliedCount }),
+      JSON.stringify({
+        ok: true,
+        labelName: label.getName(),
+        appliedCount: appliedCount,
+      }),
     ).setMimeType(ContentService.MimeType.JSON);
   }
 
@@ -260,6 +270,36 @@ function doPost(e) {
     if (msg && label) msg.getThread().removeLabel(label);
     return ContentService.createTextOutput(
       JSON.stringify({ ok: true }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // ── 라벨 특화 질의: 선택된 메일 복수에서 라벨 제거 ──
+  if (action === "removeLabelsFromMessages") {
+    const labelName = (data.labelName || "").trim();
+    const messageIds = data.messageIds || [];
+    if (!labelName || messageIds.length === 0) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: false, error: "라벨명과 메일 ID가 필요합니다." }),
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+    const label = GmailApp.getUserLabelByName(labelName);
+    let removedCount = 0;
+    if (label) {
+      messageIds.forEach(function (mid) {
+        try {
+          GmailApp.getMessageById(mid).getThread().removeLabel(label);
+          removedCount++;
+        } catch (e) {
+          Logger.log("removeLabel error for " + mid + ": " + e.message);
+        }
+      });
+    }
+    return ContentService.createTextOutput(
+      JSON.stringify({
+        ok: true,
+        labelName: labelName,
+        removedCount: removedCount,
+      }),
     ).setMimeType(ContentService.MimeType.JSON);
   }
 

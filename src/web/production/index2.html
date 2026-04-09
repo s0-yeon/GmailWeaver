@@ -325,6 +325,14 @@
       }
       .gw-lq-trash-btn:hover { background: #c0392b; }
       .gw-lq-trash-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+      .gw-lq-remove-btn {
+        padding: 8px 18px; background: #e67e22; color: #fff;
+        border: none; border-radius: 20px; font-size: 0.84rem; font-weight: 600;
+        cursor: pointer; transition: background 0.15s;
+        display: inline-flex; align-items: center; gap: 6px;
+      }
+      .gw-lq-remove-btn:hover { background: #ca6f1e; }
+      .gw-lq-remove-btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
       /* 캐시 기준 시간 뱃지 */
       .gw-cache-badge {
@@ -1073,6 +1081,92 @@
         });
       }
 
+      // 라벨 제거 카드 체크박스 리스트 렌더링
+      function lqShowRemoveLabelCards(messages, labelName) {
+        const el = lqResult();
+        el.className = 'gw-lq-result show';
+
+        if (messages.length === 0) {
+          el.innerHTML = `<div class="gw-lq-error">라벨을 제거할 메일을 찾지 못했습니다. 검색어를 바꿔보세요.</div>`;
+          return;
+        }
+
+        const labelHint = labelName
+          ? `<strong>${escapeHtml(labelName)}</strong> 라벨을 제거할 메일을 선택하세요:`
+          : '라벨을 제거할 메일을 선택하세요:';
+
+        const cards = messages.map(m => {
+          const date = new Date(m.date).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+          return `
+            <label class="gw-lq-mail-card checked" data-id="${escapeHtml(m.id)}">
+              <input type="checkbox" value="${escapeHtml(m.id)}" checked>
+              <div class="gw-lq-mail-info">
+                <div class="gw-lq-mail-subject">${escapeHtml(m.subject)}</div>
+                <div class="gw-lq-mail-meta">${escapeHtml(m.from)} · ${date}</div>
+                <div class="gw-lq-mail-snippet">${escapeHtml(m.snippet)}</div>
+              </div>
+            </label>`;
+        }).join('');
+
+        el.innerHTML = `
+          <div class="gw-lq-hint">다음 메일을 찾았어요. ${labelHint}</div>
+          <div class="gw-lq-mail-list" id="lq-mail-list">${cards}</div>
+          <div class="gw-lq-apply-row">
+            <button class="gw-lq-remove-btn" id="lq-remove-btn" data-label="${escapeHtml(labelName || '')}">
+              <i class="fas fa-tag"></i> 선택한 메일에서 라벨 제거
+            </button>
+            <span class="gw-lq-select-all" id="lq-select-all">전체 선택/해제</span>
+          </div>
+        `;
+
+        el.querySelectorAll('.gw-lq-mail-card').forEach(card => {
+          card.addEventListener('click', function(e) {
+            if (e.target.tagName === 'INPUT') return;
+            const cb = this.querySelector('input[type=checkbox]');
+            cb.checked = !cb.checked;
+            this.classList.toggle('checked', cb.checked);
+          });
+          const cb = card.querySelector('input[type=checkbox]');
+          cb.addEventListener('change', function() {
+            card.classList.toggle('checked', this.checked);
+          });
+        });
+
+        document.getElementById('lq-select-all').addEventListener('click', () => {
+          const cbs = el.querySelectorAll('input[type=checkbox]');
+          const allChecked = [...cbs].every(cb => cb.checked);
+          cbs.forEach(cb => {
+            cb.checked = !allChecked;
+            cb.closest('.gw-lq-mail-card').classList.toggle('checked', !allChecked);
+          });
+        });
+
+        document.getElementById('lq-remove-btn').addEventListener('click', async function() {
+          const labelToRemove = this.dataset.label;
+          if (!labelToRemove) { lqShowError('제거할 라벨명을 알 수 없습니다. 다시 질의해주세요.'); return; }
+          const selectedIds = [...el.querySelectorAll('input[type=checkbox]:checked')].map(cb => cb.value);
+          if (selectedIds.length === 0) { alert('라벨을 제거할 메일을 선택하세요.'); return; }
+
+          this.disabled = true;
+          this.innerHTML = '<span class="gw-spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></span> 제거 중...';
+
+          try {
+            const res = await callLabelsProxy('removeLabelsFromMessages', {
+              labelName: labelToRemove, messageIds: selectedIds
+            });
+            if (!res.ok) throw new Error(res.error || '라벨 제거 실패');
+            lqResult().className = 'gw-lq-result show';
+            lqResult().innerHTML = `<div class="gw-lq-success" style="color:#e67e22"><i class="fas fa-tag me-1"></i>${res.removedCount}개 메일에서 <strong>${escapeHtml(res.labelName)}</strong> 라벨을 제거했어요!</div>`;
+            clearCache(res.labelName);
+            if (activeLabel === res.labelName) selectLabel(res.labelName, true);
+          } catch (e) {
+            lqShowError('라벨 제거 실패: ' + e.message);
+            this.disabled = false;
+            this.innerHTML = '<i class="fas fa-tag"></i> 선택한 메일에서 라벨 제거';
+          }
+        });
+      }
+
       // 휴지통 카드 체크박스 리스트 렌더링
       function lqShowTrashCards(messages) {
         const el = lqResult();
@@ -1282,6 +1376,11 @@
               const { query } = fc.params;
               lqShowLoading(`"${query}" 삭제 대상 검색 중...`);
               lqShowTrashCards(await lqSearchMerged(query));
+
+            } else if (fc.action === 'remove_label') {
+              const { query, label_name } = fc.params;
+              lqShowLoading(`"${query}" 라벨 제거 대상 검색 중...`);
+              lqShowRemoveLabelCards(await lqSearchMerged(query), label_name);
 
             } else if (fc.action === 'apply_label') {
               const { message_ids, label_name } = fc.params;

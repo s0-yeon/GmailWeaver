@@ -1102,11 +1102,14 @@ def calendar_events():
 @app.route('/labels-proxy', methods=['POST'])
 def labels_proxy():
     data = request.json or {}
+    print("[labels] 받은 data:", data)
     try:
         res = requests.post(WEBAPP_URL, json=data, allow_redirects=False, timeout=30)
         print("[labels] 1차 status:", res.status_code)
 
-        # 302 처리: 301/302/303은 GET으로, 307/308은 POST 유지
+        # GAS Web App 리다이렉트 처리:
+        # exec URL → doPost 실행 → 302 → echo URL(결과 조회)
+        # echo URL은 GET으로 결과를 가져오는 엔드포인트이므로 GET 사용
         if res.status_code in (301, 302, 303, 307, 308):
             location = res.headers.get("Location")
             print("[labels] redirect →", location)
@@ -1130,7 +1133,9 @@ def labels_proxy():
             print("[labels] GAS 오류 메시지:", error_text)
             return jsonify({"ok": False, "error": error_text}), 200
 
-        return jsonify(res.json())
+        result = res.json()
+        print("[labels] GAS 응답:", result)
+        return jsonify(result)
 
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
@@ -1140,24 +1145,8 @@ def labels_proxy():
 
 
 # 라벨 서치 프롬포트: 사용자 의도를 "action"(라벨 적용) vs "query"(정보 질문)으로 분류
-LABEL_SEARCH_PROMPT = """\
-너는 Gmail 라벨 관리 어시스턴트야. 사용자의 요청을 분석해서 정확히 다음 두 가지 중 하나로 분류해.
-
-■ "action" — 메일을 검색하거나 라벨을 붙이는 작업 요청
-  · 특징: 동작을 수행해달라는 명령형 요청
-  · 예시: "상상빌리지 메일을 테스트 라벨에 넣어줘"
-          "회의 관련 메일 찾아서 업무 라벨로 분류해줘"
-          "장학금 안내 메일에 중요 라벨 달아줘"
-
-■ "query" — 라벨·메일 내용에 대한 정보 조회·질문
-  · 특징: 무언가를 물어보거나 현황을 알고 싶은 요청
-  · 예시: "테스트 라벨에 어떤 메일이 있어?"
-          "상상빌리지 기숙사 신청 결과가 어떻게 됐어?"
-          "이번 달 회의 일정 알려줘"
-          "어떤 라벨들이 있어?"
-
-반드시 JSON 형식으로만 응답해. 다른 텍스트 없이: {"intent": "action"} 또는 {"intent": "query"}
-"""
+with open(os.path.join("parquet_template", "prompts", "label_search_prompt.txt"), "r", encoding="utf-8") as _f:
+    LABEL_SEARCH_PROMPT = _f.read().strip()
 
 # 엔드포인트: POST /label-route (라벨 서치 프롬포트로 의도 분류)
 @app.route("/label-route", methods=["POST"])
@@ -1263,6 +1252,27 @@ def label_query():
                     "required": ["query"]
                 }
             }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "remove_label",
+                "description": "메일에서 라벨을 제거합니다. '라벨 빼줘', '라벨 제거해줘', '라벨에서 빼줘' 같은 요청에 사용합니다.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "라벨을 제거할 메일을 찾기 위한 Gmail 검색 키워드 (예: 상상빌리지 기숙사)"
+                        },
+                        "label_name": {
+                            "type": "string",
+                            "description": "제거할 라벨명 (예: 테스트). 언급이 없으면 빈 문자열."
+                        }
+                    },
+                    "required": ["query", "label_name"]
+                }
+            }
         }
     ]
 
@@ -1277,7 +1287,8 @@ def label_query():
                         "사용자의 Gmail 메일 관리 요청을 분석하여 적절한 함수를 호출하세요. "
                         "메일을 검색해서 라벨을 붙이거나 찾는 요청이면 search_emails를 사용하세요. "
                         "이미 선택된 메일에 라벨만 적용하는 요청이면 apply_label을 사용하세요. "
-                        "메일을 삭제하거나 휴지통으로 이동하는 요청이면 trash_emails를 사용하세요."
+                        "메일을 삭제하거나 휴지통으로 이동하는 요청이면 trash_emails를 사용하세요. "
+                        "메일에서 라벨을 제거하는 요청이면 remove_label을 사용하세요."
                     )
                 },
                 {"role": "user", "content": user_input}
