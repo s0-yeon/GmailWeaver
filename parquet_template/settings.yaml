@@ -55,8 +55,8 @@ input:
   text_column: "text"
 
 chunks:
-  size: 600 # 2000에서 하향
-  overlap: 100
+  size: 1500     # 2000 → 600 → 1500
+  overlap: 150  # 100 → 150
   group_by_columns: [id]
 
 ### Storage settings ###
