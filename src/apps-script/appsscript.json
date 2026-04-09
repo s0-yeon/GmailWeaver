@@ -16,7 +16,7 @@
     "https://www.googleapis.com/auth/script.scriptapp"
   ],
 
-  "urlFetchWhitelist": ["https://transpalmar-christine-noneducatory.ngrok-free.dev/"],
+  "urlFetchWhitelist": ["https://detainable-thumbless-arnav.ngrok-free.dev/"],
 
   "addOns": {
     "common": {
