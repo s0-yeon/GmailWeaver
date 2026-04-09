@@ -609,6 +609,7 @@ def _write_attachment_file(paths, summarized_by_mail: dict[str, list[dict]]):
     att_csv_path = os.path.join(paths.MAIL_DIR, "attachment_latest.csv")
     csv_rows = []
     
+    # CSV 파일로 저장
     for mail_id, items in existing.items():
         subject = subjects.get(mail_id, "제목 없음")
         for item in items:
@@ -627,7 +628,6 @@ def _write_attachment_file(paths, summarized_by_mail: dict[str, list[dict]]):
                 "text": combined_text
             })
 
-    # CSV 파일로 저장
     try:
         with open(att_csv_path, "w", encoding="utf-8", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=["id", "text"])
