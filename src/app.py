@@ -545,7 +545,7 @@ def _run_attachment_pipeline(job_id: str, paths, attachments: list, env: dict):
         # 3) attachment_latest.txt 저장
         # rewrite면 전체 덮어쓰기, 아니면 mail_id 기준으로 병합
         _write_attachment_file(paths, summarized_by_mail)
-        _build_mail_csv(paths)    
+        # _build_mail_csv(paths)    # 덮어쓰지 않도록 주석 처리
 
         update_job(job_id, progress=60, message="graphrag update 실행 중")
 
@@ -590,7 +590,7 @@ def _write_attachment_file(paths, summarized_by_mail: dict[str, list[dict]]):
             if id_m and sub_m:
                 subjects[id_m.group(1).strip()] = sub_m.group(1).strip()
 
-    # 파일마다 블록 분리해서 저장
+    # 파일마다 블록 분리해서 저장 (TXT)
     lines = []
     for mail_id, items in existing.items():
         for item in items:
@@ -605,6 +605,37 @@ def _write_attachment_file(paths, summarized_by_mail: dict[str, list[dict]]):
 
     with open(att_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
+
+    att_csv_path = os.path.join(paths.MAIL_DIR, "attachment_latest.csv")
+    csv_rows = []
+    
+    for mail_id, items in existing.items():
+        subject = subjects.get(mail_id, "제목 없음")
+        for item in items:
+            # ID에 'att_' 접두어를 붙여 기존 메일 노드와 구분되는 '첨부파일 요약 전용 노드'로 GraphRAG가 인식하게 함
+            unique_att_id = f"att_{mail_id}_{uuid.uuid4().hex[:4]}"
+            
+            combined_text = (
+                f"원문 메일 ID: {mail_id}\n"
+                f"메일 제목: {subject}\n"
+                f"첨부 파일명: {item['name']}\n"
+                f"첨부파일 요약 내용: {item['text']}"
+            )
+            
+            csv_rows.append({
+                "id": unique_att_id,
+                "text": combined_text
+            })
+
+    # CSV 파일로 저장
+    try:
+        with open(att_csv_path, "w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=["id", "text"])
+            writer.writeheader()
+            writer.writerows(csv_rows)
+        print(f"[AttachmentFile] GraphRAG 전용 CSV 저장 완료 → {att_csv_path}")
+    except Exception as e:
+        print(f"[AttachmentFile] CSV 저장 중 오류 발생: {e}")
 
     print(f"[AttachmentFile] 저장 완료 → {att_path} ({len(existing)}개 메일)")
 
