@@ -1438,7 +1438,7 @@ def send_high_affinity_person_stats():
 
     return jsonify({
         "gmail_id": gmail_id,
-        "data": get_high_affinity_person_stats()
+        "data": get_high_affinity_person_stats(paths)
     })
 
 @app.route("/user_rating_stats", methods=["POST"])
