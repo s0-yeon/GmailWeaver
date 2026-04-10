@@ -15,7 +15,7 @@ from util.user_path import user_graphrag_init
 
 from config.settings import MAIL_BLOCK_SEP
 from util.extract_statics import start_timer,end_timer,format_elapsed_time
-from util.database.db_writer import create_user
+from util.database.db_writer import create_user,save_person_stats_to_db,save_keyword_stats_to_db
 
 # 첨부파일 텍스트 요약 (공백/줄바꿈 제외 500자 미만이면 원문 그대로 반환)
 def _summarize_attachment_text(text: str,paths, filename: str) -> str:
@@ -155,7 +155,7 @@ def build_graphrag_index(job_id, paths,env):
     append_job_log(job_id, f"[INFO] GRAPHRAG_ROOT={paths.GRAPHRAG_ROOT}")
     append_job_log(job_id, f"[INFO] root_exists={os.path.exists(paths.GRAPHRAG_ROOT)}")
 
-    user_graphrag_init(paths)
+    #user_graphrag_init(paths)
 
     # GraphRAG CLI 실행 명령어 구성
     cmd = [
@@ -312,11 +312,12 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None, added_c
 
         create_user(
                 user_account_id=paths.GMAIL_ID,
-                started_at=time_result["started_at"],
                 ended_at=time_result["ended_at"],
                 index_time=formatted_time,
                 my_mail_count=added_count
             )
+        save_person_stats_to_db(paths)
+        save_keyword_stats_to_db(paths)
 
 
         update_job(job_id, progress=100, status="done", message="인덱싱 완료")
@@ -345,6 +346,9 @@ def run_graph_update_pipeline(job_id, paths, env):
 
         # 2단계: json 생성 
         build_graph_json(job_id,paths, env)
+
+        save_person_stats_to_db(paths)
+        save_keyword_stats_to_db(paths)
 
 
         update_job(job_id, progress=100, status="done", message="업데이트 완료")
