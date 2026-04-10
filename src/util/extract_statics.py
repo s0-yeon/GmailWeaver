@@ -63,6 +63,51 @@ def _extract_field(block: str, label: str, multiline: bool = False) -> str:
         )
     return m.group(1).strip() if m else ""
 
+# LLM으로 친밀한 어조 판별
+def _is_friendly_tone_with_llm(body: str) -> bool:
+
+    if not body.strip():
+        return False
+    
+    body = body[:1500]
+
+    prompt = f"""
+    다음 메일 본문이 '친밀한 어조'인지 판별하라.
+
+    판별 기준:
+    - '친밀한 어조'란, 개인적인 친분이나 가까운 관계가 느껴지는 말투를 뜻한다.
+    - 사적인 안부, 다정한 표현, 편한 말투, 친한 사이에서 쓰는 표현이 중심이면 friendly다.
+    - 단순히 예의 바르거나 친절한 것만으로는 friendly가 아니다.
+    - 업무 메일, 학교 메일, 공지, 안내, 광고, 자동 발송, 고객 응대, 형식적인 감사 표현은 not_friendly다.
+    - "감사합니다", "좋은 하루 되세요", "잘 부탁드립니다" 같은 일반적인 공손 표현만 있으면 not_friendly다.
+    - 메일 전체 분위기가 공식적이거나 정보 전달 중심이면 not_friendly다.
+
+    반드시 아래 둘 중 하나만 정확히 출력하라.
+    friendly
+    not_friendly
+
+    메일 본문:
+    {body}
+    """.strip()
+
+    result = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": "당신은 메일 본문의 어조를 분류하는 AI입니다. 반드시 friendly 또는 not_friendly 둘 중 하나만 출력하세요."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0
+    )
+
+    answer = result.choices[0].message.content.strip().lower()
+    return answer == "friendly"
+
 def extract_keywords_with_llm(body: str) -> list[str]:
     body = body.strip()
     if not body:
@@ -129,30 +174,58 @@ def _save_mail_contact_stats(blocks: list[str],paths, mode: str = "rewrite"):
             stats = json.load(f)
     else: # 전체 갱신 모드일 때 빈 딕셔너리로 초기화해서 새로 횟수 셈
         stats = {}
-    # 송수신 횟수 누적
-    def add(name: str, email: str, direction: str):
+    def ensure_account(name: str, email: str):
         if not email or email in ("-", ""):
-            return
-        # 이메일 처음 등장하면 name, sent, received 초기화
-        stats.setdefault(email, {"name": name, "sent": 0, "received": 0})
-        # 이름이 있을 때 덮어씀
+            return None
+
+        stats.setdefault(email, {
+            "name": name,
+            "sent": 0,
+            "received": 0,
+            "friendly_mail": 0
+        })
+
         if name:
             stats[email]["name"] = name
+
+        # 예전 json에 friendly_mail이 없을 수도 있으니 보정
+        if "friendly_mail" not in stats[email]:
+            stats[email]["friendly_mail"] = 0
+
+        return email
+
+    def add_count(name: str, email: str, direction: str):
+        email = ensure_account(name, email)
+        if not email:
+            return
         stats[email][direction] += 1
+
+    def add_friendly(name: str, email: str):
+        email = ensure_account(name, email)
+        if not email:
+            return
+        stats[email]["friendly_mail"] += 1
     # 블록 순회하며 횟수 집계
     for block in blocks:
         direction = _extract_field(block, "구분") # 발신 또는 수신
         from_raw  = _extract_field(block, "발신인") # 발신인 원문
         to_raw    = _extract_field(block, "수신인") # 수신인 원문 
+        body = _extract_field(block, "메일 본문", multiline=True) # 메일 본문
+        
+        is_friendly = _is_friendly_tone_with_llm(body)
 
         if direction == "발신":
             # 수신인 여러명이면 ,로 구분
             for addr in to_raw.split(","):
                 name, email = _parse_contact(addr)
-                add(name, email, "sent")
+                add_count(name, email, "sent")
+                if is_friendly:
+                    add_friendly(name, email)
         elif direction == "수신":
             name, email = _parse_contact(from_raw)
-            add(name, email, "received")
+            add_count(name, email, "received")
+            if is_friendly:
+                    add_friendly(name, email)
 
     # json 파일에 저장
     #os.makedirs(os.path.dirname(paths.MAIL_STATICS_PATH), exist_ok=True)    
