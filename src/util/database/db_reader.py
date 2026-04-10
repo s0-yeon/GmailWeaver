@@ -4,7 +4,6 @@ import json
 import os
 from config.db import get_db_connection
 
-# 웹앱용 가라데이터
 def get_mail_stats(paths): # 메일 송수신
     try:
         with open(paths.MAIL_CONTACTS_PATH, "r", encoding="utf-8") as f:
@@ -73,7 +72,8 @@ def get_keyword_stats(paths): # 메일 키워드 수
         ]
     }
 
-def get_high_affinity_person_stats(paths): # 친밀한 사람 친밀도 수치
+# 친밀한 사람 친밀도 수치
+def get_high_affinity_person_stats(paths): 
     if not os.path.exists(paths.MAIL_CONTACTS_PATH):
                 return [
             {
@@ -126,7 +126,7 @@ def get_high_affinity_person_stats(paths): # 친밀한 사람 친밀도 수치
             "affinity": round(affinity, 2)
         })
 
-    # 🔥 친밀도 높은 순 정렬
+    # 친밀도 높은 순 정렬
     result.sort(key=lambda x: x["affinity"], reverse=True)
 
     return result
