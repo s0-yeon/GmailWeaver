@@ -310,14 +310,16 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None, added_c
 
         formatted_time = format_elapsed_time(time_result["elapsed_sec"])
 
+        target_update_date = time_result["ended_at"]
+
         create_user(
                 user_account_id=paths.GMAIL_ID,
-                ended_at=time_result["ended_at"],
+                ended_at=target_update_date,
                 index_time=formatted_time,
                 my_mail_count=added_count
             )
-        save_person_stats_to_db(paths)
-        save_keyword_stats_to_db(paths)
+        save_person_stats_to_db(paths,target_update_date)
+        save_keyword_stats_to_db(paths,target_update_date)
 
 
         update_job(job_id, progress=100, status="done", message="인덱싱 완료")

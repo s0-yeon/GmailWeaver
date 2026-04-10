@@ -51,7 +51,7 @@ def create_user(user_account_id, ended_at, index_time,my_mail_count):
     cursor.close()
     conn.close()
 
-def save_person_stats_to_db(paths):
+def save_person_stats_to_db(paths,update_date=None):
     # 나와 메일을 주고 받은 person 테이블에 삽입. 동일한 데이터는 업데이트
 
     if not os.path.exists(paths.MAIL_CONTACTS_PATH):
@@ -62,14 +62,17 @@ def save_person_stats_to_db(paths):
     cursor = conn.cursor(dictionary=True)
 
     try:
-        latest_user = get_latest_user_record(paths.GMAIL_ID)
+        if update_date is None:
+            latest_user = get_latest_user_record(paths.GMAIL_ID)
 
-        if not latest_user:
-            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
-            return
+            if not latest_user:
+                print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
+                return
 
-        user_account_id = latest_user["user_account_id"]
-        update_date = latest_user["update_date"]
+            user_account_id = latest_user["user_account_id"]
+            update_date = latest_user["update_date"]
+        else:
+            user_account_id = paths.GMAIL_ID
 
         # 2) JSON 읽기
         with open(paths.MAIL_CONTACTS_PATH, "r", encoding="utf-8") as f:
@@ -128,7 +131,7 @@ def save_person_stats_to_db(paths):
         cursor.close()
         conn.close()
 
-def save_keyword_stats_to_db(paths):
+def save_keyword_stats_to_db(paths,update_date=None):
     """
     1. user 테이블에서 paths.GMAIL_ID에 해당하는 가장 최근 row 조회
     2. keyword json 파일 읽기
@@ -139,14 +142,17 @@ def save_keyword_stats_to_db(paths):
         print(f"[WARN] 파일이 없습니다: {paths.MAIL_KEYWORDS_PATH}")
         return
 
-    latest_user = get_latest_user_record(paths.GMAIL_ID)
+    if update_date is None:
+        latest_user = get_latest_user_record(paths.GMAIL_ID)
 
-    if not latest_user:
-        print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
-        return
+        if not latest_user:
+            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
+            return
 
-    user_account_id = latest_user["user_account_id"]
-    update_date = latest_user["update_date"]
+        user_account_id = latest_user["user_account_id"]
+        update_date = latest_user["update_date"]
+    else:
+        user_account_id = paths.GMAIL_ID
 
     with open(paths.MAIL_KEYWORDS_PATH, "r", encoding="utf-8") as f:
         stats = json.load(f)
@@ -171,7 +177,7 @@ def save_keyword_stats_to_db(paths):
 
         keywords = stats.get("keywords", {})
         for keyword_name, keyword_count in keywords.items():
-            if keyword_count < 2 : continue
+            if keyword_count < 2 : continue # 키워드 수가 2 이상인 경우만 (유효한 키워드를 얻기위함)
 
             cursor.execute(
                 insert_sql,
