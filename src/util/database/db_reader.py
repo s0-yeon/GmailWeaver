@@ -1,6 +1,7 @@
 # 웹앱 DB → 메일에서 추출한 정보 데이터 JSON
 # 현재는 가라 데이터
 import json
+import os
 from config.db import get_db_connection
 
 # 웹앱용 가라데이터
@@ -72,34 +73,63 @@ def get_keyword_stats(paths): # 메일 키워드 수
         ]
     }
 
-def get_high_affinity_person_stats(): # 친밀한 사람 친밀도 수치
-    return [
-        {
-        "email": "friend123@gmail.com",
-        "name": "김민수",
-        "affinity": 0.92
-        },
-        {
-        "email": "team@company.com",
-        "name": "프로젝트팀",
-        "affinity": 0.78
-        },
-        {
-        "email": "notifications@github.com",
-        "name": "uzichoi",
-        "affinity": 0.65
-        },
-        {
-        "email": "inews11@seoul.go.kr",
-        "name": "서울시청",
-        "affinity": 0.40
-        },
-        {
-        "email": "ae-best-care-market14@deals.aliexpress.com",
-        "name": "AliExpress",
-        "affinity": 0.55
-        }
-    ]
+def get_high_affinity_person_stats(paths): # 친밀한 사람 친밀도 수치
+    if not os.path.exists(paths.MAIL_CONTACTS_PATH):
+                return [
+            {
+            "email": "friend123@gmail.com",
+            "name": "김민수",
+            "affinity": 0.92
+            },
+            {
+            "email": "team@company.com",
+            "name": "프로젝트팀",
+            "affinity": 0.78
+            },
+            {
+            "email": "notifications@github.com",
+            "name": "uzichoi",
+            "affinity": 0.65
+            },
+            {
+            "email": "inews11@seoul.go.kr",
+            "name": "서울시청",
+            "affinity": 0.40
+            },
+            {
+            "email": "ae-best-care-market14@deals.aliexpress.com",
+            "name": "AliExpress",
+            "affinity": 0.55
+            }
+        ]
+
+    with open(paths.MAIL_CONTACTS_PATH, "r", encoding="utf-8") as f:
+        stats = json.load(f)
+
+    result = []
+
+    for email, data in stats.items():
+        sent = data.get("sent", 0)
+        received = data.get("received", 0)
+        friendly = data.get("friendly_mail", 0)
+
+        total = sent + received
+
+        if total == 0:
+            affinity = 0
+        else:
+            affinity = friendly / total
+
+        result.append({
+            "email": email,
+            "name": data.get("name", ""),
+            "affinity": round(affinity, 2)
+        })
+
+    # 🔥 친밀도 높은 순 정렬
+    result.sort(key=lambda x: x["affinity"], reverse=True)
+
+    return result
 
 
 def get_user_rating_stats(): # 모든 유저의 Olive 만족도
