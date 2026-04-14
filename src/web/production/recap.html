@@ -808,7 +808,8 @@
         const sorted = Object.entries(data)
           .map(([email, v]) => ({ email, name: v.name || email, count: v[field] || 0 }))
           .filter(x => x.count > 0)
-          .sort((a, b) => b.count - a.count);
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 10);
 
         document.getElementById(ids.loadingEl).style.display = 'none';
 
@@ -1049,8 +1050,8 @@
         function fmtTime(t) {
           if (!t) return '—';
           const [h, m] = String(t).split('-');
-          if (m === undefined) return h + '분';
-          return (parseInt(h) ? h + '시간 ' : '') + (parseInt(m) ? m + '분' : '');
+          if (m === undefined) return h;
+          return (parseInt(h) ? h + '시간 ' : '') + (parseInt(m) ? m : '');
         }
         // sync_update_date "2026-04-22" → "26.04.22"
         function fmtDate(d) {

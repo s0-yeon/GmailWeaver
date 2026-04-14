@@ -506,9 +506,9 @@
     <script>
       const FLASK_URL = 'http://127.0.0.1:80'; //라벨 캐시 : 1시간
       const LABEL_CACHE_KEY = 'gw_label_cache';
-      const LABEL_CACHE_TTL = 60 * 60 * 1000;
-      const MAIL_CACHE_PREFIX = 'gw_mail_cache_'; //메일 캐시: 30분, 라벨명별로 키 구분
-      const MAIL_CACHE_TTL = 30 * 60 * 1000;
+      const LABEL_CACHE_TTL = 24 * 60 * 60 * 1000;
+      const MAIL_CACHE_PREFIX = 'gw_mail_cache_'; //메일 캐시: 1일, 라벨명별로 키 구분
+      const MAIL_CACHE_TTL = 24 * 60 * 60 * 1000;
 
       // URL 파라미터 → sessionStorage → 기본값 순으로 사용자 이름 결정
       const params = new URLSearchParams(window.location.search);
@@ -517,6 +517,10 @@
         ? decodeURIComponent(nameParam)
         : (sessionStorage.getItem('gw_user_name') || '-');
       if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
+
+      const gmailIdParam = params.get('gmail_id');
+      if (gmailIdParam) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+
       document.getElementById('google-profile-name').textContent = name;
       
 
@@ -1260,7 +1264,7 @@
       // GraphRAG local search → 텍스트 답변 반환
       // labelCtx: 라벨 목록 컨텍스트 (라벨 관련 질문에 GraphRAG가 알 수 없는 메타데이터 보완)
       async function lqRunGraphRag(query, labelCtx = '') {
-        const gmailId = name + '@gmail.com';
+        const gmailId = sessionStorage.getItem('gw_gmail_id') || '';
         const fullMessage = labelCtx
           ? `${labelCtx}\n\n위 정보와 메일 내용을 참고해서 한국어로 답변해줘:\n${query}`
           : `${query} 영어 말고 한국어로 답변해줘.`;
