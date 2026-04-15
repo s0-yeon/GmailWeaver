@@ -328,8 +328,11 @@
         ? decodeURIComponent(nameParam)
         : (sessionStorage.getItem('gw_user_name') || '-');
       if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
+
+      const gmailIdParam = params.get('gmail_id');
+      if (gmailIdParam) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+
       document.getElementById('google-profile-name').textContent = name;
-      
 
       window.currentUserName = name;
       // URL ?q= 파라미터가 있으면 검색창에 자동 복원
@@ -468,12 +471,12 @@
         saveRecent(q);
         renderRecents();
 
+        const gmailId = sessionStorage.getItem('gw_gmail_id') || '';
         console.log("currentUserName =", window.currentUserName);
-        console.log("gmailId =", window.currentUserName + "@gmail.com");
+        console.log("gmailId =", gmailId);
         console.log("query =", q);
 
         try {
-          const gmailId = window.currentUserName + "@gmail.com";
 
           // 비동기 쿼리 시작
           const res = await fetch(`${FLASK_URL}/run-query-async`, {

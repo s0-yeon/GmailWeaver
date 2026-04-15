@@ -370,7 +370,7 @@
               .then(function() { _graphReady = true; });
         deps
           .then(function() {
-            var gmailId = (window.currentUserName || '') + '@gmail.com';
+            var gmailId = sessionStorage.getItem('gw_gmail_id') || '';
             return fetch('/graph-data?gmail_id=' + encodeURIComponent(gmailId));
           })
           .then(function(res) { return res.json(); })

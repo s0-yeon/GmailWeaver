@@ -15,7 +15,6 @@ import shutil
 import zlib
 import traceback 
 import urllib.parse     # import missing 해결
-
 from util.date_query import run_date_range_query
 
 from dotenv import load_dotenv
@@ -44,7 +43,7 @@ app = Flask(__name__)   # Flask 앱 객체 생성. 해당 파일이 서버의 �
 CORS(app)   # Cross-Origin Resource Sharing 허용 (다른 환경에서 이 서버의 API를 호출할 수 있도록)
 
 # Apps Script Web App URL (캘린더, 라벨 등 모든 프록시에서 공통 사용)
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxtyg_SQtae1h2kSW3T4vRFPJObE-CC2F21eH2TKmQRbIz6mnOg1qVMoMULYdozc2s0/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxQN-o7ZKI-daT-D-8h9YLo63IUefp9ShJGpZxWEPwuh1A6gH6kNMrzwP07o46eh6WE/exec"
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지 (utf-8 인코딩 및 대체 문자 처리)
 if hasattr(sys.stdout, "reconfigure"):
@@ -1427,23 +1426,6 @@ def upload_attachments():
     t.start()
 
     return jsonify({"ok": True, "job_id": job_id, "attachment_count": len(attachments)})
-
-@app.route('/dashboard/marker-icon.png')
-def marker_icon():
-    url = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png'
-    with urllib.request.urlopen(url) as r:
-        data = r.read()
-    from flask import Response
-    return Response(data, mimetype='image/png')
-
-# /dashboard/marker-shadow.png 경로로 들어오는 요청을 처리하는 Flask 라우트
-@app.route('/dashboard/marker-shadow.png')
-def marker_shadow():
-    url = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png'
-    with urllib.request.urlopen(url) as r:
-        data = r.read()
-    from flask import Response
-    return Response(data, mimetype='image/png')
 
 
 # 웹앱용 가라데이터 라우트
