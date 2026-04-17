@@ -446,7 +446,7 @@ def _delete_incremental_files(paths):
 
 # 업데이트 시 생기는 update_output 폴더 속 새로운 결과 파일 삭제
 def _delete_old_update_files(paths):
-    update_output_dir = os.path.join(paths.PARQUET_DIR, "update_output")
+    update_output_dir = paths.UPDATE_DIR
     if not os.path.exists(update_output_dir):
         return
     
