@@ -23,6 +23,7 @@ The input may be an email, a structured table, or plain text — adapt according
       even if names, email addresses, organizations, or dates appear in the Summary content.
     - CRITICAL: DO NOT create any relationship other than the single HAS_ATTACHMENT above.
   * If the first line is NOT '[ATTACHMENT_ONLY]', proceed normally with rules 1.1–1.8.
+  * CRITICAL: Every entity MUST have a valid type from the list below. If an entity's type is prohibited by a specific section rule (e.g., in Attachment Summary), DO NOT extract that entity at all.
 
 1.1 Extract entities of the following types: '[{entity_types}]'.
 Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter}<description>)'
@@ -185,6 +186,7 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
    * Relationship descriptions MUST be in Korean.
    * Output as a single list delimited by {record_delimiter}.
    * End with {completion_delimiter}.
+   * CRITICAL: Every extracted entity MUST be linked to at least one other entity (typically an Email). DO NOT extract isolated entities.
 
 ---
 
