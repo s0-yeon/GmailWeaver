@@ -47,6 +47,7 @@ function onCheckJobResult(e) {
   var query     = params.query     || "";   // 검색어(질의 내용)
   var jobType   = params.jobType   || "query";  // 작업 종류 (일반 검색/캘린더 일정 추출 구분)
   var messageId = params.messageId || "";   
+  
 
   if (!jobId) return _toast("jobId를 찾을 수 없습니다.");
 
@@ -59,6 +60,7 @@ function onCheckJobResult(e) {
     data = JSON.parse(res.getContentText());    // 서버 응답 객체(res)에서 텍스트를 추출하여 JSON 객체로 변환한 후, data에 저장
   } catch (err) { return _toast("⚠️ 상태 확인 실패: " + err.message); }
 
+  var sourceIds = data.source_ids || [];
   var status = data.status || "";
 
   if (status === "pending") {
@@ -85,7 +87,7 @@ function onCheckJobResult(e) {
   }
   // 변환 실패 시, parsed는 null 유지, 에러 무시
 
-  return _answerCard(query, result);
+  return _answerCard(query, result, sourceIds);
 }
 
 // 서버가 분석해 준 일정 정보를 실제 Google Calendar에 등록하는 함수
@@ -184,29 +186,43 @@ function _executeDeleteActions(actions) {
 }
 
 // 검색어와 답변을 받아 답변용 카드를 만드는 함수
-function _answerCard(query, answer) {
-  var card = CardService.newCardBuilder()   // 카드 객체 생성
-    .setHeader(CardService.newCardHeader()  // 헤더 설정
-      .setTitle("💬 검색 결과")     // 헤더 제목 설정 (고정 텍스트)
-      .setSubtitle(_truncate(query, 60)))  // 쿼리(검색어)를 60자로 잘라 헤더 부제목으로 설정
+function _answerCard(query, answer, sourceIds) {
+  var section = CardService.newCardSection()
+    .addWidget(CardService.newTextParagraph().setText(answer))
 
-    .addSection(CardService.newCardSection()    // 본문 섹션 추가
-      .addWidget(CardService.newTextParagraph().setText(answer))    // 문단 위젯 추가 (답변으로 채우기)
-      .addWidget(CardService.newDivider())  // 본문-버튼 사이 구분선 위젯 추가
-      .addWidget(CardService.newTextButton()    // 텍스트 버튼 위젯 추가
-        .setText("🔎 자세히 검색하기")  // 버튼에 텍스트 설정
-        .setTextButtonStyle(CardService.TextButtonStyle.FILLED) // 버튼 스타일 설정
-        .setOpenLink(CardService.newOpenLink()  // 오픈 링크 추가
-          .setUrl(WEBAPP_URL)   // 웹앱 URL로 설정
-          .setOpenAs(CardService.OpenAs.FULL_SIZE)))    // 풀 사이즈로 오픈되도록 설정
-      .addWidget(CardService.newTextButton()    // 텍스트 버튼 추가
-        .setText("← 홈으로 돌아가기")   // 텍스트 설정
-        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)  // 버튼 스타일 설정
-        .setOnClickAction(CardService.newAction().setFunctionName("_goBackHome")))) // 클릭 시 _goBackHome() 함수가 실행되도록 설정
-    .build();   // 카드 객체 완성 (빌드)
+  // 근거 메일 버튼 (source_ids 있을 때만)
+  if (sourceIds && sourceIds.length > 0) {
+    sourceIds.forEach(function(mailId) {
+      section.addWidget(CardService.newTextButton()
+        .setText("📧 메일로 확인하기")
+        .setTextButtonStyle(CardService.TextButtonStyle.OUTLINED)
+        .setOpenLink(CardService.newOpenLink()
+          .setUrl("https://mail.google.com/mail/u/0/#all/" + mailId)
+          .setOpenAs(CardService.OpenAs.FULL_SIZE)));
+    });
+  }
 
-  return CardService.newActionResponseBuilder() // 완성된 객체를 새 카드로 push하여 navigate (화면 전환)
-    .setNavigation(CardService.newNavigation().pushCard(card))
+  section
+    .addWidget(CardService.newDivider())
+    .addWidget(CardService.newTextButton()
+      .setText("🔎 자세히 검색하기")
+      .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+      .setOpenLink(CardService.newOpenLink()
+        .setUrl(WEBAPP_URL)
+        .setOpenAs(CardService.OpenAs.FULL_SIZE)))
+    .addWidget(CardService.newTextButton()
+      .setText("← 홈으로 돌아가기")
+      .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+      .setOnClickAction(CardService.newAction().setFunctionName("_goBackHome")));
+
+  return CardService.newActionResponseBuilder()
+    .setNavigation(CardService.newNavigation().pushCard(
+      CardService.newCardBuilder()
+        .setHeader(CardService.newCardHeader()
+          .setTitle("💬 검색 결과")
+          .setSubtitle(_truncate(query, 60)))
+        .addSection(section)
+        .build()))
     .build();
 }
 
