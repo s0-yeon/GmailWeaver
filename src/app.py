@@ -15,6 +15,8 @@ import shutil
 import zlib
 import traceback 
 import urllib.parse     # import missing 해결
+
+from util.graphrag_query import run_graphrag_query
 from util.date_query import run_date_range_query
 
 from dotenv import load_dotenv
@@ -43,7 +45,7 @@ app = Flask(__name__)   # Flask 앱 객체 생성. 해당 파일이 서버의 �
 CORS(app)   # Cross-Origin Resource Sharing 허용 (다른 환경에서 이 서버의 API를 호출할 수 있도록)
 
 # Apps Script Web App URL (캘린더, 라벨 등 모든 프록시에서 공통 사용)
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyDirmL5rdjNqpS_r7-b8lRHH75003ydq2rJf6zERVgKA0E-hekTJFDoco9-jGOW5M_/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec"
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지 (utf-8 인코딩 및 대체 문자 처리)
 if hasattr(sys.stdout, "reconfigure"):
@@ -110,7 +112,6 @@ def _run_graphrag(message, resMethod,paths, resType):
     answer = answer.strip()
     print(answer)
     return answer.strip()
-
 
 # 텍스트 → 캘린더 JSON 변환
 def _convert_to_calendar_json(text):
@@ -846,7 +847,12 @@ def run_query_async():
             answer = run_date_range_query(message, paths) # 이게 None이면 GraphRAG로 
             if answer is None:
                 full_message = message + " 영어 말고 한국어로 답변해줘."
-                answer = _run_graphrag(full_message, resMethod, paths, resType)
+                try:
+                    answer = run_graphrag_query(full_message, paths)
+                except Exception as e:
+                    # API 방식 실패 시 기존 CLI 방식으로 자동 fallback
+                    print(f"[ENGINE] API 실패, CLI fallback: {e}")
+                    answer = _run_graphrag(full_message, resMethod, paths, resType)
 
             if resType.lower() == "calendar":
                 # 캘린더 타입: GraphRAG 텍스트 답변을 다시 OpenAI로 구조화
