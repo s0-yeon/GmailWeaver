@@ -795,6 +795,9 @@ def _build_mail_csv(paths, mode="rewrite", new_ids=None) -> str:
     print(f"[CSV] 생성 완료 → {csv_path} ({len(rows)}개 메일)")
     return csv_path
 
+#근거메일보기 버튼
+def _extract_source_mail_ids(answer: str) -> list:
+    return list(set(re.findall(r'ID:\s*([0-9A-Fa-f]{16})', answer)))
 
 # 엔드포인트: POST /extract-calendar
 @app.route('/extract-calendar', methods=['POST'])
@@ -855,12 +858,12 @@ def run_query_async():
                     answer = _run_graphrag(full_message, resMethod, paths, resType)
 
             if resType.lower() == "calendar":
-                # 캘린더 타입: GraphRAG 텍스트 답변을 다시 OpenAI로 구조화
                 result = json.dumps(_convert_to_calendar_json(answer), ensure_ascii=False)
+                update_job(job_id, status="done", result=result)
             else:
                 result = answer
-
-            update_job(job_id, status="done", result=result)
+                source_ids = _extract_source_mail_ids(answer)
+                update_job(job_id, status="done", result=result, source_ids=source_ids)
 
         except Exception as e:
             update_job(job_id, status="error", result=str(e))
@@ -885,7 +888,7 @@ def job_status(job_id):     # 비동기 Job의 현재 상태와 결과를 반환
             return jsonify({"status": "done", "data": {"events": []}})
 
     # text 타입: result 필드에 문자열 그대로 반환
-    return jsonify({"status": job["status"], "result": job["result"] or ""})
+    return jsonify({"status": job["status"], "result": job["result"] or "", "source_ids": job.get("source_ids") or []})
 
 # 엔드포인트: POST /run-query  (동기 버전, 디버깅/단순 클라이언트용)
 @app.route('/run-query', methods=['POST'])
