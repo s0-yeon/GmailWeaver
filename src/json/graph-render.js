@@ -40,7 +40,7 @@
     } // 툴팁 숨기기
 
     // description을 3줄 분량(120자)으로 자르기
-    function shortDesc(text, maxLen = 120) {
+    function shortDesc(text, maxLen = 300) {  // 300자로 수정
       if (!text) return "";
       return text.length > maxLen
         ? text.slice(0, maxLen).trimEnd() + "…"

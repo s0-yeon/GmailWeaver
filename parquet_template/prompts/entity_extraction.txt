@@ -5,15 +5,42 @@ The input may be an email, a structured table, or plain text — adapt according
 
 -Steps-
 1. Identify Entities:
+
+1.0 Document Type Detection (CHECK THIS BEFORE ANYTHING ELSE):
+  * Examine the very first line of the input text.
+  * If the first non-empty line STARTS WITH '[ATTACHMENT_ONLY]', this document is an attachment metadata record, NOT an email.
+    Apply these rules EXCLUSIVELY and ignore all other entity and relationship rules below.
+    - Extract EXACTLY ONE Attachment entity using the 'Filename', 'Type', and 'Summary' fields.
+    - Format: ("entity"{tuple_delimiter}<Filename value>{tuple_delimiter}Attachment{tuple_delimiter}Filename: <name> | Type: <ext> | Summary: <1-sentence>)
+    - CRITICAL: The Summary field is descriptive only and MUST NOT be used as a source for extracting any entities or relationships.
+    - CRITICAL: Names, email addresses, organizations, dates, labels, and topics appearing inside the Summary are attachment content only and MUST NOT be extracted as separate entities.
+    - CRITICAL: Violating this rule is an extraction failure.
+    - Create EXACTLY ONE relationship of type HAS_ATTACHMENT:
+      - Source: the value of 'Linked Email ID' (MUST refer to an existing Email node already present in the graph)
+      - Target: the Attachment entity just extracted
+      - Format: ("relationship"{tuple_delimiter}<Linked Email ID uppercase>{tuple_delimiter}<Filename>{tuple_delimiter}HAS_ATTACHMENT{tuple_delimiter}<Korean description>{tuple_delimiter}10)
+    - CRITICAL: DO NOT create Person, Organization, Topic, Label, Event, or Email entities,
+      even if names, email addresses, organizations, or dates appear in the Summary content.
+    - CRITICAL: DO NOT create any relationship other than the single HAS_ATTACHMENT above.
+  * If the first line is NOT '[ATTACHMENT_ONLY]', proceed normally with rules 1.1–1.8.
+  * CRITICAL: Every entity MUST have a valid type from the list below. If an entity's type is prohibited by a specific section rule (e.g., in Attachment Summary), DO NOT extract that entity at all.
+
 1.1 Extract entities of the following types: '[{entity_types}]'.
 Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter}<description>)'
-  * Email:        'Title: <subject> | ID: <mail_id> | Date: <YYYY-MM-DD HH:MM> | Tone: <formal/casual/transactional/notification/alert> | Summary: <1-sentence>'
+  * Email:        'Subject: <subject> | ID: <mail_id> | Date: <YYYY-MM-DD HH:MM> | Tone: <formal/casual/transactional/notification/alert> | Summary: <1-sentence>'
   * Person:       'Account: <email> | Name: <name/None>'
   * Organization: 'OrgName: <organization_name> | Department: <department/None>'
   * Topic:        'Priority: <high/mid/low> | Summary: <Core topic of this email in 1 sentence>'
   * Label:        'Category: <label_name>'
   * Event:        'EventName: <Event Name> | Schedule: <YYYY-MM-DD HH:MM> | Location: <place/None> | Status: <confirmed/tentative>'
   * Attachment:   'Filename: <name> | Type: <file_type> | Summary: <content_summary>'
+
+1.2 Extraction Rules for Integrated Documents:
+  * MAIN CONTENT: Extract Email, Person, Organization, Topic, Label, and Event entities from the main email header and body.
+  * ATTACHMENT SUMMARY SECTION: If the text contains a section labeled "[첨부파일 요약]", apply the following CRITICAL rules:
+    - Extract ONLY 'Attachment' type entities from this section.
+    - CRITICAL: DO NOT extract any Person, Topic, Label, Organization, or Event entities from the content inside the "[첨부파일 요약]" section.
+    - The summary of the attachment must be rich and detailed based on the provided summary text, but must strictly follow the 'Attachment' format defined in Step 1.1.
 
 1.2 Email Extraction Rules:
   * The 'name' (title) of an Email entity MUST always be the <mail_id> (Unique Identifier).
@@ -33,6 +60,7 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
   * CRITICAL: No values other than the five specified above (formal, casual, transactional, notification, alert) are allowed.
   * If Tone cannot be clearly determined, select the closest matching value. 'None' is strictly forbidden.
   * Summary MUST be a concise, one-sentence description of the email content.
+  * CRITICAL: All Email entity names and all relationship references to Email IDs MUST use the uppercase form of the ID.
 
 1.3 Person Extraction Rules:
   * The 'name' (title) of a Person entity MUST always be the Account (email address).
@@ -106,19 +134,19 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
   * The entity format MUST be: 'Category: <label_name>'
 
 1.8. Grounding Rules:
-* Do NOT extract the following as entities:
-  - One-time codes, OTPs, temporary tokens, or any ephemeral numeric/alphanumeric strings.
-  - Serial numbers or sequence identifiers within filenames.
-  - Transaction identifiers such as invoice numbers, order numbers, or tracking IDs.
-* CRITICAL: Only extract entities that represent meaningful, persistent concepts, people, organizations, or events.
-* CRITICAL: An entity MUST NOT be created if any of its core fields (name, type, or description) cannot be populated with a valid, meaningful value.
-* CRITICAL: Strings representing absence of value such as 'None', 'NONE', 'null', '없음', '-' MUST NOT be used as entity names under any type.
-* CRITICAL: Do NOT create entities whose name consists solely of a person's display name without a valid email address. A Person entity without an Account is invalid and must not be created.
+  * Do NOT extract the following as entities:
+    - One-time codes, OTPs, temporary tokens, or any ephemeral numeric/alphanumeric strings.
+    - Serial numbers or sequence identifiers within filenames.
+    - Transaction identifiers such as invoice numbers, order numbers, or tracking IDs.
+  * CRITICAL: Only extract entities that represent meaningful, persistent concepts, people, organizations, or events.
+  * CRITICAL: An entity MUST NOT be created if any of its core fields (name, type, or description) cannot be populated with a valid, meaningful value.
+  * CRITICAL: Strings representing absence of value such as 'None', 'NONE', 'null', '없음', '-' MUST NOT be used as entity names under any type.
+  * CRITICAL: Do NOT create entities whose name consists solely of a person's display name without a valid email address. A Person entity without an Account is invalid and must not be created.
 
 2. Identify Relationships: 
-  Relationship directions are fixed — do NOT reverse them.
-  Source and Target MUST match the specified entity types exactly.
-   Format: '("relationship"{tuple_delimiter}<source>{tuple_delimiter}<target>{tuple_delimiter}<type>{tuple_delimiter}<description_in_Korean>{tuple_delimiter}<strength_1_10>)'
+  * Relationship directions are fixed — do NOT reverse them.
+    - Source and Target MUST match the specified entity types exactly.
+    - Format: '("relationship"{tuple_delimiter}<source>{tuple_delimiter}<target>{tuple_delimiter}<type>{tuple_delimiter}<description_in_Korean>{tuple_delimiter}<strength_1_10>)'
 
   | Type            | Source       | Target       | When to use                          |
   |-----------------|--------------|--------------|--------------------------------------|
@@ -138,18 +166,19 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
     * Self-mail rule: If the sender and receiver are the same email address, create TWO separate relationships:
       - Email → SENT_BY → Person
       - Email → SENT_TO → Person
-   * AFFILIATED_WITH target MUST be an Organization type. Topic/Event are NOT allowed.
-   * LABELED_AS target MUST be a Label entity extracted solely from the '[라벨 정보]' field.
-   * LABELED_AS MUST be created for each Label entity extracted — one relationship per label.
-   * SENT_TO MUST be used ONLY for primary recipients (To field). 
-     Use CC_TO for carbon copy recipients.
-   * HAS_ATTACHMENT MUST be created ONLY if the attachment is explicitly mentioned in the text.
-   * Do NOT use SENT_BY, SENT_TO, CC_TO if no Email entity exists.
-   * Do NOT create relationships that are NOT clearly supported by the text.
-   * Relationship weight MUST be a float between 1.0 and 10.0.
-     Explicit: 7.0+ / Inferred: 4.0 or below.
-   * Do NOT create duplicate relationships with the same source-target-type combination.
-   * Relationship descriptions MUST be in Korean.
+    * AFFILIATED_WITH target MUST be an Organization type. Topic/Event are NOT allowed.
+    * LABELED_AS target MUST be a Label entity extracted solely from the '[라벨 정보]' field.
+    * LABELED_AS MUST be created for each Label entity extracted — one relationship per label.
+    * SENT_TO MUST be used ONLY for primary recipients (To field). 
+      Use CC_TO for carbon copy recipients.
+    * HAS_ATTACHMENT MUST be created ONLY if the attachment is explicitly mentioned in the text,
+      UNLESS the document type is [ATTACHMENT_ONLY].
+    * Do NOT use SENT_BY, SENT_TO, CC_TO if no Email entity exists.
+    * Do NOT create relationships that are NOT clearly supported by the text.
+    * Relationship weight MUST be a float between 1.0 and 10.0.
+      Explicit: 7.0+ / Inferred: 4.0 or below.
+    * Do NOT create duplicate relationships with the same source-target-type combination.
+    * Relationship descriptions MUST be in Korean.
 
 3. Constraints:
    * Do NOT create duplicate entities.
@@ -157,6 +186,7 @@ Format: '("entity"{tuple_delimiter}<name>{tuple_delimiter}<type>{tuple_delimiter
    * Relationship descriptions MUST be in Korean.
    * Output as a single list delimited by {record_delimiter}.
    * End with {completion_delimiter}.
+   * CRITICAL: Every extracted entity MUST be linked to at least one other entity (typically an Email). DO NOT extract isolated entities.
 
 ---
 
@@ -188,7 +218,7 @@ Output:
 {record_delimiter}
 ("entity"{tuple_delimiter}스프린트 계획 수립{tuple_delimiter}Topic{tuple_delimiter}Priority: high | Summary: Vocarush 4월 스프린트 계획을 팀 내 공유하고 확정하는 논의)
 {record_delimiter}
-("entity"{tuple_delimiter}sprint_plan.pdf{tuple_delimiter}Attachment{tuple_delimiter}Filename: sprint_plan | Type: pdf | Summary: 4월 스프린트 계획 문서)
+("entity"{tuple_delimiter}sprint_plan.pdf{tuple_delimiter}Attachment{tuple_delimiter}Filename: sprint_plan.pdf | Type: pdf | Summary: 4월 스프린트 계획 문서)
 {record_delimiter}
 ("relationship"{tuple_delimiter}19D4DA32341500E4{tuple_delimiter}minjun.kim@vocarush.io{tuple_delimiter}SENT_BY{tuple_delimiter}이메일의 발신자는 minjun.kim@vocarush.io이다.{tuple_delimiter}10)
 {record_delimiter}
@@ -262,6 +292,24 @@ Output:
 ("relationship"{tuple_delimiter}19D615CB9C3D0153{tuple_delimiter}gpttitti@hansung.ac.kr{tuple_delimiter}SENT_BY{tuple_delimiter}이메일의 발신자는 gpttitti@hansung.ac.kr이다.{tuple_delimiter}10)
 {record_delimiter}
 ("relationship"{tuple_delimiter}19D615CB9C3D0153{tuple_delimiter}gpttitti@hansung.ac.kr{tuple_delimiter}SENT_TO{tuple_delimiter}이메일의 수신자도 gpttitti@hansung.ac.kr로, 자기 자신에게 보낸 메일이다.{tuple_delimiter}10)
+{completion_delimiter}
+
+---
+Example 4
+Entity_types: Email, Person, Organization, Topic, Label, Event, Attachment
+Text:
+[ATTACHMENT_ONLY]
+Linked Email ID: 19d6205730d2de65
+Filename: wordCountList.pdf
+Type: pdf
+Summary:
+단어 빈도 분석 결과 보고서. 제출자 김민준(minjun.kim@vocarush.io)과 박서연이 공동 작성.
+Vocarush 팀 내부 리포트이며 2026-03-20 기준 데이터를 포함함.
+
+Output:
+("entity"{tuple_delimiter}wordCountList.pdf{tuple_delimiter}Attachment{tuple_delimiter}Filename: wordCountList.pdf | Type: pdf | Summary: 단어 빈도 분석 결과를 정리한 내부 리포트)
+{record_delimiter}
+("relationship"{tuple_delimiter}19D6205730D2DE65{tuple_delimiter}wordCountList.pdf{tuple_delimiter}HAS_ATTACHMENT{tuple_delimiter}이메일에 단어 빈도 분석 PDF가 첨부되어 있다.{tuple_delimiter}10)
 {completion_delimiter}
 
 ---
