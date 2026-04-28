@@ -2,14 +2,13 @@
 # GraphRAG LocalSearch 엔진 유저별로 메모리에 캐싱해서 재사용하는 모듈
 
 import os
-
-import tiktoken
-from pathlib import Path
-import openai
+import tiktoken # 텍스트 토큰으로 변환하는 OpenAI 토크나이저
+from pathlib import Path # 파일 경로를 객체로 다루기 위한 표준 라이브러리
+import openai # OpenAI API 호출용
 import threading
-_cache_lock = threading.Lock()
-from graphrag.language_model.protocol.base import EmbeddingModel
-from graphrag.config.load_config import load_config
+_cache_lock = threading.Lock() # 멀티스레드 환경에서 캐시 동시 접근하는 것을 방지하기 위한 락
+from graphrag.language_model.protocol.base import EmbeddingModel # 임베딩 모델 인터페이스
+from graphrag.config.load_config import load_config # settings.yaml 설정 로더
 from graphrag.query.context_builder.entity_extraction import EntityVectorStoreKey
 from graphrag.query.indexer_adapters import (
     read_indexer_entities,       # parquet → Entity 객체 리스트로 변환
@@ -23,51 +22,45 @@ from graphrag.vector_stores.lancedb import LanceDBVectorStore                  #
 from graphrag.language_model.protocol.base import ChatModel
 from collections.abc import AsyncGenerator
 
-class DirectOpenAIChatModel(ChatModel):
-    """
-    fnllm 우회용 Chat 모델.
-    fnllm의 achat_stream()도 내부적으로 루프 충돌 발생.
-    openai 직접 호출로 우회.
-    """
-    def __init__(self, api_key: str, model: str):
-        self._client = openai.AsyncOpenAI(api_key=api_key)
-        self._model = model
+# OpenAI API를 직접 호출하도록 만든 커스텀 클래스
+class DirectOpenAIChatModel(ChatModel): 
+    def __init__(self, api_key: str, model: str): 
+        self._client = openai.AsyncOpenAI(api_key=api_key) # 비동기 OpenAI 클라이언트
+        self._model = model # 사용할 모델명
 
+    # graphrag 내부에서 LLM 응답을 스트리밍으로 받을 때 호출하는 메소드
     async def achat_stream(
         self, prompt: str, history=None, model_parameters=None, **kwargs
     ) -> AsyncGenerator[str, None]:
-        messages = list(history or [])
-        messages.append({"role": "user", "content": prompt})
-        params = model_parameters or {}
+        messages = list(history or []) # 이전 대화 이력 
+        messages.append({"role": "user", "content": prompt}) # 현재 질의 추가
+        params = model_parameters or {} # 추가 파라미터 (temperature 등)
 
+        # OpenAI 스트리밍 요청
         stream = await self._client.chat.completions.create(
             model=self._model,
             messages=messages,
             stream=True,
             **params
         )
+        # 토큰 단위로 청크를 받아서 내용이 있을 때만 yield
         async for chunk in stream:
             delta = chunk.choices[0].delta.content
             if delta:
                 yield delta
 
+# OpenAI 임베딩 API를 직접 호출하도록 만든 커스텀 클래스
 class DirectOpenAIEmbedder(EmbeddingModel):
-    """
-    fnllm 우회용 임베더.
-    fnllm의 embed()는 내부적으로 run_coroutine_sync를 써서
-    이미 실행 중인 이벤트 루프와 충돌함.
-    openai를 직접 동기 호출해서 이 문제를 우회함.
-    """
     def __init__(self, api_key: str, model: str):
-        self._client = openai.OpenAI(api_key=api_key)
-        self._model = model
+        self._client = openai.OpenAI(api_key=api_key) # 동기 OpenAI 클라이언트
+        self._model = model # 사용할 임베딩 모델명
 
-    def embed(self, text: str, **kwargs) -> list[float]:
+    def embed(self, text: str, **kwargs) -> list[float]: # 텍스트 한 건을 받아서 float 벡터로 변환해서 반환함
         response = self._client.embeddings.create(
             input=text,
             model=self._model
         )
-        return response.data[0].embedding
+        return response.data[0].embedding # 첫번째 결과의 임베딩 벡터 반환
 
 # 유저별 엔진 캐시 (유저마다 별도의 graphrag 인덱스 가지고 있어서 gmail_id를 키로 해서 캐시 가짐. 구조: { gmail_id: { "engine": LocalSearch객체, "mtime": float } })
 _engine_cache: dict = {}
@@ -140,11 +133,16 @@ def _build_engine(output_dir: str, graphrag_root: str) -> LocalSearch:
         embedding_vectorstore_key=EntityVectorStoreKey.ID,
     )
 
+    prompt_path = os.path.join(graphrag_root, "prompts", "local_search_system_prompt.txt")
+    with open(prompt_path, "r", encoding="utf-8") as f:
+        system_prompt = f.read()
+
     # LocalSearch 엔진 생성 (이 객체가 실제로 search(query)를 받아서 LLM 응답을 생성하는 핵심 객체) 재사용 가능.
     return LocalSearch(
         model=model,
         context_builder=context_builder,
         token_encoder=token_encoder,
+        system_prompt=system_prompt,
         model_params={
             "max_tokens": ls_config.llm_max_tokens,  # 2000
             "temperature": ls_config.temperature,    # 0
