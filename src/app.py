@@ -795,9 +795,31 @@ def _build_mail_csv(paths, mode="rewrite", new_ids=None) -> str:
     print(f"[CSV] 생성 완료 → {csv_path} ({len(rows)}개 메일)")
     return csv_path
 
-#근거메일보기 버튼
+# 근거메일보기 버튼
 def _extract_source_mail_ids(answer: str) -> list:
     return list(set(re.findall(r'ID:\s*([0-9A-Fa-f]{16})', answer)))
+
+# 질의 방법 분류
+def _classify_query_method(message: str) -> str:
+    prompt = f"""다음 질문이 로컬 검색(특정 메일·인물·날짜·주제)에 적합한지,
+                글로벌 검색(전체 경향·요약·패턴·빈도)에 적합한지 판단하라.
+                "local" 또는 "global" 중 하나만 반환하라.
+
+                질문: {message}"""
+    
+    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))  
+    
+    res = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=10,
+        temperature=0   # 일관성 확보
+    )
+
+    method = res.choices[0].message.content.strip().lower()
+    
+    print(f"[CLASSIFY] 질의: {message[:30]} → {method}")    # 채택된 질의 방법을 로그에 출력
+    return method if method in ("local", "global") else "local"     # fallback: 분류 실패 시 기본값 local
 
 # 엔드포인트: POST /extract-calendar
 @app.route('/extract-calendar', methods=['POST'])
@@ -850,11 +872,14 @@ def run_query_async():
             answer = run_date_range_query(message, paths) # 이게 None이면 GraphRAG로 
             if answer is None:
                 full_message = message + " 영어 말고 한국어로 답변해줘."
+                resMethod = _classify_query_method(message)  # "local" or "global"
                 answer = _run_graphrag(full_message, resMethod, paths, resType)
+                # answer = _run_graphrag(full_message, resMethod, paths, resType)
 
             if resType.lower() == "calendar":
                 result = json.dumps(_convert_to_calendar_json(answer), ensure_ascii=False)
                 update_job(job_id, status="done", result=result)
+                
             else:
                 result = answer
                 source_ids = _extract_source_mail_ids(answer)
