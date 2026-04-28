@@ -872,7 +872,7 @@ def run_query_async():
             answer = run_date_range_query(message, paths) # 이게 None이면 GraphRAG로 
             if answer is None:
                 full_message = message + " 영어 말고 한국어로 답변해줘."
-                resMethod = _classify_query_method(message)  # "local" or "global"
+                resMethod = _classify_query_method(message)  # LLM에 질의 전달하기 전, 질의의 유형 판별. "local" or "global"
                 answer = _run_graphrag(full_message, resMethod, paths, resType)
                 # answer = _run_graphrag(full_message, resMethod, paths, resType)
 
