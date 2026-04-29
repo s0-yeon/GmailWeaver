@@ -9,13 +9,25 @@ import openai
 import networkx as nx
 
 from util.jobs.job_store import update_job, append_job_log
-from util.graphrag_progress import parse_graphrag_progress  # 현재 버전에서는 실시간 파싱에 사용 안 함
+from util.graphrag_progress import get_stage_progress
 from util.user_path import user_graphrag_init
 # from config.settings import GRAPH_BUILD_SCRIPT, GRAPHRAG_ROOT, BASE_DIR
 
 from config.settings import MAIL_BLOCK_SEP
 from util.extract_statics import start_timer,end_timer,format_elapsed_time
 from util.database.db_writer import create_user,save_person_stats_to_db,save_keyword_stats_to_db
+
+# output 폴더를 3초 간격으로 감시해 인덱싱 단계 변화를 job 진행도에 반영
+# base_progress: subprocess 실행 전 세팅된 초기 진행도 — 이보다 낮은 값으로 되돌리지 않음
+# stop_event가 세트되면 루프 종료 (build_graphrag_index/update 완료 시 호출)
+def _watch_graphrag_output(job_id, output_dir, start_time, stop_event, base_progress=30):
+    current = base_progress
+    while not stop_event.wait(3):
+        prog, msg = get_stage_progress(output_dir, start_time)
+        if msg and prog > current:
+            current = prog
+            update_job(job_id, progress=prog, message=msg)
+
 
 # 첨부파일 텍스트 요약 (공백/줄바꿈 제외 500자 미만이면 원문 그대로 반환)
 def _summarize_attachment_text(text: str,paths, filename: str) -> str:
@@ -173,11 +185,19 @@ def build_graphrag_index(job_id, paths,env):
     print(f"[JOB][graphrag] CMD={cmd}")
     append_job_log(job_id, f"[CMD] {cmd}")
 
+    output_dir = os.path.join(paths.GRAPHRAG_ROOT, "output")
+    start_time = time.time()
+    stop_event = threading.Event()
+    watcher = threading.Thread(
+        target=_watch_graphrag_output,
+        args=(job_id, output_dir, start_time, stop_event, 30),
+        daemon=True,
+    )
+    watcher.start()
+
     try:
-        # 세밀한 진행률 파싱 대신 단계 진행률만 갱신
         update_job(job_id, progress=30, message="GraphRAG 인덱싱 실행 중")
 
-        # 파이썬 스크립트 실행
         subprocess.run(
             cmd,
             check=True,
@@ -195,6 +215,10 @@ def build_graphrag_index(job_id, paths,env):
         traceback.print_exc()
         append_job_log(job_id, f"[ERROR] build_graphrag_index failed: {e}")
         raise
+
+    finally:
+        stop_event.set()
+        watcher.join(timeout=5)
 
 
 # 백그라운드: GraphRAG 업데이트 (증분)
@@ -228,6 +252,16 @@ def build_graphrag_update(job_id,paths, env):
 
     print(f"[JOB][graphrag] CMD={cmd}")
     append_job_log(job_id, f"[CMD] {cmd}")
+
+    update_output_base = os.path.join(paths.GRAPHRAG_ROOT, "output")
+    start_time = time.time()
+    stop_event = threading.Event()
+    watcher = threading.Thread(
+        target=_watch_graphrag_output,
+        args=(job_id, update_output_base, start_time, stop_event, 30),
+        daemon=True,
+    )
+    watcher.start()
 
     try:
         update_job(job_id, progress=30, message="GraphRAG 업데이트 실행 중")
@@ -269,6 +303,10 @@ def build_graphrag_update(job_id,paths, env):
         traceback.print_exc()
         append_job_log(job_id, f"[ERROR] build_graphrag_update failed: {e}")
         raise
+
+    finally:
+        stop_event.set()
+        watcher.join(timeout=5)
 
 
 # 전체 파이프라인 실행 (index 기준)

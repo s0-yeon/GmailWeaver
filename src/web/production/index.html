@@ -538,6 +538,29 @@
           showSection('graph');
           window.loadGraphViz();
         }
+
+        // ── 6. 인덱싱 진행도 폴링 ────────────────────────────────────
+        // 인덱싱/업데이트 작업이 실행 중일 때만 3초마다 progress를 console.log로 출력
+        (function pollIndexingProgress() {
+          let lastLog = '';
+          async function check() {
+            try {
+              const res = await fetch('/active-index-job');
+              const data = await res.json();
+              if (data.found) {
+                const log = `[인덱싱] ${data.progress}% - ${data.message}`;
+                if (log !== lastLog) { // 값이 바뀔 때만 출력
+                  console.log(log);
+                  lastLog = log;
+                }
+              } else {
+                lastLog = '';
+              }
+            } catch (_) {}
+            setTimeout(check, 3000);
+          }
+          check();
+        })();
 });
     </script>
   </body>
