@@ -71,7 +71,7 @@ export default defineConfig({
           // Date/time and small utilities
           'vendor-utils': ['dayjs', 'skycons']
         },
-        assetFileNames: (assetInfo) => {
+        assetFileNames: assetInfo => {
           const originalName = assetInfo.names?.[0] ?? '';
           if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico)$/i.test(originalName)) {
             return `images/[name]-[hash][extname]`;
@@ -89,14 +89,14 @@ export default defineConfig({
         index2: 'production/index2.html',
         index3: 'production/index3.html',
         index4: 'production/index4.html',
-        
+
         form: 'production/form.html',
         form_advanced: 'production/form_advanced.html',
         form_buttons: 'production/form_buttons.html',
         form_upload: 'production/form_upload.html',
         form_validation: 'production/form_validation.html',
         form_wizards: 'production/form_wizards.html',
-        
+
         general_elements: 'production/general_elements.html',
         media_gallery: 'production/media_gallery.html',
         typography: 'production/typography.html',
@@ -106,30 +106,30 @@ export default defineConfig({
         invoice: 'production/invoice.html',
         inbox: 'production/inbox.html',
         calendar: 'production/calendar.html',
-        
+
         tables: 'production/tables.html',
         tables_dynamic: 'production/tables_dynamic.html',
-        
+
         chartjs: 'production/chartjs.html',
         echarts: 'production/echarts.html',
         other_charts: 'production/other_charts.html',
-        
+
         fixed_sidebar: 'production/fixed_sidebar.html',
         fixed_footer: 'production/fixed_footer.html',
-        
+
         e_commerce: 'production/e_commerce.html',
         projects: 'production/projects.html',
         project_detail: 'production/project_detail.html',
         contacts: 'production/contacts.html',
         profile: 'production/profile.html',
-        
+
         page_403: 'production/page_403.html',
         page_404: 'production/page_404.html',
         page_500: 'production/page_500.html',
         plain_page: 'production/plain_page.html',
         login: 'production/login.html',
         pricing_tables: 'production/pricing_tables.html',
-        
+
         level2: 'production/level2.html',
         map: 'production/map.html',
         landing: 'production/landing.html',
@@ -141,7 +141,7 @@ export default defineConfig({
         search: 'production/search.html',
 
         // 라벨 우주: D3 Zoomable Circle Packing 시각화
-        label2: 'production/label2.html',
+        label: 'production/label.html',
 
         // API 파이프라인 테스트 (Dev)
         api_test: 'production/api_test.html',
@@ -185,7 +185,7 @@ export default defineConfig({
       '/graph-data': 'http://127.0.0.1:80',
       '/graph-render.js': 'http://127.0.0.1:80',
       '/run-query-async': 'http://127.0.0.1:80',
-      '/job-status': 'http://127.0.0.1:80',
+      '/job-status': 'http://127.0.0.1:80'
     },
     watch: {
       usePolling: false,
@@ -197,12 +197,7 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: [
-      'bootstrap',
-      '@popperjs/core',
-      'dayjs',
-      '@simonwep/pickr'
-    ],
+    include: ['bootstrap', '@popperjs/core', 'dayjs', '@simonwep/pickr'],
     force: false
   },
   resolve: {
@@ -235,4 +230,4 @@ export default defineConfig({
     }),
     'process.env.NODE_ENV': '"production"'
   }
-}); 
+});
