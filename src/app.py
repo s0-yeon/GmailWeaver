@@ -18,7 +18,7 @@ import urllib.parse     # import missing 해결
 from util.date_query import run_date_range_query
 
 from dotenv import load_dotenv
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, Response, stream_with_context
 from flask_cors import CORS
 import fitz  # PyMuPDF
 from docx import Document
@@ -35,6 +35,7 @@ from config.settings import *
 from util.user_path import UserPaths
 from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats
 from util.extract_statics import start_statics_pipeline_background
+from util.sse_broadcaster import subscribe, unsubscribe
 # 환경변수 로드
 load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: GraphRAG 설정(settings.yaml)과 API 키가 같은 디렉터리에 위치하기 때문
 
@@ -916,12 +917,37 @@ def job_status(job_id):     # 비동기 Job의 현재 상태와 결과를 반환
         "source_ids": job.get("source_ids") or [],
     })
 
+# 엔드포인트: GET /indexing-stream (SSE)
+# 브라우저가 연결을 유지하면 서버가 인덱싱 progress/완료/실패 이벤트를 즉시 push
+# 15초마다 keepalive 전송 (연결 유지용)
+@app.route("/indexing-stream", methods=["GET"])
+def indexing_stream():
+    q = subscribe()
+
+    @stream_with_context
+    def generate():
+        try:
+            while True:
+                try:
+                    data = q.get(timeout=15)
+                    yield f"data: {json.dumps(data, ensure_ascii=False)}\n\n"
+                except Exception:
+                    yield ": keepalive\n\n"
+        finally:
+            unsubscribe(q)
+
+    return Response(generate(), content_type="text/event-stream",
+                    headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
 # 엔드포인트: GET /active-index-job
-# 현재 실행 중인 index/update 작업이 있으면 그 progress/message를 반환
+# 실행 중인 index/update 작업이 있으면 found=True와 진행도 반환
+# 없으면 found=False, 최근 60초 내 완료된 작업이 있으면 status/message도 함께 반환
 @app.route("/active-index-job", methods=["GET"])
 def active_index_job():
     all_jobs = get_all_jobs()
-    for job in reversed(list(all_jobs.values())):
+    jobs = list(all_jobs.values())
+
+    for job in reversed(jobs):
         if job.get("job_type") in ("index", "update") and job.get("status") == "running":
             return jsonify({
                 "found": True,
@@ -929,6 +955,17 @@ def active_index_job():
                 "progress": job.get("progress", 0),
                 "message": job.get("message", ""),
             })
+
+    for job in reversed(jobs):
+        if job.get("job_type") in ("index", "update") and job.get("status") in ("done", "failed"):
+            finished_at = job.get("finished_at") or 0
+            if time.time() - finished_at < 60:
+                return jsonify({
+                    "found": False,
+                    "recentStatus": job["status"],
+                    "message": job.get("message", ""),
+                })
+
     return jsonify({"found": False})
 
 # 엔드포인트: POST /run-query  (동기 버전, 디버깅/단순 클라이언트용)

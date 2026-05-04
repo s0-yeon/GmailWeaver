@@ -10,6 +10,7 @@ import networkx as nx
 
 from util.jobs.job_store import update_job, append_job_log
 from util.graphrag_progress import get_stage_progress
+from util.sse_broadcaster import broadcast
 from util.user_path import user_graphrag_init
 # from config.settings import GRAPH_BUILD_SCRIPT, GRAPHRAG_ROOT, BASE_DIR
 
@@ -20,13 +21,14 @@ from util.database.db_writer import create_user,save_person_stats_to_db,save_key
 # output 폴더를 3초 간격으로 감시해 인덱싱 단계 변화를 job 진행도에 반영
 # base_progress: subprocess 실행 전 세팅된 초기 진행도 — 이보다 낮은 값으로 되돌리지 않음
 # stop_event가 세트되면 루프 종료 (build_graphrag_index/update 완료 시 호출)
-def _watch_graphrag_output(job_id, output_dir, start_time, stop_event, base_progress=30):
+def _watch_graphrag_output(job_id, output_dir, start_time, stop_event, base_progress=5):
     current = base_progress
     while not stop_event.wait(3):
-        prog, msg = get_stage_progress(output_dir, start_time)
-        if msg and prog > current:
+        stages = get_stage_progress(output_dir, start_time, reported_progress=current)
+        for prog, msg in stages:
             current = prog
             update_job(job_id, progress=prog, message=msg)
+            broadcast({"type": "progress", "job_id": job_id, "progress": prog, "message": msg})
 
 
 # 첨부파일 텍스트 요약 (공백/줄바꿈 제외 500자 미만이면 원문 그대로 반환)
@@ -190,7 +192,7 @@ def build_graphrag_index(job_id, paths,env):
     stop_event = threading.Event()
     watcher = threading.Thread(
         target=_watch_graphrag_output,
-        args=(job_id, output_dir, start_time, stop_event, 30),
+        args=(job_id, output_dir, start_time, stop_event, 5),
         daemon=True,
     )
     watcher.start()
@@ -258,7 +260,7 @@ def build_graphrag_update(job_id,paths, env):
     stop_event = threading.Event()
     watcher = threading.Thread(
         target=_watch_graphrag_output,
-        args=(job_id, update_output_base, start_time, stop_event, 30),
+        args=(job_id, update_output_base, start_time, stop_event, 5),
         daemon=True,
     )
     watcher.start()
@@ -361,12 +363,14 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None, added_c
 
 
         update_job(job_id, progress=100, status="done", message="인덱싱 완료")
+        broadcast({"type": "done", "job_id": job_id, "message": "인덱싱 완료"})
         append_job_log(job_id, "[END] run_graph_pipeline success")
         print(f"[JOB][pipeline] SUCCESS job_id={job_id}")
 
     except Exception as e:
         error_msg = f"{type(e).__name__}: {e}"
         update_job(job_id, status="failed", message=error_msg)
+        broadcast({"type": "failed", "job_id": job_id, "message": error_msg})
         append_job_log(job_id, f"[ERROR] run_graph_pipeline failed: {error_msg}")
         print(f"[JOB][pipeline][ERROR] job_id={job_id} error={error_msg}")
         traceback.print_exc()
@@ -392,12 +396,14 @@ def run_graph_update_pipeline(job_id, paths, env):
 
 
         update_job(job_id, progress=100, status="done", message="업데이트 완료")
+        broadcast({"type": "done", "job_id": job_id, "message": "업데이트 완료"})
         append_job_log(job_id, "[END] run_graph_update_pipeline success")
         print(f"[JOB][update-pipeline] SUCCESS job_id={job_id}")
 
     except Exception as e:
         error_msg = f"{type(e).__name__}: {e}"
         update_job(job_id, status="failed", message=error_msg, error=error_msg)
+        broadcast({"type": "failed", "job_id": job_id, "message": error_msg})
         append_job_log(job_id, f"[ERROR] run_graph_update_pipeline failed: {error_msg}")
         print(f"[JOB][update-pipeline][ERROR] job_id={job_id} error={error_msg}")
         traceback.print_exc()
