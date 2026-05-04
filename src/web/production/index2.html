@@ -23,31 +23,44 @@
 
       /* 라벨 탭 바 (상단 탭 영역) */
       .gw-label-bar {
-        display: flex; align-items: center; gap: 8px;
-        padding: 16px 24px 0 24px; flex-wrap: wrap;
-        border-bottom: 2px solid #e8e8e8; background: #fff;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 12px 24px;
+        flex-wrap: nowrap;
+        background: #fff;
+        border-bottom: 2px solid #e8e8e8;
+        position: relative;
+        overflow: hidden;
       }
       /* 라벨 탭: 비활성 / 호버 / 활성 상태 */
       .gw-label-tab {
-        display: inline-flex; align-items: center; gap: 6px;
-        padding: 8px 18px; border-radius: 20px 20px 0 0;
-        border: 1px solid #e0e0e0; border-bottom: none;
-        background: #f4f6f8; color: #73879C; font-size: 0.88rem;
-        cursor: pointer; transition: background 0.15s, color 0.15s;
-        user-select: none; position: relative; bottom: -2px;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 7px 16px;
+          border-radius: 20px;          /* ← 둥근 알약 형태 */
+          border: 1px solid #e0e0e0;
+          background: #f4f6f8;
+          color: #73879C;
+          font-size: 0.88rem;
+          cursor: pointer;
+          transition: background 0.15s, color 0.15s;
+          user-select: none;
+          position: static;             /* ← bottom:-2px 제거 */
+          white-space: nowrap;
       }
       .gw-label-tab:hover { background: #e8f7f4; color: #26B99A; }
       .gw-label-tab:hover .gw-tab-delete { opacity: 1; }
       .gw-label-tab.active {
-        background: #fff; color: #2A3F54; font-weight: 600;
-        border-color: #e8e8e8; border-bottom-color: #fff;
+          background: #26B99A;
+          color: #fff;
+          border-color: #26B99A;
+          font-weight: 600;
       }
       .gw-label-tab.active:hover .gw-tab-delete { opacity: 1; }
-      /* 읽지 않은 메일 수 뱃지 */
-      .gw-label-tab .gw-unread-badge {
-        background: #26B99A; color: #fff; font-size: 0.72rem;
-        padding: 1px 6px; border-radius: 10px; font-weight: 600;
-      }
+      .gw-label-tab.active .gw-tab-delete { color: #fff; background: rgba(255,255,255,0.25); }
+
       /* 탭 X 버튼: 호버 시에만 표시 */
       .gw-tab-delete {
         opacity: 0;
@@ -81,6 +94,29 @@
       }
       .gw-refresh-btn:hover { border-color: #26B99A; color: #26B99A; }
       .gw-refresh-btn.spinning i { animation: spin 0.8s linear infinite; }
+
+      /* 더보기 버튼 */
+      .gw-more-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          padding: 7px 14px;
+          border-radius: 20px;
+          border: 1px dashed #ccc;
+          background: transparent;
+          color: #aaa;
+          font-size: 0.85rem;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: border-color 0.15s, color 0.15s;
+          flex-shrink: 0;
+      }
+      .gw-more-btn:hover { border-color: #26B99A; color: #26B99A; }
+
+      /* 확장됐을 때 2줄 */
+      .gw-label-bar.expanded {
+          flex-wrap: wrap;
+      }
 
       /* 미니 확인 팝업 (삭제 시 등장) */
       .gw-confirm-popup {
@@ -217,6 +253,21 @@
       }
       @keyframes spin { to { transform: rotate(360deg); } }
 
+      .gw-unread-badge {
+          background: #30be8f;        /* ← 초록 → 빨간색으로 구분 */
+          color: #fff;
+          font-size: 0.68rem;
+          padding: 1px 5px;
+          border-radius: 10px;
+          font-weight: 700;
+          min-width: 16px;
+          text-align: center;
+          line-height: 1.4;
+      }
+      .gw-label-tab.active .gw-unread-badge {
+          background: #fff;
+          color: #129658;
+      }
 
       /* 라벨 특화 질의 패널 */
       .gw-lq-panel {
@@ -378,7 +429,7 @@
                     <a><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span><span class="bi bi-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li class="active"><a href="index2.html"><i class="bi bi-tag"></i> 라벨 목록</a></li>
-                      <li><a href="label2.html"><i class="bi bi-circle-half"></i> 라벨 초원 ✦</a></li>
+                      <li><a href="label.html"><i class="bi bi-circle-half"></i> 라벨 초원 ✦</a></li>
                     </ul>
                   </li>
                   <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span><span class="bi bi-chevron-right"></span></a></li>
@@ -506,9 +557,9 @@
     <script>
       const FLASK_URL = 'http://127.0.0.1:80'; //라벨 캐시 : 1시간
       const LABEL_CACHE_KEY = 'gw_label_cache';
-      const LABEL_CACHE_TTL = 24 * 60 * 60 * 1000;
+      const LABEL_CACHE_TTL = 365 * 24 * 60 * 60 * 1000;
       const MAIL_CACHE_PREFIX = 'gw_mail_cache_'; //메일 캐시: 1일, 라벨명별로 키 구분
-      const MAIL_CACHE_TTL = 24 * 60 * 60 * 1000;
+      const MAIL_CACHE_TTL = 365 * 24 * 60 * 60 * 1000;
 
       // URL 파라미터 → sessionStorage → 기본값 순으로 사용자 이름 결정
       const params = new URLSearchParams(window.location.search);
@@ -674,41 +725,100 @@
       // 라벨 탭 렌더링 
       function renderLabelTabs() {
         const bar = document.getElementById('label-bar');
-        document.querySelectorAll('.gw-label-tab').forEach(el => el.remove());
+        document.querySelectorAll('.gw-label-tab, .gw-more-btn').forEach(el => el.remove());
         document.getElementById('label-loading').style.display = 'none';
-
         const refreshBtn = document.getElementById('refresh-btn');
-        labels.forEach(label => {
-          const tab = document.createElement('button');
-          tab.className = 'gw-label-tab' + (activeLabel === label.name ? ' active' : '');
-          tab.dataset.label = label.name;
-          tab.innerHTML = `
+        const isExpanded = bar.classList.contains('expanded');
+
+        if (isExpanded) {
+            // 펼쳐진 상태: 전체 표시
+            labels.forEach(label => bar.insertBefore(createTab(label), refreshBtn));
+            const moreBtn = document.createElement('button');
+            moreBtn.className = 'gw-more-btn';
+            moreBtn.innerHTML = `<i class="fas fa-chevron-up"></i> 접기`;
+            moreBtn.addEventListener('click', () => { bar.classList.remove('expanded'); renderLabelTabs(); });
+            bar.insertBefore(moreBtn, refreshBtn);
+            return;
+        }
+
+        // 1줄 모드: 너비 측정해서 넘치면 숨김
+        // 더보기 버튼 미리 생성 (너비 측정용)
+        const moreBtn = document.createElement('button');
+        moreBtn.className = 'gw-more-btn';
+        moreBtn.style.visibility = 'hidden';
+        moreBtn.innerHTML = `<i class="fas fa-chevron-down"></i> +0개`;
+        bar.insertBefore(moreBtn, refreshBtn);
+
+        // 사용 가능한 너비 계산 (추가버튼 + 새로고침 + 더보기 버튼 제외)
+        const addBtn = document.getElementById('add-label-btn');
+        const barWidth = bar.offsetWidth;
+        const usedRight = (refreshBtn.offsetWidth + 8) + (addBtn ? addBtn.offsetWidth + 8 : 0) + moreBtn.offsetWidth + 8;
+        const availableWidth = barWidth - 24 - 24 - usedRight; // 좌우 padding 제외
+
+        let usedWidth = 0;
+        let visibleCount = 0;
+
+        // 탭을 임시로 다 추가해서 너비 측정
+        const tempTabs = labels.map(label => {
+            const tab = createTab(label);
+            tab.style.visibility = 'hidden';
+            tab.style.position = 'absolute';
+            document.body.appendChild(tab);
+            return { tab, width: tab.offsetWidth + 6 }; // gap 포함
+        });
+
+        tempTabs.forEach(({ tab, width }) => {
+            document.body.removeChild(tab);
+        });
+
+        // 실제 너비로 몇 개 들어가는지 계산
+        for (let i = 0; i < tempTabs.length; i++) {
+            usedWidth += tempTabs[i].width;
+            if (usedWidth > availableWidth) break;
+            visibleCount++;
+        }
+
+        // 전부 들어가면 더보기 버튼 제거
+        if (visibleCount >= labels.length) {
+            moreBtn.remove();
+            labels.forEach(label => bar.insertBefore(createTab(label), refreshBtn));
+            return;
+        }
+
+        // 보일 탭 추가
+        labels.slice(0, visibleCount).forEach(label => bar.insertBefore(createTab(label), moreBtn));
+
+        // 더보기 버튼 업데이트
+        const hiddenCount = labels.length - visibleCount;
+        moreBtn.style.visibility = 'visible';
+        moreBtn.innerHTML = `<i class="fas fa-chevron-down"></i> +${hiddenCount}개`;
+        moreBtn.addEventListener('click', () => { bar.classList.add('expanded'); renderLabelTabs(); });
+      }
+
+    function createTab(label) {
+        const tab = document.createElement('button');
+        tab.className = 'gw-label-tab' + (activeLabel === label.name ? ' active' : '');
+        tab.dataset.label = label.name;
+        tab.innerHTML = `
             <i class="bi bi-tag"></i>
             ${escapeHtml(label.name)}
             ${label.unreadCount > 0 ? `<span class="gw-unread-badge">${label.unreadCount}</span>` : ''}
             <span class="gw-tab-delete" title="라벨 삭제"><i class="fas fa-times"></i></span>
-          `;
-
-          // 탭 클릭 시 라벨 선택 (X 버튼 클릭은 제외)
-          tab.addEventListener('click', (e) => {
+        `;
+        tab.addEventListener('click', (e) => {
             if (e.target.closest('.gw-tab-delete')) return;
             selectLabel(label.name);
-          });
-
-          // X 버튼: 확인 팝업 → 삭제
-          tab.querySelector('.gw-tab-delete').addEventListener('click', (e) => {
+        });
+        tab.querySelector('.gw-tab-delete').addEventListener('click', (e) => {
             e.stopPropagation();
             showConfirmPopup(
-              e.currentTarget,
-              `"${label.name}" 라벨을 삭제할까요?\n메일은 받은편지함에 유지됩니다.`,
-              () => deleteLabel(label.name)
+                e.currentTarget,
+                `"${label.name}" 라벨을 삭제할까요?\n메일은 받은편지함에 유지됩니다.`,
+                () => deleteLabel(label.name)
             );
-          });
-
-          bar.insertBefore(tab, refreshBtn);
         });
-      }
-
+        return tab;
+    }
       // 라벨 삭제
       async function deleteLabel(labelName) {
         try {
@@ -964,6 +1074,9 @@
           activeLabel = null;
           await loadLabels(true);
           selectLabel(labelName);
+
+          new BroadcastChannel('olive_label_update').postMessage({ type: 'label_created', labelName });
+          
         } catch (e) {
           alert('라벨 생성 실패: ' + e.message);
         } finally {
@@ -1395,7 +1508,38 @@
               if (!applyRes.ok) throw new Error(applyRes.error);
               lqResult().className = 'gw-lq-result show';
               lqResult().innerHTML = `<div class="gw-lq-success"><i class="fas fa-check-circle me-1"></i>${applyRes.appliedCount}개 메일에 <strong>${escapeHtml(applyRes.labelName)}</strong> 라벨을 적용했어요!</div>`;
+            } else if (fc.action === 'create_label') {
+                const labelname = fc.params?.label_name;
+                if (!labelname) { lqShowError('라벨 이름을 찾을 수 없습니다.'); return; }
+
+                clearCache();
+                activeLabel = null;
+                await loadLabels(true);   // 탭 목록 새로고침
+                selectLabel(labelname);   // 새 탭 활성화
+
+                lqResult.className = 'gw-lq-result show';
+                lqResult.innerHTML = `<div class="gw-lq-success">
+                    <i class="fas fa-check-circle me-1"></i>
+                    "<strong>${escapeHtml(labelname)}</strong>" 라벨이 생성되었습니다!
+                </div>`;
+            } else if (fc.action === 'multi') {
+                for (const step of fc.actions) {
+                    if (step.action === 'create_label') {
+                        const labelname = step.params?.label_name;
+                        lqShowLoading(`"${labelname}" 라벨 생성 중…`);
+                        const res = await callLabelsProxy('createLabel', { labelName: labelname });
+                        if (!res.ok) throw new Error(res.error);
+                        clearCache(); activeLabel = null;
+                        await loadLabels(true);
+                        selectLabel(labelname);
+                    } else if (step.action === 'search_emails') {
+                        const { query, label_to_apply } = step.params;
+                        lqShowLoading(`"${query}" 검색 중…`);
+                        lqShowMailCards(await lqSearchMerged(query), label_to_apply);
+                    }
+                }
             }
+
 
           // ── QUERY 경로: 정보 질문 → GraphRAG 텍스트 답변 ──
           } else {

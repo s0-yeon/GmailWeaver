@@ -538,6 +538,25 @@
           showSection('graph');
           window.loadGraphViz();
         }
+
+        // 6. 인덱싱 진행도 SSE
+        // 서버가 progress/완료/실패 이벤트를 push하면 즉시 console.log로 출력
+        (function listenIndexingProgress() {
+          const es = new EventSource('/indexing-stream');
+
+          es.onmessage = function(e) {
+            try {
+              const data = JSON.parse(e.data);
+              if (data.type === 'progress') {
+                console.log(`[인덱싱] ${data.progress}% - ${data.message}`);
+              } else if (data.type === 'done') {
+                console.log(`[인덱싱] 완료 - ${data.message}`);
+              } else if (data.type === 'failed') {
+                console.log(`[인덱싱] 실패 - ${data.message}`);
+              }
+            } catch (_) {}
+          };
+        })();
 });
     </script>
   </body>

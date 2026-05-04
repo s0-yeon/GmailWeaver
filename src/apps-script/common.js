@@ -3,6 +3,7 @@ var TunnelURL = "https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev"; // ngro
 const WEBAPP_URL =
   "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec"; // Apps Script Web App으로 배포된 URL
 
+
 const OLIVE = "#c6d8a5";
 
 // 공식 엔트리 포인트 (외부에서 호출)
@@ -95,8 +96,7 @@ function _buildGmailMessageCard(e) {
 
   if (accessToken) GmailApp.setCurrentMessageAccessToken(accessToken);
 
-  var webSection = CardService.newCardSection()
-    .addWidget(_webpageBtn())
+  var webSection = CardService.newCardSection().addWidget(_webpageBtn());
 
   // 섹션 2: 라벨 분류
   var labelInput = CardService.newTextInput()

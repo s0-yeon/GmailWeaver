@@ -482,7 +482,7 @@
           const res = await fetch(`${FLASK_URL}/run-query-async`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: q, resType: 'text',gmail_id: gmailId })
+            body: JSON.stringify({ message: q, resType: 'structed', gmail_id: gmailId })
           });
           const data = await res.json();
           if (!data.jobId) { showError(q, '검색 요청에 실패했습니다.'); return; }

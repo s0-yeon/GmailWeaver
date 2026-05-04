@@ -19,7 +19,7 @@ import urllib.parse     # import missing 해결
 from util.date_query import run_date_range_query
 
 from dotenv import load_dotenv
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, Response, stream_with_context
 from flask_cors import CORS
 import fitz  # PyMuPDF
 from docx import Document
@@ -36,6 +36,7 @@ from config.settings import *
 from util.user_path import UserPaths
 from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats
 from util.extract_statics import start_statics_pipeline_background
+from util.sse_broadcaster import subscribe, unsubscribe
 # 환경변수 로드
 load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: GraphRAG 설정(settings.yaml)과 API 키가 같은 디렉터리에 위치하기 때문
 
@@ -914,7 +915,64 @@ def job_status(job_id):     # 비동기 Job의 현재 상태와 결과를 반환
             return jsonify({"status": "done", "data": {"events": []}})
 
     # text 타입: result 필드에 문자열 그대로 반환
-    return jsonify({"status": job["status"], "result": job["result"] or "", "source_ids": job.get("source_ids") or []})
+    return jsonify({
+        "status": job["status"],
+        "progress": job.get("progress", 0),
+        "message": job.get("message", ""),
+        "result": job["result"] or "",
+        "source_ids": job.get("source_ids") or [],
+    })
+
+# 엔드포인트: GET /indexing-stream (SSE)
+# 브라우저가 연결을 유지하면 서버가 인덱싱 progress/완료/실패 이벤트를 즉시 push
+# 15초마다 keepalive 전송 (연결 유지용)
+@app.route("/indexing-stream", methods=["GET"])
+def indexing_stream():
+    q = subscribe()
+
+    @stream_with_context
+    def generate():
+        try:
+            while True:
+                try:
+                    data = q.get(timeout=15)
+                    yield f"data: {json.dumps(data, ensure_ascii=False)}\n\n"
+                except Exception:
+                    yield ": keepalive\n\n"
+        finally:
+            unsubscribe(q)
+
+    return Response(generate(), content_type="text/event-stream",
+                    headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+# 엔드포인트: GET /active-index-job
+# 실행 중인 index/update 작업이 있으면 found=True와 진행도 반환
+# 없으면 found=False, 최근 60초 내 완료된 작업이 있으면 status/message도 함께 반환
+@app.route("/active-index-job", methods=["GET"])
+def active_index_job():
+    all_jobs = get_all_jobs()
+    jobs = list(all_jobs.values())
+
+    for job in reversed(jobs):
+        if job.get("job_type") in ("index", "update") and job.get("status") == "running":
+            return jsonify({
+                "found": True,
+                "job_id": job["job_id"],
+                "progress": job.get("progress", 0),
+                "message": job.get("message", ""),
+            })
+
+    for job in reversed(jobs):
+        if job.get("job_type") in ("index", "update") and job.get("status") in ("done", "failed"):
+            finished_at = job.get("finished_at") or 0
+            if time.time() - finished_at < 60:
+                return jsonify({
+                    "found": False,
+                    "recentStatus": job["status"],
+                    "message": job.get("message", ""),
+                })
+
+    return jsonify({"found": False})
 
 # 엔드포인트: POST /run-query  (동기 버전, 디버깅/단순 클라이언트용)
 @app.route('/run-query', methods=['POST'])
@@ -1393,7 +1451,7 @@ def label_query():
                     "properties": {
                         "query": {
                             "type": "string",
-                            "description": "삭제할 메일을 찾기 위한 Gmail 검색 키워드 (예: 상상빌리지 기숙사)"
+                            "description": "삭제할 메일을 찾기 위한 Gmail 검색 키워드"
                         }
                     },
                     "required": ["query"]
@@ -1404,20 +1462,38 @@ def label_query():
             "type": "function",
             "function": {
                 "name": "remove_label",
-                "description": "메일에서 라벨을 제거합니다. '라벨 빼줘', '라벨 제거해줘', '라벨에서 빼줘' 같은 요청에 사용합니다.",
+                "description": "삭제하거나 휴지통으로 이동할 메일의 검색 키워드를 추출합니다. '삭제해줘', '지워줘', '휴지통으로 이동해줘' 같은 요청에 사용합니다.",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "query": {
                             "type": "string",
-                            "description": "라벨을 제거할 메일을 찾기 위한 Gmail 검색 키워드 (예: 상상빌리지 기숙사)"
+                            "description": "라벨을 제거할 메일을 찾기 위한 Gmail 검색 키워드"
                         },
                         "label_name": {
                             "type": "string",
-                            "description": "제거할 라벨명 (예: 테스트). 언급이 없으면 빈 문자열."
+                            "description": "제거할 라벨명. 언급이 없으면 빈 문자열."
                         }
                     },
                     "required": ["query", "label_name"]
+                }
+            }
+        },
+        # ✅ 추가
+        {
+            "type": "function",
+            "function": {
+                "name": "create_label",
+                "description": "새 Gmail 라벨을 생성합니다. '라벨 만들어줘', '라벨 추가해줘', '~라벨 생성해줘' 같은 요청에 사용합니다.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "label_name": {
+                            "type": "string",
+                            "description": "생성할 라벨명 (예: 산학공동연구)"
+                        }
+                    },
+                    "required": ["label_name"]
                 }
             }
         }
@@ -1435,19 +1511,30 @@ def label_query():
                         "메일을 검색해서 라벨을 붙이거나 찾는 요청이면 search_emails를 사용하세요. "
                         "이미 선택된 메일에 라벨만 적용하는 요청이면 apply_label을 사용하세요. "
                         "메일을 삭제하거나 휴지통으로 이동하는 요청이면 trash_emails를 사용하세요. "
-                        "메일에서 라벨을 제거하는 요청이면 remove_label을 사용하세요."
+                        "메일에서 라벨을 제거하는 요청이면 remove_label을 사용하세요. "
+                        "새 라벨을 만드는 요청이면 create_label을 사용하세요."  # ✅ 추가
                     )
                 },
                 {"role": "user", "content": user_input}
             ],
             tools=tools,
-            tool_choice="required"
+            tool_choice="auto"
         )
-        tool_call = response.choices[0].message.tool_calls[0]
-        action = tool_call.function.name
-        params = json.loads(tool_call.function.arguments)
+        tool_calls = response.choices[0].message.tool_calls
 
-        return jsonify({"ok": True, "action": action, "params": params})
+        # 단일 액션
+        if len(tool_calls) == 1:
+            action = tool_calls[0].function.name
+            params = json.loads(tool_calls[0].function.arguments)
+            return jsonify({"ok": True, "action": action, "params": params})
+
+        # 복합 액션 (예: create_label + search_emails)
+        else:
+            actions = [
+                {"action": tc.function.name, "params": json.loads(tc.function.arguments)}
+                for tc in tool_calls
+            ]
+            return jsonify({"ok": True, "action": "multi", "actions": actions})
 
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
@@ -1595,6 +1682,85 @@ def send_mail_sync_stats():
         "data": get_mail_sync_stats(paths)
     })
 
+# web : contact 탭 gmail API 불러오는 라우터
+@app.route('/contacts-proxy', methods=['POST'])
+def contacts_proxy():
+    data = request.get_json() or {}
+    action = data.get('action', '')
+    gmail_id = (data.get('gmail_id') or '').strip().lower()
+
+    if not gmail_id:
+        return jsonify({'ok': False, 'error': 'gmail_id가 비어있습니다.'}), 400
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+
+    # 자주 주고받은 상대 목록 (mail_contact_stats.json 기반) 
+    if action == 'getFrequentContacts':
+        max_results = int(data.get('maxResults', 100))
+        try:
+            if not os.path.exists(paths.MAIL_CONTACTS_PATH):
+                return jsonify({'ok': True, 'contacts': []})
+            with open(paths.MAIL_CONTACTS_PATH, 'r', encoding='utf-8') as f:
+                stats = json.load(f)
+            result = []
+            for email, info in stats.items():
+                count = info.get('sent', 0) + info.get('received', 0)
+                result.append({
+                    'email': email,
+                    'name': info.get('name', '') or email.split('@')[0],
+                    'count': count,
+                    'lastMailAt': None,
+                })
+            result.sort(key=lambda x: -x['count'])
+            return jsonify({'ok': True, 'contacts': result[:max_results]})
+        except Exception as e:
+            return jsonify({'ok': False, 'error': str(e)})
+
+    #  특정 상대와 주고받은 메일 수 
+    elif action == 'getMailHistory':
+        email = (data.get('email') or '').strip()
+        if not email:
+            return jsonify({'ok': False, 'error': 'email이 비어있습니다.'}), 400
+        try:
+            if not os.path.exists(paths.MAIL_CONTACTS_PATH):
+                return jsonify({'ok': True, 'sentCount': 0, 'receivedCount': 0})
+            with open(paths.MAIL_CONTACTS_PATH, 'r', encoding='utf-8') as f:
+                stats = json.load(f)
+            info = stats.get(email, {})
+            return jsonify({
+                'ok': True,
+                'sentCount': info.get('sent', 0),
+                'receivedCount': info.get('received', 0),
+            })
+        except Exception as e:
+            return jsonify({'ok': False, 'error': str(e)})
+
+    return jsonify({'ok': False, 'error': f'unknown action: {action}'})
+
+# web : contact 탭에서 메일 보내기
+@app.route('/send-mail', methods=['POST', 'OPTIONS'])
+def send_mail():
+    if request.method == 'OPTIONS':
+        return '', 204
+
+    data = request.get_json() or {}
+
+    try:
+        res = requests.post(WEBAPP_URL, json={
+            'action':  'sendMail',
+            'to':      data.get('to'),
+            'subject': data.get('subject'),
+            'body':    data.get('body'),
+        }, allow_redirects=False, timeout=30)
+
+        if res.status_code in (301, 302, 303, 307, 308):
+            location = res.headers.get('Location')
+            res = requests.get(location, allow_redirects=True, timeout=30)
+
+        return jsonify(res.json())
+
+    except Exception as e:
+        return jsonify({'ok': False, 'error': str(e)})
 
 # 서버 진입점
 if __name__ == '__main__':
