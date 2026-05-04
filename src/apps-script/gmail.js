@@ -29,7 +29,7 @@ function _runSync(mode) {
     // 전체 갱신할 때
     if (mode === "rewrite") {
       var queryAll = "in:inbox OR in:sent";
-      threads = GmailApp.search(queryAll, 0, 200);
+      threads = GmailApp.search(queryAll, 0, 20);
       threads.forEach(function (thread) {
         // 각 스레드 순회
         thread.getMessages().forEach(function (msg) {
@@ -80,7 +80,7 @@ function _runSync(mode) {
 
     // 새로운 메일만 추가할 때
     var queryNew = "in:inbox OR in:sent";
-    threads = GmailApp.search(queryNew, 0, 200);
+    threads = GmailApp.search(queryNew, 0, 30);
 
     var newMessages = []; // 새로운 메일 메시지들 저장할 변수
 

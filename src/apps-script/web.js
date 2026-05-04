@@ -27,7 +27,6 @@ function doPost(e) {
   }
   const data = JSON.parse(e.postData.contents);
   const action = data.action;
-  Logger.log("받은 action: " + action);
   const calendar = CalendarApp.getDefaultCalendar();
 
   // ── 캘린더: 일정 조회 ──
@@ -189,67 +188,6 @@ function doPost(e) {
         ok: true,
         labelName: label.getName(),
         addedCount: successCount,
-      }),
-    ).setMimeType(ContentService.MimeType.JSON);
-  }
-
-  // ── 라벨 특화 질의: Gmail 검색 ──
-  if (action === "searchEmailsForLabel") {
-    const query = (data.query || "").trim();
-    const maxResults = Math.min(Number(data.maxResults || 20), 50);
-    if (!query) {
-      return ContentService.createTextOutput(
-        JSON.stringify({ ok: false, error: "query가 필요합니다." }),
-      ).setMimeType(ContentService.MimeType.JSON);
-    }
-    try {
-      const threads = GmailApp.search(query, 0, maxResults);
-      const messages = threads.map(function (thread) {
-        const msg = thread.getMessages()[0];
-        return {
-          id: msg.getId(),
-          subject: msg.getSubject() || "(제목 없음)",
-          from: msg.getFrom() || "",
-          date: msg.getDate().toISOString(),
-          snippet: msg.getPlainBody().substring(0, 100).replace(/\n/g, " "),
-        };
-      });
-      return ContentService.createTextOutput(
-        JSON.stringify({ ok: true, messages: messages }),
-      ).setMimeType(ContentService.MimeType.JSON);
-    } catch (err) {
-      return ContentService.createTextOutput(
-        JSON.stringify({ ok: false, error: err.message }),
-      ).setMimeType(ContentService.MimeType.JSON);
-    }
-  }
-
-  // ── 라벨 특화 질의: 선택된 메일에 라벨 적용 ──
-  if (action === "applyLabelToSelected") {
-    const labelName = (data.labelName || "").trim();
-    const messageIds = data.messageIds || [];
-    if (!labelName || messageIds.length === 0) {
-      return ContentService.createTextOutput(
-        JSON.stringify({ ok: false, error: "라벨명과 메일 ID가 필요합니다." }),
-      ).setMimeType(ContentService.MimeType.JSON);
-    }
-    let label = GmailApp.getUserLabelByName(labelName);
-    if (!label) label = GmailApp.createLabel(labelName);
-    let appliedCount = 0;
-    messageIds.forEach(function (mid) {
-      try {
-        const msg = GmailApp.getMessageById(mid);
-        msg.getThread().addLabel(label);
-        appliedCount++;
-      } catch (e) {
-        Logger.log("applyLabel error for " + mid + ": " + e.message);
-      }
-    });
-    return ContentService.createTextOutput(
-      JSON.stringify({
-        ok: true,
-        labelName: label.getName(),
-        appliedCount: appliedCount,
       }),
     ).setMimeType(ContentService.MimeType.JSON);
   }
