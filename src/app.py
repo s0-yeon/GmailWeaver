@@ -774,7 +774,8 @@ def _build_mail_csv(paths, mode="rewrite", new_ids=None) -> str:
     # 3) CSV row 생성 (첨부 인라인 병합 제거 — 첨부는 attachment_latest.csv / inc_att_merged_*.csv가 담당)
     rows = []
     for mail_id, block_text in mail_blocks.items():
-        rows.append({"id": mail_id, "text": block_text})
+        clean_text = block_text.replace(MAIL_BLOCK_SEP, "").strip()     # 구분선 제거
+        rows.append({"id": mail_id, "text": clean_text})
 
     # 4) mode에 따라 저장 대상 결정
     # append 모드이고 new_ids가 있으면 새 메일만 필터링해서 inc_*.csv 생성
@@ -794,9 +795,31 @@ def _build_mail_csv(paths, mode="rewrite", new_ids=None) -> str:
     print(f"[CSV] 생성 완료 → {csv_path} ({len(rows)}개 메일)")
     return csv_path
 
-#근거메일보기 버튼
+# 근거메일보기 버튼
 def _extract_source_mail_ids(answer: str) -> list:
     return list(set(re.findall(r'ID:\s*([0-9A-Fa-f]{16})', answer)))
+
+# 질의 방법 분류
+def _classify_query_method(message: str) -> str:
+    prompt = f"""다음 질문이 로컬 검색(특정 메일·인물·날짜·주제)에 적합한지,
+                글로벌 검색(전체 경향·요약·패턴·빈도)에 적합한지 판단하라.
+                "local" 또는 "global" 중 하나만 반환하라.
+
+                질문: {message}"""
+    
+    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))  
+    
+    res = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=10,
+        temperature=0   # 일관성 확보
+    )
+
+    method = res.choices[0].message.content.strip().lower()
+    
+    print(f"[CLASSIFY] 질의: {message[:30]} → {method}")    # 채택된 질의 방법을 로그에 출력
+    return method if method in ("local", "global") else "local"     # fallback: 분류 실패 시 기본값 local
 
 # 엔드포인트: POST /extract-calendar
 @app.route('/extract-calendar', methods=['POST'])
@@ -856,12 +879,14 @@ def run_query_async():
                 except Exception as e:
                     # API 방식 실패 시 기존 CLI 방식으로 자동 fallback
                     print(f"[ENGINE] API 실패, CLI fallback: {e}")
+                    resMethod = _classify_query_method(message)
                     answer = _run_graphrag(full_message, resMethod, paths, resType)
                     source_ids = _extract_source_mail_ids(answer)
 
             if resType.lower() == "calendar":
                 result = json.dumps(_convert_to_calendar_json(answer), ensure_ascii=False)
                 update_job(job_id, status="done", result=result)
+                
             else:
                 result = answer
                 update_job(job_id, status="done", result=result, source_ids=source_ids)
