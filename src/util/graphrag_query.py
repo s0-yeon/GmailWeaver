@@ -6,11 +6,10 @@ import asyncio
 import traceback
 import threading
 import time
-from util.graphrag_engine import get_engine
+from util.graphrag_engine import get_engines
 
 # cli 호출 방식인 _run_graphrag() 대체용 (get_engine()로 캐싱된 LocalSearch 객체 직접 호출)
-def run_graphrag_query(message: str, paths) -> str:
-    from util.graphrag_engine import get_engine
+def run_graphrag_query(message: str, paths, method: str = "local") -> tuple[str, list]:
     start_time = time.time()
     result_container = {"result": None, "error": None}
 
@@ -21,7 +20,8 @@ def run_graphrag_query(message: str, paths) -> str:
         try:
             async def _search():
                 output_dir = os.path.join(paths.GRAPHRAG_ROOT, "output")
-                engine = get_engine(paths.GMAIL_ID, output_dir, paths.GRAPHRAG_ROOT) # 유저별 캐싱된 엔진 객체 가져오기
+                local_engine, global_engine = get_engines(paths.GMAIL_ID, output_dir, paths.GRAPHRAG_ROOT) # local + global 엔진 둘 다 가져오기 (캐시에서 재사용)
+                engine = local_engine if method == "local" else global_engine
                 result = await engine.search(message) # cli subprocess 대신 엔진 객체 함수 호출
                 answer = result.response
                 answer = re.sub(r'\[Data:.*?\]|\[데이터:.*?\]', '', answer)
