@@ -19,7 +19,10 @@ function doGet(e) {
 function doPost(e) {
   if (!e || !e.postData || !e.postData.contents) {
     return ContentService.createTextOutput(
-      JSON.stringify({ ok: false, error: "postData가 없습니다. 올바른 POST 요청이 필요합니다." }),
+      JSON.stringify({
+        ok: false,
+        error: "postData가 없습니다. 올바른 POST 요청이 필요합니다.",
+      }),
     ).setMimeType(ContentService.MimeType.JSON);
   }
   const data = JSON.parse(e.postData.contents);
@@ -323,6 +326,33 @@ function doPost(e) {
     return ContentService.createTextOutput(
       JSON.stringify({ ok: true, trashedCount: trashedCount }),
     ).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // ── 메일 보내기 ──
+  if (action === "sendMail") {
+    const to = (data.to || "").trim();
+    const subject = (data.subject || "").trim();
+    const body = (data.body || "").trim();
+
+    if (!to || !subject || !body) {
+      return ContentService.createTextOutput(
+        JSON.stringify({
+          ok: false,
+          error: "to, subject, body가 모두 필요합니다.",
+        }),
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    try {
+      GmailApp.sendEmail(to, subject, body);
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: true }),
+      ).setMimeType(ContentService.MimeType.JSON);
+    } catch (err) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: false, error: err.message }),
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
   }
 
   // ── 알 수 없는 action ──
