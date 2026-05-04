@@ -1,7 +1,7 @@
 // src/apps-script/common.js
-var TunnelURL = "https://laevorotatory-nonnutritively-nelle.ngrok-free.dev"; // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
+var TunnelURL = "https://detainable-thumbless-arnav.ngrok-free.dev"; // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
 const WEBAPP_URL =
-  "https://script.google.com/macros/s/AKfycbwS6LYYbgc2HteM2XaAUeilhJsWgUaCAWYPj21FJsY3sKro72XRrIdHTfo9b-jC9bXk/exec"; // Apps Script Web App으로 배포된 URL
+  "https://script.google.com/macros/s/AKfycbxQN-o7ZKI-daT-D-8h9YLo63IUefp9ShJGpZxWEPwuh1A6gH6kNMrzwP07o46eh6WE/exec"; // Apps Script Web App으로 배포된 URL
 
 const OLIVE = "#c6d8a5";
 
@@ -95,8 +95,7 @@ function _buildGmailMessageCard(e) {
 
   if (accessToken) GmailApp.setCurrentMessageAccessToken(accessToken);
 
-  var webSection = CardService.newCardSection()
-    .addWidget(_webpageBtn())
+  var webSection = CardService.newCardSection().addWidget(_webpageBtn());
 
   // 섹션 2: 라벨 분류
   var labelInput = CardService.newTextInput()
