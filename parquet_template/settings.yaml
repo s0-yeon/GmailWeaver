@@ -141,7 +141,7 @@ local_search:
   community_prop: 0.1 # Context Window에서 Community Report가 차지하는 비율. 10%
   conversation_history_max_turns: 0 # 검색 시 고려할 이전 대화의 최대 턴 수. 0이므로 현재 질문만 처리
   conversation_history_user_turns_only: True # 검색 시 사용자의 질문 이력만 포함
-  top_k_mapped_entities: 30 # 질문 시 벡터 검색으로 추출할 엔티티의 최대 개수
+  top_k_entities: 30 # 질문 시 벡터 검색으로 추출할 엔티티의 최대 개수
   top_k_relationships: 30 # 추출된 엔티티간 엣지의 최대 개수
   include_entity_rank: true # 엔티티 중요도를 Context에 포함
   include_relationship_weight: true # 엣지의 강도 포함
