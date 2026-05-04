@@ -1,1227 +1,1493 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>연락처 | Olive</title>
+  <script type="module" src="/src/main-minimal.js"></script>
+  <style>
+    .site_title_text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-    <title>Contact Form | Gentelella Alela! by Colorlib</title>    <!-- Compiled CSS (includes Bootstrap, Font Awesome, and all vendor styles) -->
-    <script type="module" src="/src/main-minimal.js"></script>
-  </head>
+    :root {
+      --accent: #4CAF50;
+      --accent-dark: #388E3C;
+      --accent-light: #81C784;
+      --main-bg: #f4f8f4;
+      --card-bg: #ffffff;
+      --text-primary: #1a2e1a;
+      --text-secondary: #6b8f6b;
+      --text-muted: #9ab89a;
+      --border: #d4e8d4;
+      --green-pale: #e8f5e9;
+      --shadow-sm: 0 2px 8px rgba(26,46,26,0.08);
+      --shadow-md: 0 4px 20px rgba(26,46,26,0.12);
+      --shadow-lg: 0 8px 32px rgba(26,46,26,0.16);
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
 
-  <body class="nav-md page-contacts">
-    <div class="container body">
-      <div class="main_container">
-        <!-- Sidebar -->
-        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
-          <div class="left_col scroll-view">
-            <div class="navbar nav_title border-0">
-              <a href="index.html" class="site_title site_title_text">
-                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
-                Olive
-              </a>
-            </div>
-            <div class="clearfix"></div>
-            <div class="profile clearfix">
-              <div class="profile_pic">
-                <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
-              </div>
-              <div class="profile_info">
-                <span data-i18n="sidebar.welcome">Welcome,</span>
-                <h4 id="google-profile-name">-</h4>
-              </div>
-            </div>
-            <br />
-            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-              <div class="menu_section">
-                <ul class="nav side-menu">
-                  <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span><span class="bi bi-chevron-right"></span></a></li>
-                  <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span><span class="bi bi-chevron-right"></span></a></li>
-                  <li>
-                    <a><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span><span class="bi bi-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="index2.html"><i class="bi bi-tag"></i> 라벨 목록</a></li>
-                      <li><a href="label2.html"><i class="bi bi-circle-half"></i> 라벨 초원 ✦</a></li>
-                    </ul>
-                  </li>
-                  <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span><span class="bi bi-chevron-right"></span></a></li>
-                  <li>
-                    <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="graph-viz.html"><i class="bi bi-diagram-3"></i> <span data-i18n="nav.graph_viz">Graph Viz</span></a></li>
-                      <li><a href="recap.html"><i class="bi bi-clipboard-data"></i> Recap</a></li>
-                      <li><a href="api_test.html"><i class="bi bi-terminal"></i> API Test <span class="badge bg-warning text-dark">Dev</span></a></li>
-                    </ul>
-                  </li>
-                  <li class="active"><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span><span class="bi bi-chevron-right"></span></a></li>
+    /* ── CONTENT PADDING ── */
+    .right_col > div {
+      padding: 28px;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .page-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .page-header p {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+    .stat-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .stat-icon.green { background: #e8f5e9; color: var(--accent-dark); }
+    .stat-icon.blue { background: #e3f2fd; color: #1976D2; }
+    .stat-icon.orange { background: #fff3e0; color: #F57C00; }
+    .stat-icon.purple { background: #f3e5f5; color: #7B1FA2; }
+
+    .stat-info h3 { font-size: 1.4rem; font-weight: 700; color: var(--text-primary); }
+    .stat-info p { font-size: 0.78rem; color: var(--text-secondary); margin-top: 1px; }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 9px 36px 9px 38px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--green-pale);
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+
+    .search-wrap input:focus { border-color: var(--accent); background: #fff; }
+    .search-wrap input::placeholder { color: var(--text-muted); }
+
+    .search-wrap .si { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; }
+
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .ftab {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .ftab:hover { border-color: var(--accent); color: var(--accent-dark); }
+    .ftab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    .sort-select {
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--green-pale);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-add {
+      padding: 9px 18px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: background 0.2s, transform 0.15s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .btn-add:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+    /* ── CONTACTS GRID ── */
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+      align-items: stretch;
+    }
+
+    /* ── CONTACT CARD ── */
+    .contact-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: all 0.25s;
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--accent-light);
+    }
+
+    .card-top {
+      padding: 20px 20px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .contact-avatar-wrap { position: relative; flex-shrink: 0; }
+
+    .contact-avatar {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .avatar-img {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .online-dot {
+      width: 11px; height: 11px;
+      background: #4CAF50;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      position: absolute;
+      bottom: 1px; right: 1px;
+    }
+
+    .card-info { flex: 1; min-width: 0; }
+
+    .contact-name {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .contact-role {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .tag-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .tag-friend { background: #e8f5e9; color: #2E7D32; }
+    .tag-work { background: #e3f2fd; color: #1565C0; }
+    .tag-family { background: #fce4ec; color: #880E4F; }
+    .tag-other { background: #f3e5f5; color: #6A1B9A; }
+
+    .card-star {
+      color: #ccc;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: color 0.15s;
+      padding: 4px;
+      flex-shrink: 0;
+    }
+
+    .card-star.starred { color: #FFA726; }
+    .card-star:hover { color: #FFA726; }
+
+    /* ── EMAIL SECTION ── */
+    .card-email-section {
+      padding: 0 20px 14px;
+      border-bottom: 1px solid var(--green-pale);
+    }
+
+    .email-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-pale);
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .email-chip:hover { background: #d4ead4; }
+
+    .email-chip i {
+      color: var(--accent-dark);
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .email-addr {
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .copy-btn {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 4px;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .copy-btn:hover { background: rgba(76,175,80,0.15); color: var(--accent-dark); }
+
+    /* ── QUICK ACTIONS ── */
+    .card-actions {
+      padding: 12px 20px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-compose {
+      flex: 1;
+      padding: 9px 0;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s, transform 0.15s;
+      font-family: inherit;
+    }
+
+    .btn-compose:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+    .btn-icon-action {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .btn-icon-action:hover { border-color: var(--accent); color: var(--accent-dark); background: var(--green-pale); }
+    .btn-icon-action.danger:hover { border-color: #e57373; color: #c62828; background: #ffebee; }
+
+    /* ── CARD NOTES ── */
+    .card-notes-row {
+      padding: 0 20px 14px;
+    }
+
+    .notes-text {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      line-height: 1.4;
+      background: var(--green-pale);
+      padding: 7px 10px;
+      border-radius: 7px;
+      border-left: 3px solid var(--accent-light);
+    }
+
+    /* ── LAST CONTACT ── */
+    .last-contact-row {
+      padding: 0 20px 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .last-contact-row i { font-size: 0.72rem; color: var(--text-muted); }
+    .last-contact-row span { font-size: 0.74rem; color: var(--text-muted); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state i { font-size: 3rem; margin-bottom: 12px; display: block; }
+    .empty-state p { font-size: 0.95rem; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,20,10,0.5);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal-box {
+      background: var(--card-bg);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 620px;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.25s;
+      max-height: 90vh;
+      overflow-y: auto;
+
+      padding: 16px 24px 24px 24px;  
+      box-sizing: border-box;
+
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 32px 16px 32px; /* 위 / 오른쪽 / 아래 / 왼쪽 */
+    }
+
+    .modal-body {
+      padding: 16px 32px 24px 32px;
+    }
+
+    .modal-footer {
+      padding: 0 32px 24px 32px; /* 24x 오타 → 24px 로 수정 */
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-title i { color: var(--accent); }
+
+    .modal-close {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: var(--green-pale);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover { background: #ffcdd2; color: #c62828; }
+
+    #viewModal .modal-footer {
+      margin-top: 18px;       
+      padding-top: 14px;       
+      border-top: 1px solid var(--green-pale);  
+    } 
+    
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .form-row.single { grid-template-columns: 1fr; }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--green-pale);
+      font-size: 0.87rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--accent); background: #fff; }
+
+    .btn-cancel {
+      padding: 9px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .btn-cancel:hover { background: var(--green-pale); }
+
+    .btn-save {
+      padding: 9px 24px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .btn-save:hover { background: var(--accent-dark); }
+
+    /* ── COMPOSE MODAL ── */
+    .compose-to-row {
+      background: var(--green-pale);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .compose-to-label { font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); }
+    .compose-to-email { font-size: 0.88rem; color: var(--text-primary); font-weight: 500; }
+
+    .compose-subject input,
+    .compose-body textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      font-size: 0.87rem;
+      color: var(--text-primary);
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .compose-subject input:focus,
+    .compose-body textarea:focus { border-color: var(--accent); }
+
+    .compose-subject { margin-bottom: 10px; }
+    .compose-body textarea { min-height: 140px; resize: vertical; }
+
+    .compose-quick-templates {
+      margin-top: 10px;
+    }
+
+    .compose-quick-templates p {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .template-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .tchip {
+      padding: 4px 10px;
+      background: var(--green-pale);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.74rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tchip:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* ── PAGINATION ── */
+    .pagination-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .page-btn {
+      min-width: 34px; height: 34px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      font-family: inherit;
+      padding: 0 8px;
+    }
+
+    .page-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
+    .page-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: var(--text-primary);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      box-shadow: var(--shadow-lg);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success i { color: var(--accent-light); }
+    .toast.error i { color: #ef9a9a; }
+
+    /* ── ALPHABET STRIP ── */
+    .alpha-strip {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      padding: 0 0 20px;
+    }
+
+    .alpha-btn {
+      min-width: 32px; height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .alpha-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
+    .alpha-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* ── VIEW DETAIL MODAL ── */
+    .detail-hero {
+      text-align: center;
+      padding: 24px 24px 0;
+    }
+
+    .detail-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 auto 12px;
+    }
+
+    .detail-name { font-size: 1.25rem; font-weight: 700; }
+    .detail-role { color: var(--text-secondary); font-size: 0.88rem; margin-top: 4px; }
+
+    .detail-tags { display: flex; justify-content: center; gap: 6px; margin-top: 10px; }
+
+    .detail-info-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .detail-info-table td {
+      padding: 9px 4px;
+      border-bottom: 1px solid var(--green-pale);
+    }
+
+    .detail-info-table td:first-child {
+      width: 35%;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .detail-info-table td:last-child { color: var(--text-primary); }
+
+    .email-history-item {
+      padding: 10px 12px;
+      background: var(--green-pale);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .email-history-item .subj { font-size: 0.84rem; font-weight: 600; }
+    .email-history-item .date { font-size: 0.74rem; color: var(--text-muted); margin-top: 2px; }
+  </style>
+</head>
+<body class="nav-md">
+<div class="container body">
+  <div class="main_container">
+
+    <!-- Sidebar -->
+    <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
+      <div class="left_col scroll-view">
+        <div class="navbar nav_title border-0">
+          <a href="index.html" class="site_title site_title_text">
+            <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;">
+            Olive
+          </a>
+        </div>
+        <div class="clearfix"></div>
+        <div class="profile clearfix">
+          <div class="profile_pic">
+            <i class="bi bi-person-circle" style="font-size: 60px; color: #aaa;"></i>
+          </div>
+          <div class="profile_info">
+            <h4 id="google-profile-name">-</h4>
+          </div>
+        </div>
+        <br />
+        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+          <div class="menu_section">
+            <ul class="nav side-menu">
+              <li><a href="index.html"><i class="bi bi-house"></i> <span data-i18n="nav.home">Home</span><span class="bi bi-chevron-right"></span></a></li>
+              <li><a href="search.html"><i class="bi bi-search"></i> <span data-i18n="nav.search">Search</span><span class="bi bi-chevron-right"></span></a></li>
+              <li>
+                <a><i class="bi bi-tags"></i> <span data-i18n="nav.labels">Labels</span><span class="bi bi-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                  <li><a href="index2.html"><i class="bi bi-tag"></i> 라벨 목록</a></li>
+                  <li><a href="label2.html"><i class="bi bi-circle-half"></i> 라벨 초원 ✦</a></li>
                 </ul>
-              </div>
-            </div>
+              </li>
+              <li><a href="calendar.html"><i class="bi bi-calendar3"></i> <span data-i18n="nav.calendar">Calendar</span><span class="bi bi-chevron-right"></span></a></li>
+              <li>
+                <a><i class="bi bi-bar-chart"></i> <span data-i18n="nav.statistics">Statistics</span><span class="bi bi-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                  <li><a href="graph-viz.html"><i class="bi bi-diagram-3"></i> <span data-i18n="nav.graph_viz">Graph Viz</span></a></li>
+                  <li><a href="recap.html"><i class="bi bi-clipboard-data"></i> Recap</a></li>
+                  <li><a href="api_test.html"><i class="bi bi-terminal"></i> API Test <span class="badge bg-warning text-dark">Dev</span></a></li>
+                </ul>
+              </li>
+              <li class="active"><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span><span class="bi bi-chevron-right"></span></a></li>
+            </ul>
           </div>
-        </aside>
+        </div>
+      </div>
+    </aside>
+    <!-- /Sidebar -->
 
-        <!-- top navigation -->
-        <div class="top_nav">
-            <div class="nav_menu d-flex align-items-center justify-content-between">
-                <div class="nav toggle">
-                  <a id="menu_toggle"><i class="fas fa-bars"></i></a>
-                </div>
-                <nav class="nav navbar-nav ms-auto">
-                <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
-                <li class="nav-item dropdown">
-                    <a href="#" role="button" class="dropdown-toggle info-number" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="fas fa-envelope"></i>
-                      <span class="badge bg-green">6</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end list-unstyled msg_list dropdown-menu-lg" role="menu" aria-labelledby="navbarDropdown1">
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      <li class="nav-item">
-                        <div class="text-center">
-                          <a class="dropdown-item">
-                            <strong>See All Alerts</strong>
-                            <i class="fas fa-angle-right"></i>
-                          </a>
-                        </div>
-                    </ul>
-                </li>
+    <!-- Top Navigation -->
+    <div class="top_nav">
+      <div class="nav_menu d-flex align-items-center justify-content-between">
+        <div class="nav toggle">
+          <a id="menu_toggle"><i class="fas fa-bars"></i></a>
+        </div>
+        <nav class="nav navbar-nav ms-auto">
+          <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+            <li class="nav-item dropdown">
+              <a href="#" role="button" class="dropdown-toggle" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color:inherit;">
+                <i class="bi bi-translate" style="font-size: 1.2rem; vertical-align: middle;"></i>
+                <span id="current-lang" style="margin-left: 4px; font-size: 0.9rem;">KO</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                <li><a class="dropdown-item lang-option" href="#" data-lang="ko" data-i18n="lang.ko">🇰🇷 한국어</a></li>
+                <li><a class="dropdown-item lang-option" href="#" data-lang="en" data-i18n="lang.en">🇺🇸 English</a></li>
+                <li><a class="dropdown-item lang-option" href="#" data-lang="ja" data-i18n="lang.ja">🇯🇵 日本語</a></li>
               </ul>
-              </nav>
-            </div>
-          </div>
-        <!-- /top navigation -->
-
-        <!-- page content -->
-        <main class="right_col" role="main" aria-label="Main content">
-          <div class="">
-            <div class="page-title">
-              <div class="title_left">
-                <h3>Contact Management <small>Team Directory</small></h3>
-              </div>
-
-              <div class="title_right">
-                <div class="col-md-5 col-sm-5 mb-3 float-end top_search">
-                  <div class="input-group search-bar-fix">
-                    <input type="text" class="form-control" id="contactSearch" placeholder="Search contacts..." data-i18n-placeholder="page.contacts.search_placeholder">
-                    <button class="btn btn-outline-secondary" type="button" onclick="searchContacts()">
-                      <i class="fas fa-search"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="clearfix"></div>
-
-            <!-- Contact Statistics -->
-            <div class="row mb-4">
-              <div class="col-md-3 col-sm-6">
-                <div class="x_panel stats-card">
-                  <div class="x_content text-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-users text-primary"></i>
-                    </div>
-                    <h3 class="stat-number text-primary">20</h3>
-                    <p class="stat-label">Total Contacts</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3 col-sm-6">
-                <div class="x_panel stats-card">
-                  <div class="x_content text-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-user-tie text-success"></i>
-                    </div>
-                    <h3 class="stat-number text-success">10</h3>
-                    <p class="stat-label">Team Members</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3 col-sm-6">
-                <div class="x_panel stats-card">
-                  <div class="x_content text-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-handshake text-warning"></i>
-                    </div>
-                    <h3 class="stat-number text-warning">6</h3>
-                    <p class="stat-label">Clients</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3 col-sm-6">
-                <div class="x_panel stats-card">
-                  <div class="x_content text-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-building text-info"></i>
-                    </div>
-                    <h3 class="stat-number text-info">4</h3>
-                    <p class="stat-label">Vendors</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Contact Filters and Actions -->
-            <div class="row mb-4">
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_content">
-                    <div class="row align-items-center">
-                      <div class="col-md-8">
-                        <div class="contact-filters">
-                          <div class="btn-group me-3" role="group">
-                            <input type="radio" class="btn-check" name="contactType" id="all" autocomplete="off" checked>
-                            <label class="btn btn-outline-primary" for="all">All Contacts</label>
-                            
-                            <input type="radio" class="btn-check" name="contactType" id="team" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="team">Team</label>
-                            
-                            <input type="radio" class="btn-check" name="contactType" id="clients" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="clients">Clients</label>
-                            
-                            <input type="radio" class="btn-check" name="contactType" id="vendors" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="vendors">Vendors</label>
-                          </div>
-                          
-                          <select class="form-select d-inline-block" style="width: auto;" onchange="filterByDepartment(this.value)">
-                            <option value="">All Departments</option>
-                            <option value="development">Development</option>
-                            <option value="design">Design</option>
-                            <option value="marketing">Marketing</option>
-                            <option value="sales">Sales</option>
-                            <option value="support">Support</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-md-4 text-end">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addContactModal">
-                          <i class="fas fa-plus me-2"></i>Add Contact
-                        </button>
-                        <div class="btn-group ms-2">
-                          <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fas fa-ellipsis-h"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Export Contacts</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-upload me-2"></i>Import Contacts</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Alphabet Filter -->
-            <div class="row mb-4">
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_content">
-                    <div class="alphabet-filter text-center">
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('all')">All</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('A')">A</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('B')">B</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('C')">C</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('D')">D</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('E')">E</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('F')">F</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('G')">G</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('H')">H</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('I')">I</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('J')">J</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('K')">K</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('L')">L</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('M')">M</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('N')">N</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('O')">O</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('P')">P</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('Q')">Q</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('R')">R</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('S')">S</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('T')">T</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('U')">U</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('V')">V</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('W')">W</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('X')">X</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('Y')">Y</button>
-                      <button class="btn btn-sm btn-outline-secondary me-1 mb-1" onclick="filterByLetter('Z')">Z</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Contact Cards -->
-            <div class="row" id="contactsContainer">
-
-            </div>
-            
-            <!-- Pagination -->
-            <div class="row">
-              <div class="col-md-12">
-                <nav aria-label="Contact pagination">
-                  <ul class="pagination justify-content-center" id="contactPagination">
-                    <li class="page-item">
-                      <a class="page-link" href="#" onclick="previousPage()">
-                        <i class="fas fa-chevron-left"></i> Previous
-                      </a>
-                    <li class="page-item active"><a class="page-link" href="#" onclick="goToPage(1)">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#" onclick="goToPage(2)">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#" onclick="goToPage(3)">3</a></li>
-                    <li class="page-item">
-                      <a class="page-link" href="#" onclick="nextPage()">
-                        Next <i class="fas fa-chevron-right"></i>
-                      </a>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /page content -->
-
-        <!-- footer content -->
-        <footer>
-          <div class="float-end">
-            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-          </div>
-          <div class="clearfix"></div>
-        </footer>
-        <!-- /footer content -->
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
+    <!-- /Top Navigation -->
 
-    <!-- Add Contact Modal -->
-    <div class="modal fade" id="addContactModal" tabindex="-1" aria-labelledby="addContactModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="addContactModalLabel">
-              <i class="fas fa-user-plus me-2"></i>Add New Contact
-            </h5>
-            <button type="button" class="btn-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form id="addContactForm">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="firstName" class="form-label">First Name *</label>
-                    <input type="text" class="form-control" id="firstName" required>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="lastName" class="form-label">Last Name *</label>
-                    <input type="text" class="form-control" id="lastName" required>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="email" class="form-label">Email *</label>
-                    <input type="email" class="form-control" id="email" required>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input type="tel" class="form-control" id="phone">
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="jobTitle" class="form-label">Job Title</label>
-                    <input type="text" class="form-control" id="jobTitle">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="department" class="form-label">Department</label>
-                    <select class="form-select" id="department">
-                      <option value="">Select Department</option>
-                      <option value="development">Development</option>
-                      <option value="design">Design</option>
-                      <option value="marketing">Marketing</option>
-                      <option value="sales">Sales</option>
-                      <option value="support">Support</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="company" class="form-label">Company</label>
-                    <input type="text" class="form-control" id="company">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="contactType" class="form-label">Contact Type</label>
-                    <select class="form-select" id="contactType">
-                      <option value="team">Team Member</option>
-                      <option value="client">Client</option>
-                      <option value="vendor">Vendor</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="address" class="form-label">Address</label>
-                <textarea class="form-control" id="address" rows="2"></textarea>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              <i class="fas fa-times me-2"></i>Cancel
-            </button>
-            <button type="button" class="btn btn-primary" onclick="saveContact()">
-              <i class="fas fa-save me-2"></i>Save Contact
-            </button>
-          </div>
+    <!-- Page Content -->
+    <main class="right_col" role="main" aria-label="Main content">
+      <div class="">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <h1>📬 내 연락처</h1>
+      <p>Gmail 주소를 저장하고, 바로 메일을 보내세요.</p>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-add" style="background:var(--accent-dark);" onclick="loadContactsFromGmail()">
+        <i class="fas fa-cloud-download-alt"></i> Gmail에서 불러오기
+      </button>
+      <button class="btn-add" onclick="openAddModal()">
+        <i class="fas fa-user-plus"></i> 연락처 추가
+      </button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon green"><i class="fas fa-users"></i></div>
+      <div class="stat-info"><h3 id="statTotal">0</h3><p>전체 연락처</p></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon blue"><i class="fas fa-user-friends"></i></div>
+      <div class="stat-info"><h3 id="statFriend">0</h3><p>친구</p></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon orange"><i class="fas fa-briefcase"></i></div>
+      <div class="stat-info"><h3 id="statWork">0</h3><p>직장/학교</p></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon purple"><i class="fas fa-star"></i></div>
+      <div class="stat-info"><h3 id="statStarred">0</h3><p>즐겨찾기</p></div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <i class="fas fa-search si"></i>
+      <input type="text" id="searchInput" placeholder="이름, 이메일, 메모로 검색...">
+    </div>
+    <div class="filter-tabs">
+      <button class="ftab active" data-filter="all">전체</button>
+      <button class="ftab" data-filter="friend">친구</button>
+      <button class="ftab" data-filter="work">직장/학교</button>
+      <button class="ftab" data-filter="family">가족</button>
+      <button class="ftab" data-filter="other">기타</button>
+      <button class="ftab" data-filter="starred">⭐ 즐겨찾기</button>
+    </div>
+    <select class="sort-select" id="sortSelect">
+      <option value="name">이름순</option>
+      <option value="recent">최근 메일순</option>
+      <option value="added">추가된 순</option>
+    </select>
+  </div>
+
+  <!-- ALPHABET STRIP -->
+  <div class="alpha-strip" id="alphaStrip"></div>
+
+  <!-- CONTACTS GRID -->
+  <div class="contacts-grid" id="contactsGrid"></div>
+
+  <!-- PAGINATION -->
+  <div class="pagination-row" id="paginationRow"></div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fas fa-user-plus"></i> <span id="addModalTitle">연락처 추가</span></div>
+      <button class="modal-close" onclick="closeAddModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>이름 *</label>
+          <input type="text" id="inputName" placeholder="홍길동">
+        </div>
+        <div class="form-group">
+          <label>Gmail 주소 *</label>
+          <input type="email" id="inputEmail" placeholder="example@gmail.com">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>전화번호</label>
+          <input type="tel" id="inputPhone" placeholder="010-0000-0000">
+        </div>
+        <div class="form-group">
+          <label>분류</label>
+          <select id="inputTag">
+            <option value="friend">친구</option>
+            <option value="work">직장/학교</option>
+            <option value="family">가족</option>
+            <option value="other">기타</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>소속 (회사/학교)</label>
+          <input type="text" id="inputOrg" placeholder="회사명 또는 학교명">
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>메모</label>
+          <textarea id="inputNote" rows="2" placeholder="이 연락처에 대한 메모..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeAddModal()">취소</button>
+      <button class="btn-save" onclick="saveContact()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMPOSE MODAL -->
+<!-- COMPOSE MODAL -->
+<div class="modal-overlay" id="composeModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fas fa-paper-plane"></i> 메일 작성</div>
+      <button class="modal-close" onclick="closeComposeModal()"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- 여기부터가 body 안 -->
+    <div class="modal-body">
+      <div class="compose-to-row">
+        <span class="compose-to-label">받는 사람</span>
+        <i class="fas fa-envelope" style="color:var(--accent-dark);font-size:0.8rem;"></i>
+        <span class="compose-to-email" id="composeToEmail">—</span>
+        <span style="font-size:0.75rem;color:var(--text-muted);" id="composeToName"></span>
+      </div>
+
+      <div class="compose-subject">
+        <input type="text" id="composeSubject" placeholder="제목을 입력하세요">
+      </div>
+
+      <div class="compose-body">
+        <textarea id="composeBody" placeholder="메일 내용을 작성하세요..."></textarea>
+      </div>
+
+      <div class="compose-quick-templates">
+        <p>빠른 템플릿 선택:</p>
+        <div class="template-chips">
+          <span class="tchip" onclick="applyTemplate('greeting')">👋 인사</span>
+          <span class="tchip" onclick="applyTemplate('meeting')">📅 미팅 요청</span>
+          <span class="tchip" onclick="applyTemplate('followup')">🔔 팔로업</span>
+          <span class="tchip" onclick="applyTemplate('thanks')">🙏 감사 인사</span>
+          <span class="tchip" onclick="applyTemplate('question')">❓ 문의</span>
         </div>
       </div>
     </div>
 
-    <!-- Contact Details Modal -->
-    <div class="modal fade" id="contactDetailsModal" tabindex="-1" aria-labelledby="contactDetailsModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="contactDetailsModalLabel">
-              <i class="fas fa-user me-2"></i>Contact Details
-            </h5>
-            <button type="button" class="btn-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body" id="contactDetailsContent">
-            <!-- Contact details will be populated here -->
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-warning" onclick="editContact()">
-              <i class="fas fa-edit me-2"></i>Edit Contact
-            </button>
-          </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeComposeModal()">취소</button>
+      <button class="btn-save" onclick="sendMailDirect()">
+        <i class="fas fa-paper-plane" style="margin-right:6px;"></i>보내기
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW DETAIL MODAL -->
+<div class="modal-overlay" id="viewModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fas fa-user"></i> 연락처 상세</div>
+      <button class="modal-close" onclick="closeViewModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="viewModalContent"></div>
+    <div class="modal-footer" id="viewModalFooter"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg"></span></div>
+
+      </div>
+    </main>
+    <!-- /Page Content -->
+
+  </div>
+</div>
+
+<script>
+const FLASK_URL = 'http://127.0.0.1:80';
+
+let contacts = JSON.parse(localStorage.getItem('olive_contacts') || '[]');
+
+async function callContactsProxy(action, extra = {}) {
+    const gmail_id = sessionStorage.getItem('gw_gmail_id') || '';
+    const res = await fetch(`${FLASK_URL}/contacts-proxy`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, gmail_id, ...extra }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+}
+
+async function loadContactsFromGmail() {
+    showToast('Gmail에서 연락처를 불러오는 중...', 'info');
+    try {
+        const res = await callContactsProxy('getFrequentContacts', { maxResults: 200 });
+        if (!res.ok) throw new Error(res.error);
+
+        let added = 0;
+        res.contacts.forEach(c => {
+            if (!contacts.find(x => x.email === c.email)) {
+                contacts.push({
+                    id: Date.now() + Math.random(),
+                    name: c.name,
+                    email: c.email,
+                    phone: '',
+                    tag: 'other',
+                    org: '',
+                    note: `메일 ${c.count}회 교환`,
+                    starred: false,
+                    addedAt: Date.now(),
+                    lastMailAt: c.lastMailAt ? new Date(c.lastMailAt).getTime() : null,
+                });
+                added++;
+            }
+        });
+
+        save();
+        renderGrid();
+        showToast(`${added}명이 Gmail에서 추가되었습니다!`, 'success');
+    } catch (e) {
+        showToast('불러오기 실패: ' + e.message, 'error');
+    }
+}
+
+let filterMode = 'all';
+let searchQuery = '';
+let alphaFilter = 'all';
+let sortMode = 'name';
+let currentPage = 1;
+const PER_PAGE = 6;
+let editingId = null;
+let composeTarget = null;
+
+function save() {
+  localStorage.setItem('olive_contacts', JSON.stringify(contacts));
+}
+
+// ── STATS ──
+function updateStats() {
+  document.getElementById('statTotal').textContent = contacts.length;
+  document.getElementById('statFriend').textContent = contacts.filter(c=>c.tag==='friend').length;
+  document.getElementById('statWork').textContent = contacts.filter(c=>c.tag==='work').length;
+  document.getElementById('statStarred').textContent = contacts.filter(c=>c.starred).length;
+}
+
+// ── FILTER & SORT ──
+function getFiltered() {
+  let list = [...contacts];
+
+  // type filter
+  if (filterMode === 'starred') list = list.filter(c=>c.starred);
+  else if (filterMode !== 'all') list = list.filter(c=>c.tag===filterMode);
+
+  // alpha filter
+  if (alphaFilter !== 'all') {
+    list = list.filter(c => c.name.charAt(0).toUpperCase() === alphaFilter ||
+      c.name.charCodeAt(0) >= 0xAC00 && alphaFilter === '한');
+  }
+
+  // search
+  if (searchQuery.trim()) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(c =>
+      c.name.toLowerCase().includes(q) ||
+      c.email.toLowerCase().includes(q) ||
+      (c.org||'').toLowerCase().includes(q) ||
+      (c.note||'').toLowerCase().includes(q)
+    );
+  }
+
+  // sort
+  if (sortMode === 'name') list.sort((a,b) => a.name.localeCompare(b.name, 'ko'));
+  else if (sortMode === 'recent') list.sort((a,b) => (b.lastMailAt||0) - (a.lastMailAt||0));
+  else if (sortMode === 'added') list.sort((a,b) => b.addedAt - a.addedAt);
+
+  return list;
+}
+
+// ── ALPHABET STRIP ──
+function renderAlpha() {
+  const strip = document.getElementById('alphaStrip');
+  const letters = ['전체','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','한'];
+  strip.innerHTML = letters.map(l => {
+    const val = l === '전체' ? 'all' : l;
+    const active = alphaFilter === val ? 'active' : '';
+    return `<button class="alpha-btn ${active}" onclick="setAlpha('${val}')">${l}</button>`;
+  }).join('');
+}
+
+function setAlpha(v) {
+  alphaFilter = v;
+  currentPage = 1;
+  renderAlpha();
+  renderGrid();
+}
+
+// ── TAG HELPERS ──
+function tagLabel(t) {
+  return {friend:'친구', work:'직장/학교', family:'가족', other:'기타'}[t] || t;
+}
+
+function tagClass(t) {
+  return {friend:'tag-friend', work:'tag-work', family:'tag-family', other:'tag-other'}[t] || 'tag-other';
+}
+
+function initials(name) {
+  return name ? name.charAt(0) : '?';
+}
+
+function timeAgo(ts) {
+  if (!ts) return '메일 없음';
+  const d = Math.floor((Date.now() - ts) / 86400000);
+  if (d === 0) return '오늘';
+  if (d === 1) return '어제';
+  return `${d}일 전`;
+}
+
+// ── RENDER GRID ──
+function renderGrid() {
+  const filtered = getFiltered();
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  const slice = filtered.slice((currentPage-1)*PER_PAGE, currentPage*PER_PAGE);
+
+  const grid = document.getElementById('contactsGrid');
+  if (slice.length === 0) {
+    grid.innerHTML = `<div class="empty-state"><i class="fas fa-address-book"></i><p>연락처가 없습니다.<br>오른쪽 위 버튼으로 추가해보세요!</p></div>`;
+  } else {
+    grid.innerHTML = slice.map(c => cardHTML(c)).join('');
+  }
+
+  renderPagination(filtered.length, totalPages);
+  updateStats();
+}
+
+function cardHTML(c) {
+  const starClass = c.starred ? 'starred' : '';
+  const noteRow = c.note 
+  ? `<div class="card-notes-row"><div class="notes-text">${escHtml(c.note)}</div></div>`
+  : `<div class="card-notes-row"><div class="notes-text" style="opacity:0;pointer-events:none;">placeholder</div></div>`;
+  const lastMail = `<div class="last-contact-row"><i class="fas fa-clock"></i><span>마지막 메일: ${timeAgo(c.lastMailAt)}</span></div>`;
+
+  return `
+    <div class="contact-card" data-id="${c.id}">
+      <div class="card-top">
+        <div class="contact-avatar-wrap">
+          <div class="contact-avatar">${initials(c.name)}</div>
+        </div>
+        <div class="card-info">
+          <div class="contact-name">${escHtml(c.name)}</div>
+          <div class="contact-role">${escHtml(c.org || '소속 없음')}</div>
+          <span class="tag-badge ${tagClass(c.tag)}">${tagLabel(c.tag)}</span>
+        </div>
+        <i class="fas fa-star card-star ${starClass}" onclick="toggleStar(${c.id}, event)" title="즐겨찾기"></i>
+      </div>
+      <div class="card-email-section">
+        <div class="email-chip" onclick="openComposeModal(${c.id})" title="클릭하면 메일 작성">
+          <i class="fas fa-envelope"></i>
+          <span class="email-addr">${escHtml(c.email)}</span>
+          <span class="copy-btn" onclick="copyEmail(event, '${escHtml(c.email)}')" title="이메일 복사"><i class="fas fa-copy"></i></span>
         </div>
       </div>
+      ${noteRow}
+      ${lastMail}
+      <div class="card-actions">
+        <button class="btn-compose" onclick="openComposeModal(${c.id})">
+          <i class="fas fa-paper-plane"></i> 메일 보내기
+        </button>
+        <button class="btn-icon-action" onclick="viewContact(${c.id})" title="상세 보기"><i class="fas fa-eye"></i></button>
+        <button class="btn-icon-action" onclick="editContact(${c.id})" title="수정"><i class="fas fa-pencil-alt"></i></button>
+        <button class="btn-icon-action danger" onclick="deleteContact(${c.id})" title="삭제"><i class="fas fa-trash-alt"></i></button>
+      </div>
     </div>
+  `;
+}
 
-    <!-- JavaScript -->
-    <script>
-      // Sample contact data
-      const contacts = [
-        {
-          id: 1,
-          firstName: "Sarah",
-          lastName: "Johnson",
-          email: "sarah.johnson@company.com",
-          phone: "+1 (555) 123-4567",
-          jobTitle: "Senior Frontend Developer",
-          department: "development",
-          company: "TechCorp Industries",
-          type: "team",
-          address: "123 Tech Street, San Francisco, CA",
-          avatar: "images/user.png",
-          rating: 4.8
-        },
-        {
-          id: 2,
-          firstName: "Michael",
-          lastName: "Chen",
-          email: "michael.chen@company.com",
-          phone: "+1 (555) 234-5678",
-          jobTitle: "UX Designer",
-          department: "design",
-          company: "TechCorp Industries",
-          type: "team",
-          address: "456 Design Ave, San Francisco, CA",
-          avatar: "images/img.jpg",
-          rating: 4.9
-        },
-        {
-          id: 3,
-          firstName: "Emily",
-          lastName: "Rodriguez",
-          email: "emily.rodriguez@client.com",
-          phone: "+1 (555) 345-6789",
-          jobTitle: "Marketing Director",
-          department: "marketing",
-          company: "Client Solutions LLC",
-          type: "client",
-          address: "789 Business Blvd, New York, NY",
-          avatar: "images/user.png",
-          rating: 4.5
-        },
-        {
-          id: 4,
-          firstName: "David",
-          lastName: "Wilson",
-          email: "david.wilson@company.com",
-          phone: "+1 (555) 456-7890",
-          jobTitle: "Backend Developer",
-          department: "development",
-          company: "TechCorp Industries",
-          type: "team",
-          address: "321 Code Lane, Austin, TX",
-          avatar: "images/img.jpg",
-          rating: 4.7
-        },
-        {
-          id: 5,
-          firstName: "Lisa",
-          lastName: "Thompson",
-          email: "lisa.thompson@vendor.com",
-          phone: "+1 (555) 567-8901",
-          jobTitle: "Account Manager",
-          department: "sales",
-          company: "Vendor Partners Inc",
-          type: "vendor",
-          address: "654 Sales Street, Chicago, IL",
-          avatar: "images/user.png",
-          rating: 4.3
-        },
-        {
-          id: 6,
-          firstName: "James",
-          lastName: "Anderson",
-          email: "james.anderson@company.com",
-          phone: "+1 (555) 678-9012",
-          jobTitle: "DevOps Engineer",
-          department: "development",
-          company: "TechCorp Industries",
-          type: "team",
-          address: "987 Cloud Drive, Seattle, WA",
-          avatar: "images/img.jpg",
-          rating: 4.6
-        },
-        {
-          id: 7,
-          firstName: "Amanda",
-          lastName: "Davis",
-          email: "amanda.davis@company.com",
-          phone: "+1 (555) 789-0123",
-          jobTitle: "UI Designer",
-          department: "design",
-          company: "TechCorp Industries",
-          type: "team",
-          address: "111 Creative Blvd, Los Angeles, CA",
-          avatar: "images/user.png",
-          rating: 4.4
-        },
-        {
-          id: 8,
-          firstName: "Robert",
-          lastName: "Martinez",
-          email: "robert.martinez@client.com",
-          phone: "+1 (555) 890-1234",
-          jobTitle: "Project Manager",
-          department: "marketing",
-          company: "Global Marketing Inc",
-          type: "client",
-          address: "222 Project Way, Denver, CO",
-          avatar: "images/img.jpg",
-          rating: 4.7
-        },
-        {
-          id: 9,
-          firstName: "Jessica",
-          lastName: "Brown",
-          email: "jessica.brown@vendor.com",
-          phone: "+1 (555) 901-2345",
-          jobTitle: "Sales Representative",
-          department: "sales",
-          company: "Business Solutions Ltd",
-          type: "vendor",
-          address: "333 Commerce St, Miami, FL",
-          avatar: "images/user.png",
-          rating: 4.2
-        },
-        {
-          id: 10,
-          firstName: "Kevin",
-          lastName: "Taylor",
-          email: "kevin.taylor@company.com",
-          phone: "+1 (555) 012-3456",
-          jobTitle: "Full Stack Developer",
-          department: "development",
-          company: "TechCorp Industries",
-          type: "team",
-          address: "444 Stack Ave, Portland, OR",
-          avatar: "images/img.jpg",
-          rating: 4.8
-        },
-        {
-          id: 11,
-          firstName: "Michelle",
-          lastName: "Garcia",
-          email: "michelle.garcia@client.com",
-          phone: "+1 (555) 123-4560",
-          jobTitle: "Brand Manager",
-          department: "marketing",
-          company: "Creative Brands Co",
-          type: "client",
-          address: "555 Brand Lane, Nashville, TN",
-          avatar: "images/user.png",
-          rating: 4.6
-        },
-        {
-          id: 12,
-          firstName: "Christopher",
-          lastName: "Lee",
-          email: "christopher.lee@company.com",
-          phone: "+1 (555) 234-5601",
-          jobTitle: "QA Engineer",
-          department: "development",
-          company: "TechCorp Industries",
-          type: "team",
-          address: "666 Quality St, Boston, MA",
-          avatar: "images/img.jpg",
-          rating: 4.5
-        },
-        {
-          id: 13,
-          firstName: "Nicole",
-          lastName: "White",
-          email: "nicole.white@vendor.com",
-          phone: "+1 (555) 345-6012",
-          jobTitle: "Technical Support",
-          department: "support",
-          company: "Support Systems Inc",
-          type: "vendor",
-          address: "777 Help Desk Dr, Phoenix, AZ",
-          avatar: "images/user.png",
-          rating: 4.4
-        },
-        {
-          id: 14,
-          firstName: "Anthony",
-          lastName: "Harris",
-          email: "anthony.harris@company.com",
-          phone: "+1 (555) 456-7012",
-          jobTitle: "Product Manager",
-          department: "design",
-          company: "TechCorp Industries",
-          type: "team",
-          address: "888 Product Plaza, San Diego, CA",
-          avatar: "images/img.jpg",
-          rating: 4.9
-        },
-        {
-          id: 15,
-          firstName: "Rachel",
-          lastName: "Clark",
-          email: "rachel.clark@client.com",
-          phone: "+1 (555) 567-8012",
-          jobTitle: "Content Manager",
-          department: "marketing",
-          company: "Content Creators LLC",
-          type: "client",
-          address: "999 Content Way, Atlanta, GA",
-          avatar: "images/user.png",
-          rating: 4.3
-        },
-        {
-          id: 16,
-          firstName: "Steven",
-          lastName: "Lewis",
-          email: "steven.lewis@vendor.com",
-          phone: "+1 (555) 678-9012",
-          jobTitle: "Business Analyst",
-          department: "sales",
-          company: "Analytics Pro Ltd",
-          type: "vendor",
-          address: "101 Analysis Ave, Dallas, TX",
-          avatar: "images/img.jpg",
-          rating: 4.6
-        },
-        {
-          id: 17,
-          firstName: "Jennifer",
-          lastName: "Walker",
-          email: "jennifer.walker@company.com",
-          phone: "+1 (555) 789-0123",
-          jobTitle: "Data Scientist",
-          department: "development",
-          company: "TechCorp Industries",
-          type: "team",
-          address: "202 Data Dr, Minneapolis, MN",
-          avatar: "images/user.png",
-          rating: 4.8
-        },
-        {
-          id: 18,
-          firstName: "Daniel",
-          lastName: "Hall",
-          email: "daniel.hall@client.com",
-          phone: "+1 (555) 890-1234",
-          jobTitle: "Creative Director",
-          department: "design",
-          company: "Design Studio Pro",
-          type: "client",
-          address: "303 Creative Circle, Las Vegas, NV",
-          avatar: "images/img.jpg",
-          rating: 4.7
-        },
-        {
-          id: 19,
-          firstName: "Angela",
-          lastName: "Allen",
-          email: "angela.allen@vendor.com",
-          phone: "+1 (555) 901-2345",
-          jobTitle: "HR Specialist",
-          department: "support",
-          company: "Human Resources Plus",
-          type: "vendor",
-          address: "404 People Place, Salt Lake City, UT",
-          avatar: "images/user.png",
-          rating: 4.2
-        },
-        {
-          id: 20,
-          firstName: "Ryan",
-          lastName: "Young",
-          email: "ryan.young@company.com",
-          phone: "+1 (555) 012-3456",
-          jobTitle: "Mobile Developer",
-          department: "development",
-          company: "TechCorp Industries",
-          type: "team",
-          address: "505 Mobile Way, Charlotte, NC",
-          avatar: "images/img.jpg",
-          rating: 4.5
-        }
-      ];
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-      let filteredContacts = [...contacts];
-      let currentPage = 1;
-      const contactsPerPage = 6;
+// ── PAGINATION ──
+function renderPagination(total, totalPages) {
+  const row = document.getElementById('paginationRow');
+  if (totalPages <= 1) { row.innerHTML = ''; return; }
+  let html = '';
+  html += `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}><i class="fas fa-chevron-left"></i></button>`;
+  for (let i=1; i<=totalPages; i++) {
+    html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}><i class="fas fa-chevron-right"></i></button>`;
+  row.innerHTML = html;
+}
 
-      document.addEventListener('DOMContentLoaded', function() {
-        // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
+function goPage(p) {
+  const total = Math.ceil(getFiltered().length / PER_PAGE);
+  if (p < 1 || p > total) return;
+  currentPage = p;
+  renderGrid();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-        // Load contacts
-        displayContacts();
-        
-        // Add event listeners for filter buttons
-        document.querySelectorAll('input[name="contactType"]').forEach(radio => {
-          radio.addEventListener('change', filterContacts);
-        });
+// ── STAR ──
+function toggleStar(id, e) {
+  e.stopPropagation();
+  const c = contacts.find(x=>x.id===id);
+  if (c) { c.starred = !c.starred; save(); renderGrid(); }
+}
 
-        // Add search functionality
-        document.getElementById('contactSearch').addEventListener('input', searchContacts);
-      });
+// ── COPY EMAIL ──
+function copyEmail(e, email) {
+  e.stopPropagation();
+  navigator.clipboard.writeText(email).then(()=>showToast('이메일이 복사되었습니다!', 'success'));
+}
 
-      function displayContacts() {
-        const container = document.getElementById('contactsContainer');
-        const startIndex = (currentPage - 1) * contactsPerPage;
-        const endIndex = startIndex + contactsPerPage;
-        const contactsToShow = filteredContacts.slice(startIndex, endIndex);
+// ── ADD/EDIT MODAL ──
+function openAddModal() {
+  editingId = null;
+  document.getElementById('addModalTitle').textContent = '연락처 추가';
+  document.getElementById('inputName').value = '';
+  document.getElementById('inputEmail').value = '';
+  document.getElementById('inputPhone').value = '';
+  document.getElementById('inputTag').value = 'friend';
+  document.getElementById('inputOrg').value = '';
+  document.getElementById('inputNote').value = '';
+  document.getElementById('addModal').classList.add('open');
+}
 
-        container.innerHTML = '';
+function editContact(id) {
+  const c = contacts.find(x=>x.id===id);
+  if (!c) return;
+  editingId = id;
+  document.getElementById('addModalTitle').textContent = '연락처 수정';
+  document.getElementById('inputName').value = c.name;
+  document.getElementById('inputEmail').value = c.email;
+  document.getElementById('inputPhone').value = c.phone||'';
+  document.getElementById('inputTag').value = c.tag;
+  document.getElementById('inputOrg').value = c.org||'';
+  document.getElementById('inputNote').value = c.note||'';
+  document.getElementById('addModal').classList.add('open');
+}
 
-        contactsToShow.forEach(contact => {
-          const contactCard = createContactCard(contact);
-          container.appendChild(contactCard);
-        });
+function closeAddModal() {
+  document.getElementById('addModal').classList.remove('open');
+}
 
-        updatePagination();
-      }
+function saveContact() {
+  const name = document.getElementById('inputName').value.trim();
+  const email = document.getElementById('inputEmail').value.trim();
+  if (!name || !email) { showToast('이름과 이메일은 필수입니다!', 'error'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('올바른 이메일 주소를 입력하세요.', 'error'); return; }
 
-      function createContactCard(contact) {
-        const col = document.createElement('div');
-        col.className = 'col-md-4 col-sm-6 mb-4';
-        
-        col.innerHTML = `
-          <div class="contact-card">
-            <div class="contact-header">
-              <img src="${contact.avatar}" alt="${contact.firstName} ${contact.lastName}" class="contact-avatar" loading="lazy">
-              <div class="contact-type-badge">
-                <span class="badge bg-${getTypeColor(contact.type)}">${capitalizeFirst(contact.type)}</span>
-              </div>
-            </div>
-            <div class="contact-body">
-              <h5 class="contact-name">${contact.firstName} ${contact.lastName}</h5>
-              <p class="contact-title">${contact.jobTitle}</p>
-              <div class="contact-info">
-                <div class="contact-info-item">
-                  <i class="fas fa-envelope text-primary"></i>
-                  <span>${contact.email}</span>
-                </div>
-                <div class="contact-info-item">
-                  <i class="fas fa-phone text-success"></i>
-                  <span>${contact.phone}</span>
-                </div>
-                <div class="contact-info-item">
-                  <i class="fas fa-building text-info"></i>
-                  <span>${contact.company}</span>
-                </div>
-              </div>
-              <div class="contact-rating">
-                <span class="rating-stars">${generateStars(contact.rating)}</span>
-                <span class="rating-value">${contact.rating}</span>
-              </div>
-            </div>
-            <div class="contact-actions">
-              <button class="btn btn-outline-primary btn-sm" onclick="viewContactDetails(${contact.id})">
-                <i class="fas fa-eye"></i> View
-              </button>
-              <button class="btn btn-outline-success btn-sm" onclick="contactPerson(${contact.id})">
-                <i class="fas fa-comment"></i> Message
-              </button>
-              <button class="btn btn-outline-info btn-sm" onclick="callContact(${contact.id})">
-                <i class="fas fa-phone"></i> Call
-              </button>
-            </div>
-          </div>
-        `;
-        
-        return col;
-      }
+  if (editingId) {
+    const c = contacts.find(x=>x.id===editingId);
+    Object.assign(c, { name, email, phone: document.getElementById('inputPhone').value.trim(),
+      tag: document.getElementById('inputTag').value, org: document.getElementById('inputOrg').value.trim(),
+      note: document.getElementById('inputNote').value.trim() });
+    showToast('연락처가 수정되었습니다!', 'success');
+  } else {
+    contacts.push({ id: Date.now(), name, email, phone: document.getElementById('inputPhone').value.trim(),
+      tag: document.getElementById('inputTag').value, org: document.getElementById('inputOrg').value.trim(),
+      note: document.getElementById('inputNote').value.trim(), starred: false, addedAt: Date.now(), lastMailAt: null });
+    showToast('연락처가 추가되었습니다!', 'success');
+  }
+  save(); closeAddModal(); renderGrid();
+}
 
-      function getTypeColor(type) {
-        const colors = {
-          'team': 'success',
-          'client': 'primary',
-          'vendor': 'warning'
-        };
-        return colors[type] || 'secondary';
-      }
+// ── DELETE ──
+function deleteContact(id) {
+  const c = contacts.find(x=>x.id===id);
+  if (!c) return;
+  if (!confirm(`"${c.name}" 연락처를 삭제할까요?`)) return;
+  contacts = contacts.filter(x=>x.id!==id);
+  save(); renderGrid();
+  showToast('연락처가 삭제되었습니다.', 'success');
+}
 
-      function capitalizeFirst(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-      }
+// ── VIEW DETAIL ──
+function viewContact(id) {
+  const c = contacts.find(x=>x.id===id);
+  if (!c) return;
+  const content = document.getElementById('viewModalContent');
+  content.innerHTML = `
+    <div class="detail-hero">
+      <div class="detail-avatar">${initials(c.name)}</div>
+      <div class="detail-name">${escHtml(c.name)}</div>
+      <div class="detail-role">${escHtml(c.org||'소속 없음')}</div>
+      <div class="detail-tags">
+        <span class="tag-badge ${tagClass(c.tag)}">${tagLabel(c.tag)}</span>
+        ${c.starred ? '<span class="tag-badge" style="background:#fff8e1;color:#F57F17;">⭐ 즐겨찾기</span>' : ''}
+      </div>
+    </div>
+    <div class="modal-body">
+      <table class="detail-info-table">
+        <tr><td><i class="fas fa-envelope" style="margin-right:6px;color:var(--accent)"></i>Gmail</td><td><a href="mailto:${escHtml(c.email)}" style="color:var(--accent-dark)">${escHtml(c.email)}</a></td></tr>
+        ${c.phone ? `<tr><td><i class="fas fa-phone" style="margin-right:6px;color:var(--accent)"></i>전화</td><td>${escHtml(c.phone)}</td></tr>` : ''}
+        ${c.org ? `<tr><td><i class="fas fa-building" style="margin-right:6px;color:var(--accent)"></i>소속</td><td>${escHtml(c.org)}</td></tr>` : ''}
+        <tr><td><i class="fas fa-clock" style="margin-right:6px;color:var(--accent)"></i>마지막 메일</td><td>${timeAgo(c.lastMailAt)}</td></tr>
+        <tr><td><i class="fas fa-calendar-plus" style="margin-right:6px;color:var(--accent)"></i>추가일</td><td>${new Date(c.addedAt).toLocaleDateString('ko-KR')}</td></tr>
+      </table>
+      ${c.note ? `<div style="margin-top:14px;"><p style="font-size:0.78rem;font-weight:600;color:var(--text-secondary);margin-bottom:6px;">📝 메모</p><div class="notes-text">${escHtml(c.note)}</div></div>` : ''}
+    </div>
+  `;
+  document.getElementById('viewModalFooter').innerHTML = `
+    <button class="btn-cancel" onclick="closeViewModal()">닫기</button>
+    <button class="btn-cancel" onclick="closeViewModal();editContact(${c.id})"><i class="fas fa-pencil-alt" style="margin-right:5px"></i>수정</button>
+    <button class="btn-save" onclick="closeViewModal();openComposeModal(${c.id})"><i class="fas fa-paper-plane" style="margin-right:5px"></i>메일 보내기</button>
+  `;
+  document.getElementById('viewModal').classList.add('open');
+}
 
-      function generateStars(rating) {
-        const fullStars = Math.floor(rating);
-        const halfStar = rating % 1 >= 0.5 ? 1 : 0;
-        const emptyStars = 5 - fullStars - halfStar;
-        
-        let stars = '';
-        for (let i = 0; i < fullStars; i++) {
-          stars += '<i class="fas fa-star text-warning"></i>';
-        }
-        if (halfStar) {
-          stars += '<i class="fas fa-star-half-alt text-warning"></i>';
-        }
-        for (let i = 0; i < emptyStars; i++) {
-          stars += '<i class="far fa-star text-warning"></i>';
-        }
-        
-        return stars;
-      }
+function closeViewModal() {
+  document.getElementById('viewModal').classList.remove('open');
+}
 
-      function filterContacts() {
-        const selectedType = document.querySelector('input[name="contactType"]:checked').id;
-        const departmentFilter = document.querySelector('select[onchange="filterByDepartment(this.value)"]').value;
-        
-        filteredContacts = contacts.filter(contact => {
-          const typeMatch = selectedType === 'all' || contact.type === selectedType;
-          const deptMatch = !departmentFilter || contact.department === departmentFilter;
-          return typeMatch && deptMatch;
-        });
-        
-        currentPage = 1;
-        displayContacts();
-      }
+// ── COMPOSE MODAL ──
+const templates = {
+  greeting: { subject: '안녕하세요!', body: '안녕하세요,\n\n잘 지내고 계신가요? [연락한 이유를 작성하세요]한 이유로 연락드리고 싶어서 메일 남깁니다.\n\n감사합니다.' },
+  meeting: { subject: '미팅 요청드립니다', body: '안녕하세요,\n\n[원하시는 날짜를 작성하세요] 잠시 시간을 내주실 수 있으신가요?\n가능한 시간을 알려주시면 감사하겠습니다.\n\n감사합니다.' },
+  followup: { subject: '이전 내용 관련 팔로업', body: '안녕하세요,\n\n지난번에 말씀 나눴던 내용 관련하여\n진행 상황을 여쭤보고 싶어 연락드립니다.\n\n감사합니다.' },
+  thanks: { subject: '감사합니다!', body: '안녕하세요,\n\n지난번에 도움 주셔서 정말 감사합니다.\n덕분에 잘 해결할 수 있었습니다.\n\n앞으로도 잘 부탁드립니다 😊' },
+  question: { subject: '문의드립니다', body: '안녕하세요,\n\n다름이 아니라 궁금한 점이 있어서 연락드립니다.\n\n[질문 내용을 여기에 작성하세요]\n\n빠른 답변 부탁드립니다. 감사합니다.' },
+};
 
-      function filterByDepartment(department) {
-        filterContacts();
-      }
+function applyTemplate(key) {
+  const t = templates[key];
+  if (t) {
+    document.getElementById('composeSubject').value = t.subject;
+    document.getElementById('composeBody').value = t.body;
+  }
+}
 
-      function filterByLetter(letter) {
-        if (letter === 'all') {
-          filteredContacts = [...contacts];
-        } else {
-          filteredContacts = contacts.filter(contact => 
-            contact.lastName.charAt(0).toUpperCase() === letter
-          );
-        }
-        
-        currentPage = 1;
-        displayContacts();
-        
-        // Update active button
-        document.querySelectorAll('.alphabet-filter .btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-      }
+function openComposeModal(id) {
+  const c = contacts.find(x=>x.id===id);
+  if (!c) return;
+  composeTarget = c;
+  document.getElementById('composeToEmail').textContent = c.email;
+  document.getElementById('composeToName').textContent = `(${c.name})`;
+  document.getElementById('composeSubject').value = '';
+  document.getElementById('composeBody').value = '';
+  document.getElementById('composeModal').classList.add('open');
+}
 
-      function searchContacts() {
-        const searchTerm = document.getElementById('contactSearch').value.toLowerCase();
-        
-        filteredContacts = contacts.filter(contact => 
-          contact.firstName.toLowerCase().includes(searchTerm) ||
-          contact.lastName.toLowerCase().includes(searchTerm) ||
-          contact.email.toLowerCase().includes(searchTerm) ||
-          contact.jobTitle.toLowerCase().includes(searchTerm) ||
-          contact.company.toLowerCase().includes(searchTerm)
-        );
-        
-        currentPage = 1;
-        displayContacts();
-      }
+function closeComposeModal() {
+  document.getElementById('composeModal').classList.remove('open');
+  composeTarget = null;
+}
 
-      function updatePagination() {
-        const totalPages = Math.ceil(filteredContacts.length / contactsPerPage);
-        const pagination = document.getElementById('contactPagination');
-        
-        pagination.innerHTML = '';
-        
-        // Previous button
-        const prevLi = document.createElement('li');
-        prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
-        prevLi.innerHTML = `<a class="page-link" href="#" onclick="previousPage()"><i class="fas fa-chevron-left"></i> Previous</a>`;
-        pagination.appendChild(prevLi);
-        
-        // Page numbers
-        for (let i = 1; i <= totalPages; i++) {
-          const pageLi = document.createElement('li');
-          pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
-          pageLi.innerHTML = `<a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>`;
-          pagination.appendChild(pageLi);
-        }
-        
-        // Next button
-        const nextLi = document.createElement('li');
-        nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
-        nextLi.innerHTML = `<a class="page-link" href="#" onclick="nextPage()">Next <i class="fas fa-chevron-right"></i></a>`;
-        pagination.appendChild(nextLi);
-      }
+async function sendMailDirect() {
+  if (!composeTarget) return;
 
-      function previousPage() {
-        if (currentPage > 1) {
-          currentPage--;
-          displayContacts();
-        }
-      }
+  const subject = document.getElementById('composeSubject').value.trim();
+  const body    = document.getElementById('composeBody').value.trim();
 
-      function nextPage() {
-        const totalPages = Math.ceil(filteredContacts.length / contactsPerPage);
-        if (currentPage < totalPages) {
-          currentPage++;
-          displayContacts();
-        }
-      }
+  if (!subject) { showToast('제목을 입력하세요.', 'error'); return; }
+  if (!body)    { showToast('내용을 입력하세요.', 'error'); return; }
 
-      function goToPage(page) {
-        currentPage = page;
-        displayContacts();
-      }
+  const btn = document.querySelector('#composeModal .btn-save');
+  btn.disabled = true;
+  btn.textContent = '전송 중...';
 
-      function viewContactDetails(contactId) {
-        const contact = contacts.find(c => c.id === contactId);
-        if (contact) {
-          const modalContent = document.getElementById('contactDetailsContent');
-          
-          // Sanitize all user-controlled data to prevent XSS attacks
-          const safeFirstName = window.sanitizeText ? window.sanitizeText(contact.firstName) : contact.firstName;
-          const safeLastName = window.sanitizeText ? window.sanitizeText(contact.lastName) : contact.lastName;
-          const safeJobTitle = window.sanitizeText ? window.sanitizeText(contact.jobTitle) : contact.jobTitle;
-          const safeEmail = window.sanitizeText ? window.sanitizeText(contact.email) : contact.email;
-          const safePhone = window.sanitizeText ? window.sanitizeText(contact.phone) : contact.phone;
-          const safeCompany = window.sanitizeText ? window.sanitizeText(contact.company) : contact.company;
-          const safeAddress = window.sanitizeText ? window.sanitizeText(contact.address) : contact.address;
-          
-          const contactDetailsHtml = `
-            <div class="row">
-              <div class="col-md-4 text-center">
-                <img src="${contact.avatar}" alt="${safeFirstName} ${safeLastName}" class="contact-detail-avatar mb-3" loading="lazy">
-                <h4>${safeFirstName} ${safeLastName}</h4>
-                <p class="text-muted">${safeJobTitle}</p>
-                <div class="rating mb-3">
-                  ${generateStars(contact.rating)} <span class="ms-2">${contact.rating}/5.0</span>
-                </div>
-              </div>
-              <div class="col-md-8">
-                <h6>Contact Information</h6>
-                <table class="table table-borderless">
-                  <tr><td><strong>Email:</strong></td><td>${safeEmail}</td></tr>
-                  <tr><td><strong>Phone:</strong></td><td>${safePhone}</td></tr>
-                  <tr><td><strong>Company:</strong></td><td>${safeCompany}</td></tr>
-                  <tr><td><strong>Department:</strong></td><td>${capitalizeFirst(contact.department)}</td></tr>
-                  <tr><td><strong>Type:</strong></td><td><span class="badge bg-${getTypeColor(contact.type)}">${capitalizeFirst(contact.type)}</span></td></tr>
-                  <tr><td><strong>Address:</strong></td><td>${safeAddress}</td></tr>
-                </table>
-              </div>
-            </div>
-          `;
-          
-          // Use safe innerHTML setter if available, otherwise sanitize manually
-          if (window.setSafeInnerHTML) {
-            window.setSafeInnerHTML(modalContent, contactDetailsHtml);
-          } else {
-            modalContent.innerHTML = contactDetailsHtml; // Fallback for development
-          }
-          
-          const modal = new bootstrap.Modal(document.getElementById('contactDetailsModal'));
-          modal.show();
-        }
-      }
+  // 미리 저장
+  const targetName = composeTarget.name;
+  const targetEmail = composeTarget.email;
+  const targetId = composeTarget.id;
 
-      function saveContact() {
-        // Get form data
-        const form = document.getElementById('addContactForm');
-        const formData = new FormData(form);
-        
-        // Validate required fields
-        if (!document.getElementById('firstName').value || !document.getElementById('lastName').value || !document.getElementById('email').value) {
-          alert('Please fill in all required fields.');
-          return;
-        }
-        
-        // Create new contact object
-        const newContact = {
-          id: contacts.length + 1,
-          firstName: document.getElementById('firstName').value,
-          lastName: document.getElementById('lastName').value,
-          email: document.getElementById('email').value,
-          phone: document.getElementById('phone').value || 'N/A',
-          jobTitle: document.getElementById('jobTitle').value || 'N/A',
-          department: document.getElementById('department').value || 'general',
-          company: document.getElementById('company').value || 'N/A',
-          type: document.getElementById('contactType').value,
-          address: document.getElementById('address').value || 'N/A',
-          avatar: 'images/user.png',
-          rating: 4.0
-        };
-        
-        // Add to contacts array
-        contacts.push(newContact);
-        filteredContacts = [...contacts];
-        
-        // Refresh display
-        displayContacts();
-        
-        // Close modal and reset form
-        const modal = bootstrap.Modal.getInstance(document.getElementById('addContactModal'));
-        modal.hide();
-        form.reset();
-        
-        alert('Contact added successfully!');
-      }
+  try {
+    const res = await fetch(`${FLASK_URL}/send-mail`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        to:      targetEmail,
+        subject: subject,
+        body:    body,
+      }),
+    });
+    const data = await res.json();
 
-      function contactPerson(contactId) {
-        const contact = contacts.find(c => c.id === contactId);
-        alert(`Messaging ${contact.firstName} ${contact.lastName} at ${contact.email}`);
-      }
+    if (!data.ok) throw new Error(data.error);
 
-      function callContact(contactId) {
-        const contact = contacts.find(c => c.id === contactId);
-        alert(`Calling ${contact.firstName} ${contact.lastName} at ${contact.phone}`);
-      }
+    const c = contacts.find(x => x.id === targetId);
+    if (c) { c.lastMailAt = Date.now(); save(); renderGrid(); }
+    closeComposeModal();
+    showToast(`${targetName}에게 메일을 보냈습니다! ✉️`, 'success');
 
-      function editContact() {
-        alert('Edit contact functionality would open the edit form.');
-      }
-    </script>
+  } catch (e) {
+    showToast('전송 실패: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:6px;"></i>보내기';
+  }
+}
+// ── TOAST ──
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  const i = t.querySelector('i');
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = `toast ${type}`;
+  i.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
 
-    <style>
-      .stats-card {
-        transition: transform 0.3s ease;
-        border-radius: 10px;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      }
+// ── EVENTS ──
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value;
+  currentPage = 1;
+  renderGrid();
+});
 
-      .stats-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      }
+document.getElementById('sortSelect').addEventListener('change', e => {
+  sortMode = e.target.value;
+  renderGrid();
+});
 
-      .stat-icon {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
-      }
+document.querySelectorAll('.ftab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    filterMode = btn.dataset.filter;
+    currentPage = 1;
+    renderGrid();
+  });
+});
 
-      .stat-number {
-        font-size: 2rem;
-        font-weight: bold;
-        margin: 0;
-      }
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
 
-      .stat-label {
-        color: #6c757d;
-        font-size: 0.9rem;
-        margin: 0;
-      }
+// ── INIT ──
+// 프로필 이름: URL 파라미터 → sessionStorage → 기본값
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const nameParam = params.get('name');
+  const name = nameParam
+    ? decodeURIComponent(nameParam)
+    : (sessionStorage.getItem('gw_user_name') || '-');
+  if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
+  const gmailIdParam = params.get('gmail_id');
+  if (gmailIdParam) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+  document.getElementById('google-profile-name').textContent = name;
+})();
 
-      .contact-card {
-        background: white;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-        height: 100%;
-        border: 1px solid #e9ecef;
-      }
-
-      .contact-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      }
-
-      .contact-header {
-        text-align: center;
-        position: relative;
-        margin-bottom: 15px;
-      }
-
-      .contact-avatar {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        border: 4px solid #fff;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      }
-
-      .contact-type-badge {
-        position: absolute;
-        top: 0;
-        right: 0;
-      }
-
-      .contact-name {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 5px;
-        color: #2c3e50;
-      }
-
-      .contact-title {
-        color: #6c757d;
-        font-size: 0.9rem;
-        margin-bottom: 15px;
-      }
-
-      .contact-info-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 8px;
-        font-size: 0.85rem;
-      }
-
-      .contact-info-item i {
-        width: 20px;
-        margin-right: 8px;
-      }
-
-      .contact-rating {
-        text-align: center;
-        margin: 15px 0;
-        padding: 10px;
-        background: #f8f9fa;
-        border-radius: 8px;
-      }
-
-      .rating-value {
-        font-weight: bold;
-        color: #495057;
-      }
-
-      .contact-actions {
-        display: flex;
-        gap: 5px;
-        justify-content: center;
-      }
-
-      .contact-actions .btn {
-        flex: 1;
-        font-size: 0.8rem;
-      }
-
-      .alphabet-filter .btn {
-        min-width: 40px;
-      }
-
-      .alphabet-filter .btn.active {
-        background-color: #007bff;
-        color: white;
-        border-color: #007bff;
-      }
-
-      .contact-detail-avatar {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        border: 5px solid #f8f9fa;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      }
-
-      .modal-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-radius: 0.5rem 0.5rem 0 0;
-      }
-
-      .modal-header .btn-btn-close {
-        filter: invert(1);
-      }
-
-      .x_panel {
-        border-radius: 10px;
-        border: none;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-      }
-
-      .btn-check:checked + .btn-outline-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-        color: white;
-      }
-    </style>
-  </body>
+renderAlpha();
+renderGrid();
+</script>
+</body>
 </html>
