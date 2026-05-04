@@ -1,7 +1,7 @@
 // src/apps-script/common.js
-var TunnelURL = "https://laevorotatory-nonnutritively-nelle.ngrok-free.dev"; // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
+var TunnelURL = "https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev"; // ngrok로 열어둔 백엔드 서버(Flask/GraphRAG) 주소
 const WEBAPP_URL =
-  "https://script.google.com/macros/s/AKfycbwS6LYYbgc2HteM2XaAUeilhJsWgUaCAWYPj21FJsY3sKro72XRrIdHTfo9b-jC9bXk/exec"; // Apps Script Web App으로 배포된 URL
+  "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec"; // Apps Script Web App으로 배포된 URL
 
 const OLIVE = "#c6d8a5";
 
