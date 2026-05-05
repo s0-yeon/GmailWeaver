@@ -89,3 +89,4 @@ When filtering by date, match against this field.
 - Omit sections that have no supporting data — do not write empty headers.
 - Respond in the same language as the user's question.
 - Korean questions MUST be answered in Korean.
+- When listing emails in your response, always include the email ID in the format "ID: <16-digit-hex>" for each email mentioned.

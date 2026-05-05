@@ -15,6 +15,7 @@ import shutil
 import zlib
 import traceback 
 import urllib.parse     # import missing 해결
+
 from util.date_query import run_date_range_query
 
 from dotenv import load_dotenv
@@ -44,7 +45,6 @@ load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: Graph
 app = Flask(__name__)   # Flask 앱 객체 생성. 해당 파일이 서버의 메인 애플리케이션이라는 의미
 CORS(app)   # Cross-Origin Resource Sharing 허용 (다른 환경에서 이 서버의 API를 호출할 수 있도록)
 
-# Apps Script Web App URL (캘린더, 라벨 등 모든 프록시에서 공통 사용)
 WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw7KX3gzE6do2sqDAlWlBsHFNwIX_ZCUILUNipin87mIyIw1_HhKWUHC0oLhM8pHUVhfA/exec"
 
 
@@ -118,7 +118,6 @@ def _run_graphrag(message, raw_message, resMethod,paths, resType):
     answer = answer.strip()
     print(answer)
     return answer.strip()
-
 
 # 텍스트 → 캘린더 JSON 변환
 def _convert_to_calendar_json(text):
@@ -870,6 +869,7 @@ def run_query_async():
     update_job(job_id, status="pending", result=None, resType=resType)
 
     def _worker():  # 백그라운드 스레드에서 실행되는 실제 작업 함수
+        from util.graphrag_query import run_graphrag_query
         try:
 
             paths = UserPaths(BASE_DIR, gmail_id)
@@ -878,11 +878,18 @@ def run_query_async():
 
             # 날짜 범위 쿼리일 시 parquet 직접 필터링해서 LLM에게 넘기기, 아니면 GraphRAG로 처리
             answer = run_date_range_query(message, paths) # 이게 None이면 GraphRAG로 
+            source_ids = []  # 초기화
             if answer is None:
                 full_message = message + " 영어 말고 한국어로 답변해줘."
-                resMethod = _classify_query_method(message)  # LLM에 질의 전달하기 전, 질의의 유형 판별. "local" or "global"
-                answer = _run_graphrag(full_message, message,resMethod, paths, resType)
-                # answer = _run_graphrag(full_message, resMethod, paths, resType)
+
+                resMethod = _classify_query_method(message)
+                try: # 엔진 객체 직접 호출 방식
+                    answer, source_ids = run_graphrag_query(full_message,message, paths, method=resMethod)
+                except Exception as e:
+                    # API 방식 실패 시 기존 CLI 방식으로 자동 fallback
+                    print(f"[ENGINE] API 실패, CLI fallback: {e}")
+                    answer = _run_graphrag(full_message,message, resMethod, paths, resType)
+                    source_ids = _extract_source_mail_ids(answer)
 
             if resType.lower() == "calendar":
                 result = json.dumps(_convert_to_calendar_json(answer), ensure_ascii=False)
@@ -890,7 +897,6 @@ def run_query_async():
                 
             else:
                 result = answer
-                source_ids = _extract_source_mail_ids(answer)
                 update_job(job_id, status="done", result=result, source_ids=source_ids)
 
         except Exception as e:
