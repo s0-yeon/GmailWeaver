@@ -1,5 +1,5 @@
 # src/util/graphrag_engine.py
-# GraphRAG LocalSearch 엔진 유저별로 메모리에 캐싱해서 재사용하는 모듈
+# GraphRAG LocalSearch, GlobalSearch 엔진 유저별로 메모리에 캐싱해서 재사용하는 모듈
 
 import os
 import tiktoken # 텍스트 토큰으로 변환하는 OpenAI 토크나이저
@@ -20,10 +20,10 @@ from graphrag.query.indexer_adapters import (
 from graphrag.query.structured_search.local_search.mixed_context import LocalSearchMixedContext  # 로컬 서치 컨텍스트 빌더
 from graphrag.query.structured_search.local_search.search import LocalSearch   # 실제 로컬 서치 엔진
 from graphrag.vector_stores.lancedb import LanceDBVectorStore                  # 임베딩 저장용 로컬 벡터 DB
-from graphrag.language_model.protocol.base import ChatModel
-from collections.abc import AsyncGenerator
+from graphrag.language_model.protocol.base import ChatModel # LLM 모델 인터페이스 (추상 클래스). DirectOpenAIChatModel이 이를 구현
+from collections.abc import AsyncGenerator # 비동기 제너레이터 타입 힌트용
 from graphrag.query.structured_search.global_search.community_context import GlobalCommunityContext
-from graphrag.query.structured_search.global_search.search import GlobalSearch
+from graphrag.query.structured_search.global_search.search import GlobalSearch # 실제 글로벌 서치 엔진
 
 class _ModelOutput:
     """ModelOutput 구현체: content 속성만 있으면 됨"""
