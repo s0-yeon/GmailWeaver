@@ -229,6 +229,118 @@
         66%  { transform: translate(-25px, 20px) scale(0.95); }
         100% { transform: translate(0, 0) scale(1); }
       }
+
+      @keyframes gw-badge-pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50%       { opacity: 0.4; transform: scale(1.4); }
+      }
+
+      /* 로그 라인 타입별 색상 */
+      #gw-log-output {
+        height: 240px;
+        overflow-y: auto;
+        overflow-x: hidden;        /* 가로 스크롤 방지 */
+        padding: 8px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        background: #f7fdf9;
+        scrollbar-width: thin;
+        scrollbar-color: #a8d5bc #f0faf4;
+        box-sizing: border-box;
+      }
+      #gw-log-output::-webkit-scrollbar { width: 5px; }
+      #gw-log-output::-webkit-scrollbar-track { background: #f0faf4; }
+      #gw-log-output::-webkit-scrollbar-thumb {
+        background: #a8d5bc;
+        border-radius: 999px;
+      }
+
+      .gw-log-line {
+        font-size: 0.8rem;
+        line-height: 1.5;
+        white-space: normal;       /* pre-wrap 제거 */
+        word-break: break-all;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 7px;
+        align-items: flex-start;
+        padding: 5px 8px;
+        border-radius: 6px;
+        border-bottom: 1px solid rgba(26,158,110,0.07);
+        transition: background 0.15s;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        box-sizing: border-box;
+        min-height: 0;
+        overflow: visible;
+      }
+      .gw-log-line:last-child { border-bottom: none; }
+      .gw-log-line:hover { background: rgba(26,158,110,0.05); }
+
+      .gw-log-line .ts {
+        display: inline-block;
+        background: #1a9e6e;
+        color: #ffffff;
+        font-size: 0.7rem;
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+        padding: 2px 6px;
+        border-radius: 4px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        user-select: none;
+        letter-spacing: 0.3px;
+        line-height: 1.4;
+        margin-top: 1px;           /* 아이콘/메시지랑 수직 맞춤 */
+        height: fit-content;
+      }
+
+      .gw-log-line .icon {
+        flex-shrink: 0;
+        font-size: 0.75rem;
+        line-height: 1.5;
+        margin-top: 0;             /* 튀는 margin 제거 */
+        height: fit-content;
+      }
+
+      .gw-log-line .msg {
+        flex: 1;
+        min-width: 0;
+        word-break: break-word;    /* break-all → break-word */
+        line-height: 1.5;
+        overflow-wrap: break-word;
+      }
+
+      /* progress */
+      .gw-log-line.progress { background: #ffffff; }
+      .gw-log-line.progress .icon { color: #1a9e6e; }
+      .gw-log-line.progress .msg  { color: #1c4a35; }
+
+      /* done */
+      .gw-log-line.done {
+        background: linear-gradient(90deg, #e8f7f0 0%, #f7fdf9 100%);
+        border-left: 3px solid #1a9e6e;
+      }
+      .gw-log-line.done .ts   { background: #0f7a52; }
+      .gw-log-line.done .icon { color: #0f7a52; }
+      .gw-log-line.done .msg  { color: #0f7a52; font-weight: 700; }
+
+      /* failed */
+      .gw-log-line.failed {
+        background: linear-gradient(90deg, #fff0f0 0%, #fff8f8 100%);
+        border-left: 3px solid #ef4444;
+      }
+      .gw-log-line.failed .ts   { background: #dc2626; }
+      .gw-log-line.failed .icon { color: #ef4444; }
+      .gw-log-line.failed .msg  { color: #b91c1c; font-weight: 600; }
+
+      /* system */
+      .gw-log-line.system { background: transparent; }
+      .gw-log-line.system .ts   { background: #9ca3af; }
+      .gw-log-line.system .icon { color: #9ca3af; }
+      .gw-log-line.system .msg  { color: #9ca3af; font-style: italic; }
+
     </style>
   </head>
 
@@ -291,6 +403,29 @@
             </div>
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item">
+                  <button id="gw-log-toggle-btn" type="button"
+                    title="인덱싱 로그"
+                    style="
+                      background: none; border: none; cursor: pointer;
+                      display: flex; align-items: center; gap: 6px;
+                      color: #73879C; font-size: 0.9rem; padding: 4px 8px;
+                      border-radius: 8px; transition: background 0.2s, color 0.2s;
+                    "
+                    onmouseover="this.style.background='#f0f7f3'; this.style.color='#1a9e6e';"
+                    onmouseout="this.style.background='none'; this.style.color='#73879C';">
+                    <i class="bi bi-terminal" style="font-size: 1.1rem;"></i>
+                    <span style="font-size: 0.85rem;">인덱싱 로그</span>
+                    <!-- 상태 뱃지 -->
+                    <span id="gw-log-badge" style="
+                      display: none;
+                      width: 8px; height: 8px;
+                      border-radius: 50%;
+                      background: #1a9e6e;
+                      animation: gw-badge-pulse 1.2s ease-in-out infinite;
+                    "></span>
+                  </button>
+                </li>
                 <li class="nav-item dropdown">
                   <a href="#" role="button" class="dropdown-toggle" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color:inherit;">
                     <i class="bi bi-translate" style="font-size: 1.2rem; vertical-align: middle;"></i>
@@ -350,6 +485,89 @@
 
       </div>
     </div>
+
+    <!-- ── 인덱싱 로그 패널 ── -->
+    <div id="gw-log-panel" style="
+      position: fixed;
+      top: 60px; right: 0;
+      width: 440px;
+      max-height: 0;
+      overflow: hidden;
+      background: #ffffff;
+      border-left: 3px solid #1a9e6e;
+      border-bottom: 3px solid #1a9e6e;
+      border-radius: 0 0 0 16px;
+      box-shadow: -8px 8px 40px rgba(26,158,110,0.15), 0 4px 24px rgba(0,0,0,0.08);
+      z-index: 9999;
+      transition: max-height 0.38s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease;
+      opacity: 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    ">
+
+      <!-- 헤더 -->
+      <div style="
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 12px 16px;
+        border-bottom: 1px solid #d8ebe3;
+        background: linear-gradient(135deg, #e8f7f0 0%, #f0faf5 100%);
+      ">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a9e6e, #34d399);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(26,158,110,0.35);
+            flex-shrink: 0;
+          ">
+            <i class="bi bi-activity" style="color: #fff; font-size: 0.85rem;"></i>
+          </div>
+          <div>
+            <div style="color: #1c4a35; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.3px;">
+              인덱싱 로그
+            </div>
+            <div style="color: #6aab8a; font-size: 0.7rem; margin-top: 1px;">
+              실시간 진행 현황
+            </div>
+          </div>
+          <span id="gw-log-status-badge" style="
+            font-size: 0.7rem; padding: 3px 10px;
+            border-radius: 999px;
+            background: #e8f7f0;
+            color: #1a9e6e;
+            border: 1.5px solid #a8d5bc;
+            font-weight: 600;
+            margin-left: 2px;
+          ">대기중</span>
+        </div>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <button id="gw-log-clear-btn" type="button" style="
+            background: #fff; border: 1.5px solid #d8ebe3;
+            color: #6aab8a; font-size: 0.72rem; padding: 4px 10px;
+            border-radius: 6px; cursor: pointer;
+            transition: all 0.2s; font-weight: 500;
+          "
+          onmouseover="this.style.borderColor='#1a9e6e'; this.style.color='#1a9e6e'; this.style.background='#f0faf4';"
+          onmouseout="this.style.borderColor='#d8ebe3'; this.style.color='#6aab8a'; this.style.background='#fff';">
+            지우기
+          </button>
+          <button id="gw-log-close-btn" type="button" style="
+            background: #fff; border: 1.5px solid #d8ebe3;
+            color: #9ca3af; font-size: 0.95rem; cursor: pointer;
+            width: 28px; height: 28px;
+            border-radius: 6px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+          "
+          onmouseover="this.style.borderColor='#fca5a5'; this.style.color='#ef4444'; this.style.background='#fff5f5';"
+          onmouseout="this.style.borderColor='#d8ebe3'; this.style.color='#9ca3af'; this.style.background='#fff';">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      </div>
+
+
+</div>
+
 
     <script>
       var _graphReady = false;
@@ -541,23 +759,174 @@
 
         // 6. 인덱싱 진행도 SSE
         // 서버가 progress/완료/실패 이벤트를 push하면 즉시 console.log로 출력
+        // 6. 인덱싱 진행도 SSE → 로그 패널 연동
         (function listenIndexingProgress() {
+
+          /* ── 요소 참조 ── */
+          const panel       = document.getElementById('gw-log-panel');
+          const output      = document.getElementById('gw-log-output');
+          const toggleBtn   = document.getElementById('gw-log-toggle-btn');
+          const closeBtn    = document.getElementById('gw-log-close-btn');
+          const clearBtn    = document.getElementById('gw-log-clear-btn');
+          const badge       = document.getElementById('gw-log-badge');
+          const statusBadge = document.getElementById('gw-log-status-badge');
+          const progressBar = document.getElementById('gw-log-progress-bar');
+          const progressPct = document.getElementById('gw-log-progress-pct');
+
+          let isOpen = false;
+
+          /* ── 패널 열기/닫기 ── */
+          function openPanel() {
+            isOpen = true;
+            panel.style.maxHeight = '360px';
+            panel.style.opacity   = '1';
+          }
+          function closePanel() {
+            isOpen = false;
+            panel.style.maxHeight = '0';
+            panel.style.opacity   = '0';
+          }
+
+          toggleBtn.addEventListener('click', () => isOpen ? closePanel() : openPanel());
+          closeBtn.addEventListener('click', closePanel);
+
+          /* ── 로그 추가 ── */
+          function addLog(text, type = 'progress') {
+            const now = new Date().toLocaleTimeString('ko-KR', {
+              hour12: false
+            });
+
+            requestAnimationFrame(() => {
+              const line = document.createElement('div');
+              line.className = `gw-log-line ${type}`;
+
+              const prefix = {
+                progress: '●',
+                done: '✔',
+                failed: '✖',
+                system: '◎'
+              }[type] || '●';
+
+              line.innerHTML =
+                `<span class="ts">${now}</span>` +
+                `<span class="icon">${prefix}</span>` +
+                `<span class="msg">${text}</span>`;
+
+              output.appendChild(line);
+
+              // 자동 스크롤
+              output.scrollTop = output.scrollHeight;
+            });
+          }
+
+          /* ── 진행률 업데이트 ── */
+          function setProgress(pct) {
+            progressBar.style.width = pct + '%';
+            progressPct.textContent = pct + '%';
+          }
+
+          /* ── 상태 뱃지 ── */
+          function setStatus(label, color, bgColor) {
+            statusBadge.textContent       = label;
+            statusBadge.style.color       = color;
+            statusBadge.style.borderColor = color;
+            statusBadge.style.background  = bgColor || (color + '1a');
+          }
+
+          /* ── 지우기 ── */
+          clearBtn.addEventListener('click', () => {
+            output.innerHTML = '';
+            setProgress(0);
+            setStatus('대기중', '#1a9e6e');
+          });
+
+          /* ── SSE 연결 ── */
+          addLog('SSE 연결 중...', 'system');
           const es = new EventSource('/indexing-stream');
 
-          es.onmessage = function(e) {
+          es.onopen = function () {
+            addLog('서버 연결됨. 인덱싱 대기 중...', 'system');
+          };
+
+          es.onmessage = function (e) {
             try {
               const data = JSON.parse(e.data);
+
               if (data.type === 'progress') {
-                console.log(`[인덱싱] ${data.progress}% - ${data.message}`);
+                // 진행 중: 뱃지 표시 + 패널 자동 오픈
+                badge.style.display = 'block';
+                setStatus('진행중', '#d97706', '#fef3c7');
+                setProgress(data.progress ?? 0);
+                addLog(`${data.progress}% - ${data.message}`, 'progress');
+
+                if (!isOpen) openPanel(); // 인덱싱 시작 시 자동으로 패널 열기
+
               } else if (data.type === 'done') {
-                console.log(`[인덱싱] 완료 - ${data.message}`);
+                badge.style.display = 'none';
+                setStatus('완료', '#0f7a52', '#e8f7f0');
+                setProgress(100);
+                addLog(data.message || '인덱싱이 완료되었습니다.', 'done');
+
               } else if (data.type === 'failed') {
-                console.log(`[인덱싱] 실패 - ${data.message}`);
+                badge.style.display = 'none';
+                setStatus('실패', '#dc2626', '#fff0f0');
+                addLog(data.message || '인덱싱 중 오류가 발생했습니다.', 'failed');
               }
-            } catch (_) {}
+            } catch (_) {
+              addLog('데이터 파싱 오류', 'failed');
+            }
           };
+
+          es.onerror = function () {
+            addLog('SSE 연결 끊김. 재연결 대기 중...', 'system');
+            setStatus('연결 끊김', '#dc2626', '#fff0f0');
+            badge.style.display = 'none';
+          };
+
         })();
 });
     </script>
+    
+<style>
+  @keyframes gw-shimmer {
+    0%   { left: -60%; }
+    100% { left: 120%; }
+  }
+</style>
+      <!-- 진행률 바 -->
+      <div style="padding: 8px 16px 4px; background: #0d1f16;">
+        <div style="
+          display: flex; justify-content: space-between;
+          font-size: 0.72rem; color: #4d7a5e; margin-bottom: 4px;
+        ">
+          <span id="gw-log-progress-label">진행률</span>
+          <span id="gw-log-progress-pct">0%</span>
+        </div>
+        <div style="
+          width: 100%; height: 4px;
+          background: #1e3828; border-radius: 999px; overflow: hidden;
+        ">
+          <div id="gw-log-progress-bar" style="
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #1a9e6e, #34d399);
+            border-radius: 999px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 8px rgba(26,158,110,0.6);
+          "></div>
+        </div>
+      </div>
+
+      <!-- 로그 출력 영역 -->
+      <div id="gw-log-output" style="
+        height: 260px;
+        overflow-y: auto;
+        padding: 10px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        scrollbar-width: thin;
+        scrollbar-color: #a8d5bc #f0faf4;
+      "></div>
+    </div>
   </body>
 </html>
