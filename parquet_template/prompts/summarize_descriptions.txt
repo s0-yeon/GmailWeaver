@@ -1,29 +1,66 @@
-You are a helpful assistant responsible for generating a comprehensive 
-summary of the data provided below.
+You are a helpful assistant responsible for generating a comprehensive summary of the data provided below.
 
-Given one or two entities, and a list of descriptions, all related to 
-the same entity or group of entities. Please concatenate all of these 
-into a single, comprehensive description. Make sure to include 
-information collected from all the descriptions. If the provided 
-descriptions are contradictory, please resolve the contradictions and 
-provide a single, coherent summary. Make sure it is written in third 
-person, and include the entity names so we have the full context.
+Given one or two entities, and a list of descriptions, all related to the same entity or group of entities. 
+Please concatenate all of these into a single, comprehensive description. 
+Make sure to include information collected from all the descriptions. 
+If the provided descriptions are contradictory, please resolve the contradictions and provide a single, coherent summary. 
+Make sure it is written in third person, and include the entity names so we have the full context.
+
+-Entity Description Format Rules-
+
+엔티티 타입에 따라 아래 포맷을 반드시 유지한다. 포맷 외의 자연어 서술 금지.
+
+Email:        Subject: <제목> | ID: <mail_id> | Date: <YYYY-MM-DD HH:MM> | Tone: <formal/casual/transactional/notification/alert> | Summary: <1-sentence. 첨부파일 내용이 있으면 통합하여 작성>
+Person:       Account: <email> | Name: <name/None>
+Organization: OrgName: <organization_name> | Department: <department/None>
+Topic:        Priority: <high/mid/low> | Summary: <1문장>
+Label:        Category: <label_name>
+Event:        EventName: <Event Name> | Schedule: <YYYY-MM-DD HH:MM> | Location: <place/None> | Status: <confirmed/tentative>
+Attachment:   'Filename: <name> | Type: <file_type> | Summary: <1문장>
 
 -Additional Rules-
 
-* 동일 인물 병합: 엔티티 이름이 다르더라도 동일한 이메일 주소를 공유하거나,
-  문맥상 동일 인물임이 명확한 경우 하나의 엔티티로 통합하여 설명하라.
-  예) '최지유', '지유띠니', 'GPTTITTI@HANSUNG.AC.KR'이 모두
-  gpttitti@hansung.ac.kr을 사용한다면 동일 인물로 간주한다.
+* 동일 인물 병합: 엔티티 이름이 다르더라도 동일한 이메일 주소를 공유하거나, 문맥상 동일 인물임이 명확한 경우 하나의 엔티티로 통합하여 설명하라.
+  예) '최지유', '지유띠니', 'GPTTITTI@HANSUNG.AC.KR'이 모두 gpttitti@hansung.ac.kr을 사용한다면 동일 인물로 간주한다.
+* 유효하지 않은 엔티티 처리: 설명이 None이거나 의미있는 정보가 없는 경우, 엔티티를 아예 생성하지 않는다.
+* 출력 언어: 한국어로 작성한다. 단, 이메일 주소, 고유명사, 서비스명은 원문 그대로 유지한다.
+* Output: 두 정보를 하나의 1문장으로 합친다. 이때 'Filename', 'Type' 필드는 중복이 없으므로 그대로 유지한다.
 
-* 유효하지 않은 엔티티 처리: 모든 설명이 None이거나 의미있는 정보가
-  없는 경우, "No meaningful information available."만 출력하고
-  추가 내용을 생성하지 않는다.
+-Examples-
 
-* 출력 언어: 한국어로 작성한다. 단, 이메일 주소, 고유명사, 
-  서비스명은 원문 그대로 유지한다.
+Example 1 (Email 타입):
+Entities: 19DDCAD4FFCA17CF
+Description List:
+- Subject: Your receipt from Anthropic, PBC #2148-6096-8161 | ID: 19ddcad4ffca17cf | Date: 2026-04-30 13:37 | Tone: transactional | Summary: Anthropic으로부터 $22.00 결제 영수증 수신
+- Subject: Your receipt from Anthropic, PBC #2148-6096-8161 | ID: 19ddcad4ffca17cf | Date: 2026-04-30 13:37 | Tone: transactional | Summary: Anthropic Claude Pro 구독 결제 영수증 수신. 첨부: Invoice-7VNMPZBZ-0004.pdf, Receipt-2148-6096-8161.pdf 포함.
+Output:
+Subject: Your receipt from Anthropic, PBC #2148-6096-8161 | ID: 19ddcad4ffca17cf | Date: 2026-04-30 13:37 | Tone: transactional | Summary: Anthropic Claude Pro 구독 $22.00 결제 영수증 수신. 첨부: 인보이스 및 영수증 PDF 2건 포함.
 
--Data-
+Example 2 (Person 타입):
+Entities: GPTTITTI@HANSUNG.AC.KR
+Description List:
+- Account: gpttitti@hansung.ac.kr | Name: 최지유
+- Account: gpttitti@hansung.ac.kr | Name: 지유띠니
+Output:
+Account: gpttitti@hansung.ac.kr | Name: 최지유
+
+Example 3 (Attachment 타입):
+Entities: 2471239_최지유_중간보고서.PDF
+Description List:
+- Filename: 2471239_최지유_중간보고서.PDF | Type: pdf | Summary: GraphRAG 기반 Gmail 관리 애드온 개발 산학공동연구 중간보고서
+- Filename: 2471239_최지유_중간보고서.PDF | Type: pdf | Summary: 2026학년도 산학공동연구 프로젝트 중간보고서로, GraphRAG 활용 Gmail 애드온 개발 진행 상황 포함
+Output:
+Filename: 2471239_최지유_중간보고서.PDF | Type: pdf | Summary: "2471239_최지유_중간보고서.PDF"는 최지유가 2026학년도 산학공동연구 프로젝트에 참여하여 작성한 중간보고서로, PDF 형식으로 제공된다. 이 문서는 2026학년도 대학혁신지원사업의 진행 상황을 기록한 내용으로, 최지유의 연구 활동을 반영하고 있다. 전체적으로 GraphRAG 기반 Gmail 관리 애드온 개발 진행 상황이 기록된 문서이다.
+
+Example 4 (Attachment 타입):
+Entities: INVOICE-7VNMPZBZ-0004.PDF
+Description List:
+- Filename: Invoice-7VNMPZBZ-0004.pdf | Type: pdf | Summary: 2026년 4월 29일에 발행된 송장
+- Filename: Invoice-7VNMPZBZ-0004.pdf | Type: pdf | Summary: 청구서 번호 7VNMPZBZ-0004, 발행일 2026년 4월 29일, 만기일 2026년 4월 29일입니다. 청구액은 $22.00 USD로, Anthropic, PBC에 보내야 합니다."
+Output: 
+Filename: Invoice-7VNMPZBZ-0004.pdf | Type: pdf | Summary: 청구서 번호 7VNMPZBZ-0004, 발행일 2026년 4월 29일, 만기일 2026년 4월 29일입니다. 청구액은 $22.00 USD로, Anthropic, PBC에 보내야 하는 송장이다."
+
+-Real Data-
 Entities: {entity_name}
 Description List: {description_list}
 Output:
