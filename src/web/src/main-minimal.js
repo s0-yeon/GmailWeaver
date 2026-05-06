@@ -3,15 +3,15 @@
 
 // Native DOM utilities (jQuery replacement) - LOAD FIRST
 const DOM = {
-  ready: (callback) => {
+  ready: callback => {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', callback);
     } else {
       callback();
     }
   },
-  select: (selector) => document.querySelector(selector),
-  selectAll: (selector) => [...document.querySelectorAll(selector)],
+  select: selector => document.querySelector(selector),
+  selectAll: selector => [...document.querySelectorAll(selector)],
   addClass: (element, className) => element?.classList.add(className),
   removeClass: (element, className) => element?.classList.remove(className),
   toggleClass: (element, className) => element?.classList.toggle(className),
@@ -23,7 +23,7 @@ const DOM = {
     return new Promise(resolve => {
       const transitions = [];
       Object.keys(properties).forEach(prop => {
-        const camelProp = prop.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+        const camelProp = prop.replace(/-([a-z])/g, g => g[1].toUpperCase());
         element.style.setProperty('transition', `${prop} ${duration}ms ${easing}`);
         element.style[camelProp] = properties[prop];
         transitions.push(`${prop} ${duration}ms ${easing}`);
@@ -48,22 +48,31 @@ import './utils/security.js';
 // Native easing functions (jQuery-free)
 const EasingFunctions = {
   easeOutElastic: function (t, b, c, d) {
-    let s = 1.70158; let p = 0; let a = c;
-    if (t === 0) {return b;}
-    if ((t /= d) === 1) {return b + c;}
-    if (!p) {p = d * 0.3;}
-    if (a < Math.abs(c)) {
-      a = c; s = p / 4;
-    } else {
-      s = p / (2 * Math.PI) * Math.asin(c / a);
+    let s = 1.70158;
+    let p = 0;
+    let a = c;
+    if (t === 0) {
+      return b;
     }
-    return a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b;
+    if ((t /= d) === 1) {
+      return b + c;
+    }
+    if (!p) {
+      p = d * 0.3;
+    }
+    if (a < Math.abs(c)) {
+      a = c;
+      s = p / 4;
+    } else {
+      s = (p / (2 * Math.PI)) * Math.asin(c / a);
+    }
+    return a * Math.pow(2, -10 * t) * Math.sin(((t * d - s) * (2 * Math.PI)) / p) + c + b;
   },
   easeInOutQuart: function (t, b, c, d) {
     if ((t /= d / 2) < 1) {
-      return c / 2 * t * t * t * t + b;
+      return (c / 2) * t * t * t * t + b;
     }
-    return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
+    return (-c / 2) * ((t -= 2) * t * t * t - 2) + b;
   }
 };
 
@@ -113,8 +122,7 @@ try {
   const Skycons = SkyconsFactory(typeof window !== 'undefined' ? window : globalThis);
   window.Skycons = Skycons;
   globalThis.Skycons = Skycons;
-} catch (error) {
-}
+} catch (error) {}
 
 // Leaflet (for maps)
 import * as L from 'leaflet';
@@ -129,8 +137,7 @@ window.addEventListener('unhandledrejection', event => {
   event.preventDefault();
 });
 
-window.addEventListener('error', event => {
-});
+window.addEventListener('error', event => {});
 
 // CSS imports for libraries
 import 'leaflet/dist/leaflet.css';
@@ -207,8 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
       advancedTableEl.dataTableInstance = dataTable;
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 });
 
@@ -248,8 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ]
         });
         advancedTable.dataTableInstance = dataTable;
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   }
 });
@@ -261,7 +266,6 @@ import './chart-initializer.js';
 
 // Widget-specific initialization (jQuery-free)
 DOM.ready(() => {
-
   // The chart initializer handles all chart initialization
   // No need for manual chart initialization here anymore
 
@@ -270,7 +274,9 @@ DOM.ready(() => {
     const progressBars = DOM.selectAll('.progress .progress-bar');
 
     progressBars.forEach(bar => {
-      if (bar.getAttribute('data-transitiongoal')) {return;}
+      if (bar.getAttribute('data-transitiongoal')) {
+        return;
+      }
 
       const goal = parseInt(bar.dataset.transitiongoal) || 0;
 
@@ -295,7 +301,9 @@ function initUniversalProgressBars() {
 
   if (allProgressBars.length > 0) {
     allProgressBars.forEach((bar, index) => {
-      if (bar.classList.contains('animation-complete')) {return;}
+      if (bar.classList.contains('animation-complete')) {
+        return;
+      }
 
       // Skip animation for progress bars inside sales-progress - they already have width set
       if (bar.closest('.sales-progress')) {
@@ -313,7 +321,12 @@ function initUniversalProgressBars() {
         const computedStyle = window.getComputedStyle(bar);
         const currentWidth = inlineWidth || computedStyle.width;
 
-        if (currentWidth && currentWidth !== '0px' && currentWidth !== '0%' && currentWidth !== 'auto') {
+        if (
+          currentWidth &&
+          currentWidth !== '0px' &&
+          currentWidth !== '0%' &&
+          currentWidth !== 'auto'
+        ) {
           targetWidth = currentWidth;
         }
       }
@@ -324,19 +337,110 @@ function initUniversalProgressBars() {
         bar.style.width = '0%';
         bar.style.transition = 'width 0.8s ease-out';
 
-        setTimeout(() => {
-          bar.style.width = targetWidth;
-          setTimeout(() => {
-            bar.style.transition = 'none';
+        setTimeout(
+          () => {
             bar.style.width = targetWidth;
-            bar.classList.add('animation-complete');
-          }, 1000);
-        }, index * 100 + 300);
+            setTimeout(() => {
+              bar.style.transition = 'none';
+              bar.style.width = targetWidth;
+              bar.classList.add('animation-complete');
+            }, 1000);
+          },
+          index * 100 + 300
+        );
       }
     });
   }
 }
 
+// 로그 패널 HTML 동적 주입
+function injectLogPanel() {
+  // CSS 주입
+  const style = document.createElement('style');
+  style.textContent = `
+    /* 기존 log 관련 CSS 전부 여기에 */
+    .log-fab { ... }
+    .panel-wrap { ... }
+    /* 나머지 전부 */
+  `;
+  document.head.appendChild(style);
+
+  // 버튼 + 패널 HTML을 nav 안에 주입
+  const targetUl = document.querySelector('ul.navbar-right');
+  if (!targetUl) return;
+
+  const li = document.createElement('li');
+  li.className = 'nav-item';
+  li.style.position = 'relative';
+  li.innerHTML = `
+    <button class="log-fab" id="logFab">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 16 16">
+        <rect x="2" y="3" width="12" height="10" rx="2"/>
+        <path d="M5 6h6M5 9h4"/>
+      </svg>
+      메일 동기화 현황
+      <span class="fab-dot" id="fabDot"></span>
+    </button>
+    <span class="fab-badge" id="fabBadge">0</span>
+    <div class="panel-wrap" id="logPanel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 16 16">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M5 6h6M5 9h4"/>
+          </svg>
+          메일 동기화 현황
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="panel-status idle" id="panelStatus">
+            <span class="status-indicator" id="statusDot"></span>
+            <span id="statusText">대기 중</span>
+          </span>
+          <div class="panel-actions">
+            <button class="panel-btn" id="clearBtn">지우기</button>
+            <button class="panel-btn" id="closeBtn">닫기</button>
+          </div>
+        </div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <div class="log-body" id="logBody">
+        <div class="log-empty" id="logEmpty">
+          <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <path d="M7 9h10M7 13h6"/>
+          </svg>
+          동기화 시작 시 로그가 표시됩니다.
+        </div>
+      </div>
+      <div class="panel-footer">
+        <span class="footer-count" id="footerCount">0 줄</span>
+        <button class="footer-scroll-btn" id="scrollBottomBtn">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12">
+            <path d="M2 4l4 4 4-4"/>
+          </svg>
+          맨 아래로
+        </button>
+      </div>
+    </div>
+  `;
+
+  // 번역 버튼 앞에 삽입
+  const langLi = targetUl.querySelector('.nav-item.dropdown');
+  targetUl.insertBefore(li, langLi);
+
+  // JS 초기화
+  initLogPanel();
+}
+
+function initLogPanel() {
+  // 기존 index.html의 6번 함수 내용 그대로
+  const logBody = document.getElementById('logBody');
+  // ... 나머지 전부
+}
+
+document.addEventListener('DOMContentLoaded', injectLogPanel);
 // Initialize universal progress bars on DOM ready
 DOM.ready(() => {
   setTimeout(initUniversalProgressBars, 200);
