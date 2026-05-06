@@ -133,7 +133,7 @@ def save_person_stats_to_db(paths,update_date=None):
         cursor.close()
         conn.close()
 
-def save_query_to_db(gmail_id: str, context: str, response_time: float):
+def save_query_to_db(gmail_id: str, context: str, response_time: float, method: str = ""):
     latest_user = get_latest_user_record(gmail_id)
     if not latest_user:
         print(f"[WARN] save_query_to_db: user 테이블에 {gmail_id} 없음, 저장 생략")
@@ -144,8 +144,8 @@ def save_query_to_db(gmail_id: str, context: str, response_time: float):
     try:
         cursor.execute(
             """
-            INSERT INTO query (query_id, user_account_id, update_date, context, response_time)
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO query (query_id, user_account_id, update_date, context, response_time, method, response_date)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 str(uuid.uuid4()),
@@ -153,10 +153,12 @@ def save_query_to_db(gmail_id: str, context: str, response_time: float):
                 latest_user["update_date"],
                 context,
                 round(response_time, 5),
+                method,
+                datetime.datetime.now(),
             )
         )
         conn.commit()
-        print(f"[DB] query 저장 완료: {gmail_id} / {response_time:.2f}s")
+        print(f"[DB] query 저장 완료: {gmail_id} / {response_time:.2f}s / {method}")
     except Exception as e:
         conn.rollback()
         print(f"[ERROR] save_query_to_db 실패: {e}")

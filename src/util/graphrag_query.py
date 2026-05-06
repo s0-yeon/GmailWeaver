@@ -66,7 +66,7 @@ def run_graphrag_query(message: str, original_message: str, paths, method: str =
     print(f"[ENGINE] 답변: {answer}")
     print(f"[ENGINE] source_ids: {source_ids}")
     try:
-        save_query_to_db(paths.GMAIL_ID, original_message, elapsed)
+        save_query_to_db(paths.GMAIL_ID, original_message, elapsed, method)
     except Exception as e:
         print(f"[WARN] query DB 저장 실패 (무시): {e}")
     return answer, source_ids  # app.py의 _worker()로 튜플 반환

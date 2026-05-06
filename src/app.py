@@ -92,7 +92,7 @@ def _run_graphrag(message, raw_message, resMethod,paths, resType):
     elapsed = time.time() - start_time
     print(f'execution_time : {elapsed}')
     try:
-        save_query_to_db(paths.GMAIL_ID, raw_message, elapsed)
+        save_query_to_db(paths.GMAIL_ID, raw_message, elapsed, resMethod)
     except Exception as e:
         print(f"[WARN] query DB 저장 실패 (무시): {e}")
 
@@ -952,34 +952,6 @@ def indexing_stream():
     return Response(generate(), content_type="text/event-stream",
                     headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
-# 엔드포인트: GET /active-index-job
-# 실행 중인 index/update 작업이 있으면 found=True와 진행도 반환
-# 없으면 found=False, 최근 60초 내 완료된 작업이 있으면 status/message도 함께 반환
-@app.route("/active-index-job", methods=["GET"])
-def active_index_job():
-    all_jobs = get_all_jobs()
-    jobs = list(all_jobs.values())
-
-    for job in reversed(jobs):
-        if job.get("job_type") in ("index", "update") and job.get("status") == "running":
-            return jsonify({
-                "found": True,
-                "job_id": job["job_id"],
-                "progress": job.get("progress", 0),
-                "message": job.get("message", ""),
-            })
-
-    for job in reversed(jobs):
-        if job.get("job_type") in ("index", "update") and job.get("status") in ("done", "failed"):
-            finished_at = job.get("finished_at") or 0
-            if time.time() - finished_at < 60:
-                return jsonify({
-                    "found": False,
-                    "recentStatus": job["status"],
-                    "message": job.get("message", ""),
-                })
-
-    return jsonify({"found": False})
 
 # 엔드포인트: POST /run-query  (동기 버전, 디버깅/단순 클라이언트용)
 @app.route('/run-query', methods=['POST'])
