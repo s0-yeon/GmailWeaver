@@ -488,7 +488,343 @@ function initLogPanel() {
   let unreadCount = 0;
   let isPanelOpen = false;
   let autoScroll = true;
+  let currentView = 'user'; // 'user' | 'dev'
 
+  // ── 사용자 메시지 매핑 ──────────────────────────────────
+  const STEPS = [
+    { key: '메일 데이터 불러오기', match: ['청크 분할', '데이터 로드'] },
+    { key: '텍스트 분석', match: ['텍스트 정제', '문서 처리'] },
+    { key: '핵심 내용 추출', match: ['임베딩', '엔티티'] },
+    { key: '관계 파악', match: ['그래프', '커뮤니티', '관계'] },
+    { key: '검색 준비 완료', match: ['인덱스 저장', '완료'] }
+  ];
+
+  function toUserMessage(msg) {
+    const map = [
+      { match: '청크 분할', text: '메일 데이터를 불러오고 있어요', stepIdx: 0 },
+      { match: '데이터 로드', text: '메일 데이터를 불러오고 있어요', stepIdx: 0 },
+      { match: '텍스트 정제', text: '내용을 정리하고 있어요', stepIdx: 1 },
+      { match: '문서 처리', text: '내용을 정리하고 있어요', stepIdx: 1 },
+      { match: '임베딩', text: '핵심 내용을 분석하고 있어요', stepIdx: 2 },
+      { match: '엔티티', text: '핵심 내용을 분석하고 있어요', stepIdx: 2 },
+      { match: '그래프', text: '메일 간 관계를 파악하고 있어요', stepIdx: 3 },
+      { match: '커뮤니티', text: '연관 메일을 그룹으로 묶고 있어요', stepIdx: 3 },
+      { match: '관계', text: '메일 간 관계를 파악하고 있어요', stepIdx: 3 },
+      { match: '인덱스 저장', text: '검색을 준비하고 있어요', stepIdx: 4 },
+      { match: '완료', text: '분석이 완료됐어요!', stepIdx: 4 },
+      { match: '오류', text: '문제가 발생했어요. 다시 시도해주세요', stepIdx: -1 }
+    ];
+    const found = map.find(m => msg.includes(m.match));
+    return found || { text: msg, stepIdx: -1 };
+  }
+
+  // ── 사용자 뷰 HTML 주입 ─────────────────────────────────
+  function buildUserView() {
+    const cards = [
+      { id: 0, title: '메일 읽기', sub: '받은 메일을 모두 가져왔어요' },
+      { id: 1, title: '내용 이해하기', sub: '메일의 핵심 내용을 파악해요' },
+      { id: 2, title: '연결 관계 분석', sub: '메일들이 어떻게 연결됐는지 봐요' },
+      { id: 3, title: '검색 기능 켜기', sub: '곧 검색할 수 있게 준비해요' }
+    ];
+
+    return `
+    <div id="userView" style="background:#fff;border-radius:12px;overflow:hidden;">
+      <div style="background:#f0f7f3;padding:16px 18px 14px;border-bottom:0.5px solid #d8ebe3;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:5px;background:#d8ebe3;border-radius:999px;padding:3px 10px;">
+            <div id="uvPillDot" style="width:6px;height:6px;border-radius:50%;background:#1a9e6e;"></div>
+            <span id="uvPillText" style="font-size:11px;font-weight:500;color:#0f6e56;">메일 분석 중</span>
+          </div>
+          <button id="uvClose" style="font-size:11px;color:#b0c4bc;background:none;border:none;cursor:pointer;padding:0;">닫기</button>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:10px;">
+          <span id="uvPct" style="font-size:52px;font-weight:500;color:#1b2e22;line-height:1;">0%</span>
+          <div style="display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:5px;gap:3px;">
+            <span id="uvMsg" style="font-size:13px;font-weight:500;color:#1b2e22;">분석 준비 중</span>
+            <span id="uvSub" style="font-size:11px;color:#73879C;">잠시만 기다려주세요</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:4px;background:#d8ebe3;">
+        <div id="uvBar" style="height:100%;background:#1a9e6e;width:0%;transition:width .5s ease;"></div>
+      </div>
+
+      <div style="padding:12px 14px;display:flex;flex-direction:column;gap:7px;">
+        ${cards
+          .map(
+            c => `
+          <div id="uvCard${c.id}" style="background:#f9fcfb;border:0.5px solid #e1f5ee;border-radius:10px;padding:11px 13px;display:flex;align-items:center;gap:11px;">
+            <div id="uvCardIcon${c.id}" style="width:32px;height:32px;border-radius:8px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s;">
+              <svg width="14" height="14" fill="none" stroke="#ccc" stroke-width="2" viewBox="0 0 14 14" id="uvCardIconSvg${c.id}"><circle cx="7" cy="7" r="5"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div id="uvCardTitle${c.id}" style="font-size:12px;font-weight:500;color:#aaa;margin-bottom:1px;transition:color .3s;">${c.title}</div>
+              <div id="uvCardSub${c.id}" style="font-size:10px;color:#ccc;transition:color .3s;">${c.sub}</div>
+            </div>
+            <span id="uvCardBadge${c.id}" style="font-size:10px;padding:2px 7px;border-radius:999px;font-weight:500;white-space:nowrap;background:#f4f4f4;color:#bbb;transition:all .3s;">대기 중</span>
+          </div>
+        `
+          )
+          .join('')}
+      </div>
+    </div>
+  `;
+  }
+
+  // ── 사용자 뷰 업데이트 ──────────────────────────────────
+  function updateUserView(pct, stepIdx, msg, type) {
+    const bar = document.getElementById('uvBar');
+    const pctEl = document.getElementById('uvPct');
+    const msgEl = document.getElementById('uvMsg');
+    const subEl = document.getElementById('uvSub');
+    const pillDot = document.getElementById('uvPillDot');
+    const pillText = document.getElementById('uvPillText');
+    if (!bar) return;
+
+    bar.style.width = Math.round(pct) + '%';
+    pctEl.textContent = Math.round(pct) + '%';
+
+    const svgDone = `<svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 14 14"><path d="M2 7l3.5 3.5L12 3"/></svg>`;
+    const svgActive = `<svg width="14" height="14" fill="none" stroke="#1a9e6e" stroke-width="2" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5"/><path d="M7 4v3l2 1.5"/></svg>`;
+    const svgWait = `<svg width="14" height="14" fill="none" stroke="#ccc" stroke-width="2" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5"/></svg>`;
+
+    // 카드 매핑 (stepIdx → 카드 인덱스)
+    // progress stepIdx: 0~1 → card 0, 2 → card 1, 3 → card 2, 4 → card 3
+    const stepToCard = [0, 0, 1, 2, 3];
+    const cardIdx = stepIdx >= 0 ? (stepToCard[stepIdx] ?? stepIdx) : -1;
+
+    const msgs = [
+      '시작됐어요! 메일을 읽고 있어요',
+      '내용을 이해하고 있어요',
+      '연결 관계를 분석하고 있어요',
+      '검색 기능을 켜고 있어요'
+    ];
+    const subs = [
+      '받은 메일을 하나씩 가져오고 있어요',
+      '중요한 내용을 뽑아내고 있어요',
+      '메일들이 어떻게 이어지는지 봐요',
+      '곧 검색할 수 있어요'
+    ];
+
+    if (type === 'done') {
+      pctEl.style.color = '#1a9e6e';
+      bar.style.background = '#1a9e6e';
+      msgEl.textContent = '분석 완료!';
+      subEl.textContent = '이제 메일을 검색할 수 있어요';
+      pillDot.style.background = '#1a9e6e';
+      pillText.textContent = '분석 완료';
+      pillText.style.color = '#0f6e56';
+      for (let i = 0; i < 4; i++) {
+        const icon = document.getElementById(`uvCardIcon${i}`);
+        const title = document.getElementById(`uvCardTitle${i}`);
+        const sub = document.getElementById(`uvCardSub${i}`);
+        const badge = document.getElementById(`uvCardBadge${i}`);
+        if (!icon) continue;
+        icon.style.background = '#1a9e6e';
+        icon.innerHTML = svgDone;
+        title.style.color = '#1b2e22';
+        sub.style.color = '#73879C';
+        badge.textContent = '완료';
+        badge.style.background = '#eaf3de';
+        badge.style.color = '#3b6d11';
+      }
+    } else if (type === 'failed') {
+      pctEl.style.color = '#e24b4a';
+      bar.style.background = '#e24b4a';
+      msgEl.textContent = '문제가 발생했어요';
+      subEl.textContent = '잠시 후 다시 시도해주세요';
+      pillDot.style.background = '#e24b4a';
+      pillText.textContent = '오류 발생';
+      pillText.style.color = '#a32d2d';
+    } else {
+      msgEl.textContent = cardIdx >= 0 ? msgs[cardIdx] : msg;
+      subEl.textContent = cardIdx >= 0 ? subs[cardIdx] : '';
+
+      for (let i = 0; i < 4; i++) {
+        const icon = document.getElementById(`uvCardIcon${i}`);
+        const title = document.getElementById(`uvCardTitle${i}`);
+        const sub = document.getElementById(`uvCardSub${i}`);
+        const badge = document.getElementById(`uvCardBadge${i}`);
+        if (!icon) continue;
+        if (i < cardIdx) {
+          icon.style.background = '#1a9e6e';
+          icon.innerHTML = svgDone;
+          title.style.color = '#1b2e22';
+          sub.style.color = '#73879C';
+          badge.textContent = '완료';
+          badge.style.background = '#eaf3de';
+          badge.style.color = '#3b6d11';
+        } else if (i === cardIdx) {
+          icon.style.background = '#e1f5ee';
+          icon.innerHTML = svgActive;
+          title.style.color = '#1b2e22';
+          title.style.fontWeight = '500';
+          sub.style.color = '#73879C';
+          badge.textContent = '진행 중';
+          badge.style.background = '#e1f5ee';
+          badge.style.color = '#0f6e56';
+        } else {
+          icon.style.background = '#f4f4f4';
+          icon.innerHTML = svgWait;
+          title.style.color = '#aaa';
+          title.style.fontWeight = '400';
+          sub.style.color = '#ccc';
+          badge.textContent = '대기 중';
+          badge.style.background = '#f4f4f4';
+          badge.style.color = '#bbb';
+        }
+      }
+    }
+  }
+
+  // ── pulse 애니메이션 CSS 주입 ───────────────────────────
+  if (!document.getElementById('uvPulseStyle')) {
+    const s = document.createElement('style');
+    s.id = 'uvPulseStyle';
+    s.textContent = `@keyframes uvPulse{0%,100%{opacity:1;}50%{opacity:.3;}}`;
+    document.head.appendChild(s);
+  }
+
+  // ── 드롭다운 HTML 주입 ──────────────────────────────────
+  function buildDropdown() {
+    const dd = document.createElement('div');
+    dd.id = 'logDropdown';
+    dd.style.cssText = `
+      position:absolute; top:calc(100% + 6px); right:0;
+      background:#fff; border:1px solid #d8ebe3; border-radius:10px;
+      overflow:hidden; z-index:10000; min-width:150px;
+      box-shadow:0 4px 16px rgba(26,158,110,0.12);
+    `;
+    dd.innerHTML = `
+      <div id="ddUser" style="display:flex;align-items:center;gap:9px;padding:10px 14px;cursor:pointer;font-size:12px;color:#1b2e22;border-bottom:1px solid #f0f7f3;transition:background .15s;">
+        <div style="width:22px;height:22px;border-radius:6px;background:#e1f5ee;display:flex;align-items:center;justify-content:center;">
+          <svg width="12" height="12" fill="none" stroke="#0f6e56" stroke-width="2" viewBox="0 0 16 16"><circle cx="8" cy="6" r="3"/><path d="M2 14c0-3 2.7-5 6-5s6 2 6 5"/></svg>
+        </div>
+        사용자 보기
+      </div>
+      <div id="ddDev" style="display:flex;align-items:center;gap:9px;padding:10px 14px;cursor:pointer;font-size:12px;color:#1b2e22;transition:background .15s;">
+        <div style="width:22px;height:22px;border-radius:6px;background:#e8f0fe;display:flex;align-items:center;justify-content:center;">
+          <svg width="12" height="12" fill="none" stroke="#185fa5" stroke-width="2" viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M5 6h6M5 9h4"/></svg>
+        </div>
+        개발자 로그
+      </div>
+    `;
+    return dd;
+  }
+
+  // ── 뷰 전환 ─────────────────────────────────────────────
+  function switchView(view) {
+    currentView = view;
+    const panelHeader = logPanel.querySelector('.panel-header');
+    const progressWrap = logPanel.querySelector('.progress-bar-wrap');
+    const panelFooter = document.getElementById('panel-footer-wrap');
+    let userView = document.getElementById('userView');
+
+    if (view === 'user') {
+      if (!userView) {
+        const wrap = document.createElement('div');
+        wrap.innerHTML = buildUserView();
+        logPanel.insertBefore(wrap.firstElementChild, logBody);
+        document.getElementById('uvClose').addEventListener('click', () => {
+          isPanelOpen = false;
+          logPanel.classList.remove('open');
+        });
+      }
+      document.getElementById('userView').style.display = '';
+      panelHeader.style.display = 'none';
+      progressWrap.style.display = 'none';
+      logBody.style.display = 'none';
+      if (panelFooter) panelFooter.style.display = 'none';
+    } else {
+      if (userView) userView.style.display = 'none';
+      panelHeader.style.display = '';
+      progressWrap.style.display = '';
+      logBody.style.display = '';
+      if (panelFooter) panelFooter.style.display = '';
+    }
+  }
+
+  // panel-footer 에 id 추가
+  const panelFooter = logPanel.querySelector('.panel-footer');
+  if (panelFooter) panelFooter.id = 'panel-footer-wrap';
+
+  // ── logFab 클릭 → 드롭다운 토글 ────────────────────────
+  const fabWrap = document.getElementById('log-fab-wrap');
+  document.getElementById('logFab').addEventListener('click', e => {
+    e.stopPropagation();
+    const existing = document.getElementById('logDropdown');
+    if (existing) {
+      existing.remove();
+      return;
+    }
+    // 패널 열려있으면 닫기
+    if (isPanelOpen) {
+      isPanelOpen = false;
+      logPanel.classList.remove('open');
+    }
+    const dd = buildDropdown();
+    fabWrap.appendChild(dd);
+
+    dd.querySelector('#ddUser').addEventListener('click', () => {
+      dd.remove();
+      isPanelOpen = true;
+      logPanel.classList.add('open');
+      unreadCount = 0;
+      fabBadge.classList.remove('show');
+      switchView('user');
+    });
+    dd.querySelector('#ddDev').addEventListener('click', () => {
+      dd.remove();
+      isPanelOpen = true;
+      logPanel.classList.add('open');
+      unreadCount = 0;
+      fabBadge.classList.remove('show');
+      switchView('dev');
+    });
+
+    // 바깥 클릭 시 드롭다운 닫기
+    setTimeout(() => {
+      document.addEventListener('click', function closeDd() {
+        document.getElementById('logDropdown')?.remove();
+        document.removeEventListener('click', closeDd);
+      });
+    }, 0);
+  });
+
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    isPanelOpen = false;
+    logPanel.classList.remove('open');
+  });
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    logBody.innerHTML = '';
+    logBody.appendChild(logEmpty);
+    logEmpty.style.display = '';
+    lineCount = 0;
+    footerCount.textContent = '0 줄';
+    progressFill.style.width = '0%';
+    setStatus('idle');
+    // 사용자 뷰 초기화
+    document.getElementById('uvPct') && (document.getElementById('uvPct').textContent = '0%');
+    const bar = document.getElementById('uvBar');
+    if (bar) {
+      bar.style.width = '0%';
+      bar.style.background = '#1a9e6e';
+    }
+    const pctEl2 = document.getElementById('uvPct');
+    if (pctEl2) {
+      pctEl2.textContent = '0%';
+      pctEl2.style.color = '#1a9e6e';
+    }
+  });
+  document.getElementById('scrollBottomBtn').addEventListener('click', () => {
+    logBody.scrollTop = logBody.scrollHeight;
+  });
+  logBody.addEventListener('scroll', () => {
+    autoScroll = logBody.scrollHeight - logBody.scrollTop - logBody.clientHeight < 40;
+  });
+
+  // ── 공통 함수 ───────────────────────────────────────────
   function ts() {
     const n = new Date();
     return [n.getHours(), n.getMinutes(), n.getSeconds()]
@@ -531,56 +867,46 @@ function initLogPanel() {
     fabDot.classList.toggle('running', type === 'running');
   }
 
-  document.getElementById('logFab').addEventListener('click', () => {
-    isPanelOpen = !isPanelOpen;
-    logPanel.classList.toggle('open', isPanelOpen);
-    if (isPanelOpen) {
-      unreadCount = 0;
-      fabBadge.classList.remove('show');
-    }
-  });
-  document.getElementById('closeBtn').addEventListener('click', () => {
-    isPanelOpen = false;
-    logPanel.classList.remove('open');
-  });
-  document.getElementById('clearBtn').addEventListener('click', () => {
-    logBody.innerHTML = '';
-    logBody.appendChild(logEmpty);
-    logEmpty.style.display = '';
-    lineCount = 0;
-    footerCount.textContent = '0 줄';
-    progressFill.style.width = '0%';
-    setStatus('idle');
-  });
-  document.getElementById('scrollBottomBtn').addEventListener('click', () => {
-    logBody.scrollTop = logBody.scrollHeight;
-  });
-  logBody.addEventListener('scroll', () => {
-    autoScroll = logBody.scrollHeight - logBody.scrollTop - logBody.clientHeight < 40;
-  });
+  // ── SSE ─────────────────────────────────────────────────
+  fetch('/indexing-history')
+    .then(r => r.json())
+    .then(history => {
+      history.forEach(data => handleData(data));
+    })
+    .catch(() => {});
 
   const es = new EventSource('/indexing-stream');
   es.onmessage = function (e) {
     try {
-      const data = JSON.parse(e.data);
-      if (data.type === 'progress') {
-        addLogLine('progress', data.message, data.progress);
-        progressFill.style.width = (data.progress ?? 0) + '%';
-        setStatus('running');
-      } else if (data.type === 'done') {
-        addLogLine('done', data.message, null);
-        progressFill.style.width = '100%';
-        setStatus('done');
-      } else if (data.type === 'failed') {
-        addLogLine('failed', data.message, null);
-        setStatus('failed');
-      }
+      handleData(JSON.parse(e.data));
     } catch (_) {}
   };
   es.onerror = function () {
     addLogLine('failed', 'SSE 연결 끊김 - 서버를 확인해 주세요.', null);
     setStatus('failed');
   };
+
+  function handleData(data) {
+    if (data.type === 'progress') {
+      addLogLine('progress', data.message, data.progress);
+      progressFill.style.width = (data.progress ?? 0) + '%';
+      setStatus('running');
+      const mapped = toUserMessage(data.message);
+      updateUserView(data.progress ?? 0, mapped.stepIdx, mapped.text, 'progress');
+    } else if (data.type === 'done') {
+      addLogLine('done', data.message, null);
+      progressFill.style.width = '100%';
+      setStatus('done');
+      updateUserView(100, 4, '분석이 완료됐어요!', 'done');
+    } else if (data.type === 'failed') {
+      addLogLine('failed', data.message, null);
+      setStatus('failed');
+      updateUserView(0, -1, '문제가 발생했어요', 'failed');
+    }
+  }
+
+  // ── 초기 사용자 뷰 삽입 (기본값) ────────────────────────
+  switchView('user');
 }
 
 document.addEventListener('DOMContentLoaded', injectLogPanel);
