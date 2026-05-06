@@ -229,6 +229,159 @@
         66%  { transform: translate(-25px, 20px) scale(0.95); }
         100% { transform: translate(0, 0) scale(1); }
       }
+      /* ── 인덱싱 로그 패널 ── */
+      .log-fab {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 16px;
+        border-radius: 999px;
+        background: #1a9e6e;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: background .18s, transform .15s;
+        box-shadow: 0 2px 10px rgba(26,158,110,0.35);
+      }
+      .log-fab:hover { background: #0f7a52; transform: translateY(-1px); }
+      .log-fab:active { transform: scale(.97); }
+      .fab-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: #fff; opacity: .85; display: inline-block;
+      }
+      .fab-dot.running { background: #6effc5; animation: dot-pulse 1.2s ease-in-out infinite; }
+      @keyframes dot-pulse {
+        0%,100% { opacity:.85; transform:scale(1); }
+        50%      { opacity:1;   transform:scale(1.35); }
+      }
+      .fab-badge {
+        position: absolute; top: -5px; right: -5px;
+        background: #e24b4a; color: #fff;
+        font-size: 10px; font-weight: 500;
+        border-radius: 999px; padding: 1px 5px;
+        min-width: 16px; text-align: center;
+        display: none;
+      }
+      .fab-badge.show { display: block; }
+
+      .panel-wrap {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        width: 480px;
+        border: 1px solid #d8ebe3;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+        z-index: 9999;
+        box-shadow: 0 8px 32px rgba(26,158,110,0.12);
+        max-height: 0; opacity: 0;
+        pointer-events: none;
+        transition: max-height .35s cubic-bezier(.22,1,.36,1), opacity .3s;
+        max-width: calc(100vw - 24px);
+      }
+      .panel-wrap.open { max-height: 480px; opacity: 1; pointer-events: all; }
+
+      .panel-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 10px 14px;
+        background: #f0f7f3;
+        border-bottom: 1px solid #d8ebe3;
+      }
+      .panel-title {
+        display: flex; align-items: center; gap: 7px;
+        font-size: 13px; font-weight: 500; color: #1b2e22;
+      }
+      .panel-status {
+        font-size: 11px; padding: 3px 9px; border-radius: 999px; font-weight: 500;
+        background: rgba(26,158,110,0.12); color: #1a9e6e;
+        display: flex; align-items: center; gap: 5px;
+      }
+      .panel-status.idle    { background: #f4f4f4; color: #888; }
+      .panel-status.done    { background: #eaf3de; color: #3b6d11; }
+      .panel-status.failed  { background: #fcebeb; color: #a32d2d; }
+      .status-indicator {
+        width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block;
+      }
+      .status-indicator.running { animation: dot-pulse 1.1s ease-in-out infinite; }
+
+      .panel-actions { display: flex; gap: 6px; }
+      .panel-btn {
+        background: none; border: 1px solid #d8ebe3;
+        color: #1a9e6e; border-radius: 6px; padding: 3px 9px;
+        font-size: 11px; cursor: pointer; transition: background .15s;
+      }
+      .panel-btn:hover { background: rgba(26,158,110,0.08); }
+
+      .progress-bar-wrap { height: 3px; background: #d8ebe3; }
+      .progress-bar-fill {
+        height: 100%; background: linear-gradient(90deg, #1a9e6e, #34d399);
+        width: 0%; transition: width .5s ease; border-radius: 0 2px 2px 0;
+      }
+
+      .log-body {
+        height: 260px; overflow-y: auto;
+        padding: 10px 14px;
+        /* font-family: monospace;  ← 이 줄 삭제 */
+        font-size: 12px; line-height: 1.7;
+        scrollbar-width: thin; scrollbar-color: #d8ebe3 transparent;
+      }
+      .log-body::-webkit-scrollbar { width: 4px; }
+      .log-body::-webkit-scrollbar-thumb { background: #d8ebe3; border-radius: 4px; }
+
+      .log-line {
+        display: flex; gap: 6px; align-items: flex-start;
+        padding: 2px 0;
+        animation: line-in .2s ease;
+        min-width: 0;
+        width: 100%;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      @keyframes line-in {
+        from { opacity:0; transform:translateY(4px); }
+        to   { opacity:1; transform:none; }
+      }
+      .log-ts   { color: #b0c4bc; flex-shrink: 0; font-size: 11px; padding-top: 1px; min-width: 0;}
+      .log-tag {
+        flex-shrink: 0;
+        font-size: 10px;
+        font-weight: 500;
+        padding: 1px 6px;
+        border-radius: 4px;
+        min-width: 36px;
+        text-align: center;
+        white-space: nowrap;
+        display: inline-block;
+        overflow: visible;
+        height: auto;
+      }
+      .log-tag.running  { background: #e1f5ee; color: #0f6e56; }
+      .log-tag.done     { background: #eaf3de; color: #3b6d11; }
+      .log-tag.failed   { background: #fcebeb; color: #a32d2d; }
+      .log-msg  { color: #333; word-break: break-word; min-width: 0; overflow-wrap: anywhere;}
+      .log-pct  { color: #1a9e6e; font-weight: 500; margin-left: 4px; }
+
+      .log-empty {
+        height: 100%; display: flex; align-items: center; justify-content: center;
+        color: #aaa; font-size: 12px; font-family: sans-serif;
+        flex-direction: column; gap: 6px;
+      }
+      .log-empty svg { opacity: .35; }
+
+      .panel-footer {
+        padding: 8px 14px; border-top: 1px solid #d8ebe3;
+        display: flex; align-items: center; justify-content: space-between;
+        background: #f9fcfb;
+      }
+      .footer-count { font-size: 11px; color: #888; }
+      .footer-scroll-btn {
+        font-size: 11px; color: #1a9e6e; cursor: pointer;
+        background: none; border: none; display: flex; align-items: center; gap: 4px;
+      }
+      .footer-scroll-btn:hover { text-decoration: underline; }
     </style>
   </head>
 
@@ -291,6 +444,59 @@
             </div>
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li id="log-fab-wrap" style="position:relative;">
+                  <button class="log-fab" id="logFab">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 16 16">
+                      <rect x="2" y="3" width="12" height="10" rx="2"/>
+                      <path d="M5 6h6M5 9h4"/>
+                    </svg>
+                    메일 분석 현황
+                    <span class="fab-dot" id="fabDot"></span>
+                  </button>
+                  <span class="fab-badge" id="fabBadge">0</span>
+                  <div class="panel-wrap" id="logPanel">
+                    <div class="panel-header">
+                      <div class="panel-title">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 16 16">
+                          <rect x="2" y="3" width="12" height="10" rx="2"/>
+                          <path d="M5 6h6M5 9h4"/>
+                        </svg>
+                        GraphRAG 인덱싱 로그
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span class="panel-status idle" id="panelStatus">
+                          <span class="status-indicator" id="statusDot"></span>
+                          <span id="statusText">대기 중</span>
+                        </span>
+                        <div class="panel-actions">
+                          <button class="panel-btn" id="clearBtn">지우기</button>
+                          <button class="panel-btn" id="closeBtn">닫기</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="progress-bar-wrap">
+                      <div class="progress-bar-fill" id="progressFill"></div>
+                    </div>
+                    <div class="log-body" id="logBody">
+                      <div class="log-empty" id="logEmpty">
+                        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                          <rect x="3" y="5" width="18" height="14" rx="2"/>
+                          <path d="M7 9h10M7 13h6"/>
+                        </svg>
+                        인덱싱 시작 시 로그가 표시됩니다.
+                      </div>
+                    </div>
+                    <div class="panel-footer">
+                      <span class="footer-count" id="footerCount">0 줄</span>
+                      <button class="footer-scroll-btn" id="scrollBottomBtn">
+                        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12">
+                          <path d="M2 4l4 4 4-4"/>
+                        </svg>
+                        맨 아래로
+                      </button>
+                    </div>
+                  </div>
+                </li>
                 <li class="nav-item dropdown">
                   <a href="#" role="button" class="dropdown-toggle" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color:inherit;">
                     <i class="bi bi-translate" style="font-size: 1.2rem; vertical-align: middle;"></i>
@@ -306,7 +512,7 @@
             </nav>
           </div>
         </div>
-
+            
         <!-- Page Content -->
         <main class="right_col" role="main" aria-label="Main content">
           <!-- 배경 오브 -->
@@ -538,25 +744,7 @@
           showSection('graph');
           window.loadGraphViz();
         }
-
-        // 6. 인덱싱 진행도 SSE
-        // 서버가 progress/완료/실패 이벤트를 push하면 즉시 console.log로 출력
-        (function listenIndexingProgress() {
-          const es = new EventSource('/indexing-stream');
-
-          es.onmessage = function(e) {
-            try {
-              const data = JSON.parse(e.data);
-              if (data.type === 'progress') {
-                console.log(`[인덱싱] ${data.progress}% - ${data.message}`);
-              } else if (data.type === 'done') {
-                console.log(`[인덱싱] 완료 - ${data.message}`);
-              } else if (data.type === 'failed') {
-                console.log(`[인덱싱] 실패 - ${data.message}`);
-              }
-            } catch (_) {}
-          };
-        })();
+        
 });
     </script>
   </body>
