@@ -60,7 +60,10 @@ function onCheckJobResult(e) {
     data = JSON.parse(res.getContentText());    // 서버 응답 객체(res)에서 텍스트를 추출하여 JSON 객체로 변환한 후, data에 저장
   } catch (err) { return _toast("⚠️ 상태 확인 실패: " + err.message); }
 
-  var sourceIds = data.source_ids || [];
+  var sourceIds = [];
+  if(data.source_ids && Array.isArray(data.source_ids)) {
+    sourceIds = data.source_ids;
+  }
   var status = data.status || "";
 
   if (status === "pending") {
