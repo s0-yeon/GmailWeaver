@@ -45,10 +45,10 @@ Each key point in the response should have the following element:
 Apply the following priority rules IN ORDER:
 
 1. [HIGHEST PRIORITY] If the data includes a community report with a numeric
-   `rating` field (scale 0-10), use that as the primary signal:
-     base_score = rating × 10
+   `rank` field (scale 0-10), use that as the primary signal:
+     base_score = rank × 10
    Then adjust ±10 based on how directly the point answers the user's question.
-   Example: rating=8.5 → base 85, highly relevant to query → final 90~95
+   Example: rank=8.5 → base 85, highly relevant to query → final 90~95
 
 2. [FIELD-LEVEL MODIFIERS] Apply these on top of the base score when the
    corresponding field or relationship is present in the data:
@@ -67,7 +67,7 @@ Apply the following priority rules IN ORDER:
    - Topic.Domain이 인증/결제/보안/마케팅 관련           → -20
    - 마케팅·광고성 메일                                  → -30
 
-3. [FALLBACK] rating 필드가 없으면 아래 기준으로 추정:
+3. [FALLBACK] rank 필드가 없으면 아래 기준으로 추정:
    - 80-100 : 사람 간 직접 소통 + 액션아이템 포함
    - 60-79  : 반복 프로젝트/협업 Topic
    - 40-59  : 구독·결제·서비스 알림
@@ -179,3 +179,5 @@ The response should be JSON formatted as follows:
         {{"description": "Description of point 2 [Data: Reports (report ids)]", "score": score_value}}
     ]
 }}
+
+반드시 한국어로 답변하세요.

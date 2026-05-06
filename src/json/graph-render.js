@@ -10,7 +10,7 @@
     ORGANIZATION: "#34d399", // 초록
     LABEL: "#60a5fa", // 파랑
     EVENT: "#a78bfa", // 보라
-    ATTACHMENT:   "#94A3B8", // 회청
+    ATTACHMENT:   "#7b8899", // 회청
     unknown: "#c9d1d9", // 회색
   };
   function renderGraph(svgEl, data) {
@@ -39,18 +39,24 @@
       tip.classList.remove("visible");
     } // 툴팁 숨기기
 
-    // description을 3줄 분량(120자)으로 자르기
+    // description 분량 제한
     function shortDesc(text, maxLen = 300) {  // 300자로 수정
       if (!text) return "";
       return text.length > maxLen
         ? text.slice(0, maxLen).trimEnd() + "…"
-        : text; // 120자 초과분은 숨김
+        : text; // 300자 초과분은 숨김
     }
 
     function edgeWidth(weight) {
       // 엣지 두께 계산
       if (weight == null) return 1.5;
       return Math.min(6, 1 + weight * 0.2);
+    }
+
+    // degree 기준으로 노드 반지름 계산
+    const _rScale = d3.scaleSqrt().domain([0, 30]).range([20, 55]).clamp(true);
+    function nodeRadius(d) {
+      return _rScale(d.degree ?? 1);
     }
 
     const w = window.innerWidth;
@@ -74,10 +80,10 @@
         d3
           .forceLink(data.edges)
           .id((d) => d.label) // 엣지의 source와 target가 label 기준으로 연결
-          .distance(80),
+          .distance(140),
       )
       .force("charge", d3.forceManyBody().strength(-800)) // 노드들 간의 밀어내는 힘
-      .force("collide", d3.forceCollide(30)); // 노드들 겹치지 않도록 함
+      .force("collide", d3.forceCollide(d => nodeRadius(d) + 8)); // 노드들 겹치지 않도록 함
 
     // 엣지 그리기
     const link = g
@@ -154,7 +160,7 @@
     // 노드
     node
       .append("circle")
-      .attr("r", 30) // 원 크기 (반지름)
+      .attr("r", d => nodeRadius(d)) // 원 크기 (반지름)
       .attr("fill", (d) => COLORS[d.entity_type] || COLORS.unknown) // 타입별 색상
       .attr("stroke", "#fff") // 테두리 = 흰색
       .attr("stroke-width", 1.5) // 테두리 두께
@@ -162,7 +168,7 @@
       .on("mouseover", (event, d) => {
         // 노드 위에 마우스 올렸을 때
         d3.select(event.currentTarget) // 노드 강조: 원 확대 + 밝기 증가
-          .attr("r", 36)
+          .attr("r", nodeRadius(d) + 8)
           .attr("filter", "brightness(1.25)");
 
         const desc = shortDesc(d.description);
@@ -183,19 +189,23 @@
         );
       })
       .on("mousemove", moveTip) // 노드 위에서 마우스 움직일 때 툴팁도 이동
-      .on("mouseout", (event) => {
+      .on("mouseout", (event, d) => {
         // 마우스가 노드 벗어나면 원래 크기로 복구 + 툴팁 숨김
-        d3.select(event.currentTarget).attr("r", 30).attr("filter", null);
+        d3.select(event.currentTarget).attr("r", nodeRadius(d)).attr("filter", null);
         hideTip();
       });
 
     // 노드 안에 텍스트 표시
     node
       .append("text")
-      .text((d) => d.label || d.id) // label 없으면 id 표시
+      .text((d) => {
+          const label = d.label || d.id;
+          const maxLen = Math.floor(nodeRadius(d) / 4.5);
+          return label.length > maxLen ? label.slice(0, maxLen) + "…" : label;
+      }) // label 없으면 id 표시
       .attr("text-anchor", "middle") // 가로 중앙 정렬
       .attr("dominant-baseline", "middle") // 세로 중앙 정렬
-      .attr("font-size", 10) // 글자 크기
+      .attr("font-size", d => Math.max(9, Math.min(13, nodeRadius(d) * 0.45))) // 글자 크기
       .attr("fill", "#333") // 글자 색상
       .style("pointer-events", "none");
 

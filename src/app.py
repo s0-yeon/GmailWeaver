@@ -14,11 +14,12 @@ import requests
 import shutil
 import zlib
 import traceback 
-import urllib.parse
+import urllib.parse     # import missing 해결
+
 from util.date_query import run_date_range_query
 
 from dotenv import load_dotenv
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, Response, stream_with_context
 from flask_cors import CORS
 import fitz  # PyMuPDF
 from docx import Document
@@ -34,11 +35,14 @@ from util.jobs.job_run import start_graph_pipeline_background, start_graph_updat
 from config.settings import *
 from util.user_path import UserPaths
 from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats
+from util.database.db_writer import save_query_to_db
 from util.extract_statics import start_statics_pipeline_background
 
 # [추가] MySQL 커넥션 (processed_attachments 중복 필터용)
 # db_reader.py, db_writer.py와 동일하게 config.db에서 가져옴
 from config.db import get_db_connection
+
+from util.sse_broadcaster import subscribe, unsubscribe
 
 # 환경변수 로드
 load_dotenv("src/parquet/.env")
@@ -49,6 +53,7 @@ CORS(app)
 
 # Apps Script Web App URL
 WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz3bAOxML5BZSSJcMFM1or5jY8K4NVwliHk_Rbe9jXYVBXbYM05Fl-1bPG1909_38hZ/exec"
+
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
 if hasattr(sys.stdout, "reconfigure"):
@@ -162,7 +167,8 @@ def _mark_attachments_as_processed(gmail_id: str, attachments: list):
 # 유틸 함수
 
 # GraphRAG CLI 실행
-def _run_graphrag(message, resMethod, paths, resType):
+def _run_graphrag(message, resMethod, raw_message, paths, resType):
+
     def decode_output(b: bytes) -> str:
         if not b:
             return ""
@@ -190,7 +196,12 @@ def _run_graphrag(message, resMethod, paths, resType):
         env=os.environ.copy(),
         text=False
     )
-    print(f'execution_time : {time.time() - start_time}')
+    elapsed = time.time() - start_time
+    print(f'execution_time : {elapsed}')
+    try:
+        save_query_to_db(paths.GMAIL_ID, raw_message, elapsed, resMethod)
+    except Exception as e:
+        print(f"[WARN] query DB 저장 실패 (무시): {e}")
 
     stdout_text = decode_output(result.stdout)
     stderr_text = decode_output(result.stderr)
@@ -208,7 +219,6 @@ def _run_graphrag(message, resMethod, paths, resType):
     answer = answer.strip()
     print(answer)
     return answer.strip()
-
 
 # 텍스트 → 캘린더 JSON 변환
 def _convert_to_calendar_json(text):
@@ -900,24 +910,36 @@ def run_query_async():
     create_job(job_id, job_type="query")
     update_job(job_id, status="pending", result=None, resType=resType)
 
-    def _worker():
+
+    def _worker():  # 백그라운드 스레드에서 실행되는 실제 작업 함수
+        from util.graphrag_query import run_graphrag_query
         try:
             paths = UserPaths(BASE_DIR, gmail_id)
             env = os.environ.copy()
             env["GMAIL_ID"] = gmail_id
 
-            answer = run_date_range_query(message, paths)
+
+
+            # 날짜 범위 쿼리일 시 parquet 직접 필터링해서 LLM에게 넘기기, 아니면 GraphRAG로 처리
+            answer = run_date_range_query(message, paths) # 이게 None이면 GraphRAG로 
+            source_ids = []  # 초기화
             if answer is None:
                 full_message = message + " 영어 말고 한국어로 답변해줘."
+
                 resMethod = _classify_query_method(message)
-                answer = _run_graphrag(full_message, resMethod, paths, resType)
+                try: # 엔진 객체 직접 호출 방식
+                    answer, source_ids = run_graphrag_query(full_message,message, paths, method=resMethod)
+                except Exception as e:
+                    # API 방식 실패 시 기존 CLI 방식으로 자동 fallback
+                    print(f"[ENGINE] API 실패, CLI fallback: {e}")
+                    answer = _run_graphrag(full_message,message, resMethod, paths, resType)
+                    source_ids = _extract_source_mail_ids(answer)
 
             if resType.lower() == "calendar":
                 result = json.dumps(_convert_to_calendar_json(answer), ensure_ascii=False)
                 update_job(job_id, status="done", result=result)
             else:
                 result = answer
-                source_ids = _extract_source_mail_ids(answer)
                 update_job(job_id, status="done", result=result, source_ids=source_ids)
 
         except Exception as e:
@@ -939,7 +961,38 @@ def job_status(job_id):
         except Exception:
             return jsonify({"status": "done", "data": {"events": []}})
 
-    return jsonify({"status": job["status"], "result": job["result"] or "", "source_ids": job.get("source_ids") or []})
+
+    # text 타입: result 필드에 문자열 그대로 반환
+    return jsonify({
+        "status": job["status"],
+        "progress": job.get("progress", 0),
+        "message": job.get("message", ""),
+        "result": job["result"] or "",
+        "source_ids": job.get("source_ids") or [],
+    })
+
+# 엔드포인트: GET /indexing-stream (SSE)
+# 브라우저가 연결을 유지하면 서버가 인덱싱 progress/완료/실패 이벤트를 즉시 push
+# 15초마다 keepalive 전송 (연결 유지용)
+@app.route("/indexing-stream", methods=["GET"])
+def indexing_stream():
+    q = subscribe()
+
+    @stream_with_context
+    def generate():
+        try:
+            while True:
+                try:
+                    data = q.get(timeout=15)
+                    yield f"data: {json.dumps(data, ensure_ascii=False)}\n\n"
+                except Exception:
+                    yield ": keepalive\n\n"
+        finally:
+            unsubscribe(q)
+
+    return Response(generate(), content_type="text/event-stream",
+                    headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
 
 # 엔드포인트: POST /run-query (동기 버전)
 @app.route('/run-query', methods=['POST'])
@@ -1483,7 +1536,11 @@ def label_query():
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "query": {"type": "string", "description": "삭제할 메일을 찾기 위한 Gmail 검색 키워드"}
+
+                        "query": {
+                            "type": "string",
+                            "description": "삭제할 메일을 찾기 위한 Gmail 검색 키워드"
+                        }
                     },
                     "required": ["query"]
                 }
@@ -1493,14 +1550,39 @@ def label_query():
             "type": "function",
             "function": {
                 "name": "remove_label",
-                "description": "메일에서 라벨을 제거합니다.",
+
+                "description": "삭제하거나 휴지통으로 이동할 메일의 검색 키워드를 추출합니다. '삭제해줘', '지워줘', '휴지통으로 이동해줘' 같은 요청에 사용합니다.",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "query": {"type": "string", "description": "라벨을 제거할 메일을 찾기 위한 Gmail 검색 키워드"},
-                        "label_name": {"type": "string", "description": "제거할 라벨명"}
+                        "query": {
+                            "type": "string",
+                            "description": "라벨을 제거할 메일을 찾기 위한 Gmail 검색 키워드"
+                        },
+                        "label_name": {
+                            "type": "string",
+                            "description": "제거할 라벨명. 언급이 없으면 빈 문자열."
+                        }
                     },
                     "required": ["query", "label_name"]
+                }
+            }
+        },
+        # ✅ 추가
+        {
+            "type": "function",
+            "function": {
+                "name": "create_label",
+                "description": "새 Gmail 라벨을 생성합니다. '라벨 만들어줘', '라벨 추가해줘', '~라벨 생성해줘' 같은 요청에 사용합니다.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "label_name": {
+                            "type": "string",
+                            "description": "생성할 라벨명 (예: 산학공동연구)"
+                        }
+                    },
+                    "required": ["label_name"]
                 }
             }
         }
@@ -1518,19 +1600,30 @@ def label_query():
                         "메일을 검색해서 라벨을 붙이거나 찾는 요청이면 search_emails를 사용하세요. "
                         "이미 선택된 메일에 라벨만 적용하는 요청이면 apply_label을 사용하세요. "
                         "메일을 삭제하거나 휴지통으로 이동하는 요청이면 trash_emails를 사용하세요. "
-                        "메일에서 라벨을 제거하는 요청이면 remove_label을 사용하세요."
+                        "메일에서 라벨을 제거하는 요청이면 remove_label을 사용하세요. "
+                        "새 라벨을 만드는 요청이면 create_label을 사용하세요."  # ✅ 추가
                     )
                 },
                 {"role": "user", "content": user_input}
             ],
             tools=tools,
-            tool_choice="required"
+            tool_choice="auto"
         )
-        tool_call = response.choices[0].message.tool_calls[0]
-        action = tool_call.function.name
-        params = json.loads(tool_call.function.arguments)
+        tool_calls = response.choices[0].message.tool_calls
 
-        return jsonify({"ok": True, "action": action, "params": params})
+        # 단일 액션
+        if len(tool_calls) == 1:
+            action = tool_calls[0].function.name
+            params = json.loads(tool_calls[0].function.arguments)
+            return jsonify({"ok": True, "action": action, "params": params})
+
+        # 복합 액션 (예: create_label + search_emails)
+        else:
+            actions = [
+                {"action": tc.function.name, "params": json.loads(tc.function.arguments)}
+                for tc in tool_calls
+            ]
+            return jsonify({"ok": True, "action": "multi", "actions": actions})
 
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500

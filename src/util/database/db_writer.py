@@ -1,6 +1,8 @@
 # gmail DB에 데이터 저장 함수
 import os
 import json
+import uuid
+import datetime
 from config.db import get_db_connection
 
 def get_latest_user_record(user_account_id: str):
@@ -130,6 +132,40 @@ def save_person_stats_to_db(paths,update_date=None):
     finally:
         cursor.close()
         conn.close()
+
+def save_query_to_db(gmail_id: str, context: str, response_time: float, method: str = ""):
+    latest_user = get_latest_user_record(gmail_id)
+    if not latest_user:
+        print(f"[WARN] save_query_to_db: user 테이블에 {gmail_id} 없음, 저장 생략")
+        return
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            """
+            INSERT INTO query (query_id, user_account_id, update_date, context, response_time, method, response_date)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """,
+            (
+                str(uuid.uuid4()),
+                latest_user["user_account_id"],
+                latest_user["update_date"],
+                context,
+                round(response_time, 5),
+                method,
+                datetime.datetime.now(),
+            )
+        )
+        conn.commit()
+        print(f"[DB] query 저장 완료: {gmail_id} / {response_time:.2f}s / {method}")
+    except Exception as e:
+        conn.rollback()
+        print(f"[ERROR] save_query_to_db 실패: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
 
 def save_keyword_stats_to_db(paths,update_date=None):
     """

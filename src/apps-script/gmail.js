@@ -51,6 +51,7 @@ function _startBatchSync(mode) {
       "백그라운드에서 " + BATCH_TRIGGER_MINUTES + "분 간격으로 처리됩니다."
     );
 
+
   } catch (err) {
     return _toast("⚠️ 동기화 실패: " + err.message);
   }
