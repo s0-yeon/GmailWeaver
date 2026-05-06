@@ -8,9 +8,10 @@ import traceback
 import threading
 import time
 from util.graphrag_engine import get_engines # 유저별 캐싱된 local. global 엔진 반환 함수 임포트
+from util.database.db_writer import save_query_to_db
 
 # cli 호출 방식인 _run_graphrag() 대체용 (get_engines()로 캐싱된 LocalSearch, globalSearch 객체 직접 호출)
-def run_graphrag_query(message: str, paths, method: str = "local") -> tuple[str, list]:
+def run_graphrag_query(message: str, original_message: str, paths, method: str = "local") -> tuple[str, list]:
     start_time = time.time()
     result_container = {"result": None, "error": None} # 스레드 간에 결과나 에러를 공유하기 위한 컨테이너 (스레드 return 값 직접 전달 못해서 dict로 우회함)
 
@@ -59,8 +60,13 @@ def run_graphrag_query(message: str, paths, method: str = "local") -> tuple[str,
     if result_container["error"]:
         raise result_container["error"]
 
-    print(f"[ENGINE] 검색 완료: {time.time() - start_time:.2f}초")
+    elapsed = time.time() - start_time
+    print(f"[ENGINE] 검색 완료: {elapsed:.2f}초")
     answer, source_ids = result_container["result"]  # 언패킹
     print(f"[ENGINE] 답변: {answer}")
     print(f"[ENGINE] source_ids: {source_ids}")
+    try:
+        save_query_to_db(paths.GMAIL_ID, original_message, elapsed, method)
+    except Exception as e:
+        print(f"[WARN] query DB 저장 실패 (무시): {e}")
     return answer, source_ids  # app.py의 _worker()로 튜플 반환
