@@ -353,24 +353,64 @@ function initUniversalProgressBars() {
   }
 }
 
-// 로그 패널 HTML 동적 주입
+// '메일 분석 현황' 창: 로그 패널 HTML 동적 주입 (SSE)
 function injectLogPanel() {
-  // CSS 주입
+  if (document.getElementById('logFab')) {
+    initLogPanel();
+    return;
+  }
+
   const style = document.createElement('style');
   style.textContent = `
-    /* 기존 log 관련 CSS 전부 여기에 */
-    .log-fab { ... }
-    .panel-wrap { ... }
-    /* 나머지 전부 */
+    .log-fab { display:inline-flex; align-items:center; gap:8px; padding:7px 16px; border-radius:999px; background:#1a9e6e; color:#fff; font-size:13px; font-weight:500; cursor:pointer; border:none; transition:background .18s,transform .15s; box-shadow:0 2px 10px rgba(26,158,110,0.35); }
+    .log-fab:hover { background:#0f7a52; transform:translateY(-1px); }
+    .log-fab:active { transform:scale(.97); }
+    .fab-dot { width:8px; height:8px; border-radius:50%; background:#fff; opacity:.85; display:inline-block; }
+    .fab-dot.running { background:#6effc5; animation:dot-pulse 1.2s ease-in-out infinite; }
+    @keyframes dot-pulse { 0%,100%{opacity:.85;transform:scale(1);}50%{opacity:1;transform:scale(1.35);} }
+    .fab-badge { position:absolute; top:-5px; right:-5px; background:#e24b4a; color:#fff; font-size:10px; font-weight:500; border-radius:999px; padding:1px 5px; min-width:16px; text-align:center; display:none; }
+    .fab-badge.show { display:block; }
+    .panel-wrap { position:absolute; top:calc(100% + 10px); right:0; width:480px; border:1px solid #d8ebe3; border-radius:12px; overflow:hidden; background:#fff; z-index:9999; box-shadow:0 8px 32px rgba(26,158,110,0.12); max-height:0; opacity:0; pointer-events:none; transition:max-height .35s cubic-bezier(.22,1,.36,1),opacity .3s; max-width:calc(100vw - 24px); }
+    .panel-wrap.open { max-height:480px; opacity:1; pointer-events:all; }
+    .panel-header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:#f0f7f3; border-bottom:1px solid #d8ebe3; }
+    .panel-title { display:flex; align-items:center; gap:7px; font-size:13px; font-weight:500; color:#1b2e22; }
+    .panel-status { font-size:11px; padding:3px 9px; border-radius:999px; font-weight:500; background:rgba(26,158,110,0.12); color:#1a9e6e; display:flex; align-items:center; gap:5px; }
+    .panel-status.idle { background:#f4f4f4; color:#888; }
+    .panel-status.done { background:#eaf3de; color:#3b6d11; }
+    .panel-status.failed { background:#fcebeb; color:#a32d2d; }
+    .status-indicator { width:6px; height:6px; border-radius:50%; background:currentColor; display:inline-block; }
+    .status-indicator.running { animation:dot-pulse 1.1s ease-in-out infinite; }
+    .panel-actions { display:flex; gap:6px; }
+    .panel-btn { background:none; border:1px solid #d8ebe3; color:#1a9e6e; border-radius:6px; padding:3px 9px; font-size:11px; cursor:pointer; transition:background .15s; }
+    .panel-btn:hover { background:rgba(26,158,110,0.08); }
+    .progress-bar-wrap { height:3px; background:#d8ebe3; }
+    .progress-bar-fill { height:100%; background:linear-gradient(90deg,#1a9e6e,#34d399); width:0%; transition:width .5s ease; border-radius:0 2px 2px 0; }
+    .log-body { height:260px; overflow-y:auto; padding:10px 14px; font-size:12px; line-height:1.7; scrollbar-width:thin; scrollbar-color:#d8ebe3 transparent; }
+    .log-body::-webkit-scrollbar { width:4px; }
+    .log-body::-webkit-scrollbar-thumb { background:#d8ebe3; border-radius:4px; }
+    .log-line { display:flex; gap:6px; align-items:flex-start; padding:2px 0; animation:line-in .2s ease; min-width:0; width:100%; }
+    @keyframes line-in { from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;} }
+    .log-ts { color:#b0c4bc; flex-shrink:0; font-size:11px; padding-top:1px; }
+    .log-tag { flex-shrink:0; font-size:10px; font-weight:500; padding:1px 6px; border-radius:4px; min-width:36px; text-align:center; white-space:nowrap; display:inline-block; overflow:visible; height:auto; }
+    .log-tag.running { background:#e1f5ee; color:#0f6e56; }
+    .log-tag.done { background:#eaf3de; color:#3b6d11; }
+    .log-tag.failed { background:#fcebeb; color:#a32d2d; }
+    .log-msg { color:#333; word-break:break-word; min-width:0; overflow-wrap:anywhere; }
+    .log-pct { color:#1a9e6e; font-weight:500; margin-left:4px; }
+    .log-empty { height:100%; display:flex; align-items:center; justify-content:center; color:#aaa; font-size:12px; flex-direction:column; gap:6px; }
+    .log-empty svg { opacity:.35; }
+    .panel-footer { padding:8px 14px; border-top:1px solid #d8ebe3; display:flex; align-items:center; justify-content:space-between; background:#f9fcfb; }
+    .footer-count { font-size:11px; color:#888; }
+    .footer-scroll-btn { font-size:11px; color:#1a9e6e; cursor:pointer; background:none; border:none; display:flex; align-items:center; gap:4px; }
+    .footer-scroll-btn:hover { text-decoration:underline; }
   `;
   document.head.appendChild(style);
 
-  // 버튼 + 패널 HTML을 nav 안에 주입
   const targetUl = document.querySelector('ul.navbar-right');
   if (!targetUl) return;
 
   const li = document.createElement('li');
-  li.className = 'nav-item';
+  li.id = 'log-fab-wrap';
   li.style.position = 'relative';
   li.innerHTML = `
     <button class="log-fab" id="logFab">
@@ -378,7 +418,7 @@ function injectLogPanel() {
         <rect x="2" y="3" width="12" height="10" rx="2"/>
         <path d="M5 6h6M5 9h4"/>
       </svg>
-      메일 동기화 현황
+      메일 분석 현황
       <span class="fab-dot" id="fabDot"></span>
     </button>
     <span class="fab-badge" id="fabBadge">0</span>
@@ -389,7 +429,7 @@ function injectLogPanel() {
             <rect x="2" y="3" width="12" height="10" rx="2"/>
             <path d="M5 6h6M5 9h4"/>
           </svg>
-          메일 동기화 현황
+          메일 분석 현황
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <span class="panel-status idle" id="panelStatus">
@@ -411,7 +451,7 @@ function injectLogPanel() {
             <rect x="3" y="5" width="18" height="14" rx="2"/>
             <path d="M7 9h10M7 13h6"/>
           </svg>
-          동기화 시작 시 로그가 표시됩니다.
+          분석 시작 시 로그가 표시됩니다.
         </div>
       </div>
       <div class="panel-footer">
@@ -426,18 +466,121 @@ function injectLogPanel() {
     </div>
   `;
 
-  // 번역 버튼 앞에 삽입
   const langLi = targetUl.querySelector('.nav-item.dropdown');
   targetUl.insertBefore(li, langLi);
 
-  // JS 초기화
   initLogPanel();
 }
 
 function initLogPanel() {
-  // 기존 index.html의 6번 함수 내용 그대로
   const logBody = document.getElementById('logBody');
-  // ... 나머지 전부
+  const logEmpty = document.getElementById('logEmpty');
+  const progressFill = document.getElementById('progressFill');
+  const panelStatus = document.getElementById('panelStatus');
+  const statusDot = document.getElementById('statusDot');
+  const statusText = document.getElementById('statusText');
+  const footerCount = document.getElementById('footerCount');
+  const fabDot = document.getElementById('fabDot');
+  const fabBadge = document.getElementById('fabBadge');
+  const logPanel = document.getElementById('logPanel');
+
+  let lineCount = 0;
+  let unreadCount = 0;
+  let isPanelOpen = false;
+  let autoScroll = true;
+
+  function ts() {
+    const n = new Date();
+    return [n.getHours(), n.getMinutes(), n.getSeconds()]
+      .map(v => String(v).padStart(2, '0'))
+      .join(':');
+  }
+
+  function addLogLine(type, msg, pct) {
+    if (logEmpty) logEmpty.style.display = 'none';
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    const tagClass =
+      type === 'progress'
+        ? 'running'
+        : type === 'done'
+          ? 'done'
+          : type === 'failed'
+            ? 'failed'
+            : 'info';
+    const tagLabel =
+      type === 'progress' ? '진행' : type === 'done' ? '완료' : type === 'failed' ? '실패' : '정보';
+    const pctText = pct != null ? `<span class="log-pct">(${pct}%)</span>` : '';
+    line.innerHTML = `<span class="log-ts">${ts()}</span><span class="log-tag ${tagClass}">${tagLabel}</span><span class="log-msg">${msg}${pctText}</span>`;
+    logBody.appendChild(line);
+    lineCount++;
+    footerCount.textContent = lineCount + ' 줄';
+    if (!isPanelOpen) {
+      unreadCount++;
+      fabBadge.textContent = unreadCount;
+      fabBadge.classList.add('show');
+    }
+    if (autoScroll) logBody.scrollTop = logBody.scrollHeight;
+  }
+
+  function setStatus(type) {
+    panelStatus.className = 'panel-status ' + type;
+    statusDot.className = 'status-indicator' + (type === 'running' ? ' running' : '');
+    const labels = { idle: '대기 중', running: '분석 중', done: '완료', failed: '실패' };
+    statusText.textContent = labels[type] || type;
+    fabDot.classList.toggle('running', type === 'running');
+  }
+
+  document.getElementById('logFab').addEventListener('click', () => {
+    isPanelOpen = !isPanelOpen;
+    logPanel.classList.toggle('open', isPanelOpen);
+    if (isPanelOpen) {
+      unreadCount = 0;
+      fabBadge.classList.remove('show');
+    }
+  });
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    isPanelOpen = false;
+    logPanel.classList.remove('open');
+  });
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    logBody.innerHTML = '';
+    logBody.appendChild(logEmpty);
+    logEmpty.style.display = '';
+    lineCount = 0;
+    footerCount.textContent = '0 줄';
+    progressFill.style.width = '0%';
+    setStatus('idle');
+  });
+  document.getElementById('scrollBottomBtn').addEventListener('click', () => {
+    logBody.scrollTop = logBody.scrollHeight;
+  });
+  logBody.addEventListener('scroll', () => {
+    autoScroll = logBody.scrollHeight - logBody.scrollTop - logBody.clientHeight < 40;
+  });
+
+  const es = new EventSource('/indexing-stream');
+  es.onmessage = function (e) {
+    try {
+      const data = JSON.parse(e.data);
+      if (data.type === 'progress') {
+        addLogLine('progress', data.message, data.progress);
+        progressFill.style.width = (data.progress ?? 0) + '%';
+        setStatus('running');
+      } else if (data.type === 'done') {
+        addLogLine('done', data.message, null);
+        progressFill.style.width = '100%';
+        setStatus('done');
+      } else if (data.type === 'failed') {
+        addLogLine('failed', data.message, null);
+        setStatus('failed');
+      }
+    } catch (_) {}
+  };
+  es.onerror = function () {
+    addLogLine('failed', 'SSE 연결 끊김 - 서버를 확인해 주세요.', null);
+    setStatus('failed');
+  };
 }
 
 document.addEventListener('DOMContentLoaded', injectLogPanel);
