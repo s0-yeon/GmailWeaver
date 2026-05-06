@@ -15,9 +15,7 @@
     "https://www.googleapis.com/auth/calendar",
     "https://www.googleapis.com/auth/script.scriptapp"
   ],
-  "urlFetchWhitelist": [
-    "https://unmatching-sandy-hydrocinnamyl.ngrok-free.dev/"
-  ],
+  "urlFetchWhitelist": ["https://detainable-thumbless-arnav.ngrok-free.dev/"],
   "addOns": {
     "common": {
       "name": "🫒 Olive",

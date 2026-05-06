@@ -35,6 +35,7 @@ from util.jobs.job_run import start_graph_pipeline_background, start_graph_updat
 from config.settings import *
 from util.user_path import UserPaths
 from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats
+from util.database.db_writer import save_query_to_db
 from util.extract_statics import start_statics_pipeline_background
 from util.sse_broadcaster import subscribe, unsubscribe
 # 환경변수 로드
@@ -44,8 +45,8 @@ load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: Graph
 app = Flask(__name__)   # Flask 앱 객체 생성. 해당 파일이 서버의 메인 애플리케이션이라는 의미
 CORS(app)   # Cross-Origin Resource Sharing 허용 (다른 환경에서 이 서버의 API를 호출할 수 있도록)
 
-# Apps Script Web App URL (캘린더, 라벨 등 모든 프록시에서 공통 사용)
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw7KX3gzE6do2sqDAlWlBsHFNwIX_ZCUILUNipin87mIyIw1_HhKWUHC0oLhM8pHUVhfA/exec"
+
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지 (utf-8 인코딩 및 대체 문자 처리)
 if hasattr(sys.stdout, "reconfigure"):
@@ -56,7 +57,7 @@ if hasattr(sys.stderr, "reconfigure"):
 # 유틸 함수
 
 # GraphRAG CLI 실행
-def _run_graphrag(message, resMethod,paths, resType):
+def _run_graphrag(message, raw_message, resMethod,paths, resType):
     def decode_output(b: bytes) -> str:
         # subprocess 결과(bytes)를 문자열로 디코딩
         # Windows 환경에서 GraphRAG가 cp949/euc-kr로 출력할 수 있으므로 UTF-8 → CP949 → EUC-KR 순으로 시도
@@ -88,7 +89,12 @@ def _run_graphrag(message, resMethod,paths, resType):
         env = os.environ.copy(),     # env=os.environ.copy(): 현재 프로세스의 환경변수 상속
         text = False    # text=False: stdout/stderr를 bytes로 받음 (직접 디코딩하기 위해)
     )
-    print(f'execution_time : {time.time() - start_time}')
+    elapsed = time.time() - start_time
+    print(f'execution_time : {elapsed}')
+    try:
+        save_query_to_db(paths.GMAIL_ID, raw_message, elapsed, resMethod)
+    except Exception as e:
+        print(f"[WARN] query DB 저장 실패 (무시): {e}")
 
     stdout_text = decode_output(result.stdout)
     stderr_text = decode_output(result.stderr)
@@ -875,13 +881,14 @@ def run_query_async():
             source_ids = []  # 초기화
             if answer is None:
                 full_message = message + " 영어 말고 한국어로 답변해줘."
+
                 resMethod = _classify_query_method(message)
                 try: # 엔진 객체 직접 호출 방식
-                    answer, source_ids = run_graphrag_query(full_message, paths, method=resMethod)
+                    answer, source_ids = run_graphrag_query(full_message,message, paths, method=resMethod)
                 except Exception as e:
                     # API 방식 실패 시 기존 CLI 방식으로 자동 fallback
                     print(f"[ENGINE] API 실패, CLI fallback: {e}")
-                    answer = _run_graphrag(full_message, resMethod, paths, resType)
+                    answer = _run_graphrag(full_message,message, resMethod, paths, resType)
                     source_ids = _extract_source_mail_ids(answer)
 
             if resType.lower() == "calendar":
@@ -945,34 +952,6 @@ def indexing_stream():
     return Response(generate(), content_type="text/event-stream",
                     headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
-# 엔드포인트: GET /active-index-job
-# 실행 중인 index/update 작업이 있으면 found=True와 진행도 반환
-# 없으면 found=False, 최근 60초 내 완료된 작업이 있으면 status/message도 함께 반환
-@app.route("/active-index-job", methods=["GET"])
-def active_index_job():
-    all_jobs = get_all_jobs()
-    jobs = list(all_jobs.values())
-
-    for job in reversed(jobs):
-        if job.get("job_type") in ("index", "update") and job.get("status") == "running":
-            return jsonify({
-                "found": True,
-                "job_id": job["job_id"],
-                "progress": job.get("progress", 0),
-                "message": job.get("message", ""),
-            })
-
-    for job in reversed(jobs):
-        if job.get("job_type") in ("index", "update") and job.get("status") in ("done", "failed"):
-            finished_at = job.get("finished_at") or 0
-            if time.time() - finished_at < 60:
-                return jsonify({
-                    "found": False,
-                    "recentStatus": job["status"],
-                    "message": job.get("message", ""),
-                })
-
-    return jsonify({"found": False})
 
 # 엔드포인트: POST /run-query  (동기 버전, 디버깅/단순 클라이언트용)
 @app.route('/run-query', methods=['POST'])
