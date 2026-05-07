@@ -45,7 +45,7 @@ load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: Graph
 app = Flask(__name__)   # Flask 앱 객체 생성. 해당 파일이 서버의 메인 애플리케이션이라는 의미
 CORS(app)   # Cross-Origin Resource Sharing 허용 (다른 환경에서 이 서버의 API를 호출할 수 있도록)
 
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw7KX3gzE6do2sqDAlWlBsHFNwIX_ZCUILUNipin87mIyIw1_HhKWUHC0oLhM8pHUVhfA/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzsZy_kzf3H0sJkvEhjczIHidzOAUs-I8E-jAJI6YXYPqo-FZqZNH-rVAS4N5a_w1V-/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지 (utf-8 인코딩 및 대체 문자 처리)
@@ -1282,6 +1282,9 @@ def calendar_events():
     except Exception:
         return jsonify({"events": [], "error": res.text[:200]}), 200
 
+
+
+# 엔드포인트: POST /labels-proxy (Apps Script 라벨 프록시)
 # 엔드포인트: POST /labels-proxy (Apps Script 라벨 프록시)
 @app.route('/labels-proxy', methods=['POST'])
 def labels_proxy():
@@ -1323,58 +1326,54 @@ def labels_proxy():
 
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
-    
 
 
-
-
-# 라벨 서치 프롬포트: 사용자 의도를 "action"(라벨 적용) vs "query"(정보 질문)으로 분류
-with open(os.path.join("parquet_template", "prompts", "label_search_prompt.txt"), "r", encoding="utf-8") as _f:
-    LABEL_SEARCH_PROMPT = _f.read().strip()
-
-# 엔드포인트: POST /label-route (라벨 서치 프롬포트로 의도 분류)
+# 엔드포인트: POST /label-route — deprecated, /label-query 로 직접 호출하세요
 @app.route("/label-route", methods=["POST"])
-def label_route():
+def label_route_deprecated():
     data = request.json or {}
-    user_input = data.get("userInput", "").strip()
-    label_names = data.get("labels", [])  # 현재 라벨 목록 (컨텍스트용)
+    with app.test_request_context(
+        '/label-query', method='POST',
+        json=data, content_type='application/json'
+    ):
+        result = label_query()
+    result_data = result.get_json()
+    if not result_data.get("ok"):
+        return jsonify(result_data)
+    return jsonify({"ok": True, "intent": result_data.get("intent", "query")})
 
-    if not user_input:
-        return jsonify({"ok": False, "error": "userInput이 비어있습니다."}), 400
-
-    system_content = LABEL_SEARCH_PROMPT
-    if label_names:
-        system_content += f"\n\n현재 사용자의 라벨 목록: {', '.join(label_names)}"
-
-    try:
-        client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": system_content},
-                {"role": "user", "content": user_input}
-            ],
-            response_format={"type": "json_object"},
-            temperature=0
-        )
-        result = json.loads(response.choices[0].message.content)
-        intent = result.get("intent", "query")
-        if intent not in ("action", "query"):
-            intent = "query"
-        return jsonify({"ok": True, "intent": intent})
-
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
-
-
-# 엔드포인트: POST /label-query (라벨 특화 질의 - OpenAI Function Calling)
+# 엔드포인트: POST /label-query (라벨 특화 질의 - 의도 분류 + OpenAI Function Calling)
 @app.route("/label-query", methods=["POST"])
 def label_query():
-    data = request.json or {}
-    user_input = data.get("userInput", "").strip()
+    data        = request.json or {}
+    user_input  = data.get("userInput", "").strip()
+    label_names = data.get("labels", [])
 
     if not user_input:
         return jsonify({"ok": False, "error": "userInput이 비어있습니다."}), 400
+
+    system_content = (
+        "사용자의 Gmail 관련 요청을 분석하세요.\n\n"
+
+        "【작업 요청】메일을 검색·분류·삭제·이동·라벨 추가·라벨 제거하는 요청이면 "
+        "반드시 아래 함수 중 하나를 호출하세요.\n"
+        "  - search_emails : 메일 검색 후 라벨 적용\n"
+        "  - apply_label   : 이미 선택된 메일에 라벨만 적용\n"
+        "  - trash_emails  : 메일을 휴지통으로 이동\n"
+        "  - remove_label  : 메일에서 라벨 제거\n"
+        "  - create_label  : 새 라벨 생성\n\n"
+
+        "【정보 질문】메일 내용이나 현황에 대한 질문 "
+        "(예: '받은 메일 중 중요한 게 뭐야?', '최근 메일 요약해줘', "
+        "'어떤 라벨에 메일이 많아?', '내 메일함 분석해줘') 이면 "
+        "함수를 호출하지 마세요. 아무 함수도 호출하지 않으면 "
+        "시스템이 자동으로 GraphRAG 지식 베이스 검색으로 답변합니다.\n\n"
+
+        "판단이 애매할 때는 작업 요청으로 처리하세요."
+    )
+
+    if label_names:
+        system_content += f"\n\n현재 사용자의 라벨 목록: {', '.join(label_names)}"
 
     tools = [
         {
@@ -1391,7 +1390,7 @@ def label_query():
                         },
                         "label_to_apply": {
                             "type": "string",
-                            "description": "검색된 메일에 적용할 라벨명 (예: 테스트). 언급이 없으면 빈 문자열."
+                            "description": "검색된 메일에 적용할 라벨명. 언급이 없으면 빈 문자열."
                         }
                     },
                     "required": ["query", "label_to_apply"]
@@ -1441,7 +1440,7 @@ def label_query():
             "type": "function",
             "function": {
                 "name": "remove_label",
-                "description": "삭제하거나 휴지통으로 이동할 메일의 검색 키워드를 추출합니다. '삭제해줘', '지워줘', '휴지통으로 이동해줘' 같은 요청에 사용합니다.",
+                "description": "메일에서 특정 라벨을 제거합니다. '라벨 빼줘', '라벨 제거해줘' 같은 요청에 사용합니다.",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -1458,7 +1457,6 @@ def label_query():
                 }
             }
         },
-        # ✅ 추가
         {
             "type": "function",
             "function": {
@@ -1483,37 +1481,42 @@ def label_query():
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "사용자의 Gmail 메일 관리 요청을 분석하여 적절한 함수를 호출하세요. "
-                        "메일을 검색해서 라벨을 붙이거나 찾는 요청이면 search_emails를 사용하세요. "
-                        "이미 선택된 메일에 라벨만 적용하는 요청이면 apply_label을 사용하세요. "
-                        "메일을 삭제하거나 휴지통으로 이동하는 요청이면 trash_emails를 사용하세요. "
-                        "메일에서 라벨을 제거하는 요청이면 remove_label을 사용하세요. "
-                        "새 라벨을 만드는 요청이면 create_label을 사용하세요."  # ✅ 추가
-                    )
-                },
-                {"role": "user", "content": user_input}
+                {"role": "system", "content": system_content},
+                {"role": "user",   "content": user_input}
             ],
             tools=tools,
-            tool_choice="auto"
+            tool_choice="auto",
+            temperature=0
         )
+
         tool_calls = response.choices[0].message.tool_calls
 
-        # 단일 액션
+        if not tool_calls:
+            print("[label-query] FC 없음 → intent=query")
+            return jsonify({"ok": True, "intent": "query"})
+
         if len(tool_calls) == 1:
             action = tool_calls[0].function.name
             params = json.loads(tool_calls[0].function.arguments)
-            return jsonify({"ok": True, "action": action, "params": params})
+            print(f"[label-query] 단일 액션: {action} / params: {params}")
+            return jsonify({
+                "ok":     True,
+                "intent": "action",
+                "action": action,
+                "params": params
+            })
 
-        # 복합 액션 (예: create_label + search_emails)
-        else:
-            actions = [
-                {"action": tc.function.name, "params": json.loads(tc.function.arguments)}
-                for tc in tool_calls
-            ]
-            return jsonify({"ok": True, "action": "multi", "actions": actions})
+        actions = [
+            {"action": tc.function.name, "params": json.loads(tc.function.arguments)}
+            for tc in tool_calls
+        ]
+        print(f"[label-query] 복합 액션: {[a['action'] for a in actions]}")
+        return jsonify({
+            "ok":      True,
+            "intent":  "action",
+            "action":  "multi",
+            "actions": actions
+        })
 
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500

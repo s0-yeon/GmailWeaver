@@ -1102,6 +1102,34 @@
         el.innerHTML = `<div class="gw-lq-error"><i class="fas fa-exclamation-circle me-1"></i>${escapeHtml(msg)}</div>`;
       }
 
+      // 단순 메일 목록 렌더링 (라벨 적용 UI 없음)
+      function lqShowMailList(messages) {
+        const el = lqResult();
+        el.className = 'gw-lq-result show';
+
+        if (messages.length === 0) {
+          el.innerHTML = `<div class="gw-lq-error">조건에 맞는 메일을 찾지 못했습니다. 검색어를 바꿔보세요.</div>`;
+          return;
+        }
+
+        const cards = messages.map(m => {
+          const date = new Date(m.date).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+          return `
+            <div class="gw-lq-mail-card" style="cursor:default;">
+              <div class="gw-lq-mail-info">
+                <div class="gw-lq-mail-subject">${escapeHtml(m.subject)}</div>
+                <div class="gw-lq-mail-meta">${escapeHtml(m.from)} · ${date}</div>
+                <div class="gw-lq-mail-snippet">${escapeHtml(m.snippet)}</div>
+              </div>
+            </div>`;
+        }).join('');
+
+        el.innerHTML = `
+          <div class="gw-lq-hint"><strong>${messages.length}개</strong> 메일을 찾았어요.</div>
+          <div class="gw-lq-mail-list">${cards}</div>
+        `;
+      }
+
       // 메일 카드 체크박스 리스트 렌더링
       function lqShowMailCards(messages, labelName) {
         const el = lqResult();
@@ -1418,14 +1446,11 @@
         el.innerHTML = `<div class="gw-lq-answer">${escapeHtml(answerText).replace(/\n/g, '<br>')}</div>`;
       }
 
-      // ──────────────────────────────────────────────────────────────
-      // 메인 파이프라인
-      //
-      //  [/label-route] 라벨 서치 프롬포트로 의도 분류
-      //      │
-      //      ├─ "action" → [/label-query] FC → GraphRAG + GmailApp 병렬 검색 → 메일 카드
-      //      └─ "query"  → [/run-query-async] GraphRAG local search → 텍스트 답변
-      // ──────────────────────────────────────────────────────────────
+
+      // 라벨 특화 질의 메인 파이프라인
+      // /label-query 1회 호출로 intent 분류 + FC 파라미터 추출 통합
+      // intent="action" → Gmail 우선 검색, 결과 부족 시 GraphRAG 보조
+      // intent="query"  → GraphRAG local search → 텍스트 답변
       async function runLabelQuery() {
         const userInput = document.getElementById('lq-input').value.trim();
         if (!userInput) return;
@@ -1435,59 +1460,81 @@
         lqShowLoading('요청을 분석하고 있습니다...');
 
         try {
-          // 1단계: 라벨 서치 프롬포트로 의도 분류 (action vs query)
-          const routeRes = await fetch(`${FLASK_URL}/label-route`, {
+          const fc = await fetch(`${FLASK_URL}/label-query`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               userInput,
-              labels: labels.map(l => l.name || l)   // 현재 라벨 목록을 컨텍스트로 전달
+              labels: labels.map(l => l.name || l)
             })
-          });
-          const route = await routeRes.json();
-          if (!route.ok) throw new Error(route.error || '의도 분류 실패');
+          }).then(r => r.json());
+
+          if (!fc.ok) throw new Error(fc.error || 'Function Calling 실패');
 
           // ── ACTION 경로: 라벨 적용 작업 ──
-          if (route.intent === 'action') {
-            // 2a: Function Calling으로 검색 쿼리 + 라벨명 추출
-            lqShowLoading('라벨 작업 파라미터를 추출하고 있습니다...');
-            const fcRes = await fetch(`${FLASK_URL}/label-query`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ userInput })
-            });
-            const fc = await fcRes.json();
-            if (!fc.ok) throw new Error(fc.error || 'Function Calling 실패');
+          if (fc.intent === 'action') {
 
-            // 공통: GraphRAG + Gmail 병렬 검색 → 중복 제거 병합
+            // Gmail 우선 검색 → 결과 부족 시 GraphRAG 보조
             async function lqSearchMerged(query) {
-              const [graphRagRaw, gmailResult] = await Promise.allSettled([
-                lqRunGraphRag(query).then(text => lqFetchGraphRagMessages(text)),
-                callLabelsProxy('searchEmailsForLabel', { query, maxResults: 20 })
-              ]);
-              const graphRagMsgs = graphRagRaw.status === 'fulfilled' ? graphRagRaw.value : [];
-              const gmailMsgs = (gmailResult.status === 'fulfilled' && gmailResult.value.ok)
-                ? (gmailResult.value.messages || []).map(m => ({ ...m, source: 'gmail' })) : [];
+
+              // 1단계: Gmail 먼저
+              const gmailResult = await callLabelsProxy('searchEmailsForLabel', { query, maxResults: 20 });
+              const gmailMsgs = (gmailResult.ok ? (gmailResult.messages || []) : [])
+                .map(m => ({ ...m, source: 'gmail' }));
+
+              // Gmail 결과 3건 이상이면 GraphRAG 건너뜀
+              if (gmailMsgs.length >= 3) {
+                lqShowLoading(`Gmail에서 ${gmailMsgs.length}건 검색됨`);
+                return gmailMsgs;
+              }
+
+              // 2단계: Gmail 결과 부족 → GraphRAG 보조
+              lqShowLoading(`Gmail ${gmailMsgs.length}건 → GraphRAG 보조 검색 중...`);
+              let graphRagMsgs = [];
+              try {
+                const text = await lqRunGraphRag(query);
+                graphRagMsgs = await lqFetchGraphRagMessages(text);
+              } catch (e) {
+                console.warn('[lqSearchMerged] GraphRAG 실패, Gmail 결과만 사용:', e.message);
+              }
+
+              // 중복 제거 병합 (Gmail 우선)
               const seen = new Set();
               const merged = [];
-              for (const m of [...graphRagMsgs, ...gmailMsgs]) {
+              for (const m of [...gmailMsgs, ...graphRagMsgs]) {
                 if (!seen.has(m.id)) { seen.add(m.id); merged.push(m); }
               }
+
               if (merged.length === 0) {
-                throw new Error(
-                  (graphRagRaw.status === 'rejected' ? graphRagRaw.reason?.message : null)
-                  || (gmailResult.status === 'rejected' ? gmailResult.reason?.message : null)
-                  || gmailResult.value?.error
-                  || '조건에 맞는 메일을 찾지 못했습니다.'
-                );
+                throw new Error(gmailResult.error || '조건에 맞는 메일을 찾지 못했습니다.');
               }
+
               return merged;
             }
 
             if (fc.action === 'search_emails') {
               const { query, label_to_apply } = fc.params;
-              lqShowLoading(`"${query}" 검색 중... (GraphRAG + Gmail 병렬)`);
-              lqShowMailCards(await lqSearchMerged(query), label_to_apply);
+
+              // 라벨명이 있는데 현재 목록에 없으면 자동 생성
+              if (label_to_apply) {
+                const labelExists = labels.some(l => (l.name || l) === label_to_apply);
+                if (!labelExists) {
+                  lqShowLoading(`"${label_to_apply}" 라벨이 없어 자동 생성 중...`);
+                  const createRes = await callLabelsProxy('createLabel', { labelName: label_to_apply });
+                  if (!createRes.ok) throw new Error(createRes.error || '라벨 생성 실패');
+                  clearCache();
+                  activeLabel = null;
+                  await loadLabels(true);
+                }
+              }
+
+              lqShowLoading(`"${query}" 검색 중...`);
+              const results = await lqSearchMerged(query);
+              if (label_to_apply) {
+                lqShowMailCards(results, label_to_apply);
+              } else {
+                lqShowMailList(results);
+              }
 
             } else if (fc.action === 'trash_emails') {
               const { query } = fc.params;
@@ -1508,43 +1555,54 @@
               if (!applyRes.ok) throw new Error(applyRes.error);
               lqResult().className = 'gw-lq-result show';
               lqResult().innerHTML = `<div class="gw-lq-success"><i class="fas fa-check-circle me-1"></i>${applyRes.appliedCount}개 메일에 <strong>${escapeHtml(applyRes.labelName)}</strong> 라벨을 적용했어요!</div>`;
+
             } else if (fc.action === 'create_label') {
-                const labelname = fc.params?.label_name;
-                if (!labelname) { lqShowError('라벨 이름을 찾을 수 없습니다.'); return; }
+              const labelname = fc.params?.label_name;
+              if (!labelname) { lqShowError('라벨 이름을 찾을 수 없습니다.'); return; }
 
-                clearCache();
-                activeLabel = null;
-                await loadLabels(true);   // 탭 목록 새로고침
-                selectLabel(labelname);   // 새 탭 활성화
+              lqShowLoading(`"${labelname}" 라벨 생성 중...`);
 
-                lqResult.className = 'gw-lq-result show';
-                lqResult.innerHTML = `<div class="gw-lq-success">
-                    <i class="fas fa-check-circle me-1"></i>
-                    "<strong>${escapeHtml(labelname)}</strong>" 라벨이 생성되었습니다!
-                </div>`;
+              const createRes = await callLabelsProxy('createLabel', { labelName: labelname });
+              if (!createRes.ok) throw new Error(createRes.error || '라벨 생성 실패');
+
+              clearCache();
+              activeLabel = null;
+              await loadLabels(true);
+              selectLabel(labelname);
+
+              lqResult().className = 'gw-lq-result show';
+              lqResult().innerHTML = `<div class="gw-lq-success">
+                <i class="fas fa-check-circle me-1"></i>
+                "<strong>${escapeHtml(labelname)}</strong>" 라벨이 생성되었습니다!
+              </div>`;
+
+              new BroadcastChannel('olive_label_update').postMessage({
+                type: 'label_created', labelName: labelname
+              });
+
             } else if (fc.action === 'multi') {
-                for (const step of fc.actions) {
-                    if (step.action === 'create_label') {
-                        const labelname = step.params?.label_name;
-                        lqShowLoading(`"${labelname}" 라벨 생성 중…`);
-                        const res = await callLabelsProxy('createLabel', { labelName: labelname });
-                        if (!res.ok) throw new Error(res.error);
-                        clearCache(); activeLabel = null;
-                        await loadLabels(true);
-                        selectLabel(labelname);
-                    } else if (step.action === 'search_emails') {
-                        const { query, label_to_apply } = step.params;
-                        lqShowLoading(`"${query}" 검색 중…`);
-                        lqShowMailCards(await lqSearchMerged(query), label_to_apply);
-                    }
-                }
-            }
+              for (const step of fc.actions) {
+                if (step.action === 'create_label') {
+                  const labelname = step.params?.label_name;
+                  lqShowLoading(`"${labelname}" 라벨 생성 중…`);
+                  const res = await callLabelsProxy('createLabel', { labelName: labelname });
+                  if (!res.ok) throw new Error(res.error);
+                  clearCache();
+                  activeLabel = null;
+                  await loadLabels(true);
+                  selectLabel(labelname);
 
+                } else if (step.action === 'search_emails') {
+                  const { query, label_to_apply } = step.params;
+                  lqShowLoading(`"${query}" 검색 중…`);
+                  lqShowMailCards(await lqSearchMerged(query), label_to_apply);
+                }
+              }
+            }
 
           // ── QUERY 경로: 정보 질문 → GraphRAG 텍스트 답변 ──
           } else {
             lqShowLoading('GraphRAG로 메일 지식 베이스를 검색하고 있습니다...');
-            // 라벨 목록을 컨텍스트로 주입 (GraphRAG는 Gmail 라벨 메타데이터를 모름)
             const labelNames = labels.map(l => l.name || l).filter(Boolean);
             const labelCtx = labelNames.length
               ? `[${name} 계정의 Gmail 라벨 목록: ${labelNames.join(', ')}]`
