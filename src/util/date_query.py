@@ -1,185 +1,73 @@
 import os
 import re
+import json
 import time
 import datetime
-import calendar
+import openai
 
-def _extract_date_range(message: str):
+def _extract_date_range_with_llm(message: str):
     today = datetime.datetime.now()
-    year = today.year
+    weekday_kr = ['월', '화', '수', '목', '금', '토', '일'][today.weekday()]
 
-    # 패턴1: 3월 22일 ~ 3월 25일
-    m = re.search(r'(\d+)월\s*(\d+)일\s*[~～\-]\s*(\d+)월\s*(\d+)일', message)
-    if m:
-        start = f"{year}-{int(m.group(1)):02d}-{int(m.group(2)):02d}"
-        end = f"{year}-{int(m.group(3)):02d}-{int(m.group(4)):02d}"
-        return start, end
+    tw_start = today - datetime.timedelta(days=today.weekday())
+    tw_end   = tw_start + datetime.timedelta(days=6)
+    lw_start = tw_start - datetime.timedelta(weeks=1)
+    lw_end   = tw_end   - datetime.timedelta(weeks=1)
+    llw_start = tw_start - datetime.timedelta(weeks=2)
+    llw_end   = tw_end   - datetime.timedelta(weeks=2)
+    lllw_start = tw_start - datetime.timedelta(weeks=3)
+    lllw_end   = tw_end   - datetime.timedelta(weeks=3)
 
-    # 패턴2: 3월 22일 ~ 25일
-    m = re.search(r'(\d+)월\s*(\d+)일\s*[~～\-]\s*(\d+)일', message)
-    if m:
-        month = int(m.group(1))
-        start = f"{year}-{month:02d}-{int(m.group(2)):02d}"
-        end = f"{year}-{month:02d}-{int(m.group(3)):02d}"
-        return start, end
+    fmt = lambda d: d.strftime('%Y-%m-%d')
+    date_context = (
+        f"오늘: {fmt(today)} ({weekday_kr}요일)\n"
+        f"이번 주: {fmt(tw_start)} ~ {fmt(tw_end)}\n"
+        f"저번 주 / 지난 주: {fmt(lw_start)} ~ {fmt(lw_end)}\n"
+        f"저저번 주: {fmt(llw_start)} ~ {fmt(llw_end)}\n"
+        f"저저저번 주: {fmt(lllw_start)} ~ {fmt(lllw_end)}\n"
+        f"이번 달: {fmt(today.replace(day=1))} ~ {fmt(today)}\n"
+    )
 
-    # 패턴3: 2026-03-22 ~ 2026-03-25
-    m = re.search(r'(\d{4})-(\d{2})-(\d{2})\s*[~～\-]\s*(\d{4})-(\d{2})-(\d{2})', message)
-    if m:
-        start = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
-        end = f"{m.group(4)}-{m.group(5)}-{m.group(6)}"
-        return start, end
+    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    f"{date_context}"
+                    "위 날짜 기준표를 참고하여 사용자 질의가 특정 날짜나 기간을 조회하는 것이라면 set_date_range를 호출하세요. "
+                    "날짜와 무관한 질의라면 아무것도 호출하지 마세요."
+                )
+            },
+            {"role": "user", "content": message}
+        ],
+        tools=[{
+            "type": "function",
+            "function": {
+                "name": "set_date_range",
+                "description": "날짜/기간 기반 이메일 조회 시 호출. 날짜 무관 질의는 호출 금지.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "start_date": {"type": "string", "description": "조회 시작 날짜 (YYYY-MM-DD)"},
+                        "end_date":   {"type": "string", "description": "조회 종료 날짜 (YYYY-MM-DD)"}
+                    },
+                    "required": ["start_date", "end_date"]
+                }
+            }
+        }],
+        tool_choice="auto",
+        temperature=0.0
+    )
 
-    # 패턴4: 2026-03-22 ~ 03-25
-    m = re.search(r'(\d{4})-(\d{2})-(\d{2})\s*[~～\-]\s*(\d{2})-(\d{2})', message)
-    if m:
-        start = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
-        end = f"{m.group(1)}-{m.group(4)}-{m.group(5)}"
-        return start, end
+    tool_calls = response.choices[0].message.tool_calls
+    if not tool_calls:
+        return None
 
-    # 패턴5: 이번 주
-    if '이번 주' in message or '이번주' in message:
-        start_of_week = today - datetime.timedelta(days=today.weekday())
-        end_of_week = start_of_week + datetime.timedelta(days=6)
-        return start_of_week.strftime('%Y-%m-%d'), end_of_week.strftime('%Y-%m-%d')
-
-    # 패턴6: 지난 주 / 저번 주 / 저저번 주 (N주 전)
-    m = re.search(r'(저저번|저번|지난)\s*주', message)
-    if m:
-        weeks_ago = 2 if m.group(1) == '저저번' else 1
-        start_of_week = today - datetime.timedelta(days=today.weekday() + 7 * weeks_ago)
-        end_of_week = start_of_week + datetime.timedelta(days=6)
-        return start_of_week.strftime('%Y-%m-%d'), end_of_week.strftime('%Y-%m-%d')
-
-    # 패턴7: 오늘
-    if '오늘' in message:
-        date = today.strftime('%Y-%m-%d')
-        return date, date
-
-    # 패턴8: 어제
-    if '어제' in message:
-        date = (today - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-        return date, date
-
-    # 패턴9: 며칠 전 (3일 전, 5일 전 등)
-    m = re.search(r'(\d+)\s*일\s*전', message)
-    if m:
-        date = (today - datetime.timedelta(days=int(m.group(1)))).strftime('%Y-%m-%d')
-        return date, date
-
-    # 패턴10: 최근 N일
-    m = re.search(r'최근\s*(\d+)\s*일', message)
-    if m:
-        start = (today - datetime.timedelta(days=int(m.group(1)) - 1)).strftime('%Y-%m-%d')
-        end = today.strftime('%Y-%m-%d')
-        return start, end
-
-    # 패턴11: 이번 달
-    if '이번 달' in message or '이번달' in message:
-        start = today.replace(day=1).strftime('%Y-%m-%d')
-        end = today.strftime('%Y-%m-%d')
-        return start, end
-
-    # 패턴12: 지난 달 / 저번 달 / 저저번 달 (N달 전)
-    m = re.search(r'(저저번|저번|지난)\s*달', message)
-    if m:
-        months_ago = 2 if m.group(1) == '저저번' else 1
-        month = today.month - months_ago
-        y = today.year
-        while month <= 0:
-            month += 12
-            y -= 1
-        last_day = calendar.monthrange(y, month)[1]
-        return f"{y}-{month:02d}-01", f"{y}-{month:02d}-{last_day:02d}"
-
-    # 패턴13: 올해
-    if '올해' in message:
-        start = f"{year}-01-01"
-        end = today.strftime('%Y-%m-%d')
-        return start, end
-
-    # 패턴14: 작년
-    if '작년' in message:
-        last_year = year - 1
-        return f"{last_year}-01-01", f"{last_year}-12-31"
-
-    # 패턴15: N년 전
-    m = re.search(r'(\d+)\s*년\s*전', message)
-    if m:
-        target_year = year - int(m.group(1))
-        return f"{target_year}-01-01", f"{target_year}-12-31"
-
-    # 패턴16: N달 전 (해당 월 전체)
-    m = re.search(r'(\d+)\s*달\s*전', message)
-    if m:
-        months_ago = int(m.group(1))
-        month = today.month - months_ago
-        y = today.year
-        while month <= 0:
-            month += 12
-            y -= 1
-        last_day = calendar.monthrange(y, month)[1]
-        return f"{y}-{month:02d}-01", f"{y}-{month:02d}-{last_day:02d}"
-
-        # 패턴17: N개월 전 (해당 월 전체)
-    m = re.search(r'(\d+)\s*개월\s*전', message)
-    if m:
-        months_ago = int(m.group(1))
-        month = today.month - months_ago
-        y = today.year
-        while month <= 0:
-            month += 12
-            y -= 1
-        last_day = calendar.monthrange(y, month)[1]
-        return f"{y}-{month:02d}-01", f"{y}-{month:02d}-{last_day:02d}"
-
-    # 패턴18: 2026년 3월 22일
-    m = re.search(r'(\d{4})\s*년\s*(\d+)\s*월\s*(\d+)\s*일', message)
-    if m:
-        date = f"{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
-        return date, date
-
-    # 패턴19: 2026년 3월 (연월 전체)
-    m = re.search(r'(\d{4})\s*년\s*(\d+)\s*월', message)
-    if m and not re.search(r'\d+일', message):
-        y, month = int(m.group(1)), int(m.group(2))
-        last_day = calendar.monthrange(y, month)[1]
-        return f"{y}-{month:02d}-01", f"{y}-{month:02d}-{last_day:02d}"
-
-    # 패턴20: 2026년 전체
-    m = re.search(r'(\d{4})\s*년', message)
-    if m and not re.search(r'\d+월', message):
-        y = int(m.group(1))
-        return f"{y}-01-01", f"{y}-12-31"
-
-    # 패턴21: 3월 전체 (연도 없이 월만)
-    m = re.search(r'(\d+)월', message)
-    if m and not re.search(r'\d+일', message):
-        month = int(m.group(1))
-        last_day = calendar.monthrange(year, month)[1]
-        return f"{year}-{month:02d}-01", f"{year}-{month:02d}-{last_day:02d}"
-
-    # 패턴22: 3월 22일 (단일 날짜)
-    m = re.search(r'(\d+)월\s*(\d+)일', message)
-    if m:
-        date = f"{year}-{int(m.group(1)):02d}-{int(m.group(2)):02d}"
-        return date, date
-
-    # 패턴23: 2026-03-22 (단일 날짜 숫자형)
-    m = re.search(r'(\d{4})-(\d{2})-(\d{2})', message)
-    if m:
-        return f"{m.group(1)}-{m.group(2)}-{m.group(3)}", f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
-
-    # 패턴24: 26-03-22 또는 2026-3-22 (zero-padding 없는 경우)
-    m = re.search(r'(\d{2,4})-(\d{1,2})-(\d{1,2})', message)
-    if m:
-        y = int(m.group(1))
-        if y < 100:
-            y += 2000
-        date = f"{y}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
-        return date, date
-
-    return None
+    args = json.loads(tool_calls[0].function.arguments)
+    print(f"[DEBUG] date_range extracted: {args['start_date']} ~ {args['end_date']}")
+    return args["start_date"], args["end_date"]
 
 # parquet에서 날짜 범위에 맞는 이메일 필터링
 def _filter_emails_by_date(paths, start_date: str, end_date: str) -> list:
@@ -228,8 +116,7 @@ def _filter_emails_by_date(paths, start_date: str, end_date: str) -> list:
 
 # 질의에서 날짜 범위 측정하여 parquet 에서 날짜 필터링 하여 llm 답변
 def run_date_range_query(message: str, paths) -> str:
-    import openai
-    date_range = _extract_date_range(message) # 질의에서 날짜 범위 추출, 날짜 패턴 없으면 None 반환
+    date_range = _extract_date_range_with_llm(message)
     if not date_range:
         return None  # 날짜 쿼리 아니면 graphrag로 넘긴다
 

@@ -45,7 +45,7 @@ load_dotenv("src/parquet/.env") # src/parquet/.env를 사용하는 이유: Graph
 app = Flask(__name__)   # Flask 앱 객체 생성. 해당 파일이 서버의 메인 애플리케이션이라는 의미
 CORS(app)   # Cross-Origin Resource Sharing 허용 (다른 환경에서 이 서버의 API를 호출할 수 있도록)
 
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw7KX3gzE6do2sqDAlWlBsHFNwIX_ZCUILUNipin87mIyIw1_HhKWUHC0oLhM8pHUVhfA/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지 (utf-8 인코딩 및 대체 문자 처리)
