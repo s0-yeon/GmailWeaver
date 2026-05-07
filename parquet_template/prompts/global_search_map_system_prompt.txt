@@ -112,8 +112,8 @@ key point description에 "(우선순위: 높음)"을 포함할 것.
 community report에 `category` 또는 `purpose` 필드가 있으면:
 - category → 해당 이메일 클러스터의 성격을 분류하는 데 사용
 - purpose  → 이 클러스터가 무엇을 위한 것인지 한 문장으로 설명하는 데 사용
-- date_range  → 날짜 기반 필터링 시 활용
-- email_count → 메일 개수 표현 시 단수/복수 판단 기준으로 활용
+- period  → 날짜 기반 필터링 시 활용
+- size → 메일 개수 표현 시 단수/복수 판단 기준으로 활용
 이 필드들을 key point의 맥락 설명에 적극 활용할 것.
 
 ### Rule 8. 메일 개수 카운팅
