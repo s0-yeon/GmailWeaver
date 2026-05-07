@@ -238,4 +238,118 @@ def save_keyword_stats_to_db(paths,update_date=None):
         cursor.close()
         conn.close()
 
+def init_processed_attachments_table():
+    """
+    서버 시작 시 processed_attachments 테이블이 없으면 자동 생성
+    """
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS processed_attachments (
+                id               INT AUTO_INCREMENT PRIMARY KEY,
+                user_account_id  VARCHAR(255) NOT NULL,
+                update_date      DATETIME     NOT NULL,
+                mail_id          VARCHAR(255) NOT NULL,
+                filename         VARCHAR(255) NOT NULL,
+                processed_at     DATETIME     NOT NULL,
+                UNIQUE KEY uq_att (user_account_id, update_date, mail_id, filename),
+                FOREIGN KEY (user_account_id, update_date) REFERENCES user(user_account_id, update_date)
+            )
+        """)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print("[DB] processed_attachments 테이블 준비 완료")
+    except Exception as e:
+        print(f"[DB] processed_attachments 테이블 초기화 실패 (무시): {e}")
+
+
+def filter_unprocessed_attachments(gmail_id: str, attachments: list) -> list:
+    """
+    이미 처리된 첨부파일 필터링
+    (user_account_id, update_date, mail_id, filename) 조합으로 중복 체크
+    반환: 미처리 첨부파일 리스트
+    """
+    if not attachments:
+        return []
+
+    latest_user = get_latest_user_record(gmail_id)
+    if not latest_user:
+        print(f"[WARN] filter_unprocessed_attachments: user 테이블에 {gmail_id} 없음, 전체 처리")
+        return attachments
+
+    user_account_id = latest_user["user_account_id"]
+    update_date = latest_user["update_date"]
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(f"""
+            SELECT mail_id, filename
+            FROM processed_attachments
+            WHERE user_account_id = %s
+              AND update_date = %s
+              AND (mail_id, filename) IN ({",".join(["(%s,%s)"] * len(attachments))})
+        """, [user_account_id, update_date] + [
+            v for a in attachments
+            for v in (a.get("mail_id", ""), a.get("name", ""))
+        ])
+
+        already_done = set((row[0], row[1]) for row in cursor.fetchall())
+        cursor.close()
+        conn.close()
+
+        unprocessed = [
+            a for a in attachments
+            if (a.get("mail_id", ""), a.get("name", "")) not in already_done
+        ]
+
+        skipped = len(attachments) - len(unprocessed)
+        if skipped > 0:
+            print(f"[AttachmentFilter] 중복 제외: {skipped}개 / 처리 대상: {len(unprocessed)}개")
+
+        return unprocessed
+
+    except Exception as e:
+        print(f"[AttachmentFilter] DB 조회 실패, 전체 처리: {e}")
+        return attachments
+
+
+def mark_attachments_as_processed(gmail_id: str, attachments: list):
+    """
+    처리 완료된 첨부파일 DB에 기록
+    IGNORE: 중복 INSERT 시 오류 없이 무시
+    """
+    if not attachments:
+        return
+
+    latest_user = get_latest_user_record(gmail_id)
+    if not latest_user:
+        print(f"[WARN] mark_attachments_as_processed: user 테이블에 {gmail_id} 없음, 기록 생략")
+        return
+
+    user_account_id = latest_user["user_account_id"]
+    update_date = latest_user["update_date"]
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        now = datetime.datetime.now()
+        rows = [
+            (user_account_id, update_date, a.get("mail_id", ""), a.get("name", ""), now)
+            for a in attachments
+        ]
+        cursor.executemany("""
+            INSERT IGNORE INTO processed_attachments
+                (user_account_id, update_date, mail_id, filename, processed_at)
+            VALUES (%s, %s, %s, %s, %s)
+        """, rows)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print(f"[AttachmentFilter] {len(rows)}개 처리 완료 기록")
+    except Exception as e:
+        print(f"[AttachmentFilter] 처리 완료 기록 실패 (무시): {e}")
     

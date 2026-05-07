@@ -3,8 +3,10 @@
 
 //배치 시스템 상수
 var BATCH_TRIGGER_MINUTES = 5;
-var BATCH_SIZE = 50; // GmailApp.search() 1회 최대 반환 수 (스레드 단위)
-var ATT_BATCH_SIZE = 10; //첨부파일 배치 크기
+var BATCH_SIZE = 16; // GmailApp.search() 1회 최대 반환 수 (스레드 단위)
+var ATT_BATCH_SIZE = 16; //첨부파일 배치 크기
+var MAX_THREADS = 29; // 테스트용. 전체 처리하려면 null로 설정
+
 // 동기화 버튼 핸들러
 // 서버에 없는 메일 추가
 function onSyncNewOnly(e) {
@@ -145,7 +147,7 @@ function _runBatchSync() {
       isLast = !hasNextNew;
     } else {
       // rewrite: 다음 배치에 스레드가 있는지만 확인
-      isLast = (nextThreads.length === 0);
+      isLast = (nextThreads.length === 0) || (MAX_THREADS !== null && nextOffset >= MAX_THREADS);
     }
     var filename = mode === "rewrite"
       ? "mail_latest.txt"
@@ -211,14 +213,13 @@ function _runBatchSync() {
 // 마지막 배치 전송 후 호출: 배치 상태 키 초기화, 동기화 시간 저장
 // 트리거는 삭제하지 않음 → 상시 돌면서 다음 버튼 클릭을 대기
 function _finishBatchSync(props, mode) {
-  // 동기화 완료 시각 저장 (append 모드의 다음 기준점으로 사용)
   props.setProperty("GW_LAST_SYNC_MS", String(Date.now()));
- 
-  // 배치 상태 키 초기화
-  // GW_SYNC_MODE 없으면 _runBatchSync가 할 일 없다고 판단하고 리턴
   props.deleteProperty("GW_SYNC_MODE");
   props.deleteProperty("GW_BATCH_OFFSET");
- 
+  if (mode === "rewrite") {
+    props.deleteProperty("GW_ATT_OFFSET");
+    props.setProperty("GW_ATT_FULL_SCAN", "true");
+  }
   Logger.log("[BatchSync] 전체 배치 완료. mode=" + mode);
 }
 
@@ -618,19 +619,65 @@ function _runAttachmentSync() {
     var props = PropertiesService.getUserProperties();
     var myEmail = Session.getActiveUser().getEmail();
 
-    var lastSyncMs = Number(props.getProperty("GW_LAST_SYNC_MS") || "0");
-    var lastSyncDate = _msToDateStr(lastSyncMs);
-    var queryNew = "in:inbox OR in:sent after:" + lastSyncDate;
+    var fullScan = props.getProperty("GW_ATT_FULL_SCAN") === "true";
+
+    // 1) fullScan 플래그 없으면 스킵 (메일 배치 완료 전)
+    if (!fullScan) {
+      Logger.log("[AttachmentSync] GW_ATT_FULL_SCAN 없음 → 스킵");
+      return;
+    }
+    // 2) 메일 배치 진행 중이면 스킵
+    if (props.getProperty("GW_SYNC_MODE")) {
+      Logger.log("[AttachmentSync] 메일 배치 진행 중 → 스킵");
+      return;
+    }
+    // 3) 메일 인덱싱 완료 전이면 스킵
+    if (!props.getProperty("GW_LAST_SYNC_MS")) {
+      Logger.log("[AttachmentSync] 메일 인덱싱 미완료 → 스킵");
+      return;
+    }
+
+    var queryNew = "in:inbox OR in:sent";
     var attOffset = Number(props.getProperty("GW_ATT_OFFSET") || "0");
+
+    if (MAX_THREADS !== null && attOffset >= MAX_THREADS) {
+      props.deleteProperty("GW_ATT_OFFSET");
+      props.deleteProperty("GW_ATT_FULL_SCAN");
+      UrlFetchApp.fetch(TunnelURL + "/upload-attachments", {
+        method: "post",
+        contentType: "application/json",
+        headers: { "ngrok-skip-browser-warning": "1" },
+        payload: JSON.stringify({ gmail_id: myEmail, attachments: [], is_last: true }),
+        muteHttpExceptions: true
+      });
+      Logger.log("[AttachmentSync] MAX_THREADS 도달, finish 신호 전송");
+      return;
+    }
+
     var threads = GmailApp.search(queryNew, attOffset, ATT_BATCH_SIZE);
     var allAttachments = [];
     var MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024;
 
     if (threads.length === 0) {
       props.deleteProperty("GW_ATT_OFFSET");
+      props.deleteProperty("GW_ATT_FULL_SCAN");
       Logger.log("[AttachmentSync] 모든 배치 완료, 오프셋 초기화");
+      UrlFetchApp.fetch(TunnelURL + "/upload-attachments", {
+        method: "post",
+        contentType: "application/json",
+        headers: { "ngrok-skip-browser-warning": "1" },
+        payload: JSON.stringify({
+          gmail_id: myEmail,
+          attachments: [],
+          is_last: true
+        }),
+        muteHttpExceptions: true
+      });
       return;
     }
+
+    var nextCheck = GmailApp.search(queryNew, attOffset + threads.length, 1);
+    var isLast = nextCheck.length === 0 || (MAX_THREADS !== null && (attOffset + threads.length) >= MAX_THREADS);
 
     threads.forEach(function(thread) {
       thread.getMessages().forEach(function(msg) {
@@ -648,7 +695,6 @@ function _runAttachmentSync() {
                             lowerName.endsWith(".xlsx") || lowerName.endsWith(".csv") ||
                             lowerName.endsWith(".txt");
 
-          // base64 인코딩 후 payload에 추가
           if (isSupported && size <= MAX_ATTACHMENT_SIZE) {
             var dataBase64 = Utilities.base64Encode(att.getBytes());
             allAttachments.push({
@@ -663,24 +709,36 @@ function _runAttachmentSync() {
     });
 
     if (allAttachments.length === 0) {
-      // 첨부파일 없어도 오프셋은 갱신 (다음 배치로 이동)
-      if (threads.length < ATT_BATCH_SIZE) {
+      if (isLast) {
         props.deleteProperty("GW_ATT_OFFSET");
+        props.deleteProperty("GW_ATT_FULL_SCAN");
+        UrlFetchApp.fetch(TunnelURL + "/upload-attachments", {
+          method: "post",
+          contentType: "application/json",
+          headers: { "ngrok-skip-browser-warning": "1" },
+          payload: JSON.stringify({
+            gmail_id: myEmail,
+            attachments: [],
+            is_last: true
+          }),
+          muteHttpExceptions: true
+        });
+        Logger.log("[AttachmentSync] 마지막 배치 완료 (첨부파일 없음), finish 신호 전송");
       } else {
         props.setProperty("GW_ATT_OFFSET", String(attOffset + threads.length));
+        Logger.log("[AttachmentSync] 이번 배치 전송할 첨부파일 없음");
       }
-      Logger.log("[AttachmentSync] 이번 배치 전송할 첨부파일 없음");
       return;
     }
 
-    // /upload-attachments 엔드포인트로 전송 (메일 본문 없이 첨부만)
     var res = UrlFetchApp.fetch(TunnelURL + "/upload-attachments", {
       method: "post",
       contentType: "application/json",
       headers: { "ngrok-skip-browser-warning": "1" },
       payload: JSON.stringify({
         gmail_id: myEmail,
-        attachments: allAttachments
+        attachments: allAttachments,
+        is_last: isLast
       }),
       muteHttpExceptions: true
     });
@@ -688,14 +746,13 @@ function _runAttachmentSync() {
     var code = res.getResponseCode();
     Logger.log("[AttachmentSync] 전송 완료: " + allAttachments.length + "개 / " + code);
 
-    // 전송 성공 시에만 오프셋 갱신
-    // 실패 시 오프셋 갱신 안 함 → 다음 트리거에서 동일 배치 재시도
     if (code >= 200 && code < 300) {
-      if (threads.length < ATT_BATCH_SIZE) {
-        props.deleteProperty("GW_ATT_OFFSET"); // 마지막 배치: 초기화
+      if (isLast) {
+        props.deleteProperty("GW_ATT_OFFSET");
+        props.deleteProperty("GW_ATT_FULL_SCAN");
         Logger.log("[AttachmentSync] 마지막 배치 완료, 오프셋 초기화");
       } else {
-        props.setProperty("GW_ATT_OFFSET", String(attOffset + threads.length)); // 다음 배치로
+        props.setProperty("GW_ATT_OFFSET", String(attOffset + threads.length));
         Logger.log("[AttachmentSync] 오프셋 갱신: " + attOffset + " → " + (attOffset + threads.length));
       }
     } else {

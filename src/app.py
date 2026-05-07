@@ -35,14 +35,17 @@ from util.jobs.job_run import start_graph_pipeline_background, start_graph_updat
 from config.settings import *
 from util.user_path import UserPaths
 from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats
-from util.database.db_writer import save_query_to_db
+from util.database.db_writer import (
+    save_query_to_db,
+    init_processed_attachments_table,
+    filter_unprocessed_attachments,
+    mark_attachments_as_processed
+)
 from util.extract_statics import start_statics_pipeline_background
 
-# [추가] MySQL 커넥션 (processed_attachments 중복 필터용)
-# db_reader.py, db_writer.py와 동일하게 config.db에서 가져옴
-from config.db import get_db_connection
-
 from util.sse_broadcaster import subscribe, unsubscribe
+
+from config.db import get_db_connection
 
 # 환경변수 로드
 load_dotenv("src/parquet/.env")
@@ -50,6 +53,9 @@ load_dotenv("src/parquet/.env")
 # Flask 앱 초기화
 app = Flask(__name__)
 CORS(app)
+
+# 서버 시작 시 테이블 초기화 실행
+init_processed_attachments_table()
 
 # Apps Script Web App URL
 WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz3bAOxML5BZSSJcMFM1or5jY8K4NVwliHk_Rbe9jXYVBXbYM05Fl-1bPG1909_38hZ/exec"
@@ -61,107 +67,6 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-# ============================================================
-# [추가] processed_attachments 테이블 초기화
-# 서버 시작 시 테이블이 없으면 자동 생성
-# gmail_id + mail_id + filename 조합으로 중복 처리 방지
-# ============================================================
-def _init_processed_attachments_table():
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS processed_attachments (
-                id           INT AUTO_INCREMENT PRIMARY KEY,
-                gmail_id     VARCHAR(255) NOT NULL,
-                mail_id      VARCHAR(255) NOT NULL,
-                filename     VARCHAR(500) NOT NULL,
-                processed_at DATETIME     NOT NULL,
-                UNIQUE KEY uq_att (gmail_id, mail_id, filename)
-            )
-        """)
-        conn.commit()
-        cursor.close()
-        conn.close()
-        print("[DB] processed_attachments 테이블 준비 완료")
-    except Exception as e:
-        # 테이블 생성 실패 시 서버 시작을 막지 않음 (로그만 출력)
-        print(f"[DB] processed_attachments 테이블 초기화 실패 (무시): {e}")
-
-# 서버 시작 시 테이블 초기화 실행
-_init_processed_attachments_table()
-
-# ============================================================
-# [추가] 이미 처리된 첨부파일 목록 DB 조회
-# 수신한 첨부파일 중 (gmail_id, mail_id, filename) 조합이 이미 있는 것 필터링
-# 반환: 미처리 첨부파일 리스트
-# ============================================================
-def _filter_unprocessed_attachments(gmail_id: str, attachments: list) -> list:
-    if not attachments:
-        return []
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-        # IN 절로 한 번에 조회 (N+1 쿼리 방지)
-        placeholders = ",".join(["%s"] * len(attachments))
-        keys = [(gmail_id, a.get("mail_id", ""), a.get("name", "")) for a in attachments]
-
-        # (gmail_id, mail_id, filename) 조합으로 이미 처리된 것 조회
-        cursor.execute(f"""
-            SELECT mail_id, filename
-            FROM processed_attachments
-            WHERE gmail_id = %s
-              AND (mail_id, filename) IN ({",".join(["(%s,%s)"] * len(attachments))})
-        """, [gmail_id] + [v for pair in [(a.get("mail_id",""), a.get("name","")) for a in attachments] for v in pair])
-
-        already_done = set((row[0], row[1]) for row in cursor.fetchall())
-        cursor.close()
-        conn.close()
-
-        # 이미 처리된 것 제외하고 반환
-        unprocessed = [
-            a for a in attachments
-            if (a.get("mail_id",""), a.get("name","")) not in already_done
-        ]
-
-        skipped = len(attachments) - len(unprocessed)
-        if skipped > 0:
-            print(f"[AttachmentFilter] 중복 제외: {skipped}개 / 처리 대상: {len(unprocessed)}개")
-
-        return unprocessed
-
-    except Exception as e:
-        # DB 조회 실패 시 전체를 처리 대상으로 반환 (안전한 fallback)
-        print(f"[AttachmentFilter] DB 조회 실패, 전체 처리: {e}")
-        return attachments
-
-# ============================================================
-# [추가] 처리 완료된 첨부파일 DB에 기록
-# IGNORE: 중복 INSERT 시 오류 없이 무시 (UNIQUE KEY 설정 활용)
-# ============================================================
-def _mark_attachments_as_processed(gmail_id: str, attachments: list):
-    if not attachments:
-        return
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        now = datetime.datetime.now()
-        rows = [
-            (gmail_id, a.get("mail_id",""), a.get("name",""), now)
-            for a in attachments
-        ]
-        cursor.executemany("""
-            INSERT IGNORE INTO processed_attachments
-                (gmail_id, mail_id, filename, processed_at)
-            VALUES (%s, %s, %s, %s)
-        """, rows)
-        conn.commit()
-        cursor.close()
-        conn.close()
-        print(f"[AttachmentFilter] {len(rows)}개 처리 완료 기록")
-    except Exception as e:
-        print(f"[AttachmentFilter] 처리 완료 기록 실패 (무시): {e}")
 
 
 # 유틸 함수
@@ -584,7 +489,7 @@ def _is_index_ready(paths):
         return False
 
 # 백그라운드: 첨부파일 텍스트 추출 → 요약 → attachment_latest.txt 저장 → graphrag update
-def _run_attachment_pipeline(job_id: str, paths, attachments: list, env: dict):
+def _run_attachment_pipeline(job_id: str, paths, attachments: list, env: dict, is_last):
     from util.jobs.job_run import build_graphrag_update, build_graph_json
 
     print(f"[JOB][attachment] START job_id={job_id}")
@@ -652,15 +557,23 @@ def _run_attachment_pipeline(job_id: str, paths, attachments: list, env: dict):
 
         update_job(job_id, progress=60, message="GraphRAG Update 실행 중")
 
-        # 4) graphrag update → json 생성
-        build_graphrag_update(job_id, paths, env)
-        build_graph_json(job_id, paths, env)
+        # 4) graphrag update → json 생성 (마지막 배치일 때만)
+        print(f"[JOB][attachment] is_last={is_last}, job_id={job_id}")
+        if is_last:
+            build_graphrag_update(job_id, paths, env)
+            build_graph_json(job_id, paths, env)
+        else:
+            print(f"[JOB][attachment] 중간 배치 → GraphRAG update 생략, 누적 중")
+            _delete_old_update_files(paths)
+            mark_attachments_as_processed(paths.GMAIL_ID, attachments)
+            update_job(job_id, status="done", message="첨부파일 누적 완료 (중간 배치)")
+            return
 
         # 6) 처리 완료된 이전 update_output 폴더 삭제
         _delete_old_update_files(paths)
 
         # [추가] 7) 처리 완료된 첨부파일 DB에 기록 (다음 트리거에서 중복 방지)
-        _mark_attachments_as_processed(paths.GMAIL_ID, attachments)
+        mark_attachments_as_processed(paths.GMAIL_ID, attachments)
 
         update_job(job_id, progress=100, status="done", message="첨부파일 인덱싱 완료")
         print(f"[JOB][attachment] SUCCESS job_id={job_id}")
@@ -715,11 +628,22 @@ def _build_merged_attachment_csv(paths, summarized_by_mail: dict[str, list[dict]
 
     new_csv_path = os.path.join(paths.MAIL_DIR, "attachment_latest.csv")
     try:
+        # 기존 CSV 읽어서 누적 (중간 배치 내용 보존)
+        existing_rows = {}
+        if os.path.exists(new_csv_path):
+            with open(new_csv_path, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    existing_rows[row["id"]] = row["text"]
+        # 새 배치로 갱신 (같은 mail_id면 최신 요약으로 덮어씀)
+        for row in csv_rows:
+            existing_rows[row["id"]] = row["text"]
+
         with open(new_csv_path, "w", encoding="utf-8", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=["id", "text"])
             writer.writeheader()
-            writer.writerows(csv_rows)
-        print(f"[AttachmentFile] 증분 병합 CSV 생성 완료: {new_csv_path}")
+            writer.writerows([{"id": k, "text": v} for k, v in existing_rows.items()])
+        print(f"[AttachmentFile] 증분 병합 CSV 생성 완료: {new_csv_path} ({len(existing_rows)}개)")
         return new_csv_path
     except Exception as e:
         print(f"[AttachmentFile] 증분 CSV 생성 중 오류: {e}")
@@ -1041,11 +965,8 @@ def upload():
     attachments = data.get("attachment") or []
     requested_mode = data.get("syncmode", "append")
     gmail_id = (data.get("gmail_id") or "").strip().lower()
-
-    # [추가] is_last: 마지막 배치 여부. True면 GraphRAG 파이프라인 실행
-    # 배치 시스템이 없는 단일 호출(기존 방식)에서도 기본값 True로 동작 유지
     is_last = data.get("is_last", True)
-    batch_offset = data.get("batch_offset", 0)  # 디버깅용
+    batch_offset = data.get("batch_offset", 0)
 
     paths = UserPaths(BASE_DIR, gmail_id)
 
@@ -1080,9 +1001,11 @@ def upload():
             for fname in os.listdir(paths.MAIL_DIR):
                 fpath = os.path.join(paths.MAIL_DIR, fname)
                 try:
-                    os.remove(fpath)
+                    if os.path.isfile(fpath):  # 파일만 삭제, 폴더는 건너뜀
+                        os.remove(fpath)
                 except Exception as e:
                     print(f"[CLEAN] 파일 삭제 실패 (무시): {fpath} / {e}")
+
             print(f"[CLEAN] input 폴더 초기화 완료 (첫 배치): {paths.MAIL_DIR}")
         if os.path.exists(paths.ATTACHMENT_DIR):
             shutil.rmtree(paths.ATTACHMENT_DIR)
@@ -1098,15 +1021,18 @@ def upload():
                 print(f"[CLEAN] stats.json 삭제 실패 (무시): {e}")
 
         try:
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            cursor.execute(
-                "DELETE FROM processed_attachments WHERE gmail_id = %s",
-                (gmail_id,)
-            )
-            conn.commit()
-            cursor.close()
-            conn.close()
+            from util.database.db_writer import get_latest_user_record
+            latest_user = get_latest_user_record(gmail_id)
+            if latest_user:
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                cursor.execute(
+                    "DELETE FROM processed_attachments WHERE user_account_id = %s AND update_date = %s",
+                    (latest_user["user_account_id"], latest_user["update_date"])
+                )
+                conn.commit()
+                cursor.close()
+                conn.close()
             print(f"[CLEAN] processed_attachments DB 초기화 완료 (gmail_id={gmail_id})")
         except Exception as e:
             print(f"[CLEAN] processed_attachments DB 초기화 실패 (무시): {e}")
@@ -1645,9 +1571,29 @@ def upload_attachments():
 
     if not gmail_id:
         return jsonify({"ok": False, "error": "gmail_id가 비어있습니다."}), 400
+    
     if not attachments:
+        # attachments 없이 is_last=true만 온 경우 → GraphRAG update 트리거
+        is_last = data.get("is_last", False)
+        if is_last:
+            # 이미 누적된 attachment_latest.csv로 GraphRAG update 실행
+            paths = UserPaths(BASE_DIR, gmail_id)
+            if os.path.exists(os.path.join(paths.MAIL_DIR, "attachment_latest.csv")):
+                job_id = str(uuid.uuid4())[:8]
+                create_job(job_id, job_type="attachment")
+                env = os.environ.copy()
+                env["PYTHONUNBUFFERED"] = "1"
+                from util.jobs.job_run import build_graphrag_update, build_graph_json
+                def _finish():
+                    build_graphrag_update(job_id, paths, env)
+                    build_graph_json(job_id, paths, env)
+                    _delete_old_update_files(paths)
+                    update_job(job_id, status="done", message="첨부파일 인덱싱 완료")
+                    print(f"[JOB][attachment] SUCCESS job_id={job_id}")
+                threading.Thread(target=_finish, daemon=True).start()
+                return jsonify({"ok": True, "message": "finish signal received"})
         return jsonify({"ok": False, "error": "attachments가 비어있습니다."}), 400
-
+    
     paths = UserPaths(BASE_DIR, gmail_id)
 
     # 2) 메일 인덱스가 준비되지 않았으면 거절
@@ -1667,10 +1613,25 @@ def upload_attachments():
         return jsonify({"ok": False, "error": "인덱싱 진행 중, 다음 트리거에서 재시도됩니다."}), 409
 
     # [추가] 4) 이미 처리된 첨부파일 필터링
-    unprocessed = _filter_unprocessed_attachments(gmail_id, attachments)
+    is_last = data.get("is_last", True)
+    unprocessed = filter_unprocessed_attachments(gmail_id, attachments)
 
     if not unprocessed:
         print(f"[upload-attachments] 모두 이미 처리된 첨부파일 → 스킵")
+        if is_last and os.path.exists(os.path.join(paths.MAIL_DIR, "attachment_latest.csv")):
+            job_id = str(uuid.uuid4())[:8]
+            create_job(job_id, job_type="attachment")
+            env = os.environ.copy()
+            env["PYTHONUNBUFFERED"] = "1"
+            from util.jobs.job_run import build_graphrag_update, build_graph_json
+            def _finish():
+                build_graphrag_update(job_id, paths, env)
+                build_graph_json(job_id, paths, env)
+                _delete_old_update_files(paths)
+                update_job(job_id, status="done", message="첨부파일 인덱싱 완료")
+                print(f"[JOB][attachment] SUCCESS job_id={job_id}")
+            threading.Thread(target=_finish, daemon=True).start()
+            return jsonify({"ok": True, "message": "모두 처리됨, finish 실행"})
         return jsonify({"ok": True, "skipped": len(attachments), "message": "모두 이미 처리된 첨부파일"})
 
     # 4) 즉시 200 응답 (Apps Script 타임아웃 방지)
@@ -1684,7 +1645,7 @@ def upload_attachments():
     # 5) 백그라운드에서 처리 (미처리 첨부파일만 전달)
     t = threading.Thread(
         target=_run_attachment_pipeline,
-        args=(job_id, paths, unprocessed, env),
+        args=(job_id, paths, unprocessed, env, is_last),
         daemon=True
     )
     t.start()
