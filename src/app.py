@@ -1153,8 +1153,16 @@ def upload():
         # statics 파이프라인
         statics_job_id = str(uuid.uuid4())[:8]
         create_job(statics_job_id, job_type="statics")
+        
+        if is_last and sync_mode == "rewrite":
+            final_text = _read_latest_text(paths)
+            statics_blocks = _split_mail_blocks(final_text)
+            statics_blocks = [b for b in statics_blocks if _extract_mail_id_from_block(b)]
+        else:
+            statics_blocks = append_blocks
+
         start_statics_pipeline_background(
-            statics_job_id, append_blocks, paths,
+            statics_job_id, statics_blocks, paths,
             mode="rewrite" if sync_mode == "rewrite" else "append"
         )
 
@@ -1217,7 +1225,10 @@ def upload():
         # [순서 주석] _build_mail_csv는 동기 실행 후 GraphRAG 스레드 시작
         # → CSV 파일이 완전히 쓰인 뒤 GraphRAG가 읽도록 순서 보장
         _build_mail_csv(paths)
-        start_graph_pipeline_background(graph_job_id, paths, env, added_count=added_count)
+        # rewrite 배치 완료 시 총 누적 메일 수로 기록 (마지막 배치 added_count만 넘기면 일부만 저장되는 버그 방지)
+        final_text = _read_latest_text(paths)
+        total_mail_count = len([b for b in _split_mail_blocks(final_text) if _extract_mail_id_from_block(b)])
+        start_graph_pipeline_background(graph_job_id, paths, env, added_count=total_mail_count)
 
     else:  # append
         if new_ids:
