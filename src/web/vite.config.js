@@ -143,9 +143,6 @@ export default defineConfig({
         // 라벨 우주: D3 Zoomable Circle Packing 시각화
         label: 'production/label.html',
 
-        // API 파이프라인 테스트 (Dev)
-        api_test: 'production/api_test.html',
-
         // 그래프 시각화
         graph_viz: 'production/graph-viz.html',
 

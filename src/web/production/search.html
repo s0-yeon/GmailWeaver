@@ -188,6 +188,45 @@
       }
       .gw-empty i { font-size: 3.5rem; display: block; margin-bottom: 16px; color: #e0e0e0; }
       .gw-empty p { font-size: 1rem; }
+
+      /* 근거 메일 섹션 */
+      .gw-source-emails {
+        margin-top: 20px;
+        padding-top: 16px;
+        border-top: 1px solid #e8e8e8;
+      }
+      .gw-source-label {
+        font-size: 0.82rem;
+        color: #73879C;
+        margin-bottom: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .gw-source-btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .gw-source-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 16px;
+        background: #fff;
+        border: 1px solid #26B99A;
+        border-radius: 20px;
+        font-size: 0.88rem;
+        color: #26B99A;
+        text-decoration: none;
+        transition: background 0.15s, color 0.15s;
+        white-space: nowrap;
+      }
+      .gw-source-btn:hover {
+        background: #26B99A;
+        color: #fff;
+        text-decoration: none;
+      }
     </style>
   </head>
 
@@ -233,7 +272,6 @@
                     <ul class="nav child_menu">
                       <li><a href="graph-viz.html"><i class="bi bi-diagram-3"></i> <span data-i18n="nav.graph_viz">Graph Viz</span></a></li>
                       <li><a href="recap.html"><i class="bi bi-clipboard-data"></i> Recap</a></li>
-                      <li><a href="api_test.html"><i class="bi bi-terminal"></i> API Test <span class="badge bg-warning text-dark">Dev</span></a></li>
                     </ul>
                   </li>
                   <li><a href="contacts.html"><i class="bi bi-people"></i> <span data-i18n="nav.contacts">Contacts</span><span class="bi bi-chevron-right"></span></a></li>
@@ -437,10 +475,24 @@
         `;
       }
       // 결과 카드 렌더링
-      function showResult(q, text) {
+      function showResult(q, text, sourceIds) {
+        let sourceHtml = '';
+        if (sourceIds && sourceIds.length > 0) {
+          const btns = sourceIds.map(id =>
+            `<a class="gw-source-btn" href="https://mail.google.com/mail/u/0/#all/${escapeAttr(id)}" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-envelope"></i> 메일로 확인하기
+            </a>`
+          ).join('');
+          sourceHtml = `
+            <div class="gw-source-emails">
+              <div class="gw-source-label">근거 메일</div>
+              <div class="gw-source-btns">${btns}</div>
+            </div>`;
+        }
         document.getElementById('result-container').innerHTML = `
           <div class="gw-query-label">검색어: <strong>${escapeHtml(q)}</strong></div>
           <div class="gw-result-card">${escapeHtml(text)}</div>
+          ${sourceHtml}
         `;
       }
       // 에러 메시지 렌더링
@@ -458,7 +510,7 @@
           try {
             const res = await fetch(`${FLASK_URL}/job-status/${jobId}`);
             const data = await res.json();
-            if (data.status === 'done') { showResult(q, data.result || '결과가 없습니다.'); return; }
+            if (data.status === 'done') { showResult(q, data.result || '결과가 없습니다.', data.source_ids || []); return; }
             if (data.status === 'error') { showError(q, data.result || '오류가 발생했습니다.'); return; }
           } catch (e) { showError(q, '서버 연결에 실패했습니다.'); return; }
         }
