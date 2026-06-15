@@ -1,161 +1,226 @@
 // src/apps-script/gmail.js
 // Gmail 동기화, 라벨, 캘린더, 단일 메일 업로드
 
+//배치 시스템 상수
+var BATCH_TRIGGER_MINUTES = 5;
+var BATCH_SIZE = 16; // GmailApp.search() 1회 최대 반환 수 (스레드 단위)
+var ATT_BATCH_SIZE = 16; //첨부파일 배치 크기
+var MAX_THREADS = 29; // 테스트용. 전체 처리하려면 null로 설정
+
 // 동기화 버튼 핸들러
 // 서버에 없는 메일 추가
 function onSyncNewOnly(e) {
-  return _runSync("append");
+  return _startBatchSync("append");
 }
 
 // 전체 갱신 (보낸 메일 포함)
 function onSyncAll(e) {
-  return _runSync("rewrite");
+  return _startBatchSync("rewrite");
 }
 
-// Gmail 동기화
-function _runSync(mode) {
+// 배치 시스템
+// 버튼 클릭 시 호출. 전체 메일 수만 세고 즉시 반환
+// 실제 전송은 _runBatchSync() 트리거가 BATCH_TRIGGER_MINUTES마다 담당
+function _startBatchSync(mode) {
   try {
-    // 사용자 속성에서 마지막 동기화 시간 가져옴
     var props = PropertiesService.getUserProperties();
-    var lastSyncMs = Number(props.getProperty("GW_LAST_SYNC_MS") || "0");
+    var query = "in:inbox OR in:sent";
 
-    // 공통 변수
-    var threads = []; // 스레드 목록
-    var myEmail = Session.getActiveUser().getEmail(); // 발신자 구분에 사용
-    var allText = ""; // 서버로 전송할 메일 본문
-    var count = 0; // 메일 수
-    var allAttachments = []; // 첨부파일 목록
-
-    // 전체 갱신할 때
-    if (mode === "rewrite") {
-      var queryAll = "in:inbox OR in:sent";
-      threads = GmailApp.search(queryAll, 0, 200);
-      threads.forEach(function (thread) {
-        // 각 스레드 순회
-        thread.getMessages().forEach(function (msg) {
-          // 스레드 속 메일 순회
-          count++;
-          allText += _buildMessageText(msg, myEmail, count) + "\n\n"; // 메일 본문 내용 추가
-          allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));
-        });
+    // 1) append 모드: 최근 배치만 확인해서 새 메일 있는지 체크
+    // 카운트 루프 제거 → 버튼 누르자마자 즉시 토스트 반환
+    if (mode === "append") {
+      var lastSyncMs = Number(props.getProperty("GW_LAST_SYNC_MS") || "0");
+      var recentThreads = GmailApp.search(query, 0, BATCH_SIZE);
+      var hasNew = recentThreads.some(function(thread) {
+        return thread.getLastMessageDate().getTime() > lastSyncMs;
       });
-
-      if (count === 0) {
-        // 전송할 메일 없을 때 팝업
-        return _toast("📭 전송할 메일이 없습니다.");
+      if (!hasNew) {
+        return _toast("📭 새로 추가할 메일이 없습니다.");
       }
-
-      var filenameAll = "mail_latest.txt";
-
-      // 서버에 /upload 엔드포인트로 post 전송
-      var resAll = UrlFetchApp.fetch(TunnelURL + "/upload", {
-        method: "post",
-        contentType: "application/json",
-        payload: JSON.stringify({
-          filename: filenameAll, // 파일명
-          content: allText, // 본문
-          attachment: allAttachments, // 첨부파일
-          syncmode: "rewrite", // 처리방식
-          gmail_id: myEmail,
-        }),
-        muteHttpExceptions: true, // HTTP 오류 에러 말고 응답으로 수신
-      });
-
-      var codeAll = resAll.getResponseCode();
-      var textAll = resAll.getContentText();
-
-      if (codeAll < 200 || codeAll >= 300) {
-        throw new Error("upload failed: " + codeAll + " / " + textAll);
-      }
-
-      // 메일 전송 성공 시 동기화 시간 저장
-      props.setProperty("GW_LAST_SYNC_MS", String(Date.now()));
-
-      Logger.log("upload success: " + codeAll + " / " + textAll);
-      Logger.log("메일 수: " + count);
-      Logger.log("첨부 전송 개수: " + allAttachments.length);
-
-      return _toast("✅ " + count + "개 메일 전송 완료. 첨부파일 내용은 메일 인덱싱 후 자동 처리됩니다.");
+      props.setProperty("GW_SYNC_MODE", mode);
+      props.setProperty("GW_BATCH_OFFSET", "0");
+      return _toast(
+        "✅ 새 메일 추가 인덱싱을 시작합니다.\n" +
+        "백그라운드에서 " + BATCH_TRIGGER_MINUTES + "분 간격으로 처리됩니다."
+      );
     }
 
-    // 새로운 메일만 추가할 때
-    var queryNew = "in:inbox OR in:sent";
-    threads = GmailApp.search(queryNew, 0, 30);
+    // 2) rewrite: PropertiesService에 배치 상태 저장 후 즉시 토스트 반환
+    props.setProperty("GW_SYNC_MODE", mode);
+    props.setProperty("GW_BATCH_OFFSET", "0");
+    return _toast(
+      "✅ 전체 갱신 인덱싱을 시작합니다.\n" +
+      "백그라운드에서 " + BATCH_TRIGGER_MINUTES + "분 간격으로 처리됩니다."
+    );
 
-    var newMessages = []; // 새로운 메일 메시지들 저장할 변수
 
-    threads.forEach(function (thread) {
-      thread.getMessages().forEach(function (msg) {
-        var msgTime = msg.getDate().getTime();
-        if (msgTime > lastSyncMs) {
-          // 마지막 동기화 시간보다 나중인 메일만 선택해서 저장
-          newMessages.push(msg);
-        }
-      });
-    });
-
-    // 새로운 메일을 위로 정렬
-    newMessages.sort(function (a, b) {
-      return b.getDate().getTime() - a.getDate().getTime();
-    });
-
-    // 새로운 메일만 추가할 때 처리
-    newMessages.forEach(function (msg) {
-      count++;
-      allText += _buildMessageText(msg, myEmail, count) + "\n\n";
-      allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));
-    });
-
-    if (count === 0) {
-      return _toast("📭 새로 추가할 메일이 없습니다.");
-    }
-
-    // append 누를 때마다 새로운 input 파일로 생성
-    var filename = "inc_" + _dateToYmdHms(new Date()) + ".txt";
-
-    // 서버에 /upload 엔드포인트로 post 전송
-    var resNew = UrlFetchApp.fetch(TunnelURL + "/upload", {
-      method: "post",
-      contentType: "application/json",
-      payload: JSON.stringify({
-        filename: filename,
-        content: allText,
-        attachment: allAttachments,
-        syncmode: "append",
-        gmail_id: myEmail,
-      }),
-      muteHttpExceptions: true,
-    });
-
-    var codeNew = resNew.getResponseCode();
-    var textNew = resNew.getContentText();
-
-    if (codeNew < 200 || codeNew >= 300) {
-      throw new Error("upload failed: " + codeNew + " / " + textNew);
-    }
-
-    var dataNew = {};
-    try {
-      dataNew = JSON.parse(textNew); // 서버 응답 문자열 json으로 파싱 (밑에서 전체갱신으로 바꼈는지 아닌지 확인하기 위해 if문에 사용하기 위함)
-    } catch (err) {
-      throw new Error("응답 JSON 파싱 실패: " + textNew);
-    }
-
-    // 서버에 메일 전송 성공 시 동기화 시간 저장
-    props.setProperty("GW_LAST_SYNC_MS", String(Date.now()));
-
-    Logger.log("upload success: " + codeNew + " / " + textNew);
-    Logger.log("메일 수: " + count);
-    Logger.log("첨부 전송 개수: " + allAttachments.length);
-
-    if (dataNew.fallback_to_rewrite) {
-      // 새로운 메일만 추가 눌렀는데 인덱싱 안돼있어서 인덱싱 모드로 바뀌었으면
-      return _toast("✅ 기존 인덱스가 없어 전체 인덱싱을 먼저 실행합니다.");
-    }
-    return _toast("✅ " + count + "개 새 메일 전송 완료. 첨부파일 내용은 메일 내용 인덱싱 후 자동 처리됩니다.");
   } catch (err) {
     return _toast("⚠️ 동기화 실패: " + err.message);
   }
+}
+
+// 배치 트리거 등록 - Apps Script 편집기에서 최초 1회 수동 실행
+// registerAttachmentTrigger()와 동일한 패턴
+// 애드온 컨텍스트에서는 1시간 미만 트리거 등록 불가하므로
+// 반드시 Apps Script 편집기에서 직접 실행해야 함
+function registerBatchTrigger() {
+  ScriptApp.getProjectTriggers().forEach(function(trigger) {
+    if (trigger.getHandlerFunction() === "_runBatchSync") {
+      ScriptApp.deleteTrigger(trigger);
+    }
+  });
+  ScriptApp.newTrigger("_runBatchSync")
+    .timeBased()
+    .everyMinutes(BATCH_TRIGGER_MINUTES)
+    .create();
+  Logger.log("[BatchTrigger] _runBatchSync " + BATCH_TRIGGER_MINUTES + "분 트리거 등록 완료");
+}
+
+// 배치 실행 트리거 함수 - Apps Script가 자동 호출
+// PropertiesService에서 offset/mode를 읽어 배치 1개(스레드 200개) 처리
+// - 완료(스레드 0개) 시: 트리거 삭제, 상태 초기화
+// - 미완료 시: offset 갱신 후 다음 트리거 대기
+// - 전송 실패 시: offset 갱신 안 함 → 다음 트리거에서 재시도
+function _runBatchSync() {
+  var props      = PropertiesService.getUserProperties();
+  var mode       = props.getProperty("GW_SYNC_MODE");
+ 
+  // GW_SYNC_MODE 없으면 할 일 없음 → 조기 리턴
+  // 버튼을 누르지 않은 상태에서 트리거가 깨어났을 때
+  if (!mode) {
+    return;
+  }
+ 
+  var offset     = Number(props.getProperty("GW_BATCH_OFFSET") || "0");
+  var myEmail    = Session.getActiveUser().getEmail();
+  var query      = "in:inbox OR in:sent";
+ 
+  try {
+    // 1) 현재 오프셋 기준으로 스레드 BATCH_SIZE개 가져오기
+    var threads = GmailApp.search(query, offset, BATCH_SIZE);
+ 
+    // 2) 더 이상 스레드 없으면 배치 완료 처리
+    if (threads.length === 0) {
+      _finishBatchSync(props, mode);
+      return;
+    }
+ 
+    // 3) 메일 텍스트 & 첨부 메타데이터 수집
+    var allText        = "";
+    var allAttachments = [];
+    var count          = 0;
+ 
+    if (mode === "append") {
+      // append: 마지막 동기화 이후 메일만 필터링
+      var lastSyncMs = Number(props.getProperty("GW_LAST_SYNC_MS") || "0");
+      threads.forEach(function(thread) {
+        thread.getMessages().forEach(function(msg) {
+          if (msg.getDate().getTime() > lastSyncMs) {
+            count++;
+            allText += _buildMessageText(msg, myEmail, count) + "\n\n";
+            allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));
+          }
+        });
+      });
+    } else {
+      // rewrite: 해당 배치 내 전체 메일 포함
+      threads.forEach(function(thread) {
+        thread.getMessages().forEach(function(msg) {
+          count++;
+          allText += _buildMessageText(msg, myEmail, count) + "\n\n";
+          allAttachments = allAttachments.concat(_buildAttachmentPayload(msg));
+        });
+      });
+    }
+ 
+    // 4) 다음 배치 오프셋 및 마지막 배치 여부 계산
+    var nextOffset = offset + threads.length;
+    // threads.length < BATCH_SIZE 이면 더 이상 스레드 없음 → 마지막 배치
+    var nextThreads = GmailApp.search(query, nextOffset, 1);
+    var isLast;
+    if (mode === "append") {
+      // append: 다음 배치에 새 메일이 있는지 확인
+      var lastSyncMs2 = Number(props.getProperty("GW_LAST_SYNC_MS") || "0");
+      var hasNextNew = nextThreads.some(function(thread) {
+        return thread.getLastMessageDate().getTime() > lastSyncMs2;
+      });
+      isLast = !hasNextNew;
+    } else {
+      // rewrite: 다음 배치에 스레드가 있는지만 확인
+      isLast = (nextThreads.length === 0) || (MAX_THREADS !== null && nextOffset >= MAX_THREADS);
+    }
+    var filename = mode === "rewrite"
+      ? "mail_latest.txt"
+      : "inc_" + _dateToYmdHms(new Date()) + ".txt";
+ 
+    // 5) 이번 배치에 보낼 메일이 없어도(append에서 새 메일 0개)
+    //    오프셋은 갱신하고 다음 배치로 이동
+    if (count === 0) {
+      props.setProperty("GW_BATCH_OFFSET", String(nextOffset));
+      if (isLast) {
+        _finishBatchSync(props, mode);
+      }
+      return;
+    }
+ 
+    // 6) 서버로 배치 전송
+    // is_last=true 일 때만 서버가 GraphRAG 파이프라인 실행
+    // (마지막 배치 전까지는 mail_latest.txt에 누적만 하고 인덱싱 안 함)
+    var res = UrlFetchApp.fetch(TunnelURL + "/upload", {
+      method: "post",
+      contentType: "application/json",
+      headers: { "ngrok-skip-browser-warning": "1" },
+      payload: JSON.stringify({
+        filename:     filename,
+        content:      allText,
+        attachment:   allAttachments,
+        syncmode:     mode,
+        gmail_id:     myEmail,
+        is_last:      isLast,       // 마지막 배치 여부 → 서버 GraphRAG 실행 타이밍 결정
+        batch_offset: offset,       // 디버깅용: 현재 배치 시작 위치
+      }),
+      muteHttpExceptions: true,
+    });
+  
+    var code = res.getResponseCode();
+    var text = res.getContentText();
+ 
+    if (code < 200 || code >= 300) {
+      // 전송 실패 시 오프셋 갱신하지 않음 → 다음 트리거에서 동일 배치 재시도
+      Logger.log("[BatchSync] 전송 실패 (재시도 예정): " + code + " / " + text);
+      return;
+    }
+ 
+    // 7) 전송 성공 시 오프셋 갱신
+    props.setProperty("GW_BATCH_OFFSET", String(nextOffset));
+    Logger.log(
+      "[BatchSync] 배치 완료: offset=" + offset + " → " + nextOffset +
+      ", 메일=" + count + "개, isLast=" + isLast
+    );
+ 
+    // 8) 마지막 배치면 정리 처리
+    if (isLast) {
+      _finishBatchSync(props, mode);
+    }
+ 
+  } catch (err) {
+    // 예외 발생 시 오프셋 갱신 안 함 → 다음 트리거에서 동일 배치 재시도
+    Logger.log("[BatchSync] 오류 (재시도 예정): " + err.message);
+  }
+}
+
+// 배치 완료 처리
+// 마지막 배치 전송 후 호출: 배치 상태 키 초기화, 동기화 시간 저장
+// 트리거는 삭제하지 않음 → 상시 돌면서 다음 버튼 클릭을 대기
+function _finishBatchSync(props, mode) {
+  props.setProperty("GW_LAST_SYNC_MS", String(Date.now()));
+  props.deleteProperty("GW_SYNC_MODE");
+  props.deleteProperty("GW_BATCH_OFFSET");
+  if (mode === "rewrite") {
+    props.deleteProperty("GW_ATT_OFFSET");
+    props.setProperty("GW_ATT_FULL_SCAN", "true");
+  }
+  Logger.log("[BatchSync] 전체 배치 완료. mode=" + mode);
 }
 
 // 라벨 적용 (선택된 메일)
@@ -517,12 +582,11 @@ function _buildAttachmentPayload(msg) {
 
     // base64 인코딩 후 payload push
     if (isSupported && size <= MAX_ATTACHMENT_SIZE) {
-      var dataBase64 = Utilities.base64Encode(att.getBytes());
       payload.push({
         mail_id: id,
         name: name,
         mime: mime,
-        data_base64: dataBase64,
+        // data_base64 없음 - 원본은 _runAttachmentSync()가 별도 전송
       });
     }
   });
@@ -552,11 +616,68 @@ function _dateToYmdHms(d) {
 // Apps Script 트리거에서 자동 실행됨 (사용자 인터랙션 없음)
 function _runAttachmentSync() {
   try {
+    var props = PropertiesService.getUserProperties();
     var myEmail = Session.getActiveUser().getEmail();
-    var queryAll = "in:inbox OR in:sent";
-    var threads = GmailApp.search(queryAll, 0, 200);
+
+    var fullScan = props.getProperty("GW_ATT_FULL_SCAN") === "true";
+
+    // 1) fullScan 플래그 없으면 스킵 (메일 배치 완료 전)
+    if (!fullScan) {
+      Logger.log("[AttachmentSync] GW_ATT_FULL_SCAN 없음 → 스킵");
+      return;
+    }
+    // 2) 메일 배치 진행 중이면 스킵
+    if (props.getProperty("GW_SYNC_MODE")) {
+      Logger.log("[AttachmentSync] 메일 배치 진행 중 → 스킵");
+      return;
+    }
+    // 3) 메일 인덱싱 완료 전이면 스킵
+    if (!props.getProperty("GW_LAST_SYNC_MS")) {
+      Logger.log("[AttachmentSync] 메일 인덱싱 미완료 → 스킵");
+      return;
+    }
+
+    var queryNew = "in:inbox OR in:sent";
+    var attOffset = Number(props.getProperty("GW_ATT_OFFSET") || "0");
+
+    if (MAX_THREADS !== null && attOffset >= MAX_THREADS) {
+      props.deleteProperty("GW_ATT_OFFSET");
+      props.deleteProperty("GW_ATT_FULL_SCAN");
+      UrlFetchApp.fetch(TunnelURL + "/upload-attachments", {
+        method: "post",
+        contentType: "application/json",
+        headers: { "ngrok-skip-browser-warning": "1" },
+        payload: JSON.stringify({ gmail_id: myEmail, attachments: [], is_last: true }),
+        muteHttpExceptions: true
+      });
+      Logger.log("[AttachmentSync] MAX_THREADS 도달, finish 신호 전송");
+      return;
+    }
+
+    var threads = GmailApp.search(queryNew, attOffset, ATT_BATCH_SIZE);
     var allAttachments = [];
     var MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024;
+
+    if (threads.length === 0) {
+      props.deleteProperty("GW_ATT_OFFSET");
+      props.deleteProperty("GW_ATT_FULL_SCAN");
+      Logger.log("[AttachmentSync] 모든 배치 완료, 오프셋 초기화");
+      UrlFetchApp.fetch(TunnelURL + "/upload-attachments", {
+        method: "post",
+        contentType: "application/json",
+        headers: { "ngrok-skip-browser-warning": "1" },
+        payload: JSON.stringify({
+          gmail_id: myEmail,
+          attachments: [],
+          is_last: true
+        }),
+        muteHttpExceptions: true
+      });
+      return;
+    }
+
+    var nextCheck = GmailApp.search(queryNew, attOffset + threads.length, 1);
+    var isLast = nextCheck.length === 0 || (MAX_THREADS !== null && (attOffset + threads.length) >= MAX_THREADS);
 
     threads.forEach(function(thread) {
       thread.getMessages().forEach(function(msg) {
@@ -574,7 +695,6 @@ function _runAttachmentSync() {
                             lowerName.endsWith(".xlsx") || lowerName.endsWith(".csv") ||
                             lowerName.endsWith(".txt");
 
-          // base64 인코딩 후 payload에 추가
           if (isSupported && size <= MAX_ATTACHMENT_SIZE) {
             var dataBase64 = Utilities.base64Encode(att.getBytes());
             allAttachments.push({
@@ -589,27 +709,67 @@ function _runAttachmentSync() {
     });
 
     if (allAttachments.length === 0) {
-      Logger.log("[AttachmentSync] 전송할 첨부파일 없음");
+      if (isLast) {
+        props.deleteProperty("GW_ATT_OFFSET");
+        props.deleteProperty("GW_ATT_FULL_SCAN");
+        UrlFetchApp.fetch(TunnelURL + "/upload-attachments", {
+          method: "post",
+          contentType: "application/json",
+          headers: { "ngrok-skip-browser-warning": "1" },
+          payload: JSON.stringify({
+            gmail_id: myEmail,
+            attachments: [],
+            is_last: true
+          }),
+          muteHttpExceptions: true
+        });
+        Logger.log("[AttachmentSync] 마지막 배치 완료 (첨부파일 없음), finish 신호 전송");
+      } else {
+        props.setProperty("GW_ATT_OFFSET", String(attOffset + threads.length));
+        Logger.log("[AttachmentSync] 이번 배치 전송할 첨부파일 없음");
+      }
       return;
     }
 
-    // /upload-attachments 엔드포인트로 전송 (메일 본문 없이 첨부만)
     var res = UrlFetchApp.fetch(TunnelURL + "/upload-attachments", {
       method: "post",
       contentType: "application/json",
       headers: { "ngrok-skip-browser-warning": "1" },
       payload: JSON.stringify({
         gmail_id: myEmail,
-        attachments: allAttachments
+        attachments: allAttachments,
+        is_last: isLast
       }),
       muteHttpExceptions: true
     });
 
-    Logger.log("[AttachmentSync] 전송 완료: " + allAttachments.length + "개 / " + res.getResponseCode());
+    var code = res.getResponseCode();
+    Logger.log("[AttachmentSync] 전송 완료: " + allAttachments.length + "개 / " + code);
+
+    if (code >= 200 && code < 300) {
+      if (isLast) {
+        props.deleteProperty("GW_ATT_OFFSET");
+        props.deleteProperty("GW_ATT_FULL_SCAN");
+        Logger.log("[AttachmentSync] 마지막 배치 완료, 오프셋 초기화");
+      } else {
+        props.setProperty("GW_ATT_OFFSET", String(attOffset + threads.length));
+        Logger.log("[AttachmentSync] 오프셋 갱신: " + attOffset + " → " + (attOffset + threads.length));
+      }
+    } else {
+      Logger.log("[AttachmentSync] 전송 실패 (재시도 예정): " + code + " / " + res.getContentText());
+    }
 
   } catch (err) {
     Logger.log("[AttachmentSync] 오류: " + err.message);
   }
+}
+
+function _msToDateStr(ms) {
+  var d = ms ? new Date(ms) : new Date(0);
+  var y = d.getFullYear();
+  var m = String(d.getMonth() + 1).padStart(2, "0");
+  var day = String(d.getDate()).padStart(2, "0");
+  return y + "/" + m + "/" + day;
 }
 
 // 10분 트리거 등록 (최초 1회만 실행하면 됨)
