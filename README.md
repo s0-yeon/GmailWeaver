@@ -93,11 +93,12 @@ pip install graphrag==2.1.0
 - olefile: HWP 파일 읽고 수정
 - python-pptx: PPTX 파일 읽고 수정
 - openyxl: XLSX 파일 읽고 수정
+- mysql-connector-python: MySQL DB와 통신
 
 ### 설치 및 확인
 
 ```bash
-pip install flask flask-cors python-dotenv openai pymupdf python-docx python-pptx openpyxl requests
+pip install flask flask-cors python-dotenv openai pymupdf python-docx olefile python-pptx openpyxl requests mysql-connector-python
 pip list
 ```
 
