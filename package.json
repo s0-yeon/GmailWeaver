@@ -6,6 +6,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build:inline": "react-scripts build && inline-source --root build build/index.html > build/inline.html",
+    "build:web": "cd src/web && npm run build",
     "lint": "eslint -c .eslintrc.json src/*.js",
     "lint:fix": "eslint -c .eslintrc.json --fix src/*.js"
   },
