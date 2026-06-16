@@ -379,6 +379,32 @@
       .gw-trash-search-box button:hover { background: #c0392b; }
       .gw-trash-search-box button i { color: white; font-size: 0.95rem; }
       .gw-trash-result { margin-top: 16px; padding: 0 32px 32px 32px; }
+
+      /* ── 상단 페이지 네비게이션 ── */
+      .gw-top-links { display: flex; align-items: center; gap: 2px; margin-left: 16px; }
+      .gw-tl {
+        display: inline-flex; align-items: center; padding: 6px 14px;
+        border-radius: 6px; font-size: 0.88rem; font-weight: 500; color: #73879C;
+        text-decoration: none; border: none; background: transparent;
+        cursor: pointer; transition: background 0.15s, color 0.15s; white-space: nowrap;
+        font-family: inherit; line-height: 1.4;
+      }
+      .gw-tl:hover { background: #f4f6f8; color: #2A3F54; text-decoration: none; }
+      .gw-tl.active { color: #26B99A; font-weight: 700; background: #e8f7f4; }
+      .gw-tl-dropdown { position: relative; }
+      .gw-tl-dd-menu {
+        display: none; position: absolute; top: calc(100% + 6px); left: 0;
+        background: #fff; border: 1px solid #e0e0e0; border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 9999; min-width: 140px; padding: 6px 0;
+      }
+      .gw-tl-dropdown:hover .gw-tl-dd-menu { display: block; }
+      .gw-tl-dd-menu a { display: block; padding: 8px 16px; font-size: 0.84rem; color: #2A3F54; text-decoration: none; }
+      .gw-tl-dd-menu a:hover { background: #f4f6f8; color: #26B99A; }
+      @media (max-width: 900px) { .gw-top-links { display: none; } }
+      .left_col, .nav_title { display: none !important; }
+      .right_col { margin-left: 0 !important; }
+      .top_nav { margin-left: 0 !important; }
+      .nav.toggle { display: none !important; }
     </style>
   </head>
 
@@ -432,6 +458,19 @@
             <div class="nav toggle">
               <a id="menu_toggle"><i class="fas fa-bars"></i></a>
             </div>
+            <nav class="gw-top-links">
+              <a href="index.html" class="gw-tl">홈</a>
+              <a href="search.html" class="gw-tl active">검색</a>
+              <div class="gw-tl-dropdown">
+                <button class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></button>
+                <div class="gw-tl-dd-menu">
+                  <a href="graph-viz.html">Graph Viz</a>
+                  <a href="recap.html">Recap</a>
+                </div>
+              </div>
+              <a href="contacts.html" class="gw-tl">연락처</a>
+              <a href="calendar.html" class="gw-tl">캘린더</a>
+            </nav>
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
                 <li class="nav-item dropdown">
