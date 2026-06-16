@@ -1128,6 +1128,35 @@
           <div class="gw-lq-mail-list">${cards}</div>
         `;
       }
+      
+      // 단순 메일 목록 렌더링 (라벨 적용 UI 없음)
+      function lqShowMailList(messages) {
+        const el = lqResult();
+        el.className = 'gw-lq-result show';
+
+        if (messages.length === 0) {
+          el.innerHTML = `<div class="gw-lq-error">조건에 맞는 메일을 찾지 못했습니다. 검색어를 바꿔보세요.</div>`;
+          return;
+        }
+
+        const cards = messages.map(m => {
+          const date = new Date(m.date).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+          return `
+            <div class="gw-lq-mail-card" style="cursor:default;">
+              <div class="gw-lq-mail-info">
+                <div class="gw-lq-mail-subject">${escapeHtml(m.subject)}</div>
+                <div class="gw-lq-mail-meta">${escapeHtml(m.from)} · ${date}</div>
+                <div class="gw-lq-mail-snippet">${escapeHtml(m.snippet)}</div>
+              </div>
+            </div>`;
+        }).join('');
+
+        el.innerHTML = `
+          <div class="gw-lq-hint"><strong>${messages.length}개</strong> 메일을 찾았어요.</div>
+          <div class="gw-lq-mail-list">${cards}</div>
+        `;
+      }
+
 
       // 메일 카드 체크박스 리스트 렌더링
       function lqShowMailCards(messages, labelName) {
@@ -1481,9 +1510,8 @@
               const gmailMsgs = (gmailResult.ok ? (gmailResult.messages || []) : [])
                 .map(m => ({ ...m, source: 'gmail' }));
 
-              // Gmail 결과 3건 이상이면 GraphRAG 건너뜀
-              if (gmailMsgs.length >= 3) {
-                lqShowLoading(`Gmail에서 ${gmailMsgs.length}건 검색됨`);
+              // Gmail 결과 1건 이상이면 GraphRAG 건너뜀 (라벨 검색은 메일 찾기가 목적이므로 1건으로 충분)
+              if (gmailMsgs.length >= 1) {
                 return gmailMsgs;
               }
 
@@ -1512,18 +1540,25 @@
             }
 
             if (fc.action === 'search_emails') {
-              const { query, label_to_apply } = fc.params;
+              const { query } = fc.params;
+              let label_to_apply = fc.params.label_to_apply || '';
 
-              // 라벨명이 있는데 현재 목록에 없으면 자동 생성
+              // 라벨명 보정: LLM이 오타를 낸 경우 대소문자 무관 일치 라벨로 교정
               if (label_to_apply) {
-                const labelExists = labels.some(l => (l.name || l) === label_to_apply);
-                if (!labelExists) {
-                  lqShowLoading(`"${label_to_apply}" 라벨이 없어 자동 생성 중...`);
-                  const createRes = await callLabelsProxy('createLabel', { labelName: label_to_apply });
-                  if (!createRes.ok) throw new Error(createRes.error || '라벨 생성 실패');
-                  clearCache();
-                  activeLabel = null;
-                  await loadLabels(true);
+                const exactMatch = labels.find(l => (l.name || l) === label_to_apply);
+                if (!exactMatch) {
+                  const caseMatch = labels.find(l => (l.name || l).toLowerCase() === label_to_apply.toLowerCase());
+                  if (caseMatch) {
+                    label_to_apply = caseMatch.name || caseMatch;
+                  } else {
+                    // 기존 라벨 목록에 없는 경우만 자동 생성
+                    lqShowLoading(`"${label_to_apply}" 라벨이 없어 자동 생성 중...`);
+                    const createRes = await callLabelsProxy('createLabel', { labelName: label_to_apply });
+                    if (!createRes.ok) throw new Error(createRes.error || '라벨 생성 실패');
+                    clearCache();
+                    activeLabel = null;
+                    await loadLabels(true);
+                  }
                 }
               }
 
