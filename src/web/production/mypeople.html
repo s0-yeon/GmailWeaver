@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:* https://api.example.com https://*.googleapis.com https://*.ngrok-free.dev https://*.ngrok-free.app https://*.ngrok.io; frame-src 'self'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <title>MyPeople | GmailWeaver</title>
+    <script type="module" src="/src/main-minimal.js"></script>
+    <style>
+      .site_title_text {
+        font-size: 1.2rem; font-weight: 700; color: #fff;
+        letter-spacing: 0.5px; text-decoration: none;
+        display: flex; align-items: center; gap: 8px;
+      }
+      .site_title_text i { font-size: 1.3rem; color: #26B99A; }
+
+      body, html { overflow: hidden; }
+      .right_col {
+        background: linear-gradient(145deg, #e8f5f0 0%, #f0f7ff 50%, #f5f0ff 100%);
+        margin-left: 0 !important; padding: 0 !important; overflow: hidden !important;
+      }
+      .left_col, .nav_title { display: none !important; }
+      .top_nav { margin-left: 0 !important; }
+      .nav.toggle { display: none !important; }
+      footer { display: none !important; }
+
+      /* ── 페이지 레이아웃 ── */
+      .mp-page {
+        display: flex; flex-direction: column;
+        height: calc(100vh - 58px - 148px);
+        padding: 10px 60px 0;
+        gap: 8px; box-sizing: border-box;
+      }
+
+      /* ── 상단 헤더 ── */
+      .mp-header {
+        display: flex; align-items: center;
+        justify-content: space-between; flex-shrink: 0;
+      }
+      .mp-title-wrap { display: flex; align-items: center; gap: 8px; }
+      .mp-title-icon {
+        width: 28px; height: 28px; border-radius: 8px;
+        background: linear-gradient(135deg, #26B99A, #1a7a62);
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 3px 8px rgba(38,185,154,0.3);
+      }
+      .mp-title-icon i { color: #fff; font-size: 0.78rem; }
+      .mp-title { font-size: 1.05rem; font-weight: 800; color: #0f3d2e; letter-spacing: -0.02em; }
+      .mp-count {
+        font-size: 0.72rem; color: #26B99A; font-weight: 700;
+        background: rgba(38,185,154,0.12); padding: 2px 8px;
+        border-radius: 20px;
+      }
+      .mp-header-right { display: flex; align-items: center; gap: 10px; }
+      .mp-search {
+        display: flex; align-items: center; gap: 8px;
+        background: rgba(255,255,255,0.8); border: 1.5px solid #c8e6dc;
+        border-radius: 24px; padding: 7px 16px;
+        backdrop-filter: blur(8px);
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .mp-search:focus-within {
+        border-color: #26B99A; background: #fff;
+        box-shadow: 0 0 0 3px rgba(38,185,154,0.12);
+      }
+      .mp-search i { color: #26B99A; font-size: 0.88rem; }
+      .mp-search input {
+        border: none; outline: none; font-size: 0.88rem;
+        color: #2a3f35; background: transparent; width: 180px;
+      }
+      .mp-search input::placeholder { color: #b0c8be; }
+
+      /* ── 그리드 패널 ── */
+      .mp-panel {
+        flex: 1;
+        background: rgba(255,255,255,0.72);
+        border: 1.5px solid rgba(200,230,215,0.8);
+        border-radius: 20px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 28px rgba(38,185,154,0.1),
+                    inset 0 1px 0 rgba(255,255,255,0.9);
+        padding: 20px; overflow-y: auto; overflow-x: hidden;
+      }
+      .mp-panel::-webkit-scrollbar { width: 4px; }
+      .mp-panel::-webkit-scrollbar-thumb { background: #b8ddd0; border-radius: 10px; }
+
+      .mp-grid {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 10px;
+      }
+
+      /* 카드 — 세로형 직사각형, 파스텔 */
+      .mp-card {
+        border-radius: 14px;
+        aspect-ratio: 1 / 1;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 10px; cursor: pointer;
+        transition: transform 0.22s cubic-bezier(0.22,1,0.36,1), box-shadow 0.22s;
+        position: relative; overflow: hidden;
+      }
+      .mp-card::before {
+        content: ''; position: absolute; top: -20%; right: -10%;
+        width: 55%; height: 50%;
+        background: rgba(255,255,255,0.18); border-radius: 50%;
+        pointer-events: none;
+      }
+      .mp-card:hover { transform: translateY(-4px) scale(1.04); }
+
+      /* 파스텔 팔레트 */
+      .mp-card.c0 { background: linear-gradient(150deg,#a8e8d8,#72cbb5); box-shadow:0 3px 14px rgba(114,203,181,0.28); }
+      .mp-card.c1 { background: linear-gradient(150deg,#b8d4f8,#8ab6f4); box-shadow:0 3px 14px rgba(138,182,244,0.28); }
+      .mp-card.c2 { background: linear-gradient(150deg,#d0c0f8,#b8a4f4); box-shadow:0 3px 14px rgba(184,164,244,0.28); }
+      .mp-card.c3 { background: linear-gradient(150deg,#fde4a8,#fbd080); box-shadow:0 3px 14px rgba(251,208,128,0.28); }
+      .mp-card.c4 { background: linear-gradient(150deg,#fcc0d8,#f8a4c4); box-shadow:0 3px 14px rgba(248,164,196,0.28); }
+      .mp-card.c5 { background: linear-gradient(150deg,#a4e8e4,#78d4d0); box-shadow:0 3px 14px rgba(120,212,208,0.28); }
+      .mp-card.c6 { background: linear-gradient(150deg,#fed4a8,#fcbc80); box-shadow:0 3px 14px rgba(252,188,128,0.28); }
+      .mp-card.c0:hover { box-shadow:0 12px 24px rgba(114,203,181,0.4); }
+      .mp-card.c1:hover { box-shadow:0 12px 24px rgba(138,182,244,0.4); }
+      .mp-card.c2:hover { box-shadow:0 12px 24px rgba(184,164,244,0.4); }
+      .mp-card.c3:hover { box-shadow:0 12px 24px rgba(251,208,128,0.4); }
+      .mp-card.c4:hover { box-shadow:0 12px 24px rgba(248,164,196,0.4); }
+      .mp-card.c5:hover { box-shadow:0 12px 24px rgba(120,212,208,0.4); }
+      .mp-card.c6:hover { box-shadow:0 12px 24px rgba(252,188,128,0.4); }
+
+      .mp-avatar {
+        width: 64px; height: 64px; border-radius: 50%;
+        background: rgba(255,255,255,0.88);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.25rem; font-weight: 800;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex-shrink: 0;
+      }
+      .mp-name {
+        font-size: 0.74rem; font-weight: 700;
+        color: rgba(30,50,44,0.82);
+        text-align: center; line-height: 1.25; word-break: keep-all;
+      }
+      .mp-empty {
+        grid-column: 1 / -1; text-align: center;
+        padding: 50px 0; color: #a0b8b0;
+      }
+      .mp-empty i { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+
+      /* ════════════════════════════════════
+         타임라인 패널 (그리드와 동일 가로)
+      ════════════════════════════════════ */
+      .mp-timeline {
+        position: fixed; bottom: 16px;
+        left: 60px; right: 60px;
+        height: 116px;
+        background: rgba(255,255,255,0.94);
+        backdrop-filter: blur(20px);
+        border: 1.5px solid rgba(200,230,215,0.9);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(38,185,154,0.13),
+                    0 2px 8px rgba(0,0,0,0.05),
+                    inset 0 1px 0 rgba(255,255,255,0.95);
+        z-index: 200;
+        padding: 14px 36px 16px;
+        display: flex; flex-direction: column; gap: 8px;
+      }
+
+      /* 날짜 텍스트 행 */
+      .mp-tl-dates {
+        display: flex; justify-content: space-between;
+        align-items: center;
+      }
+      .mp-tl-date-label {
+        font-size: 0.78rem; font-weight: 700; color: #0f7a62;
+        background: #e6f7f2; padding: 3px 10px;
+        border-radius: 20px; letter-spacing: 0.02em;
+      }
+      .mp-tl-selected {
+        font-size: 0.8rem; color: #4a9c80; font-weight: 500;
+        text-align: center; flex: 1;
+      }
+
+      /* 슬라이더 트랙 래퍼 */
+      .mp-tl-track-wrap {
+        position: relative;
+        height: 36px;
+        display: flex; align-items: center;
+      }
+
+      /* 배경 트랙 */
+      .mp-tl-track {
+        position: absolute; left: 0; right: 0;
+        height: 6px; background: #d4e8df;
+        border-radius: 3px;
+      }
+
+      /* 선택 구간 채움 */
+      .mp-tl-fill {
+        position: absolute; height: 6px;
+        background: linear-gradient(90deg, #26B99A, #1a9e82);
+        border-radius: 3px; pointer-events: none;
+      }
+
+      /* 공통 range input */
+      .mp-tl-track-wrap input[type=range] {
+        position: absolute; left: 0;
+        width: 100%; height: 6px;
+        background: transparent;
+        pointer-events: none;
+        appearance: none; -webkit-appearance: none;
+        outline: none; margin: 0;
+      }
+      .mp-tl-track-wrap input[type=range]::-webkit-slider-thumb {
+        appearance: none; -webkit-appearance: none;
+        width: 20px; height: 20px; border-radius: 50%;
+        background: #fff;
+        border: 2.5px solid #26B99A;
+        box-shadow: 0 2px 8px rgba(38,185,154,0.35);
+        cursor: grab; pointer-events: auto;
+        transition: transform 0.15s, box-shadow 0.15s;
+      }
+      .mp-tl-track-wrap input[type=range]::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+        box-shadow: 0 3px 14px rgba(38,185,154,0.5);
+      }
+      .mp-tl-track-wrap input[type=range]::-webkit-slider-thumb:active {
+        cursor: grabbing; background: #e6f7f2;
+      }
+      .mp-tl-track-wrap input[type=range]::-moz-range-thumb {
+        width: 20px; height: 20px; border-radius: 50%;
+        background: #fff; border: 2.5px solid #26B99A;
+        box-shadow: 0 2px 8px rgba(38,185,154,0.35);
+        cursor: grab; pointer-events: auto;
+      }
+
+      /* 눈금 & 레이블 */
+      .mp-tl-ticks {
+        position: absolute; left: 0; right: 0;
+        top: 18px;
+        display: flex; justify-content: space-between;
+        pointer-events: none;
+      }
+      .mp-tl-tick {
+        display: flex; flex-direction: column; align-items: center; gap: 3px;
+      }
+      .mp-tl-tick-line {
+        width: 1px; height: 6px;
+        background: #b0d4c8;
+      }
+      .mp-tl-tick-lbl {
+        font-size: 0.68rem; color: #8ab8a8; font-weight: 500;
+        white-space: nowrap;
+      }
+
+      /* ── 상단 네비게이션 ── */
+      .gw-top-links { display: flex; align-items: center; gap: 2px; margin-left: 16px; }
+      .gw-tl {
+        display: inline-flex; align-items: center; padding: 6px 14px;
+        border-radius: 6px; font-size: 0.88rem; font-weight: 500; color: #73879C;
+        text-decoration: none; border: none; background: transparent;
+        cursor: pointer; transition: background 0.15s, color 0.15s; white-space: nowrap;
+        font-family: inherit; line-height: 1.4;
+      }
+      .gw-tl:hover { background: #f4f6f8; color: #2A3F54; text-decoration: none; }
+      .gw-tl.active { color: #26B99A; font-weight: 700; background: #e8f7f4; }
+      .gw-tl-dropdown { position: relative; }
+      .gw-tl-dd-menu {
+        display: none; position: absolute; top: calc(100% + 6px); left: 0;
+        background: #fff; border: 1px solid #e0e0e0; border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 9999; min-width: 140px; padding: 6px 0;
+      }
+      .gw-tl-dropdown:hover .gw-tl-dd-menu { display: block; }
+      .gw-tl-dd-menu a { display: block; padding: 8px 16px; font-size: 0.84rem; color: #2A3F54; text-decoration: none; }
+      .gw-tl-dd-menu a:hover { background: #f4f6f8; color: #26B99A; }
+      @media (max-width: 900px) { .gw-top-links { display: none; } }
+      @media (max-width: 1200px) { .mp-grid { grid-template-columns: repeat(5, 1fr); } }
+      @media (max-width: 960px)  { .mp-grid { grid-template-columns: repeat(4, 1fr); } }
+    </style>
+  </head>
+
+  <body class="nav-md page-mypeople">
+    <div class="container body">
+      <div class="main_container">
+
+        <aside class="col-md-3 left_col menu_fixed" aria-label="Sidebar navigation">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title site_title_text">
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;"> Olive
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="profile clearfix">
+              <div class="profile_pic"><i class="bi bi-person-circle" style="font-size:60px;color:#aaa;"></i></div>
+              <div class="profile_info"><h4 id="google-profile-name">-</h4></div>
+            </div>
+          </div>
+        </aside>
+
+        <div class="top_nav">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+            <div class="nav toggle"><a id="menu_toggle"><i class="fas fa-bars"></i></a></div>
+            <nav class="gw-top-links">
+              <a href="index.html" class="gw-tl">홈</a>
+              <a href="search.html" class="gw-tl">검색</a>
+              <div class="gw-tl-dropdown">
+                <button class="gw-tl gw-tl-dd-btn active">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></button>
+                <div class="gw-tl-dd-menu">
+                  <a href="graph-viz.html">Graph Viz</a>
+                  <a href="recap.html">Recap</a>
+                  <a href="mypeople.html" style="color:#26B99A;font-weight:700;">MyPeople</a>
+                </div>
+              </div>
+              <a href="contacts.html" class="gw-tl">연락처</a>
+              <a href="calendar.html" class="gw-tl">캘린더</a>
+            </nav>
+            <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle" id="langDropdown"
+                     data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none;color:inherit;">
+                    <i class="bi bi-translate" style="font-size:1.2rem;vertical-align:middle;"></i>
+                    <span id="current-lang" style="margin-left:4px;font-size:0.9rem;">KO</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ko">🇰🇷 한국어</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="en">🇺🇸 English</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ja">🇯🇵 日本語</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        <main class="right_col" role="main">
+          <div class="mp-page">
+            <div class="mp-header">
+              <div class="mp-title-wrap">
+                <div class="mp-title-icon"><i class="bi bi-people-fill"></i></div>
+                <h1 class="mp-title">MyPeople</h1>
+                <span class="mp-count" id="mp-count"></span>
+              </div>
+              <div class="mp-header-right">
+                <div class="mp-search">
+                  <i class="bi bi-search"></i>
+                  <input type="text" id="mp-search-input" placeholder="이름 검색...">
+                </div>
+              </div>
+            </div>
+            <div class="mp-panel">
+              <div class="mp-grid" id="mp-grid">
+                <div class="mp-empty"><i class="bi bi-people"></i><p>데이터를 불러오는 중...</p></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════ 하단 타임라인 슬라이더 ════ -->
+          <div class="mp-timeline">
+            <div class="mp-tl-dates">
+              <span class="mp-tl-date-label" id="tl-start-lbl">—</span>
+              <span class="mp-tl-selected" id="tl-selected-text"></span>
+              <span class="mp-tl-date-label" id="tl-end-lbl">—</span>
+            </div>
+            <div class="mp-tl-track-wrap" id="tl-wrap">
+              <div class="mp-tl-track"></div>
+              <div class="mp-tl-fill" id="tl-fill"></div>
+              <input type="range" id="tl-min" min="0" max="1000" value="0" step="1">
+              <input type="range" id="tl-max" min="0" max="1000" value="1000" step="1">
+              <div class="mp-tl-ticks" id="tl-ticks"></div>
+            </div>
+          </div>
+        </main>
+
+        <footer><div class="clearfix"></div></footer>
+      </div>
+    </div>
+
+    <script>
+      /* ── 사용자 처리 ── */
+      (function () {
+        const p = new URLSearchParams(window.location.search);
+        const n = p.get('name') ? decodeURIComponent(p.get('name')) : (sessionStorage.getItem('gw_user_name') || '-');
+        if (p.get('name')) sessionStorage.setItem('gw_user_name', n);
+        if (p.get('gmail_id')) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(p.get('gmail_id')));
+        const el = document.getElementById('google-profile-name');
+        if (el) el.textContent = n;
+      })();
+
+      /* ── 이니셜 ── */
+      function initials(name) {
+        const t = (name || '').trim();
+        if (!t) return '?';
+        if (/[가-힣]/.test(t[0])) return t[0];
+        return t.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+      }
+
+      /* ── 날짜 유틸 ── */
+      function dateToMs(str) { return new Date(str).getTime(); }
+      function fmtDate(ms) {
+        const d = new Date(ms);
+        return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+      }
+      function fmtShort(ms) {
+        const d = new Date(ms);
+        const m = d.getMonth() + 1;
+        return m === 1 ? `${d.getFullYear()}` : `${d.getFullYear()}.${String(m).padStart(2,'0')}`;
+      }
+
+      /* ── 더미 데이터 (날짜 포함) ── */
+      const MOCK_PEOPLE = [
+        {name:'김예은',  email:'yeeun@example.com',  first:'2022-11-03', last:'2025-12-10'},
+        {name:'이준혁',  email:'junhyuk@example.com', first:'2023-02-14', last:'2025-11-22'},
+        {name:'박소연',  email:'soyeon@example.com',  first:'2023-05-01', last:'2025-10-05'},
+        {name:'최민준',  email:'minjun@example.com',  first:'2022-11-20', last:'2024-08-30'},
+        {name:'정하은',  email:'haeun@example.com',   first:'2024-01-08', last:'2025-12-28'},
+        {name:'강지우',  email:'jiwoo@example.com',   first:'2023-07-15', last:'2025-09-14'},
+        {name:'윤서현',  email:'seohyun@example.com', first:'2022-12-01', last:'2024-06-20'},
+        {name:'임채원',  email:'chaewon@example.com', first:'2023-03-22', last:'2025-07-31'},
+        {name:'한도윤',  email:'doyun@example.com',   first:'2024-04-10', last:'2025-12-28'},
+        {name:'오지훈',  email:'jihun@example.com',   first:'2023-09-05', last:'2025-05-18'},
+        {name:'신아름',  email:'areum@example.com',   first:'2022-11-15', last:'2023-12-31'},
+        {name:'배수진',  email:'sujin@example.com',   first:'2024-02-28', last:'2025-11-01'},
+        {name:'조민서',  email:'minseo@example.com',  first:'2023-06-10', last:'2025-08-22'},
+        {name:'권태양',  email:'taeyang@example.com', first:'2022-11-03', last:'2025-04-30'},
+        {name:'문지은',  email:'jieun@example.com',   first:'2024-05-12', last:'2025-12-28'},
+        {name:'류현우',  email:'hyunwoo@example.com', first:'2023-01-19', last:'2024-11-15'},
+        {name:'장나래',  email:'narae@example.com',   first:'2023-08-01', last:'2025-10-20'},
+        {name:'노성민',  email:'sungmin@example.com', first:'2022-11-10', last:'2025-06-30'},
+      ];
+
+      /* ── 전역 상태 ── */
+      let allPeople = [];
+      let globalFirst = 0, globalLast = 0; // ms
+      let selMin = 0, selMax = 0;          // ms (현재 선택 구간)
+      let searchQ = '';
+
+      /* ── 카드 렌더링 ── */
+      function renderCards() {
+        const grid = document.getElementById('mp-grid');
+        const list = allPeople.filter(p => {
+          const pFirst = dateToMs(p.first), pLast = dateToMs(p.last);
+          const inRange = pLast >= selMin && pFirst <= selMax;
+          const inSearch = !searchQ || (p.name || '').toLowerCase().includes(searchQ);
+          return inRange && inSearch;
+        });
+        const countEl = document.getElementById('mp-count');
+        if (countEl) countEl.textContent = list.length ? `${list.length}명` : '';
+
+        if (!list.length) {
+          grid.innerHTML = `<div class="mp-empty"><i class="bi bi-people"></i><p>해당 기간에 연락한 사람이 없습니다.</p></div>`;
+          return;
+        }
+        const COLS = 9;
+        const COLORS = ['c0','c1','c2','c3','c4','c5','c6'];
+        const AVATAR_COLORS = ['#0f7a62','#1d55c4','#5b21b6','#b45309','#9d174d','#0f766e','#c2410c'];
+        grid.innerHTML = list.map((p, i) => {
+          const row = Math.floor(i / COLS);
+          const cls = COLORS[row % COLORS.length];
+          const clr = AVATAR_COLORS[row % AVATAR_COLORS.length];
+          return `
+            <div class="mp-card ${cls}" title="${p.email || ''}">
+              <div class="mp-avatar" style="color:${clr}">${initials(p.name)}</div>
+              <div class="mp-name">${p.name}</div>
+            </div>`;
+        }).join('');
+      }
+
+      /* ── 타임라인 초기화 ── */
+      function initTimeline(firstMs, lastMs) {
+        globalFirst = firstMs; globalLast = lastMs;
+        selMin = firstMs; selMax = lastMs;
+
+        const inMin = document.getElementById('tl-min');
+        const inMax = document.getElementById('tl-max');
+        const fill  = document.getElementById('tl-fill');
+
+        document.getElementById('tl-start-lbl').textContent = fmtDate(firstMs);
+        document.getElementById('tl-end-lbl').textContent   = fmtDate(lastMs);
+
+        /* 눈금 생성 (약 6~8개) */
+        buildTicks(firstMs, lastMs);
+
+        function msToVal(ms) { return Math.round((ms - firstMs) / (lastMs - firstMs) * 1000); }
+        function valToMs(v)  { return firstMs + (v / 1000) * (lastMs - firstMs); }
+
+        function updateFill() {
+          const minV = +inMin.value, maxV = +inMax.value;
+          const lPct = minV / 10, rPct = maxV / 10;
+          fill.style.left  = lPct + '%';
+          fill.style.width = (rPct - lPct) + '%';
+          selMin = valToMs(minV); selMax = valToMs(maxV);
+          document.getElementById('tl-selected-text').textContent =
+            `${fmtDate(selMin)} — ${fmtDate(selMax)}`;
+          renderCards();
+        }
+
+        inMin.addEventListener('input', () => {
+          if (+inMin.value >= +inMax.value) inMin.value = +inMax.value - 1;
+          updateFill();
+        });
+        inMax.addEventListener('input', () => {
+          if (+inMax.value <= +inMin.value) inMax.value = +inMin.value + 1;
+          updateFill();
+        });
+
+        updateFill();
+      }
+
+      function buildTicks(firstMs, lastMs) {
+        const ticks = document.getElementById('tl-ticks');
+        ticks.innerHTML = '';
+        const spanMs = lastMs - firstMs;
+        const spanMonths = spanMs / (1000 * 60 * 60 * 24 * 30);
+
+        /* 간격 결정: 3년 이상이면 반년, 그 미만이면 분기 */
+        const stepMonths = spanMonths > 30 ? 6 : 3;
+
+        const start = new Date(firstMs);
+        const cur = new Date(start.getFullYear(), start.getMonth(), 1);
+
+        const points = [];
+        while (cur.getTime() <= lastMs) {
+          points.push(cur.getTime());
+          cur.setMonth(cur.getMonth() + stepMonths);
+        }
+        points.push(lastMs);
+
+        const uniq = [...new Set([firstMs, ...points])].filter(t => t >= firstMs && t <= lastMs);
+
+        uniq.forEach(t => {
+          const pct = ((t - firstMs) / (lastMs - firstMs)) * 100;
+          const div = document.createElement('div');
+          div.className = 'mp-tl-tick';
+          div.style.position = 'absolute';
+          div.style.left = pct + '%';
+          div.style.transform = 'translateX(-50%)';
+          div.innerHTML = `<div class="mp-tl-tick-line"></div><span class="mp-tl-tick-lbl">${fmtShort(t)}</span>`;
+          ticks.appendChild(div);
+        });
+      }
+
+      /* ── 데이터 로드 ── */
+      async function loadPeople() {
+        const gmailId = sessionStorage.getItem('gw_gmail_id') || '';
+        try {
+          const res = await fetch('/people-data?gmail_id=' + encodeURIComponent(gmailId));
+          if (!res.ok) throw new Error(res.status);
+          allPeople = await res.json();
+        } catch { allPeople = []; }
+        if (!allPeople.length) allPeople = MOCK_PEOPLE;
+
+        /* 전체 날짜 범위 계산 */
+        const allFirsts = allPeople.map(p => dateToMs(p.first)).filter(Boolean);
+        const allLasts  = allPeople.map(p => dateToMs(p.last)).filter(Boolean);
+        const firstMs = allFirsts.length ? Math.min(...allFirsts) : Date.now() - 1000*60*60*24*365;
+        const lastMs  = allLasts.length  ? Math.max(...allLasts)  : Date.now();
+
+        initTimeline(firstMs, lastMs);
+      }
+
+      /* ── 검색 ── */
+      document.getElementById('mp-search-input').addEventListener('input', e => {
+        searchQ = e.target.value.trim().toLowerCase();
+        renderCards();
+      });
+
+      loadPeople();
+    </script>
+  </body>
+</html>

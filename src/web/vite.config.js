@@ -151,7 +151,10 @@ export default defineConfig({
         graph_viz: 'production/graph-viz.html',
 
         // 메일 통계 요약
-        recap: 'production/recap.html'
+        recap: 'production/recap.html',
+
+        // 나의 사람들
+        mypeople: 'production/mypeople.html'
       }
     },
     minify: 'terser',
