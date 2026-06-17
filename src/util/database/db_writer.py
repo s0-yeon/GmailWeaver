@@ -352,4 +352,104 @@ def mark_attachments_as_processed(gmail_id: str, attachments: list):
         print(f"[AttachmentFilter] {len(rows)}개 처리 완료 기록")
     except Exception as e:
         print(f"[AttachmentFilter] 처리 완료 기록 실패 (무시): {e}")
+
+def save_label_to_db(paths, update_date=None):
+    import pandas as pd, re, os
+
+    if update_date is None:
+        latest_user = get_latest_user_record(paths.GMAIL_ID)
+        if not latest_user:
+            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
+            return
+        user_account_id = latest_user["user_account_id"]
+        update_date = latest_user["update_date"]
+    else:
+        user_account_id = paths.GMAIL_ID
+
+    text_units_path = paths.RELATIONSHIPS_PATH.replace("relationships.parquet", "text_units.parquet")
+    df = pd.read_parquet(text_units_path)
+
+    label_counts = {}
+    for _, row in df.iterrows():
+        text = str(row.get('text', ''))
+        label_match = re.search(r'\[라벨 정보\]\s*\n(.+)', text)
+        label_raw = label_match.group(1).strip() if label_match else None
+        if label_raw and label_raw != '없음':
+            label_counts[label_raw] = label_counts.get(label_raw, 0) + 1
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        insert_sql = """
+            INSERT INTO label (label_name, user_account_id, update_date, mail_count)
+            VALUES (%s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE mail_count = VALUES(mail_count)
+        """
+        for label_name, mail_count in label_counts.items():
+            cursor.execute(insert_sql, (label_name, user_account_id, update_date, mail_count))
+        conn.commit()
+        print(f"[DB] label 테이블 저장 완료: {len(label_counts)}건")
+    except Exception as e:
+        conn.rollback()
+        print(f"[ERROR] save_label_to_db 실패: {e}")
+        raise
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def save_mail_to_db(paths, update_date=None):
+    import pandas as pd, re, os
+
+    if update_date is None:
+        latest_user = get_latest_user_record(paths.GMAIL_ID)
+        if not latest_user:
+            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
+            return
+        user_account_id = latest_user["user_account_id"]
+        update_date = latest_user["update_date"]
+    else:
+        user_account_id = paths.GMAIL_ID
+
+    text_units_path = paths.RELATIONSHIPS_PATH.replace("relationships.parquet", "text_units.parquet")
+    df = pd.read_parquet(text_units_path)
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        insert_sql = """
+            INSERT INTO mail (mail_id, user_account_id, update_date, label_name, mail_date)
+            VALUES (%s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE label_name = VALUES(label_name), mail_date = VALUES(mail_date)
+        """
+        count = 0
+        seen_ids = set()
+        for _, row in df.iterrows():
+            text = str(row.get('text', ''))
+
+            id_match = re.search(r'^ID:\s*(.+)$', text, re.MULTILINE)
+            mail_id = id_match.group(1).strip() if id_match else None
+            if not mail_id or mail_id in seen_ids:
+                continue
+            seen_ids.add(mail_id)
+
+            date_match = re.search(r'^날짜:\s*(.+)$', text, re.MULTILINE)
+            mail_date = date_match.group(1).strip() if date_match else None
+
+            label_match = re.search(r'\[라벨 정보\]\s*\n(.+)', text)
+            label_raw = label_match.group(1).strip() if label_match else None
+            label_name = None if (not label_raw or label_raw == '없음') else label_raw
+
+            cursor.execute(insert_sql, (mail_id, user_account_id, update_date, label_name, mail_date))
+            count += 1
+
+        conn.commit()
+        print(f"[DB] mail 테이블 저장 완료: {count}건")
+    except Exception as e:
+        conn.rollback()
+        print(f"[ERROR] save_mail_to_db 실패: {e}")
+        raise
+    finally:
+        cursor.close()
+        conn.close()
     
