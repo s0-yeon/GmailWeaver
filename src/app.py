@@ -54,6 +54,7 @@ load_dotenv("src/parquet/.env")
 app = Flask(__name__)
 CORS(app)
 
+
 # 서버 시작 시 테이블 초기화 실행
 init_processed_attachments_table()
 

@@ -408,6 +408,72 @@
       .right_col { margin-left: 0 !important; }
       .top_nav { margin-left: 0 !important; }
       .nav.toggle { display: none !important; }
+      footer { display: none !important; }
+      .right_col { padding: 0 !important; overflow: hidden !important; }
+      body, html { overflow: hidden; }
+
+      /* ══ Knowledge Graph Home — Glass Pill ══ */
+      .gw-home-v2 {
+        position: relative; z-index: 1;
+        display: flex; flex-direction: column; align-items: center;
+        height: calc(100vh - 58px);
+        padding-top: 22px; overflow: hidden;
+      }
+      .gw-home-v2 .gw-greeting { font-size: 2.1rem; margin-bottom: 6px; font-weight: 700; letter-spacing: -0.01em; }
+      .gw-home-v2 .gw-subtitle { margin-bottom: 0; font-size: 0.83rem; color: #94a8bb; letter-spacing: 0.06em; text-transform: uppercase; }
+
+      .gw-kgraph {
+        position: relative;
+        width: min(760px, 92vw);
+        height: min(460px, 60vw);
+        min-height: 360px;
+        margin-top: 20px;
+      }
+      #kg-svg {
+        position: absolute; top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none; overflow: visible;
+      }
+
+      .gw-knode {
+        position: absolute;
+        text-decoration: none !important; z-index: 2;
+        transform: translate(-50%, -50%); cursor: pointer;
+      }
+
+      /* Frosted glass circle — unified green */
+      .gw-knode-blob {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 6px;
+        width: 132px; height: 132px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.56);
+        backdrop-filter: blur(18px) saturate(1.5);
+        -webkit-backdrop-filter: blur(18px) saturate(1.5);
+        border: 2px solid rgba(38,185,154,0.8);
+        color: #0a5242;
+        box-shadow: 0 6px 28px rgba(38,185,154,0.38), inset 0 1px 0 rgba(255,255,255,0.85);
+        font-size: 0.96rem; font-weight: 600;
+        letter-spacing: 0.02em;
+        transition: transform 0.32s cubic-bezier(0.22,1,0.36,1),
+                    box-shadow 0.32s, background 0.32s;
+      }
+      .gw-knode-icon { font-size: 2.0rem; line-height: 1; color: #1a9e82; transition: transform 0.32s; }
+      .gw-knode:hover .gw-knode-blob {
+        transform: translateY(-7px) scale(1.07);
+        background: rgba(200,244,234,0.78);
+        box-shadow: 0 18px 52px rgba(38,185,154,0.48), inset 0 1px 0 rgba(255,255,255,0.9);
+      }
+      .gw-knode:hover .gw-knode-icon { transform: scale(1.18); }
+
+      @keyframes kf0{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 9px))}}
+      @keyframes kf1{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 11px))}}
+      @keyframes kf2{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 8px))}}
+      @keyframes kf3{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 10px))}}
+      #kn-search   { animation: kf0 3.8s ease-in-out infinite; }
+      #kn-mylife   { animation: kf1 4.2s ease-in-out infinite 0.7s; }
+      #kn-contacts { animation: kf2 3.5s ease-in-out infinite 1.4s; }
+      #kn-calendar { animation: kf3 4.0s ease-in-out infinite 1.0s; }
     </style>
   </head>
 
@@ -552,35 +618,22 @@
             
         <!-- Page Content -->
         <main class="right_col" role="main" aria-label="Main content">
-          <!-- 배경 오브 -->
           <div class="gw-orb gw-orb-1"></div>
           <div class="gw-orb gw-orb-2"></div>
           <div class="gw-orb gw-orb-3"></div>
-
-          <!-- 파티클 캔버스 -->
           <canvas id="gw-particles"></canvas>
 
-          <div class="gw-home-wrapper" id="home-section">
+          <div class="gw-home-v2">
             <div class="gw-greeting gw-anim" id="home-greeting" style="transition-delay:0.05s">반갑습니다!<span class="gw-cursor"></span></div>
-            <div class="gw-subtitle gw-anim" data-i18n="page.index.subtitle" style="transition-delay:0.18s">무엇이든 물어보세요.</div>
-            <div class="gw-search-box gw-anim" style="transition-delay:0.32s">
-              <input type="text" id="home-search-input" placeholder="메일에 대해 궁금한 것을 검색하세요..." data-i18n-placeholder="page.index.search_placeholder" autocomplete="off">
-              <button id="home-search-btn" type="button">
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-            <p class="gw-search-hint gw-anim" data-i18n="page.index.search_hint" style="transition-delay:0.42s">Enter 또는 버튼을 눌러 검색</p>
+            <p class="gw-subtitle gw-anim" style="transition-delay:0.15s">지식 그래프로 탐색하세요</p>
 
-            <div class="gw-quick-chips gw-anim" style="transition-delay:0.54s">
-              <a href="search.html" class="gw-chip"><i class="bi bi-envelope"></i> 최근 메일</a>
-              <a href="index2.html" class="gw-chip"><i class="bi bi-tags"></i> 라벨 보기</a>
-              <a href="calendar.html" class="gw-chip"><i class="bi bi-calendar3"></i> 캘린더</a>
-              <a href="contacts.html" class="gw-chip"><i class="bi bi-people"></i> 연락처</a>
+            <div class="gw-kgraph gw-anim" id="kgraph" style="transition-delay:0.3s">
+              <svg id="kg-svg" aria-hidden="true"></svg>
+              <a href="search.html"    class="gw-knode kn-search"   id="kn-search">  <div class="gw-knode-blob"><i class="gw-knode-icon bi bi-search"></i>검색</div></a>
+              <a href="graph-viz.html" class="gw-knode kn-mylife"   id="kn-mylife">  <div class="gw-knode-blob"><i class="gw-knode-icon bi bi-stars"></i>My Life</div></a>
+              <a href="contacts.html"  class="gw-knode kn-contacts" id="kn-contacts"><div class="gw-knode-blob"><i class="gw-knode-icon bi bi-people-fill"></i>연락처</div></a>
+              <a href="calendar.html"  class="gw-knode kn-calendar" id="kn-calendar"><div class="gw-knode-blob"><i class="gw-knode-icon bi bi-calendar3"></i>캘린더</div></a>
             </div>
-          </div>
-
-          <div id="graph-section" style="display:none; width:100%; height:calc(100vh - 80px); position:relative;">
-            <svg id="graph" width="100%" height="100%"></svg>
           </div>
         </main>
 
@@ -595,194 +648,155 @@
     </div>
 
     <script>
-      var _graphReady = false;
-      function _loadScript(src) {
-        return new Promise(function(resolve, reject) {
-          var s = document.createElement('script');
-          s.src = src;
-          s.onload = resolve;
-          s.onerror = reject;
-          document.head.appendChild(s);
-        });
-      }
-      window.loadGraphViz = function() {
-        var deps = _graphReady
-          ? Promise.resolve()
-          : _loadScript('https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js')
-              .then(function() { return _loadScript('/graph-render.js'); })
-              .then(function() { _graphReady = true; });
-        deps
-          .then(function() {
-            var gmailId = sessionStorage.getItem('gw_gmail_id') || '';
-            return fetch('/graph-data?gmail_id=' + encodeURIComponent(gmailId));
-          })
-          .then(function(res) { return res.json(); })
-          .then(function(data) { renderGraph(document.getElementById('graph'), data); })
-          .catch(function(err) { console.error('그래프 로드 실패:', err); });
-      };
+      /* ── URL 파라미터 & 이름 처리 ── */
+      (function() {
+        const params = new URLSearchParams(window.location.search);
+        const nameParam = params.get('name');
+        const name = nameParam ? decodeURIComponent(nameParam) : (sessionStorage.getItem('gw_user_name') || '-');
+        if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
+        const gmailIdParam = params.get('gmail_id');
+        if (gmailIdParam) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+        window.currentUserName = name;
+        const pnEl = document.getElementById('google-profile-name');
+        if (pnEl) pnEl.textContent = name;
 
-      // 이름 처리: URL 파라미터 우선, 없으면 sessionStorage 사용
-      const params = new URLSearchParams(window.location.search);
-      const nameParam = params.get('name');
-      const name = nameParam
-        ? decodeURIComponent(nameParam)
-        : (sessionStorage.getItem('gw_user_name') || '-');
-
-      if (nameParam) {
-        sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
-      }
-
-      // gmail_id 처리: URL 파라미터 우선, 없으면 sessionStorage 사용
-      const gmailIdParam = params.get('gmail_id');
-      if (gmailIdParam) {
-        sessionStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
-      }
-
-      window.currentUserName = name;
-
-      // 이름 주입
-      document.getElementById('google-profile-name').textContent = name;
-
-      // 인사말 타이핑 효과 (커서 span 보존)
-      function typeGreeting(text) {
-        const el = document.getElementById('home-greeting');
-        const cursor = el.querySelector('.gw-cursor');
-        el.textContent = '';
-        if (cursor) el.appendChild(cursor);
-        let i = 0;
-        function tick() {
-          if (i < text.length) {
-            el.insertBefore(document.createTextNode(text[i]), cursor || null);
-            i++;
-            setTimeout(tick, 48);
-          }
+        function typeGreeting(text) {
+          const el = document.getElementById('home-greeting');
+          if (!el) return;
+          const cursor = el.querySelector('.gw-cursor');
+          el.textContent = '';
+          if (cursor) el.appendChild(cursor);
+          let i = 0;
+          (function tick() {
+            if (i < text.length) {
+              el.insertBefore(document.createTextNode(text[i++]), cursor || null);
+              setTimeout(tick, 48);
+            }
+          })();
         }
-        tick();
-      }
+        const greet = name !== '-' ? name + '님, 반갑습니다!' : '반갑습니다!';
+        setTimeout(() => typeGreeting(greet), 400);
+      })();
 
-      const greetingText = name !== '-' ? name + '님, 반갑습니다!' : '반갑습니다!';
-      setTimeout(() => typeGreeting(greetingText), 400);
+      /* ── Knowledge Graph 초기화 ── */
+      function initKGraph() {
+        const container = document.getElementById('kgraph');
+        const svg = document.getElementById('kg-svg');
+        if (!container || !svg) return;
+        const W = container.offsetWidth, H = container.offsetHeight;
 
-      // 검색 실행
-      function doSearch() {
-        const q = document.getElementById('home-search-input').value.trim();
-        if (!q) return;
-        window.location.href = 'search.html?q=' + encodeURIComponent(q);
-      }
+        const nodes = [
+          {id:'kn-search',   px:0.13, py:0.38, color:'#26B99A'},
+          {id:'kn-mylife',   px:0.37, py:0.68, color:'#26B99A'},
+          {id:'kn-contacts', px:0.64, py:0.20, color:'#26B99A'},
+          {id:'kn-calendar', px:0.86, py:0.58, color:'#26B99A'}
+        ];
 
-      document.getElementById('home-search-btn').addEventListener('click', doSearch);
-      document.getElementById('home-search-input').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') doSearch();
-      });
+        const pos = {};
+        nodes.forEach(n => {
+          const el = document.getElementById(n.id); if(!el) return;
+          const x = W * n.px, y = H * n.py;
+          pos[n.id] = {x, y, color: n.color};
+          el.style.left = x + 'px';
+          el.style.top  = y + 'px';
+        });
 
-      // Statistics > Graph Viz 토글
-      function showSection(section) {
-        document.getElementById('home-section').style.display = section === 'home' ? '' : 'none';
-       document.getElementById('graph-section').style.display = section === 'graph' ? '' : 'none';
+        svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+        svg.innerHTML = '';
+
+        const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+        const chain = ['kn-search','kn-mylife','kn-contacts','kn-calendar'];
+
+        /* 엣지별 선형 그라데이션 정의 */
+        for(let i = 0; i < chain.length - 1; i++) {
+          const a = pos[chain[i]], b = pos[chain[i+1]];
+          if(!a || !b) continue;
+          const g = document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
+          g.id = `eg${i}`; g.setAttribute('gradientUnits','userSpaceOnUse');
+          g.setAttribute('x1',a.x); g.setAttribute('y1',a.y);
+          g.setAttribute('x2',b.x); g.setAttribute('y2',b.y);
+          [[a.color,'0%','0.7'],[b.color,'100%','0.7']].forEach(([c,off,op]) => {
+            const s = document.createElementNS('http://www.w3.org/2000/svg','stop');
+            s.setAttribute('offset',off); s.setAttribute('stop-color',c); s.setAttribute('stop-opacity',op);
+            g.appendChild(s);
+          });
+          defs.appendChild(g);
+        }
+        svg.appendChild(defs);
+
+        /* 연결선 + 여행 점 */
+        for(let i = 0; i < chain.length - 1; i++) {
+          const a = pos[chain[i]], b = pos[chain[i+1]];
+          if(!a || !b) continue;
+          const mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - 42;
+          const d = `M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}`;
+
+          /* 글로우 레이어 */
+          const glow = document.createElementNS('http://www.w3.org/2000/svg','path');
+          glow.setAttribute('d',d); glow.setAttribute('fill','none');
+          glow.setAttribute('stroke',`url(#eg${i})`);
+          glow.setAttribute('stroke-width','8'); glow.setAttribute('opacity','0.1');
+          svg.appendChild(glow);
+
+          /* 메인 경로 */
+          const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+          path.setAttribute('d',d); path.setAttribute('fill','none');
+          path.setAttribute('stroke',`url(#eg${i})`);
+          path.setAttribute('stroke-width','1.6');
+          path.setAttribute('stroke-linecap','round');
+          svg.appendChild(path);
+
+          /* 흐르는 점 */
+          const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+          dot.setAttribute('r','3.5');
+          dot.setAttribute('fill', pos[chain[i+1]].color);
+          dot.setAttribute('opacity','0.78');
+          const am = document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
+          am.setAttribute('dur',(2.0 + i*0.4)+'s');
+          am.setAttribute('repeatCount','indefinite');
+          am.setAttribute('path',d);
+          dot.appendChild(am);
+          svg.appendChild(dot);
+        }
       }
 
       document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.gw-anim').forEach(el =>
+          requestAnimationFrame(() => el.classList.add('visible'))
+        );
 
-        // 1. Stagger 페이드인
-        document.querySelectorAll('.gw-anim').forEach(el => {
-          requestAnimationFrame(() => el.classList.add('visible'));
-        });
-
-        // ── 2. Idle pulse on search input ────────────────────────────
-        const searchInput = document.getElementById('home-search-input');
-        let pulseTimer;
-        function startPulse() {
-          pulseTimer = setTimeout(() => searchInput.classList.add('idle-pulse'), 3000);
-        }
-        function stopPulse() {
-          clearTimeout(pulseTimer);
-          searchInput.classList.remove('idle-pulse');
-          startPulse();
-        }
-        searchInput.addEventListener('focus', () => { clearTimeout(pulseTimer); searchInput.classList.remove('idle-pulse'); });
-        searchInput.addEventListener('blur', startPulse);
-        searchInput.addEventListener('input', stopPulse);
-        startPulse();
-
-        // ── 3. 파티클 캔버스 ─────────────────────────────────────────
-        (function initParticles() {
+        /* particles */
+        (function() {
           const canvas = document.getElementById('gw-particles');
           if (!canvas) return;
           const ctx = canvas.getContext('2d');
-          let W, H, particles;
-
-          function resize() {
-            W = canvas.width  = window.innerWidth;
-            H = canvas.height = window.innerHeight;
-          }
-          window.addEventListener('resize', resize);
-          resize();
-
-          function mkParticle() {
-            return {
-              x: Math.random() * W,
-              y: Math.random() * H,
-              r: Math.random() * 2 + 0.6,
-              dx: (Math.random() - 0.5) * 0.35,
-              dy: (Math.random() - 0.5) * 0.35,
-              alpha: Math.random() * 0.5 + 0.2
-            };
-          }
-
-          particles = Array.from({length: 60}, mkParticle);
-
-          function connect() {
-            for (let i = 0; i < particles.length; i++) {
-              for (let j = i + 1; j < particles.length; j++) {
-                const dx = particles[i].x - particles[j].x;
-                const dy = particles[i].y - particles[j].y;
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                if (dist < 120) {
-                  ctx.beginPath();
-                  ctx.strokeStyle = `rgba(26,158,110,${0.12 * (1 - dist/120)})`;
-                  ctx.lineWidth = 0.8;
-                  ctx.moveTo(particles[i].x, particles[i].y);
-                  ctx.lineTo(particles[j].x, particles[j].y);
-                  ctx.stroke();
-                }
-              }
-            }
-          }
-
+          let W, H, P;
+          function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+          addEventListener('resize', resize); resize();
+          function mk() { return {x:Math.random()*W,y:Math.random()*H,r:Math.random()*2+.6,dx:(Math.random()-.5)*.35,dy:(Math.random()-.5)*.35,a:Math.random()*.5+.2}; }
+          P = Array.from({length:60}, mk);
           function draw() {
-            ctx.clearRect(0, 0, W, H);
-            particles.forEach(p => {
-              p.x += p.dx; p.y += p.dy;
-              if (p.x < 0 || p.x > W) p.dx *= -1;
-              if (p.y < 0 || p.y > H) p.dy *= -1;
-              ctx.beginPath();
-              ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(26,158,110,${p.alpha})`;
-              ctx.fill();
+            ctx.clearRect(0,0,W,H);
+            P.forEach(p => {
+              p.x+=p.dx; p.y+=p.dy;
+              if(p.x<0||p.x>W)p.dx*=-1; if(p.y<0||p.y>H)p.dy*=-1;
+              ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+              ctx.fillStyle=`rgba(26,158,110,${p.a})`; ctx.fill();
             });
-            connect();
+            for(let i=0;i<P.length;i++) for(let j=i+1;j<P.length;j++){
+              const dx=P[i].x-P[j].x,dy=P[i].y-P[j].y,d=Math.sqrt(dx*dx+dy*dy);
+              if(d<120){ctx.beginPath();ctx.strokeStyle=`rgba(26,158,110,${.12*(1-d/120)})`;ctx.lineWidth=.8;ctx.moveTo(P[i].x,P[i].y);ctx.lineTo(P[j].x,P[j].y);ctx.stroke();}
+            }
             requestAnimationFrame(draw);
           }
           draw();
         })();
 
-        // ── 4. Graph Viz 사이드바 메뉴 ──────────────────────────────
-        const navGraphViz = document.getElementById('nav-graph-viz');
-        if (navGraphViz) {
-          navGraphViz.addEventListener('click', (e) => {
-            e.preventDefault();
-            showSection('graph');
-            window.loadGraphViz();
-          });
-        }
+        initKGraph();
+        addEventListener('resize', () => { clearTimeout(window._kgt); window._kgt = setTimeout(initKGraph, 120); });
+      });
 
-        // ── 5. 해시로 직접 접근 시 그래프 섹션 자동 표시 ─────────────
-        if (window.location.hash === '#graph-viz') {
-          showSection('graph');
-          window.loadGraphViz();
-        }
-        
-});
+
     </script>
   </body>
 </html>
