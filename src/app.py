@@ -1675,6 +1675,41 @@ def upload_attachments():
     })
 
 
+# ── MyPeople: 지식그래프 인물 목록 ──
+@app.route("/people-data", methods=["GET"])
+def people_data():
+    gmail_id = (request.args.get("gmail_id") or "").strip().lower()
+    if not gmail_id:
+        return jsonify([]), 200
+
+    # TODO: DB 스키마 확정 후 아래 자리에 실제 쿼리 삽입
+    # 반환 형식 예시:
+    # [
+    #   {
+    #     "name": "김예은",
+    #     "email": "yeeun@example.com",
+    #     "count": 42,       # 주고받은 메일 수
+    #     "affinity": 0.87,  # 친밀도 (0.0 ~ 1.0)
+    #     "labels": 5,       # 연관 라벨 수
+    #     "recent": True,    # 최근 연락 여부
+    #     "last_contact": "2026-06-10"
+    #   }
+    # ]
+    people = _fetch_people_from_db(gmail_id)
+    return jsonify(people), 200
+
+
+def _fetch_people_from_db(gmail_id: str) -> list:  # noqa: ARG001
+    """지식그래프 DB에서 인물 목록을 조회한다. DB 스키마 확정 후 구현."""
+    # TODO: DB 연결 및 쿼리 구현
+    # paths = UserPaths(BASE_DIR, gmail_id)
+    # conn = get_db_connection(paths.db_path)
+    # rows = conn.execute("SELECT ...").fetchall()
+    # return [dict(row) for row in rows]
+    del gmail_id  # 미구현 스텁 — 추후 쿼리에서 사용
+    return []
+
+
 # 웹앱용 통계 라우트
 @app.route("/mail-stats", methods=["POST"])
 def send_mail_stats():
