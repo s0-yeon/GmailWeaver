@@ -15,7 +15,7 @@ from util.user_path import user_graphrag_init
 # from config.settings import GRAPH_BUILD_SCRIPT, GRAPHRAG_ROOT, BASE_DIR
 
 from config.settings import MAIL_BLOCK_SEP
-from util.extract_statics import start_timer,end_timer,format_elapsed_time
+from util.extract_statics import start_timer,end_timer,format_elapsed_time, _extract_statics_pipeline
 from util.database.db_writer import create_user,save_person_stats_to_db,save_keyword_stats_to_db
 
 # output 폴더를 3초 간격으로 감시해 인덱싱 단계 변화를 job 진행도에 반영
@@ -348,6 +348,7 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None, added_c
 
         formatted_time = format_elapsed_time(time_result["elapsed_sec"])
 
+        _extract_statics_pipeline(paths, mode='rewrite')
         target_update_date = time_result["ended_at"]
 
         create_user(
