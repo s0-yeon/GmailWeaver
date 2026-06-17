@@ -396,7 +396,7 @@
       .gw-tl.active { color: #26B99A; font-weight: 700; background: #e8f7f4; }
       .gw-tl-dropdown { position: relative; }
       .gw-tl-dd-menu {
-        display: none; position: absolute; top: calc(100% + 6px); left: 0;
+        display: none; position: absolute; top: 100%; left: 0; padding-top: 6px;
         background: #fff; border: 1px solid #e0e0e0; border-radius: 8px;
         box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 9999; min-width: 140px; padding: 6px 0;
       }
@@ -536,11 +536,12 @@
               <a href="index.html" class="gw-tl active">홈</a>
               <a href="search.html" class="gw-tl">검색</a>
               <div class="gw-tl-dropdown">
-                <button class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></button>
+                <a href="mylife.html" class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:4px;"></i></a>
                 <div class="gw-tl-dd-menu">
+                  <a href="ex_mypeople.html">My People</a>
                   <a href="graph-viz.html">Graph Viz</a>
-                  <a href="recap.html">Recap</a>
                   <a href="mytime.html">My Time</a>
+                  <a href="recap.html">Recap</a>
                 </div>
               </div>
               <a href="contacts.html" class="gw-tl">연락처</a>
@@ -631,7 +632,7 @@
             <div class="gw-kgraph gw-anim" id="kgraph" style="transition-delay:0.3s">
               <svg id="kg-svg" aria-hidden="true"></svg>
               <a href="search.html"    class="gw-knode kn-search"   id="kn-search">  <div class="gw-knode-blob"><i class="gw-knode-icon bi bi-search"></i>검색</div></a>
-              <a href="graph-viz.html" class="gw-knode kn-mylife"   id="kn-mylife">  <div class="gw-knode-blob"><i class="gw-knode-icon bi bi-stars"></i>My Life</div></a>
+              <a href="mylife.html" class="gw-knode kn-mylife"   id="kn-mylife">  <div class="gw-knode-blob"><i class="gw-knode-icon bi bi-stars"></i>My Life</div></a>
               <a href="contacts.html"  class="gw-knode kn-contacts" id="kn-contacts"><div class="gw-knode-blob"><i class="gw-knode-icon bi bi-people-fill"></i>연락처</div></a>
               <a href="calendar.html"  class="gw-knode kn-calendar" id="kn-calendar"><div class="gw-knode-blob"><i class="gw-knode-icon bi bi-calendar3"></i>캘린더</div></a>
             </div>
@@ -656,7 +657,13 @@
         const name = nameParam ? decodeURIComponent(nameParam) : (sessionStorage.getItem('gw_user_name') || '-');
         if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
         const gmailIdParam = params.get('gmail_id');
-        if (gmailIdParam) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+        if (gmailIdParam) localStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+      const flaskUrlParam = params.get('flask_url');
+      if (flaskUrlParam) localStorage.setItem('gw_flask_url', decodeURIComponent(flaskUrlParam));
+      // Flask에서 직접 열릴 때 자동으로 ngrok URL 저장
+      if (!window.location.origin.includes('script.google.com')) {
+        localStorage.setItem('gw_flask_url', window.location.origin);
+      }
         window.currentUserName = name;
         const pnEl = document.getElementById('google-profile-name');
         if (pnEl) pnEl.textContent = name;
@@ -796,8 +803,6 @@
         initKGraph();
         addEventListener('resize', () => { clearTimeout(window._kgt); window._kgt = setTimeout(initKGraph, 120); });
       });
-
-
-    </script>
-  </body>
-</html>
+      </script>
+    </body>
+  </html>

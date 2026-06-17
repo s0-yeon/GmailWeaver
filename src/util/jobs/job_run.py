@@ -392,6 +392,7 @@ def run_graph_update_pipeline(job_id, paths, env):
         # 2단계: json 생성 
         build_graph_json(job_id,paths, env)
 
+        _extract_statics_pipeline(paths, mode='append')
         save_person_stats_to_db(paths)
         save_keyword_stats_to_db(paths)
 

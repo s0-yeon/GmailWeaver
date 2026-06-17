@@ -107,7 +107,9 @@
       .gw-tl-dd-menu a:hover { background: #f4f6f8; color: #26B99A; }
       @media (max-width: 900px) { .gw-top-links { display: none; } }
       .left_col, .nav_title { display: none !important; }
-      .right_col { margin-left: 0 !important; }
+      html, body { height: 100%; overflow: hidden; }
+      .container.body, .main_container { height: 100%; overflow: hidden; }
+      .right_col { margin-left: 0 !important; height: calc(100vh - 60px); overflow-y: auto; }
       .top_nav { margin-left: 0 !important; }
       .nav.toggle { display: none !important; }
       footer { display: none !important; }
@@ -175,9 +177,11 @@
               <a href="index.html" class="gw-tl">홈</a>
               <a href="search.html" class="gw-tl">검색</a>
               <div class="gw-tl-dropdown">
-                <button class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></button>
+                <a href="mylife.html" class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:4px;"></i></a>
                 <div class="gw-tl-dd-menu">
+                  <a href="ex_mypeople.html">My People</a>
                   <a href="graph-viz.html">Graph Viz</a>
+                  <a href="mytime.html">My Time</a>
                   <a href="recap.html">Recap</a>
                 </div>
               </div>
@@ -516,10 +520,4 @@
       // 새로고침 버튼: gw_cal_ 세션 캐시 전체 삭제 후 이벤트 재요청
       document.getElementById('refresh-calendar-btn').addEventListener('click', function() {
         Object.keys(sessionStorage)
-          .filter(k => k.startsWith('gw_cal_'))
-          .forEach(k => sessionStorage.removeItem(k));
-        if (window.calendar) window.calendar.refetchEvents();
-      });
-    </script>
-  </body>
-</html>
+          .filter(k => k.startsW
