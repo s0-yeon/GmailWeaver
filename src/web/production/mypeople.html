@@ -20,85 +20,124 @@
       .site_title_text i { font-size: 1.3rem; color: #26B99A; }
 
       body, html { overflow: hidden; }
-      .right_col {
-        background: linear-gradient(145deg, #e8f5f0 0%, #f0f7ff 50%, #f5f0ff 100%);
-        margin-left: 0 !important; padding: 0 !important; overflow: hidden !important;
-      }
       .left_col, .nav_title { display: none !important; }
-      .top_nav { margin-left: 0 !important; }
       .nav.toggle { display: none !important; }
       footer { display: none !important; }
 
+      /* top_nav: fixed, full-width, on top */
+      .top_nav {
+        position: fixed !important;
+        top: 0 !important; left: 0 !important; right: 0 !important;
+        width: 100% !important; margin: 0 !important; z-index: 1000 !important;
+      }
+
+      /* right_col: fixed, starts exactly at bottom of navbar */
+      .right_col {
+        position: fixed !important;
+        top: 57px !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+        background: linear-gradient(145deg, #e8f5f0 0%, #f0f7ff 50%, #f5f0ff 100%);
+        margin: 0 !important; padding: 0 !important; overflow: hidden !important;
+      }
+
       /* ── 페이지 레이아웃 ── */
+      .right_col > div:first-child { padding-top: 0 !important; }
       .mp-page {
-        display: flex; flex-direction: column;
-        height: calc(100vh - 58px - 148px);
-        padding: 10px 60px 0;
-        gap: 8px; box-sizing: border-box;
+        position: fixed !important;
+        top: 57px !important;
+        left: 0 !important; right: 0 !important;
+        bottom: 100px !important;
+        padding: 0 60px !important;
+        display: flex !important; flex-direction: column !important;
+        gap: 2px !important; box-sizing: border-box !important;
       }
 
-      /* ── 상단 헤더 ── */
-      .mp-header {
-        display: flex; align-items: center;
-        justify-content: space-between; flex-shrink: 0;
-      }
-      .mp-title-wrap { display: flex; align-items: center; gap: 8px; }
-      .mp-title-icon {
-        width: 28px; height: 28px; border-radius: 8px;
-        background: linear-gradient(135deg, #26B99A, #1a7a62);
-        display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 3px 8px rgba(38,185,154,0.3);
-      }
-      .mp-title-icon i { color: #fff; font-size: 0.78rem; }
-      .mp-title { font-size: 1.05rem; font-weight: 800; color: #0f3d2e; letter-spacing: -0.02em; }
-      .mp-count {
-        font-size: 0.72rem; color: #26B99A; font-weight: 700;
-        background: rgba(38,185,154,0.12); padding: 2px 8px;
-        border-radius: 20px;
-      }
-      .mp-header-right { display: flex; align-items: center; gap: 10px; }
-      .mp-search {
-        display: flex; align-items: center; gap: 8px;
-        background: rgba(255,255,255,0.8); border: 1.5px solid #c8e6dc;
-        border-radius: 24px; padding: 7px 16px;
-        backdrop-filter: blur(8px);
-        transition: border-color 0.2s, box-shadow 0.2s;
-      }
-      .mp-search:focus-within {
-        border-color: #26B99A; background: #fff;
-        box-shadow: 0 0 0 3px rgba(38,185,154,0.12);
-      }
-      .mp-search i { color: #26B99A; font-size: 0.88rem; }
-      .mp-search input {
-        border: none; outline: none; font-size: 0.88rem;
-        color: #2a3f35; background: transparent; width: 180px;
-      }
-      .mp-search input::placeholder { color: #b0c8be; }
-
-      /* ── 그리드 패널 ── */
+      /* ── 그리드 패널 (헤더 포함) ── */
       .mp-panel {
-        flex: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
         background: rgba(255,255,255,0.72);
         border: 1.5px solid rgba(200,230,215,0.8);
         border-radius: 20px;
         backdrop-filter: blur(12px);
         box-shadow: 0 4px 28px rgba(38,185,154,0.1),
                     inset 0 1px 0 rgba(255,255,255,0.9);
-        padding: 20px; overflow-y: auto; overflow-x: hidden;
+        flex: 1; min-height: 0;
+        padding: 8px 14px;
+        overflow-y: auto;
       }
       .mp-panel::-webkit-scrollbar { width: 4px; }
       .mp-panel::-webkit-scrollbar-thumb { background: #b8ddd0; border-radius: 10px; }
 
+      /* ── 패널 헤더 — 패널과 동일한 폭으로 정렬 ── */
+      .mp-panel-header {
+        display: flex; align-items: center;
+        justify-content: space-between; flex-shrink: 0;
+        margin-bottom: 4px;
+        max-width: 1200px; width: 100%; margin-left: auto; margin-right: auto;
+      }
+      .mp-title-wrap { display: flex; align-items: center; gap: 8px; }
+      .mp-title { font-size: 1.05rem; font-weight: 800; color: #0f3d2e; letter-spacing: -0.02em; }
+      .mp-count {
+        font-size: 0.72rem; color: #26B99A; font-weight: 700;
+        background: rgba(38,185,154,0.12); padding: 2px 8px;
+        border-radius: 20px;
+      }
+      /* ── 노션식 드롭다운 토글 ── */
+      .mp-dropdown { position: relative; }
+      .mp-dropdown-btn {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 24px;
+        background: rgba(255,255,255,0.8);
+        border: 1.5px solid rgba(200,230,215,0.9);
+        border-radius: 10px; padding: 6px 16px;
+        cursor: pointer; font-size: 0.85rem; font-weight: 600;
+        color: #2a3f35; backdrop-filter: blur(8px);
+        transition: border-color 0.15s, background 0.15s;
+        white-space: nowrap; user-select: none;
+        min-width: 140px;
+      }
+      .mp-dropdown-btn:hover { border-color: #26B99A; background: #fff; }
+      .mp-dropdown-btn.open { border-color: #26B99A; background: #fff; border-radius: 10px 10px 0 0; border-bottom-color: transparent; }
+      .mp-dropdown-chevron {
+        font-size: 0.7rem; color: #7aaa96;
+        transition: transform 0.18s;
+      }
+      .mp-dropdown-btn.open .mp-dropdown-chevron { transform: rotate(180deg); }
+      .mp-dropdown-menu {
+        display: none; position: absolute; top: 100%; right: 0;
+        min-width: 100%; background: #fff;
+        border: 1.5px solid #26B99A; border-top: none;
+        border-radius: 0 0 10px 10px;
+        box-shadow: 0 8px 24px rgba(38,185,154,0.12);
+        z-index: 500; overflow: hidden;
+      }
+      .mp-dropdown-menu.open { display: block; }
+      .mp-dropdown-item {
+        padding: 9px 16px; font-size: 0.84rem; font-weight: 500;
+        color: #2a3f35; cursor: pointer;
+        transition: background 0.12s;
+        display: flex; align-items: center; gap: 8px;
+      }
+      .mp-dropdown-item:hover { background: #f0faf6; color: #26B99A; }
+      .mp-dropdown-item.selected { color: #26B99A; font-weight: 700; }
+      .mp-dropdown-item.selected::before {
+        content: '✓'; font-size: 0.75rem; color: #26B99A;
+      }
+      .mp-dropdown-item:not(.selected)::before { content: ''; display: inline-block; width: 0.75rem; }
+
       .mp-grid {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 10px;
+        gap: 6px;
       }
 
-      /* 카드 — 세로형 직사각형, 파스텔 */
+      /* 카드 — 열 너비 기준 정사각형, 화면 비율에 따라 반응 */
       .mp-card {
         border-radius: 14px;
         aspect-ratio: 1 / 1;
+        width: 100%; height: auto;
+        align-self: stretch; justify-self: stretch;
         display: flex; flex-direction: column;
         align-items: center; justify-content: center;
         gap: 4px; cursor: pointer;
@@ -130,10 +169,12 @@
       .mp-card.c6:hover { box-shadow:0 12px 24px rgba(252,188,128,0.4); }
 
       .mp-avatar {
-        width: 100px; height: 100px; border-radius: 50%;
+        width: 62%; height: auto; aspect-ratio: 1/1;
+        max-width: 110px; min-width: 60px;
+        border-radius: 50%;
         background: rgba(255,255,255,0.88);
         display: flex; align-items: center; justify-content: center;
-        font-size: 1.5rem; font-weight: 800;
+        font-size: clamp(1rem, 3.5vw, 1.6rem); font-weight: 800;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex-shrink: 0;
       }
       .mp-name {
@@ -334,16 +375,20 @@
 
         <main class="right_col" role="main">
           <div class="mp-page">
-            <div class="mp-header">
+            <div class="mp-panel-header">
               <div class="mp-title-wrap">
-                <div class="mp-title-icon"><i class="bi bi-people-fill"></i></div>
                 <h1 class="mp-title">MyPeople</h1>
                 <span class="mp-count" id="mp-count"></span>
               </div>
-              <div class="mp-header-right">
-                <div class="mp-search">
-                  <i class="bi bi-search"></i>
-                  <input type="text" id="mp-search-input" placeholder="이름 검색...">
+              <div class="mp-dropdown" id="mp-dropdown">
+                <div class="mp-dropdown-btn" id="mp-dropdown-btn">
+                  <span id="mp-dropdown-label">전체</span>
+                  <i class="bi bi-chevron-down mp-dropdown-chevron"></i>
+                </div>
+                <div class="mp-dropdown-menu" id="mp-dropdown-menu">
+                  <div class="mp-dropdown-item selected" data-filter="all">전체</div>
+                  <div class="mp-dropdown-item" data-filter="close">친밀</div>
+                  <div class="mp-dropdown-item" data-filter="work">업무</div>
                 </div>
               </div>
             </div>
@@ -432,7 +477,7 @@
       let allPeople = [];
       let globalFirst = 0, globalLast = 0; // ms
       let selMin = 0, selMax = 0;          // ms (현재 선택 구간)
-      let searchQ = '';
+      let activeFilter = 'all';
 
       /* ── 카드 렌더링 ── */
       function renderCards() {
@@ -440,8 +485,7 @@
         const list = allPeople.filter(p => {
           const pFirst = dateToMs(p.first), pLast = dateToMs(p.last);
           const inRange = pLast >= selMin && pFirst <= selMax;
-          const inSearch = !searchQ || (p.name || '').toLowerCase().includes(searchQ);
-          return inRange && inSearch;
+          return inRange;
         });
         const countEl = document.getElementById('mp-count');
         if (countEl) countEl.textContent = list.length ? `${list.length}명` : '';
@@ -558,10 +602,32 @@
         initTimeline(firstMs, lastMs);
       }
 
-      /* ── 검색 ── */
-      document.getElementById('mp-search-input').addEventListener('input', e => {
-        searchQ = e.target.value.trim().toLowerCase();
+      /* ── 드롭다운 토글 ── */
+      const ddBtn = document.getElementById('mp-dropdown-btn');
+      const ddMenu = document.getElementById('mp-dropdown-menu');
+      const ddLabel = document.getElementById('mp-dropdown-label');
+
+      ddBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        ddBtn.classList.toggle('open');
+        ddMenu.classList.toggle('open');
+      });
+
+      ddMenu.addEventListener('click', e => {
+        const item = e.target.closest('.mp-dropdown-item');
+        if (!item) return;
+        document.querySelectorAll('.mp-dropdown-item').forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+        ddLabel.textContent = item.textContent.replace('✓', '').trim();
+        activeFilter = item.dataset.filter;
+        ddBtn.classList.remove('open');
+        ddMenu.classList.remove('open');
         renderCards();
+      });
+
+      document.addEventListener('click', () => {
+        ddBtn.classList.remove('open');
+        ddMenu.classList.remove('open');
       });
 
       loadPeople();
