@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:*; frame-src 'self'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <title>My Time | GmailWeaver</title>
+    <script type="module" src="/src/main-minimal.js"></script>
+    <style>
+      .site_title_text{font-size:1.2rem;font-weight:700;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px}
+      .left_col,.nav_title{display:none!important}
+      .right_col{margin-left:0!important;background:#f5f7f6}
+      .top_nav{margin-left:0!important}
+      .nav.toggle{display:none!important}
+      footer{display:none!important}
+
+      .gw-top-links{display:flex;align-items:center;gap:2px;margin-left:16px}
+      .gw-tl{display:inline-flex;align-items:center;padding:6px 14px;border-radius:6px;font-size:.88rem;font-weight:500;color:#73879C;text-decoration:none;border:none;background:transparent;cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;font-family:inherit;line-height:1.4}
+      .gw-tl:hover{background:#f4f6f8;color:#2A3F54;text-decoration:none}
+      .gw-tl.active{color:#26B99A;font-weight:700;background:#e8f7f4}
+      .gw-tl-dropdown{position:relative}
+      .gw-tl-dd-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;background:#fff;border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.1);z-index:9999;min-width:140px;padding:6px 0}
+      .gw-tl-dropdown:hover .gw-tl-dd-menu{display:block}
+      .gw-tl-dd-menu a{display:block;padding:8px 16px;font-size:.84rem;color:#2A3F54;text-decoration:none}
+      .gw-tl-dd-menu a:hover{background:#f4f6f8;color:#26B99A}
+      @media(max-width:900px){.gw-top-links{display:none}}
+
+      /* ── 페이지 ── */
+      .mt-page{max-width:1200px;margin:0 auto;padding:28px 40px 32px}
+
+      /* 헤더 */
+      .mt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+      .mt-title{font-size:2.6rem;font-weight:800;color:#1b2e22;letter-spacing:-.04em}
+      .mt-title span{color:#1a9e6e}
+      .mt-mode-toggle{display:flex;gap:3px;background:#e9efec;border-radius:8px;padding:3px}
+      .mt-mode-btn{padding:6px 18px;border-radius:6px;border:none;font-size:.82rem;font-weight:600;cursor:pointer;background:transparent;color:#73879C;transition:all .15s;font-family:inherit}
+      .mt-mode-btn.active{background:#fff;color:#1a9e6e;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+      /* ── 메인 카드 ── */
+      .mt-main{
+        background:#fff;border-radius:16px;border:1px solid #e3ede8;
+        padding:36px 52px 32px;margin-bottom:12px;
+        display:flex;flex-direction:column;
+        height:calc(100vh - 360px); /* 네비(56) + 페이지패딩(96) + 헤더(80) + 포인터카드(100) + 여유 */
+        min-height:320px;
+        max-height:600px;
+      }
+
+      /* 타임라인 트랙 */
+      .mt-track{
+        display:flex;
+        align-items:flex-start;
+        justify-content:space-between;
+        position:relative;
+      }
+      /* 선 */
+      .mt-track::after{
+        content:'';position:absolute;
+        left:0;right:0;
+        top:7px; /* 도트 절반 */
+        height:1.5px;background:#e3ede8;
+        z-index:0;
+      }
+
+      /* 노드 컬럼 */
+      .mt-node-col{
+        display:flex;flex-direction:column;align-items:center;
+        position:relative;z-index:1;
+        cursor:pointer;
+        flex:1;
+      }
+
+      /* 도트 */
+      .mt-dot{
+        width:14px;height:14px;border-radius:50%;
+        background:#a8c4ba;border:2px solid #fff;
+        box-shadow:0 0 0 1.5px #8fb5a9;
+        transition:background .18s,box-shadow .18s,transform .18s;
+        flex-shrink:0;
+      }
+      .mt-node-col:hover .mt-dot,
+      .mt-node-col.active .mt-dot{
+        background:#1a9e6e;
+        box-shadow:0 0 0 5px rgba(26,158,110,.28);
+        transform:scale(1.3);
+      }
+      /* 클릭으로 고정된 노드 */
+      .mt-node-col.pinned .mt-dot{
+        background:#14845c;
+        box-shadow:0 0 0 6px rgba(20,132,92,.32);
+        transform:scale(1.4);
+      }
+      .mt-node-col.pinned .mt-node-label{color:#14845c;font-weight:800}
+      .mt-node-col.pinned .mt-node-count{color:#14845c}
+
+      /* 기간 레이블 */
+      .mt-node-label{
+        margin-top:10px;
+        font-size:.76rem;font-weight:700;color:#73879C;
+        white-space:nowrap;letter-spacing:.02em;
+        transition:color .15s;
+      }
+      .mt-node-col:hover .mt-node-label,
+      .mt-node-col.active .mt-node-label{color:#1a9e6e}
+
+      /* 메일 수 */
+      .mt-node-count{
+        margin-top:3px;
+        font-size:.7rem;color:#a8c4ba;font-weight:500;
+        transition:color .15s;
+      }
+      .mt-node-col:hover .mt-node-count,
+      .mt-node-col.active .mt-node-count{color:#1a9e6e}
+
+      /* ── 인포 패널 (노드 아래, 고정 높이) ── */
+      .mt-info-area{
+        margin-top:64px;
+        flex:1;
+        position:relative;
+        min-height:0;
+        overflow:hidden;
+      }
+      .mt-panel{
+        position:absolute;inset:0;
+        background:#f0f8f4;
+        border:1.5px solid #a8d9c0;
+        border-radius:14px;
+        padding:20px 28px;
+        box-sizing:border-box;
+        opacity:0;
+        transform:translateY(5px);
+        transition:opacity .2s,transform .2s;
+        pointer-events:none;
+        overflow-y:auto;
+      }
+      .mt-panel.show{
+        opacity:1;
+        transform:translateY(0);
+        pointer-events:auto;
+      }
+      /* 고정됐을 때 테두리 강조 */
+      .mt-panel.pinned{
+        border-color:#1a9e6e;
+        box-shadow:0 0 0 3px rgba(26,158,110,.1);
+      }
+      .mt-panel-top{display:flex;align-items:baseline;gap:16px;margin-bottom:12px}
+      .mt-panel-period{font-size:.82rem;font-weight:800;color:#1a9e6e;letter-spacing:.04em}
+      .mt-panel-count{font-size:.8rem;color:#73879C;font-weight:500}
+      .mt-panel-count strong{color:#1b2e22;font-size:1rem;font-weight:700}
+      .mt-panel-summary{font-size:.84rem;color:#2A3F54;line-height:1.75;margin-bottom:14px}
+      .mt-panel-contacts-title{font-size:.68rem;font-weight:700;color:#8fb5a9;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:7px}
+      .mt-panel-contacts{display:flex;flex-wrap:wrap;gap:6px}
+      .mt-panel-contact{font-size:.75rem;color:#4f6358;background:#dff0e8;border-radius:20px;padding:3px 11px;font-weight:500}
+
+      /* ── 포인터 라인 ── */
+      .mt-pointer-wrap{background:#fff;border-radius:12px;border:1px solid #e3ede8;padding:20px 52px 16px}
+      .mt-pointer-label{font-size:.66rem;font-weight:600;color:#8fb5a9;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
+      .mt-pointer-track{position:relative;height:20px;cursor:pointer;user-select:none}
+      .mt-pointer-bg{position:absolute;left:0;right:0;top:50%;height:2px;background:#c0d4cc;transform:translateY(-50%)}
+      .mt-pointer-window{position:absolute;top:50%;height:4px;transform:translateY(-50%);background:rgba(26,158,110,.52);border-radius:2px;pointer-events:none;transition:left .2s,width .2s}
+      .mt-pointer-cursor{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#1a9e6e;border:2px solid #fff;box-shadow:0 0 0 3px rgba(26,158,110,.3);pointer-events:none;transition:left .2s;z-index:3}
+      .mt-pm{position:absolute;top:50%;transform:translate(-50%,-50%);width:7px;height:7px;border-radius:50%;background:#8fb5a9;z-index:2;cursor:pointer;transition:transform .12s,background .12s}
+      .mt-pm:hover{transform:translate(-50%,-50%) scale(1.8);background:#1a9e6e}
+      .mt-pointer-axis{position:relative;height:16px;margin-top:4px}
+      .mt-pa-lbl{position:absolute;transform:translateX(-50%);font-size:.65rem;color:#8fb5a9;font-weight:600}
+    </style>
+  </head>
+
+  <body class="nav-md page-mytime">
+    <div class="container body">
+      <div class="main_container">
+
+        <aside class="col-md-3 left_col menu_fixed">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title border-0">
+              <a href="index.html" class="site_title site_title_text">
+                <img src="images/olive-tree.png" style="width:28px;height:28px;object-fit:contain;"> Olive
+              </a>
+            </div>
+          </div>
+        </aside>
+
+        <div class="top_nav" style="left:0;">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+            <div class="nav toggle"><a id="menu_toggle"><i class="fas fa-bars"></i></a></div>
+            <nav class="gw-top-links">
+              <a href="index.html" class="gw-tl">홈</a>
+              <a href="search.html" class="gw-tl">검색</a>
+              <div class="gw-tl-dropdown">
+                <button class="gw-tl gw-tl-dd-btn active">My Life <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:2px;"></i></button>
+                <div class="gw-tl-dd-menu">
+                  <a href="graph-viz.html">Graph Viz</a>
+                  <a href="recap.html">Recap</a>
+                  <a href="mytime.html" style="color:#26B99A;font-weight:700;">My Time</a>
+                </div>
+              </div>
+              <a href="contacts.html" class="gw-tl">연락처</a>
+              <a href="calendar.html" class="gw-tl">캘린더</a>
+            </nav>
+            <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li class="nav-item dropdown">
+                  <a href="#" role="button" class="dropdown-toggle" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none;color:inherit;">
+                    <i class="bi bi-translate" style="font-size:1.2rem;vertical-align:middle;"></i>
+                    <span id="current-lang" style="margin-left:4px;font-size:.9rem;">KO</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ko">🇰🇷 한국어</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="en">🇺🇸 English</a></li>
+                    <li><a class="dropdown-item lang-option" href="#" data-lang="ja">🇯🇵 日本語</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        <main class="right_col" role="main">
+          <div class="mt-page">
+
+            <div class="mt-header">
+              <div class="mt-title">My <span>Time</span></div>
+              <div class="mt-mode-toggle">
+                <button class="mt-mode-btn active" data-mode="month">월별</button>
+                <button class="mt-mode-btn" data-mode="year">년별</button>
+              </div>
+            </div>
+
+            <div class="mt-main" id="mainCard">
+              <div class="mt-track" id="track"></div>
+              <div class="mt-info-area">
+                <div class="mt-panel" id="infoPanel">
+                  <div class="mt-panel-top">
+                    <div class="mt-panel-period" id="panelPeriod"></div>
+                    <div class="mt-panel-count" id="panelCount"></div>
+                  </div>
+                  <div class="mt-panel-summary" id="panelSummary"></div>
+                  <div class="mt-panel-contacts-title">주요 연락처</div>
+                  <div class="mt-panel-contacts" id="panelContacts"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 포인터 -->
+            <div class="mt-pointer-wrap">
+              <div class="mt-pointer-label">전체 타임라인 — 클릭으로 이동</div>
+              <div class="mt-pointer-track" id="pointerTrack">
+                <div class="mt-pointer-bg"></div>
+                <div class="mt-pointer-window" id="pointerWindow"></div>
+                <div class="mt-pointer-cursor" id="pointerCursor"></div>
+              </div>
+              <div class="mt-pointer-axis" id="pointerAxis"></div>
+            </div>
+
+          </div>
+        </main>
+        <footer></footer>
+      </div>
+    </div>
+
+    <script>
+    (function () {
+      /* ════════════════════════════
+         DB에서 올 데이터 구조 (월별 요약 텍스트 + 주요 연락처)
+         실제 연결 시: /api/timeline?gmail_id=... → 아래와 같은 JSON 반환
+      ════════════════════════════ */
+      const MONTH_DATA = {
+        '2024-01': { count:182, threads:43, summary:'새해 프로젝트 킥오프와 관련된 대화가 집중됐습니다. OKR 수립과 예산 협의, 팀 구성이 주요 주제였으며 외부 파트너와의 초기 미팅도 다수 있었습니다.', contacts:['김민준 (팀장)','이서연 (기획)','박지호 (개발)'] },
+        '2024-02': { count:97,  threads:28, summary:'상대적으로 조용한 한 달이었습니다. 팀빌딩 행사 준비와 내부 계획서 검토가 주를 이뤘고, 발렌타인 전후로 개인 일정 관련 메일이 소소하게 오갔습니다.', contacts:['이서연 (기획)','최현우 (디자인)'] },
+        '2024-03': { count:134, threads:35, summary:'Q1 마감을 앞두고 팀 내 소통이 활발했습니다. 마라톤 참가 신청과 채용 관련 이메일이 증가했으며, 분기 회고 미팅 일정 조율이 활발히 이루어졌습니다.', contacts:['김민준 (팀장)','정유진 (HR)','박지호 (개발)'] },
+        '2024-04': { count:210, threads:52, summary:'제주 컨퍼런스 참가로 외부 파트너와의 커뮤니케이션이 크게 늘었습니다. 기술 스펙 논의와 신규 파트너십 제안이 핵심 주제였습니다.', contacts:['이서연 (기획)','최현우 (디자인)','강동원 (파트너)'] },
+        '2024-05': { count:88,  threads:21, summary:'사이드 프로젝트 오픈소스 활동 관련 커뮤니티 메일이 많았습니다. 내부적으로는 비교적 조용했으며 개발 스터디 관련 일정 공유가 주를 이뤘습니다.', contacts:['박지호 (개발)','한소희 (커뮤니티)'] },
+        '2024-06': { count:245, threads:61, summary:'Q2 성과 발표를 중심으로 활발한 소통이 이루어졌습니다. KPI 달성 보고, 하반기 계획 수립, 보너스 지급 관련 HR 커뮤니케이션이 많았습니다.', contacts:['김민준 (팀장)','이서연 (기획)','최현우 (디자인)','박지호 (개발)'] },
+        '2024-07': { count:76,  threads:18, summary:'오사카 출장을 계기로 일본 파트너와의 초기 소통이 시작됐습니다. 국내 메일은 비교적 적었으며 여름 휴가 전 업무 인계 관련 메일이 일부 있었습니다.', contacts:['강동원 (파트너)','야마다 켄지 (JP)'] },
+        '2024-08': { count:63,  threads:14, summary:'여름 휴가 시즌으로 전체 메일 수가 낮았습니다. 가족 모임 관련 개인 메일과 Q3 준비를 위한 간단한 업무 공유가 주를 이뤘습니다.', contacts:['이서연 (기획)','정유진 (HR)'] },
+        '2024-09': { count:198, threads:47, summary:'신규 팀원 3명 합류와 함께 온보딩 관련 소통이 급증했습니다. 업무 분장, 스프린트 계획, 개발 환경 세팅 등 내부 커뮤니케이션이 집중됐습니다.', contacts:['김민준 (팀장)','정유진 (HR)','신재원 (신입)','박지호 (개발)'] },
+        '2024-10': { count:155, threads:38, summary:'Q3 마감과 성과 리뷰가 주요 주제였습니다. 연간 건강검진 관련 공지와 내년 로드맵 초안 검토 메일이 오갔습니다.', contacts:['김민준 (팀장)','이서연 (기획)','최현우 (디자인)'] },
+        '2024-11': { count:172, threads:44, summary:'AWS 자격증 준비를 위한 스터디 그룹 메일이 많았습니다. 아키텍처 개선 제안과 코드 리뷰 관련 기술 논의가 활발했습니다.', contacts:['박지호 (개발)','신재원 (신입)','최현우 (디자인)'] },
+        '2024-12': { count:89,  threads:22, summary:'연말 결산과 내년 계획 수립이 중심 주제였습니다. 부산 크리스마스 여행 관련 개인 메일과 팀 회식 일정 조율이 섞여 있었습니다.', contacts:['김민준 (팀장)','이서연 (기획)'] },
+        '2025-01': { count:267, threads:68, summary:'GmailWeaver 베타 런칭 직후로 사용자 피드백과 버그 리포트가 쏟아졌습니다. 언론 보도 이후 외부 문의가 급증했으며 내부적으로 긴급 대응 논의가 이어졌습니다.', contacts:['김민준 (팀장)','이서연 (기획)','박지호 (개발)','한소희 (커뮤니티)'] },
+        '2025-02': { count:118, threads:29, summary:'강릉 팀 워크샵을 계기로 팀 내부 소통이 이루어졌습니다. 서비스 개선 방향 논의와 Q1 목표 정렬이 주요 주제였습니다.', contacts:['이서연 (기획)','최현우 (디자인)'] },
+        '2025-03': { count:143, threads:36, summary:'논문 초고 작성으로 학교 측과의 메일이 증가했습니다. 채용 면접 일정 조율과 Q1 목표 점검 메일이 활발히 오갔습니다.', contacts:['정유진 (HR)','박지호 (개발)','김교수 (학교)'] },
+        '2025-04': { count:189, threads:46, summary:'논문 게재 확정과 함께 학회 발표 준비 메일이 이어졌습니다. 동시에 시리즈A 투자를 위한 IR 데크 피드백 메일이 주를 이뤘습니다.', contacts:['김교수 (학교)','이서연 (기획)','VC 담당자'] },
+        '2025-05': { count:312, threads:79, summary:'시리즈A 투자 계약이 성사되며 역대 가장 바쁜 달이었습니다. 법무법인과의 계약서 검토, 투자자 측 요청 자료 준비, 신규 채용 공고 관련 메일이 폭발적으로 증가했습니다.', contacts:['VC 담당자','법무법인','김민준 (팀장)','이서연 (기획)'] },
+        '2025-06': { count:94,  threads:23, summary:'방콕 휴가 기간 동안 메일이 최소화됐습니다. 복귀 후 밀린 업무 처리와 자동화 도입 관련 기술 메일이 주를 이뤘습니다.', contacts:['박지호 (개발)','신재원 (신입)'] },
+        '2025-07': { count:178, threads:43, summary:'이사와 Q3 계획 수립이 겹쳐 다양한 성격의 메일이 오갔습니다. 인테리어 업체 소통, 새 사무실 준비, 하반기 제품 로드맵 논의가 주요 내용이었습니다.', contacts:['이서연 (기획)','최현우 (디자인)','김민준 (팀장)'] },
+        '2025-08': { count:289, threads:72, summary:'MAU 1만 돌파 소식이 언론에 보도되며 인터뷰 요청과 파트너십 제안 메일이 급증했습니다. 마케팅팀과의 협업 메일도 크게 늘었습니다.', contacts:['한소희 (커뮤니티)','기자','이서연 (기획)','마케팅팀'] },
+        '2025-09': { count:134, threads:33, summary:'마라톤 훈련 중 10K 완주를 앞두고 훈련 모임 메일이 소소하게 있었습니다. Q3 마감 성과 공유와 분기 회고 일정 조율이 주를 이뤘습니다.', contacts:['김민준 (팀장)','박지호 (개발)'] },
+        '2025-10': { count:201, threads:51, summary:'이노베이터 100 선정 이후 강연·인터뷰 섭외 메일이 쏟아졌습니다. 네트워킹 행사 참여 관련 외부 메일이 평소보다 두 배 가까이 증가했습니다.', contacts:['주최측','기자','이서연 (기획)','한소희 (커뮤니티)'] },
+        '2025-11': { count:167, threads:41, summary:'도쿄 출장을 계기로 일본 파트너사와의 글로벌 협업 논의가 본격화됐습니다. 해외 진출 로드맵 초안과 현지화 전략 관련 메일이 많았습니다.', contacts:['야마다 켄지 (JP)','강동원 (파트너)','김민준 (팀장)'] },
+        '2025-12': { count:112, threads:27, summary:'2025 연말 결산과 시리즈B 준비 착수가 주요 주제였습니다. 팀 회식 일정 조율과 VC와의 비공식 대화 메일이 섞여 있었습니다.', contacts:['김민준 (팀장)','이서연 (기획)','VC 담당자'] },
+        '2026-01': { count:238, threads:59, summary:'시리즈B IR 투어가 시작되며 투자자 미팅 관련 메일이 집중됐습니다. 법무법인과의 실사 준비, 팀 목표 정렬 메일이 활발히 오갔습니다.', contacts:['VC 담당자','법무법인','김민준 (팀장)','이서연 (기획)'] },
+        '2026-02': { count:81,  threads:19, summary:'팀 스노보드 워크샵과 Q1 준비가 주요 내용이었습니다. 내부 소통 위주로 메일 수가 낮게 유지됐습니다.', contacts:['이서연 (기획)','최현우 (디자인)'] },
+        '2026-03': { count:129, threads:31, summary:'필라테스 시작과 함께 재활 관련 개인 일정 메일이 일부 있었습니다. Q1 마감 성과 집계와 팀 내 업무 조율이 주를 이뤘습니다.', contacts:['정유진 (HR)','박지호 (개발)'] },
+        '2026-04': { count:321, threads:82, summary:'MAU 5만 돌파와 글로벌 진출 선언으로 역대 최다 메일을 기록했습니다. 해외 파트너 협의, 대규모 채용 공고, 언론 대응이 동시에 몰렸습니다.', contacts:['김민준 (팀장)','이서연 (기획)','해외 파트너','마케팅팀'] },
+        '2026-05': { count:73,  threads:17, summary:'발리 여행 중 메일을 최소화했습니다. 복귀 후 처리할 업무 인계 메일만 간략히 오갔습니다.', contacts:['이서연 (기획)'] },
+        '2026-06': { count:198, threads:49, summary:'AI 기능 정식 출시로 사용자 반응과 버그 리포트가 쏟아졌습니다. 언론 보도 대응과 커뮤니티 관리 메일이 집중됐으며 개발팀 내부 긴급 논의도 많았습니다.', contacts:['박지호 (개발)','신재원 (신입)','한소희 (커뮤니티)','기자'] },
+      };
+
+      const ALL_KEYS   = Object.keys(MONTH_DATA).sort();
+      const YEAR_KEYS  = [...new Set(ALL_KEYS.map(k => k.slice(0,4)))].sort();
+      const YEAR_DATA  = {};
+      YEAR_KEYS.forEach(y => {
+        const months = ALL_KEYS.filter(k => k.startsWith(y));
+        const total  = months.reduce((s,k) => s + MONTH_DATA[k].count, 0);
+        const threads= months.reduce((s,k) => s + MONTH_DATA[k].threads, 0);
+        // 가장 바쁜 달의 요약을 대표로
+        const peak   = months.sort((a,b)=>MONTH_DATA[b].count-MONTH_DATA[a].count)[0];
+        const contacts= [...new Set(months.flatMap(k=>MONTH_DATA[k].contacts))].slice(0,4);
+        YEAR_DATA[y] = {
+          count:total, threads,
+          summary: `${y}년 전체 ${total.toLocaleString()}건의 메일이 오갔습니다. 가장 활발했던 달은 ${peak}월이었으며, ${MONTH_DATA[peak].summary}`,
+          contacts
+        };
+      });
+
+      /* ── 포인터 전체 범위 ── */
+      const FIRST_NUM = monthToNum(ALL_KEYS[0]);
+      const LAST_NUM  = monthToNum(ALL_KEYS[ALL_KEYS.length-1]);
+      const TOTAL     = LAST_NUM - FIRST_NUM;
+
+      function monthToNum(k) { const [y,m]=k.split('-').map(Number); return y*12+m; }
+      function monthToPct(k) { return (monthToNum(k)-FIRST_NUM)/TOTAL; }
+      function yearToPct(y)  { return (Number(y)*12+1-FIRST_NUM)/TOTAL; }
+
+      /* ── 상태 ── */
+      let mode = 'month';
+      let centerIdx = 2; // ALL_KEYS index (월별) or YEAR_KEYS index (년별)
+      let pinnedKey = null; // 클릭으로 고정된 키
+
+      const WIN = { month:8, year:5 };
+
+      function getWindowKeys() {
+        const keys = mode==='month' ? ALL_KEYS : YEAR_KEYS;
+        const win  = WIN[mode];
+        let start = Math.max(0, centerIdx - Math.floor(win/2));
+        start = Math.min(start, keys.length - win);
+        start = Math.max(0, start);
+        return keys.slice(start, start + win);
+      }
+
+      /* ── 렌더 ── */
+      function render() {
+        const keys = getWindowKeys();
+        const data = mode==='month' ? MONTH_DATA : YEAR_DATA;
+        const track = document.getElementById('track');
+        track.innerHTML = '';
+        pinnedKey = null;
+        document.getElementById('infoPanel').classList.remove('pinned');
+        hidePanel();
+
+        keys.forEach((k) => {
+          const d = data[k];
+          if (!d) return;
+
+          const col = document.createElement('div');
+          col.className = 'mt-node-col';
+          col.dataset.key = k;
+
+          const dot = document.createElement('div');
+          dot.className = 'mt-dot';
+
+          const lbl = document.createElement('div');
+          lbl.className = 'mt-node-label';
+          lbl.textContent = mode==='month'
+            ? `${k.slice(0,4)}.${k.slice(5)}`
+            : `${k}년`;
+
+          const cnt = document.createElement('div');
+          cnt.className = 'mt-node-count';
+          cnt.textContent = `${d.count.toLocaleString()}건`;
+
+          col.appendChild(dot);
+          col.appendChild(lbl);
+          col.appendChild(cnt);
+          track.appendChild(col);
+
+          col.addEventListener('mouseenter', () => { if (!pinnedKey) showPanel(col, k, d); });
+          col.addEventListener('mouseleave', () => { if (!pinnedKey) hidePanel(); });
+          col.addEventListener('click', () => {
+            if (pinnedKey === k) {
+              // 같은 노드 재클릭 → 고정 해제
+              pinnedKey = null;
+              col.classList.remove('pinned');
+              document.getElementById('infoPanel').classList.remove('pinned');
+              hidePanel();
+            } else {
+              // 새 노드 클릭 → 고정
+              pinnedKey = k;
+              document.querySelectorAll('.mt-node-col').forEach(c => c.classList.remove('pinned'));
+              col.classList.add('pinned');
+              showPanel(col, k, d);
+              document.getElementById('infoPanel').classList.add('pinned');
+            }
+          });
+        });
+
+        updatePointerWindow();
+      }
+
+      /* ── 인포 패널 ── */
+      function showPanel(col, key, d) {
+        document.querySelectorAll('.mt-node-col').forEach(c => c.classList.toggle('active', c===col));
+
+        document.getElementById('panelPeriod').textContent =
+          mode==='month' ? `${key.slice(0,4)}년 ${key.slice(5)}월` : `${key}년`;
+        document.getElementById('panelCount').innerHTML =
+          `<strong>${d.count.toLocaleString()}</strong>건 &nbsp;·&nbsp; ${d.threads}개 대화`;
+        document.getElementById('panelSummary').textContent = d.summary;
+
+        const cc = document.getElementById('panelContacts');
+        cc.innerHTML = '';
+        d.contacts.forEach(c => {
+          const el = document.createElement('div');
+          el.className = 'mt-panel-contact';
+          el.textContent = c;
+          cc.appendChild(el);
+        });
+
+        document.getElementById('infoPanel').classList.add('show');
+      }
+
+      function hidePanel() {
+        document.getElementById('infoPanel').classList.remove('show');
+        document.querySelectorAll('.mt-node-col').forEach(c=>c.classList.remove('active'));
+      }
+
+      /* ── 모드 토글 ── */
+      document.querySelectorAll('.mt-mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          mode = btn.dataset.mode;
+          centerIdx = mode==='month' ? 3 : 0;
+          document.querySelectorAll('.mt-mode-btn').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          render();
+          updatePointerCursor();
+        });
+      });
+
+      /* ── 포인터 ── */
+      function buildPointer() {
+        const track = document.getElementById('pointerTrack');
+        track.querySelectorAll('.mt-pm').forEach(el=>el.remove());
+
+        ALL_KEYS.forEach((k, idx) => {
+          const pm = document.createElement('div');
+          pm.className = 'mt-pm';
+          pm.style.left = `${monthToPct(k)*100}%`;
+          pm.addEventListener('click', e => {
+            e.stopPropagation();
+            centerIdx = mode==='month' ? idx : Math.floor(idx/(ALL_KEYS.length/YEAR_KEYS.length));
+            centerIdx = Math.max(0, Math.min(
+              (mode==='month' ? ALL_KEYS : YEAR_KEYS).length - 1, centerIdx));
+            updatePointerCursor(); render();
+          });
+          track.insertBefore(pm, document.getElementById('pointerWindow'));
+        });
+
+        const axis = document.getElementById('pointerAxis');
+        axis.innerHTML = '';
+        YEAR_KEYS.forEach(y => {
+          const pct = Math.max(0, Math.min(98, yearToPct(y)*100));
+          const lbl = document.createElement('div');
+          lbl.className = 'mt-pa-lbl';
+          lbl.textContent = y;
+          lbl.style.left = pct+'%';
+          axis.appendChild(lbl);
+        });
+
+        updatePointerCursor();
+        updatePointerWindow();
+      }
+
+      function updatePointerCursor() {
+        const keys = mode==='month' ? ALL_KEYS : YEAR_KEYS;
+        const k = keys[Math.max(0,Math.min(keys.length-1,centerIdx))];
+        const pct = mode==='month' ? monthToPct(k)*100 : yearToPct(k)*100;
+        document.getElementById('pointerCursor').style.left = Math.max(0,Math.min(100,pct))+'%';
+      }
+
+      function updatePointerWindow() {
+        const wKeys = getWindowKeys();
+        if (!wKeys.length) return;
+        const s = mode==='month' ? monthToPct(wKeys[0]) : yearToPct(wKeys[0]);
+        const e = mode==='month' ? monthToPct(wKeys[wKeys.length-1]) : yearToPct(wKeys[wKeys.length-1]) + 12/TOTAL;
+        const win = document.getElementById('pointerWindow');
+        win.style.left  = `${Math.max(0,s*100)}%`;
+        win.style.width = `${Math.min(100,(e-s)*100)}%`;
+      }
+
+      document.getElementById('pointerTrack').addEventListener('click', e => {
+        if (e.target.classList.contains('mt-pm')) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const pct  = (e.clientX - rect.left) / rect.width;
+        const totalIdx = Math.round(pct * ALL_KEYS.length);
+        if (mode==='month') {
+          centerIdx = Math.max(0, Math.min(ALL_KEYS.length-1, totalIdx));
+        } else {
+          centerIdx = Math.max(0, Math.min(YEAR_KEYS.length-1, Math.floor(totalIdx / (ALL_KEYS.length/YEAR_KEYS.length))));
+        }
+        updatePointerCursor(); render();
+      });
+
+      /* ── 초기화 ── */
+      buildPointer();
+      render();
+    })();
+    </script>
+  </body>
+</html>

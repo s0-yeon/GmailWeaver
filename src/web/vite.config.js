@@ -151,7 +151,10 @@ export default defineConfig({
         graph_viz: 'production/graph-viz.html',
 
         // 메일 통계 요약
-        recap: 'production/recap.html'
+        recap: 'production/recap.html',
+
+        // 시간 타임라인
+        mytime: 'production/mytime.html'
       }
     },
     minify: 'terser',
