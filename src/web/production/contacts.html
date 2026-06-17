@@ -1112,7 +1112,25 @@ let searchQuery = '';
 let alphaFilter = 'all';
 let sortMode = 'name';
 let currentPage = 1;
-const PER_PAGE = 10;
+
+function calcPerPage() {
+  const grid = document.getElementById('contactsGrid');
+  if (!grid) return 10;
+  const containerW = grid.parentElement.offsetWidth || window.innerWidth;
+  const cardMin = 300 + 16; // minmax + gap
+  const cols = Math.max(1, Math.floor((containerW + 16) / cardMin));
+  return cols * 2; // 항상 딱 2줄
+}
+let PER_PAGE = calcPerPage();
+
+window.addEventListener('resize', () => {
+  const newPer = calcPerPage();
+  if (newPer !== PER_PAGE) {
+    PER_PAGE = newPer;
+    currentPage = 1;
+    renderGrid();
+  }
+});
 let editingId = null;
 let composeTarget = null;
 
