@@ -34,7 +34,7 @@ from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
 from util.user_path import UserPaths
-from util.database.db_reader import get_mail_stats, get_keyword_stats, get_mail_sync_stats, get_user_rating_stats, get_high_affinity_person_stats, get_mail_date_range
+from util.database.db_reader import get_mail_stats, get_keyword_stats, get_mail_sync_stats, get_user_rating_stats, get_high_affinity_person_stats, get_mail_date_range, get_mail_exchange_stats
 from util.database.db_writer import (
     save_query_to_db,
     init_processed_attachments_table,
@@ -1722,6 +1722,23 @@ def send_mail_date_range():
     if not gmail_id:
         return jsonify({"error": "gmail_id is required"}), 400
     return jsonify({"gmail_id": gmail_id, "data": get_mail_date_range(gmail_id)})
+
+@app.route("/mail-exchange-stats", methods=["POST"])
+def send_mail_exchange_stats():
+    data = request.json or {}
+    gmail_id       = data.get("gmail_id", "").strip()
+    person_mail_id = data.get("person_mail_id", "").strip()
+    start_date     = data.get("start_date", "").strip()
+    end_date       = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not person_mail_id:
+        return jsonify({"error": "person_mail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    return jsonify({"data": get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date)})
 
 # 연락처 프록시
 @app.route('/contacts-proxy', methods=['POST'])
