@@ -91,7 +91,7 @@
 
       .mp-grid {
         display: grid;
-        grid-template-columns: repeat(9, 1fr);
+        grid-template-columns: repeat(7, 1fr);
         gap: 10px;
       }
 
@@ -101,7 +101,7 @@
         aspect-ratio: 1 / 1;
         display: flex; flex-direction: column;
         align-items: center; justify-content: center;
-        gap: 10px; cursor: pointer;
+        gap: 4px; cursor: pointer;
         transition: transform 0.22s cubic-bezier(0.22,1,0.36,1), box-shadow 0.22s;
         position: relative; overflow: hidden;
       }
@@ -130,14 +130,14 @@
       .mp-card.c6:hover { box-shadow:0 12px 24px rgba(252,188,128,0.4); }
 
       .mp-avatar {
-        width: 64px; height: 64px; border-radius: 50%;
+        width: 100px; height: 100px; border-radius: 50%;
         background: rgba(255,255,255,0.88);
         display: flex; align-items: center; justify-content: center;
-        font-size: 1.25rem; font-weight: 800;
+        font-size: 1.5rem; font-weight: 800;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex-shrink: 0;
       }
       .mp-name {
-        font-size: 0.74rem; font-weight: 700;
+        font-size: 1.48rem; font-weight: 700;
         color: rgba(30,50,44,0.82);
         text-align: center; line-height: 1.25; word-break: keep-all;
       }
@@ -151,19 +151,15 @@
          타임라인 패널 (그리드와 동일 가로)
       ════════════════════════════════════ */
       .mp-timeline {
-        position: fixed; bottom: 16px;
-        left: 60px; right: 60px;
-        height: 116px;
-        background: rgba(255,255,255,0.94);
-        backdrop-filter: blur(20px);
-        border: 1.5px solid rgba(200,230,215,0.9);
-        border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(38,185,154,0.13),
-                    0 2px 8px rgba(0,0,0,0.05),
-                    inset 0 1px 0 rgba(255,255,255,0.95);
+        position: fixed; bottom: 12px;
+        left: 160px; right: 160px;
+        height: 88px;
+        background: none;
+        border: none;
+        box-shadow: none;
         z-index: 200;
-        padding: 14px 36px 16px;
-        display: flex; flex-direction: column; gap: 8px;
+        padding: 10px 28px 12px;
+        display: flex; flex-direction: column; gap: 6px;
       }
 
       /* 날짜 텍스트 행 */
@@ -191,21 +187,23 @@
       /* 배경 트랙 */
       .mp-tl-track {
         position: absolute; left: 0; right: 0;
-        height: 6px; background: #d4e8df;
-        border-radius: 3px;
+        height: 8px; background: rgba(180,220,205,0.75);
+        border-radius: 4px;
+        box-shadow: 0 1px 4px rgba(38,185,154,0.15);
       }
 
       /* 선택 구간 채움 */
       .mp-tl-fill {
-        position: absolute; height: 6px;
+        position: absolute; height: 8px;
         background: linear-gradient(90deg, #26B99A, #1a9e82);
-        border-radius: 3px; pointer-events: none;
+        border-radius: 4px; pointer-events: none;
+        box-shadow: 0 2px 8px rgba(38,185,154,0.35);
       }
 
       /* 공통 range input */
       .mp-tl-track-wrap input[type=range] {
         position: absolute; left: 0;
-        width: 100%; height: 6px;
+        width: 100%; height: 8px;
         background: transparent;
         pointer-events: none;
         appearance: none; -webkit-appearance: none;
@@ -245,11 +243,11 @@
         display: flex; flex-direction: column; align-items: center; gap: 3px;
       }
       .mp-tl-tick-line {
-        width: 1px; height: 6px;
-        background: #b0d4c8;
+        width: 1.5px; height: 7px;
+        background: #7ab8a4;
       }
       .mp-tl-tick-lbl {
-        font-size: 0.68rem; color: #8ab8a8; font-weight: 500;
+        font-size: 0.7rem; color: #4a8872; font-weight: 600;
         white-space: nowrap;
       }
 
@@ -452,7 +450,7 @@
           grid.innerHTML = `<div class="mp-empty"><i class="bi bi-people"></i><p>해당 기간에 연락한 사람이 없습니다.</p></div>`;
           return;
         }
-        const COLS = 9;
+        const COLS = 7;
         const COLORS = ['c0','c1','c2','c3','c4','c5','c6'];
         const AVATAR_COLORS = ['#0f7a62','#1d55c4','#5b21b6','#b45309','#9d174d','#0f766e','#c2410c'];
         grid.innerHTML = list.map((p, i) => {
