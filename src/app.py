@@ -59,8 +59,7 @@ CORS(app)
 init_processed_attachments_table()
 
 # Apps Script Web App URL
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzsZy_kzf3H0sJkvEhjczIHidzOAUs-I8E-jAJI6YXYPqo-FZqZNH-rVAS4N5a_w1V-/exec"
-
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbximJJhfkUKvxRfNyWzkYxc6JKdLGD9WVaiBwvaMlyhjzbrEmmw7wXh_1b74FEHjqzkkg/exec"
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
 if hasattr(sys.stdout, "reconfigure"):
@@ -1154,16 +1153,9 @@ def upload():
         # statics 파이프라인
         statics_job_id = str(uuid.uuid4())[:8]
         create_job(statics_job_id, job_type="statics")
-        
-        if is_last and sync_mode == "rewrite":
-            final_text = _read_latest_text(paths)
-            statics_blocks = _split_mail_blocks(final_text)
-            statics_blocks = [b for b in statics_blocks if _extract_mail_id_from_block(b)]
-        else:
-            statics_blocks = append_blocks
 
         start_statics_pipeline_background(
-            statics_job_id, statics_blocks, paths,
+            statics_job_id, paths,
             mode="rewrite" if sync_mode == "rewrite" else "append"
         )
 
@@ -1835,6 +1827,13 @@ def send_mail():
 
     except Exception as e:
         return jsonify({'ok': False, 'error': str(e)})
+
+
+#mytime
+@app.route('/indexing-history')
+def indexing_history():
+    # DB에서 기록 조회 후 반환
+    return jsonify([])  # 일단 빈 배열로 막기
 
 # 서버 진입점
 if __name__ == '__main__':

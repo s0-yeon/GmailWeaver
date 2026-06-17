@@ -2,12 +2,14 @@ import os
 import re
 import json
 import time
+import threading
 import traceback
 from datetime import datetime
 from dotenv import load_dotenv
 from openai import OpenAI
 # Job 이용 공통함수 import
 from util.jobs.job_store import *
+
 # .env 로드
 load_dotenv("src/parquet/.env")
 
@@ -167,74 +169,55 @@ def extract_keywords_with_llm(body: str) -> list[str]:
 
 
 # 메일 발신 수신 횟수 계정별로 저장
-def _save_mail_contact_stats(blocks: list[str],paths, mode: str = "rewrite"):
-    # 새로운 메일만 추가된 거라 이미 횟수 저장한 json 파일이 존재할 때 
+def _save_mail_contact_stats(paths, mode: str = "rewrite"):
+    import pandas as pd
+
     if mode == "append" and os.path.exists(paths.MAIL_CONTACTS_PATH):
         with open(paths.MAIL_CONTACTS_PATH, "r", encoding="utf-8") as f:
             stats = json.load(f)
-    else: # 전체 갱신 모드일 때 빈 딕셔너리로 초기화해서 새로 횟수 셈
+    else:
         stats = {}
-    def ensure_account(name: str, email: str):
-        if not email or email in ("-", ""):
-            return None
 
-        stats.setdefault(email, {
+    entities_df = pd.read_parquet(paths.ENTITIES_PATH)
+    rel_df      = pd.read_parquet(paths.RELATIONSHIPS_PATH)
+
+    persons = entities_df[entities_df['type'] == 'PERSON']
+    emails  = entities_df[entities_df['type'] == 'EMAIL']
+
+    # SENT_BY = 발신인, SENT_TO = 수신인
+    sent_by_count = rel_df[rel_df['description'].str.contains('SENT_BY', na=False)].groupby('target').size()
+    sent_to_count = rel_df[rel_df['description'].str.contains('SENT_TO', na=False)].groupby('target').size()
+
+    # Tone: casual인 메일 ID 수집
+    casual_email_ids = set()
+    for _, row in emails.iterrows():
+        if 'Tone: casual' in str(row.get('description', '')):
+            casual_email_ids.add(row['title'])
+
+    # casual 메일에 연결된 person별 카운트
+    casual_rel = rel_df[rel_df['source'].isin(casual_email_ids)]
+    friendly_count = casual_rel.groupby('target').size()
+
+    for _, row in persons.iterrows():
+        email_addr = row['title'].lower()
+        desc = str(row.get('description', ''))
+        name_match = re.search(r'Name:\s*(.+)', desc)
+        name = name_match.group(1).strip() if name_match else ''
+
+        stats[email_addr] = {
             "name": name,
-            "sent": 0,
-            "received": 0,
-            "friendly_mail": 0
-        })
+            "sent":          int(sent_by_count.get(row['title'], 0)),
+            "received":      int(sent_to_count.get(row['title'], 0)),
+            "friendly_mail": int(friendly_count.get(row['title'], 0)),
+        }
 
-        if name:
-            stats[email]["name"] = name
-
-        # 예전 json에 friendly_mail이 없을 수도 있으니 보정
-        if "friendly_mail" not in stats[email]:
-            stats[email]["friendly_mail"] = 0
-
-        return email
-
-    def add_count(name: str, email: str, direction: str):
-        email = ensure_account(name, email)
-        if not email:
-            return
-        stats[email][direction] += 1
-
-    def add_friendly(name: str, email: str):
-        email = ensure_account(name, email)
-        if not email:
-            return
-        stats[email]["friendly_mail"] += 1
-    # 블록 순회하며 횟수 집계
-    for block in blocks:
-        direction = _extract_field(block, "구분") # 발신 또는 수신
-        from_raw  = _extract_field(block, "발신인") # 발신인 원문
-        to_raw    = _extract_field(block, "수신인") # 수신인 원문 
-        body = _extract_field(block, "메일 본문", multiline=True) # 메일 본문
-        
-        is_friendly = _is_friendly_tone_with_llm(body)
-
-        if direction == "발신":
-            # 수신인 여러명이면 ,로 구분
-            for addr in to_raw.split(","):
-                name, email = _parse_contact(addr)
-                add_count(name, email, "sent")
-                if is_friendly:
-                    add_friendly(name, email)
-        elif direction == "수신":
-            name, email = _parse_contact(from_raw)
-            add_count(name, email, "received")
-            if is_friendly:
-                    add_friendly(name, email)
-
-    # json 파일에 저장
-    #os.makedirs(os.path.dirname(paths.MAIL_STATICS_PATH), exist_ok=True)    
     with open(paths.MAIL_CONTACTS_PATH, "w", encoding="utf-8") as f:
-        json.dump(stats, f, ensure_ascii=False, indent=2) # indent=2 : 사람이 읽기 쉽게 들여쓰기 적용
+        json.dump(stats, f, ensure_ascii=False, indent=2)
 
     print(f"[STATS] ({mode}) 계정 {len(stats)}개 집계 완료 → {paths.MAIL_CONTACTS_PATH}")
 
-def _save_mail_keyword_stats(blocks: list[str], paths, mode: str = "rewrite"):
+def _save_mail_keyword_stats(paths, mode: str = "rewrite"):
+    import pandas as pd, re
     # 기존 데이터 로드 (append 모드)
     if mode == "append" and os.path.exists(paths.MAIL_KEYWORDS_PATH):
         with open(paths.MAIL_KEYWORDS_PATH, "r", encoding="utf-8") as f:
@@ -245,43 +228,35 @@ def _save_mail_keyword_stats(blocks: list[str], paths, mode: str = "rewrite"):
         keyword_stats = {}
         processed_ids = set()
 
-    # 키워드 누적 함수
-    def add_keywords(keywords: list[str]):
-        if not keywords:
-            return
-        for kw in keywords:
-            keyword_stats[kw] = keyword_stats.get(kw, 0) + 1
+    text_units_df = pd.read_parquet(paths.RELATIONSHIPS_PATH.replace("relationships.parquet", "text_units.parquet"))
 
-    # 블록 순회
-    for block in blocks:
-        mail_id = _extract_field(block, "ID")
+    for _, row in text_units_df.iterrows():
+        text = str(row.get('text', ''))
 
-        # 이미 처리한 메일이면 skip (append 모드 )
+        id_match = re.search(r'^ID:\s*(.+)$', text, re.MULTILINE)
+        mail_id = id_match.group(1).strip() if id_match else None
+
         if mode == "append" and mail_id in processed_ids:
             continue
 
-        body = _extract_field(block, "메일 본문", multiline=True)
+        body_match = re.search(r'\[메일 본문\]\s*\n(.*?)(?:\n=+|\Z)', text, re.DOTALL)
+        body = body_match.group(1).strip() if body_match else ''
 
         if not body:
             continue
 
-        # 🔥 LLM 키워드 추출
         keywords = extract_keywords_with_llm(body)
 
-        # 키워드 집계
-        add_keywords(keywords)
+        for kw in keywords:
+            keyword_stats[kw] = keyword_stats.get(kw, 0) + 1
 
-        # 처리된 메일 기록
         if mail_id:
             processed_ids.add(mail_id)
 
-    # 저장 구조
     result = {
         "keywords": keyword_stats,
         "processed_mail_ids": list(processed_ids)
     }
-
-    #os.makedirs(os.path.dirname(paths.MAIL_KEYWORDS_PATH), exist_ok=True)
 
     with open(paths.MAIL_KEYWORDS_PATH, "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
@@ -289,23 +264,18 @@ def _save_mail_keyword_stats(blocks: list[str], paths, mode: str = "rewrite"):
     print(f"[KEYWORD] ({mode}) 키워드 {len(keyword_stats)}개 저장 완료 → {paths.MAIL_KEYWORDS_PATH}")
 
 
-def _extract_statics_pipeline(blocks: list[str], paths, mode: str = "rewrite"):
-    print("[DEBUG] blocks 개수:", len(blocks))
-
+def _extract_statics_pipeline(paths, mode: str = "rewrite"):
     os.makedirs(paths.MAIL_STATICS_PATH, exist_ok=True)
-    _save_mail_keyword_stats(blocks, paths, mode)
-    _save_mail_contact_stats(blocks, paths, mode)
+    _save_mail_keyword_stats(paths, mode)
+    _save_mail_contact_stats(paths, mode)
 
-def run_statics_pipeline(job_id, blocks: list[str], paths, mode: str = "rewrite"):
-    print(f"[JOB][statics] START job_id={job_id}")
-    append_job_log(job_id, "[START] statics pipeline")
-
+def run_statics_pipeline(job_id, paths, mode: str = "rewrite"):
     print(f"[JOB][statics] START job_id={job_id}")
     append_job_log(job_id, "[START] statics pipeline")
 
     try:
         update_job(job_id, status="running", progress=0, message="통계 추출 시작")
-        _extract_statics_pipeline(blocks, paths, mode)
+        _extract_statics_pipeline(paths, mode)
 
         update_job(
             job_id,
@@ -316,7 +286,6 @@ def run_statics_pipeline(job_id, blocks: list[str], paths, mode: str = "rewrite"
                 "mail_keywords_path": paths.MAIL_KEYWORDS_PATH,
                 "mail_contacts_path": paths.MAIL_CONTACTS_PATH,
                 "mode": mode,
-                "blocks_count": len(blocks),
             },
             finished_at=time.time(),
         )
@@ -334,13 +303,13 @@ def run_statics_pipeline(job_id, blocks: list[str], paths, mode: str = "rewrite"
             finished_at=time.time(),
         )
 
-def start_statics_pipeline_background(job_id, blocks: list[str], paths, mode: str = "rewrite"):
+def start_statics_pipeline_background(job_id, paths, mode: str = "rewrite"):
     print(f"[JOB][statics] BACKGROUND START job_id={job_id}")
     append_job_log(job_id, "[INFO] background thread starting")
 
     t = threading.Thread(
         target=run_statics_pipeline,
-        args=(job_id, blocks, paths, mode),
+        args=(job_id, paths, mode),
         daemon=True,
     )
     t.start()
@@ -349,4 +318,3 @@ def start_statics_pipeline_background(job_id, blocks: list[str], paths, mode: st
     append_job_log(job_id, f"[INFO] background thread started name={t.name}")
 
     return t
-

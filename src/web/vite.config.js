@@ -154,7 +154,11 @@ export default defineConfig({
         recap: 'production/recap.html',
 
         // 나의 사람들
-        mypeople: 'production/mypeople.html'
+        mypeople: 'production/mypeople.html',
+
+        // 시간 타임라인
+        mytime: 'production/mytime.html'
+
       }
     },
     minify: 'terser',
