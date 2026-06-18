@@ -1839,6 +1839,25 @@ def contacts_proxy():
 
     return jsonify({'ok': False, 'error': f'unknown action: {action}'})
 
+# 메일 보내기
+@app.route('/send-mail', methods=['POST', 'OPTIONS'])
+def send_mail():
+    if request.method == 'OPTIONS':
+        return '', 204
+    data = request.get_json() or {}
+    try:
+        res = requests.post(WEBAPP_URL, json={
+            'action':  'sendMail',
+            'to':      data.get('to'),
+            'subject': data.get('subject'),
+            'body':    data.get('body'),
+        }, allow_redirects=False, timeout=30)
+        if res.status_code in (301, 302, 303, 307, 308):
+            location = res.headers.get('Location')
+            res = requests.get(location, allow_redirects=True, timeout=30)
+        return jsonify(res.json())
+    except Exception as e:
+        return jsonify({'ok': False, 'error': str(e)})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=False)
