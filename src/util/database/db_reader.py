@@ -2,6 +2,7 @@
 # 현재는 가라 데이터
 import json
 import os
+import re
 from config.db import get_db_connection
 
 def get_mail_stats(paths): # 메일 송수신
@@ -175,6 +176,64 @@ def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
     finally:
         cursor.close()
         conn.close()
+
+def get_date_range_person_stats(gmail_id, start_date, end_date):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        cursor.execute("SELECT MAX(update_date) AS ud FROM user WHERE user_account_id = %s", (gmail_id,))
+        update_date = cursor.fetchone()["ud"]
+
+        sql = """
+        SELECT sender, receiver, direction
+        FROM mail
+        WHERE user_account_id = %s
+          AND update_date = %s
+          AND mail_date BETWEEN %s AND %s
+          AND direction IS NOT NULL
+        """
+        cursor.execute(sql, (gmail_id, update_date, start_date, end_date))
+        rows = cursor.fetchall()
+
+        email_pattern = re.compile(r'[\w.+\-]+@[\w.\-]+')
+        counts = {}
+
+        for row in rows:
+            direction = row["direction"]
+            if direction == "received":
+                emails = email_pattern.findall(row["sender"] or "")
+            elif direction == "sent":
+                emails = email_pattern.findall(row["receiver"] or "")
+            else:
+                continue
+
+            for email in emails:
+                email = email.lower()
+                if email == gmail_id.lower():
+                    continue
+                entry = counts.setdefault(email, {"sent": 0, "received": 0})
+                if direction == "sent":
+                    entry["sent"] += 1
+                else:
+                    entry["received"] += 1
+
+        result = [
+            {
+                "email": email,
+                "sent": data["sent"],
+                "received": data["received"],
+                "total": data["sent"] + data["received"],
+            }
+            for email, data in counts.items()
+        ]
+        result.sort(key=lambda x: x["total"], reverse=True)
+        return result
+
+    finally:
+        cursor.close()
+        conn.close()
+
 
 def get_mail_date_range(gmail_id):
     conn = get_db_connection()
