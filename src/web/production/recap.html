@@ -488,7 +488,7 @@
       .gw-tl.active { color: #26B99A; font-weight: 700; background: #e8f7f4; }
       .gw-tl-dropdown { position: relative; }
       .gw-tl-dd-menu {
-        display: none; position: absolute; top: calc(100% + 6px); left: 0;
+        display: none; position: absolute; top: 100%; left: 0; padding-top: 6px;
         background: #fff; border: 1px solid #e0e0e0; border-radius: 8px;
         box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 9999; min-width: 140px; padding: 6px 0;
       }
@@ -562,11 +562,12 @@
               <a href="index.html" class="gw-tl">홈</a>
               <a href="search.html" class="gw-tl">검색</a>
               <div class="gw-tl-dropdown">
-                <button class="gw-tl gw-tl-dd-btn active">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></button>
+                <a href="mylife.html" class="gw-tl gw-tl-dd-btn active">My Life <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:4px;"></i></a>
                 <div class="gw-tl-dd-menu">
+                  <a href="ex_mypeople.html">My People</a>
                   <a href="graph-viz.html">Graph Viz</a>
-                  <a href="recap.html" style="color:#26B99A;font-weight:700;">Recap</a>
                   <a href="mytime.html">My Time</a>
+                  <a href="recap.html" style="color:#26B99A;font-weight:700;">Recap</a>
                 </div>
               </div>
               <a href="contacts.html" class="gw-tl">연락처</a>
@@ -821,7 +822,7 @@
       if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
 
       const gmailIdParam = params.get('gmail_id');
-      if (gmailIdParam) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+      if (gmailIdParam) localStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
 
       document.getElementById('google-profile-name').textContent = name;
 
@@ -1179,7 +1180,7 @@
       }
 
       document.addEventListener('DOMContentLoaded', async () => {
-        const gmailId = sessionStorage.getItem('gw_gmail_id');
+        const gmailId = localStorage.getItem('gw_gmail_id');
 
         if (!gmailId) {
           ['rcSenderLoading','rcKwLoading','rcAfLoading'].forEach(id => {
@@ -1261,8 +1262,6 @@
           err.style.display = '';
           err.textContent = ratingResult.status === 'rejected'
             ? '불러오기 실패: ' + ratingResult.reason.message : '데이터가 없습니다.';
-        }
-      });
     </script>
   </body>
 </html>
