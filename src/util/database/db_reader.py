@@ -135,6 +135,71 @@ def get_high_affinity_person_stats(paths):
 def get_user_rating_stats(): # 모든 유저의 Olive 만족도
     return {"total_rating" : 99}
 
+def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        cursor.execute("SELECT MAX(update_date) AS ud FROM user WHERE user_account_id = %s", (gmail_id,))
+        update_date = cursor.fetchone()["ud"]
+
+        like_param = f"%{person_mail_id}%"
+        sql = """
+        SELECT
+            DATE_FORMAT(mail_date, '%Y-%m') AS month,
+            SUM(CASE WHEN direction = 'sent'     AND receiver LIKE %s THEN 1 ELSE 0 END) AS sent,
+            SUM(CASE WHEN direction = 'received' AND sender   LIKE %s THEN 1 ELSE 0 END) AS received
+        FROM mail
+        WHERE user_account_id = %s
+          AND update_date = %s
+          AND mail_date BETWEEN %s AND %s
+        GROUP BY DATE_FORMAT(mail_date, '%Y-%m')
+        ORDER BY month ASC
+        """
+        cursor.execute(sql, (like_param, like_param, gmail_id, update_date, start_date, end_date))
+        rows = cursor.fetchall()
+
+        monthly = [
+            {"month": row["month"], "sent": int(row["sent"] or 0), "received": int(row["received"] or 0)}
+            for row in rows
+        ]
+        total_sent     = sum(m["sent"]     for m in monthly)
+        total_received = sum(m["received"] for m in monthly)
+
+        return {
+            "monthly": monthly,
+            "total": {"sent": total_sent, "received": total_received},
+        }
+
+    finally:
+        cursor.close()
+        conn.close()
+
+def get_mail_date_range(gmail_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        sql = """
+        SELECT MIN(mail_date) AS first_date, MAX(mail_date) AS last_date
+        FROM mail
+        WHERE user_account_id = %s
+          AND update_date = (
+              SELECT MAX(update_date) FROM user WHERE user_account_id = %s
+          )
+        """
+        cursor.execute(sql, (gmail_id, gmail_id))
+        row = cursor.fetchone()
+
+        return {
+            "first_date": row["first_date"].strftime("%Y-%m-%d") if row["first_date"] else None,
+            "last_date":  row["last_date"].strftime("%Y-%m-%d")  if row["last_date"]  else None,
+        }
+
+    finally:
+        cursor.close()
+        conn.close()
+
 def get_mail_sync_stats(paths): # 메일 동기화시 동기화된 메일 수, 동기화 시간
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
