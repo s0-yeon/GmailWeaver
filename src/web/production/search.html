@@ -393,7 +393,7 @@
       .gw-tl.active { color: #26B99A; font-weight: 700; background: #e8f7f4; }
       .gw-tl-dropdown { position: relative; }
       .gw-tl-dd-menu {
-        display: none; position: absolute; top: calc(100% + 6px); left: 0;
+        display: none; position: absolute; top: 100%; left: 0; padding-top: 6px;
         background: #fff; border: 1px solid #e0e0e0; border-radius: 8px;
         box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 9999; min-width: 140px; padding: 6px 0;
       }
@@ -463,9 +463,11 @@
               <a href="index.html" class="gw-tl">홈</a>
               <a href="search.html" class="gw-tl active">검색</a>
               <div class="gw-tl-dropdown">
-                <button class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></button>
+                <a href="mylife.html" class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:4px;"></i></a>
                 <div class="gw-tl-dd-menu">
+                  <a href="ex_mypeople.html">My People</a>
                   <a href="graph-viz.html">Graph Viz</a>
+                  <a href="mytime.html">My Time</a>
                   <a href="recap.html">Recap</a>
                   <a href="mypeople.html">MyPeople</a>
                 </div>
@@ -627,7 +629,7 @@
     <div id="gw-confirm-popup" class="gw-confirm-popup" style="display:none;"></div>
 
     <script>
-      const FLASK_URL = 'http://127.0.0.1:80';
+      const FLASK_URL = localStorage.getItem('gw_flask_url') || window.location.origin;
 
       // 검색 모드 상수
       const RECENT_KEY = 'gw_recent_searches';
@@ -648,7 +650,9 @@
       if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
 
       const gmailIdParam = params.get('gmail_id');
-      if (gmailIdParam) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+      if (gmailIdParam) localStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+      const flaskUrlParam = params.get('flask_url');
+      if (flaskUrlParam) localStorage.setItem('gw_flask_url', decodeURIComponent(flaskUrlParam));
 
       document.getElementById('google-profile-name').textContent = name;
       window.currentUserName = name;
@@ -835,7 +839,7 @@
         showLoading(q);
         saveRecent(q);
         renderRecents();
-        const gmailId = sessionStorage.getItem('gw_gmail_id') || '';
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
         try {
           const res = await fetch(`${FLASK_URL}/run-query-async`, {
             method: 'POST',
@@ -1599,7 +1603,7 @@
         throw new Error('GraphRAG 응답 시간이 초과되었습니다.');
       }
       async function lqRunGraphRag(query, labelCtx = '') {
-        const gmailId = sessionStorage.getItem('gw_gmail_id') || '';
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
         const fullMessage = labelCtx
           ? `${labelCtx}\n\n위 정보와 메일 내용을 참고해서 한국어로 답변해줘:\n${query}`
           : `${query} 영어 말고 한국어로 답변해줘.`;

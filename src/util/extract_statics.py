@@ -172,6 +172,10 @@ def extract_keywords_with_llm(body: str) -> list[str]:
 def _save_mail_contact_stats(paths, mode: str = "rewrite"):
     import pandas as pd
 
+    if not os.path.exists(paths.ENTITIES_PATH) or not os.path.exists(paths.RELATIONSHIPS_PATH):
+        print(f"[STATS] entities/relationships parquet 없음 → contacts 생성 건너뜀")
+        return
+
     if mode == "append" and os.path.exists(paths.MAIL_CONTACTS_PATH):
         with open(paths.MAIL_CONTACTS_PATH, "r", encoding="utf-8") as f:
             stats = json.load(f)

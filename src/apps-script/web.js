@@ -10,7 +10,9 @@ function doGet(e) {
     "/dashboard/?name=" +
     name +
     "&gmail_id=" +
-    encodeURIComponent(email);
+    encodeURIComponent(email) +
+    "&flask_url=" +
+    encodeURIComponent(TunnelURL);
   return HtmlService.createHtmlOutput(
     '<script>window.location.href = "' + dashboardUrl + '";<\/script>',
   ).setTitle("GmailWeaver Web App");

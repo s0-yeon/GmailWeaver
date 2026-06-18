@@ -371,7 +371,7 @@
     (function () {
       'use strict';
 
-      const FLASK_URL = 'http://127.0.0.1:80';
+      const FLASK_URL = localStorage.getItem('gw_flask_url') || window.location.origin;
 
       /* ── 초원 팔레트 ── */
       const PALETTE = [
