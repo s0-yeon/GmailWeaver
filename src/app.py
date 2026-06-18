@@ -38,6 +38,7 @@ from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_s
 from util.database.db_writer import (
     save_query_to_db,
     init_processed_attachments_table,
+    init_keyword_mail_table,
     filter_unprocessed_attachments,
     mark_attachments_as_processed
 )
@@ -57,9 +58,10 @@ CORS(app)
 
 # 서버 시작 시 테이블 초기화 실행
 init_processed_attachments_table()
+init_keyword_mail_table()
 
 # Apps Script Web App URL
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbximJJhfkUKvxRfNyWzkYxc6JKdLGD9WVaiBwvaMlyhjzbrEmmw7wXh_1b74FEHjqzkkg/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwAk_JabdKuGUHIVcaKeEnY1DUiYb0uqkiu-KdUG67Zf1U3D8k-F06RGS5043k_fZS8MQ/exec"
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
 if hasattr(sys.stdout, "reconfigure"):
@@ -1687,6 +1689,59 @@ def send_keyword_stats():
         return jsonify({"error": "gmail_id is required"}), 400
     paths = UserPaths(BASE_DIR, gmail_id)
     return jsonify({"gmail_id": gmail_id, "data": get_keyword_stats(paths)})
+
+@app.route("/keyword-by-person-date", methods=["POST"])
+def keyword_by_person_date():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    person_gmail_id = data.get("person_gmail_id", "").strip()
+    start_date = data.get("start_date", "").strip()
+    end_date = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not person_gmail_id:
+        return jsonify({"error": "person_gmail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        sql = """
+            SELECT km.keyword_name, m.mail_date
+            FROM keyword_mail km
+            JOIN mail m
+              ON km.mail_id         = m.mail_id
+             AND km.user_account_id = m.user_account_id
+             AND km.update_date     = m.update_date
+            WHERE km.user_account_id = %s
+              AND (m.sender = %s OR m.receiver = %s)
+              AND m.mail_date BETWEEN %s AND %s
+            ORDER BY m.mail_date
+        """
+        cursor.execute(sql, (gmail_id, person_gmail_id, person_gmail_id, start_date, end_date))
+        rows = cursor.fetchall()
+
+        keyword_map = {}
+        for row in rows:
+            kw = row["keyword_name"]
+            date = row["mail_date"].strftime("%Y-%m-%d") if row["mail_date"] else None
+            if kw not in keyword_map:
+                keyword_map[kw] = {"word": kw, "count": 0, "dates": []}
+            keyword_map[kw]["count"] += 1
+            if date and date not in keyword_map[kw]["dates"]:
+                keyword_map[kw]["dates"].append(date)
+
+        return jsonify({"keywords": list(keyword_map.values())})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
 
 @app.route("/high_affinity_person_stats", methods=["POST"])
 def send_high_affinity_person_stats():

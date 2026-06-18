@@ -229,6 +229,23 @@ def save_keyword_stats_to_db(paths,update_date=None):
         conn.commit()
         print(f"[DB] keyword 테이블 저장 완료: {inserted_count}건")
 
+        keyword_mail_map = stats.get("keyword_mail_map", {})
+        km_insert_sql = """
+            INSERT IGNORE INTO keyword_mail (keyword_name, mail_id, user_account_id, update_date)
+            VALUES (%s, %s, %s, %s)
+        """
+        km_rows = []
+        for keyword_name, mail_ids in keyword_mail_map.items():
+            if keywords.get(keyword_name, 0) < 2:
+                continue
+            for mail_id in mail_ids:
+                km_rows.append((keyword_name, mail_id, user_account_id, update_date))
+
+        if km_rows:
+            cursor.executemany(km_insert_sql, km_rows)
+            conn.commit()
+            print(f"[DB] keyword_mail 테이블 저장 완료: {len(km_rows)}건")
+
     except Exception as e:
         conn.rollback()
         print(f"[ERROR] save_keyword_stats_to_db 실패: {e}")
@@ -237,6 +254,31 @@ def save_keyword_stats_to_db(paths,update_date=None):
     finally:
         cursor.close()
         conn.close()
+
+def init_keyword_mail_table():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS keyword_mail (
+                keyword_name    VARCHAR(50)  NOT NULL,
+                mail_id         VARCHAR(200) NOT NULL,
+                user_account_id VARCHAR(50)  NOT NULL,
+                update_date     DATETIME     NOT NULL,
+                PRIMARY KEY (keyword_name, mail_id, user_account_id, update_date),
+                FOREIGN KEY (keyword_name, user_account_id, update_date)
+                    REFERENCES keyword(keyword_name, user_account_id, update_date),
+                FOREIGN KEY (mail_id, user_account_id, update_date)
+                    REFERENCES mail(mail_id, user_account_id, update_date)
+            )
+        """)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print("[DB] keyword_mail 테이블 준비 완료")
+    except Exception as e:
+        print(f"[DB] keyword_mail 테이블 초기화 실패 (무시): {e}")
+
 
 def init_processed_attachments_table():
     """

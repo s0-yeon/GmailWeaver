@@ -223,9 +223,11 @@ def _save_mail_keyword_stats(paths, mode: str = "rewrite"):
         with open(paths.MAIL_KEYWORDS_PATH, "r", encoding="utf-8") as f:
             data = json.load(f)
             keyword_stats = data.get("keywords", {})
+            keyword_mail_map = data.get("keyword_mail_map", {})
             processed_ids = set(data.get("processed_mail_ids", []))
     else:
         keyword_stats = {}
+        keyword_mail_map = {}
         processed_ids = set()
 
     text_units_df = pd.read_parquet(paths.RELATIONSHIPS_PATH.replace("relationships.parquet", "text_units.parquet"))
@@ -249,12 +251,18 @@ def _save_mail_keyword_stats(paths, mode: str = "rewrite"):
 
         for kw in keywords:
             keyword_stats[kw] = keyword_stats.get(kw, 0) + 1
+            if mail_id:
+                if kw not in keyword_mail_map:
+                    keyword_mail_map[kw] = []
+                if mail_id not in keyword_mail_map[kw]:
+                    keyword_mail_map[kw].append(mail_id)
 
         if mail_id:
             processed_ids.add(mail_id)
 
     result = {
         "keywords": keyword_stats,
+        "keyword_mail_map": keyword_mail_map,
         "processed_mail_ids": list(processed_ids)
     }
 
