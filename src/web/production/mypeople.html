@@ -666,10 +666,23 @@
         const p = new URLSearchParams(window.location.search);
         const n = p.get('name') ? decodeURIComponent(p.get('name')) : (sessionStorage.getItem('gw_user_name') || '-');
         if (p.get('name')) sessionStorage.setItem('gw_user_name', n);
-        if (p.get('gmail_id')) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(p.get('gmail_id')));
+        if (p.get('gmail_id')) localStorage.setItem('gw_gmail_id', decodeURIComponent(p.get('gmail_id')));
         const el = document.getElementById('google-profile-name');
         if (el) el.textContent = n;
       })();
+
+      /* ── 같은 name을 가진 브랜드 엔트리 통합 (친밀도 높은 대표 1개만 유지) ── */
+      function groupByEntityName(list) {
+        const named = new Map();
+        const unnamed = [];
+        list.forEach(p => {
+          const n = (p.name || '').trim();
+          if (!n) { unnamed.push(p); return; }
+          const existing = named.get(n);
+          if (!existing || (p.affinity ?? -1) > (existing.affinity ?? -1)) named.set(n, p);
+        });
+        return [...named.values(), ...unnamed];
+      }
 
       /* ── 이름 길이별 폰트 크기 ── */
       function nameFontSize(name) {
@@ -738,27 +751,6 @@
         return m === 1 ? `${d.getFullYear()}` : `${d.getFullYear()}.${String(m).padStart(2,'0')}`;
       }
 
-      /* ── 더미 데이터 (날짜 포함) ── */
-      const MOCK_PEOPLE = [
-        {name:'김예은',  email:'yeeun@example.com',  first:'2022-11-03', last:'2025-12-10'},
-        {name:'이준혁',  email:'junhyuk@example.com', first:'2023-02-14', last:'2025-11-22'},
-        {name:'박소연',  email:'soyeon@example.com',  first:'2023-05-01', last:'2025-10-05'},
-        {name:'최민준',  email:'minjun@example.com',  first:'2022-11-20', last:'2024-08-30'},
-        {name:'정하은',  email:'haeun@example.com',   first:'2024-01-08', last:'2025-12-28'},
-        {name:'강지우',  email:'jiwoo@example.com',   first:'2023-07-15', last:'2025-09-14'},
-        {name:'윤서현',  email:'seohyun@example.com', first:'2022-12-01', last:'2024-06-20'},
-        {name:'임채원',  email:'chaewon@example.com', first:'2023-03-22', last:'2025-07-31'},
-        {name:'한도윤',  email:'doyun@example.com',   first:'2024-04-10', last:'2025-12-28'},
-        {name:'오지훈',  email:'jihun@example.com',   first:'2023-09-05', last:'2025-05-18'},
-        {name:'신아름',  email:'areum@example.com',   first:'2022-11-15', last:'2023-12-31'},
-        {name:'배수진',  email:'sujin@example.com',   first:'2024-02-28', last:'2025-11-01'},
-        {name:'조민서',  email:'minseo@example.com',  first:'2023-06-10', last:'2025-08-22'},
-        {name:'권태양',  email:'taeyang@example.com', first:'2022-11-03', last:'2025-04-30'},
-        {name:'문지은',  email:'jieun@example.com',   first:'2024-05-12', last:'2025-12-28'},
-        {name:'류현우',  email:'hyunwoo@example.com', first:'2023-01-19', last:'2024-11-15'},
-        {name:'장나래',  email:'narae@example.com',   first:'2023-08-01', last:'2025-10-20'},
-        {name:'노성민',  email:'sungmin@example.com', first:'2022-11-10', last:'2025-06-30'},
-      ];
 
       /* ── 전역 상태 ── */
       let allPeople = [];
@@ -769,7 +761,7 @@
       /* ── 카드 렌더링 ── */
       function renderCards() {
         const grid = document.getElementById('mp-grid');
-        const list = allPeople;
+        const list = groupByEntityName(allPeople);
         const countEl = document.getElementById('mp-count');
         if (countEl) countEl.textContent = list.length ? `${list.length}명` : '';
 
@@ -868,11 +860,13 @@
 
       /* ── 데이터 로드 ── */
       async function loadPeople() {
-        const gmailId = sessionStorage.getItem('gw_gmail_id') || '';
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
         const post = body => ({
           method: 'POST', headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({gmail_id: gmailId})
         });
+
+        let dateRange = null;
 
         try {
           const [pRes, dRes] = await Promise.all([
@@ -883,26 +877,30 @@
           if (pRes.ok) {
             const j = await pRes.json();
             allPeople = j.data || j || [];
+          } else {
+            console.error('high_affinity_person_stats 오류:', pRes.status);
           }
 
           if (dRes.ok) {
             const j = await dRes.json();
             const d = j.data || j;
-            if (d.first_date && d.last_date) {
-              renderCards();
-              initTimeline(new Date(d.first_date).getTime(), new Date(d.last_date).getTime());
-              return;
-            }
+            if (d.first_date && d.last_date) dateRange = d;
+          } else {
+            console.error('mail-date-range 오류:', dRes.status);
           }
-        } catch (e) { console.warn('loadPeople:', e); }
+        } catch (e) {
+          console.error('loadPeople 네트워크 오류:', e);
+        }
 
-        if (!allPeople.length) allPeople = MOCK_PEOPLE;
         renderCards();
-        const allFirsts = allPeople.map(p => dateToMs(p.first)).filter(Boolean);
-        const allLasts  = allPeople.map(p => dateToMs(p.last)).filter(Boolean);
-        const firstMs = allFirsts.length ? Math.min(...allFirsts) : Date.now() - 1000*60*60*24*365*3;
-        const lastMs  = allLasts.length  ? Math.max(...allLasts)  : Date.now();
-        initTimeline(firstMs, lastMs);
+
+        if (dateRange) {
+          initTimeline(new Date(dateRange.first_date).getTime(), new Date(dateRange.last_date).getTime());
+        } else {
+          const fallbackEnd = Date.now();
+          const fallbackStart = fallbackEnd - 1000 * 60 * 60 * 24 * 365 * 3;
+          initTimeline(fallbackStart, fallbackEnd);
+        }
       }
 
       /* ── 드롭다운 토글 ── */
@@ -1021,7 +1019,7 @@
       }
 
       async function openDetail(person, rowIndex) {
-        const gmailId = sessionStorage.getItem('gw_gmail_id') || '';
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
         const detailDisplayName = resolveDisplayName(person);
         const affCls = affinityClass(person.affinity);
         const bg = AFFINITY_BG[affCls];

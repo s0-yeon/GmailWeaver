@@ -195,7 +195,13 @@ export default defineConfig({
       '/graph-data': 'http://127.0.0.1:80',
       '/graph-render.js': 'http://127.0.0.1:80',
       '/run-query-async': 'http://127.0.0.1:80',
-      '/job-status': 'http://127.0.0.1:80'
+      '/job-status': 'http://127.0.0.1:80',
+      '/high_affinity_person_stats': 'http://127.0.0.1:80',
+      '/mail-date-range': 'http://127.0.0.1:80',
+      '/mail-exchange-stats': 'http://127.0.0.1:80',
+      '/keyword-stats': 'http://127.0.0.1:80',
+      '/mail-stats': 'http://127.0.0.1:80',
+      '/mail-sync-stats': 'http://127.0.0.1:80'
     },
     watch: {
       usePolling: false,
