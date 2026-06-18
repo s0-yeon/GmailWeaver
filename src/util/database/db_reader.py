@@ -2,6 +2,7 @@
 # 현재는 가라 데이터
 import json
 import os
+import re
 from config.db import get_db_connection
 
 def get_mail_stats(paths): # 메일 송수신
@@ -132,6 +133,37 @@ def get_high_affinity_person_stats(paths):
     return result
 
 
+def get_keywords_by_person_date(gmail_id: str, person_gmail_id: str, start_date: str, end_date: str) -> list:
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    try:
+        sql = """
+            SELECT keyword_name, mail_date, SUM(daily_count) AS day_count
+            FROM keyword_mail
+            WHERE user_account_id   = %s
+              AND person_account_id = %s
+              AND mail_date BETWEEN %s AND %s
+            GROUP BY keyword_name, mail_date
+            ORDER BY mail_date
+        """
+        cursor.execute(sql, (gmail_id, person_gmail_id, start_date, end_date))
+        rows = cursor.fetchall()
+
+        keyword_map = {}
+        for row in rows:
+            kw = row["keyword_name"]
+            date = str(row["mail_date"])
+            if kw not in keyword_map:
+                keyword_map[kw] = {"word": kw, "count": 0, "dates": []}
+            keyword_map[kw]["count"] += row["day_count"]
+            keyword_map[kw]["dates"].append(date)
+
+        return list(keyword_map.values())
+    finally:
+        cursor.close()
+        conn.close()
+
+
 def get_user_rating_stats(): # 모든 유저의 Olive 만족도
     return {"total_rating" : 99}
 
@@ -163,6 +195,7 @@ def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
             {"month": row["month"], "sent": int(row["sent"] or 0), "received": int(row["received"] or 0)}
             for row in rows
         ]
+
         total_sent     = sum(m["sent"]     for m in monthly)
         total_received = sum(m["received"] for m in monthly)
 
@@ -174,6 +207,49 @@ def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
     finally:
         cursor.close()
         conn.close()
+
+def get_date_range_person_stats(gmail_id, start_date, end_date, sort_by):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        cursor.execute("SELECT MAX(update_date) AS ud FROM user WHERE user_account_id = %s", (gmail_id,))
+        update_date = cursor.fetchone()["ud"]
+
+        direction_filter = "sent" if sort_by == "sent" else "received"
+        sql = """
+        SELECT sender, receiver, direction
+        FROM mail
+        WHERE user_account_id = %s
+          AND update_date = %s
+          AND mail_date BETWEEN %s AND %s
+          AND direction = %s
+        """
+        cursor.execute(sql, (gmail_id, update_date, start_date, end_date, direction_filter))
+        rows = cursor.fetchall()
+
+        email_pattern = re.compile(r'[\w.+\-]+@[\w.\-]+')
+        counts = {}
+
+        for row in rows:
+            field = row["receiver"] if sort_by == "sent" else row["sender"]
+            for email in email_pattern.findall(field or ""):
+                email = email.lower()
+                if email == gmail_id.lower():
+                    continue
+                counts[email] = counts.get(email, 0) + 1
+
+        result = [
+            {"email": email, sort_by: count}
+            for email, count in counts.items()
+        ]
+        result.sort(key=lambda x: x[sort_by], reverse=True)
+        return result
+
+    finally:
+        cursor.close()
+        conn.close()
+
 
 def get_mail_date_range(gmail_id):
     conn = get_db_connection()

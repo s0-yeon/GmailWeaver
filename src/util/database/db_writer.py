@@ -53,8 +53,8 @@ def create_user(user_account_id, ended_at, index_time,my_mail_count):
     cursor.close()
     conn.close()
 
-def save_person_stats_to_db(paths,update_date=None):
-    # 나와 메일을 주고 받은 person 테이블에 삽입. 동일한 데이터는 업데이트
+def save_person_stats_to_db(paths, update_date=None):
+    """person 테이블에 기본 통계 저장 후, parquet 기반 LLM 프로필을 description에 함께 저장"""
 
     if not os.path.exists(paths.MAIL_CONTACTS_PATH):
         print(f"[WARN] 파일이 없습니다: {paths.MAIL_CONTACTS_PATH}")
@@ -66,21 +66,26 @@ def save_person_stats_to_db(paths,update_date=None):
     try:
         if update_date is None:
             latest_user = get_latest_user_record(paths.GMAIL_ID)
-
             if not latest_user:
                 print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
                 return
-
             user_account_id = latest_user["user_account_id"]
-            update_date = latest_user["update_date"]
+            update_date     = latest_user["update_date"]
         else:
             user_account_id = paths.GMAIL_ID
 
-        # 2) JSON 읽기
         with open(paths.MAIL_CONTACTS_PATH, "r", encoding="utf-8") as f:
             stats = json.load(f)
 
-        # 3) person 테이블 저장
+        # parquet → LLM 프로필 생성 (실패해도 기본 통계 저장은 계속)
+        from util.extract_statics import generate_person_descriptions
+        try:
+            descriptions_raw = generate_person_descriptions(paths)
+            descriptions = {k.lower(): v for k, v in descriptions_raw.items()}
+        except Exception as e:
+            print(f"[WARN] 프로필 생성 실패, description 없이 저장: {e}")
+            descriptions = {}
+
         insert_sql = """
             INSERT INTO person (
                 person_account_id,
@@ -89,34 +94,31 @@ def save_person_stats_to_db(paths,update_date=None):
                 person_name,
                 receive_mails,
                 send_mails,
-                friendly_mails
+                friendly_mails,
+                description
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             ON DUPLICATE KEY UPDATE
-                person_name = VALUES(person_name),
-                receive_mails = VALUES(receive_mails),
-                send_mails = VALUES(send_mails),
-                friendly_mails = VALUES(friendly_mails)
+                person_name    = VALUES(person_name),
+                receive_mails  = VALUES(receive_mails),
+                send_mails     = VALUES(send_mails),
+                friendly_mails = VALUES(friendly_mails),
+                description    = COALESCE(VALUES(description), description)
         """
 
         inserted_count = 0
-
         for email, info in stats.items():
-            person_name = info.get("name", "")
-            receive_mails = int(info.get("received", 0))
-            send_mails = int(info.get("sent", 0))
-            friendly_mails = int(info.get("friendly_mail", 0))
-
             cursor.execute(
                 insert_sql,
                 (
                     email,
                     user_account_id,
                     update_date,
-                    person_name,
-                    receive_mails,
-                    send_mails,
-                    friendly_mails
+                    info.get("name", ""),
+                    int(info.get("received", 0)),
+                    int(info.get("sent", 0)),
+                    int(info.get("friendly_mail", 0)),
+                    descriptions.get(email),
                 )
             )
             inserted_count += 1
@@ -229,6 +231,37 @@ def save_keyword_stats_to_db(paths,update_date=None):
         conn.commit()
         print(f"[DB] keyword 테이블 저장 완료: {inserted_count}건")
 
+        keyword_person_date_map = stats.get("keyword_person_date_map", {})
+
+        cursor.execute(
+            "SELECT person_account_id FROM person WHERE user_account_id = %s AND update_date = %s",
+            (user_account_id, update_date)
+        )
+        valid_persons = {row[0] for row in cursor.fetchall()}
+
+        map_persons = {p for pm in keyword_person_date_map.values() for p in pm}
+
+
+        km_insert_sql = """
+            INSERT INTO keyword_mail (keyword_name, user_account_id, person_account_id, mail_date, update_date, daily_count)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE daily_count = VALUES(daily_count)
+        """
+        km_rows = []
+        for keyword_name, person_map in keyword_person_date_map.items():
+            if keywords.get(keyword_name, 0) < 2:
+                continue
+            for person_id, date_map in person_map.items():
+                if person_id not in valid_persons:
+                    continue
+                for mail_date, count in date_map.items():
+                    km_rows.append((keyword_name, user_account_id, person_id, mail_date, update_date, count))
+
+        if km_rows:
+            cursor.executemany(km_insert_sql, km_rows)
+            conn.commit()
+            print(f"[DB] keyword_mail 테이블 저장 완료: {len(km_rows)}건")
+
     except Exception as e:
         conn.rollback()
         print(f"[ERROR] save_keyword_stats_to_db 실패: {e}")
@@ -237,6 +270,31 @@ def save_keyword_stats_to_db(paths,update_date=None):
     finally:
         cursor.close()
         conn.close()
+
+def init_keyword_mail_table():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS keyword_mail (
+                keyword_name      VARCHAR(50)  NOT NULL,
+                user_account_id   VARCHAR(50)  NOT NULL,
+                person_account_id VARCHAR(200) NOT NULL,
+                mail_date         DATE         NOT NULL,
+                update_date       DATETIME     NOT NULL,
+                daily_count       INT          NOT NULL DEFAULT 1,
+                PRIMARY KEY (keyword_name, user_account_id, person_account_id, mail_date, update_date),
+                FOREIGN KEY (keyword_name, user_account_id, update_date)
+                    REFERENCES keyword(keyword_name, user_account_id, update_date)
+            )
+        """)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print("[DB] keyword_mail 테이블 준비 완료")
+    except Exception as e:
+        print(f"[DB] keyword_mail 테이블 초기화 실패 (무시): {e}")
+
 
 def init_processed_attachments_table():
     """

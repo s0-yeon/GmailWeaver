@@ -34,10 +34,12 @@ from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
 from util.user_path import UserPaths
-from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats,  get_mail_date_range, get_mail_exchange_stats
+from util.database.db_reader import get_mail_stats, get_keyword_stats, get_mail_sync_stats, get_user_rating_stats, get_high_affinity_person_stats, get_mail_date_range, get_mail_exchange_stats, get_date_range_person_stats, get_keywords_by_person_date
+
 from util.database.db_writer import (
     save_query_to_db,
     init_processed_attachments_table,
+    init_keyword_mail_table,
     filter_unprocessed_attachments,
     mark_attachments_as_processed
 )
@@ -57,9 +59,10 @@ CORS(app)
 
 # 서버 시작 시 테이블 초기화 실행
 init_processed_attachments_table()
+init_keyword_mail_table()
 
 # Apps Script Web App URL
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbximJJhfkUKvxRfNyWzkYxc6JKdLGD9WVaiBwvaMlyhjzbrEmmw7wXh_1b74FEHjqzkkg/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwAk_JabdKuGUHIVcaKeEnY1DUiYb0uqkiu-KdUG67Zf1U3D8k-F06RGS5043k_fZS8MQ/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
@@ -1733,23 +1736,6 @@ def send_mail_date_range():
         return jsonify({"error": "gmail_id is required"}), 400
     return jsonify({"gmail_id": gmail_id, "data": get_mail_date_range(gmail_id)})
 
-@app.route("/mail-exchange-stats", methods=["POST"])
-def send_mail_exchange_stats():
-    data = request.json or {}
-    gmail_id       = data.get("gmail_id", "").strip()
-    person_mail_id = data.get("person_mail_id", "").strip()
-    start_date     = data.get("start_date", "").strip()
-    end_date       = data.get("end_date", "").strip()
-
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    if not person_mail_id:
-        return jsonify({"error": "person_mail_id is required"}), 400
-    if not start_date or not end_date:
-        return jsonify({"error": "start_date and end_date are required"}), 400
-
-    return jsonify({"data": get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date)})
-
 @app.route("/keyword-stats", methods=["POST"])
 def send_keyword_stats():
     data = request.json or {}
@@ -1758,6 +1744,29 @@ def send_keyword_stats():
         return jsonify({"error": "gmail_id is required"}), 400
     paths = UserPaths(BASE_DIR, gmail_id)
     return jsonify({"gmail_id": gmail_id, "data": get_keyword_stats(paths)})
+
+@app.route("/keyword-by-person-date", methods=["POST"]) # 각 사람마다 주고받은 메일의 키위드 리턴
+def keyword_by_person_date():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    person_gmail_id = data.get("person_gmail_id", "").strip()
+    # 시간 범위 내에 있는 메일의 키워드들을 추출
+    start_date = data.get("start_date", "").strip()
+    end_date = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not person_gmail_id:
+        return jsonify({"error": "person_gmail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    try:
+        keywords = get_keywords_by_person_date(gmail_id, person_gmail_id, start_date, end_date)
+        return jsonify({"keywords": keywords})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route("/high_affinity_person_stats", methods=["POST"])
 def send_high_affinity_person_stats():
@@ -1785,6 +1794,71 @@ def send_mail_sync_stats():
         return jsonify({"error": "gmail_id is required"}), 400
     paths = UserPaths(BASE_DIR, gmail_id)
     return jsonify({"gmail_id": gmail_id, "data": get_mail_sync_stats(paths)})
+
+@app.route("/mail-exchange-stats", methods=["POST"])
+def send_mail_exchange_stats():
+    data = request.json or {}
+    gmail_id       = data.get("gmail_id", "").strip()
+    person_mail_id = data.get("person_gmail_id", "").strip()
+    start_date     = data.get("start_date", "").strip()
+    end_date       = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not person_mail_id:
+        return jsonify({"error": "person_gmail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    return jsonify({"data": get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date)})
+
+@app.route("/mail-person-sent-stats", methods=["POST"])
+def send_mail_person_sent_stats():
+    data = request.json or {}
+    gmail_id   = data.get("gmail_id", "").strip()
+    start_date = data.get("start_date", "").strip()
+    end_date   = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    return jsonify({"gmail_id": gmail_id, "data": get_date_range_person_stats(gmail_id, start_date, end_date, "sent")})
+
+@app.route("/mail-person-received-stats", methods=["POST"])
+def send_mail_person_received_stats():
+    data = request.json or {}
+    gmail_id   = data.get("gmail_id", "").strip()
+    start_date = data.get("start_date", "").strip()
+    end_date   = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    return jsonify({"gmail_id": gmail_id, "data": get_date_range_person_stats(gmail_id, start_date, end_date, "received")})
+
+@app.route("/mail-summaries", methods=["POST"])
+def send_mail_summaries():
+    data = request.json or {}
+    gmail_id     = data.get("gmail_id", "").strip()
+    summary_type = data.get("type", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if summary_type not in ("monthly", "yearly"):
+        return jsonify({"error": "type must be 'monthly' or 'yearly'"}), 400
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+    if not os.path.exists(paths.MAIL_SUMMARIES_PATH):
+        return jsonify({"error": "summaries not generated yet"}), 404
+
+    with open(paths.MAIL_SUMMARIES_PATH, "r", encoding="utf-8") as f:
+        summaries = json.load(f)
+
+    return jsonify({summary_type: summaries.get(summary_type, {})})
 
 # 연락처 프록시
 @app.route('/contacts-proxy', methods=['POST'])

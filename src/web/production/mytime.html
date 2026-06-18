@@ -265,60 +265,66 @@
     </div>
 
     <script>
-    (function () {
+    (async function () {
       /* ════════════════════════════
-         DB에서 올 데이터 구조 (월별 요약 텍스트 + 주요 연락처)
-         실제 연결 시: /api/timeline?gmail_id=... → 아래와 같은 JSON 반환
+         /mail-summaries API에서 월별·연별 요약 데이터 로드
       ════════════════════════════ */
-      const MONTH_DATA = {
-        '2024-01': { count:182, threads:43, summary:'새해 프로젝트 킥오프와 관련된 대화가 집중됐습니다. OKR 수립과 예산 협의, 팀 구성이 주요 주제였으며 외부 파트너와의 초기 미팅도 다수 있었습니다.', contacts:['김민준 (팀장)','이서연 (기획)','박지호 (개발)'] },
-        '2024-02': { count:97,  threads:28, summary:'상대적으로 조용한 한 달이었습니다. 팀빌딩 행사 준비와 내부 계획서 검토가 주를 이뤘고, 발렌타인 전후로 개인 일정 관련 메일이 소소하게 오갔습니다.', contacts:['이서연 (기획)','최현우 (디자인)'] },
-        '2024-03': { count:134, threads:35, summary:'Q1 마감을 앞두고 팀 내 소통이 활발했습니다. 마라톤 참가 신청과 채용 관련 이메일이 증가했으며, 분기 회고 미팅 일정 조율이 활발히 이루어졌습니다.', contacts:['김민준 (팀장)','정유진 (HR)','박지호 (개발)'] },
-        '2024-04': { count:210, threads:52, summary:'제주 컨퍼런스 참가로 외부 파트너와의 커뮤니케이션이 크게 늘었습니다. 기술 스펙 논의와 신규 파트너십 제안이 핵심 주제였습니다.', contacts:['이서연 (기획)','최현우 (디자인)','강동원 (파트너)'] },
-        '2024-05': { count:88,  threads:21, summary:'사이드 프로젝트 오픈소스 활동 관련 커뮤니티 메일이 많았습니다. 내부적으로는 비교적 조용했으며 개발 스터디 관련 일정 공유가 주를 이뤘습니다.', contacts:['박지호 (개발)','한소희 (커뮤니티)'] },
-        '2024-06': { count:245, threads:61, summary:'Q2 성과 발표를 중심으로 활발한 소통이 이루어졌습니다. KPI 달성 보고, 하반기 계획 수립, 보너스 지급 관련 HR 커뮤니케이션이 많았습니다.', contacts:['김민준 (팀장)','이서연 (기획)','최현우 (디자인)','박지호 (개발)'] },
-        '2024-07': { count:76,  threads:18, summary:'오사카 출장을 계기로 일본 파트너와의 초기 소통이 시작됐습니다. 국내 메일은 비교적 적었으며 여름 휴가 전 업무 인계 관련 메일이 일부 있었습니다.', contacts:['강동원 (파트너)','야마다 켄지 (JP)'] },
-        '2024-08': { count:63,  threads:14, summary:'여름 휴가 시즌으로 전체 메일 수가 낮았습니다. 가족 모임 관련 개인 메일과 Q3 준비를 위한 간단한 업무 공유가 주를 이뤘습니다.', contacts:['이서연 (기획)','정유진 (HR)'] },
-        '2024-09': { count:198, threads:47, summary:'신규 팀원 3명 합류와 함께 온보딩 관련 소통이 급증했습니다. 업무 분장, 스프린트 계획, 개발 환경 세팅 등 내부 커뮤니케이션이 집중됐습니다.', contacts:['김민준 (팀장)','정유진 (HR)','신재원 (신입)','박지호 (개발)'] },
-        '2024-10': { count:155, threads:38, summary:'Q3 마감과 성과 리뷰가 주요 주제였습니다. 연간 건강검진 관련 공지와 내년 로드맵 초안 검토 메일이 오갔습니다.', contacts:['김민준 (팀장)','이서연 (기획)','최현우 (디자인)'] },
-        '2024-11': { count:172, threads:44, summary:'AWS 자격증 준비를 위한 스터디 그룹 메일이 많았습니다. 아키텍처 개선 제안과 코드 리뷰 관련 기술 논의가 활발했습니다.', contacts:['박지호 (개발)','신재원 (신입)','최현우 (디자인)'] },
-        '2024-12': { count:89,  threads:22, summary:'연말 결산과 내년 계획 수립이 중심 주제였습니다. 부산 크리스마스 여행 관련 개인 메일과 팀 회식 일정 조율이 섞여 있었습니다.', contacts:['김민준 (팀장)','이서연 (기획)'] },
-        '2025-01': { count:267, threads:68, summary:'GmailWeaver 베타 런칭 직후로 사용자 피드백과 버그 리포트가 쏟아졌습니다. 언론 보도 이후 외부 문의가 급증했으며 내부적으로 긴급 대응 논의가 이어졌습니다.', contacts:['김민준 (팀장)','이서연 (기획)','박지호 (개발)','한소희 (커뮤니티)'] },
-        '2025-02': { count:118, threads:29, summary:'강릉 팀 워크샵을 계기로 팀 내부 소통이 이루어졌습니다. 서비스 개선 방향 논의와 Q1 목표 정렬이 주요 주제였습니다.', contacts:['이서연 (기획)','최현우 (디자인)'] },
-        '2025-03': { count:143, threads:36, summary:'논문 초고 작성으로 학교 측과의 메일이 증가했습니다. 채용 면접 일정 조율과 Q1 목표 점검 메일이 활발히 오갔습니다.', contacts:['정유진 (HR)','박지호 (개발)','김교수 (학교)'] },
-        '2025-04': { count:189, threads:46, summary:'논문 게재 확정과 함께 학회 발표 준비 메일이 이어졌습니다. 동시에 시리즈A 투자를 위한 IR 데크 피드백 메일이 주를 이뤘습니다.', contacts:['김교수 (학교)','이서연 (기획)','VC 담당자'] },
-        '2025-05': { count:312, threads:79, summary:'시리즈A 투자 계약이 성사되며 역대 가장 바쁜 달이었습니다. 법무법인과의 계약서 검토, 투자자 측 요청 자료 준비, 신규 채용 공고 관련 메일이 폭발적으로 증가했습니다.', contacts:['VC 담당자','법무법인','김민준 (팀장)','이서연 (기획)'] },
-        '2025-06': { count:94,  threads:23, summary:'방콕 휴가 기간 동안 메일이 최소화됐습니다. 복귀 후 밀린 업무 처리와 자동화 도입 관련 기술 메일이 주를 이뤘습니다.', contacts:['박지호 (개발)','신재원 (신입)'] },
-        '2025-07': { count:178, threads:43, summary:'이사와 Q3 계획 수립이 겹쳐 다양한 성격의 메일이 오갔습니다. 인테리어 업체 소통, 새 사무실 준비, 하반기 제품 로드맵 논의가 주요 내용이었습니다.', contacts:['이서연 (기획)','최현우 (디자인)','김민준 (팀장)'] },
-        '2025-08': { count:289, threads:72, summary:'MAU 1만 돌파 소식이 언론에 보도되며 인터뷰 요청과 파트너십 제안 메일이 급증했습니다. 마케팅팀과의 협업 메일도 크게 늘었습니다.', contacts:['한소희 (커뮤니티)','기자','이서연 (기획)','마케팅팀'] },
-        '2025-09': { count:134, threads:33, summary:'마라톤 훈련 중 10K 완주를 앞두고 훈련 모임 메일이 소소하게 있었습니다. Q3 마감 성과 공유와 분기 회고 일정 조율이 주를 이뤘습니다.', contacts:['김민준 (팀장)','박지호 (개발)'] },
-        '2025-10': { count:201, threads:51, summary:'이노베이터 100 선정 이후 강연·인터뷰 섭외 메일이 쏟아졌습니다. 네트워킹 행사 참여 관련 외부 메일이 평소보다 두 배 가까이 증가했습니다.', contacts:['주최측','기자','이서연 (기획)','한소희 (커뮤니티)'] },
-        '2025-11': { count:167, threads:41, summary:'도쿄 출장을 계기로 일본 파트너사와의 글로벌 협업 논의가 본격화됐습니다. 해외 진출 로드맵 초안과 현지화 전략 관련 메일이 많았습니다.', contacts:['야마다 켄지 (JP)','강동원 (파트너)','김민준 (팀장)'] },
-        '2025-12': { count:112, threads:27, summary:'2025 연말 결산과 시리즈B 준비 착수가 주요 주제였습니다. 팀 회식 일정 조율과 VC와의 비공식 대화 메일이 섞여 있었습니다.', contacts:['김민준 (팀장)','이서연 (기획)','VC 담당자'] },
-        '2026-01': { count:238, threads:59, summary:'시리즈B IR 투어가 시작되며 투자자 미팅 관련 메일이 집중됐습니다. 법무법인과의 실사 준비, 팀 목표 정렬 메일이 활발히 오갔습니다.', contacts:['VC 담당자','법무법인','김민준 (팀장)','이서연 (기획)'] },
-        '2026-02': { count:81,  threads:19, summary:'팀 스노보드 워크샵과 Q1 준비가 주요 내용이었습니다. 내부 소통 위주로 메일 수가 낮게 유지됐습니다.', contacts:['이서연 (기획)','최현우 (디자인)'] },
-        '2026-03': { count:129, threads:31, summary:'필라테스 시작과 함께 재활 관련 개인 일정 메일이 일부 있었습니다. Q1 마감 성과 집계와 팀 내 업무 조율이 주를 이뤘습니다.', contacts:['정유진 (HR)','박지호 (개발)'] },
-        '2026-04': { count:321, threads:82, summary:'MAU 5만 돌파와 글로벌 진출 선언으로 역대 최다 메일을 기록했습니다. 해외 파트너 협의, 대규모 채용 공고, 언론 대응이 동시에 몰렸습니다.', contacts:['김민준 (팀장)','이서연 (기획)','해외 파트너','마케팅팀'] },
-        '2026-05': { count:73,  threads:17, summary:'발리 여행 중 메일을 최소화했습니다. 복귀 후 처리할 업무 인계 메일만 간략히 오갔습니다.', contacts:['이서연 (기획)'] },
-        '2026-06': { count:198, threads:49, summary:'AI 기능 정식 출시로 사용자 반응과 버그 리포트가 쏟아졌습니다. 언론 보도 대응과 커뮤니티 관리 메일이 집중됐으며 개발팀 내부 긴급 논의도 많았습니다.', contacts:['박지호 (개발)','신재원 (신입)','한소희 (커뮤니티)','기자'] },
-      };
+      const baseUrl  = localStorage.getItem('gw_flask_url') || '';
+      const gmailId  = localStorage.getItem('gw_gmail_id') || '';
 
-      const ALL_KEYS   = Object.keys(MONTH_DATA).sort();
-      const YEAR_KEYS  = [...new Set(ALL_KEYS.map(k => k.slice(0,4)))].sort();
-      const YEAR_DATA  = {};
-      YEAR_KEYS.forEach(y => {
-        const months = ALL_KEYS.filter(k => k.startsWith(y));
-        const total  = months.reduce((s,k) => s + MONTH_DATA[k].count, 0);
-        const threads= months.reduce((s,k) => s + MONTH_DATA[k].threads, 0);
-        // 가장 바쁜 달의 요약을 대표로
-        const peak   = months.sort((a,b)=>MONTH_DATA[b].count-MONTH_DATA[a].count)[0];
-        const contacts= [...new Set(months.flatMap(k=>MONTH_DATA[k].contacts))].slice(0,4);
-        YEAR_DATA[y] = {
-          count:total, threads,
-          summary: `${y}년 전체 ${total.toLocaleString()}건의 메일이 오갔습니다. 가장 활발했던 달은 ${peak}월이었으며, ${MONTH_DATA[peak].summary}`,
-          contacts
-        };
-      });
+      let MONTH_DATA = {};
+      let YEAR_DATA  = {};
+
+      /* 로딩 표시 */
+      const track = document.getElementById('track');
+      track.innerHTML = '<div style="color:#8fb5a9;font-size:.85rem;padding:20px 0;">데이터 불러오는 중...</div>';
+
+      try {
+        const [monthlyRes, yearlyRes] = await Promise.all([
+          fetch(`${baseUrl}/mail-summaries`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gmail_id: gmailId, type: 'monthly' })
+          }),
+          fetch(`${baseUrl}/mail-summaries`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gmail_id: gmailId, type: 'yearly' })
+          })
+        ]);
+
+        const monthlyJson = await monthlyRes.json();
+        const yearlyJson  = await yearlyRes.json();
+
+        /* monthly: { "2025-01": { summary: "...", contacts: [...] } } */
+        Object.entries(monthlyJson.monthly || {}).forEach(([period, val]) => {
+          MONTH_DATA[period] = {
+            summary:  typeof val === 'object' ? (val.summary  || '') : val,
+            contacts: typeof val === 'object' ? (val.contacts || []).slice(0, 5) : []
+          };
+        });
+
+        /* yearly: { "2025": { summary: "...", contacts: [...] } } */
+        Object.entries(yearlyJson.yearly || {}).forEach(([year, val]) => {
+          YEAR_DATA[year] = {
+            summary:  typeof val === 'object' ? (val.summary  || '') : val,
+            contacts: typeof val === 'object' ? (val.contacts || []).slice(0, 5) : []
+          };
+        });
+
+      } catch (e) {
+        console.error('[mytime] 데이터 로드 실패:', e);
+        track.innerHTML = '<div style="color:#e57373;font-size:.85rem;padding:20px 0;">데이터를 불러오지 못했습니다. 인덱싱 후 다시 시도해주세요.</div>';
+        return;
+      }
+
+      const ALL_KEYS  = Object.keys(MONTH_DATA).sort();
+      const YEAR_KEYS = Object.keys(YEAR_DATA).sort();
+
+      if (!ALL_KEYS.length) {
+        track.innerHTML = '<div style="color:#8fb5a9;font-size:.85rem;padding:20px 0;">아직 생성된 요약이 없습니다. 인덱싱을 먼저 실행해주세요.</div>';
+        return;
+      }
 
       /* ── 포인터 전체 범위 ── */
       const FIRST_NUM = monthToNum(ALL_KEYS[0]);
@@ -374,7 +380,7 @@
 
           const cnt = document.createElement('div');
           cnt.className = 'mt-node-count';
-          cnt.textContent = `${d.count.toLocaleString()}건`;
+          cnt.textContent = d.count ? `${d.count.toLocaleString()}건` : '';
 
           col.appendChild(dot);
           col.appendChild(lbl);
@@ -411,7 +417,7 @@
         document.getElementById('panelPeriod').textContent =
           mode==='month' ? `${key.slice(0,4)}년 ${key.slice(5)}월` : `${key}년`;
         document.getElementById('panelCount').innerHTML =
-          `<strong>${d.count.toLocaleString()}</strong>건 &nbsp;·&nbsp; ${d.threads}개 대화`;
+          d.count ? `<strong>${d.count.toLocaleString()}</strong>건 &nbsp;·&nbsp; ${d.threads}개 대화` : '';
         document.getElementById('panelSummary').textContent = d.summary;
 
         const cc = document.getElementById('panelContacts');
