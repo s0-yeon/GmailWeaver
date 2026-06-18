@@ -1812,8 +1812,8 @@ def send_mail_exchange_stats():
 
     return jsonify({"data": get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date)})
 
-@app.route("/mail-person-range-stats", methods=["POST"])
-def send_mail_person_range_stats():
+@app.route("/mail-person-sent-stats", methods=["POST"])
+def send_mail_person_sent_stats():
     data = request.json or {}
     gmail_id   = data.get("gmail_id", "").strip()
     start_date = data.get("start_date", "").strip()
@@ -1824,7 +1824,21 @@ def send_mail_person_range_stats():
     if not start_date or not end_date:
         return jsonify({"error": "start_date and end_date are required"}), 400
 
-    return jsonify({"gmail_id": gmail_id, "data": get_date_range_person_stats(gmail_id, start_date, end_date)})
+    return jsonify({"gmail_id": gmail_id, "data": get_date_range_person_stats(gmail_id, start_date, end_date, "sent")})
+
+@app.route("/mail-person-received-stats", methods=["POST"])
+def send_mail_person_received_stats():
+    data = request.json or {}
+    gmail_id   = data.get("gmail_id", "").strip()
+    start_date = data.get("start_date", "").strip()
+    end_date   = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    return jsonify({"gmail_id": gmail_id, "data": get_date_range_person_stats(gmail_id, start_date, end_date, "received")})
 
 @app.route("/mail-summaries", methods=["POST"])
 def send_mail_summaries():
