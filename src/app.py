@@ -1789,14 +1789,22 @@ def send_mail_exchange_stats():
 @app.route("/mail-summaries", methods=["POST"])
 def send_mail_summaries():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
+    gmail_id     = data.get("gmail_id", "").strip()
+    summary_type = data.get("type", "").strip()
+
     if not gmail_id:
         return jsonify({"error": "gmail_id is required"}), 400
+    if summary_type not in ("monthly", "yearly"):
+        return jsonify({"error": "type must be 'monthly' or 'yearly'"}), 400
+
     paths = UserPaths(BASE_DIR, gmail_id)
     if not os.path.exists(paths.MAIL_SUMMARIES_PATH):
         return jsonify({"error": "summaries not generated yet"}), 404
+
     with open(paths.MAIL_SUMMARIES_PATH, "r", encoding="utf-8") as f:
-        return jsonify(json.load(f))
+        summaries = json.load(f)
+
+    return jsonify({summary_type: summaries.get(summary_type, {})})
 
 # 연락처 프록시
 @app.route('/contacts-proxy', methods=['POST'])
