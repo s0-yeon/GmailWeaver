@@ -34,7 +34,7 @@ from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
 from util.user_path import UserPaths
-from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats
+from util.database.db_reader import get_mail_stats, get_keyword_stats, get_mail_sync_stats, get_user_rating_stats, get_high_affinity_person_stats, get_keywords_by_person_date
 from util.database.db_writer import (
     save_query_to_db,
     init_processed_attachments_table,
@@ -1690,11 +1690,12 @@ def send_keyword_stats():
     paths = UserPaths(BASE_DIR, gmail_id)
     return jsonify({"gmail_id": gmail_id, "data": get_keyword_stats(paths)})
 
-@app.route("/keyword-by-person-date", methods=["POST"])
+@app.route("/keyword-by-person-date", methods=["POST"]) # 각 사람마다 주고받은 메일의 키위드 리턴
 def keyword_by_person_date():
     data = request.json or {}
     gmail_id = data.get("gmail_id", "").strip()
     person_gmail_id = data.get("person_gmail_id", "").strip()
+    # 시간 범위 내에 있는 메일의 키워드들을 추출
     start_date = data.get("start_date", "").strip()
     end_date = data.get("end_date", "").strip()
 
@@ -1706,41 +1707,10 @@ def keyword_by_person_date():
         return jsonify({"error": "start_date and end_date are required"}), 400
 
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        sql = """
-            SELECT km.keyword_name, m.mail_date
-            FROM keyword_mail km
-            JOIN mail m
-              ON km.mail_id         = m.mail_id
-             AND km.user_account_id = m.user_account_id
-             AND km.update_date     = m.update_date
-            WHERE km.user_account_id = %s
-              AND (m.sender = %s OR m.receiver = %s)
-              AND m.mail_date BETWEEN %s AND %s
-            ORDER BY m.mail_date
-        """
-        cursor.execute(sql, (gmail_id, person_gmail_id, person_gmail_id, start_date, end_date))
-        rows = cursor.fetchall()
-
-        keyword_map = {}
-        for row in rows:
-            kw = row["keyword_name"]
-            date = row["mail_date"].strftime("%Y-%m-%d") if row["mail_date"] else None
-            if kw not in keyword_map:
-                keyword_map[kw] = {"word": kw, "count": 0, "dates": []}
-            keyword_map[kw]["count"] += 1
-            if date and date not in keyword_map[kw]["dates"]:
-                keyword_map[kw]["dates"].append(date)
-
-        return jsonify({"keywords": list(keyword_map.values())})
-
+        keywords = get_keywords_by_person_date(gmail_id, person_gmail_id, start_date, end_date)
+        return jsonify({"keywords": keywords})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    finally:
-        cursor.close()
-        conn.close()
 
 
 @app.route("/high_affinity_person_stats", methods=["POST"])
