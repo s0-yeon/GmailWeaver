@@ -137,29 +137,25 @@ def get_keywords_by_person_date(gmail_id: str, person_gmail_id: str, start_date:
     cursor = conn.cursor(dictionary=True)
     try:
         sql = """
-            SELECT km.keyword_name, m.mail_date
-            FROM keyword_mail km
-            JOIN mail m
-              ON km.mail_id         = m.mail_id
-             AND km.user_account_id = m.user_account_id
-             AND km.update_date     = m.update_date
-            WHERE km.user_account_id = %s
-              AND (m.sender = %s OR m.receiver = %s)
-              AND m.mail_date BETWEEN %s AND %s
-            ORDER BY m.mail_date
+            SELECT keyword_name, mail_date, SUM(daily_count) AS day_count
+            FROM keyword_mail
+            WHERE user_account_id   = %s
+              AND person_account_id = %s
+              AND mail_date BETWEEN %s AND %s
+            GROUP BY keyword_name, mail_date
+            ORDER BY mail_date
         """
-        cursor.execute(sql, (gmail_id, person_gmail_id, person_gmail_id, start_date, end_date))
+        cursor.execute(sql, (gmail_id, person_gmail_id, start_date, end_date))
         rows = cursor.fetchall()
 
         keyword_map = {}
         for row in rows:
             kw = row["keyword_name"]
-            date = row["mail_date"].strftime("%Y-%m-%d") if row["mail_date"] else None
+            date = str(row["mail_date"])
             if kw not in keyword_map:
                 keyword_map[kw] = {"word": kw, "count": 0, "dates": []}
-            keyword_map[kw]["count"] += 1
-            if date and date not in keyword_map[kw]["dates"]:
-                keyword_map[kw]["dates"].append(date)
+            keyword_map[kw]["count"] += row["day_count"]
+            keyword_map[kw]["dates"].append(date)
 
         return list(keyword_map.values())
     finally:
