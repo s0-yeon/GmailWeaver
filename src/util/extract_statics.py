@@ -185,35 +185,48 @@ def _save_mail_contact_stats(paths, mode: str = "rewrite"):
     entities_df = pd.read_parquet(paths.ENTITIES_PATH)
     rel_df      = pd.read_parquet(paths.RELATIONSHIPS_PATH)
 
-    persons = entities_df[entities_df['type'] == 'PERSON']
-    emails  = entities_df[entities_df['type'] == 'EMAIL']
+    type_col = 'type' if 'type' in entities_df.columns else 'entity_type'
+    emails   = entities_df[entities_df[type_col].str.upper() == 'EMAIL']
 
-    # SENT_BY = 발신인, SENT_TO = 수신인
-    sent_by_count = rel_df[rel_df['description'].str.contains('SENT_BY', na=False)].groupby('target').size()
-    sent_to_count = rel_df[rel_df['description'].str.contains('SENT_TO', na=False)].groupby('target').size()
+    # relationships.parquet 기준: 실제 SENT_BY/SENT_TO가 있는 연락처만
+    sent_by_count = rel_df[rel_df['description'] == 'SENT_BY'].groupby('target').size()
+    sent_to_count = rel_df[rel_df['description'] == 'SENT_TO'].groupby('target').size()
 
-    # Tone: casual인 메일 ID 수집
-    casual_email_ids = set()
-    for _, row in emails.iterrows():
-        if 'Tone: casual' in str(row.get('description', '')):
-            casual_email_ids.add(row['title'])
+    all_contacts = set(sent_by_count.index) | set(sent_to_count.index)
+    all_contacts.discard(paths.GMAIL_ID.upper())   # 본인 제외
 
-    # casual 메일에 연결된 person별 카운트
-    casual_rel = rel_df[rel_df['source'].isin(casual_email_ids)]
-    friendly_count = casual_rel.groupby('target').size()
-
-    for _, row in persons.iterrows():
-        email_addr = row['title'].lower()
+    # 이름 맵: entities.parquet Person 엔티티에서 파싱 (대문자 키)
+    name_map = {}
+    for _, row in entities_df[entities_df[type_col].str.upper() == 'PERSON'].iterrows():
         desc = str(row.get('description', ''))
-        name_match = re.search(r'Name:\s*(.+)', desc)
-        name = name_match.group(1).strip() if name_match else ''
+        m = re.search(r'Name:\s*(.+)', desc)
+        name = m.group(1).strip() if m else ''
+        name_map[str(row['title']).upper()] = '' if name.lower() == 'none' else name
 
-        stats[email_addr] = {
-            "name": name,
-            "sent":          int(sent_by_count.get(row['title'], 0)),
-            "received":      int(sent_to_count.get(row['title'], 0)),
-            "friendly_mail": int(friendly_count.get(row['title'], 0)),
-        }
+    # Tone: casual인 메일의 연락처별 친밀 카운트
+    casual_ids = {
+        str(row['title']) for _, row in emails.iterrows()
+        if 'Tone: casual' in str(row.get('description', ''))
+    }
+    friendly_count = rel_df[rel_df['source'].isin(casual_ids)].groupby('target').size()
+
+    for contact in all_contacts:
+        email_lower = contact.lower()
+        if mode == "append" and email_lower in stats:
+            prev = stats[email_lower]
+            stats[email_lower] = {
+                "name":          name_map.get(contact.upper()) or prev.get("name", ""),
+                "sent":          prev.get("sent", 0)          + int(sent_by_count.get(contact, 0)),
+                "received":      prev.get("received", 0)      + int(sent_to_count.get(contact, 0)),
+                "friendly_mail": prev.get("friendly_mail", 0) + int(friendly_count.get(contact, 0)),
+            }
+        else:
+            stats[email_lower] = {
+                "name":          name_map.get(contact.upper(), ""),
+                "sent":          int(sent_by_count.get(contact, 0)),
+                "received":      int(sent_to_count.get(contact, 0)),
+                "friendly_mail": int(friendly_count.get(contact, 0)),
+            }
 
     with open(paths.MAIL_CONTACTS_PATH, "w", encoding="utf-8") as f:
         json.dump(stats, f, ensure_ascii=False, indent=2)
@@ -266,6 +279,158 @@ def _save_mail_keyword_stats(paths, mode: str = "rewrite"):
         json.dump(result, f, ensure_ascii=False, indent=2)
 
     print(f"[KEYWORD] ({mode}) 키워드 {len(keyword_stats)}개 저장 완료 → {paths.MAIL_KEYWORDS_PATH}")
+
+
+def generate_person_descriptions(paths) -> dict:
+    """
+    parquet에서 각 person의 이름·소속·주제·메일 수를 수집하고
+    LLM으로 줄글 프로필을 생성해 dict로 반환한다 (DB 저장은 호출자가 담당).
+
+    반환: { person_email: "이름: ...\n관계: ...\n자주 주고 받은 내용: ..." }
+    """
+    import pandas as pd
+
+    if not os.path.exists(paths.ENTITIES_PATH) or not os.path.exists(paths.RELATIONSHIPS_PATH):
+        print("[PROFILES] parquet 없음 → 프로필 생성 건너뜀")
+        return {}
+
+    entities_df = pd.read_parquet(paths.ENTITIES_PATH)
+    rel_df      = pd.read_parquet(paths.RELATIONSHIPS_PATH)
+
+    type_col = 'type' if 'type' in entities_df.columns else 'entity_type'
+
+    def titles_of(etype: str) -> set:
+        mask = entities_df[type_col].str.lower() == etype.lower()
+        return set(entities_df.loc[mask, 'title'].astype(str))
+
+    person_set = titles_of('person')
+    topic_set  = titles_of('topic')
+    org_set    = titles_of('organization')
+    email_set  = titles_of('email')
+
+    person_name_map   = {}
+    topic_summary_map = {}
+    org_name_map      = {}
+
+    for _, row in entities_df.iterrows():
+        etype = str(row.get(type_col, '')).lower()
+        title = str(row.get('title', ''))
+        desc  = str(row.get('description', ''))
+        if etype == 'person':
+            m = re.search(r'Name:\s*([^|]+)', desc)
+            v = m.group(1).strip() if m else ''
+            person_name_map[title] = '' if v.lower() == 'none' else v
+        elif etype == 'topic':
+            m = re.search(r'Summary:\s*(.+)', desc)
+            topic_summary_map[title] = m.group(1).strip() if m else ''
+        elif etype == 'organization':
+            m = re.search(r'OrgName:\s*([^|]+)', desc)
+            org_name_map[title] = m.group(1).strip() if m else title
+
+    # mail_contact_stats.json 기준으로 대상 연락처 한정
+    import json as _json
+    contact_emails: set = set()
+    if os.path.exists(paths.MAIL_CONTACTS_PATH):
+        with open(paths.MAIL_CONTACTS_PATH, "r", encoding="utf-8") as _f:
+            contact_emails = set(_json.load(_f).keys())  # lowercase
+
+    email_to_topics:  dict[str, list] = {}
+    person_to_emails: dict[str, set]  = {p: set() for p in person_set}
+    person_to_orgs:   dict[str, set]  = {p: set() for p in person_set}
+    person_counts:    dict[str, dict] = {
+        p: {'sent': 0, 'received': 0, 'cc': 0} for p in person_set
+    }
+
+    for _, row in rel_df.iterrows():
+        src   = str(row.get('source', ''))
+        tgt   = str(row.get('target', ''))
+        # description 컬럼이 관계 타입 (SENT_BY, SENT_TO, CC_TO, ...)
+        rtype = str(row.get('description', '')).upper()
+
+        if src in email_set and tgt in topic_set:
+            email_to_topics.setdefault(src, []).append(tgt)
+
+        if src in email_set and tgt in person_set:
+            person_to_emails[tgt].add(src)
+            if   rtype == 'SENT_BY':  person_counts[tgt]['sent']     += 1
+            elif rtype == 'SENT_TO':  person_counts[tgt]['received'] += 1
+            elif rtype == 'CC_TO':    person_counts[tgt]['cc']       += 1
+            else:                     person_counts[tgt]['received'] += 1
+
+        if src in person_set and tgt in org_set:
+            person_to_orgs[src].add(org_name_map.get(tgt, tgt))
+
+    descriptions: dict[str, str] = {}
+    my_email = paths.GMAIL_ID.lower()
+
+    for person_email in person_set:
+        if person_email.lower() == my_email:
+            continue
+        if person_email.lower() not in contact_emails:
+            continue
+
+        counts      = person_counts[person_email]
+        total_mails = counts['sent'] + counts['received'] + counts['cc']
+
+        name = person_name_map.get(person_email, '')
+        orgs = list(person_to_orgs[person_email])
+
+        topic_counter: dict[str, int] = {}
+        for eid in person_to_emails[person_email]:
+            for t in email_to_topics.get(eid, []):
+                topic_counter[t] = topic_counter.get(t, 0) + 1
+
+        top_topics  = sorted(topic_counter, key=topic_counter.get, reverse=True)[:5]
+        topics_text = '\n'.join(
+            f"- {t}: {topic_summary_map.get(t, t)}" for t in top_topics
+        ) or '(주제 정보 없음)'
+
+        prompt = f"""다음은 이메일 분석 데이터입니다.
+
+나의 이메일: {my_email}
+상대방 이메일: {person_email}
+이름: {name if name else '알 수 없음'}
+소속 조직: {', '.join(orgs) if orgs else '없음'}
+주고받은 메일 수: {total_mails}건 (보낸 {counts['sent']}건 / 받은 {counts['received']}건)
+주요 대화 주제:
+{topics_text}
+
+아래 형식으로만 출력하세요. 다른 텍스트는 절대 포함하지 마세요.
+관계: <이 사람과 나의 관계를 한 문장으로>
+자주 주고 받은 내용: <주로 어떤 내용으로 메일을 주고받는지 한 문장으로>""".strip()
+
+        try:
+            result = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "당신은 이메일 데이터를 분석해 인물 관계를 한국어로 간결하게 요약하는 AI입니다."
+                    },
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.3
+            )
+            llm_output = result.choices[0].message.content.strip()
+        except Exception as e:
+            print(f"[PROFILES] LLM 호출 실패 ({person_email}): {e}")
+            continue
+
+        rel_m     = re.search(r'관계:\s*(.+)',            llm_output)
+        content_m = re.search(r'자주 주고 받은 내용:\s*(.+)', llm_output)
+
+        relationship = rel_m.group(1).strip()     if rel_m     else ''
+        content      = content_m.group(1).strip() if content_m else ''
+
+        descriptions[person_email] = (
+            f"이름: {name if name else '알 수 없음'}\n"
+            f"관계: {relationship}\n"
+            f"자주 주고 받은 내용: {content}"
+        )
+        print(f"[PROFILES] 완료: {person_email}")
+
+    print(f"[PROFILES] 총 {len(descriptions)}명 프로필 생성 완료")
+    return descriptions
 
 
 def _extract_statics_pipeline(paths, mode: str = "rewrite"):

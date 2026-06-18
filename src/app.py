@@ -34,7 +34,9 @@ from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
 from util.user_path import UserPaths
+
 from util.database.db_reader import get_mail_stats, get_keyword_stats, get_mail_sync_stats, get_user_rating_stats, get_high_affinity_person_stats, get_mail_date_range, get_mail_exchange_stats
+
 from util.database.db_writer import (
     save_query_to_db,
     init_processed_attachments_table,
@@ -59,7 +61,7 @@ CORS(app)
 init_processed_attachments_table()
 
 # Apps Script Web App URL
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbximJJhfkUKvxRfNyWzkYxc6JKdLGD9WVaiBwvaMlyhjzbrEmmw7wXh_1b74FEHjqzkkg/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
@@ -1725,6 +1727,31 @@ def send_mail_stats():
     print(f"[MAIL_STATS] path={paths.USER_ROOT}")
     return jsonify({"gmail_id": gmail_id, "data": get_mail_stats(paths)})
 
+@app.route("/mail-date-range", methods=["POST"])
+def send_mail_date_range():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    return jsonify({"gmail_id": gmail_id, "data": get_mail_date_range(gmail_id)})
+
+@app.route("/mail-exchange-stats", methods=["POST"])
+def send_mail_exchange_stats():
+    data = request.json or {}
+    gmail_id       = data.get("gmail_id", "").strip()
+    person_mail_id = data.get("person_mail_id", "").strip()
+    start_date     = data.get("start_date", "").strip()
+    end_date       = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not person_mail_id:
+        return jsonify({"error": "person_mail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    return jsonify({"data": get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date)})
+
 @app.route("/keyword-stats", methods=["POST"])
 def send_keyword_stats():
     data = request.json or {}
@@ -1859,6 +1886,25 @@ def contacts_proxy():
 
     return jsonify({'ok': False, 'error': f'unknown action: {action}'})
 
+# 메일 보내기
+@app.route('/send-mail', methods=['POST', 'OPTIONS'])
+def send_mail():
+    if request.method == 'OPTIONS':
+        return '', 204
+    data = request.get_json() or {}
+    try:
+        res = requests.post(WEBAPP_URL, json={
+            'action':  'sendMail',
+            'to':      data.get('to'),
+            'subject': data.get('subject'),
+            'body':    data.get('body'),
+        }, allow_redirects=False, timeout=30)
+        if res.status_code in (301, 302, 303, 307, 308):
+            location = res.headers.get('Location')
+            res = requests.get(location, allow_redirects=True, timeout=30)
+        return jsonify(res.json())
+    except Exception as e:
+        return jsonify({'ok': False, 'error': str(e)})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=False)

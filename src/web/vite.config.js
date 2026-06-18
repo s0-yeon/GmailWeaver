@@ -159,8 +159,8 @@ export default defineConfig({
         // 시간 타임라인
         mytime: 'production/mytime.html',
 
-        // My People (임시 placeholder)
-        ex_mypeople: 'production/ex_mypeople.html'
+        // 나의 사람들
+        mypeople: 'production/mypeople.html'
       }
     },
     minify: 'terser',
