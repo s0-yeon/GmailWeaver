@@ -358,9 +358,9 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None, added_c
                 my_mail_count=added_count
             )
         save_person_stats_to_db(paths,target_update_date)
-        save_keyword_stats_to_db(paths,target_update_date)
         save_label_to_db(paths, target_update_date)
         save_mail_to_db(paths, target_update_date)
+        save_keyword_stats_to_db(paths,target_update_date)
 
 
         update_job(job_id, progress=100, status="done", message="인덱싱 완료")
@@ -394,6 +394,7 @@ def run_graph_update_pipeline(job_id, paths, env):
 
         _extract_statics_pipeline(paths, mode='append')
         save_person_stats_to_db(paths)
+        save_mail_to_db(paths)
         save_keyword_stats_to_db(paths)
 
 
