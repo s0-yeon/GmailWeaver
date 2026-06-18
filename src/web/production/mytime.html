@@ -296,14 +296,20 @@
         const monthlyJson = await monthlyRes.json();
         const yearlyJson  = await yearlyRes.json();
 
-        /* monthly: { "2025-01": "요약...", ... } */
-        Object.entries(monthlyJson.monthly || {}).forEach(([period, summary]) => {
-          MONTH_DATA[period] = { summary, contacts: [] };
+        /* monthly: { "2025-01": { summary: "...", contacts: [...] } } */
+        Object.entries(monthlyJson.monthly || {}).forEach(([period, val]) => {
+          MONTH_DATA[period] = {
+            summary:  typeof val === 'object' ? (val.summary  || '') : val,
+            contacts: typeof val === 'object' ? (val.contacts || []).slice(0, 5) : []
+          };
         });
 
-        /* yearly: { "2025": "요약...", ... } */
-        Object.entries(yearlyJson.yearly || {}).forEach(([year, summary]) => {
-          YEAR_DATA[year] = { summary, contacts: [] };
+        /* yearly: { "2025": { summary: "...", contacts: [...] } } */
+        Object.entries(yearlyJson.yearly || {}).forEach(([year, val]) => {
+          YEAR_DATA[year] = {
+            summary:  typeof val === 'object' ? (val.summary  || '') : val,
+            contacts: typeof val === 'object' ? (val.contacts || []).slice(0, 5) : []
+          };
         });
 
       } catch (e) {
