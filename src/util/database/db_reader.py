@@ -133,6 +133,37 @@ def get_high_affinity_person_stats(paths):
     return result
 
 
+def get_keywords_by_person_date(gmail_id: str, person_gmail_id: str, start_date: str, end_date: str) -> list:
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    try:
+        sql = """
+            SELECT keyword_name, mail_date, SUM(daily_count) AS day_count
+            FROM keyword_mail
+            WHERE user_account_id   = %s
+              AND person_account_id = %s
+              AND mail_date BETWEEN %s AND %s
+            GROUP BY keyword_name, mail_date
+            ORDER BY mail_date
+        """
+        cursor.execute(sql, (gmail_id, person_gmail_id, start_date, end_date))
+        rows = cursor.fetchall()
+
+        keyword_map = {}
+        for row in rows:
+            kw = row["keyword_name"]
+            date = str(row["mail_date"])
+            if kw not in keyword_map:
+                keyword_map[kw] = {"word": kw, "count": 0, "dates": []}
+            keyword_map[kw]["count"] += row["day_count"]
+            keyword_map[kw]["dates"].append(date)
+
+        return list(keyword_map.values())
+    finally:
+        cursor.close()
+        conn.close()
+
+
 def get_user_rating_stats(): # 모든 유저의 Olive 만족도
     return {"total_rating" : 99}
 
