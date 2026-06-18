@@ -244,53 +244,74 @@
       }
 
       /* 구분선 */
-      .mp-detail-divider {
-        height: 1px; background: #e8f0ec; flex-shrink: 0;
-      }
-
-      /* 통계 카드 4개 */
-      .mp-stat-row {
-        display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
-      }
-      .mp-stat-card {
-        background: linear-gradient(145deg, #f4faf7, #eef6f1);
-        border: 1px solid #d4ece2; border-radius: 14px;
-        padding: 14px 16px; text-align: center;
-      }
-      .mp-stat-value {
-        font-size: 1.4rem; font-weight: 800; color: #0f3d2e; line-height: 1;
-      }
-      .mp-stat-label {
-        font-size: 0.72rem; color: #7aaa96; font-weight: 600;
-        margin-top: 4px; letter-spacing: 0.02em;
-      }
+      .mp-detail-divider { height: 1px; background: #e8f0ec; flex-shrink: 0; }
 
       /* 섹션 공통 */
       .mp-detail-section { display: flex; flex-direction: column; gap: 10px; }
       .mp-detail-section-title {
-        font-size: 0.78rem; font-weight: 700; color: #26B99A;
+        font-size: 0.75rem; font-weight: 700; color: #26B99A;
         text-transform: uppercase; letter-spacing: 0.06em;
+        display: flex; justify-content: space-between; align-items: center;
       }
 
-      /* 키워드 태그 */
-      .mp-detail-keywords { display: flex; flex-wrap: wrap; gap: 8px; }
-      .mp-keyword-tag {
-        background: rgba(38,185,154,0.1); color: #0f7a62;
-        border: 1px solid rgba(38,185,154,0.25);
-        border-radius: 20px; padding: 4px 12px;
-        font-size: 0.8rem; font-weight: 600;
+      /* 친밀도 바 */
+      .mp-affinity-wrap { display: flex; align-items: center; gap: 12px; }
+      .mp-affinity-track {
+        flex: 1; height: 14px; background: #e8f0ec;
+        border-radius: 7px; overflow: hidden;
       }
-      .mp-keyword-placeholder {
-        color: #b0c8be; font-size: 0.82rem; font-style: italic;
+      .mp-affinity-fill {
+        height: 100%; border-radius: 7px; width: 0;
+        background: linear-gradient(90deg, #26B99A, #1a7a62);
+        transition: width 0.9s cubic-bezier(0.22,1,0.36,1);
+      }
+      .mp-affinity-pct {
+        font-size: 0.9rem; font-weight: 800; color: #0f3d2e;
+        min-width: 42px; text-align: right;
       }
 
-      /* 차트 플레이스홀더 */
-      .mp-detail-chart-placeholder {
-        height: 80px; border-radius: 12px;
-        background: linear-gradient(145deg, #f4faf7, #eef6f1);
-        border: 1.5px dashed #c8e6dc;
-        display: flex; align-items: center; justify-content: center;
-        color: #b0c8be; font-size: 0.82rem;
+      /* 월별 바 차트 */
+      .mp-chart { display: flex; flex-direction: column; gap: 5px; }
+      .mp-chart-legend {
+        display: flex; gap: 16px;
+        font-size: 0.72rem; font-weight: 600; margin-bottom: 2px;
+      }
+      .mp-chart-row {
+        display: grid; grid-template-columns: 56px 1fr 1fr;
+        gap: 6px; align-items: center;
+      }
+      .mp-chart-month {
+        font-size: 0.68rem; color: #6a9a88; font-weight: 600; text-align: right;
+      }
+      .mp-chart-bar-wrap { display: flex; align-items: center; gap: 6px; }
+      .mp-chart-bar {
+        height: 14px; border-radius: 7px; min-width: 3px;
+        transition: width 0.6s cubic-bezier(0.22,1,0.36,1);
+      }
+      .mp-chart-bar.sent { background: linear-gradient(90deg,#26B99A,#1a9e82); }
+      .mp-chart-bar.recv { background: linear-gradient(90deg,#8ab6f4,#5a94e8); }
+      .mp-chart-val {
+        font-size: 0.68rem; font-weight: 700; min-width: 18px;
+      }
+
+      /* 워드 클라우드 */
+      .mp-wc-wrap {
+        width: 100%; padding: 14px 10px; border-radius: 14px;
+        background: #fafbff; border: 1.5px solid #e8edf5;
+        display: flex; flex-wrap: wrap; align-items: center;
+        justify-content: center; gap: 8px 12px; min-height: 100px;
+      }
+      .mp-wc-word {
+        display: inline-block; font-weight: 800; line-height: 1.2;
+        cursor: default; border-radius: 6px; padding: 2px 6px;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+        opacity: 0; transform: scale(0.6);
+      }
+      .mp-wc-word.show { opacity: 1; transform: scale(1); }
+      .mp-wc-word:hover { transform: scale(1.15) !important; z-index: 10; position: relative; }
+      .mp-wc-count {
+        font-size: 0.65em; font-weight: 600; margin-left: 3px;
+        vertical-align: super; opacity: 0.7;
       }
 
       /* ════════════════════════════════════
@@ -516,43 +537,41 @@
 
                 <div class="mp-detail-divider"></div>
 
-                <div class="mp-stat-row">
-                  <div class="mp-stat-card">
-                    <div class="mp-stat-value" id="mp-stat-sent">—</div>
-                    <div class="mp-stat-label">보낸 메일</div>
-                  </div>
-                  <div class="mp-stat-card">
-                    <div class="mp-stat-value" id="mp-stat-recv">—</div>
-                    <div class="mp-stat-label">받은 메일</div>
-                  </div>
-                  <div class="mp-stat-card">
-                    <div class="mp-stat-value" id="mp-stat-first">—</div>
-                    <div class="mp-stat-label">첫 연락</div>
-                  </div>
-                  <div class="mp-stat-card">
-                    <div class="mp-stat-value" id="mp-stat-last">—</div>
-                    <div class="mp-stat-label">최근 연락</div>
+                <!-- 친밀도 -->
+                <div class="mp-detail-section">
+                  <div class="mp-detail-section-title">친밀도</div>
+                  <div class="mp-affinity-wrap">
+                    <div class="mp-affinity-track">
+                      <div class="mp-affinity-fill" id="mp-affinity-fill"></div>
+                    </div>
+                    <div class="mp-affinity-pct" id="mp-affinity-pct">—</div>
                   </div>
                 </div>
 
+                <div class="mp-detail-divider"></div>
+
+                <!-- 월별 송수신 -->
                 <div class="mp-detail-section">
-                  <div class="mp-detail-section-title">주요 키워드</div>
-                  <div class="mp-detail-keywords" id="mp-detail-keywords">
-                    <span class="mp-keyword-placeholder">데이터베이스 연결 후 표시됩니다</span>
+                  <div class="mp-detail-section-title">
+                    <span>이메일 교환</span>
+                    <span id="mp-stats-total" style="font-size:0.78rem;font-weight:600;color:#5a7a6e;text-transform:none;letter-spacing:0;"></span>
+                  </div>
+                  <div class="mp-chart-legend">
+                    <span style="color:#26B99A;">● 보낸 메일</span>
+                    <span style="color:#8ab6f4;">● 받은 메일</span>
+                  </div>
+                  <div class="mp-chart" id="mp-chart">
+                    <span style="color:#b0c8be;font-size:0.82rem;font-style:italic;">로딩 중...</span>
                   </div>
                 </div>
 
-                <div class="mp-detail-section">
-                  <div class="mp-detail-section-title">이메일 빈도</div>
-                  <div class="mp-detail-chart-placeholder" id="mp-detail-chart">
-                    데이터베이스 연결 후 표시됩니다
-                  </div>
-                </div>
+                <div class="mp-detail-divider"></div>
 
+                <!-- 키워드 워드클라우드 -->
                 <div class="mp-detail-section">
-                  <div class="mp-detail-section-title">최근 메일 주제</div>
-                  <div class="mp-detail-chart-placeholder" id="mp-detail-topics">
-                    데이터베이스 연결 후 표시됩니다
+                  <div class="mp-detail-section-title">키워드</div>
+                  <div class="mp-wc-wrap" id="mp-detail-wc">
+                    <span style="color:#b0c8be;font-size:0.82rem;font-style:italic;">로딩 중...</span>
                   </div>
                 </div>
               </div>
@@ -642,16 +661,12 @@
       /* ── 카드 렌더링 ── */
       function renderCards() {
         const grid = document.getElementById('mp-grid');
-        const list = allPeople.filter(p => {
-          const pFirst = dateToMs(p.first), pLast = dateToMs(p.last);
-          const inRange = pLast >= selMin && pFirst <= selMax;
-          return inRange;
-        });
+        const list = allPeople;
         const countEl = document.getElementById('mp-count');
         if (countEl) countEl.textContent = list.length ? `${list.length}명` : '';
 
         if (!list.length) {
-          grid.innerHTML = `<div class="mp-empty"><i class="bi bi-people"></i><p>해당 기간에 연락한 사람이 없습니다.</p></div>`;
+          grid.innerHTML = `<div class="mp-empty"><i class="bi bi-people"></i><p>데이터를 불러오는 중...</p></div>`;
           return;
         }
         const COLS = 7;
@@ -746,19 +761,39 @@
       /* ── 데이터 로드 ── */
       async function loadPeople() {
         const gmailId = sessionStorage.getItem('gw_gmail_id') || '';
-        try {
-          const res = await fetch('/people-data?gmail_id=' + encodeURIComponent(gmailId));
-          if (!res.ok) throw new Error(res.status);
-          allPeople = await res.json();
-        } catch { allPeople = []; }
-        if (!allPeople.length) allPeople = MOCK_PEOPLE;
+        const post = body => ({
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({gmail_id: gmailId})
+        });
 
-        /* 전체 날짜 범위 계산 */
+        try {
+          const [pRes, dRes] = await Promise.all([
+            fetch('/high_affinity_person_stats', post()),
+            fetch('/mail-date-range', post())
+          ]);
+
+          if (pRes.ok) {
+            const j = await pRes.json();
+            allPeople = j.data || j || [];
+          }
+
+          if (dRes.ok) {
+            const j = await dRes.json();
+            const d = j.data || j;
+            if (d.first_date && d.last_date) {
+              renderCards();
+              initTimeline(new Date(d.first_date).getTime(), new Date(d.last_date).getTime());
+              return;
+            }
+          }
+        } catch (e) { console.warn('loadPeople:', e); }
+
+        if (!allPeople.length) allPeople = MOCK_PEOPLE;
+        renderCards();
         const allFirsts = allPeople.map(p => dateToMs(p.first)).filter(Boolean);
         const allLasts  = allPeople.map(p => dateToMs(p.last)).filter(Boolean);
-        const firstMs = allFirsts.length ? Math.min(...allFirsts) : Date.now() - 1000*60*60*24*365;
+        const firstMs = allFirsts.length ? Math.min(...allFirsts) : Date.now() - 1000*60*60*24*365*3;
         const lastMs  = allLasts.length  ? Math.max(...allLasts)  : Date.now();
-
         initTimeline(firstMs, lastMs);
       }
 
@@ -801,33 +836,130 @@
         'linear-gradient(150deg,#a4e8e4,#78d4d0)',
         'linear-gradient(150deg,#fed4a8,#fcbc80)',
       ];
+      const WC_COLORS = ['#2d7dd2','#26B99A','#f4845f','#a855f7','#ef4444','#f59e0b','#10b981','#3b82f6','#ec4899','#6366f1'];
+      let kwCache = null;
 
-      function openDetail(person, rowIndex) {
-        const detail = document.getElementById('mp-detail');
+      function msToDateStr(ms) {
+        return new Date(ms).toISOString().split('T')[0];
+      }
+
+      async function loadKeywords(gmailId) {
+        if (kwCache) return kwCache;
+        try {
+          const res = await fetch('/keyword-stats', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({gmail_id: gmailId})
+          });
+          if (res.ok) {
+            const j = await res.json();
+            kwCache = (j.data || j).keywords || [];
+          }
+        } catch {}
+        return kwCache || [];
+      }
+
+      function renderBarChart(data) {
+        const chart = document.getElementById('mp-chart');
+        const totalEl = document.getElementById('mp-stats-total');
+        if (!data || !data.monthly || !data.monthly.length) {
+          chart.innerHTML = '<span style="color:#b0c8be;font-size:0.82rem;font-style:italic;">해당 기간 데이터 없음</span>';
+          if (totalEl) totalEl.textContent = '';
+          return;
+        }
+        const total = data.total || {sent: 0, received: 0};
+        if (totalEl) totalEl.textContent = `보낸 ${total.sent}건  /  받은 ${total.received}건`;
+        const maxVal = Math.max(...data.monthly.map(m => Math.max(m.sent, m.received)), 1);
+        chart.innerHTML = data.monthly.map(m => {
+          const sw = Math.max(3, Math.round((m.sent / maxVal) * 150));
+          const rw = Math.max(3, Math.round((m.received / maxVal) * 150));
+          return `<div class="mp-chart-row">
+            <span class="mp-chart-month">${m.month}</span>
+            <div class="mp-chart-bar-wrap">
+              <div class="mp-chart-bar sent" style="width:${sw}px"></div>
+              <span class="mp-chart-val" style="color:#26B99A;">${m.sent}</span>
+            </div>
+            <div class="mp-chart-bar-wrap">
+              <div class="mp-chart-bar recv" style="width:${rw}px"></div>
+              <span class="mp-chart-val" style="color:#8ab6f4;">${m.received}</span>
+            </div>
+          </div>`;
+        }).join('');
+      }
+
+      function renderWordCloud(keywords) {
+        const wrap = document.getElementById('mp-detail-wc');
+        if (!keywords || !keywords.length) {
+          wrap.innerHTML = '<span style="color:#b0c8be;font-size:0.82rem;font-style:italic;">키워드 없음</span>';
+          return;
+        }
+        const sorted = [...keywords].sort((a, b) => b.count - a.count).slice(0, 20);
+        const max = sorted[0].count, min = sorted[sorted.length - 1].count;
+        wrap.innerHTML = '';
+        sorted.forEach((kw, idx) => {
+          const norm = max === min ? 1 : Math.log1p(kw.count - min) / Math.log1p(max - min);
+          const fs = Math.round(12 + norm * 22);
+          const el = document.createElement('span');
+          el.className = 'mp-wc-word';
+          el.style.cssText = `font-size:${fs}px;color:${WC_COLORS[idx % WC_COLORS.length]};transition-delay:${(idx*0.04).toFixed(2)}s;`;
+          el.title = `${kw.word}: ${kw.count}회`;
+          el.innerHTML = `${kw.word}<sup class="mp-wc-count">${kw.count}</sup>`;
+          wrap.appendChild(el);
+          requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+        });
+      }
+
+      async function openDetail(person, rowIndex) {
+        const gmailId = sessionStorage.getItem('gw_gmail_id') || '';
         const bg = CARD_BG[rowIndex % CARD_BG.length];
         const textColor = AVATAR_COLORS_DETAIL[rowIndex % AVATAR_COLORS_DETAIL.length];
 
         document.getElementById('mp-detail-avatar').style.background = bg;
         document.getElementById('mp-detail-avatar').style.color = textColor;
         document.getElementById('mp-detail-avatar').textContent = initials(person.name);
-
         document.getElementById('mp-detail-name').textContent = person.name;
         document.getElementById('mp-detail-email').textContent = person.email || '이메일 정보 없음';
 
-        // 현재 데이터에서 표시 가능한 값
-        document.getElementById('mp-stat-first').textContent = person.first || '—';
-        document.getElementById('mp-stat-last').textContent = person.last || '—';
-        document.getElementById('mp-stat-sent').textContent = '—'; // DB 연결 후
-        document.getElementById('mp-stat-recv').textContent = '—'; // DB 연결 후
+        const aff = person.affinity != null ? person.affinity : null;
+        if (aff != null) {
+          const pct = Math.round(aff * 100);
+          document.getElementById('mp-affinity-fill').style.width = pct + '%';
+          document.getElementById('mp-affinity-pct').textContent = pct + '%';
+        } else {
+          document.getElementById('mp-affinity-fill').style.width = '0%';
+          document.getElementById('mp-affinity-pct').textContent = '—';
+        }
 
-        detail.classList.add('open');
+        document.getElementById('mp-chart').innerHTML = '<span style="color:#b0c8be;font-size:0.82rem;">로딩 중...</span>';
+        document.getElementById('mp-detail-wc').innerHTML = '<span style="color:#b0c8be;font-size:0.82rem;">로딩 중...</span>';
+        document.getElementById('mp-detail').classList.add('open');
+
+        const [statsData, keywords] = await Promise.all([
+          (async () => {
+            try {
+              const res = await fetch('/mail-exchange-stats', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                  gmail_id: gmailId,
+                  person_mail_id: person.email,
+                  start_date: msToDateStr(selMin),
+                  end_date: msToDateStr(selMax)
+                })
+              });
+              if (res.ok) { const j = await res.json(); return j.data || j; }
+            } catch {}
+            return null;
+          })(),
+          loadKeywords(gmailId)
+        ]);
+
+        renderBarChart(statsData);
+        renderWordCloud(keywords);
       }
 
       document.getElementById('mp-detail-close').addEventListener('click', () => {
         document.getElementById('mp-detail').classList.remove('open');
       });
 
-      // 카드 클릭 이벤트 (renderCards 이후 동적으로 바인딩)
       document.getElementById('mp-grid').addEventListener('click', e => {
         const card = e.target.closest('.mp-card');
         if (!card) return;
