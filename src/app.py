@@ -61,7 +61,7 @@ CORS(app)
 init_processed_attachments_table()
 
 # Apps Script Web App URL
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbximJJhfkUKvxRfNyWzkYxc6JKdLGD9WVaiBwvaMlyhjzbrEmmw7wXh_1b74FEHjqzkkg/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
@@ -1735,23 +1735,6 @@ def send_mail_date_range():
         return jsonify({"error": "gmail_id is required"}), 400
     return jsonify({"gmail_id": gmail_id, "data": get_mail_date_range(gmail_id)})
 
-@app.route("/mail-exchange-stats", methods=["POST"])
-def send_mail_exchange_stats():
-    data = request.json or {}
-    gmail_id       = data.get("gmail_id", "").strip()
-    person_mail_id = data.get("person_mail_id", "").strip()
-    start_date     = data.get("start_date", "").strip()
-    end_date       = data.get("end_date", "").strip()
-
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    if not person_mail_id:
-        return jsonify({"error": "person_mail_id is required"}), 400
-    if not start_date or not end_date:
-        return jsonify({"error": "start_date and end_date are required"}), 400
-
-    return jsonify({"data": get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date)})
-
 @app.route("/keyword-stats", methods=["POST"])
 def send_keyword_stats():
     data = request.json or {}
@@ -1787,14 +1770,6 @@ def send_mail_sync_stats():
         return jsonify({"error": "gmail_id is required"}), 400
     paths = UserPaths(BASE_DIR, gmail_id)
     return jsonify({"gmail_id": gmail_id, "data": get_mail_sync_stats(paths)})
-
-@app.route("/mail-date-range", methods=["POST"])
-def send_mail_date_range():
-    data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    return jsonify({"gmail_id": gmail_id, "data": get_mail_date_range(gmail_id)})
 
 @app.route("/mail-exchange-stats", methods=["POST"])
 def send_mail_exchange_stats():
