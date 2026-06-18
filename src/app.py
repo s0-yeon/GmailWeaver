@@ -34,7 +34,8 @@ from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
 from util.user_path import UserPaths
-from util.database.db_reader import get_mail_stats, get_keyword_stats, get_mail_sync_stats, get_user_rating_stats, get_high_affinity_person_stats, get_keywords_by_person_date
+from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats, get_keywords_by_person_date, get_mail_date_range, get_mail_exchange_stats
+
 from util.database.db_writer import (
     save_query_to_db,
     init_processed_attachments_table,
@@ -62,6 +63,7 @@ init_keyword_mail_table()
 
 # Apps Script Web App URL
 WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwAk_JabdKuGUHIVcaKeEnY1DUiYb0uqkiu-KdUG67Zf1U3D8k-F06RGS5043k_fZS8MQ/exec"
+
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
 if hasattr(sys.stdout, "reconfigure"):
@@ -917,7 +919,30 @@ def indexing_stream():
             unsubscribe(q)
 
     return Response(generate(), content_type="text/event-stream",
-                    headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+                    headers={
+                        "Cache-Control": "no-cache",
+                        "X-Accel-Buffering": "no",
+                        "Connection": "keep-alive",
+                        "ngrok-skip-browser-warning": "true",
+                    })
+
+
+# 엔드포인트: GET /indexing-history
+@app.route("/indexing-history", methods=["GET"])
+def indexing_history():
+    """최근 job 상태 목록 반환 (페이지 로드 시 이전 상태 복원용)"""
+    all_jobs = get_all_jobs()
+    # 최신순 정렬, 최대 20개
+    sorted_jobs = sorted(all_jobs.values(), key=lambda j: j.get("created_at", 0), reverse=True)[:20]
+    events = []
+    for job in sorted_jobs:
+        events.append({
+            "type": job.get("status", "idle"),
+            "job_id": job.get("job_id"),
+            "progress": job.get("progress", 0),
+            "message": job.get("message", ""),
+        })
+    return jsonify(events)
 
 
 # 엔드포인트: POST /run-query (동기 버전)
@@ -1155,6 +1180,13 @@ def upload():
         # statics 파이프라인
         statics_job_id = str(uuid.uuid4())[:8]
         create_job(statics_job_id, job_type="statics")
+        
+        if is_last and sync_mode == "rewrite":
+            final_text = _read_latest_text(paths)
+            statics_blocks = _split_mail_blocks(final_text)
+            statics_blocks = [b for b in statics_blocks if _extract_mail_id_from_block(b)]
+        else:
+            statics_blocks = append_blocks
 
         start_statics_pipeline_background(
             statics_job_id, paths,
@@ -1274,8 +1306,9 @@ def graph_data():
         return jsonify({"nodes": [], "edges": [], "error": "graph json not found"}), 200
 
     try:
-        with open(paths.GRAPH_JSON_PATH, "r", encoding="utf-8") as f:
-            data = json.load(f)
+        with open(paths.GRAPH_JSON_PATH, "rb") as f:
+            raw = f.read().rstrip(b'\x00')  # null 바이트 제거 (비정상 종료 방어)
+        data = json.loads(raw.decode("utf-8"))
         print(f"[GRAPH-DATA] 반환: {len(data.get('nodes', []))} 노드")
         return jsonify(data)
     except Exception as e:
@@ -1306,6 +1339,20 @@ def index_status():
         return jsonify({"error": "gmail_id가 비어있습니다."}), 400
     paths = UserPaths(BASE_DIR, gmail_id)
     return jsonify({"indexed": _is_index_ready(paths)})
+
+# 엔드포인트: GET /init  — localStorage에 flask_url 자동 저장 후 대시보드로 이동
+@app.route('/init')
+def init_storage():
+    from flask import request as _req
+    origin = _req.host_url.rstrip('/')
+    return f"""<!DOCTYPE html><html><head><meta charset="utf-8"><title>Initializing...</title></head>
+<body>
+<script>
+  localStorage.setItem('gw_flask_url', {repr(origin)});
+  window.location.replace('/dashboard/');
+</script>
+<p>설정 중... 자동으로 이동합니다.</p>
+</body></html>""", 200, {{'Content-Type': 'text/html; charset=utf-8'}}
 
 # 엔드포인트: GET /dashboard/
 @app.route('/dashboard/', defaults={'path': 'production/index.html'})
@@ -1681,6 +1728,31 @@ def send_mail_stats():
     print(f"[MAIL_STATS] path={paths.USER_ROOT}")
     return jsonify({"gmail_id": gmail_id, "data": get_mail_stats(paths)})
 
+@app.route("/mail-date-range", methods=["POST"])
+def send_mail_date_range():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    return jsonify({"gmail_id": gmail_id, "data": get_mail_date_range(gmail_id)})
+
+@app.route("/mail-exchange-stats", methods=["POST"])
+def send_mail_exchange_stats():
+    data = request.json or {}
+    gmail_id       = data.get("gmail_id", "").strip()
+    person_mail_id = data.get("person_mail_id", "").strip()
+    start_date     = data.get("start_date", "").strip()
+    end_date       = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not person_mail_id:
+        return jsonify({"error": "person_mail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    return jsonify({"data": get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date)})
+
 @app.route("/keyword-stats", methods=["POST"])
 def send_keyword_stats():
     data = request.json or {}
@@ -1798,9 +1870,7 @@ def contacts_proxy():
 def send_mail():
     if request.method == 'OPTIONS':
         return '', 204
-
     data = request.get_json() or {}
-
     try:
         res = requests.post(WEBAPP_URL, json={
             'action':  'sendMail',
@@ -1808,23 +1878,13 @@ def send_mail():
             'subject': data.get('subject'),
             'body':    data.get('body'),
         }, allow_redirects=False, timeout=30)
-
         if res.status_code in (301, 302, 303, 307, 308):
             location = res.headers.get('Location')
             res = requests.get(location, allow_redirects=True, timeout=30)
-
         return jsonify(res.json())
-
     except Exception as e:
         return jsonify({'ok': False, 'error': str(e)})
 
-
-#mytime
-@app.route('/indexing-history')
-def indexing_history():
-    # DB에서 기록 조회 후 반환
-    return jsonify([])  # 일단 빈 배열로 막기
-
-# 서버 진입점
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=False)
+

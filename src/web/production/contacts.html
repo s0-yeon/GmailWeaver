@@ -759,7 +759,7 @@
     .gw-tl.active { color: #26B99A; font-weight: 700; background: #e8f7f4; }
     .gw-tl-dropdown { position: relative; }
     .gw-tl-dd-menu {
-      display: none; position: absolute; top: calc(100% + 6px); left: 0;
+      display: none; position: absolute; top: 100%; left: 0; padding-top: 6px;
       background: #fff; border: 1px solid #e0e0e0; border-radius: 8px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 9999; min-width: 140px; padding: 6px 0;
     }
@@ -768,7 +768,9 @@
     .gw-tl-dd-menu a:hover { background: #f4f6f8; color: #26B99A; }
     @media (max-width: 900px) { .gw-top-links { display: none; } }
     .left_col, .nav_title { display: none !important; }
-    .right_col { margin-left: 0 !important; }
+    html, body { height: 100%; overflow: hidden; }
+    .container.body, .main_container { height: 100%; overflow: hidden; }
+    .right_col { margin-left: 0 !important; height: calc(100vh - 60px); overflow-y: auto; }
     .top_nav { margin-left: 0 !important; }
     .nav.toggle { display: none !important; }
     footer { display: none !important; }
@@ -834,11 +836,15 @@
           <a href="index.html" class="gw-tl">홈</a>
           <a href="search.html" class="gw-tl">검색</a>
           <div class="gw-tl-dropdown">
-            <button class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></button>
+            <a href="mylife.html" class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:4px;"></i></a>
             <div class="gw-tl-dd-menu">
-              <a href="graph-viz.html">Graph Viz</a>
-              <a href="recap.html">Recap</a>
-            </div>
+
+                  <a href="mypeople.html">MyPeople</a>
+                  <a href="graph-viz.html">Graph Viz</a>
+                  <a href="mytime.html">My Time</a>
+                  <a href="recap.html">Recap</a>
+                </div>
+
           </div>
           <a href="contacts.html" class="gw-tl active">연락처</a>
           <a href="calendar.html" class="gw-tl">캘린더</a>
@@ -1055,12 +1061,12 @@
 </div>
 
 <script>
-const FLASK_URL = 'http://127.0.0.1:80';
+const FLASK_URL = localStorage.getItem('gw_flask_url') || window.location.origin;
 
 let contacts = JSON.parse(localStorage.getItem('olive_contacts') || '[]');
 
 async function callContactsProxy(action, extra = {}) {
-    const gmail_id = sessionStorage.getItem('gw_gmail_id') || '';
+    const gmail_id = localStorage.getItem('gw_gmail_id') || '';
     const res = await fetch(`${FLASK_URL}/contacts-proxy`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1097,7 +1103,8 @@ async function loadContactsFromGmail() {
 
         save();
         renderGrid();
-        showToast(`${added}명이 Gmail에서 추가되었습니다!`, 'success');
+        const msg = added > 0 ? `${added}명이 Gmail에서 추가되었습니다!` : `연락처가 이미 최신 상태입니다. (총 ${res.contacts.length}명)`;
+        showToast(msg, 'success');
     } catch (e) {
         showToast('불러오기 실패: ' + e.message, 'error');
     }
@@ -1108,7 +1115,25 @@ let searchQuery = '';
 let alphaFilter = 'all';
 let sortMode = 'name';
 let currentPage = 1;
-const PER_PAGE = 10;
+
+function calcPerPage() {
+  const grid = document.getElementById('contactsGrid');
+  if (!grid) return 10;
+  const containerW = grid.parentElement.offsetWidth || window.innerWidth;
+  const cardMin = 300 + 16; // minmax + gap
+  const cols = Math.max(1, Math.floor((containerW + 16) / cardMin));
+  return cols * 2; // 항상 딱 2줄
+}
+let PER_PAGE = calcPerPage();
+
+window.addEventListener('resize', () => {
+  const newPer = calcPerPage();
+  if (newPer !== PER_PAGE) {
+    PER_PAGE = newPer;
+    currentPage = 1;
+    renderGrid();
+  }
+});
 let editingId = null;
 let composeTarget = null;
 
@@ -1520,12 +1545,16 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
     : (sessionStorage.getItem('gw_user_name') || '-');
   if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
   const gmailIdParam = params.get('gmail_id');
-  if (gmailIdParam) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
-  document.getElementById('google-profile-name').textContent = name;
-})();
+  if (gmailIdParam) localStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+      const flaskUrlParam = params.get('flask_url');
+      if (flaskUrlParam) localStorage.setItem('gw_flask_url', decodeURIComponent(flaskUrlParam));
 
-renderAlpha();
-renderGrid();
-</script>
+  const el = document.getElementById('google-profile-name');
+  if (el) el.textContent = name;
+  window.currentUserName = name;
+
+  renderGrid();
+})();
+  </script>
 </body>
 </html>

@@ -460,9 +460,10 @@ def save_mail_to_db(paths, update_date=None):
     cursor = conn.cursor()
     try:
         insert_sql = """
-            INSERT INTO mail (mail_id, user_account_id, update_date, label_name, mail_date)
-            VALUES (%s, %s, %s, %s, %s)
-            ON DUPLICATE KEY UPDATE label_name = VALUES(label_name), mail_date = VALUES(mail_date)
+            INSERT INTO mail (mail_id, user_account_id, update_date, label_name, mail_date, sender, receiver, direction)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE label_name = VALUES(label_name), mail_date = VALUES(mail_date),
+                sender = VALUES(sender), receiver = VALUES(receiver), direction = VALUES(direction)
         """
         count = 0
         seen_ids = set()
@@ -482,7 +483,17 @@ def save_mail_to_db(paths, update_date=None):
             label_raw = label_match.group(1).strip() if label_match else None
             label_name = None if (not label_raw or label_raw == '없음') else label_raw
 
-            cursor.execute(insert_sql, (mail_id, user_account_id, update_date, label_name, mail_date))
+            sender_match = re.search(r'^발신인:\s*(.+)$', text, re.MULTILINE)
+            sender = sender_match.group(1).strip() if sender_match else None
+
+            receiver_match = re.search(r'^수신인:\s*(.+)$', text, re.MULTILINE)
+            receiver = receiver_match.group(1).strip() if receiver_match else None
+
+            direction_match = re.search(r'^구분:\s*(.+)$', text, re.MULTILINE)
+            direction_raw = direction_match.group(1).strip() if direction_match else None
+            direction = 'sent' if direction_raw == '발신' else ('received' if direction_raw == '수신' else None)
+
+            cursor.execute(insert_sql, (mail_id, user_account_id, update_date, label_name, mail_date, sender, receiver, direction))
             count += 1
 
         conn.commit()

@@ -28,11 +28,20 @@ def run_graphrag_query(message: str, original_message: str, paths, method: str =
                 answer = re.sub(r'\[Data:.*?\]|\[데이터:.*?\]', '', answer) # graphrag가 답변에 삽입하는 출처 태그 제거
                 answer = re.sub(r'\*+|#+', '', answer) # 마크다운 강조 기호 제거 (**, ## 등)
                 answer = answer.strip() # 앞뒤 공백 제거
-            
-                # 답변 텍스트에서만 ID 추출 (sources 전체 아님)
+
+                # 1차: 답변 텍스트에서 ID 추출
                 found = re.findall(r'ID:\s*([0-9a-fA-F]{16})', answer)
-                # 답변 나온 순서 유지하면서 중복 제거
-                seen = set() 
+
+                # 2차: LLM이 답변에 ID를 직접 안 썼을 때 → context_text(LLM에 넘긴 원본 청크)에서 추출
+                if not found:
+                    ctx = result.context_text
+                    if isinstance(ctx, list):
+                        ctx = '\n'.join(ctx)
+                    if isinstance(ctx, str):
+                        found = re.findall(r'ID:\s*([0-9a-fA-F]{16})', ctx)
+
+                # 순서 유지하면서 중복 제거
+                seen = set()
                 source_ids = []
                 for id in found:
                     if id not in seen:

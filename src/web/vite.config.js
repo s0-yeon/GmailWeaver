@@ -153,8 +153,14 @@ export default defineConfig({
         // 메일 통계 요약
         recap: 'production/recap.html',
 
+        // My Life 랜딩
+        mylife: 'production/mylife.html',
+
         // 시간 타임라인
-        mytime: 'production/mytime.html'
+        mytime: 'production/mytime.html',
+
+        // 나의 사람들
+        mypeople: 'production/mypeople.html'
       }
     },
     minify: 'terser',
