@@ -231,6 +231,37 @@ def save_keyword_stats_to_db(paths,update_date=None):
         conn.commit()
         print(f"[DB] keyword 테이블 저장 완료: {inserted_count}건")
 
+        keyword_person_date_map = stats.get("keyword_person_date_map", {})
+
+        cursor.execute(
+            "SELECT person_account_id FROM person WHERE user_account_id = %s AND update_date = %s",
+            (user_account_id, update_date)
+        )
+        valid_persons = {row[0] for row in cursor.fetchall()}
+
+        map_persons = {p for pm in keyword_person_date_map.values() for p in pm}
+
+
+        km_insert_sql = """
+            INSERT INTO keyword_mail (keyword_name, user_account_id, person_account_id, mail_date, update_date, daily_count)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE daily_count = VALUES(daily_count)
+        """
+        km_rows = []
+        for keyword_name, person_map in keyword_person_date_map.items():
+            if keywords.get(keyword_name, 0) < 2:
+                continue
+            for person_id, date_map in person_map.items():
+                if person_id not in valid_persons:
+                    continue
+                for mail_date, count in date_map.items():
+                    km_rows.append((keyword_name, user_account_id, person_id, mail_date, update_date, count))
+
+        if km_rows:
+            cursor.executemany(km_insert_sql, km_rows)
+            conn.commit()
+            print(f"[DB] keyword_mail 테이블 저장 완료: {len(km_rows)}건")
+
     except Exception as e:
         conn.rollback()
         print(f"[ERROR] save_keyword_stats_to_db 실패: {e}")
@@ -239,6 +270,31 @@ def save_keyword_stats_to_db(paths,update_date=None):
     finally:
         cursor.close()
         conn.close()
+
+def init_keyword_mail_table():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS keyword_mail (
+                keyword_name      VARCHAR(50)  NOT NULL,
+                user_account_id   VARCHAR(50)  NOT NULL,
+                person_account_id VARCHAR(200) NOT NULL,
+                mail_date         DATE         NOT NULL,
+                update_date       DATETIME     NOT NULL,
+                daily_count       INT          NOT NULL DEFAULT 1,
+                PRIMARY KEY (keyword_name, user_account_id, person_account_id, mail_date, update_date),
+                FOREIGN KEY (keyword_name, user_account_id, update_date)
+                    REFERENCES keyword(keyword_name, user_account_id, update_date)
+            )
+        """)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print("[DB] keyword_mail 테이블 준비 완료")
+    except Exception as e:
+        print(f"[DB] keyword_mail 테이블 초기화 실패 (무시): {e}")
+
 
 def init_processed_attachments_table():
     """
