@@ -759,7 +759,7 @@
     .gw-tl.active { color: #26B99A; font-weight: 700; background: #e8f7f4; }
     .gw-tl-dropdown { position: relative; }
     .gw-tl-dd-menu {
-      display: none; position: absolute; top: calc(100% + 6px); left: 0;
+      display: none; position: absolute; top: 100%; left: 0; padding-top: 6px;
       background: #fff; border: 1px solid #e0e0e0; border-radius: 8px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 9999; min-width: 140px; padding: 6px 0;
     }
@@ -1101,7 +1101,8 @@ async function loadContactsFromGmail() {
 
         save();
         renderGrid();
-        showToast(`${added}명이 Gmail에서 추가되었습니다!`, 'success');
+        const msg = added > 0 ? `${added}명이 Gmail에서 추가되었습니다!` : `연락처가 이미 최신 상태입니다. (총 ${res.contacts.length}명)`;
+        showToast(msg, 'success');
     } catch (e) {
         showToast('불러오기 실패: ' + e.message, 'error');
     }
@@ -1550,7 +1551,7 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
   if (el) el.textContent = name;
   window.currentUserName = name;
 
-  loadContacts();
+  renderGrid();
 })();
   </script>
 </body>

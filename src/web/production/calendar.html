@@ -98,7 +98,7 @@
       .gw-tl.active { color: #26B99A; font-weight: 700; background: #e8f7f4; }
       .gw-tl-dropdown { position: relative; }
       .gw-tl-dd-menu {
-        display: none; position: absolute; top: calc(100% + 6px); left: 0;
+        display: none; position: absolute; top: 100%; left: 0; padding-top: 6px;
         background: #fff; border: 1px solid #e0e0e0; border-radius: 8px;
         box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 9999; min-width: 140px; padding: 6px 0;
       }
@@ -116,6 +116,7 @@
       .right_col > div { padding-top: 4px !important; }
       .page-title { padding: 4px 10px 4px !important; margin: 0 0 4px !important; }
       .page-title h3 { margin: 0 !important; line-height: 1.4 !important; }
+      .fc-daygrid-day-frame { min-height: 85px !important; }
     </style>
   </head>
 
@@ -327,7 +328,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" id="newEventModalLabel"><i class="fas fa-plus-circle me-2"></i>Create New Event</h4>
-            <button type="button" class="btn-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form id="newEventForm" class="needs-validation" novalidate>
@@ -405,7 +406,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" id="editEventModalLabel"><i class="fas fa-edit me-2"></i>Edit Event</h4>
-            <button type="button" class="btn-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form id="editEventForm" class="needs-validation" novalidate>
@@ -484,7 +485,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" id="eventDetailsLabel"><i class="fas fa-calendar-alt me-2"></i>Event Details</h4>
-            <button type="button" class="btn-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <!-- 내용은 main-calendar.js의 showEventDetails()에서 동적 주입 -->
           <div class="modal-body" id="eventDetailsContent"></div>
@@ -523,4 +524,10 @@
       // 새로고침 버튼: gw_cal_ 세션 캐시 전체 삭제 후 이벤트 재요청
       document.getElementById('refresh-calendar-btn').addEventListener('click', function() {
         Object.keys(sessionStorage)
-          .filter(k => k.startsW
+          .filter(k => k.startsWith('gw_cal_'))
+          .forEach(k => sessionStorage.removeItem(k));
+        if (window._gwCalendar) window._gwCalendar.refetchEvents();
+      });
+    </script>
+  </body>
+</html>
