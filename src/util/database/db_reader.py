@@ -163,6 +163,7 @@ def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
             {"month": row["month"], "sent": int(row["sent"] or 0), "received": int(row["received"] or 0)}
             for row in rows
         ]
+
         total_sent     = sum(m["sent"]     for m in monthly)
         total_received = sum(m["received"] for m in monthly)
 
