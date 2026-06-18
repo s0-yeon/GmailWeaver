@@ -53,8 +53,8 @@ def create_user(user_account_id, ended_at, index_time,my_mail_count):
     cursor.close()
     conn.close()
 
-def save_person_stats_to_db(paths,update_date=None):
-    # 나와 메일을 주고 받은 person 테이블에 삽입. 동일한 데이터는 업데이트
+def save_person_stats_to_db(paths, update_date=None):
+    """person 테이블에 기본 통계 저장 후, parquet 기반 LLM 프로필을 description에 함께 저장"""
 
     if not os.path.exists(paths.MAIL_CONTACTS_PATH):
         print(f"[WARN] 파일이 없습니다: {paths.MAIL_CONTACTS_PATH}")
@@ -66,21 +66,26 @@ def save_person_stats_to_db(paths,update_date=None):
     try:
         if update_date is None:
             latest_user = get_latest_user_record(paths.GMAIL_ID)
-
             if not latest_user:
                 print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
                 return
-
             user_account_id = latest_user["user_account_id"]
-            update_date = latest_user["update_date"]
+            update_date     = latest_user["update_date"]
         else:
             user_account_id = paths.GMAIL_ID
 
-        # 2) JSON 읽기
         with open(paths.MAIL_CONTACTS_PATH, "r", encoding="utf-8") as f:
             stats = json.load(f)
 
-        # 3) person 테이블 저장
+        # parquet → LLM 프로필 생성 (실패해도 기본 통계 저장은 계속)
+        from util.extract_statics import generate_person_descriptions
+        try:
+            descriptions_raw = generate_person_descriptions(paths)
+            descriptions = {k.lower(): v for k, v in descriptions_raw.items()}
+        except Exception as e:
+            print(f"[WARN] 프로필 생성 실패, description 없이 저장: {e}")
+            descriptions = {}
+
         insert_sql = """
             INSERT INTO person (
                 person_account_id,
@@ -89,34 +94,31 @@ def save_person_stats_to_db(paths,update_date=None):
                 person_name,
                 receive_mails,
                 send_mails,
-                friendly_mails
+                friendly_mails,
+                description
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             ON DUPLICATE KEY UPDATE
-                person_name = VALUES(person_name),
-                receive_mails = VALUES(receive_mails),
-                send_mails = VALUES(send_mails),
-                friendly_mails = VALUES(friendly_mails)
+                person_name    = VALUES(person_name),
+                receive_mails  = VALUES(receive_mails),
+                send_mails     = VALUES(send_mails),
+                friendly_mails = VALUES(friendly_mails),
+                description    = COALESCE(VALUES(description), description)
         """
 
         inserted_count = 0
-
         for email, info in stats.items():
-            person_name = info.get("name", "")
-            receive_mails = int(info.get("received", 0))
-            send_mails = int(info.get("sent", 0))
-            friendly_mails = int(info.get("friendly_mail", 0))
-
             cursor.execute(
                 insert_sql,
                 (
                     email,
                     user_account_id,
                     update_date,
-                    person_name,
-                    receive_mails,
-                    send_mails,
-                    friendly_mails
+                    info.get("name", ""),
+                    int(info.get("received", 0)),
+                    int(info.get("sent", 0)),
+                    int(info.get("friendly_mail", 0)),
+                    descriptions.get(email),
                 )
             )
             inserted_count += 1

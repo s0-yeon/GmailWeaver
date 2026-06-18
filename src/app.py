@@ -59,7 +59,7 @@ CORS(app)
 init_processed_attachments_table()
 
 # Apps Script Web App URL
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbximJJhfkUKvxRfNyWzkYxc6JKdLGD9WVaiBwvaMlyhjzbrEmmw7wXh_1b74FEHjqzkkg/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzR29ycMGq8ig5H8NMB4fciIwTleDtN-7UJKH-agPx_uK3tN4yKtkfe9v0lZ_kAvS8a/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
