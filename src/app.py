@@ -36,12 +36,14 @@ from config.settings import *
 from util.user_path import UserPaths
 from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats, get_keywords_by_person_date, get_mail_date_range, get_mail_exchange_stats, calculate_eis
 
+
 from util.database.db_writer import (
     save_query_to_db,
     init_processed_attachments_table,
     init_keyword_mail_table,
     filter_unprocessed_attachments,
-    mark_attachments_as_processed
+    mark_attachments_as_processed,
+    rebuild_keyword_mail,
 )
 from util.extract_statics import start_statics_pipeline_background
 
@@ -1768,6 +1770,54 @@ def keyword_by_person_date():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/rebuild-keyword-mail", methods=["POST"])
+def rebuild_keyword_mail_route():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    paths = UserPaths(BASE_DIR, gmail_id)
+    try:
+        rebuild_keyword_mail(paths)
+        return jsonify({"ok": True, "message": "keyword_mail 테이블 재구성 완료"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/upload-photos", methods=["POST"])
+def upload_contact_photos():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    photos   = data.get("photos", {})
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not isinstance(photos, dict) or not photos:
+        return jsonify({"ok": True, "message": "사진 없음"}), 200
+    paths = UserPaths(BASE_DIR, gmail_id)
+    os.makedirs(paths.MAIL_STATICS_PATH, exist_ok=True)
+    existing = {}
+    if os.path.exists(paths.MAIL_PHOTOS_PATH):
+        with open(paths.MAIL_PHOTOS_PATH, "r", encoding="utf-8") as f:
+            existing = json.load(f)
+    existing.update({k.lower(): v for k, v in photos.items()})
+    with open(paths.MAIL_PHOTOS_PATH, "w", encoding="utf-8") as f:
+        json.dump(existing, f, ensure_ascii=False, indent=2)
+    return jsonify({"ok": True, "saved": len(photos)})
+
+
+@app.route("/contact-photos", methods=["POST"])
+def get_contact_photos():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    if not gmail_id:
+        return jsonify({}), 200
+    paths = UserPaths(BASE_DIR, gmail_id)
+    if not os.path.exists(paths.MAIL_PHOTOS_PATH):
+        return jsonify({}), 200
+    with open(paths.MAIL_PHOTOS_PATH, "r", encoding="utf-8") as f:
+        return jsonify(json.load(f))
+
+
 @app.route("/high_affinity_person_stats", methods=["POST"])
 def send_high_affinity_person_stats():
     data = request.json or {}
@@ -1812,6 +1862,35 @@ def send_mail_exchange_stats():
 
     return jsonify({"data": get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date)})
 
+
+@app.route("/mail-person-sent-stats", methods=["POST"])
+def send_mail_person_sent_stats():
+    data = request.json or {}
+    gmail_id   = data.get("gmail_id", "").strip()
+    start_date = data.get("start_date", "").strip()
+    end_date   = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    return jsonify({"gmail_id": gmail_id, "data": get_date_range_person_stats(gmail_id, start_date, end_date, "sent")})
+
+@app.route("/mail-person-received-stats", methods=["POST"])
+def send_mail_person_received_stats():
+    data = request.json or {}
+    gmail_id   = data.get("gmail_id", "").strip()
+    start_date = data.get("start_date", "").strip()
+    end_date   = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    return jsonify({"gmail_id": gmail_id, "data": get_date_range_person_stats(gmail_id, start_date, end_date, "received")})
+
 @app.route("/intimacy", methods=["POST"])
 def send_intimacy():
     data = request.json or {}
@@ -1841,6 +1920,7 @@ def send_intimacy():
         "end_date":        end_date,
         "data":            result,
     })
+
 
 @app.route("/mail-summaries", methods=["POST"])
 def send_mail_summaries():

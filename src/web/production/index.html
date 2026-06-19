@@ -35,7 +35,7 @@
         width: 100%; height: 100%;
         pointer-events: none;
         z-index: 0;
-        opacity: 0.45;
+        opacity: 0.38;
       }
 
       /* ── 홈 래퍼 ── */
@@ -200,34 +200,121 @@
         animation: gw-float linear infinite;
       }
       .gw-orb-1 {
-        width: 520px; height: 520px;
-        background: radial-gradient(circle at 40% 40%, rgba(26,158,110,0.55), rgba(26,158,110,0.08) 70%, transparent);
-        top: -60px; right: 5%;
-        opacity: 0.7;
+        width: 580px; height: 580px;
+        background: radial-gradient(circle at 40% 40%, rgba(26,158,110,0.52), rgba(26,158,110,0.08) 70%, transparent);
+        top: -80px; right: 4%;
+        opacity: 0.62;
         animation-duration: 18s;
       }
       .gw-orb-2 {
-        width: 420px; height: 420px;
-        background: radial-gradient(circle at 50% 50%, rgba(52,211,153,0.50), rgba(52,211,153,0.06) 70%, transparent);
-        bottom: -40px; left: 2%;
-        opacity: 0.65;
+        width: 480px; height: 480px;
+        background: radial-gradient(circle at 50% 50%, rgba(52,211,153,0.46), rgba(52,211,153,0.06) 70%, transparent);
+        bottom: -50px; left: 0%;
+        opacity: 0.58;
         animation-duration: 24s;
         animation-delay: -8s;
       }
       .gw-orb-3 {
-        width: 280px; height: 280px;
-        background: radial-gradient(circle at 50% 50%, rgba(212,168,67,0.48), rgba(212,168,67,0.06) 70%, transparent);
-        top: 42%; right: 22%;
-        opacity: 0.55;
+        width: 320px; height: 320px;
+        background: radial-gradient(circle at 50% 50%, rgba(212,168,67,0.42), rgba(212,168,67,0.05) 70%, transparent);
+        top: 38%; right: 20%;
+        opacity: 0.52;
         animation-duration: 20s;
         animation-delay: -4s;
         filter: blur(50px);
+      }
+      .gw-orb-4 {
+        width: 460px; height: 460px;
+        background: radial-gradient(circle at 50% 50%, rgba(130,80,255,0.30), rgba(130,80,255,0.04) 70%, transparent);
+        top: 8%; left: 22%;
+        opacity: 0.42;
+        animation-duration: 26s;
+        animation-delay: -14s;
+        filter: blur(60px);
+      }
+      .gw-orb-5 {
+        width: 300px; height: 300px;
+        background: radial-gradient(circle at 50% 50%, rgba(255,140,40,0.30), rgba(255,140,40,0.04) 70%, transparent);
+        bottom: 5%; right: 10%;
+        opacity: 0.38;
+        animation-duration: 22s;
+        animation-delay: -3s;
+        filter: blur(52px);
+      }
+
+      /* ── 오로라 밴드 ── */
+      .gw-aurora {
+        position: fixed; pointer-events: none; z-index: 0;
+        width: 220%; height: 280px; left: -60%;
+        filter: blur(38px);
+        animation: gw-aurora-drift ease-in-out infinite alternate;
+      }
+      @keyframes gw-aurora-drift {
+        0%   { transform: translateX(-6%) translateY(0px) scaleY(1); }
+        100% { transform: translateX(6%)  translateY(28px) scaleY(1.1); }
+      }
+      .gw-aurora-1 {
+        background: linear-gradient(90deg, transparent 5%, rgba(26,200,140,0.20) 30%, rgba(100,80,255,0.14) 60%, transparent 95%);
+        top: 8%; opacity: 0.30;
+        animation-duration: 14s;
+      }
+      .gw-aurora-2 {
+        background: linear-gradient(90deg, transparent 5%, rgba(255,150,50,0.16) 35%, rgba(26,200,140,0.18) 65%, transparent 95%);
+        top: 52%; opacity: 0.22;
+        animation-duration: 18s;
+        animation-delay: -9s;
+        animation-direction: alternate-reverse;
       }
       @keyframes gw-float {
         0%   { transform: translate(0, 0) scale(1); }
         33%  { transform: translate(40px, -30px) scale(1.07); }
         66%  { transform: translate(-25px, 20px) scale(0.95); }
         100% { transform: translate(0, 0) scale(1); }
+      }
+
+      /* ── 도트 그리드 ── */
+      .gw-dot-grid {
+        position: fixed; inset: 0; pointer-events: none; z-index: 0;
+        background-image: radial-gradient(circle, rgba(20,160,110,0.15) 1.2px, transparent 1.2px);
+        background-size: 36px 36px;
+        opacity: 0.35;
+      }
+
+      /* ── 데코 링 ── */
+      .gw-deco-ring {
+        position: fixed; border-radius: 50%;
+        pointer-events: none; z-index: 0;
+      }
+      @keyframes gw-ring-cw  { to { transform: translate(-50%,-50%) rotate(360deg);  } }
+      @keyframes gw-ring-ccw { to { transform: translate(-50%,-50%) rotate(-360deg); } }
+      .gw-deco-ring-1 {
+        width: 680px; height: 680px;
+        top: 58%; left: 76%;
+        transform: translate(-50%,-50%);
+        border: 1px dashed rgba(26,185,130,0.15);
+        animation: gw-ring-cw 55s linear infinite;
+      }
+      .gw-deco-ring-2 {
+        width: 480px; height: 480px;
+        top: 68%; left: 16%;
+        transform: translate(-50%,-50%);
+        border: 1px dashed rgba(26,185,130,0.12);
+        animation: gw-ring-ccw 40s linear infinite;
+      }
+      .gw-deco-ring-3 {
+        width: 320px; height: 320px;
+        top: 18%; left: 54%;
+        transform: translate(-50%,-50%);
+        border: 1px solid rgba(160,100,255,0.16);
+        animation: gw-ring-cw 30s linear infinite;
+      }
+      .gw-deco-ring-4 {
+        width: 220px; height: 220px;
+        top: 75%; right: 8%; left: auto;
+        transform: translateY(-50%);
+        border: 1px solid rgba(255,140,40,0.18);
+        animation: gw-ring-ccw 24s linear infinite;
+        transform-origin: center;
       }
       /* ── 인덱싱 로그 패널 ── */
       .log-fab {
@@ -409,7 +496,13 @@
       .top_nav { margin-left: 0 !important; }
       .nav.toggle { display: none !important; }
       footer { display: none !important; }
-      .right_col { padding: 0 !important; overflow: hidden !important; }
+      .right_col {
+        padding: 0 !important; overflow: hidden !important;
+        background:
+          radial-gradient(ellipse at 10% 15%, rgba(26,210,140,0.10) 0%, transparent 45%),
+          radial-gradient(ellipse at 85% 10%, rgba(120,80,255,0.07) 0%, transparent 40%),
+          linear-gradient(145deg, #d8f0e6 0%, #e8eeff 50%, #f0ecff 100%) !important;
+      }
       body, html { overflow: hidden; }
 
       /* ══ Knowledge Graph Home — Glass Pill ══ */
@@ -419,14 +512,14 @@
         height: calc(100vh - 58px);
         padding-top: 22px; overflow: hidden;
       }
-      .gw-home-v2 .gw-greeting { font-size: 2.1rem; margin-bottom: 6px; font-weight: 700; letter-spacing: -0.01em; }
-      .gw-home-v2 .gw-subtitle { margin-bottom: 0; font-size: 0.83rem; color: #94a8bb; letter-spacing: 0.06em; text-transform: uppercase; }
+      .gw-home-v2 .gw-greeting { font-size: 2.4rem; margin-bottom: 10px; font-weight: 800; letter-spacing: -0.03em; color: #0a3a24; }
+      .gw-home-v2 .gw-subtitle { margin-bottom: 72px; font-size: 0.88rem; color: #7aaa96; letter-spacing: 0.08em; text-transform: uppercase; background: none; padding: 0; border-radius: 0; border: none; display: block; }
 
       .gw-kgraph {
         position: relative;
-        width: min(760px, 92vw);
-        height: min(460px, 60vw);
-        min-height: 360px;
+        width: min(960px, 97vw);
+        height: min(580px, 70vw);
+        min-height: 460px;
       }
       #kg-svg {
         position: absolute; top: 0; left: 0;
@@ -443,32 +536,40 @@
       /* Frosted glass circle — unified green */
       .gw-knode-blob {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
-        gap: 6px;
-        width: 132px; height: 132px;
+        gap: 10px;
+        width: 184px; height: 184px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.56);
-        backdrop-filter: blur(18px) saturate(1.5);
-        -webkit-backdrop-filter: blur(18px) saturate(1.5);
-        border: 2px solid rgba(38,185,154,0.8);
-        color: #0a5242;
-        box-shadow: 0 6px 28px rgba(38,185,154,0.38), inset 0 1px 0 rgba(255,255,255,0.85);
-        font-size: 0.96rem; font-weight: 600;
-        letter-spacing: 0.02em;
-        transition: transform 0.32s cubic-bezier(0.22,1,0.36,1),
-                    box-shadow 0.32s, background 0.32s;
+        background: rgba(255,255,255,0.64);
+        backdrop-filter: blur(28px) saturate(2.0);
+        -webkit-backdrop-filter: blur(28px) saturate(2.0);
+        border: 2.5px solid rgba(38,185,154,0.90);
+        color: #084a37;
+        box-shadow:
+          0 10px 48px rgba(38,185,154,0.42),
+          0 0 0 10px rgba(38,185,154,0.07),
+          inset 0 2px 0 rgba(255,255,255,0.98),
+          inset 0 -1px 0 rgba(38,185,154,0.12);
+        font-size: 1.12rem; font-weight: 700;
+        letter-spacing: 0.04em;
+        transition: transform 0.38s cubic-bezier(0.22,1,0.36,1),
+                    box-shadow 0.38s, background 0.38s;
       }
-      .gw-knode-icon { font-size: 2.0rem; line-height: 1; color: #1a9e82; transition: transform 0.32s; }
+      .gw-knode-icon { font-size: 2.8rem; line-height: 1; color: #1a9e82; transition: transform 0.38s; }
       .gw-knode:hover .gw-knode-blob {
-        transform: translateY(-7px) scale(1.07);
-        background: rgba(200,244,234,0.78);
-        box-shadow: 0 18px 52px rgba(38,185,154,0.48), inset 0 1px 0 rgba(255,255,255,0.9);
+        transform: translateY(-12px) scale(1.10);
+        background: rgba(196,252,232,0.86);
+        box-shadow:
+          0 28px 72px rgba(38,185,154,0.58),
+          0 0 0 16px rgba(38,185,154,0.10),
+          inset 0 2px 0 rgba(255,255,255,1.0),
+          inset 0 -1px 0 rgba(38,185,154,0.15);
       }
-      .gw-knode:hover .gw-knode-icon { transform: scale(1.18); }
+      .gw-knode:hover .gw-knode-icon { transform: scale(1.22); color: #0f7a60; }
 
-      @keyframes kf0{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 9px))}}
-      @keyframes kf1{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 11px))}}
-      @keyframes kf2{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 8px))}}
-      @keyframes kf3{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 10px))}}
+      @keyframes kf0{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 16px))}}
+      @keyframes kf1{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 20px))}}
+      @keyframes kf2{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 14px))}}
+      @keyframes kf3{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 18px))}}
       #kn-search   { animation: kf0 3.8s ease-in-out infinite; }
       #kn-mylife   { animation: kf1 4.2s ease-in-out infinite 0.7s; }
       #kn-contacts { animation: kf2 3.5s ease-in-out infinite 1.4s; }
@@ -619,9 +720,18 @@
             
         <!-- Page Content -->
         <main class="right_col" role="main" aria-label="Main content">
+          <div class="gw-dot-grid"></div>
+          <div class="gw-aurora gw-aurora-1"></div>
+          <div class="gw-aurora gw-aurora-2"></div>
           <div class="gw-orb gw-orb-1"></div>
           <div class="gw-orb gw-orb-2"></div>
           <div class="gw-orb gw-orb-3"></div>
+          <div class="gw-orb gw-orb-4"></div>
+          <div class="gw-orb gw-orb-5"></div>
+          <div class="gw-deco-ring gw-deco-ring-1"></div>
+          <div class="gw-deco-ring gw-deco-ring-2"></div>
+          <div class="gw-deco-ring gw-deco-ring-3"></div>
+          <div class="gw-deco-ring gw-deco-ring-4"></div>
           <canvas id="gw-particles"></canvas>
 
           <div class="gw-home-v2">
@@ -693,10 +803,10 @@
         const W = container.offsetWidth, H = container.offsetHeight;
 
         const nodes = [
-          {id:'kn-search',   px:0.13, py:0.38, color:'#26B99A'},
-          {id:'kn-mylife',   px:0.37, py:0.68, color:'#26B99A'},
-          {id:'kn-contacts', px:0.64, py:0.20, color:'#26B99A'},
-          {id:'kn-calendar', px:0.86, py:0.58, color:'#26B99A'}
+          {id:'kn-search',   px:0.10, py:0.34, color:'#26B99A'},
+          {id:'kn-mylife',   px:0.38, py:0.74, color:'#26B99A'},
+          {id:'kn-contacts', px:0.65, py:0.16, color:'#26B99A'},
+          {id:'kn-calendar', px:0.88, py:0.60, color:'#26B99A'}
         ];
 
         const pos = {};
@@ -735,27 +845,27 @@
         for(let i = 0; i < chain.length - 1; i++) {
           const a = pos[chain[i]], b = pos[chain[i+1]];
           if(!a || !b) continue;
-          const mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - 42;
+          const mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - 62;
           const d = `M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}`;
 
           /* 글로우 레이어 */
           const glow = document.createElementNS('http://www.w3.org/2000/svg','path');
           glow.setAttribute('d',d); glow.setAttribute('fill','none');
           glow.setAttribute('stroke',`url(#eg${i})`);
-          glow.setAttribute('stroke-width','8'); glow.setAttribute('opacity','0.1');
+          glow.setAttribute('stroke-width','18'); glow.setAttribute('opacity','0.14');
           svg.appendChild(glow);
 
           /* 메인 경로 */
           const path = document.createElementNS('http://www.w3.org/2000/svg','path');
           path.setAttribute('d',d); path.setAttribute('fill','none');
           path.setAttribute('stroke',`url(#eg${i})`);
-          path.setAttribute('stroke-width','1.6');
+          path.setAttribute('stroke-width','2.5');
           path.setAttribute('stroke-linecap','round');
           svg.appendChild(path);
 
           /* 흐르는 점 */
           const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
-          dot.setAttribute('r','3.5');
+          dot.setAttribute('r','5.5');
           dot.setAttribute('fill', pos[chain[i+1]].color);
           dot.setAttribute('opacity','0.78');
           const am = document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
@@ -780,8 +890,8 @@
           let W, H, P;
           function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
           addEventListener('resize', resize); resize();
-          function mk() { return {x:Math.random()*W,y:Math.random()*H,r:Math.random()*2+.6,dx:(Math.random()-.5)*.35,dy:(Math.random()-.5)*.35,a:Math.random()*.5+.2}; }
-          P = Array.from({length:60}, mk);
+          function mk() { return {x:Math.random()*W,y:Math.random()*H,r:Math.random()*2.2+.7,dx:(Math.random()-.5)*.38,dy:(Math.random()-.5)*.38,a:Math.random()*.55+.25}; }
+          P = Array.from({length:90}, mk);
           function draw() {
             ctx.clearRect(0,0,W,H);
             P.forEach(p => {
@@ -792,7 +902,7 @@
             });
             for(let i=0;i<P.length;i++) for(let j=i+1;j<P.length;j++){
               const dx=P[i].x-P[j].x,dy=P[i].y-P[j].y,d=Math.sqrt(dx*dx+dy*dy);
-              if(d<120){ctx.beginPath();ctx.strokeStyle=`rgba(26,158,110,${.12*(1-d/120)})`;ctx.lineWidth=.8;ctx.moveTo(P[i].x,P[i].y);ctx.lineTo(P[j].x,P[j].y);ctx.stroke();}
+              if(d<150){ctx.beginPath();ctx.strokeStyle=`rgba(26,158,110,${.16*(1-d/150)})`;ctx.lineWidth=.9;ctx.moveTo(P[i].x,P[i].y);ctx.lineTo(P[j].x,P[j].y);ctx.stroke();}
             }
             requestAnimationFrame(draw);
           }

@@ -40,21 +40,59 @@
       }
 
       /* ── 페이지 레이아웃 ── */
-      .right_col > div:first-child { padding-top: 0 !important; }
+      .right_col > div:first-child { padding-top: 0; }
       .mp-page {
         position: fixed !important;
         top: 57px !important;
         left: 0 !important; right: 0 !important;
         bottom: 100px !important;
-        padding: 0 60px !important;
+        padding: 16px 90px 0 90px !important;
         display: flex !important; flex-direction: column !important;
-        gap: 2px !important; box-sizing: border-box !important;
+        gap: 10px !important; box-sizing: border-box !important;
       }
 
-      /* ── 그리드 패널 (헤더 포함) ── */
+      /* ── 콘텐츠 행 (왼쪽+오른쪽 패널) ── */
+      .mp-content {
+        flex: 1; min-height: 0;
+        display: flex; flex-direction: row;
+        gap: 20px;
+      }
+
+      /* ── 왼쪽 컬럼 (사람 패널, 8) ── */
+      .mp-left {
+        flex: 8; min-width: 0;
+        display: flex; flex-direction: column;
+      }
+
+      /* ── 오른쪽 컬럼 (그래프 패널, 2) ── */
+      .mp-right {
+        flex: 2; min-width: 0;
+        background: #1a9e6e;
+        border: 2.5px solid #1a9e6e;
+        border-radius: 20px;
+        box-shadow: 0 4px 18px rgba(38,130,100,0.18);
+        padding: 16px 14px;
+        display: flex; flex-direction: column; overflow: hidden;
+      }
+      .mp-right-title {
+        font-size: 0.9rem; font-weight: 700; color: #fff;
+        margin-bottom: 10px; flex-shrink: 0; letter-spacing: -0.01em;
+      }
+      .mp-right-card {
+        flex: 1; overflow-y: auto;
+        background: #fff;
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 14px;
+        padding: 12px 10px;
+      }
+      #mp-global-wc {
+        display: flex; flex-wrap: wrap;
+        align-items: flex-start; align-content: flex-start;
+        gap: 7px 10px;
+      }
+
+      /* ── 그리드 패널 ── */
       .mp-panel {
-        max-width: 1200px;
-        margin: 0 auto;
         width: 100%;
         background: rgba(255,255,255,0.72);
         border: 1.5px solid rgba(200,230,215,0.8);
@@ -69,13 +107,17 @@
       .mp-panel::-webkit-scrollbar { width: 4px; }
       .mp-panel::-webkit-scrollbar-thumb { background: #b8ddd0; border-radius: 10px; }
 
-      /* ── 패널 헤더 — 패널과 동일한 폭으로 정렬 ── */
+      /* ── 패널 헤더 ── */
       .mp-panel-header {
-        display: flex; align-items: center;
-        justify-content: space-between; flex-shrink: 0;
-        margin-bottom: 4px;
-        max-width: 1200px; width: 100%; margin-left: auto; margin-right: auto;
+        display: flex; align-items: center; flex-shrink: 0;
+        width: 100%; gap: 20px;
       }
+      .mp-header-left {
+        flex: 8; display: flex; align-items: center;
+        justify-content: space-between;
+        padding-right: 28px;
+      }
+      .mp-header-spacer { flex: 2; }
       .mp-title-wrap { display: flex; align-items: center; gap: 8px; }
       .mp-title{font-size:2.6rem;font-weight:800;color:#1b2e22;letter-spacing:-.04em}
       .mp-title span{color:#1a9e6e}
@@ -85,7 +127,7 @@
         border-radius: 20px;
       }
       /* ── 노션식 드롭다운 토글 ── */
-      .mp-dropdown { position: relative; }
+      .mp-dropdown { position: relative; margin-top: 10px; }
       .mp-dropdown-btn {
         display: flex; align-items: center; justify-content: space-between;
         gap: 24px;
@@ -129,16 +171,17 @@
 
       .mp-grid {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 6px;
+        grid-template-columns: repeat(8, 1fr);
+        grid-auto-rows: auto;
+        gap: 8px;
+        align-items: start;
       }
 
       /* 카드 — 열 너비 기준 정사각형, 화면 비율에 따라 반응 */
       .mp-card {
         border-radius: 14px;
         aspect-ratio: 1 / 1;
-        width: 100%; height: auto;
-        align-self: stretch; justify-self: stretch;
+        width: 100%;
         display: flex; flex-direction: column;
         align-items: center; justify-content: center;
         gap: 4px; cursor: pointer;
@@ -195,11 +238,64 @@
         color: rgba(30,50,44,0.82);
         text-align: center; line-height: 1.25; word-break: keep-all;
       }
+      .mp-email-hint {
+        font-size: 0.62rem; font-weight: 500;
+        color: rgba(30,50,44,0.42);
+        text-align: center; line-height: 1;
+        max-width: 90%; overflow: hidden;
+        text-overflow: ellipsis; white-space: nowrap;
+      }
+      .mp-period-badge {
+        position: absolute; top: 6px; right: 6px;
+        font-size: 0.58rem; font-weight: 700;
+        color: rgba(20,50,40,0.75);
+        background: rgba(255,255,255,0.82);
+        border-radius: 8px; padding: 1px 6px;
+        letter-spacing: 0.01em; line-height: 1.6;
+        pointer-events: none;
+      }
       .mp-empty {
         grid-column: 1 / -1; text-align: center;
         padding: 50px 0; color: #a0b8b0;
       }
       .mp-empty i { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+
+      /* ── 그래프 미니 래퍼 (오른쪽 패널 상단) ── */
+      .mp-graph-mini-card {
+        height: 120px !important; flex-shrink: 0 !important;
+        padding: 0 !important; overflow: hidden;
+        cursor: pointer;
+        transition: box-shadow 0.15s, transform 0.15s;
+      }
+      .mp-graph-mini-card:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(38,185,154,0.2) !important; }
+
+      /* ── 그래프 전체 패널 (왼쪽 패널 오버레이) ── */
+      .mp-graph-panel {
+        display: none;
+        position: absolute; inset: 0; z-index: 8;
+        background: #fff; border-radius: 16px;
+        flex-direction: column; overflow: hidden;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      }
+      .mp-graph-panel.open { display: flex; }
+      .mp-graph-panel-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 8px 14px; border-bottom: 1.5px solid #d4ece4;
+        background: #f5faf8; flex-shrink: 0;
+      }
+      .mp-graph-panel-title {
+        font-size: 0.85rem; font-weight: 700; color: #1a5a4a;
+        display: flex; align-items: center; gap: 6px;
+      }
+      .mp-graph-close {
+        display: flex; align-items: center; gap: 5px;
+        padding: 5px 12px; border: 1.5px solid #c4dfd8;
+        background: #fff; color: #1a5a4a;
+        font-size: 0.78rem; font-weight: 600; cursor: pointer;
+        border-radius: 8px; transition: background 0.12s;
+      }
+      .mp-graph-close:hover { background: #e8f4f0; }
+      .mp-graph-iframe { flex: 1; border: none; width: 100%; min-height: 0; }
 
       /* ════════════════════════════════════
          사람 디테일 패널
@@ -237,16 +333,16 @@
 
       /* 헤더 */
       .mp-detail-header {
-        display: flex; align-items: center; gap: 28px;
-        padding: 26px 28px 20px;
+        display: flex; align-items: center; gap: clamp(12px, 2vw, 28px);
+        padding: 20px 72px 16px clamp(16px, 2.5vw, 28px);
         flex-shrink: 0;
         border-bottom: 1px solid #e8f0ec;
-        padding-right: 72px;
       }
       .mp-detail-avatar {
-        width: 160px; height: 160px; border-radius: 50%; flex-shrink: 0;
+        width: clamp(90px, 14vw, 160px); height: clamp(90px, 14vw, 160px);
+        border-radius: 50%; flex-shrink: 0;
         display: flex; align-items: center; justify-content: center;
-        font-size: 4rem; font-weight: 800;
+        font-size: clamp(2rem, 4vw, 4rem); font-weight: 800;
         box-shadow: 0 8px 32px rgba(0,0,0,0.12);
       }
       .mp-detail-name {
@@ -257,16 +353,15 @@
 
       /* 본문 3열 */
       .mp-detail-body {
-        flex: 1; min-height: 0; overflow-y: auto;
-        display: grid; grid-template-columns: 210px 1fr 1fr;
+        flex: 1; min-height: 0; overflow: hidden;
+        display: grid; grid-template-columns: clamp(150px, 22%, 210px) 1fr 1fr;
       }
-      .mp-detail-body::-webkit-scrollbar { width: 4px; }
-      .mp-detail-body::-webkit-scrollbar-thumb { background: #b8ddd0; border-radius: 10px; }
 
       .mp-detail-col {
         padding: 20px 18px;
         border-right: 1px solid #e8f0ec;
         display: flex; flex-direction: column; gap: 12px;
+        min-width: 0;
       }
       .mp-detail-col:last-child { border-right: none; }
 
@@ -305,7 +400,7 @@
       }
 
       /* 세로 막대그래프 */
-      .mp-vchart-wrap { display: flex; gap: 4px; flex: 1; min-height: 180px; }
+      .mp-vchart-wrap { display: flex; gap: 4px; flex: 1; min-height: 0; }
       .mp-vchart-y {
         display: flex; flex-direction: column; justify-content: space-between;
         padding-bottom: 18px; min-width: 22px;
@@ -318,8 +413,9 @@
         padding: 0 4px 0 6px;
         overflow-x: auto; height: 160px;
       }
-      .mp-vchart-area::-webkit-scrollbar { height: 2px; }
-      .mp-vchart-area::-webkit-scrollbar-thumb { background: #c8e0d8; }
+      .mp-vchart-area::-webkit-scrollbar { height: 5px; }
+      .mp-vchart-area::-webkit-scrollbar-thumb { background: #26B99A; border-radius: 3px; }
+      .mp-vchart-area::-webkit-scrollbar-track { background: #e8f4f0; border-radius: 3px; }
       .mp-vchart-group {
         display: flex; flex-direction: column; align-items: center; gap: 3px; flex-shrink: 0;
       }
@@ -330,7 +426,9 @@
       }
       .mp-vchart-bar.sent { background: linear-gradient(0deg,#1a9e82,#26B99A); }
       .mp-vchart-bar.recv { background: linear-gradient(0deg,#5a94e8,#8ab6f4); }
+      .mp-vchart-label { display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
       .mp-vchart-month { font-size: 0.54rem; color: #9ab8b0; white-space: nowrap; }
+      .mp-vchart-year  { font-size: 0.5rem;  color: #26B99A; font-weight: 700; white-space: nowrap; }
       .mp-chart-legend { display: flex; gap: 14px; font-size: 0.7rem; font-weight: 600; flex-shrink: 0; }
 
       /* 워드 클라우드 */
@@ -354,11 +452,11 @@
       }
 
       /* ════════════════════════════════════
-         타임라인 패널 (그리드와 동일 가로)
+         타임라인 패널
       ════════════════════════════════════ */
       .mp-timeline {
         position: fixed; bottom: 12px;
-        left: 160px; right: 160px;
+        left: 40px; right: 40px;
         height: 88px;
         background: none;
         border: none;
@@ -478,8 +576,25 @@
       .gw-tl-dd-menu a { display: block; padding: 8px 16px; font-size: 0.84rem; color: #2A3F54; text-decoration: none; }
       .gw-tl-dd-menu a:hover { background: #f4f6f8; color: #26B99A; }
       @media (max-width: 900px) { .gw-top-links { display: none; } }
-      @media (max-width: 1200px) { .mp-grid { grid-template-columns: repeat(5, 1fr); } }
-      @media (max-width: 960px)  { .mp-grid { grid-template-columns: repeat(4, 1fr); } }
+
+      /* 반응형: 중간 화면 — 오른쪽 패널 축소 */
+      @media (max-width: 1280px) {
+        .mp-grid { grid-template-columns: repeat(7, 1fr); }
+        .mp-page { padding: 16px 72px 0 72px !important; gap: 8px !important; }
+        .mp-content { gap: 16px; }
+      }
+      @media (max-width: 960px) {
+        .mp-page { padding: 14px 32px 0 32px !important; }
+        .mp-content { flex-direction: column; }
+        .mp-right { display: none; }
+        .mp-grid { grid-template-columns: repeat(5, 1fr); }
+        .mp-timeline { left: 40px; right: 40px; }
+      }
+      @media (max-width: 640px) {
+        .mp-grid { grid-template-columns: repeat(4, 1fr); }
+        .mp-page { padding: 12px 24px 0 24px !important; }
+        .mp-timeline { left: 28px; right: 28px; }
+      }
     </style>
   </head>
 
@@ -541,24 +656,46 @@
 
         <main class="right_col" role="main">
           <div class="mp-page">
+
+            <!-- 헤더: 제목 + 드롭다운 (왼쪽 패널 끝 기준 정렬) -->
             <div class="mp-panel-header">
-              <div class="mp-title-wrap">
-                <div class="mp-title">My <span>People</span></div>
-                <span class="mp-count" id="mp-count"></span>
-              </div>
-              <div class="mp-dropdown" id="mp-dropdown">
-                <div class="mp-dropdown-btn" id="mp-dropdown-btn">
-                  <span id="mp-dropdown-label">전체</span>
-                  <i class="bi bi-chevron-down mp-dropdown-chevron"></i>
+              <div class="mp-header-left">
+                <div class="mp-title-wrap">
+                  <div class="mp-title">My <span>People</span></div>
+                  <span class="mp-count" id="mp-count"></span>
                 </div>
-                <div class="mp-dropdown-menu" id="mp-dropdown-menu">
-                  <div class="mp-dropdown-item selected" data-filter="all">전체</div>
-                  <div class="mp-dropdown-item" data-filter="close">친밀</div>
-                  <div class="mp-dropdown-item" data-filter="work">업무</div>
+                <div class="mp-dropdown" id="mp-dropdown">
+                  <div class="mp-dropdown-btn" id="mp-dropdown-btn">
+                    <span id="mp-dropdown-label">전체</span>
+                    <i class="bi bi-chevron-down mp-dropdown-chevron"></i>
+                  </div>
+                  <div class="mp-dropdown-menu" id="mp-dropdown-menu">
+                    <div class="mp-dropdown-item selected" data-filter="all">전체</div>
+                    <div class="mp-dropdown-item" data-filter="close">친밀</div>
+                    <div class="mp-dropdown-item" data-filter="work">업무</div>
+                  </div>
                 </div>
               </div>
+              <div class="mp-header-spacer"></div>
             </div>
+
+            <!-- 왼쪽+오른쪽 패널 행 -->
+            <div class="mp-content">
+            <div class="mp-left">
             <div class="mp-panel">
+              <div class="mp-graph-panel" id="mp-graph-panel">
+                <div class="mp-graph-panel-header">
+                  <div class="mp-graph-panel-title">
+                    <i class="bi bi-diagram-3"></i> Graph Viz
+                  </div>
+                  <button class="mp-graph-close" onclick="toggleGraphView()">
+                    <i class="bi bi-arrow-left"></i> 카드 보기
+                  </button>
+                </div>
+                <svg id="graph" width="100%" height="100%" style="flex:1;min-height:0;display:block;"></svg>
+                <div id="tooltip" style="position:fixed;background:#fff;color:#000;border:1px solid rgba(0,0,0,0.2);padding:10px 14px;border-radius:10px;font-size:13px;font-family:sans-serif;line-height:1.6;pointer-events:none;opacity:0;transition:opacity 0.15s;max-width:260px;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.12);"></div>
+              </div>
+
               <div class="mp-grid" id="mp-grid">
                 <div class="mp-empty"><i class="bi bi-people"></i><p>데이터를 불러오는 중...</p></div>
               </div>
@@ -637,6 +774,23 @@
                 </div>
               </div>
             </div>
+            </div><!-- /mp-left -->
+
+            <!-- 오른쪽: 전체 키워드 패널 (2) -->
+            <div class="mp-right">
+              <!-- 그래프 썸네일 (미니 그래프 + 클릭 오버레이) -->
+              <div class="mp-right-title">지식그래프</div>
+              <div class="mp-right-card mp-graph-mini-card" onclick="toggleGraphView()">
+                <svg id="mp-graph-mini" style="width:100%;height:100%;display:block;"></svg>
+              </div>
+              <div class="mp-right-title" style="margin-top:10px;">전체 키워드</div>
+              <div class="mp-right-card">
+                <div id="mp-global-wc"><span style="color:#7ab8a4;font-size:0.82rem;">로딩 중...</span></div>
+              </div>
+            </div>
+
+            </div><!-- /mp-content -->
+
           </div>
 
           <!-- ════ 하단 타임라인 슬라이더 ════ -->
@@ -666,30 +820,47 @@
         const p = new URLSearchParams(window.location.search);
         const n = p.get('name') ? decodeURIComponent(p.get('name')) : (sessionStorage.getItem('gw_user_name') || '-');
         if (p.get('name')) sessionStorage.setItem('gw_user_name', n);
-        if (p.get('gmail_id')) sessionStorage.setItem('gw_gmail_id', decodeURIComponent(p.get('gmail_id')));
+        if (p.get('gmail_id')) localStorage.setItem('gw_gmail_id', decodeURIComponent(p.get('gmail_id')));
         const el = document.getElementById('google-profile-name');
         if (el) el.textContent = n;
       })();
 
+      /* ── 같은 name을 가진 브랜드 엔트리 통합 (친밀도 높은 대표 1개만 유지) ── */
+      function groupByEntityName(list) {
+        const seen = new Map();
+        list.forEach(p => {
+          const key = (p.email || '').toLowerCase().trim();
+          if (!key) return;
+          if (!seen.has(key)) seen.set(key, p);
+        });
+        return [...seen.values()];
+      }
+
       /* ── 이름 길이별 폰트 크기 ── */
       function nameFontSize(name) {
         const len = (name || '').length;
-        if (len <= 4)  return '1.48rem';
-        if (len <= 6)  return '1.48rem';
-        if (len <= 9)  return '1.48rem';
-        if (len <= 15) return '1.1rem';
-        return '1.0rem';
+        if (len <= 4)  return 'clamp(0.9rem, 1.7vw, 1.7rem)';
+        if (len <= 6)  return 'clamp(0.82rem, 1.4vw, 1.4rem)';
+        if (len <= 9)  return 'clamp(0.72rem, 1.2vw, 1.2rem)';
+        if (len <= 15) return 'clamp(0.6rem,  1.0vw, 1.0rem)';
+        return             'clamp(0.5rem,  0.82vw, 0.88rem)';
       }
 
       /* ── 이메일에서 표시 이름 추론 ── */
       function resolveDisplayName(p) {
-        if (p.name && p.name.trim()) return p.name.trim();
-        if (!p.email) return '(알 수 없음)';
+        if (!p.email) return (p.name && p.name.trim()) ? p.name.trim() : '(알 수 없음)';
         const [local, domain] = p.email.split('@');
-        const GENERIC = ['noreply','no-reply','no.reply','donotreply','info','support','admin','hello','contact','mail','newsletter','notifications','notification','update','updates','service','team','automated'];
+        const GENERIC = ['noreply','no-reply','no.reply','donotreply','info','support','admin',
+          'hello','contact','mail','newsletter','newsletters','notifications','notification',
+          'update','updates','service','team','automated','mailer','postmaster','alert','alerts'];
+        // 발신 전용 계정은 이름 필드 무시 → 도메인 브랜드명 사용
         if (GENERIC.includes((local || '').toLowerCase())) {
-          return (domain || '').split('.')[0];
+          const parts = (domain || '').split('.');
+          // mail.instagram.com → instagram, accounts.google.com → google
+          return parts.length >= 3 ? parts[parts.length - 2] : parts[0];
         }
+        // 일반 계정: 이름 있으면 이름, 없으면 @ 앞부분
+        if (p.name && p.name.trim()) return p.name.trim();
         return local || '(알 수 없음)';
       }
 
@@ -738,38 +909,88 @@
         return m === 1 ? `${d.getFullYear()}` : `${d.getFullYear()}.${String(m).padStart(2,'0')}`;
       }
 
-      /* ── 더미 데이터 (날짜 포함) ── */
-      const MOCK_PEOPLE = [
-        {name:'김예은',  email:'yeeun@example.com',  first:'2022-11-03', last:'2025-12-10'},
-        {name:'이준혁',  email:'junhyuk@example.com', first:'2023-02-14', last:'2025-11-22'},
-        {name:'박소연',  email:'soyeon@example.com',  first:'2023-05-01', last:'2025-10-05'},
-        {name:'최민준',  email:'minjun@example.com',  first:'2022-11-20', last:'2024-08-30'},
-        {name:'정하은',  email:'haeun@example.com',   first:'2024-01-08', last:'2025-12-28'},
-        {name:'강지우',  email:'jiwoo@example.com',   first:'2023-07-15', last:'2025-09-14'},
-        {name:'윤서현',  email:'seohyun@example.com', first:'2022-12-01', last:'2024-06-20'},
-        {name:'임채원',  email:'chaewon@example.com', first:'2023-03-22', last:'2025-07-31'},
-        {name:'한도윤',  email:'doyun@example.com',   first:'2024-04-10', last:'2025-12-28'},
-        {name:'오지훈',  email:'jihun@example.com',   first:'2023-09-05', last:'2025-05-18'},
-        {name:'신아름',  email:'areum@example.com',   first:'2022-11-15', last:'2023-12-31'},
-        {name:'배수진',  email:'sujin@example.com',   first:'2024-02-28', last:'2025-11-01'},
-        {name:'조민서',  email:'minseo@example.com',  first:'2023-06-10', last:'2025-08-22'},
-        {name:'권태양',  email:'taeyang@example.com', first:'2022-11-03', last:'2025-04-30'},
-        {name:'문지은',  email:'jieun@example.com',   first:'2024-05-12', last:'2025-12-28'},
-        {name:'류현우',  email:'hyunwoo@example.com', first:'2023-01-19', last:'2024-11-15'},
-        {name:'장나래',  email:'narae@example.com',   first:'2023-08-01', last:'2025-10-20'},
-        {name:'노성민',  email:'sungmin@example.com', first:'2022-11-10', last:'2025-06-30'},
-      ];
 
       /* ── 전역 상태 ── */
       let allPeople = [];
       let globalFirst = 0, globalLast = 0; // ms
       let selMin = 0, selMax = 0;          // ms (현재 선택 구간)
       let activeFilter = 'all';
+      let periodStats = {};       // email → {sent, received}
+      let periodStatsLoaded = false;
+      let statsDebounceTimer = null;
+      let contactPhotos = {};     // email → photo URL
+
+      async function fetchPeriodStats() {
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        if (!gmailId) return;
+        const post = body => ({
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(body)
+        });
+        const body = {
+          gmail_id: gmailId,
+          start_date: msToDateStr(selMin),
+          end_date: msToDateStr(selMax)
+        };
+        try {
+          const [sRes, rRes] = await Promise.all([
+            fetch('/mail-person-sent-stats',     post(body)),
+            fetch('/mail-person-received-stats', post(body))
+          ]);
+          const newStats = {};
+          if (sRes.ok) {
+            const j = await sRes.json();
+            (j.data || j).forEach(item => {
+              const e = (item.email || '').toLowerCase();
+              newStats[e] = newStats[e] || {sent: 0, received: 0};
+              newStats[e].sent = item.sent || 0;
+            });
+          }
+          if (rRes.ok) {
+            const j = await rRes.json();
+            (j.data || j).forEach(item => {
+              const e = (item.email || '').toLowerCase();
+              newStats[e] = newStats[e] || {sent: 0, received: 0};
+              newStats[e].received = item.received || 0;
+            });
+          }
+          periodStats = newStats;
+          periodStatsLoaded = true;
+          console.log('[periodStats] loaded. keys:', Object.keys(newStats).length, newStats);
+          renderCards();
+        } catch (e) { console.error('fetchPeriodStats 오류:', e); }
+      }
+
+      function updateCardBadges() {
+        document.querySelectorAll('.mp-card').forEach(card => {
+          const ps = periodStats[(card.dataset.email || '').toLowerCase()] || {};
+          const total = (ps.sent || 0) + (ps.received || 0);
+          let badge = card.querySelector('.mp-period-badge');
+          if (total > 0) {
+            if (!badge) {
+              badge = document.createElement('div');
+              badge.className = 'mp-period-badge';
+              card.appendChild(badge);
+            }
+            badge.textContent = total + '건';
+          } else if (badge) {
+            badge.remove();
+          }
+        });
+      }
 
       /* ── 카드 렌더링 ── */
       function renderCards() {
         const grid = document.getElementById('mp-grid');
-        const list = allPeople;
+        let list = groupByEntityName(allPeople);
+        console.log('[renderCards] loaded:', periodStatsLoaded, 'before filter:', list.length, 'periodStats keys:', Object.keys(periodStats).length);
+        if (periodStatsLoaded) {
+          list = list.filter(p => {
+            const ps = periodStats[(p.email || '').toLowerCase()];
+            return ps && (ps.sent || 0) + (ps.received || 0) > 0;
+          });
+          console.log('[renderCards] after filter:', list.length);
+        }
         const countEl = document.getElementById('mp-count');
         if (countEl) countEl.textContent = list.length ? `${list.length}명` : '';
 
@@ -784,10 +1005,17 @@
           const cls = affinityClass(p.affinity);
           const clr = affinityAvatarColor(p.affinity);
           const displayName = resolveDisplayName(p);
+          const ps = periodStats[(p.email || '').toLowerCase()] || {};
+          const total = (ps.sent || 0) + (ps.received || 0);
+          const photo = contactPhotos[(p.email || '').toLowerCase()];
+          const avatarInner = photo
+            ? `<img src="${photo}" alt="${displayName}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(displayName)}'">`
+            : initials(displayName);
           return `
             <div class="mp-card ${cls}" data-idx="${i}" data-name="${p.name || ''}" data-email="${p.email || ''}" title="${p.email || ''}">
-              <div class="mp-avatar" style="color:${clr}">${initials(displayName)}</div>
+              <div class="mp-avatar" style="color:${clr}">${avatarInner}</div>
               <div class="mp-name" style="font-size:${nameFontSize(displayName)}">${displayName}</div>
+              ${total > 0 ? `<div class="mp-period-badge">${total}건</div>` : ''}
             </div>`;
         }).join('');
       }
@@ -819,6 +1047,8 @@
           document.getElementById('tl-selected-text').textContent =
             `${fmtDate(selMin)} — ${fmtDate(selMax)}`;
           renderCards();
+          clearTimeout(statsDebounceTimer);
+          statsDebounceTimer = setTimeout(fetchPeriodStats, 400);
         }
 
         inMin.addEventListener('input', () => {
@@ -868,41 +1098,52 @@
 
       /* ── 데이터 로드 ── */
       async function loadPeople() {
-        const gmailId = sessionStorage.getItem('gw_gmail_id') || '';
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
         const post = body => ({
           method: 'POST', headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({gmail_id: gmailId})
         });
 
+        let dateRange = null;
+
         try {
-          const [pRes, dRes] = await Promise.all([
+          const [pRes, dRes, phRes] = await Promise.all([
             fetch('/high_affinity_person_stats', post()),
-            fetch('/mail-date-range', post())
+            fetch('/mail-date-range', post()),
+            fetch('/contact-photos', post())
           ]);
 
           if (pRes.ok) {
             const j = await pRes.json();
             allPeople = j.data || j || [];
+          } else {
+            console.error('high_affinity_person_stats 오류:', pRes.status);
           }
 
           if (dRes.ok) {
             const j = await dRes.json();
             const d = j.data || j;
-            if (d.first_date && d.last_date) {
-              renderCards();
-              initTimeline(new Date(d.first_date).getTime(), new Date(d.last_date).getTime());
-              return;
-            }
+            if (d.first_date && d.last_date) dateRange = d;
+          } else {
+            console.error('mail-date-range 오류:', dRes.status);
           }
-        } catch (e) { console.warn('loadPeople:', e); }
 
-        if (!allPeople.length) allPeople = MOCK_PEOPLE;
+          if (phRes.ok) {
+            contactPhotos = await phRes.json();
+          }
+        } catch (e) {
+          console.error('loadPeople 네트워크 오류:', e);
+        }
+
         renderCards();
-        const allFirsts = allPeople.map(p => dateToMs(p.first)).filter(Boolean);
-        const allLasts  = allPeople.map(p => dateToMs(p.last)).filter(Boolean);
-        const firstMs = allFirsts.length ? Math.min(...allFirsts) : Date.now() - 1000*60*60*24*365*3;
-        const lastMs  = allLasts.length  ? Math.max(...allLasts)  : Date.now();
-        initTimeline(firstMs, lastMs);
+
+        if (dateRange) {
+          initTimeline(new Date(dateRange.first_date).getTime(), new Date(dateRange.last_date).getTime());
+        } else {
+          const fallbackEnd = Date.now();
+          const fallbackStart = fallbackEnd - 1000 * 60 * 60 * 24 * 365 * 3;
+          initTimeline(fallbackStart, fallbackEnd);
+        }
       }
 
       /* ── 드롭다운 토글 ── */
@@ -984,22 +1225,25 @@
           const mid = Math.round(maxVal / 2);
           yEl.innerHTML = `<span>${maxVal}</span><span>${mid}</span><span>0</span>`;
         }
-        chartArea.innerHTML = data.monthly.map(m => {
+        chartArea.innerHTML = data.monthly.map((m, i) => {
           const sh = Math.max(2, Math.round((m.sent / maxVal) * CHART_H));
           const rh = Math.max(2, Math.round((m.received / maxVal) * CHART_H));
-          const monthShort = m.month.replace(/^\d{4}-/, '');
+          const [year, mon] = m.month.split('-');
+          const prevYear = i > 0 ? data.monthly[i - 1].month.split('-')[0] : null;
+          const yearLabel = (i === 0 || year !== prevYear)
+            ? `<span class="mp-vchart-year">${year}</span>` : '';
           return `<div class="mp-vchart-group">
             <div class="mp-vchart-bars">
               <div class="mp-vchart-bar sent" style="height:${sh}px" title="보낸: ${m.sent}"></div>
               <div class="mp-vchart-bar recv" style="height:${rh}px" title="받은: ${m.received}"></div>
             </div>
-            <span class="mp-vchart-month">${monthShort}</span>
+            <div class="mp-vchart-label">${yearLabel}<span class="mp-vchart-month">${mon}</span></div>
           </div>`;
         }).join('');
       }
 
-      function renderWordCloud(keywords) {
-        const wrap = document.getElementById('mp-detail-wc');
+      function renderWordCloud(keywords, targetId) {
+        const wrap = document.getElementById(targetId || 'mp-detail-wc');
         if (!keywords || !keywords.length) {
           wrap.innerHTML = '<span style="color:#b0c8be;font-size:0.82rem;font-style:italic;">키워드 없음</span>';
           return;
@@ -1021,14 +1265,20 @@
       }
 
       async function openDetail(person, rowIndex) {
-        const gmailId = sessionStorage.getItem('gw_gmail_id') || '';
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
         const detailDisplayName = resolveDisplayName(person);
         const affCls = affinityClass(person.affinity);
         const bg = AFFINITY_BG[affCls];
         const textColor = affinityAvatarColor(person.affinity);
-        document.getElementById('mp-detail-avatar').style.background = bg;
-        document.getElementById('mp-detail-avatar').style.color = textColor;
-        document.getElementById('mp-detail-avatar').textContent = initials(detailDisplayName);
+        const avatarEl = document.getElementById('mp-detail-avatar');
+        avatarEl.style.background = bg;
+        avatarEl.style.color = textColor;
+        const detailPhoto = contactPhotos[(person.email || '').toLowerCase()];
+        if (detailPhoto) {
+          avatarEl.innerHTML = `<img src="${detailPhoto}" alt="${detailDisplayName}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(detailDisplayName)}'">`;
+        } else {
+          avatarEl.textContent = initials(detailDisplayName);
+        }
         document.getElementById('mp-detail-name').textContent = detailDisplayName;
         document.getElementById('mp-detail-email').textContent = person.email || '이메일 정보 없음';
 
@@ -1057,7 +1307,7 @@
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                   gmail_id: gmailId,
-                  person_mail_id: person.email,
+                  person_gmail_id: person.email,
                   start_date: msToDateStr(selMin),
                   end_date: msToDateStr(selMax)
                 })
@@ -1066,11 +1316,25 @@
             } catch {}
             return null;
           })(),
-          loadKeywords(gmailId)
+          (async () => {
+            try {
+              const res = await fetch('/keyword-by-person-date', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                  gmail_id: gmailId,
+                  person_gmail_id: person.email,
+                  start_date: msToDateStr(selMin),
+                  end_date: msToDateStr(selMax)
+                })
+              });
+              if (res.ok) { const j = await res.json(); return j.keywords || []; }
+            } catch {}
+            return [];
+          })()
         ]);
 
         renderBarChart(statsData);
-        renderWordCloud(keywords);
+        renderWordCloud(keywords.slice(0, 10), 'mp-detail-wc');
       }
 
       document.getElementById('mp-detail-close').addEventListener('click', () => {
@@ -1081,14 +1345,107 @@
         const card = e.target.closest('.mp-card');
         if (!card) return;
         const idx = parseInt(card.dataset.idx);
-        const person = allPeople.find(p =>
-          (card.dataset.email && p.email === card.dataset.email) ||
-          (card.dataset.name && p.name === card.dataset.name)
-        );
+        const person = allPeople.find(p => p.email === card.dataset.email);
         if (person) openDetail(person, Math.floor(idx / 7));
       });
 
-      loadPeople();
+      /* ── 그래프 D3 로드 + 렌더링 ── */
+      let _graphData = null;
+      let _graphD3Ready = false;
+      let _graphFullRendered = false;
+
+      function _loadGraphScripts() {
+        return new Promise((resolve, reject) => {
+          if (_graphD3Ready) { resolve(); return; }
+          const d3s = document.createElement('script');
+          d3s.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js';
+          d3s.onload = () => {
+            const rgs = document.createElement('script');
+            rgs.src = '/graph-render.js';
+            rgs.onload = () => { _graphD3Ready = true; resolve(); };
+            rgs.onerror = reject;
+            document.head.appendChild(rgs);
+          };
+          d3s.onerror = reject;
+          document.head.appendChild(d3s);
+        });
+      }
+
+      async function _ensureGraphData() {
+        if (_graphData) return _graphData;
+        await _loadGraphScripts();
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        const res = await fetch('/graph-data?gmail_id=' + encodeURIComponent(gmailId));
+        _graphData = await res.json();
+        return _graphData;
+      }
+
+      function _renderMiniGraph(svgEl, data) {
+        if (!data || !data.nodes || !data.nodes.length || !window.d3) return;
+        const rect = svgEl.getBoundingClientRect();
+        const w = rect.width || 160;
+        const h = rect.height || 110;
+        if (w < 10 || h < 10) return;
+        /* graph-render.js와 동일하게 label을 노드 식별자로 사용 */
+        const nodes = data.nodes.slice(0, 80).map(n => ({ label: n.label, type: n.type }));
+        const labelSet = new Set(nodes.map(n => n.label));
+        const links = (data.edges || [])
+          .filter(e => labelSet.has(e.source) && labelSet.has(e.target))
+          .slice(0, 120)
+          .map(e => ({ source: e.source, target: e.target }));
+        const C = { EMAIL:'#f87171', PERSON:'#ffa255', TOPIC:'#eef616', ORGANIZATION:'#34d399', LABEL:'#60a5fa', EVENT:'#a78bfa' };
+        const sim = d3.forceSimulation(nodes)
+          .force('link', d3.forceLink(links).id(d => d.label).distance(10).strength(0.5))
+          .force('charge', d3.forceManyBody().strength(-20))
+          .force('center', d3.forceCenter(w / 2, h / 2))
+          .stop();
+        for (let i = 0; i < 300; i++) sim.tick();
+        const svg = d3.select(svgEl);
+        svg.selectAll('*').remove();
+        svg.append('g').selectAll('line').data(links).join('line')
+          .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+          .attr('x2', d => d.target.x).attr('y2', d => d.target.y)
+          .attr('stroke', 'rgba(38,130,100,0.2)').attr('stroke-width', 0.8);
+        svg.append('g').selectAll('circle').data(nodes).join('circle')
+          .attr('cx', d => Math.max(3, Math.min(w - 3, d.x)))
+          .attr('cy', d => Math.max(3, Math.min(h - 3, d.y)))
+          .attr('r', 2.5)
+          .attr('fill', d => C[d.type] || '#c9d1d9');
+      }
+
+      async function _initMiniGraph() {
+        try {
+          const data = await _ensureGraphData();
+          const mini = document.getElementById('mp-graph-mini');
+          if (mini) _renderMiniGraph(mini, data);
+        } catch (e) { /* silent */ }
+      }
+
+      async function toggleGraphView() {
+        const panel = document.getElementById('mp-graph-panel');
+        const isOpen = panel.classList.contains('open');
+        if (!isOpen) {
+          panel.classList.add('open');
+          if (!_graphFullRendered) {
+            try {
+              const data = await _ensureGraphData();
+              await new Promise(r => requestAnimationFrame(r));
+              renderGraph(document.getElementById('graph'), data);
+              _graphFullRendered = true;
+            } catch (e) { console.error('그래프 렌더 실패:', e); }
+          }
+        } else {
+          panel.classList.remove('open');
+        }
+      }
+
+      loadPeople().then(() => fetchPeriodStats());
+      (async () => {
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        const kws = await loadKeywords(gmailId);
+        renderWordCloud(kws, 'mp-global-wc');
+      })();
+      setTimeout(_initMiniGraph, 2500);
     </script>
   </body>
 </html>

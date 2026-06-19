@@ -3,6 +3,7 @@
 import json
 import math
 import os
+import re
 from datetime import date
 from config.db import get_db_connection
 from util.database.db_writer import get_latest_user_record
@@ -330,6 +331,49 @@ def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
     finally:
         cursor.close()
         conn.close()
+
+def get_date_range_person_stats(gmail_id, start_date, end_date, sort_by):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        cursor.execute("SELECT MAX(update_date) AS ud FROM user WHERE user_account_id = %s", (gmail_id,))
+        update_date = cursor.fetchone()["ud"]
+
+        direction_filter = "sent" if sort_by == "sent" else "received"
+        sql = """
+        SELECT sender, receiver, direction
+        FROM mail
+        WHERE user_account_id = %s
+          AND update_date = %s
+          AND mail_date BETWEEN %s AND %s
+          AND direction = %s
+        """
+        cursor.execute(sql, (gmail_id, update_date, start_date, end_date, direction_filter))
+        rows = cursor.fetchall()
+
+        email_pattern = re.compile(r'[\w.+\-]+@[\w.\-]+')
+        counts = {}
+
+        for row in rows:
+            field = row["receiver"] if sort_by == "sent" else row["sender"]
+            for email in email_pattern.findall(field or ""):
+                email = email.lower()
+                if email == gmail_id.lower():
+                    continue
+                counts[email] = counts.get(email, 0) + 1
+
+        result = [
+            {"email": email, sort_by: count}
+            for email, count in counts.items()
+        ]
+        result.sort(key=lambda x: x[sort_by], reverse=True)
+        return result
+
+    finally:
+        cursor.close()
+        conn.close()
+
 
 def get_mail_date_range(gmail_id):
     conn = get_db_connection()

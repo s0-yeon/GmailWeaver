@@ -53,14 +53,20 @@
       return Math.min(6, 1 + weight * 0.2);
     }
 
-    // degree 기준으로 노드 반지름 계산
-    const _rScale = d3.scaleSqrt().domain([0, 30]).range([20, 55]).clamp(true);
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    /* 1440px 기준으로 노드/링크 크기 비례 스케일 */
+    const viewScale = Math.max(0.5, Math.min(2.0, w / 1440));
+
+    // degree 기준으로 노드 반지름 계산 (뷰포트 비례)
+    const _rScale = d3.scaleSqrt()
+      .domain([0, 30])
+      .range([20 * viewScale, 55 * viewScale])
+      .clamp(true);
     function nodeRadius(d) {
       return _rScale(d.degree ?? 1);
     }
-
-    const w = window.innerWidth;
-    const h = window.innerHeight;
 
     const svg = d3.select("#graph"); // svg 요소
     const g = svg.append("g"); // 그래프 담을 태그
@@ -80,9 +86,9 @@
         d3
           .forceLink(data.edges)
           .id((d) => d.label) // 엣지의 source와 target가 label 기준으로 연결
-          .distance(140),
+          .distance(140 * viewScale),
       )
-      .force("charge", d3.forceManyBody().strength(-800)) // 노드들 간의 밀어내는 힘
+      .force("charge", d3.forceManyBody().strength(-800 * viewScale)) // 노드들 간의 밀어내는 힘
       .force("collide", d3.forceCollide(d => nodeRadius(d) + 8)); // 노드들 겹치지 않도록 함
 
     // 엣지 그리기
