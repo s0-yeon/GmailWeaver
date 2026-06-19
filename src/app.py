@@ -34,7 +34,7 @@ from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
 from util.user_path import UserPaths
-from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats, get_keywords_by_person_date, get_mail_date_range, get_mail_exchange_stats
+from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats, get_keywords_by_person_date, get_mail_date_range, get_mail_exchange_stats, calculate_eis
 
 from util.database.db_writer import (
     save_query_to_db,
@@ -62,7 +62,7 @@ init_processed_attachments_table()
 init_keyword_mail_table()
 
 # Apps Script Web App URL
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwAk_JabdKuGUHIVcaKeEnY1DUiYb0uqkiu-KdUG67Zf1U3D8k-F06RGS5043k_fZS8MQ/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwWeBQk6lHnVfwkSLWFb7671u8CpQgKSIBXbHDorT4M82sZbWKCfZ3SUbospU3b1trKMw/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
@@ -1811,6 +1811,36 @@ def send_mail_exchange_stats():
         return jsonify({"error": "start_date and end_date are required"}), 400
 
     return jsonify({"data": get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date)})
+
+@app.route("/intimacy", methods=["POST"])
+def send_intimacy():
+    data = request.json or {}
+    gmail_id        = data.get("gmail_id", "").strip()
+    person_gmail_id = data.get("person_gmail_id", "").strip()
+    start_date      = data.get("start_date", "").strip()
+    end_date        = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not person_gmail_id:
+        return jsonify({"error": "person_gmail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    result = calculate_eis(
+        user_account_id=gmail_id,
+        person_account_id=person_gmail_id,
+        start_date=start_date,
+        end_date=end_date,
+        apply_time_decay=False,
+    )
+    return jsonify({
+        "gmail_id":        gmail_id,
+        "person_gmail_id": person_gmail_id,
+        "start_date":      start_date,
+        "end_date":        end_date,
+        "data":            result,
+    })
 
 @app.route("/mail-summaries", methods=["POST"])
 def send_mail_summaries():
