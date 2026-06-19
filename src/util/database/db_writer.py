@@ -457,7 +457,7 @@ def save_label_to_db(paths, update_date=None):
 
 
 def save_mail_to_db(paths, update_date=None):
-    import pandas as pd, re, os
+    import pandas as pd, re, os, datetime
 
     if update_date is None:
         latest_user = get_latest_user_record(paths.GMAIL_ID)
@@ -472,44 +472,142 @@ def save_mail_to_db(paths, update_date=None):
     text_units_path = paths.RELATIONSHIPS_PATH.replace("relationships.parquet", "text_units.parquet")
     df = pd.read_parquet(text_units_path)
 
+    # entities.parquet에서 mail_id -> parquet_tone 매핑 빌드
+    tone_map = {}
+    if os.path.exists(paths.ENTITIES_PATH):
+        entities_df = pd.read_parquet(paths.ENTITIES_PATH)
+        type_col = 'type' if 'type' in entities_df.columns else 'entity_type'
+        for _, row in entities_df[entities_df[type_col].str.upper() == 'EMAIL'].iterrows():
+            tone_m = re.search(r'Tone:\s*(\w+)', str(row.get('description', '')))
+            if tone_m:
+                val = tone_m.group(1).lower()
+                if val in {'formal', 'casual', 'transactional', 'notification', 'alert'}:
+                    tone_map[str(row['title']).upper()] = val
+
+    def _extract_sender_email(raw):
+        m = re.search(r'<([^>]+)>', raw)
+        return m.group(1).lower() if m else raw.strip().lower()
+
+    def _parse_korean_datetime(text):
+        m = re.search(r'(\d{4})년 (\d{1,2})월 (\d{1,2})일[^(]*\([^)]+\)\s*(오전|오후)\s*(\d{1,2}):(\d{2})', text)
+        if not m:
+            return None
+        year, month, day, ampm, hour, minute = m.groups()
+        hour = int(hour)
+        if ampm == '오후' and hour != 12:
+            hour += 12
+        elif ampm == '오전' and hour == 12:
+            hour = 0
+        return f"{year}-{int(month):02d}-{int(day):02d} {hour:02d}:{minute}"
+
+    from util.extract_statics import _is_friendly_tone_with_llm
+
+    # 1pass: 전체 메일 파싱 + 발신자/날짜 기준 lookup 딕셔너리 빌드
+    mail_data = []
+    mail_lookup = {}  # (sender_email, 'YYYY-MM-DD HH:MM') -> (mail_id, mail_date)
+    seen_ids = set()
+
+    for _, row in df.iterrows():
+        text = str(row.get('text', ''))
+
+        id_match = re.search(r'^ID:\s*(.+)$', text, re.MULTILINE)
+        mail_id = id_match.group(1).strip() if id_match else None
+        if not mail_id or mail_id in seen_ids:
+            continue
+        seen_ids.add(mail_id)
+
+        date_match = re.search(r'^날짜:\s*(.+)$', text, re.MULTILINE)
+        mail_date = date_match.group(1).strip() if date_match else None
+
+        label_match = re.search(r'\[라벨 정보\]\s*\n(.+)', text)
+        label_raw = label_match.group(1).strip() if label_match else None
+        label_name = None if (not label_raw or label_raw == '없음') else label_raw
+
+        sender_match = re.search(r'^발신인:\s*(.+)$', text, re.MULTILINE)
+        sender = sender_match.group(1).strip() if sender_match else None
+
+        receiver_match = re.search(r'^수신인:\s*(.+)$', text, re.MULTILINE)
+        receiver = receiver_match.group(1).strip() if receiver_match else None
+
+        direction_match = re.search(r'^구분:\s*(.+)$', text, re.MULTILINE)
+        direction_raw = direction_match.group(1).strip() if direction_match else None
+        direction = 'sent' if direction_raw == '발신' else ('received' if direction_raw == '수신' else None)
+
+        subject_match = re.search(r'^제목:\s*(.+)$', text, re.MULTILINE)
+        subject = subject_match.group(1).strip() if subject_match else ''
+
+        body_match = re.search(r'\[메일 본문\]\s*\n(.*?)(?:\n=+|\Z)', text, re.DOTALL)
+        body = body_match.group(1).strip() if body_match else ''
+
+        is_reply = bool(re.match(r'Re:\s*', subject, re.IGNORECASE))
+        parquet_tone = tone_map.get(mail_id.upper())
+        llm_tone = 'friendly' if _is_friendly_tone_with_llm(body) else 'not_friendly'
+
+        if sender and mail_date:
+            key = (_extract_sender_email(sender), mail_date[:16])
+            mail_lookup[key] = (mail_id, mail_date)
+
+        mail_data.append({
+            'mail_id': mail_id,
+            'label_name': label_name,
+            'mail_date': mail_date,
+            'sender': sender,
+            'receiver': receiver,
+            'direction': direction,
+            'is_reply': is_reply,
+            'parquet_tone': parquet_tone,
+            'llm_tone': llm_tone,
+            'body': body,
+        })
+
+    # 2pass: 답장 메일의 reply_to_mail_id, reply_elapsed_hours 계산 후 DB INSERT
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
         insert_sql = """
-            INSERT INTO mail (mail_id, user_account_id, update_date, label_name, mail_date, sender, receiver, direction)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-            ON DUPLICATE KEY UPDATE label_name = VALUES(label_name), mail_date = VALUES(mail_date),
-                sender = VALUES(sender), receiver = VALUES(receiver), direction = VALUES(direction)
+            INSERT INTO mail (
+                mail_id, user_account_id, update_date, label_name, mail_date,
+                sender, receiver, direction, parquet_tone, llm_tone,
+                is_reply, reply_to_mail_id, reply_elapsed_hours
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+                label_name = VALUES(label_name), mail_date = VALUES(mail_date),
+                sender = VALUES(sender), receiver = VALUES(receiver), direction = VALUES(direction),
+                parquet_tone = VALUES(parquet_tone), llm_tone = VALUES(llm_tone),
+                is_reply = VALUES(is_reply),
+                reply_to_mail_id = VALUES(reply_to_mail_id), reply_elapsed_hours = VALUES(reply_elapsed_hours)
         """
         count = 0
-        seen_ids = set()
-        for _, row in df.iterrows():
-            text = str(row.get('text', ''))
+        for mail in mail_data:
+            reply_to_mail_id = None
+            reply_elapsed_hours = None
 
-            id_match = re.search(r'^ID:\s*(.+)$', text, re.MULTILINE)
-            mail_id = id_match.group(1).strip() if id_match else None
-            if not mail_id or mail_id in seen_ids:
-                continue
-            seen_ids.add(mail_id)
+            if mail['is_reply'] and mail['body']:
+                quoted_m = re.search(
+                    r'(\d{4}년 \d{1,2}월 \d{1,2}일[^,]+),\s*(.+?)님이 작성:',
+                    mail['body']
+                )
+                if quoted_m:
+                    orig_dt_str = _parse_korean_datetime(quoted_m.group(1))
+                    orig_sender_email = _extract_sender_email(quoted_m.group(2).strip())
 
-            date_match = re.search(r'^날짜:\s*(.+)$', text, re.MULTILINE)
-            mail_date = date_match.group(1).strip() if date_match else None
+                    if orig_dt_str:
+                        match = mail_lookup.get((orig_sender_email, orig_dt_str))
+                        if match:
+                            reply_to_mail_id = match[0]
+                            try:
+                                orig_dt = datetime.datetime.strptime(match[1][:16], '%Y-%m-%d %H:%M')
+                                reply_dt = datetime.datetime.strptime(mail['mail_date'][:16], '%Y-%m-%d %H:%M')
+                                reply_elapsed_hours = round((reply_dt - orig_dt).total_seconds() / 3600, 2)
+                            except Exception:
+                                pass
 
-            label_match = re.search(r'\[라벨 정보\]\s*\n(.+)', text)
-            label_raw = label_match.group(1).strip() if label_match else None
-            label_name = None if (not label_raw or label_raw == '없음') else label_raw
-
-            sender_match = re.search(r'^발신인:\s*(.+)$', text, re.MULTILINE)
-            sender = sender_match.group(1).strip() if sender_match else None
-
-            receiver_match = re.search(r'^수신인:\s*(.+)$', text, re.MULTILINE)
-            receiver = receiver_match.group(1).strip() if receiver_match else None
-
-            direction_match = re.search(r'^구분:\s*(.+)$', text, re.MULTILINE)
-            direction_raw = direction_match.group(1).strip() if direction_match else None
-            direction = 'sent' if direction_raw == '발신' else ('received' if direction_raw == '수신' else None)
-
-            cursor.execute(insert_sql, (mail_id, user_account_id, update_date, label_name, mail_date, sender, receiver, direction))
+            cursor.execute(insert_sql, (
+                mail['mail_id'], user_account_id, update_date, mail['label_name'],
+                mail['mail_date'], mail['sender'], mail['receiver'], mail['direction'],
+                mail['parquet_tone'], mail['llm_tone'], mail['is_reply'], reply_to_mail_id, reply_elapsed_hours
+            ))
             count += 1
 
         conn.commit()
