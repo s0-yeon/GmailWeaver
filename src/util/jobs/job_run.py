@@ -358,10 +358,14 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None, added_c
                 index_time=formatted_time,
                 my_mail_count=added_count
             )
-        save_person_stats_to_db(paths,target_update_date)
-        save_label_to_db(paths, target_update_date)
-        save_mail_to_db(paths, target_update_date)
-        save_keyword_stats_to_db(paths,target_update_date)
+        db_threads = [
+            threading.Thread(target=save_person_stats_to_db, args=(paths, target_update_date)),
+            threading.Thread(target=save_label_to_db, args=(paths, target_update_date)),
+            threading.Thread(target=save_mail_to_db, args=(paths, target_update_date)),
+            threading.Thread(target=save_keyword_stats_to_db, args=(paths, target_update_date)),
+        ]
+        for t in db_threads: t.start()
+        for t in db_threads: t.join()
         generate_mail_summaries(paths)
 
 
@@ -395,9 +399,13 @@ def run_graph_update_pipeline(job_id, paths, env):
         build_graph_json(job_id,paths, env)
 
         _extract_statics_pipeline(paths, mode='append')
-        save_person_stats_to_db(paths)
-        save_mail_to_db(paths)
-        save_keyword_stats_to_db(paths)
+        db_threads = [
+            threading.Thread(target=save_person_stats_to_db, args=(paths,)),
+            threading.Thread(target=save_mail_to_db, args=(paths,)),
+            threading.Thread(target=save_keyword_stats_to_db, args=(paths,)),
+        ]
+        for t in db_threads: t.start()
+        for t in db_threads: t.join()
 
 
         update_job(job_id, progress=100, status="done", message="업데이트 완료")
