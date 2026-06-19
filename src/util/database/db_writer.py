@@ -679,6 +679,7 @@ def save_mail_to_db(paths, update_date=None):
                             except Exception:
                                 pass
 
+            print(f"[DEBUG] receiver (len={len(mail['receiver'] or '')}) = {mail['receiver']}")
             cursor.execute(insert_sql, (
                 mail['mail_id'], user_account_id, update_date, mail['label_name'],
                 mail['mail_date'], mail['sender'], mail['receiver'], mail['direction'],

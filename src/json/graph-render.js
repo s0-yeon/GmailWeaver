@@ -53,8 +53,9 @@
       return Math.min(6, 1 + weight * 0.2);
     }
 
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    const svgRect = svgEl.getBoundingClientRect();
+    const w = svgRect.width  || window.innerWidth;
+    const h = svgRect.height || window.innerHeight;
 
     /* 1440px 기준으로 노드/링크 크기 비례 스케일 */
     const viewScale = Math.max(0.5, Math.min(2.0, w / 1440));
@@ -71,12 +72,10 @@
     const svg = d3.select("#graph"); // svg 요소
     const g = svg.append("g"); // 그래프 담을 태그
 
-    const zoom = d3.zoom().on("zoom", (e) => g.attr("transform", e.transform));
-    svg.call(zoom); // svg에 줌 이벤트 등록
-    svg.call(
-      zoom.transform,
-      d3.zoomIdentity.translate(w / 2, h / 2).scale(0.5),
-    ); // 초기 줌 레벨 = 0.5 (그래프 전체가 보이도록)
+    const zoom = d3.zoom()
+      .scaleExtent([0.05, 4])
+      .on("zoom", (e) => g.attr("transform", e.transform));
+    svg.call(zoom);
 
     // 노드들 간의 힘 설정 (움직임)
     const simulation = d3
@@ -85,11 +84,12 @@
         "link",
         d3
           .forceLink(data.edges)
-          .id((d) => d.label) // 엣지의 source와 target가 label 기준으로 연결
+          .id((d) => d.label)
           .distance(140 * viewScale),
       )
-      .force("charge", d3.forceManyBody().strength(-800 * viewScale)) // 노드들 간의 밀어내는 힘
-      .force("collide", d3.forceCollide(d => nodeRadius(d) + 8)); // 노드들 겹치지 않도록 함
+      .force("charge", d3.forceManyBody().strength(-800 * viewScale))
+      .force("collide", d3.forceCollide(d => nodeRadius(d) + 8))
+      .force("center", d3.forceCenter(0, 0));
 
     // 엣지 그리기
     const link = g
@@ -215,17 +215,56 @@
       .attr("fill", "#333") // 글자 색상
       .style("pointer-events", "none");
 
+    let _fitted = false;
+
+    function fitToView() {
+      const nodes = data.nodes;
+      if (!nodes.length) return;
+      const pad = 60;
+      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      nodes.forEach(d => {
+        const r = nodeRadius(d);
+        x0 = Math.min(x0, d.x - r);
+        y0 = Math.min(y0, d.y - r);
+        x1 = Math.max(x1, d.x + r);
+        y1 = Math.max(y1, d.y + r);
+      });
+      const bw = x1 - x0, bh = y1 - y0;
+      if (bw <= 0 || bh <= 0) return;
+      const scale = Math.min(0.9, (w - pad * 2) / bw, (h - pad * 2) / bh);
+      const tx = w / 2 - scale * ((x0 + x1) / 2);
+      const ty = h / 2 - scale * ((y0 + y1) / 2);
+      svg.call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+    }
+
     // 시뮬레이션 틱마다 노드와 엣지 위치 업데이트
     simulation.on("tick", () => {
-      // 엣지 양 끝점 위치 업데이트
       link
-        .attr("x1", (d) => d.source.x) // 처음 노드 x좌표
-        .attr("y1", (d) => d.source.y) // 처음 노드 y좌표
-        .attr("x2", (d) => d.target.x) // 나중 노드 x좌표
-        .attr("y2", (d) => d.target.y); // 나중 노드 y좌표
-      // 노드위치 업데이트
+        .attr("x1", (d) => d.source.x)
+        .attr("y1", (d) => d.source.y)
+        .attr("x2", (d) => d.target.x)
+        .attr("y2", (d) => d.target.y);
       node.attr("transform", (d) => `translate(${d.x},${d.y})`);
     });
+
+    simulation.on("end", () => {
+      if (!_fitted) { _fitted = true; fitToView(); }
+    });
+
+    // 시뮬레이션이 오래 걸릴 경우 300틱 후에도 fit 시도
+    let _tickCount = 0;
+    const _origTick = simulation.on("tick");
+    simulation.on("tick.fit", () => {
+      if (!_fitted && ++_tickCount >= 300) {
+        _fitted = true;
+        fitToView();
+        simulation.on("tick.fit", null);
+      }
+    });
+
+    // 전체 보기 버튼 연결
+    const fitBtn = document.getElementById('mp-graph-fit-btn');
+    if (fitBtn) fitBtn.onclick = fitToView;
   }
 
   global.renderGraph = renderGraph;
