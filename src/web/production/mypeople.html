@@ -254,6 +254,8 @@
         letter-spacing: 0.01em; line-height: 1.6;
         pointer-events: none;
       }
+      .mp-period-badge.sent  { color: #1a6e4a; background: rgba(38,185,154,0.18); }
+      .mp-period-badge.recv  { color: #1d4ed8; background: rgba(90,148,232,0.18); }
       .mp-empty {
         grid-column: 1 / -1; text-align: center;
         padding: 50px 0; color: #a0b8b0;
@@ -320,13 +322,13 @@
 
       /* 닫기 버튼 */
       .mp-detail-close {
-        position: absolute; top: 18px; right: 20px; z-index: 20;
-        width: 36px; height: 36px; border-radius: 50%;
+        position: absolute; top: clamp(10px, 1.2vw, 18px); right: clamp(12px, 1.4vw, 20px); z-index: 20;
+        width: clamp(28px, 2.4vw, 36px); height: clamp(28px, 2.4vw, 36px); border-radius: 50%;
         border: 1.5px solid #ddeae4;
         background: #f4f8f6;
         cursor: pointer;
         display: flex; align-items: center; justify-content: center;
-        color: #7aaa96; font-size: 1rem;
+        color: #7aaa96; font-size: clamp(0.78rem, 0.9vw, 1rem);
         transition: background 0.15s, color 0.15s, border-color 0.15s;
       }
       .mp-detail-close:hover { background: #e0f0eb; color: #0f3d2e; border-color: #26B99A; }
@@ -346,38 +348,113 @@
         box-shadow: 0 8px 32px rgba(0,0,0,0.12);
       }
       .mp-detail-name {
-        font-size: 1.9rem; font-weight: 800; color: #0f3d2e;
-        margin: 0 0 8px; line-height: 1.2;
+        font-size: clamp(1rem, 2vw, 1.9rem); font-weight: 800; color: #0f3d2e;
+        margin: 0 0 clamp(4px, 0.5vw, 8px); line-height: 1.2;
       }
-      .mp-detail-email { font-size: 0.88rem; color: #7a9a88; margin: 0; }
+      .mp-detail-email { font-size: clamp(0.7rem, 0.9vw, 0.88rem); color: #7a9a88; margin: 0; }
 
-      /* 본문 3열 */
+      /* 탭 미니 버튼 그룹 (헤더 하단 경계선 바로 위 오른쪽) */
+      .mp-detail-tab-group {
+        position: absolute;
+        bottom: 10px; right: clamp(12px, 1.4vw, 20px);
+        z-index: 25;
+        display: flex; gap: 5px;
+      }
+      .mp-detail-tab-btn {
+        padding: 6px 20px;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.85rem; font-weight: 700;
+        color: #fff; letter-spacing: 0.03em;
+        transition: opacity 0.15s, transform 0.15s;
+        white-space: nowrap;
+        background: #5a94e8;
+      }
+      #mp-tab-stats { background: #26B99A; }
+      #mp-tab-desc  { background: #5a94e8; }
+      .mp-detail-tab-btn:hover { opacity: 0.82; transform: scale(1.04); }
+      .mp-detail-tab-btn.active-stats {
+        background: #26B99A; box-shadow: 0 2px 10px rgba(38,185,154,0.45);
+      }
+      .mp-detail-tab-btn.active-desc {
+        background: #5a94e8; box-shadow: 0 2px 10px rgba(90,148,232,0.45);
+      }
+      .mp-detail-tab-btn:not(.active-stats):not(.active-desc) { opacity: 0.45; }
+
+      /* 본문 3열 — 친밀도는 내용만큼, 나머지 둘은 균등 */
       .mp-detail-body {
         flex: 1; min-height: 0; overflow: hidden;
-        display: grid; grid-template-columns: clamp(150px, 22%, 210px) 1fr 1fr;
+        display: grid; grid-template-columns: auto 1fr 1fr;
+      }
+
+      /* 설명 탭 패널 */
+      .mp-detail-desc {
+        display: none; flex: 1; min-height: 0; overflow-y: auto;
+        background: #f0f4ff;
+        padding: clamp(14px, 2vw, 28px) clamp(16px, 2.5vw, 32px);
+        flex-direction: column; gap: 16px;
+      }
+      .mp-detail-desc.show { display: flex; }
+      .mp-desc-card {
+        background: #fff; border-radius: 14px;
+        padding: clamp(12px, 1.6vw, 20px) clamp(14px, 2vw, 24px);
+        border: 1.5px solid #d8e4ff;
+        display: flex; flex-direction: column; gap: 10px;
+      }
+      .mp-desc-card-title {
+        font-size: clamp(0.68rem, 0.82vw, 0.82rem); font-weight: 700;
+        color: #2a4bb8; letter-spacing: 0.06em; text-transform: uppercase;
+      }
+      .mp-desc-stat-row {
+        display: flex; gap: 10px;
+      }
+      .mp-desc-stat-box {
+        flex: 1; background: #f5f8ff; border-radius: 10px;
+        padding: 10px 12px; text-align: center;
+        border: 1px solid #dce7ff;
+      }
+      .mp-desc-stat-num {
+        font-size: clamp(1.1rem, 1.8vw, 1.6rem); font-weight: 800; line-height: 1;
+      }
+      .mp-desc-stat-lbl {
+        font-size: clamp(0.6rem, 0.7vw, 0.7rem); color: #7a9ab8; margin-top: 4px; font-weight: 600;
+      }
+      .mp-desc-kw-list {
+        display: flex; flex-wrap: wrap; gap: 6px 8px;
+      }
+      .mp-desc-kw {
+        display: inline-block; border-radius: 20px;
+        padding: 3px 10px; font-size: clamp(0.64rem, 0.76vw, 0.78rem); font-weight: 700;
+        background: #e8eeff; color: #3a5bcc;
+      }
+      .mp-desc-affinity-bar {
+        height: 10px; border-radius: 10px;
+        background: linear-gradient(90deg, #5a94e8, #8ab6f4);
+        transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
       }
 
       .mp-detail-col {
-        padding: 20px 18px;
+        padding: clamp(8px, 1vw, 14px) clamp(6px, 1vw, 14px);
         border-right: 1px solid #e8f0ec;
-        display: flex; flex-direction: column; gap: 12px;
+        display: flex; flex-direction: column; gap: clamp(5px, 0.6vw, 9px);
         min-width: 0;
       }
       .mp-detail-col:last-child { border-right: none; }
 
-      /* 섹션 타이틀 — 필 버튼 */
+      /* 섹션 타이틀 — 필 버튼 (글씨 길이만큼만) */
       .mp-detail-section-title {
-        display: flex; justify-content: space-between; align-items: center;
-        align-self: flex-start; width: 100%;
+        display: inline-flex; align-items: center;
+        align-self: flex-start;
         background: rgba(38,185,154,0.1);
         border: 1.5px solid rgba(38,185,154,0.28);
         border-radius: 20px;
-        padding: 5px 14px;
-        font-size: 0.84rem; font-weight: 700; color: #1a6e58;
+        padding: clamp(3px, 0.4vw, 5px) clamp(8px, 1vw, 14px);
+        font-size: clamp(0.68rem, 0.82vw, 0.84rem); font-weight: 700; color: #1a6e58;
         letter-spacing: 0.04em; box-sizing: border-box;
       }
       .mp-detail-section-sub {
-        font-size: 0.72rem; font-weight: 600;
+        font-size: clamp(0.6rem, 0.7vw, 0.72rem); font-weight: 600;
         color: #5a9a88; text-transform: none; letter-spacing: 0;
       }
 
@@ -407,7 +484,7 @@
       }
       .mp-vchart-y span { font-size: 0.58rem; color: #9ab8b0; text-align: right; line-height: 1; }
       .mp-vchart-area {
-        flex: 1; display: flex; align-items: flex-end; gap: 4px;
+        flex: 1; display: flex; align-items: flex-end; justify-content: center; gap: 4px;
         border-left: 1px solid #ddeae4;
         border-bottom: 1px solid #ddeae4;
         padding: 0 4px 0 6px;
@@ -666,13 +743,15 @@
                 </div>
                 <div class="mp-dropdown" id="mp-dropdown">
                   <div class="mp-dropdown-btn" id="mp-dropdown-btn">
-                    <span id="mp-dropdown-label">전체</span>
+                    <span id="mp-dropdown-label">친밀도</span>
                     <i class="bi bi-chevron-down mp-dropdown-chevron"></i>
                   </div>
                   <div class="mp-dropdown-menu" id="mp-dropdown-menu">
-                    <div class="mp-dropdown-item selected" data-filter="all">전체</div>
-                    <div class="mp-dropdown-item" data-filter="close">친밀</div>
-                    <div class="mp-dropdown-item" data-filter="work">업무</div>
+                    <div class="mp-dropdown-item selected" data-sort="affinity">친밀도</div>
+                    <div class="mp-dropdown-item" data-sort="name">이름</div>
+                    <div class="mp-dropdown-item" data-sort="total">송수신횟수</div>
+                    <div class="mp-dropdown-item" data-sort="received">받은 메일수</div>
+                    <div class="mp-dropdown-item" data-sort="sent">보낸 메일수</div>
                   </div>
                 </div>
               </div>
@@ -704,17 +783,58 @@
               <div class="mp-detail" id="mp-detail">
                 <button class="mp-detail-close" id="mp-detail-close"><i class="bi bi-x-lg"></i></button>
 
-                <!-- 헤더: 아바타 + 이름/메일 (고정, 스크롤 안 됨) -->
-                <div class="mp-detail-header">
+                <!-- 헤더: 아바타 + 이름/메일 + 탭 버튼 -->
+                <div class="mp-detail-header" style="position:relative;">
                   <div class="mp-detail-avatar" id="mp-detail-avatar"></div>
                   <div>
                     <h2 class="mp-detail-name" id="mp-detail-name"></h2>
                     <p class="mp-detail-email" id="mp-detail-email"></p>
                   </div>
+                  <!-- 탭 미니 버튼 (경계선 바로 위 오른쪽 끝) -->
+                  <div class="mp-detail-tab-group">
+                    <button class="mp-detail-tab-btn active-stats" id="mp-tab-stats" onclick="switchDetailTab('stats')">통계</button>
+                    <button class="mp-detail-tab-btn" id="mp-tab-desc" onclick="switchDetailTab('desc')">설명</button>
+                  </div>
+                </div>
+
+                <!-- 설명 탭 패널 -->
+                <div class="mp-detail-desc" id="mp-detail-desc">
+                  <div class="mp-desc-card" id="mp-desc-mailcard">
+                    <div class="mp-desc-card-title">메일 교환</div>
+                    <div class="mp-desc-stat-row">
+                      <div class="mp-desc-stat-box">
+                        <div class="mp-desc-stat-num" id="mp-desc-sent" style="color:#1a9e82;">—</div>
+                        <div class="mp-desc-stat-lbl">보낸 메일</div>
+                      </div>
+                      <div class="mp-desc-stat-box">
+                        <div class="mp-desc-stat-num" id="mp-desc-recv" style="color:#5a94e8;">—</div>
+                        <div class="mp-desc-stat-lbl">받은 메일</div>
+                      </div>
+                      <div class="mp-desc-stat-box">
+                        <div class="mp-desc-stat-num" id="mp-desc-total" style="color:#4a4a6a;">—</div>
+                        <div class="mp-desc-stat-lbl">총 메일수</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mp-desc-card">
+                    <div class="mp-desc-card-title">친밀도</div>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <div style="flex:1;background:#e8eeff;border-radius:10px;height:10px;overflow:hidden;">
+                        <div class="mp-desc-affinity-bar" id="mp-desc-aff-bar" style="width:0%"></div>
+                      </div>
+                      <span id="mp-desc-aff-pct" style="font-size:clamp(0.9rem,1.2vw,1.1rem);font-weight:800;color:#2a4bb8;min-width:42px;text-align:right;">—</span>
+                    </div>
+                  </div>
+                  <div class="mp-desc-card">
+                    <div class="mp-desc-card-title">주요 키워드</div>
+                    <div class="mp-desc-kw-list" id="mp-desc-kw-list">
+                      <span style="color:#a0b8c8;font-size:0.8rem;">로딩 중...</span>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- 본문: 3열 그리드 (스크롤 됨) -->
-                <div class="mp-detail-body">
+                <div class="mp-detail-body" id="mp-detail-body-stats">
 
                   <!-- 열 1: 친밀도 링 -->
                   <div class="mp-detail-col">
@@ -745,8 +865,8 @@
 
                   <!-- 열 2: 세로 막대그래프 -->
                   <div class="mp-detail-col">
-                    <div class="mp-detail-section-title">
-                      <span>이메일 교환</span>
+                    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+                      <div class="mp-detail-section-title">이메일 교환</div>
                       <span id="mp-stats-total" class="mp-detail-section-sub"></span>
                     </div>
                     <div class="mp-chart-legend">
@@ -914,11 +1034,45 @@
       let allPeople = [];
       let globalFirst = 0, globalLast = 0; // ms
       let selMin = 0, selMax = 0;          // ms (현재 선택 구간)
+      let fullMin = 0, fullMax = 0;        // ms (전체 기간, 슬라이더 무관)
       let activeFilter = 'all';
       let periodStats = {};       // email → {sent, received}
       let periodStatsLoaded = false;
       let statsDebounceTimer = null;
       let contactPhotos = {};     // email → photo URL
+      let sortMode = 'affinity';
+      let sentStatsMap = {};      // email → 보낸 메일수
+      let receivedStatsMap = {};  // email → 받은 메일수
+
+      async function fetchSentStats() {
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        try {
+          const res = await fetch('/mail-person-sent-stats', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ gmail_id: gmailId, start_date: msToDateStr(selMin), end_date: msToDateStr(selMax) })
+          });
+          if (res.ok) {
+            const j = await res.json();
+            sentStatsMap = {};
+            (j.data || []).forEach(item => { sentStatsMap[(item.email||'').toLowerCase()] = item.sent || 0; });
+          }
+        } catch(e) { console.error('fetchSentStats 오류:', e); }
+      }
+
+      async function fetchReceivedStats() {
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        try {
+          const res = await fetch('/mail-person-received-stats', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ gmail_id: gmailId, start_date: msToDateStr(selMin), end_date: msToDateStr(selMax) })
+          });
+          if (res.ok) {
+            const j = await res.json();
+            receivedStatsMap = {};
+            (j.data || []).forEach(item => { receivedStatsMap[(item.email||'').toLowerCase()] = item.received || 0; });
+          }
+        } catch(e) { console.error('fetchReceivedStats 오류:', e); }
+      }
 
       async function fetchPeriodStats() {
         const gmailId = localStorage.getItem('gw_gmail_id') || '';
@@ -989,7 +1143,21 @@
             const ps = periodStats[(p.email || '').toLowerCase()];
             return ps && (ps.sent || 0) + (ps.received || 0) > 0;
           });
-          console.log('[renderCards] after filter:', list.length);
+        }
+        // 정렬
+        if (sortMode === 'affinity') {
+          list.sort((a, b) => (b.affinity || 0) - (a.affinity || 0));
+        } else if (sortMode === 'name') {
+          list.sort((a, b) => resolveDisplayName(a).localeCompare(resolveDisplayName(b), 'ko'));
+        } else if (sortMode === 'total') {
+          list.sort((a, b) => {
+            const ea = (a.email||'').toLowerCase(), eb = (b.email||'').toLowerCase();
+            return ((sentStatsMap[eb]||0) + (receivedStatsMap[eb]||0)) - ((sentStatsMap[ea]||0) + (receivedStatsMap[ea]||0));
+          });
+        } else if (sortMode === 'sent') {
+          list.sort((a, b) => (sentStatsMap[(b.email||'').toLowerCase()] || 0) - (sentStatsMap[(a.email||'').toLowerCase()] || 0));
+        } else if (sortMode === 'received') {
+          list.sort((a, b) => (receivedStatsMap[(b.email||'').toLowerCase()] || 0) - (receivedStatsMap[(a.email||'').toLowerCase()] || 0));
         }
         const countEl = document.getElementById('mp-count');
         if (countEl) countEl.textContent = list.length ? `${list.length}명` : '';
@@ -1006,16 +1174,27 @@
           const clr = affinityAvatarColor(p.affinity);
           const displayName = resolveDisplayName(p);
           const ps = periodStats[(p.email || '').toLowerCase()] || {};
+          const em = (p.email || '').toLowerCase();
           const total = (ps.sent || 0) + (ps.received || 0);
-          const photo = contactPhotos[(p.email || '').toLowerCase()];
+          const photo = contactPhotos[em];
           const avatarInner = photo
             ? `<img src="${photo}" alt="${displayName}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(displayName)}'">`
             : initials(displayName);
+          let badge = '';
+          if (sortMode === 'sent') {
+            const cnt = sentStatsMap[em] || 0;
+            if (cnt > 0) badge = `<div class="mp-period-badge sent">보낸 ${cnt}건</div>`;
+          } else if (sortMode === 'received') {
+            const cnt = receivedStatsMap[em] || 0;
+            if (cnt > 0) badge = `<div class="mp-period-badge recv">받은 ${cnt}건</div>`;
+          } else {
+            if (total > 0) badge = `<div class="mp-period-badge">${total}건</div>`;
+          }
           return `
             <div class="mp-card ${cls}" data-idx="${i}" data-name="${p.name || ''}" data-email="${p.email || ''}" title="${p.email || ''}">
               <div class="mp-avatar" style="color:${clr}">${avatarInner}</div>
               <div class="mp-name" style="font-size:${nameFontSize(displayName)}">${displayName}</div>
-              ${total > 0 ? `<div class="mp-period-badge">${total}건</div>` : ''}
+              ${badge}
             </div>`;
         }).join('');
       }
@@ -1023,6 +1202,7 @@
       /* ── 타임라인 초기화 ── */
       function initTimeline(firstMs, lastMs) {
         globalFirst = firstMs; globalLast = lastMs;
+        fullMin = firstMs; fullMax = lastMs;
         selMin = firstMs; selMax = lastMs;
 
         const inMin = document.getElementById('tl-min');
@@ -1044,11 +1224,12 @@
           fill.style.left  = lPct + '%';
           fill.style.width = (rPct - lPct) + '%';
           selMin = valToMs(minV); selMax = valToMs(maxV);
+          sentStatsMap = {}; receivedStatsMap = {};  // 날짜 범위 변경 시 캐시 무효화
           document.getElementById('tl-selected-text').textContent =
             `${fmtDate(selMin)} — ${fmtDate(selMax)}`;
           renderCards();
           clearTimeout(statsDebounceTimer);
-          statsDebounceTimer = setTimeout(fetchPeriodStats, 400);
+          statsDebounceTimer = setTimeout(fetchPeriodStats, 120);
         }
 
         inMin.addEventListener('input', () => {
@@ -1157,15 +1338,18 @@
         ddMenu.classList.toggle('open');
       });
 
-      ddMenu.addEventListener('click', e => {
+      ddMenu.addEventListener('click', async e => {
         const item = e.target.closest('.mp-dropdown-item');
         if (!item) return;
         document.querySelectorAll('.mp-dropdown-item').forEach(i => i.classList.remove('selected'));
         item.classList.add('selected');
         ddLabel.textContent = item.textContent.replace('✓', '').trim();
-        activeFilter = item.dataset.filter;
+        sortMode = item.dataset.sort;
         ddBtn.classList.remove('open');
         ddMenu.classList.remove('open');
+        if (sortMode === 'sent') await fetchSentStats();
+        else if (sortMode === 'received') await fetchReceivedStats();
+        else if (sortMode === 'total') await Promise.all([fetchSentStats(), fetchReceivedStats()]);
         renderCards();
       });
 
@@ -1264,6 +1448,24 @@
         });
       }
 
+      function switchDetailTab(tab) {
+        const statsBody = document.getElementById('mp-detail-body-stats');
+        const descBody  = document.getElementById('mp-detail-desc');
+        const btnStats  = document.getElementById('mp-tab-stats');
+        const btnDesc   = document.getElementById('mp-tab-desc');
+        if (tab === 'stats') {
+          statsBody.style.display = '';
+          descBody.classList.remove('show');
+          btnStats.className = 'mp-detail-tab-btn active-stats';
+          btnDesc.className  = 'mp-detail-tab-btn';
+        } else {
+          statsBody.style.display = 'none';
+          descBody.classList.add('show');
+          btnStats.className = 'mp-detail-tab-btn';
+          btnDesc.className  = 'mp-detail-tab-btn active-desc';
+        }
+      }
+
       async function openDetail(person, rowIndex) {
         const gmailId = localStorage.getItem('gw_gmail_id') || '';
         const detailDisplayName = resolveDisplayName(person);
@@ -1282,19 +1484,53 @@
         document.getElementById('mp-detail-name').textContent = detailDisplayName;
         document.getElementById('mp-detail-email').textContent = person.email || '이메일 정보 없음';
 
-        const aff = person.affinity != null ? person.affinity : null;
-        const pct = aff != null ? Math.round(aff * 100) : null;
+        // 탭 초기화: 통계 탭으로
+        switchDetailTab('stats');
+        // 설명 패널 초기화
+        document.getElementById('mp-desc-sent').textContent = '—';
+        document.getElementById('mp-desc-recv').textContent = '—';
+        document.getElementById('mp-desc-total').textContent = '—';
+        document.getElementById('mp-desc-aff-pct').textContent = '—';
+        document.getElementById('mp-desc-aff-bar').style.width = '0%';
+        document.getElementById('mp-desc-kw-list').innerHTML = '<span style="color:#a0b8c8;font-size:0.8rem;">로딩 중...</span>';
+
         const CIRC = 314.16;
         const ringFill = document.getElementById('mp-aff-ring-fill');
         const pctEl = document.getElementById('mp-affinity-pct');
         if (ringFill) { ringFill.style.transition = 'none'; ringFill.style.strokeDashoffset = CIRC; }
-        if (pctEl) pctEl.textContent = pct != null ? pct + '%' : '—';
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          if (ringFill) {
-            ringFill.style.transition = 'stroke-dashoffset 1s cubic-bezier(0.22,1,0.36,1)';
-            ringFill.style.strokeDashoffset = pct != null ? CIRC * (1 - pct / 100) : CIRC;
-          }
-        }));
+        if (pctEl) pctEl.textContent = '—';
+
+        // 비동기로 친밀도 로드 후 링 애니메이션
+        (async () => {
+          try {
+            const intimacyRes = await fetch('/intimacy', {
+              method: 'POST', headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                gmail_id: gmailId,
+                person_gmail_id: person.email,
+                start_date: msToDateStr(selMin),
+                end_date: msToDateStr(selMax)
+              })
+            });
+            if (intimacyRes.ok) {
+              const iData = await intimacyRes.json();
+              const eis = iData.data?.EIS_final ?? iData.data?.EIS ?? null;
+              const pct = eis != null ? Math.round(eis * 100) : null;
+              if (pctEl) pctEl.textContent = pct != null ? pct + '%' : '—';
+              // 설명 탭 친밀도 바 업데이트
+              const descPctEl  = document.getElementById('mp-desc-aff-pct');
+              const descBarEl  = document.getElementById('mp-desc-aff-bar');
+              if (descPctEl) descPctEl.textContent = pct != null ? pct + '%' : '—';
+              requestAnimationFrame(() => requestAnimationFrame(() => {
+                if (ringFill) {
+                  ringFill.style.transition = 'stroke-dashoffset 1s cubic-bezier(0.22,1,0.36,1)';
+                  ringFill.style.strokeDashoffset = pct != null ? CIRC * (1 - pct / 100) : CIRC;
+                }
+                if (descBarEl) descBarEl.style.width = pct != null ? pct + '%' : '0%';
+              }));
+            }
+          } catch(e) { console.error('intimacy 오류:', e); }
+        })();
 
         document.getElementById('mp-chart').innerHTML = '<span style="color:#a0b8b0;font-size:0.82rem;">로딩 중...</span>';
         document.getElementById('mp-detail-wc').innerHTML = '<span style="color:#a0b8b0;font-size:0.82rem;">로딩 중...</span>';
@@ -1335,6 +1571,25 @@
 
         renderBarChart(statsData);
         renderWordCloud(keywords.slice(0, 10), 'mp-detail-wc');
+
+        // 설명 탭 데이터 채우기
+        if (statsData && statsData.total) {
+          const t = statsData.total;
+          document.getElementById('mp-desc-sent').textContent  = t.sent;
+          document.getElementById('mp-desc-recv').textContent  = t.received;
+          document.getElementById('mp-desc-total').textContent = t.sent + t.received;
+        }
+        const kwListEl = document.getElementById('mp-desc-kw-list');
+        if (kwListEl) {
+          const topKw = (keywords || []).slice(0, 12);
+          if (topKw.length) {
+            kwListEl.innerHTML = topKw.map(k =>
+              `<span class="mp-desc-kw">${k.word} <strong>${k.count}</strong></span>`
+            ).join('');
+          } else {
+            kwListEl.innerHTML = '<span style="color:#a0b8c8;font-size:0.8rem;">키워드 없음</span>';
+          }
+        }
       }
 
       document.getElementById('mp-detail-close').addEventListener('click', () => {
