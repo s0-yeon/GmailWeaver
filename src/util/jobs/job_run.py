@@ -363,10 +363,10 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None, added_c
             threading.Thread(target=save_label_to_db, args=(paths, target_update_date)),
             threading.Thread(target=save_mail_to_db, args=(paths, target_update_date)),
             threading.Thread(target=save_keyword_stats_to_db, args=(paths, target_update_date)),
+            threading.Thread(target=generate_mail_summaries, args=(paths,)),
         ]
         for t in db_threads: t.start()
         for t in db_threads: t.join()
-        generate_mail_summaries(paths)
 
 
         update_job(job_id, progress=100, status="done", message="인덱싱 완료")
