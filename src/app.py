@@ -34,7 +34,11 @@ from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
 from util.user_path import UserPaths
+<<<<<<< HEAD
 from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats, get_keywords_by_person_date, get_mail_date_range, get_mail_exchange_stats, calculate_eis, get_date_range_person_stats
+=======
+from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats, get_keywords_by_person_date, get_mail_date_range, get_mail_exchange_stats, calculate_eis, get_person_descriptions
+>>>>>>> 129aa463e3d117e241e7b569be2aa7eb6392cfe5
 
 
 from util.database.db_writer import (
@@ -1921,6 +1925,14 @@ def send_intimacy():
         "data":            result,
     })
 
+
+@app.route("/person-descriptions", methods=["POST"])
+def send_person_descriptions():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    return jsonify({"gmail_id": gmail_id, "data": get_person_descriptions(gmail_id)})
 
 @app.route("/mail-summaries", methods=["POST"])
 def send_mail_summaries():
