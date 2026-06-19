@@ -63,7 +63,7 @@ init_processed_attachments_table()
 init_keyword_mail_table()
 
 # Apps Script Web App URL
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwAk_JabdKuGUHIVcaKeEnY1DUiYb0uqkiu-KdUG67Zf1U3D8k-F06RGS5043k_fZS8MQ/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbx-8gGri0e6SYAfH3QfRGYTGrzA1xjB-ZjfrMfLSpdgTxXkFdsnixebZiKyw2m8JcSO/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
