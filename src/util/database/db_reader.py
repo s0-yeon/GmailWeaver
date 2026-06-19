@@ -1,9 +1,155 @@
 # 웹앱 DB → 메일에서 추출한 정보 데이터 JSON
 # 현재는 가라 데이터
 import json
+import math
 import os
 import re
+from datetime import date
 from config.db import get_db_connection
+from util.database.db_writer import get_latest_user_record
+
+_PARQUET_TONE_SCORE = {
+    "casual":        1.0,
+    "transactional": 0.5,
+    "formal":        0.2,
+    "notification":  0.1,
+    "alert":         0.1,
+}
+_LAMBDA = 0.01
+
+
+def calculate_eis(
+    user_account_id: str,
+    person_account_id: str,
+    update_date: str = None,
+    start_date: str = None,
+    end_date: str = None,
+    apply_volume_correction: bool = True,
+    apply_time_decay: bool = True,
+) -> dict:
+    """
+    update_date 생략 시 DB에서 MAX(update_date)를 자동 조회.
+    start_date / end_date 지정 시 mail_date 범위로 추가 필터링.
+
+    Returns:
+    {
+        "R": float,
+        "P": float,
+        "T": float,
+        "EIS": float,
+        "EIS_adj": float,
+        "EIS_final": float,
+        "N": int,
+        "S_A_to_B": int,
+        "S_B_to_A": int,
+        "reply_count": int,
+        "t_bar": float | None,
+        "delta_t_last": int | None
+    }
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    try:
+        if update_date is None:
+            latest = get_latest_user_record(user_account_id)
+            update_date = latest["update_date"] if latest else None
+
+        date_filter = ""
+        params = [user_account_id, update_date, person_account_id, person_account_id]
+        if start_date and end_date:
+            date_filter = "AND mail_date BETWEEN %s AND %s"
+            params += [start_date, end_date]
+
+        sql = f"""
+            SELECT direction, parquet_tone, llm_tone,
+                   is_reply, reply_elapsed_hours, mail_date
+            FROM mail
+            WHERE user_account_id = %s
+              AND update_date = %s
+              AND (
+                (direction = 'sent'     AND receiver LIKE CONCAT('%<', %s, '>%'))
+                OR
+                (direction = 'received' AND sender   LIKE CONCAT('%<', %s, '>%'))
+              )
+              {date_filter}
+        """
+        cursor.execute(sql, params)
+        rows = cursor.fetchall()
+    finally:
+        cursor.close()
+        conn.close()
+
+    # ── 1. 상호성 점수 R ──────────────────────────────────────────────────
+    S_A_to_B = sum(1 for r in rows if r["direction"] == "sent")
+    S_B_to_A = sum(1 for r in rows if r["direction"] == "received")
+    N = S_A_to_B + S_B_to_A
+
+    R = 0.0 if N == 0 else 1 - abs((S_A_to_B - S_B_to_A) / N)
+
+    # ── 2. 반응성 점수 P ──────────────────────────────────────────────────
+    reply_count = sum(1 for r in rows if r["is_reply"] == 1)
+    elapsed = [float(r["reply_elapsed_hours"]) for r in rows if r["reply_elapsed_hours"] is not None]
+
+    if N == 0:
+        P, t_bar = 0.0, None
+    else:
+        reply_ratio = reply_count / N
+        if elapsed:
+            t_bar = sum(elapsed) / len(elapsed)
+            P = reply_ratio * math.exp(-_LAMBDA * t_bar)
+        else:
+            t_bar = None
+            P = reply_ratio
+
+    # ── 3. 어조 점수 T ────────────────────────────────────────────────────
+    if N == 0:
+        T = 0.0
+    else:
+        tone_scores = []
+        for r in rows:
+            parquet_score = _PARQUET_TONE_SCORE.get(r["parquet_tone"] or "", 0.0)
+            llm = r["llm_tone"]
+            if llm is None:
+                tone_scores.append(parquet_score)
+            else:
+                llm_score = 1.0 if llm == "friendly" else 0.0
+                tone_scores.append((parquet_score + llm_score) / 2)
+        T = sum(tone_scores) / len(tone_scores)
+
+    # ── 4. 통합 EIS ───────────────────────────────────────────────────────
+    EIS = 0.3 * R + 0.4 * P + 0.3 * T
+
+    # ── 5. 볼륨 보정 (apply_volume_correction=False 시 생략) ──────────────
+    EIS_adj = EIS * (1 - math.exp(-0.05 * N)) if apply_volume_correction else EIS
+
+    # ── 6. 시간 감쇠 보정 (apply_time_decay=False 시 생략) ────────────────
+    mail_dates = [r["mail_date"] for r in rows if r["mail_date"] is not None]
+    if not apply_time_decay:
+        delta_t_last = None
+        EIS_final = EIS_adj
+    elif not mail_dates:
+        delta_t_last = None
+        EIS_final = 0.0
+    else:
+        last_mail = max(mail_dates)
+        last_date = last_mail.date() if hasattr(last_mail, "date") else last_mail
+        delta_t_last = (date.today() - last_date).days
+        EIS_final = EIS_adj * math.exp(-0.005 * delta_t_last)
+
+    return {
+        "R":            round(R, 6),
+        "P":            round(P, 6),
+        "T":            round(T, 6),
+        "EIS":          round(EIS, 6),
+        "EIS_adj":      round(EIS_adj, 6),
+        "EIS_final":    round(EIS_final, 6),
+        "N":            N,
+        "S_A_to_B":     S_A_to_B,
+        "S_B_to_A":     S_B_to_A,
+        "reply_count":  reply_count,
+        "t_bar":        round(t_bar, 4) if t_bar is not None else None,
+        "delta_t_last": delta_t_last,
+    }
 
 def get_mail_stats(paths): # 메일 송수신
     try:
@@ -73,63 +219,41 @@ def get_keyword_stats(paths): # 메일 키워드 수
         ]
     }
 
-# 친밀한 사람 친밀도 수치
-def get_high_affinity_person_stats(paths): 
-    if not os.path.exists(paths.MAIL_CONTACTS_PATH):
-                return [
-            {
-            "email": "friend123@gmail.com",
-            "name": "김민수",
-            "affinity": 0.92
-            },
-            {
-            "email": "team@company.com",
-            "name": "프로젝트팀",
-            "affinity": 0.78
-            },
-            {
-            "email": "notifications@github.com",
-            "name": "uzichoi",
-            "affinity": 0.65
-            },
-            {
-            "email": "inews11@seoul.go.kr",
-            "name": "서울시청",
-            "affinity": 0.40
-            },
-            {
-            "email": "ae-best-care-market14@deals.aliexpress.com",
-            "name": "AliExpress",
-            "affinity": 0.55
-            }
-        ]
+# 친밀한 사람 친밀도 수치 (볼륨 보정·시간 감쇠 없이 EIS 기반)
+def get_high_affinity_person_stats(paths):
+    latest = get_latest_user_record(paths.GMAIL_ID)
+    if not latest:
+        return []
+    update_date = latest["update_date"]
 
-    with open(paths.MAIL_CONTACTS_PATH, "r", encoding="utf-8") as f:
-        stats = json.load(f)
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    try:
+        cursor.execute(
+            "SELECT person_account_id, person_name FROM person WHERE user_account_id = %s AND update_date = %s",
+            (paths.GMAIL_ID, update_date),
+        )
+        persons = cursor.fetchall()
+    finally:
+        cursor.close()
+        conn.close()
 
     result = []
-
-    for email, data in stats.items():
-        sent = data.get("sent", 0)
-        received = data.get("received", 0)
-        friendly = data.get("friendly_mail", 0)
-
-        total = sent + received
-
-        if total == 0:
-            affinity = 0
-        else:
-            affinity = friendly / total
-
+    for person in persons:
+        eis = calculate_eis(
+            user_account_id=paths.GMAIL_ID,
+            person_account_id=person["person_account_id"],
+            update_date=update_date,
+            apply_volume_correction=False,
+            apply_time_decay=False,
+        )
         result.append({
-            "email": email,
-            "name": data.get("name", ""),
-            "affinity": round(affinity, 2)
+            "email": person["person_account_id"],
+            "name":  person.get("person_name", ""),
+            "affinity": eis["EIS_final"],
         })
 
-    # 친밀도 높은 순 정렬
     result.sort(key=lambda x: x["affinity"], reverse=True)
-
     return result
 
 
