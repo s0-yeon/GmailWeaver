@@ -271,6 +271,82 @@ def save_keyword_stats_to_db(paths,update_date=None):
         cursor.close()
         conn.close()
 
+def rebuild_keyword_mail(paths, update_date=None):
+    """
+    기존 keyword JSON의 키워드 목록과 text_units parquet을 이용해
+    LLM 없이 단순 문자열 매칭으로 keyword_person_date_map을 재구성하고
+    keyword_mail 테이블을 채운다.
+    """
+    import pandas as pd, re, os
+
+    if not os.path.exists(paths.MAIL_KEYWORDS_PATH):
+        print(f"[WARN] keyword 파일 없음: {paths.MAIL_KEYWORDS_PATH}")
+        return
+
+    if update_date is None:
+        latest_user = get_latest_user_record(paths.GMAIL_ID)
+        if not latest_user:
+            print(f"[WARN] user 없음: {paths.GMAIL_ID}")
+            return
+        update_date = latest_user["update_date"]
+
+    with open(paths.MAIL_KEYWORDS_PATH, "r", encoding="utf-8") as f:
+        kw_data = json.load(f)
+
+    known_keywords = [kw for kw, cnt in kw_data.get("keywords", {}).items() if cnt >= 2]
+    if not known_keywords:
+        print("[WARN] 유효한 키워드 없음 (count < 2)")
+        return
+
+    text_units_path = paths.RELATIONSHIPS_PATH.replace("relationships.parquet", "text_units.parquet")
+    if not os.path.exists(text_units_path):
+        print(f"[WARN] text_units parquet 없음: {text_units_path}")
+        return
+
+    df = pd.read_parquet(text_units_path)
+
+    def parse_email(value):
+        m = re.search(r'<(.+?)>', value)
+        return m.group(1).strip().lower() if m else value.strip().lower()
+
+    keyword_person_date_map = {}
+    gmail_lower = paths.GMAIL_ID.lower()
+
+    for _, row in df.iterrows():
+        text = str(row.get('text', ''))
+
+        date_match   = re.search(r'^날짜:\s*(.+)$', text, re.MULTILINE)
+        sender_match = re.search(r'^발신인:\s*(.+)$', text, re.MULTILINE)
+        receiver_match = re.search(r'^수신인:\s*(.+)$', text, re.MULTILINE)
+        body_match   = re.search(r'\[메일 본문\]\s*\n(.*?)(?:\n=+|\Z)', text, re.DOTALL)
+
+        mail_date = date_match.group(1).strip()[:10] if date_match else None
+        sender    = parse_email(sender_match.group(1)) if sender_match else None
+        receiver  = parse_email(receiver_match.group(1)) if receiver_match else None
+        body      = body_match.group(1).strip() if body_match else ''
+
+        person = receiver if sender == gmail_lower else sender
+
+        if not body or not mail_date or not person:
+            continue
+
+        for kw in known_keywords:
+            if kw in body:
+                keyword_person_date_map.setdefault(kw, {}).setdefault(person, {})
+                keyword_person_date_map[kw][person][mail_date] = \
+                    keyword_person_date_map[kw][person].get(mail_date, 0) + 1
+
+    kw_data["keyword_person_date_map"] = keyword_person_date_map
+    with open(paths.MAIL_KEYWORDS_PATH, "w", encoding="utf-8") as f:
+        json.dump(kw_data, f, ensure_ascii=False, indent=2)
+
+    total_pairs = sum(len(pm) for pm in keyword_person_date_map.values())
+    print(f"[KEYWORD] keyword_person_date_map 재구성 완료: 키워드 {len(keyword_person_date_map)}개, person-date 쌍 {total_pairs}개")
+
+    # DB에 저장
+    save_keyword_stats_to_db(paths, update_date)
+
+
 def init_keyword_mail_table():
     try:
         conn = get_db_connection()

@@ -41,7 +41,8 @@ from util.database.db_writer import (
     init_processed_attachments_table,
     init_keyword_mail_table,
     filter_unprocessed_attachments,
-    mark_attachments_as_processed
+    mark_attachments_as_processed,
+    rebuild_keyword_mail,
 )
 from util.extract_statics import start_statics_pipeline_background
 
@@ -1764,6 +1765,20 @@ def keyword_by_person_date():
     try:
         keywords = get_keywords_by_person_date(gmail_id, person_gmail_id, start_date, end_date)
         return jsonify({"keywords": keywords})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/rebuild-keyword-mail", methods=["POST"])
+def rebuild_keyword_mail_route():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    paths = UserPaths(BASE_DIR, gmail_id)
+    try:
+        rebuild_keyword_mail(paths)
+        return jsonify({"ok": True, "message": "keyword_mail 테이블 재구성 완료"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

@@ -67,12 +67,28 @@
       /* ── 오른쪽 컬럼 (그래프 패널, 2) ── */
       .mp-right {
         flex: 2; min-width: 0;
-        background: linear-gradient(160deg, #c6ede3 0%, #c4d9ff 55%, #ddd0ff 100%);
-        border: 1.5px solid rgba(160,200,230,0.7);
+        background: #e8f4f0;
+        border: 1.5px solid #c4dfd8;
         border-radius: 20px;
-        backdrop-filter: blur(12px);
-        box-shadow: 0 4px 28px rgba(38,130,200,0.12),
-                    inset 0 1px 0 rgba(255,255,255,0.7);
+        box-shadow: 0 4px 18px rgba(38,130,100,0.09);
+        padding: 16px 14px;
+        display: flex; flex-direction: column; overflow: hidden;
+      }
+      .mp-right-title {
+        font-size: 0.9rem; font-weight: 700; color: #1a5a4a;
+        margin-bottom: 10px; flex-shrink: 0; letter-spacing: -0.01em;
+      }
+      .mp-right-card {
+        flex: 1; overflow-y: auto;
+        background: #fff;
+        border: 1px solid #d4ece4;
+        border-radius: 14px;
+        padding: 12px 10px;
+      }
+      #mp-global-wc {
+        display: flex; flex-wrap: wrap;
+        align-items: flex-start; align-content: flex-start;
+        gap: 7px 10px;
       }
 
       /* ── 그리드 패널 ── */
@@ -222,6 +238,15 @@
         text-align: center; line-height: 1;
         max-width: 90%; overflow: hidden;
         text-overflow: ellipsis; white-space: nowrap;
+      }
+      .mp-period-badge {
+        position: absolute; bottom: 6px;
+        font-size: 0.62rem; font-weight: 700;
+        color: rgba(20,50,40,0.7);
+        background: rgba(255,255,255,0.72);
+        border-radius: 8px; padding: 1px 7px;
+        letter-spacing: 0.01em; line-height: 1.6;
+        pointer-events: none;
       }
       .mp-empty {
         grid-column: 1 / -1; text-align: center;
@@ -690,8 +715,13 @@
             </div>
             </div><!-- /mp-left -->
 
-            <!-- 오른쪽: 빈 패널 (2) -->
-            <div class="mp-right"></div>
+            <!-- 오른쪽: 전체 키워드 패널 (2) -->
+            <div class="mp-right">
+              <div class="mp-right-title">전체 키워드</div>
+              <div class="mp-right-card">
+                <div id="mp-global-wc"><span style="color:#7ab8a4;font-size:0.82rem;">로딩 중...</span></div>
+              </div>
+            </div>
 
             </div><!-- /mp-content -->
 
@@ -813,11 +843,81 @@
       let globalFirst = 0, globalLast = 0; // ms
       let selMin = 0, selMax = 0;          // ms (현재 선택 구간)
       let activeFilter = 'all';
+      let periodStats = {};       // email → {sent, received}
+      let periodStatsLoaded = false;
+      let statsDebounceTimer = null;
+
+      async function fetchPeriodStats() {
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        if (!gmailId) return;
+        const post = body => ({
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(body)
+        });
+        const body = {
+          gmail_id: gmailId,
+          start_date: msToDateStr(selMin),
+          end_date: msToDateStr(selMax)
+        };
+        try {
+          const [sRes, rRes] = await Promise.all([
+            fetch('/mail-person-sent-stats',     post(body)),
+            fetch('/mail-person-received-stats', post(body))
+          ]);
+          const newStats = {};
+          if (sRes.ok) {
+            const j = await sRes.json();
+            (j.data || j).forEach(item => {
+              const e = (item.email || '').toLowerCase();
+              newStats[e] = newStats[e] || {sent: 0, received: 0};
+              newStats[e].sent = item.sent || 0;
+            });
+          }
+          if (rRes.ok) {
+            const j = await rRes.json();
+            (j.data || j).forEach(item => {
+              const e = (item.email || '').toLowerCase();
+              newStats[e] = newStats[e] || {sent: 0, received: 0};
+              newStats[e].received = item.received || 0;
+            });
+          }
+          periodStats = newStats;
+          periodStatsLoaded = true;
+          console.log('[periodStats] loaded. keys:', Object.keys(newStats).length, newStats);
+          renderCards();
+        } catch (e) { console.error('fetchPeriodStats 오류:', e); }
+      }
+
+      function updateCardBadges() {
+        document.querySelectorAll('.mp-card').forEach(card => {
+          const ps = periodStats[(card.dataset.email || '').toLowerCase()] || {};
+          const total = (ps.sent || 0) + (ps.received || 0);
+          let badge = card.querySelector('.mp-period-badge');
+          if (total > 0) {
+            if (!badge) {
+              badge = document.createElement('div');
+              badge.className = 'mp-period-badge';
+              card.appendChild(badge);
+            }
+            badge.textContent = total + '건';
+          } else if (badge) {
+            badge.remove();
+          }
+        });
+      }
 
       /* ── 카드 렌더링 ── */
       function renderCards() {
         const grid = document.getElementById('mp-grid');
-        const list = groupByEntityName(allPeople);
+        let list = groupByEntityName(allPeople);
+        console.log('[renderCards] loaded:', periodStatsLoaded, 'before filter:', list.length, 'periodStats keys:', Object.keys(periodStats).length);
+        if (periodStatsLoaded) {
+          list = list.filter(p => {
+            const ps = periodStats[(p.email || '').toLowerCase()];
+            return ps && (ps.sent || 0) + (ps.received || 0) > 0;
+          });
+          console.log('[renderCards] after filter:', list.length);
+        }
         const countEl = document.getElementById('mp-count');
         if (countEl) countEl.textContent = list.length ? `${list.length}명` : '';
 
@@ -832,10 +932,13 @@
           const cls = affinityClass(p.affinity);
           const clr = affinityAvatarColor(p.affinity);
           const displayName = resolveDisplayName(p);
+          const ps = periodStats[(p.email || '').toLowerCase()] || {};
+          const total = (ps.sent || 0) + (ps.received || 0);
           return `
             <div class="mp-card ${cls}" data-idx="${i}" data-name="${p.name || ''}" data-email="${p.email || ''}" title="${p.email || ''}">
               <div class="mp-avatar" style="color:${clr}">${initials(displayName)}</div>
               <div class="mp-name" style="font-size:${nameFontSize(displayName)}">${displayName}</div>
+              ${total > 0 ? `<div class="mp-period-badge">${total}건</div>` : ''}
             </div>`;
         }).join('');
       }
@@ -867,6 +970,8 @@
           document.getElementById('tl-selected-text').textContent =
             `${fmtDate(selMin)} — ${fmtDate(selMax)}`;
           renderCards();
+          clearTimeout(statsDebounceTimer);
+          statsDebounceTimer = setTimeout(fetchPeriodStats, 400);
         }
 
         inMin.addEventListener('input', () => {
@@ -1052,8 +1157,8 @@
         }).join('');
       }
 
-      function renderWordCloud(keywords) {
-        const wrap = document.getElementById('mp-detail-wc');
+      function renderWordCloud(keywords, targetId) {
+        const wrap = document.getElementById(targetId || 'mp-detail-wc');
         if (!keywords || !keywords.length) {
           wrap.innerHTML = '<span style="color:#b0c8be;font-size:0.82rem;font-style:italic;">키워드 없음</span>';
           return;
@@ -1120,11 +1225,25 @@
             } catch {}
             return null;
           })(),
-          loadKeywords(gmailId)
+          (async () => {
+            try {
+              const res = await fetch('/keyword-by-person-date', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                  gmail_id: gmailId,
+                  person_gmail_id: person.email,
+                  start_date: msToDateStr(selMin),
+                  end_date: msToDateStr(selMax)
+                })
+              });
+              if (res.ok) { const j = await res.json(); return j.keywords || []; }
+            } catch {}
+            return [];
+          })()
         ]);
 
         renderBarChart(statsData);
-        renderWordCloud(keywords);
+        renderWordCloud(keywords, 'mp-detail-wc');
       }
 
       document.getElementById('mp-detail-close').addEventListener('click', () => {
@@ -1139,7 +1258,12 @@
         if (person) openDetail(person, Math.floor(idx / 7));
       });
 
-      loadPeople();
+      loadPeople().then(() => fetchPeriodStats());
+      (async () => {
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        const kws = await loadKeywords(gmailId);
+        renderWordCloud(kws, 'mp-global-wc');
+      })();
     </script>
   </body>
 </html>
