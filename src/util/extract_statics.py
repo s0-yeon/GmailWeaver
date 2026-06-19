@@ -201,7 +201,12 @@ def _save_mail_contact_stats(paths, mode: str = "rewrite"):
         desc = str(row.get('description', ''))
         m = re.search(r'Name:\s*(.+)', desc)
         name = m.group(1).strip() if m else ''
-        name_map[str(row['title']).upper()] = '' if name.lower() == 'none' else name
+        if name.lower() == 'none':
+            name = ''
+        elif ',' in name:
+            # GraphRAG가 여러 From 이름을 합쳐 저장한 경우 첫 번째 항목만 사용
+            name = name.split(',')[0].strip()
+        name_map[str(row['title']).upper()] = name
 
     # Tone: casual인 메일의 연락처별 친밀 카운트
     casual_ids = {

@@ -790,3 +790,86 @@ function registerAttachmentTrigger() {
 
   Logger.log("[Trigger] _runAttachmentSync 10분 트리거 등록 완료");
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 연락처 프로필 사진 동기화
+// Apps Script 편집기에서 수동 실행하거나, _finishBatchSync 후 자동 호출 가능
+// People API Advanced Service 활성화 필요 (appsscript.json에 선언됨)
+// ─────────────────────────────────────────────────────────────────────────────
+function syncContactPhotos() {
+  var myEmail = Session.getActiveUser().getEmail();
+  var photosMap = {};
+  var token = ScriptApp.getOAuthToken();
+
+  function fetchPeoplePages(baseUrl, label) {
+    var pageToken = null;
+    var totalPeople = 0;
+    var withPhoto = 0;
+    var withEmail = 0;
+    do {
+      var url = baseUrl + (pageToken ? '&pageToken=' + encodeURIComponent(pageToken) : '');
+      var res = UrlFetchApp.fetch(url, {
+        headers: { 'Authorization': 'Bearer ' + token },
+        muteHttpExceptions: true
+      });
+      if (res.getResponseCode() !== 200) {
+        Logger.log('[Photos][' + label + '] API 오류: ' + res.getResponseCode() + ' / ' + res.getContentText());
+        return;
+      }
+      var data = JSON.parse(res.getContentText());
+      var people = data.connections || data.otherContacts || [];
+      totalPeople += people.length;
+      people.forEach(function(person) {
+        var photos = person.photos || [];
+        var emails = person.emailAddresses || [];
+        if (emails.length > 0) withEmail++;
+        if (photos.length > 0) withPhoto++;
+        var photo = null;
+        for (var i = 0; i < photos.length; i++) {
+          if (photos[i].url) { photo = photos[i]; break; }
+        }
+        if (!photo) return;
+        emails.forEach(function(e) {
+          if (e.value) photosMap[e.value.toLowerCase()] = photo.url;
+        });
+      });
+      pageToken = data.nextPageToken || null;
+    } while (pageToken);
+    Logger.log('[Photos][' + label + '] 총: ' + totalPeople + '명 / 이메일있음: ' + withEmail + '명 / 사진필드있음: ' + withPhoto + '명');
+  }
+
+  try {
+    // 내 연락처 (직접 저장한 연락처)
+    fetchPeoplePages(
+      'https://people.googleapis.com/v1/people/me/connections'
+      + '?personFields=emailAddresses,photos&pageSize=1000',
+      'connections'
+    );
+
+    // 다른 연락처 (Gmail에서 주고받은 사람)
+    fetchPeoplePages(
+      'https://people.googleapis.com/v1/otherContacts'
+      + '?readMask=emailAddresses,photos&pageSize=1000',
+      'otherContacts'
+    );
+    Logger.log('[Photos] 최종 사진 수집: ' + Object.keys(photosMap).length + '개');
+
+    if (Object.keys(photosMap).length === 0) {
+      Logger.log('[Photos] 수집된 사진 없음 → 업로드 건너뜀');
+      return;
+    }
+
+    var uploadRes = UrlFetchApp.fetch(TunnelURL + '/upload-photos', {
+      method: 'post',
+      contentType: 'application/json',
+      headers: { 'ngrok-skip-browser-warning': '1' },
+      payload: JSON.stringify({ gmail_id: myEmail, photos: photosMap }),
+      muteHttpExceptions: true
+    });
+
+    Logger.log('[Photos] 업로드 응답: ' + uploadRes.getResponseCode());
+
+  } catch (err) {
+    Logger.log('[Photos] 오류: ' + err.message);
+  }
+}

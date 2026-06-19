@@ -1783,6 +1783,40 @@ def rebuild_keyword_mail_route():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/upload-photos", methods=["POST"])
+def upload_contact_photos():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    photos   = data.get("photos", {})
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not isinstance(photos, dict) or not photos:
+        return jsonify({"ok": True, "message": "사진 없음"}), 200
+    paths = UserPaths(BASE_DIR, gmail_id)
+    os.makedirs(paths.MAIL_STATICS_PATH, exist_ok=True)
+    existing = {}
+    if os.path.exists(paths.MAIL_PHOTOS_PATH):
+        with open(paths.MAIL_PHOTOS_PATH, "r", encoding="utf-8") as f:
+            existing = json.load(f)
+    existing.update({k.lower(): v for k, v in photos.items()})
+    with open(paths.MAIL_PHOTOS_PATH, "w", encoding="utf-8") as f:
+        json.dump(existing, f, ensure_ascii=False, indent=2)
+    return jsonify({"ok": True, "saved": len(photos)})
+
+
+@app.route("/contact-photos", methods=["POST"])
+def get_contact_photos():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    if not gmail_id:
+        return jsonify({}), 200
+    paths = UserPaths(BASE_DIR, gmail_id)
+    if not os.path.exists(paths.MAIL_PHOTOS_PATH):
+        return jsonify({}), 200
+    with open(paths.MAIL_PHOTOS_PATH, "r", encoding="utf-8") as f:
+        return jsonify(json.load(f))
+
+
 @app.route("/high_affinity_person_stats", methods=["POST"])
 def send_high_affinity_person_stats():
     data = request.json or {}

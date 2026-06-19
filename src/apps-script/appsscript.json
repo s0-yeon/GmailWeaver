@@ -13,9 +13,14 @@
     "https://www.googleapis.com/auth/script.external_request",
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/calendar",
-    "https://www.googleapis.com/auth/script.scriptapp"
+    "https://www.googleapis.com/auth/script.scriptapp",
+    "https://www.googleapis.com/auth/contacts.readonly",
+    "https://www.googleapis.com/auth/contacts.other.readonly"
   ],
-  "urlFetchWhitelist": ["https://laevorotatory-nonnutritively-nelle.ngrok-free.dev/"],
+  "urlFetchWhitelist": [
+    "https://detainable-thumbless-arnav.ngrok-free.dev/",
+    "https://people.googleapis.com/"
+  ],
   "addOns": {
     "common": {
       "name": "🫒 Olive",
