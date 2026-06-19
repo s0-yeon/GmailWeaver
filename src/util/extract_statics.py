@@ -389,9 +389,13 @@ def generate_person_descriptions(paths) -> dict:
         if src in person_set and tgt in org_set:
             person_to_orgs[src].add(org_name_map.get(tgt, tgt))
 
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
     descriptions: dict[str, str] = {}
     my_email = paths.GMAIL_ID.lower()
 
+    # 프롬프트 데이터 수집
+    person_prompts = []
     for person_email in person_set:
         if person_email.lower() == my_email:
             continue
@@ -428,6 +432,9 @@ def generate_person_descriptions(paths) -> dict:
 관계: <이 사람과 나의 관계를 한 문장으로>
 자주 주고 받은 내용: <주로 어떤 내용으로 메일을 주고받는지 한 문장으로>""".strip()
 
+        person_prompts.append((person_email, name, prompt))
+
+    def _call_llm(person_email, name, prompt):
         try:
             result = client.chat.completions.create(
                 model="gpt-4o-mini",
@@ -441,22 +448,27 @@ def generate_person_descriptions(paths) -> dict:
                 temperature=0.3
             )
             llm_output = result.choices[0].message.content.strip()
+            rel_m     = re.search(r'관계:\s*(.+)',            llm_output)
+            content_m = re.search(r'자주 주고 받은 내용:\s*(.+)', llm_output)
+            relationship = rel_m.group(1).strip()     if rel_m     else ''
+            content      = content_m.group(1).strip() if content_m else ''
+            return person_email, (
+                f"이름: {name if name else '알 수 없음'}\n"
+                f"관계: {relationship}\n"
+                f"자주 주고 받은 내용: {content}"
+            )
         except Exception as e:
             print(f"[PROFILES] LLM 호출 실패 ({person_email}): {e}")
-            continue
+            return person_email, None
 
-        rel_m     = re.search(r'관계:\s*(.+)',            llm_output)
-        content_m = re.search(r'자주 주고 받은 내용:\s*(.+)', llm_output)
-
-        relationship = rel_m.group(1).strip()     if rel_m     else ''
-        content      = content_m.group(1).strip() if content_m else ''
-
-        descriptions[person_email] = (
-            f"이름: {name if name else '알 수 없음'}\n"
-            f"관계: {relationship}\n"
-            f"자주 주고 받은 내용: {content}"
-        )
-        print(f"[PROFILES] 완료: {person_email}")
+    with ThreadPoolExecutor(max_workers=min(len(person_prompts), 15)) as executor:
+        futures = {executor.submit(_call_llm, email, name, prompt): email
+                   for email, name, prompt in person_prompts}
+        for future in as_completed(futures):
+            person_email, desc = future.result()
+            if desc:
+                descriptions[person_email] = desc
+                print(f"[PROFILES] 완료: {person_email}")
 
     print(f"[PROFILES] 총 {len(descriptions)}명 프로필 생성 완료")
     return descriptions
