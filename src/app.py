@@ -1258,7 +1258,7 @@ def upload():
         # rewrite 배치 완료 시 총 누적 메일 수로 기록 (마지막 배치 added_count만 넘기면 일부만 저장되는 버그 방지)
         final_text = _read_latest_text(paths)
         total_mail_count = len([b for b in _split_mail_blocks(final_text) if _extract_mail_id_from_block(b)])
-        start_graph_pipeline_background(graph_job_id, paths, env, added_count=total_mail_count)
+        start_graph_pipeline_background(graph_job_id, paths, env, added_count=total_mail_count, max_mails=10)
 
     else:  # append
         if new_ids:

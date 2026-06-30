@@ -155,8 +155,43 @@ def build_graph_json(job_id, paths, env):
         raise
 
 
+def _trim_mail_latest(paths, max_mails, job_id):
+    if not os.path.exists(paths.MAIL_LATEST_PATH):
+        return
+    with open(paths.MAIL_LATEST_PATH, 'r', encoding='utf-8') as f:
+        content = f.read()
+    blocks = [p.strip() for p in content.split(MAIL_BLOCK_SEP) if p.strip()]
+    if len(blocks) <= max_mails:
+        return
+    trimmed = blocks[:max_mails]
+    result = '\n'.join(
+        f"{MAIL_BLOCK_SEP}\n{b}\n{MAIL_BLOCK_SEP}" for b in trimmed
+    ) + '\n'
+    with open(paths.MAIL_LATEST_PATH, 'w', encoding='utf-8') as f:
+        f.write(result)
+
+    # CSV도 트리밍 (GraphRAG는 csv를 읽음)
+    trimmed_ids = set()
+    for block in trimmed:
+        m = re.search(r'^\s*ID:\s*(.+?)\s*$', block, re.MULTILINE)
+        if m:
+            trimmed_ids.add(m.group(1).strip())
+    csv_path = paths.MAIL_LATEST_PATH.replace('.txt', '.csv')
+    if os.path.exists(csv_path) and trimmed_ids:
+        import pandas as pd
+        df = pd.read_csv(csv_path)
+        id_col = next((c for c in df.columns if 'id' in c.lower()), None)
+        if id_col:
+            df = df[df[id_col].astype(str).isin(trimmed_ids)]
+            df.to_csv(csv_path, index=False)
+
+    msg = f"[max_mails] {len(blocks)}개 중 {max_mails}개만 인덱싱"
+    print(f"[JOB][graphrag] {msg}")
+    append_job_log(job_id, f"[INFO] {msg}")
+
+
 # 백그라운드: GraphRAG 인덱싱
-def build_graphrag_index(job_id, paths,env):
+def build_graphrag_index(job_id, paths, env, max_mails=None):
     print(f"[JOB][graphrag] START job_id={job_id}")
     print(f"[JOB][graphrag] cwd={os.getcwd()}")
     print(f"[JOB][graphrag] sys.executable={sys.executable}")
@@ -169,6 +204,9 @@ def build_graphrag_index(job_id, paths,env):
     append_job_log(job_id, f"[INFO] sys.executable={sys.executable}")
     append_job_log(job_id, f"[INFO] GRAPHRAG_ROOT={paths.GRAPHRAG_ROOT}")
     append_job_log(job_id, f"[INFO] root_exists={os.path.exists(paths.GRAPHRAG_ROOT)}")
+
+    if max_mails is not None:
+        _trim_mail_latest(paths, max_mails, job_id)
 
     #user_graphrag_init(paths)
 
@@ -313,7 +351,7 @@ def build_graphrag_update(job_id,paths, env):
 
 
 # 전체 파이프라인 실행 (index 기준)
-def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None, added_count=0):
+def run_graph_pipeline(job_id, paths, env, attachment_texts_by_mail=None, added_count=0, max_mails=None):
     print(f"[JOB][pipeline] START job_id={job_id}")
     append_job_log(job_id, "[START] run_graph_pipeline")
 
@@ -342,7 +380,7 @@ def run_graph_pipeline(job_id,paths, env, attachment_texts_by_mail=None, added_c
             print(f"[JOB][summarize] DONE job_id={job_id}")
 
         timer = start_timer() #인덱싱 시간 측정용, 측정 시작
-        build_graphrag_index(job_id,paths, env)
+        build_graphrag_index(job_id, paths, env, max_mails=max_mails)
         time_result = end_timer(timer) #인덱싱 시간 측정용, 측정 끝
 
         build_graph_json(job_id,paths, env)
@@ -423,7 +461,7 @@ def run_graph_update_pipeline(job_id, paths, env):
 
 
 # 백그라운드 전체 파이프라인 실행 (index 기준)
-def start_graph_pipeline_background(job_id,paths, env, attachment_texts_by_mail=None, added_count=0):
+def start_graph_pipeline_background(job_id, paths, env, attachment_texts_by_mail=None, added_count=0, max_mails=None):
     print(f"[JOB][pipeline] BACKGROUND START job_id={job_id}")
     append_job_log(job_id, "[INFO] background thread starting")
 
@@ -431,7 +469,7 @@ def start_graph_pipeline_background(job_id,paths, env, attachment_texts_by_mail=
     t = threading.Thread(
 
         target=run_graph_pipeline,  # 실행할 함수: 그래프라그 파이프라인 (인덱싱) 실행 함수
-        args=(job_id, paths, env.copy(), attachment_texts_by_mail, added_count),
+        args=(job_id, paths, env.copy(), attachment_texts_by_mail, added_count, max_mails),
         daemon=True,                # app.py 종료 시 같이 종료
     )
     t.start()  # 스레드 실행 (비동기 시작)
