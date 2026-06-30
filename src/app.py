@@ -65,7 +65,7 @@ init_processed_attachments_table()
 init_keyword_mail_table()
 
 # Apps Script Web App URL
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwWeBQk6lHnVfwkSLWFb7671u8CpQgKSIBXbHDorT4M82sZbWKCfZ3SUbospU3b1trKMw/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbys9oYAwgYWdhRTqGdafvVxzGWW6q4ZkEx2JSOPOE8DN0uq5kfe8JuqC1wIUDnu9UZ4/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
@@ -1258,7 +1258,7 @@ def upload():
         # rewrite 배치 완료 시 총 누적 메일 수로 기록 (마지막 배치 added_count만 넘기면 일부만 저장되는 버그 방지)
         final_text = _read_latest_text(paths)
         total_mail_count = len([b for b in _split_mail_blocks(final_text) if _extract_mail_id_from_block(b)])
-        start_graph_pipeline_background(graph_job_id, paths, env, added_count=total_mail_count, max_mails=10)
+        start_graph_pipeline_background(graph_job_id, paths, env, added_count=total_mail_count, max_mails=paths.MAX_MAILS)
 
     else:  # append
         if new_ids:
