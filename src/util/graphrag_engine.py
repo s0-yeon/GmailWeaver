@@ -53,10 +53,23 @@ class _ModelResponse:
         return []
 
 # OpenAI API를 직접 호출하도록 만든 커스텀 클래스
-class DirectOpenAIChatModel(ChatModel): 
-    def __init__(self, api_key: str, model: str): 
+class DirectOpenAIChatModel(ChatModel):
+    def __init__(self, api_key: str, model: str):
         self._client = openai.AsyncOpenAI(api_key=api_key) # 비동기 OpenAI 클라이언트
         self._model = model # 사용할 모델명
+        self._input_tokens = 0
+        self._output_tokens = 0
+
+    def consume_usage(self) -> dict:
+        """누적된 토큰 사용량을 반환하고 초기화한다."""
+        result = {
+            "model_name": self._model,
+            "input_tokens": self._input_tokens,
+            "output_tokens": self._output_tokens,
+        }
+        self._input_tokens = 0
+        self._output_tokens = 0
+        return result
 
     # GlobalSearch가 호출하는 메서드 (비스트리밍)
     async def achat(self, prompt: str, history=None, model_parameters=None, **kwargs):
@@ -75,6 +88,9 @@ class DirectOpenAIChatModel(ChatModel):
             stream=False,  # 스트리밍 아님
             **params
         )
+        if response.usage:
+            self._input_tokens += response.usage.prompt_tokens
+            self._output_tokens += response.usage.completion_tokens
         content = response.choices[0].message.content or ""
         return _ModelResponse(content)
 
@@ -82,22 +98,26 @@ class DirectOpenAIChatModel(ChatModel):
     async def achat_stream(
         self, prompt: str, history=None, model_parameters=None, **kwargs
     ) -> AsyncGenerator[str, None]:
-        messages = list(history or []) # 이전 대화 이력 
+        messages = list(history or []) # 이전 대화 이력
         messages.append({"role": "user", "content": prompt}) # 현재 질의 추가
         params = model_parameters or {} # 추가 파라미터 (temperature 등)
 
-        # OpenAI 스트리밍 요청
+        # 스트림 종료 시 usage 청크를 받아 토큰 수를 집계
         stream = await self._client.chat.completions.create(
             model=self._model,
             messages=messages,
             stream=True,
+            stream_options={"include_usage": True},
             **params
         )
-        # 토큰 단위로 청크를 받아서 내용이 있을 때만 yield
         async for chunk in stream:
-            delta = chunk.choices[0].delta.content
-            if delta:
-                yield delta
+            if chunk.usage:
+                self._input_tokens += chunk.usage.prompt_tokens
+                self._output_tokens += chunk.usage.completion_tokens
+            if chunk.choices:
+                delta = chunk.choices[0].delta.content
+                if delta:
+                    yield delta
 
 # OpenAI 임베딩 API를 직접 호출하도록 만든 커스텀 클래스
 class DirectOpenAIEmbedder(EmbeddingModel):
@@ -121,7 +141,7 @@ def _get_output_mtime(output_dir: str) -> float:
     return os.path.getmtime(p) if os.path.exists(p) else 0.0
 
 #LocalSearch엔진 처음부터 빌드. (유저별 첫 요청이나 인덱싱 갱신시에만 호출)
-def _build_local_engine(output_dir: str, graphrag_root: str) -> LocalSearch:
+def _build_local_engine(output_dir: str, graphrag_root: str) -> tuple[LocalSearch, "DirectOpenAIChatModel"]:
     import pandas as pd
     lancedb_uri = os.path.join(output_dir, "lancedb")
     #setting.yaml에서 설정 가져옴
@@ -186,7 +206,7 @@ def _build_local_engine(output_dir: str, graphrag_root: str) -> LocalSearch:
         system_prompt = f.read()
 
     # LocalSearch 엔진 생성 (이 객체가 실제로 search(query)를 받아서 LLM 응답을 생성하는 핵심 객체) 재사용 가능.
-    return LocalSearch(
+    engine = LocalSearch(
         model=model,
         context_builder=context_builder,
         token_encoder=token_encoder,
@@ -204,8 +224,9 @@ def _build_local_engine(output_dir: str, graphrag_root: str) -> LocalSearch:
         },
         response_type="multiple paragraphs",
     )
+    return engine, model
 
-def _build_global_engine(output_dir: str, graphrag_root: str) -> GlobalSearch:
+def _build_global_engine(output_dir: str, graphrag_root: str) -> tuple[GlobalSearch, "DirectOpenAIChatModel"]:
     import pandas as pd
     config = load_config(Path(graphrag_root))
 
@@ -245,7 +266,7 @@ def _build_global_engine(output_dir: str, graphrag_root: str) -> GlobalSearch:
     with open(os.path.join(prompts_dir, "global_search_reduce_system_prompt.txt"), "r", encoding="utf-8") as f:
         reduce_prompt = f.read()
 
-    return GlobalSearch(
+    engine = GlobalSearch(
         model=model,
         context_builder=context_builder,
         token_encoder=token_encoder,
@@ -265,6 +286,7 @@ def _build_global_engine(output_dir: str, graphrag_root: str) -> GlobalSearch:
             "community_level": best_level,
         },
     )
+    return engine, model
 
 # 유저별 캐시된 엔진 반환
 def get_engines(gmail_id: str, output_dir: str, graphrag_root: str) -> tuple[LocalSearch, GlobalSearch]:
@@ -282,12 +304,25 @@ def get_engines(gmail_id: str, output_dir: str, graphrag_root: str) -> tuple[Loc
 
         # 캐시 miss 또는 인덱스 갱신 감지 (index/update 실행 후 mtime 변경): 새로 빌드
         print(f"[ENGINE] 빌드 시작: {gmail_id}")
-        local_engine  = _build_local_engine(output_dir, graphrag_root)
-        global_engine = _build_global_engine(output_dir, graphrag_root)
+        local_engine,  local_model  = _build_local_engine(output_dir, graphrag_root)
+        global_engine, global_model = _build_global_engine(output_dir, graphrag_root)
         _engine_cache[gmail_id] = {
-            "local":  local_engine,
-            "global": global_engine,
-            "mtime":  mtime
+            "local":         local_engine,
+            "global":        global_engine,
+            "local_model":   local_model,
+            "global_model":  global_model,
+            "mtime":         mtime,
         }
         print(f"[ENGINE] 빌드 완료: {gmail_id}")
         return local_engine, global_engine
+
+
+def get_and_reset_usage(gmail_id: str, method: str) -> dict:
+    """검색 완료 후 해당 엔진의 누적 토큰 사용량을 반환하고 초기화한다."""
+    with _cache_lock:
+        cached = _engine_cache.get(gmail_id)
+        if not cached:
+            return {"model_name": None, "input_tokens": 0, "output_tokens": 0}
+        key = "local_model" if method == "local" else "global_model"
+        model: DirectOpenAIChatModel = cached[key]
+        return model.consume_usage()

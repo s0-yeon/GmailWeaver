@@ -7,7 +7,7 @@ import asyncio # 비동기 실행 지원 (LocalSearch/GlobalSearch.search()가 a
 import traceback
 import threading
 import time
-from util.graphrag_engine import get_engines # 유저별 캐싱된 local. global 엔진 반환 함수 임포트
+from util.graphrag_engine import get_engines, get_and_reset_usage # 유저별 캐싱된 local. global 엔진 반환 함수 임포트
 from util.database.db_writer import save_query_to_db
 
 # cli 호출 방식인 _run_graphrag() 대체용 (get_engines()로 캐싱된 LocalSearch, globalSearch 객체 직접 호출)
@@ -75,7 +75,13 @@ def run_graphrag_query(message: str, original_message: str, paths, method: str =
     print(f"[ENGINE] 답변: {answer}")
     print(f"[ENGINE] source_ids: {source_ids}")
     try:
-        save_query_to_db(paths.GMAIL_ID, original_message, elapsed, method)
+        usage = get_and_reset_usage(paths.GMAIL_ID, method)
+        save_query_to_db(
+            paths.GMAIL_ID, original_message, elapsed, method,
+            model_name=usage["model_name"],
+            input_tokens=usage["input_tokens"],
+            output_tokens=usage["output_tokens"],
+        )
     except Exception as e:
         print(f"[WARN] query DB 저장 실패 (무시): {e}")
     return answer, source_ids  # app.py의 _worker()로 튜플 반환
