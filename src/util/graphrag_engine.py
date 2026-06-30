@@ -147,7 +147,7 @@ def _build_local_engine(output_dir: str, graphrag_root: str) -> tuple[LocalSearc
     #setting.yaml에서 설정 가져옴
     config = load_config(Path(graphrag_root))
 
-    # settings.yaml의 models.default_chat_model (gpt-4o-mini)
+    # settings.yaml의 models.default_chat_model (gpt-5.4-mini)
     llm_config = config.models["default_chat_model"]
     # settings.yaml의 models.default_embedding_model (text=embedding-3-small)
     emb_config = config.models["default_embedding_model"]
@@ -157,7 +157,7 @@ def _build_local_engine(output_dir: str, graphrag_root: str) -> tuple[LocalSearc
     # LLM: 최종 답변 생성용
     model = DirectOpenAIChatModel(
         api_key=os.environ["GRAPHRAG_API_KEY"],
-        model=llm_config.model  # gpt-4o-mini
+        model=llm_config.model  # gpt-5.4-mini
     )
     text_embedder = DirectOpenAIEmbedder(
         api_key=os.environ["GRAPHRAG_API_KEY"],

@@ -93,7 +93,7 @@ def _is_friendly_tone_with_llm(body: str) -> bool:
     """.strip()
 
     result = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-5.4-mini",
         messages=[
             {
                 "role": "system",
@@ -134,7 +134,7 @@ def extract_keywords_with_llm(body: str) -> list[str]:
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-5.4-mini",
             messages=[
                 {"role": "system", "content": "당신은 텍스트에서 핵심 키워드를 추출하는 AI입니다."},
                 {"role": "user", "content": prompt}
@@ -437,7 +437,7 @@ def generate_person_descriptions(paths) -> dict:
     def _call_llm(person_email, name, prompt):
         try:
             result = client.chat.completions.create(
-                model="gpt-4o-mini",
+                model="gpt-5.4-mini",
                 messages=[
                     {
                         "role": "system",

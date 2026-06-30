@@ -46,7 +46,7 @@ def _summarize_attachment_text(text: str,paths, filename: str) -> str:
     client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-5.4-mini",
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": f"파일명: {filename}\n\n{text}"}

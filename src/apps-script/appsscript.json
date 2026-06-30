@@ -18,8 +18,7 @@
     "https://www.googleapis.com/auth/contacts.other.readonly"
   ],
   "urlFetchWhitelist": [
-    "https://detainable-thumbless-arnav.ngrok-free.dev/",
-    "https://people.googleapis.com/"
+    "https://transpalmar-christine-noneducatory.ngrok-free.dev/"
   ],
   "addOns": {
     "common": {

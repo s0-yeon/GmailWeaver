@@ -28,7 +28,7 @@ def _summarize_with_llm(text, period_label, contacts):
     client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-5.4-mini",
             response_format={"type": "json_object"},
             messages=[
                 {

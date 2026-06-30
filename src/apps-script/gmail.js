@@ -2,10 +2,10 @@
 // Gmail 동기화, 라벨, 캘린더, 단일 메일 업로드
 
 //배치 시스템 상수
-var BATCH_TRIGGER_MINUTES = 5;
-var BATCH_SIZE = 16; // GmailApp.search() 1회 최대 반환 수 (스레드 단위)
+var BATCH_TRIGGER_MINUTES = 10;
+var BATCH_SIZE = 100; // GmailApp.search() 1회 최대 반환 수 (스레드 단위)
 var ATT_BATCH_SIZE = 16; //첨부파일 배치 크기
-var MAX_THREADS = 29; // 테스트용. 전체 처리하려면 null로 설정
+var MAX_THREADS = 1500; // 테스트용. 전체 처리하려면 null로 설정
 
 // 동기화 버튼 핸들러
 // 서버에 없는 메일 추가
