@@ -487,6 +487,73 @@ def mark_attachments_as_processed(gmail_id: str, attachments: list):
     except Exception as e:
         print(f"[AttachmentFilter] 처리 완료 기록 실패 (무시): {e}")
 
+def save_mail_summarize_to_db(paths, update_date=None):
+    if not os.path.exists(paths.MAIL_SUMMARIES_PATH):
+        print(f"[WARN] 파일이 없습니다: {paths.MAIL_SUMMARIES_PATH}")
+        return
+
+    if update_date is None:
+        latest_user = get_latest_user_record(paths.GMAIL_ID)
+        if not latest_user:
+            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
+            return
+        user_account_id = latest_user["user_account_id"]
+        update_date = latest_user["update_date"]
+    else:
+        user_account_id = paths.GMAIL_ID
+
+    with open(paths.MAIL_SUMMARIES_PATH, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    rows = []
+    for period, info in data.get("yearly", {}).items():
+        rows.append((
+            user_account_id,
+            update_date,
+            "yearly",
+            period,
+            info.get("summary"),
+            json.dumps(info.get("contacts"), ensure_ascii=False) if info.get("contacts") else None,
+        ))
+    for period, info in data.get("monthly", {}).items():
+        rows.append((
+            user_account_id,
+            update_date,
+            "monthly",
+            period,
+            info.get("summary"),
+            json.dumps(info.get("contacts"), ensure_ascii=False) if info.get("contacts") else None,
+        ))
+
+    if not rows:
+        print("[WARN] save_mail_summarize_to_db: 저장할 데이터가 없습니다.")
+        return
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        insert_sql = """
+            INSERT INTO mail_summarize (
+                user_account_id, update_date, summarize_unit, summary_period,
+                summarized_context, contacts
+            )
+            VALUES (%s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+                summarized_context = VALUES(summarized_context),
+                contacts = VALUES(contacts)
+        """
+        cursor.executemany(insert_sql, rows)
+        conn.commit()
+        print(f"[DB] mail_summarize 테이블 저장 완료: {len(rows)}건")
+    except Exception as e:
+        conn.rollback()
+        print(f"[ERROR] save_mail_summarize_to_db 실패: {e}")
+        raise
+    finally:
+        cursor.close()
+        conn.close()
+
+
 def save_label_to_db(paths, update_date=None):
     import pandas as pd, re, os
 

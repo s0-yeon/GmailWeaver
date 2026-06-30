@@ -4,6 +4,7 @@ import json
 import datetime
 import openai
 from dotenv import load_dotenv
+from util.database.db_writer import save_mail_summarize_to_db
 
 load_dotenv("src/parquet/.env")
 
@@ -156,3 +157,5 @@ def generate_mail_summaries(paths):
         json.dump(result, f, ensure_ascii=False, indent=2)
 
     print(f"[mail_summary] 저장 완료: {paths.MAIL_SUMMARIES_PATH}")
+
+    save_mail_summarize_to_db(paths)
