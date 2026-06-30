@@ -1113,15 +1113,17 @@
         return             'clamp(0.5rem,  0.82vw, 0.88rem)';
       }
 
+      /* ── 발신 전용/브랜드 계정 로컬파트 목록 (표시 이름 추론 + 아바타 생성 대상 판별 공용) ── */
+      const GENERIC_LOCAL_PARTS = ['noreply','no-reply','no.reply','donotreply','info','support','admin',
+        'hello','contact','mail','newsletter','newsletters','notifications','notification',
+        'update','updates','service','team','automated','mailer','postmaster','alert','alerts'];
+
       /* ── 이메일에서 표시 이름 추론 ── */
       function resolveDisplayName(p) {
         if (!p.email) return (p.name && p.name.trim()) ? p.name.trim() : '(알 수 없음)';
         const [local, domain] = p.email.split('@');
-        const GENERIC = ['noreply','no-reply','no.reply','donotreply','info','support','admin',
-          'hello','contact','mail','newsletter','newsletters','notifications','notification',
-          'update','updates','service','team','automated','mailer','postmaster','alert','alerts'];
         // 발신 전용 계정은 이름 필드 무시 → 도메인 브랜드명 사용
-        if (GENERIC.includes((local || '').toLowerCase())) {
+        if (GENERIC_LOCAL_PARTS.includes((local || '').toLowerCase())) {
           const parts = (domain || '').split('.');
           // mail.instagram.com → instagram, accounts.google.com → google
           return parts.length >= 3 ? parts[parts.length - 2] : parts[0];
@@ -1129,6 +1131,13 @@
         // 일반 계정: 이름 있으면 이름, 없으면 @ 앞부분
         if (p.name && p.name.trim()) return p.name.trim();
         return local || '(알 수 없음)';
+      }
+
+      /* ── 실제 Gmail 표시명(이름)을 가진 사람인지 판별 (메일주소 @ 앞부분 대체가 아닌 경우만) ── */
+      function hasGmailDisplayName(p) {
+        if (!p.email || !(p.name && p.name.trim())) return false;
+        const [local] = p.email.split('@');
+        return !GENERIC_LOCAL_PARTS.includes((local || '').toLowerCase());
       }
 
       /* ── 친밀도 기반 카드 색상 ── */
@@ -1187,6 +1196,8 @@
       let periodStatsLoaded = false;
       let statsDebounceTimer = null;
       let contactPhotos = {};     // email → photo URL
+      let generatedAvatars = {};  // email → GPT 생성 아바타 이미지 URL
+      let avatarGenStarted = false;
       let sortMode = 'affinity';
       let sentStatsMap = {};      // email → 보낸 메일수
       let receivedStatsMap = {};  // email → 받은 메일수
@@ -1325,7 +1336,7 @@
           const ps = periodStats[(p.email || '').toLowerCase()] || {};
           const em = (p.email || '').toLowerCase();
           const total = (ps.sent || 0) + (ps.received || 0);
-          const photo = CUSTOM_AVATARS[displayName] || contactPhotos[em];
+          const photo = generatedAvatars[em] || contactPhotos[em];
           const avatarInner = photo
             ? `<img src="${photo}" alt="${displayName}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(displayName)}'">`
             : initials(displayName);
@@ -1432,39 +1443,6 @@
         });
       }
 
-      /* ── 커스텀 아바타 매핑 (이름 → 이미지 경로) ── */
-      const CUSTOM_AVATARS = {
-        '최지유': 'images/avatar_male.png',
-        '김예은': 'images/avatar_female.png',
-      };
-
-      /* ── 보고서용 설명 하드코딩 ── */
-      const _DEMO_DESC = {
-        '최지유': '이름: 최지유\n관계: 상대방은 함께 일하는 동료이다.\n자주 주고받은 내용: 프로젝트 관련 최종보고서를 전달 받은 내용이 주를 이룬다.',
-      };
-
-      /* ── 보고서용 친밀도 하드코딩 패치 ── */
-      const _DEMO_AFFINITY = {
-        'cafucafu': 0.80,
-        'csi10186': 0.60,
-        'inhist73': 0.60,
-      };
-      function _applyDemoPatch(list) {
-        // Instagram 계정 중 기존 affinity 가장 높은 1개만 0.99(빨강)로 패치
-        const instaList = list
-          .filter(p => (p.email || '').toLowerCase().includes('instagram'))
-          .sort((a, b) => (b.affinity || 0) - (a.affinity || 0));
-        const topInsta = (instaList[0]?.email || '').toLowerCase();
-        return list.map(p => {
-          const email = (p.email || '').toLowerCase();
-          if (topInsta && email === topInsta) return { ...p, affinity: 0.99 };
-          for (const [key, aff] of Object.entries(_DEMO_AFFINITY)) {
-            if (email.includes(key)) return { ...p, affinity: aff };
-          }
-          return p;
-        });
-      }
-
       /* ── 데이터 로드 ── */
       async function loadPeople() {
         const gmailId = localStorage.getItem('gw_gmail_id') || '';
@@ -1476,15 +1454,16 @@
         let dateRange = null;
 
         try {
-          const [pRes, dRes, phRes] = await Promise.all([
+          const [pRes, dRes, phRes, avRes] = await Promise.all([
             fetch('/high_affinity_person_stats', post()),
             fetch('/mail-date-range', post()),
-            fetch('/contact-photos', post())
+            fetch('/contact-photos', post()),
+            fetch('/person-avatars', post())
           ]);
 
           if (pRes.ok) {
             const j = await pRes.json();
-            allPeople = _applyDemoPatch(j.data || j || []);
+            allPeople = j.data || j || [];
           } else {
             console.error('high_affinity_person_stats 오류:', pRes.status);
           }
@@ -1500,11 +1479,16 @@
           if (phRes.ok) {
             contactPhotos = await phRes.json();
           }
+
+          if (avRes.ok) {
+            generatedAvatars = await avRes.json();
+          }
         } catch (e) {
           console.error('loadPeople 네트워크 오류:', e);
         }
 
         renderCards();
+        startAvatarGeneration();
 
         if (dateRange) {
           initTimeline(new Date(dateRange.first_date).getTime(), new Date(dateRange.last_date).getTime());
@@ -1512,6 +1496,39 @@
           const fallbackEnd = Date.now();
           const fallbackStart = fallbackEnd - 1000 * 60 * 60 * 24 * 365 * 3;
           initTimeline(fallbackStart, fallbackEnd);
+        }
+      }
+
+      /* ── Gmail 표시명이 있는 사람만 골라 GPT 이미지 API로 아바타 생성 (이미 생성된 사람은 서버에서 캐시로 건너뜀) ── */
+      async function startAvatarGeneration() {
+        if (avatarGenStarted) return;
+        avatarGenStarted = true;
+
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        if (!gmailId) return;
+
+        const candidates = groupByEntityName(allPeople)
+          .filter(p => hasGmailDisplayName(p) && !generatedAvatars[(p.email || '').toLowerCase()])
+          .map(p => ({ email: p.email, name: resolveDisplayName(p) }));
+
+        if (!candidates.length) return;
+
+        const BATCH_SIZE = 6;
+        for (let i = 0; i < candidates.length; i += BATCH_SIZE) {
+          const batch = candidates.slice(i, i + BATCH_SIZE);
+          try {
+            const res = await fetch('/generate-person-avatars', {
+              method: 'POST', headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ gmail_id: gmailId, people: batch })
+            });
+            if (res.ok) {
+              const j = await res.json();
+              Object.assign(generatedAvatars, j.data || {});
+              renderCards();
+            }
+          } catch (e) {
+            console.error('아바타 생성 오류:', e);
+          }
         }
       }
 
@@ -1600,16 +1617,10 @@
         const personName  = (typeof person === 'object') ? (person.name || '') : '';
         const el = document.getElementById('mp-desc-profile-content');
         if (!el) return;
-        // 하드코딩 우선 확인 (이름 매칭)
-        const demoKey = Object.keys(_DEMO_DESC).find(k => personName.includes(k) || personEmail.includes(k));
-        const rawDesc = demoKey
-          ? _DEMO_DESC[demoKey]
-          : (() => {
-              const found = descriptions.find(d =>
-                (d.person_account_id || '').toLowerCase() === personEmail.toLowerCase()
-              );
-              return found ? found.description : null;
-            })();
+        const found = descriptions.find(d =>
+          (d.person_account_id || '').toLowerCase() === personEmail.toLowerCase()
+        );
+        const rawDesc = found ? found.description : null;
         if (!rawDesc) {
           el.innerHTML = '<p class="mp-desc-profile-empty">등록된 설명이 없습니다.</p>';
           return;
@@ -1903,7 +1914,7 @@
         const avatarEl = document.getElementById('mp-detail-avatar');
         avatarEl.style.background = bg;
         avatarEl.style.color = textColor;
-        const detailPhoto = CUSTOM_AVATARS[detailDisplayName] || contactPhotos[(person.email || '').toLowerCase()];
+        const detailPhoto = generatedAvatars[(person.email || '').toLowerCase()] || contactPhotos[(person.email || '').toLowerCase()];
         if (detailPhoto) {
           avatarEl.innerHTML = `<img src="${detailPhoto}" alt="${detailDisplayName}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(detailDisplayName)}'">`;
         } else {
@@ -2097,7 +2108,7 @@
         // 탭1: 친밀도 순위
         if (afRes.status === 'fulfilled' && afRes.value.ok) {
           const j = await afRes.value.json();
-          const list = _applyDemoPatch(j.data || []);
+          const list = j.data || [];
           if (list.length) renderMpAffinity(list);
           else document.getElementById('mp-rp1-aff').innerHTML =
             '<span style="color:#a0b8a8;font-size:0.8rem;">데이터 없음</span>';
