@@ -46,6 +46,7 @@ from util.database.db_writer import (
     rebuild_keyword_mail,
 )
 from util.extract_statics import start_statics_pipeline_background
+from util.avatar_generator import get_cached_person_avatars, generate_person_avatars_batch
 
 from util.sse_broadcaster import subscribe, unsubscribe
 
@@ -1816,6 +1817,34 @@ def get_contact_photos():
         return jsonify({}), 200
     with open(paths.MAIL_PHOTOS_PATH, "r", encoding="utf-8") as f:
         return jsonify(json.load(f))
+
+
+@app.route("/person-avatars", methods=["POST"])
+def get_person_avatars():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    if not gmail_id:
+        return jsonify({}), 200
+    paths = UserPaths(BASE_DIR, gmail_id)
+    return jsonify(get_cached_person_avatars(paths))
+
+
+@app.route("/generate-person-avatars", methods=["POST"])
+def generate_person_avatars():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    people = data.get("people", [])
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    paths = UserPaths(BASE_DIR, gmail_id)
+    result = generate_person_avatars_batch(paths, people)
+    return jsonify({"gmail_id": gmail_id, "data": result})
+
+
+@app.route("/person-avatar-image/<gmail_id>/<filename>")
+def person_avatar_image(gmail_id, filename):
+    paths = UserPaths(BASE_DIR, gmail_id)
+    return send_from_directory(paths.AVATAR_IMAGES_DIR, filename)
 
 
 @app.route("/high_affinity_person_stats", methods=["POST"])
