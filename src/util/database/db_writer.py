@@ -135,19 +135,43 @@ def save_person_stats_to_db(paths, update_date=None):
         cursor.close()
         conn.close()
 
-def save_query_to_db(gmail_id: str, context: str, response_time: float, method: str = ""):
+_MODEL_COST_PER_1M = {
+    "gpt-4o-mini": {"input": 0.150, "output": 0.600},
+    "gpt-4o":      {"input": 2.50,  "output": 10.00},
+}
+
+def _calc_cost_usd(model_name: str, input_tokens: int, output_tokens: int) -> float:
+    costs = _MODEL_COST_PER_1M.get(model_name, {"input": 0.0, "output": 0.0})
+    return (input_tokens * costs["input"] + output_tokens * costs["output"]) / 1_000_000
+
+
+def save_query_to_db(
+    gmail_id: str,
+    context: str,
+    response_time: float,
+    method: str = "",
+    model_name: str = None,
+    input_tokens: int = None,
+    output_tokens: int = None,
+):
     latest_user = get_latest_user_record(gmail_id)
     if not latest_user:
         print(f"[WARN] save_query_to_db: user 테이블에 {gmail_id} 없음, 저장 생략")
         return
+
+    cost_usd = None
+    if model_name and input_tokens is not None and output_tokens is not None:
+        cost_usd = _calc_cost_usd(model_name, input_tokens, output_tokens)
 
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
         cursor.execute(
             """
-            INSERT INTO query (query_id, user_account_id, update_date, context, response_time, method, response_date)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO query
+                (query_id, user_account_id, update_date, context, response_time, method, response_date,
+                 model_name, input_tokens, output_tokens, cost_usd)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 str(uuid.uuid4()),
@@ -157,10 +181,14 @@ def save_query_to_db(gmail_id: str, context: str, response_time: float, method: 
                 round(response_time, 5),
                 method,
                 datetime.datetime.now(),
+                model_name,
+                input_tokens,
+                output_tokens,
+                cost_usd,
             )
         )
         conn.commit()
-        print(f"[DB] query 저장 완료: {gmail_id} / {response_time:.2f}s / {method}")
+        print(f"[DB] query 저장 완료: {gmail_id} / {response_time:.2f}s / {method} / {model_name} / in={input_tokens} out={output_tokens} cost=${cost_usd}")
     except Exception as e:
         conn.rollback()
         print(f"[ERROR] save_query_to_db 실패: {e}")
