@@ -312,7 +312,7 @@ def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
         GROUP BY DATE_FORMAT(mail_date, '%Y-%m')
         ORDER BY month ASC
         """
-        cursor.execute(sql, (like_param, like_param, gmail_id, update_date, start_date, end_date))
+        cursor.execute(sql, (like_param, like_param, gmail_id, update_date, start_date, end_date + ' 23:59:59'))
         rows = cursor.fetchall()
 
         monthly = [
@@ -349,7 +349,7 @@ def get_date_range_person_stats(gmail_id, start_date, end_date, sort_by):
           AND mail_date BETWEEN %s AND %s
           AND direction = %s
         """
-        cursor.execute(sql, (gmail_id, update_date, start_date, end_date, direction_filter))
+        cursor.execute(sql, (gmail_id, update_date, start_date, end_date + ' 23:59:59', direction_filter))
         rows = cursor.fetchall()
 
         email_pattern = re.compile(r'[\w.+\-]+@[\w.\-]+')
