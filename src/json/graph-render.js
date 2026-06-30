@@ -209,10 +209,11 @@
           const maxLen = Math.floor(nodeRadius(d) / 4.5);
           return label.length > maxLen ? label.slice(0, maxLen) + "…" : label;
       }) // label 없으면 id 표시
-      .attr("text-anchor", "middle") // 가로 중앙 정렬
-      .attr("dominant-baseline", "middle") // 세로 중앙 정렬
-      .attr("font-size", d => Math.max(9, Math.min(13, nodeRadius(d) * 0.45))) // 글자 크기
-      .attr("fill", "#333") // 글자 색상
+      .attr("text-anchor", "middle")
+      .attr("dominant-baseline", "middle")
+      .attr("font-size", d => Math.max(11, Math.min(15, nodeRadius(d) * 0.52)))
+      .attr("font-weight", "700")
+      .attr("fill", "#1a1a1a")
       .style("pointer-events", "none");
 
     let _fitted = false;
