@@ -190,7 +190,7 @@ def _save_mail_contact_stats(paths, mode: str = "rewrite"):
 
     # relationships.parquet 기준: 실제 SENT_BY/SENT_TO가 있는 연락처만
     sent_by_count = rel_df[rel_df['description'] == 'SENT_BY'].groupby('target').size()
-    sent_to_count = rel_df[rel_df['description'] == 'SENT_TO'].groupby('target').size()
+    sent_to_count = rel_df[rel_df['description'].str.contains('SENT_TO')].groupby('target').size()
 
     all_contacts = set(sent_by_count.index) | set(sent_to_count.index)
     all_contacts.discard(paths.GMAIL_ID.upper())   # 본인 제외
@@ -221,15 +221,15 @@ def _save_mail_contact_stats(paths, mode: str = "rewrite"):
             prev = stats[email_lower]
             stats[email_lower] = {
                 "name":          name_map.get(contact.upper()) or prev.get("name", ""),
-                "sent":          prev.get("sent", 0)          + int(sent_by_count.get(contact, 0)),
-                "received":      prev.get("received", 0)      + int(sent_to_count.get(contact, 0)),
+                "sent":          prev.get("sent", 0)          + int(sent_to_count.get(contact, 0)),
+                "received":      prev.get("received", 0)      + int(sent_by_count.get(contact, 0)),
                 "friendly_mail": prev.get("friendly_mail", 0) + int(friendly_count.get(contact, 0)),
             }
         else:
             stats[email_lower] = {
                 "name":          name_map.get(contact.upper(), ""),
-                "sent":          int(sent_by_count.get(contact, 0)),
-                "received":      int(sent_to_count.get(contact, 0)),
+                "sent":          int(sent_to_count.get(contact, 0)),
+                "received":      int(sent_by_count.get(contact, 0)),
                 "friendly_mail": int(friendly_count.get(contact, 0)),
             }
 
