@@ -2,6 +2,14 @@ import re,os
 from config.settings import GRAPHRAG_SETTINGS_DIR, GRAPHRAG_PROMPTS_DIR
 import shutil
 
+_MAX_MAILS_CONFIG = {
+    "ddyr1554@gmail.com": 200,
+    "inhist44@gmail.com": 1000,
+    "cjiyou1090@gmail.com": 1500,
+    "csi10186@gmail.com": 500,
+    "03yeah03@gmail.com": 100,
+}
+
 def _gmail_to_dir_name(gmail_id: str) -> str:
     s = gmail_id.strip().lower()
     s = s.replace("@", "_at_")
@@ -42,6 +50,7 @@ class UserPaths:
         self.MAIL_AVATARS_PATH  = os.path.join(self.MAIL_STATICS_PATH, "person_avatars.json")
         self.AVATAR_IMAGES_DIR  = os.path.join(self.MAIL_STATICS_PATH, "avatars")
         self.UPDATE_DIR = os.path.join(self.GRAPHRAG_ROOT, "update_output")
+        self.MAX_MAILS = _MAX_MAILS_CONFIG.get(gmail_id, None)
 
 
 
