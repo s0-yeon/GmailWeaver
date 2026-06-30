@@ -16,7 +16,7 @@ from util.user_path import user_graphrag_init
 
 from config.settings import MAIL_BLOCK_SEP
 from util.extract_statics import start_timer,end_timer,format_elapsed_time, _extract_statics_pipeline
-from util.database.db_writer import create_user,save_person_stats_to_db,save_keyword_stats_to_db, save_label_to_db, save_mail_to_db
+from util.database.db_writer import create_user,save_person_stats_to_db,save_keyword_stats_to_db, save_label_to_db, save_mail_to_db, collect_indexing_stats, update_user_indexing_stats
 from util.mail_summary import generate_mail_summaries
 
 # output 폴더를 3초 간격으로 감시해 인덱싱 단계 변화를 job 진행도에 반영
@@ -396,6 +396,8 @@ def run_graph_pipeline(job_id, paths, env, attachment_texts_by_mail=None, added_
                 index_time=formatted_time,
                 my_mail_count=added_count
             )
+        indexing_stats = collect_indexing_stats(paths)
+        update_user_indexing_stats(paths.GMAIL_ID, None, indexing_stats)
         db_threads = [
             threading.Thread(target=save_person_stats_to_db, args=(paths, target_update_date)),
             threading.Thread(target=save_label_to_db, args=(paths, target_update_date)),
@@ -437,6 +439,8 @@ def run_graph_update_pipeline(job_id, paths, env):
         build_graph_json(job_id,paths, env)
 
         _extract_statics_pipeline(paths, mode='append')
+        indexing_stats = collect_indexing_stats(paths)
+        update_user_indexing_stats(paths.GMAIL_ID, None, indexing_stats)
         db_threads = [
             threading.Thread(target=save_person_stats_to_db, args=(paths,)),
             threading.Thread(target=save_mail_to_db, args=(paths,)),

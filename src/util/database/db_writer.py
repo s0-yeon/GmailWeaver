@@ -33,20 +33,22 @@ def get_latest_user_record(user_account_id: str):
         cursor.close()
         conn.close()
 
-def create_user(user_account_id, ended_at, index_time,my_mail_count):
+def create_user(user_account_id, ended_at, index_time, my_mail_count):
     conn = get_db_connection()
     cursor = conn.cursor()
 
     sql = """
-    INSERT INTO user (user_account_id, update_date, index_time,my_mail_count)
-    VALUES (%s, %s, %s, %s)
+    INSERT INTO user (user_account_id, update_date, index_time, my_mail_count, llm_model, embed_model)
+    VALUES (%s, %s, %s, %s, %s, %s)
     """
 
     cursor.execute(sql, (
         user_account_id,
         ended_at,
         str(index_time),
-         my_mail_count
+        my_mail_count,
+        "",
+        "",
     ))
 
     conn.commit()
@@ -140,9 +142,145 @@ _MODEL_COST_PER_1M = {
     "gpt-4o":      {"input": 2.50,  "output": 10.00},
 }
 
+_EMBED_COST_PER_1M = {
+    "text-embedding-3-small": 0.02,
+    "text-embedding-3-large": 0.13,
+    "text-embedding-ada-002": 0.10,
+}
+
 def _calc_cost_usd(model_name: str, input_tokens: int, output_tokens: int) -> float:
     costs = _MODEL_COST_PER_1M.get(model_name, {"input": 0.0, "output": 0.0})
     return (input_tokens * costs["input"] + output_tokens * costs["output"]) / 1_000_000
+
+def _calc_embed_cost_usd(model_name: str, total_tokens: int) -> float:
+    cost = _EMBED_COST_PER_1M.get(model_name, 0.0)
+    return (total_tokens * cost) / 1_000_000
+
+
+def collect_indexing_stats(paths) -> dict:
+    """캐시 폴더를 읽어 인덱싱에 사용된 LLM/임베딩 통계를 집계"""
+    LLM_FOLDERS = ["community_reporting", "extract_graph", "summarize_descriptions"]
+    EMBED_FOLDER = "text_embedding"
+
+    cache_dir = os.path.join(paths.GRAPHRAG_ROOT, "cache")
+
+    llm_calls = 0
+    input_tokens = 0
+    output_tokens = 0
+    llm_model = ""
+
+    embed_calls = 0
+    embed_tokens = 0
+    embed_model = ""
+
+    for folder in LLM_FOLDERS:
+        folder_path = os.path.join(cache_dir, folder)
+        if not os.path.exists(folder_path):
+            continue
+        for fname in os.listdir(folder_path):
+            fpath = os.path.join(folder_path, fname)
+            try:
+                with open(fpath, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                result = data.get("result", {})
+                usage = result.get("usage", {})
+                llm_calls += 1
+                input_tokens += usage.get("prompt_tokens", 0)
+                output_tokens += usage.get("completion_tokens", 0)
+                if not llm_model:
+                    llm_model = (
+                        data.get("input", {}).get("parameters", {}).get("model", "")
+                        or result.get("model", "")
+                    )
+            except Exception as e:
+                print(f"[WARN] LLM 캐시 읽기 실패 {fpath}: {e}")
+
+    embed_path = os.path.join(cache_dir, EMBED_FOLDER)
+    if os.path.exists(embed_path):
+        for fname in os.listdir(embed_path):
+            fpath = os.path.join(embed_path, fname)
+            try:
+                with open(fpath, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                result = data.get("result", {})
+                usage = result.get("usage", {})
+                embed_calls += 1
+                embed_tokens += usage.get("total_tokens", 0)
+                if not embed_model:
+                    embed_model = result.get("model", "") or (
+                        data.get("input", {}).get("parameters", {}).get("model", "")
+                    )
+            except Exception as e:
+                print(f"[WARN] 임베딩 캐시 읽기 실패 {fpath}: {e}")
+
+    cost_usd = (
+        _calc_cost_usd(llm_model, input_tokens, output_tokens)
+        + _calc_embed_cost_usd(embed_model, embed_tokens)
+    )
+
+    print(
+        f"[STATS] llm={llm_calls}calls in={input_tokens} out={output_tokens} model={llm_model} | "
+        f"embed={embed_calls}calls tokens={embed_tokens} model={embed_model} | cost=${cost_usd:.6f}"
+    )
+    return {
+        "llm_calls": llm_calls,
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "llm_model": llm_model,
+        "embed_calls": embed_calls,
+        "embed_tokens": embed_tokens,
+        "embed_model": embed_model,
+        "cost_usd": cost_usd,
+    }
+
+
+def update_user_indexing_stats(gmail_id: str, update_date, stats: dict):
+    """user 테이블의 인덱싱 통계 컬럼을 업데이트"""
+    if update_date is None:
+        latest = get_latest_user_record(gmail_id)
+        if not latest:
+            print(f"[WARN] update_user_indexing_stats: user 없음 {gmail_id}")
+            return
+        update_date = latest["update_date"]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            """
+            UPDATE user SET
+                llm_calls     = %s,
+                input_tokens  = %s,
+                output_tokens = %s,
+                llm_model     = %s,
+                embed_calls   = %s,
+                embed_tokens  = %s,
+                embed_model   = %s,
+                cost_usd      = %s
+            WHERE user_account_id = %s AND update_date = %s
+            """,
+            (
+                stats["llm_calls"],
+                stats["input_tokens"],
+                stats["output_tokens"],
+                stats["llm_model"],
+                stats["embed_calls"],
+                stats["embed_tokens"],
+                stats["embed_model"],
+                stats["cost_usd"],
+                gmail_id,
+                update_date,
+            ),
+        )
+        conn.commit()
+        print(f"[DB] user 인덱싱 통계 저장 완료: {gmail_id} cost=${stats['cost_usd']:.6f}")
+    except Exception as e:
+        conn.rollback()
+        print(f"[ERROR] update_user_indexing_stats 실패: {e}")
+        raise
+    finally:
+        cursor.close()
+        conn.close()
 
 
 def save_query_to_db(
