@@ -11,6 +11,8 @@
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <title>MyPeople | GmailWeaver</title>
     <script type="module" src="/src/main-minimal.js"></script>
+    <link rel="stylesheet" as="style" crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
     <style>
       .site_title_text {
         font-size: 1.2rem; font-weight: 700; color: #fff;
@@ -49,6 +51,7 @@
         padding: 16px 90px 0 90px !important;
         display: flex !important; flex-direction: column !important;
         gap: 10px !important; box-sizing: border-box !important;
+        font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       }
 
       /* ── 콘텐츠 행 (왼쪽+오른쪽 패널) ── */
@@ -59,9 +62,9 @@
         overflow: visible;
       }
 
-      /* ── 왼쪽 컬럼 (사람 패널, 8) ── */
+      /* ── 왼쪽 컬럼 (사람 패널) ── */
       .mp-left {
-        flex: 8; min-width: 0;
+        flex: 1; min-width: 0;
         display: flex; flex-direction: column;
       }
 
@@ -171,9 +174,12 @@
         flex: 1; min-height: 0;
         padding: 8px 14px;
         overflow-y: auto;
+        -webkit-mask-image: -webkit-radial-gradient(circle, #fff 100%, #000 100%);
+        mask-image: radial-gradient(circle, #fff 100%, #000 100%);
       }
       .mp-panel::-webkit-scrollbar { width: 4px; }
       .mp-panel::-webkit-scrollbar-thumb { background: #b8ddd0; border-radius: 10px; }
+      .mp-panel:has(.mp-detail.open) { overflow: hidden; }
 
       /* ── 패널 헤더 ── */
       .mp-panel-header {
@@ -181,9 +187,8 @@
         width: 100%; gap: 20px;
       }
       .mp-header-left {
-        flex: 8; display: flex; align-items: center;
+        flex: 1; display: flex; align-items: center;
         justify-content: space-between;
-        padding-right: 28px;
       }
       .mp-header-spacer { flex: 2; }
       .mp-title-wrap { display: flex; align-items: center; gap: 8px; }
@@ -293,16 +298,16 @@
       .mp-card.ca-gray:hover   { box-shadow:0 12px 24px rgba(180,200,190,0.35); }
 
       .mp-avatar {
-        width: 62%; height: auto; aspect-ratio: 1/1;
-        max-width: 110px; min-width: 60px;
+        width: 76%; height: auto; aspect-ratio: 1/1;
+        max-width: clamp(100px, 11vw, 148px); min-width: clamp(56px, 6vw, 78px);
         border-radius: 50%;
         background: rgba(255,255,255,0.88);
         display: flex; align-items: center; justify-content: center;
-        font-size: clamp(1rem, 3.5vw, 1.6rem); font-weight: 800;
+        font-size: clamp(1.3rem, 4vw, 2rem); font-weight: 800;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex-shrink: 0;
       }
       .mp-name {
-        font-size: 1.48rem; font-weight: 700;
+        font-size: clamp(1.1rem, 3vw, 2.15rem); font-weight: 700;
         color: rgba(30,50,44,0.82);
         text-align: center; line-height: 1.25; word-break: keep-all;
       }
@@ -315,10 +320,10 @@
       }
       .mp-period-badge {
         position: absolute; top: 6px; right: 6px;
-        font-size: 0.58rem; font-weight: 700;
+        font-size: 0.8rem; font-weight: 700;
         color: rgba(20,50,40,0.75);
         background: rgba(255,255,255,0.82);
-        border-radius: 8px; padding: 1px 6px;
+        border-radius: 9px; padding: 3px 9px;
         letter-spacing: 0.01em; line-height: 1.6;
         pointer-events: none;
       }
@@ -468,6 +473,7 @@
       /* 설명 탭 패널 */
       .mp-detail-desc {
         display: none; flex: 1; min-height: 0; overflow-y: auto;
+        overscroll-behavior: contain;
         background: linear-gradient(160deg, #f4f8ff 0%, #f0faf8 100%);
         padding: clamp(20px, 2.5vw, 36px) clamp(20px, 3vw, 48px);
         flex-direction: column;
@@ -595,6 +601,7 @@
       .mp-vchart-y span { font-size: 0.58rem; color: #aac4bc; text-align: right; line-height: 1; font-weight: 600; }
       .mp-vchart-area {
         flex: 1; overflow-x: auto; height: 160px;
+        overscroll-behavior: contain;
         display: flex; align-items: flex-end;
         border-left: 1.5px solid rgba(38,185,154,0.25);
         border-bottom: 1.5px solid rgba(38,185,154,0.25);
@@ -641,6 +648,7 @@
         border-radius: 14px;
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
         overflow-y: auto;
+        overscroll-behavior: contain;
       }
       .mp-wc-wrap::-webkit-scrollbar { width: 4px; }
       .mp-wc-wrap::-webkit-scrollbar-thumb { background: rgba(160,140,220,0.35); border-radius: 4px; }
@@ -885,7 +893,6 @@
                   </div>
                 </div>
               </div>
-              <div class="mp-header-spacer"></div>
             </div>
 
             <!-- 왼쪽+오른쪽 패널 행 -->
@@ -1003,58 +1010,6 @@
             </div>
             </div><!-- /mp-left -->
 
-            <!-- 오른쪽: 번호탭 통계 패널 -->
-            <div class="mp-right-wrap">
-              <!-- 번호 탭 버튼 -->
-              <div class="mp-right-numbtns">
-                <button class="mp-right-numbtn n1 active" onclick="switchRightTab(1)">1</button>
-                <button class="mp-right-numbtn n2" onclick="switchRightTab(2)">2</button>
-                <button class="mp-right-numbtn n3" onclick="switchRightTab(3)">3</button>
-              </div>
-
-              <div class="mp-right" id="mp-right-panel">
-
-                <!-- 패널 1: 친밀도 순위 + 키워드 -->
-                <div class="mp-rpanel" id="mp-rp1">
-                  <div class="mp-right-title">친밀도 순위</div>
-                  <div class="mp-right-card" style="flex:1.2;" id="mp-rp1-aff">
-                    <span style="color:#7ab8a4;font-size:0.82rem;">로딩 중...</span>
-                  </div>
-                  <div class="mp-right-title" style="margin-top:10px;">키워드</div>
-                  <div class="mp-right-card" id="mp-rp1-kw">
-                    <div id="mp-global-wc" style="display:flex;flex-wrap:wrap;align-items:center;gap:5px 7px;"><span style="color:#7ab8a4;font-size:0.82rem;">로딩 중...</span></div>
-                  </div>
-                </div>
-
-                <!-- 패널 2: 받은 메일 순위 + 보낸 메일 순위 -->
-                <div class="mp-rpanel" id="mp-rp2" style="display:none;">
-                  <div class="mp-right-title">보낸 메일 순위</div>
-                  <div class="mp-right-card" style="flex:1;" id="mp-rp2-recv">
-                    <span style="color:#7ab8a4;font-size:0.82rem;">로딩 중...</span>
-                  </div>
-                  <div class="mp-right-title" style="margin-top:10px;">받은 메일 순위</div>
-                  <div class="mp-right-card" style="flex:1;" id="mp-rp2-sent">
-                    <span style="color:#7ab8a4;font-size:0.82rem;">로딩 중...</span>
-                  </div>
-                </div>
-
-                <!-- 패널 3: 지식그래프 + 메일 동기화 현황 -->
-                <div class="mp-rpanel" id="mp-rp3" style="display:none;">
-                  <div class="mp-right-title" style="cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleGraphView()">
-                    지식그래프
-                    <span style="font-size:0.7rem;color:#a0c8b8;font-weight:400;">↗ 전체보기</span>
-                  </div>
-                  <div class="mp-right-card mp-graph-mini-card">
-                    <svg id="mp-graph-mini" style="width:100%;height:100%;display:block;"></svg>
-                  </div>
-                  <div class="mp-right-title" style="margin-top:10px;">메일 동기화 현황</div>
-                  <div class="mp-right-card" id="mp-rp3-sync">
-                    <span style="color:#7ab8a4;font-size:0.82rem;">로딩 중...</span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
 
             </div><!-- /mp-content -->
 
@@ -1106,11 +1061,21 @@
       /* ── 이름 길이별 폰트 크기 ── */
       function nameFontSize(name) {
         const len = (name || '').length;
-        if (len <= 4)  return 'clamp(0.9rem, 1.7vw, 1.7rem)';
-        if (len <= 6)  return 'clamp(0.82rem, 1.4vw, 1.4rem)';
-        if (len <= 9)  return 'clamp(0.72rem, 1.2vw, 1.2rem)';
-        if (len <= 15) return 'clamp(0.6rem,  1.0vw, 1.0rem)';
-        return             'clamp(0.5rem,  0.82vw, 0.88rem)';
+        const isKorean = /[가-힣]/.test(name || '');
+        if (isKorean) {
+          if (len <= 4)  return 'clamp(0.9rem, 1.7vw, 1.7rem)';
+          if (len <= 6)  return 'clamp(0.82rem, 1.4vw, 1.4rem)';
+          if (len <= 9)  return 'clamp(0.72rem, 1.2vw, 1.2rem)';
+          if (len <= 15) return 'clamp(0.6rem,  1.0vw, 1.0rem)';
+          return             'clamp(0.5rem,  0.82vw, 0.88rem)';
+        }
+        /* 영문/숫자는 글자 폭이 한글보다 좁으므로 같은 길이 구간이어도 더 크게 하되,
+           최댓값(가장 짧은 구간)은 한글 3~4글자 구간 크기를 넘지 않도록 캡 */
+        if (len <= 5)  return 'clamp(0.88rem, 1.68vw, 1.68rem)';
+        if (len <= 8)  return 'clamp(0.8rem,  1.43vw, 1.43rem)';
+        if (len <= 12) return 'clamp(0.7rem,  1.2vw,  1.2rem)';
+        if (len <= 18) return 'clamp(0.58rem, 0.97vw, 0.97rem)';
+        return             'clamp(0.48rem, 0.8vw,  0.85rem)';
       }
 
       /* ── 발신 전용/브랜드 계정 판별 (표시 이름 추론 + 아바타 생성 대상 판별 공용) ──
@@ -1951,6 +1916,8 @@
         switchDetailTab('stats');
 
         currentDetailPerson = person;
+        const panel = document.querySelector('.mp-panel');
+        if (panel) panel.scrollTop = 0;
         document.getElementById('mp-detail').classList.add('open');
 
         // 설명 탭 프로필
