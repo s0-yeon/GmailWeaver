@@ -1540,12 +1540,9 @@
         const COLS = 7;
         const COLORS = ['c0','c1','c2','c3','c4','c5','c6'];
         const AVATAR_COLORS = ['#0f7a62','#1d55c4','#5b21b6','#b45309','#9d174d','#0f766e','#c2410c'];
-        const TEST_TIER_VALUES = [0.95, 0.80, 0.55, 0.25, 0.05];  // TEMP TEST
-        const TEST_BLOCK_SIZE = Math.ceil(list.length / TEST_TIER_VALUES.length);  // TEMP TEST — 전체를 5구간으로 한 번만 나눠 순서대로 내려가게
         grid.innerHTML = list.map((p, i) => {
-          const testAffinity = TEST_TIER_VALUES[Math.min(TEST_TIER_VALUES.length - 1, Math.floor(i / TEST_BLOCK_SIZE))];  // TEMP TEST — 이 줄을 지우고 아래 줄 주석을 해제하면 원래대로 복귀
-          // const testAffinity = p.affinity;
-          const ac = affinityColor(testAffinity);
+          const affinity = p.affinity;
+          const ac = affinityColor(affinity);
           const cardVars = `--ca-light:${ac.light};--ca-dark:${ac.dark};--ca-shadow:${ac.shadow};--ca-shadow-hover:${ac.shadowHover};`;
           const displayName = resolveDisplayName(p);
           const ps = periodStats[(p.email || '').toLowerCase()] || {};
@@ -1558,7 +1555,7 @@
             : initials(displayName);
           let badge = '';
           if (sortMode === 'affinity') {
-            if (testAffinity != null) badge = `<div class="mp-period-badge">${Math.round(testAffinity * 100)}%</div>`;
+            if (affinity != null) badge = `<div class="mp-period-badge">${Math.round(affinity * 100)}%</div>`;
           } else if (sortMode === 'name') {
             badge = '';
           } else if (sortMode === 'sent') {
