@@ -13,8 +13,9 @@ import base64
 import requests
 import shutil
 import zlib
-import traceback 
+import traceback
 import urllib.parse     # import missing 해결
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from util.date_query import run_date_range_query
 
@@ -34,7 +35,7 @@ from util.jobs.job_store import *
 from util.jobs.job_run import start_graph_pipeline_background, start_graph_update_pipeline_background
 from config.settings import *
 from util.user_path import UserPaths
-from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats, get_keywords_by_person_date, get_mail_date_range, get_mail_exchange_stats, calculate_eis, get_person_descriptions, get_date_range_person_stats
+from util.database.db_reader import get_mail_stats, get_keyword_stats,get_mail_sync_stats,get_user_rating_stats,get_high_affinity_person_stats, get_keywords_by_person_date, get_mail_date_range, get_mail_exchange_stats, calculate_eis, get_person_descriptions, get_date_range_person_stats, get_person_mail_ids_in_range
 
 
 from util.database.db_writer import (
@@ -70,7 +71,7 @@ init_processed_attachments_table()
 init_keyword_mail_table()
 
 # Apps Script Web App URL
-WEBAPP_URL = "https://script.google.com/macros/s/AKfycbys9oYAwgYWdhRTqGdafvVxzGWW6q4ZkEx2JSOPOE8DN0uq5kfe8JuqC1wIUDnu9UZ4/exec"
+WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzWHApeAR296kK9-vE15U86o2p-FD7xKVvGJ1Q9EDdwh065CMSNbs8SIjIypx4DNpED/exec"
 
 
 # 한글 출력 시 깨지거나 에러 나는 것 방지
@@ -1917,6 +1918,93 @@ def send_mail_exchange_stats():
         return jsonify({"error": "start_date and end_date are required"}), 400
 
     return jsonify({"data": get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date)})
+
+
+_mail_message_cache_lock = threading.Lock()
+
+def _load_mail_message_cache(paths):
+    if not os.path.exists(paths.MAIL_MESSAGE_CACHE_PATH):
+        return {}
+    try:
+        with open(paths.MAIL_MESSAGE_CACHE_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+def _save_mail_message_cache(paths, cache):
+    os.makedirs(paths.MAIL_STATICS_PATH, exist_ok=True)
+    with open(paths.MAIL_MESSAGE_CACHE_PATH, "w", encoding="utf-8") as f:
+        json.dump(cache, f, ensure_ascii=False, indent=2)
+
+
+@app.route("/mail-person-emails", methods=["POST"])
+def send_person_emails_in_range():
+    data = request.json or {}
+    gmail_id       = data.get("gmail_id", "").strip()
+    person_mail_id = data.get("person_gmail_id", "").strip()
+    start_date     = data.get("start_date", "").strip()
+    end_date       = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not person_mail_id:
+        return jsonify({"error": "person_gmail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    # 1) MySQL mail 테이블에서 이 기간에 오간 메일 ID 목록을 가져온다(GraphRAG 인덱싱
+    #    캡과 무관하게 전체 동기화 이력을 담고 있어서, 통계 그래프 숫자와 실제 목록
+    #    건수가 어긋나지 않는다).
+    mail_refs = get_person_mail_ids_in_range(gmail_id, person_mail_id, start_date, end_date)
+
+    # 2) 제목/본문은 MySQL에 없으므로(집계용 테이블), 메일 ID별로 파일 캐시부터 확인하고
+    #    캐시에 없을 때만 Apps Script의 getMessage 액션으로 Gmail에서 가져온다. 메일
+    #    내용은 사실상 안 바뀌는 데이터라 한 번 가져오면 영구히 재사용해도 된다.
+    paths = UserPaths(BASE_DIR, gmail_id)
+    mail_cache = _load_mail_message_cache(paths)
+
+    def _fetch_one(ref):
+        cached = mail_cache.get(ref["id"])
+        if cached:
+            return {**cached, "id": ref["id"], "direction": ref["direction"], "date": ref["date"]}
+        try:
+            res = requests.post(
+                WEBAPP_URL, json={"action": "getMessage", "messageId": ref["id"]}, timeout=15
+            )
+            try:
+                j = res.json()
+            except ValueError:
+                print(f"[mail-person-emails] getMessage 응답이 JSON이 아님 ({ref['id']}, status={res.status_code}): {res.text[:200]!r}")
+                return None
+            if not j.get("ok"):
+                print(f"[mail-person-emails] getMessage 실패 응답 ({ref['id']}): {j.get('error')}")
+                return None
+            msg = j.get("message") or {}
+            body = re.sub(r"\s+", " ", msg.get("body") or "").strip()
+            content = {
+                "subject": msg.get("subject") or "(제목 없음)",
+                "snippet": body[:160],
+                "gmailUrl": msg.get("gmailUrl") or f"https://mail.google.com/mail/u/0/#all/{ref['id']}",
+            }
+            with _mail_message_cache_lock:
+                mail_cache[ref["id"]] = content
+                _save_mail_message_cache(paths, mail_cache)
+            return {**content, "id": ref["id"], "direction": ref["direction"], "date": ref["date"]}
+        except Exception as e:
+            print(f"[mail-person-emails] getMessage 실패 ({ref['id']}): {e}")
+            return None
+
+    emails = []
+    if mail_refs:
+        with ThreadPoolExecutor(max_workers=min(len(mail_refs), 6)) as executor:
+            futures = [executor.submit(_fetch_one, ref) for ref in mail_refs]
+            for future in as_completed(futures):
+                result = future.result()
+                if result:
+                    emails.append(result)
+    emails.sort(key=lambda e: e["date"])
+
+    return jsonify({"data": emails})
 
 
 @app.route("/mail-person-sent-stats", methods=["POST"])

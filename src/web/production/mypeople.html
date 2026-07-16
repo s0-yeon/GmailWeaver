@@ -73,6 +73,8 @@
         flex: 2; min-width: 0;
         position: relative;
         display: flex; flex-direction: column;
+        /* 순위 바/동기화 타일 글자 크기가 이 컬럼의 실제 너비 기준으로 반응하도록 */
+        container-type: inline-size;
       }
       .mp-right-numbtns {
         position: absolute; top: -36px; right: 0;
@@ -82,7 +84,7 @@
       .mp-right-numbtn {
         width: 34px; height: 28px;
         border: none; cursor: pointer;
-        font-size: 0.9rem; font-weight: 900;
+        font-size: clamp(0.75rem, 1.6cqw, 0.9rem); font-weight: 900;
         border-radius: 8px 8px 0 0;
         color: rgba(255,255,255,0.45);
         transition: color 0.15s, height 0.15s;
@@ -106,7 +108,7 @@
       .mp-right.tab2 { background: #6b9df7; border-color: #6b9df7; box-shadow: 0 4px 18px rgba(107,157,247,0.28); }
       .mp-right.tab3 { background: #9b75e0; border-color: #9b75e0; box-shadow: 0 4px 18px rgba(155,117,224,0.28); }
       .mp-right-title {
-        font-size: 0.9rem; font-weight: 700; color: rgba(255,255,255,0.92);
+        font-size: clamp(0.76rem, 1.6cqw, 0.9rem); font-weight: 700; color: rgba(255,255,255,0.92);
         margin-bottom: 10px; flex-shrink: 0; letter-spacing: -0.01em;
         text-shadow: 0 1px 3px rgba(0,0,0,0.15);
       }
@@ -126,10 +128,10 @@
         display: grid; grid-template-columns: 24px 1fr auto;
         align-items: center; gap: 7px; margin-bottom: 9px;
       }
-      .mp-rp-rank { font-size: 0.74rem; font-weight: 800; color: #adb5bd; text-align: center; }
+      .mp-rp-rank { font-size: clamp(0.64rem, 1.3cqw, 0.74rem); font-weight: 800; color: #adb5bd; text-align: center; }
       .mp-rp-bar-wrap { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
       .mp-rp-name {
-        font-size: 0.72rem; font-weight: 700; color: #2d3a4b;
+        font-size: clamp(0.62rem, 1.3cqw, 0.72rem); font-weight: 700; color: #2d3a4b;
         white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       }
       .mp-rp-track { background: #f0f4f0; border-radius: 20px; height: 6px; overflow: hidden; }
@@ -140,7 +142,7 @@
       .mp-rp-fill.aff      { background: linear-gradient(90deg,#26B99A,#1affcc); }
       .mp-rp-fill.received { background: linear-gradient(90deg,#5a94e8,#8ab6f4); }
       .mp-rp-fill.sent     { background: linear-gradient(90deg,#74c69d,#40916c); }
-      .mp-rp-count { font-size: 0.72rem; font-weight: 800; color: #40916c; text-align: right; white-space: nowrap; }
+      .mp-rp-count { font-size: clamp(0.62rem, 1.3cqw, 0.72rem); font-weight: 800; color: #40916c; text-align: right; white-space: nowrap; }
 
       /* ── 동기화 타일 (탭3) ── */
       .mp-sync-tiles {
@@ -153,9 +155,9 @@
         color: #fff; display: flex; align-items: center; gap: 10px;
         min-height: 0;
       }
-      .mp-sync-icon { font-size: 1.2rem; flex-shrink: 0; }
-      .mp-sync-num { font-size: 1rem; font-weight: 900; flex: 1; }
-      .mp-sync-lbl { font-size: 0.6rem; font-weight: 700; opacity: 0.82; text-transform: uppercase; letter-spacing: 0.4px; }
+      .mp-sync-icon { font-size: clamp(1rem, 2.1cqw, 1.2rem); flex-shrink: 0; }
+      .mp-sync-num { font-size: clamp(0.85rem, 1.8cqw, 1rem); font-weight: 900; flex: 1; }
+      .mp-sync-lbl { font-size: clamp(0.52rem, 1.05cqw, 0.6rem); font-weight: 700; opacity: 0.82; text-transform: uppercase; letter-spacing: 0.4px; }
       #mp-global-wc {
         display: flex; flex-wrap: wrap;
         align-items: flex-start; align-content: flex-start;
@@ -176,6 +178,9 @@
         overflow-y: auto;
         -webkit-mask-image: -webkit-radial-gradient(circle, #fff 100%, #000 100%);
         mask-image: radial-gradient(circle, #fff 100%, #000 100%);
+        /* 카드 그리드 안의 글자 크기(아바타 이니셜/이름/배지)가 이 패널의 실제 너비
+           기준으로 반응하도록 컨테이너로 지정 */
+        container-type: inline-size;
       }
       .mp-panel::-webkit-scrollbar { width: 4px; }
       .mp-panel::-webkit-scrollbar-thumb { background: #b8ddd0; border-radius: 10px; }
@@ -189,13 +194,16 @@
       .mp-header-left {
         flex: 1; display: flex; align-items: center;
         justify-content: space-between;
+        /* 왼쪽 패널(.mp-panel)과 같은 너비를 가지므로, 이 헤더 영역 자체를 컨테이너로
+           지정해 제목/드롭다운 등 텍스트가 실제 렌더링 폭 기준으로 반응하게 한다 */
+        container-type: inline-size;
       }
       .mp-header-spacer { flex: 2; }
       .mp-title-wrap { display: flex; align-items: center; gap: 8px; }
-      .mp-title{font-size:2.6rem;font-weight:800;color:#1b2e22;letter-spacing:-.04em}
+      .mp-title{font-size:clamp(1.6rem, 8cqw, 2.6rem);font-weight:800;color:#1b2e22;letter-spacing:-.04em}
       .mp-title span{color:#1a9e6e}
       .mp-count {
-        font-size: 0.72rem; color: #26B99A; font-weight: 700;
+        font-size: clamp(0.6rem, 1.6cqw, 0.72rem); color: #26B99A; font-weight: 700;
         background: rgba(38,185,154,0.12); padding: 2px 8px;
         border-radius: 20px;
       }
@@ -208,7 +216,7 @@
         background: rgba(255,255,255,0.8);
         border: 1.5px solid rgba(200,230,215,0.9);
         border-radius: 10px; padding: 6px 16px;
-        cursor: pointer; font-size: 0.85rem; font-weight: 600;
+        cursor: pointer; font-size: clamp(0.68rem, 1.9cqw, 0.85rem); font-weight: 600;
         color: #2a3f35; backdrop-filter: blur(8px);
         transition: border-color 0.15s, background 0.15s, color 0.15s;
         white-space: nowrap; user-select: none;
@@ -228,7 +236,7 @@
         background: rgba(255,255,255,0.8);
         border: 1.5px solid rgba(200,230,215,0.9);
         border-radius: 10px; padding: 6px 16px;
-        cursor: pointer; font-size: 0.85rem; font-weight: 600;
+        cursor: pointer; font-size: clamp(0.68rem, 1.9cqw, 0.85rem); font-weight: 600;
         color: #2a3f35; backdrop-filter: blur(8px);
         transition: border-color 0.15s, background 0.15s;
         white-space: nowrap; user-select: none;
@@ -237,7 +245,7 @@
       .mp-dropdown-btn:hover { border-color: #26B99A; background: #fff; }
       .mp-dropdown-btn.open { border-color: #26B99A; background: #fff; border-radius: 10px 10px 0 0; border-bottom-color: transparent; }
       .mp-dropdown-chevron {
-        font-size: 0.7rem; color: #7aaa96;
+        font-size: clamp(0.58rem, 1.6cqw, 0.7rem); color: #7aaa96;
         transition: transform 0.18s;
       }
       .mp-dropdown-btn.open .mp-dropdown-chevron { transform: rotate(180deg); }
@@ -251,7 +259,7 @@
       }
       .mp-dropdown-menu.open { display: block; }
       .mp-dropdown-item {
-        padding: 9px 16px; font-size: 0.84rem; font-weight: 500;
+        padding: 9px 16px; font-size: clamp(0.68rem, 1.9cqw, 0.84rem); font-weight: 500;
         color: #2a3f35; cursor: pointer;
         transition: background 0.12s;
         display: flex; align-items: center; gap: 8px;
@@ -315,21 +323,21 @@
 
       .mp-avatar {
         width: 76%; height: auto; aspect-ratio: 1/1;
-        max-width: clamp(100px, 11vw, 148px); min-width: clamp(56px, 6vw, 78px);
+        max-width: clamp(100px, 11cqw, 148px); min-width: clamp(56px, 6cqw, 78px);
         border-radius: 50%;
         background: rgba(255,255,255,0.88);
         display: flex; align-items: center; justify-content: center;
-        font-size: clamp(1.3rem, 4vw, 2rem); font-weight: 800;
+        font-size: clamp(1.3rem, 4cqw, 2rem); font-weight: 800;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex-shrink: 0;
         overflow: hidden;
       }
       .mp-name {
-        font-size: clamp(1.1rem, 3vw, 2.15rem); font-weight: 700;
+        font-size: clamp(1.1rem, 3cqw, 2.15rem); font-weight: 700;
         color: rgba(30,50,44,0.82);
         text-align: center; line-height: 1.25; word-break: keep-all;
       }
       .mp-email-hint {
-        font-size: 0.62rem; font-weight: 500;
+        font-size: clamp(0.52rem, 0.9cqw, 0.62rem); font-weight: 500;
         color: rgba(30,50,44,0.42);
         text-align: center; line-height: 1;
         max-width: 90%; overflow: hidden;
@@ -337,7 +345,7 @@
       }
       .mp-period-badge {
         position: absolute; top: 6px; right: 6px;
-        font-size: 0.8rem; font-weight: 700;
+        font-size: clamp(0.62rem, 1.2cqw, 0.8rem); font-weight: 700;
         color: rgba(20,50,40,0.75);
         background: rgba(255,255,255,0.82);
         border-radius: 9px; padding: 3px 9px;
@@ -350,7 +358,7 @@
         grid-column: 1 / -1; text-align: center;
         padding: 50px 0; color: #a0b8b0;
       }
-      .mp-empty i { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+      .mp-empty i { font-size: clamp(1.6rem, 5cqw, 2.5rem); display: block; margin-bottom: 10px; }
 
       /* ── 그래프 미니 래퍼 (오른쪽 패널 상단) ── */
       .mp-graph-mini-card {
@@ -404,6 +412,9 @@
         animation: detailIn 0.28s cubic-bezier(0.22,1,0.36,1);
         z-index: 10;
         box-shadow: 0 24px 64px rgba(0,40,30,0.13), inset 0 1px 0 rgba(255,255,255,0.9);
+        /* 뷰포트(vw)가 아니라 이 패널 자신의 실제 너비를 기준으로 내부 요소들이
+           반응형으로 커지고 작아지도록 컨테이너 쿼리 컨텍스트로 지정 */
+        container-type: inline-size;
       }
       .mp-detail.open { display: flex; }
       @keyframes detailIn {
@@ -413,14 +424,14 @@
 
       /* 닫기 버튼 */
       .mp-detail-close {
-        position: absolute; top: clamp(10px, 1.2vw, 16px); right: clamp(12px, 1.4vw, 18px); z-index: 20;
-        width: clamp(28px, 2.2vw, 34px); height: clamp(28px, 2.2vw, 34px); border-radius: 50%;
+        position: absolute; top: clamp(10px, 1.2cqw, 16px); right: clamp(12px, 1.4cqw, 18px); z-index: 20;
+        width: clamp(28px, 2.2cqw, 34px); height: clamp(28px, 2.2cqw, 34px); border-radius: 50%;
         border: 1.5px solid rgba(200,225,215,0.7);
         background: rgba(255,255,255,0.85);
         backdrop-filter: blur(8px);
         cursor: pointer;
         display: flex; align-items: center; justify-content: center;
-        color: #9ab8ac; font-size: clamp(0.72rem, 0.85vw, 0.9rem);
+        color: #9ab8ac; font-size: clamp(0.72rem, 0.85cqw, 0.9rem);
         transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       }
@@ -428,18 +439,25 @@
 
       /* 헤더 */
       .mp-detail-header {
-        display: flex; align-items: center; justify-content: center; gap: clamp(14px, 2.2vw, 30px);
-        padding: 22px 80px 20px clamp(20px, 2.8vw, 32px);
-        flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center; gap: clamp(14px, 2.2cqw, 30px);
+        padding: 22px 80px 20px clamp(20px, 2.8cqw, 32px);
+        /* flex-grow(1:3)로 나누면 탭마다 본문 콘텐츠가 달라 실제 분배된 높이가
+           흔들려서 아바타(cqh 기반)까지 탭마다 크기가 달라졌다. height:25%로
+           고정해 어떤 탭이 활성이든 헤더 높이가 항상 동일하게 한다. */
+        flex: 0 0 auto; height: 25%; min-height: 0; overflow: hidden;
+        container-type: size;
         background: linear-gradient(135deg, #ffffff 0%, #f2fbf7 55%, #edf4ff 100%);
         border-bottom: 1.5px solid rgba(38,185,154,0.12);
         position: relative;
       }
       .mp-detail-avatar {
-        width: clamp(80px, 12vw, 140px); height: clamp(80px, 12vw, 140px);
+        /* 헤더 세로 padding(22px+20px=42px)을 뺀 실제 가용 높이에 맞춰 아바타 크기를 정해서,
+           헤더가 눌려도 아바타가 헤더 밖으로 삐져나오지 않고 그 안에서 줄어든다 */
+        width: clamp(56px, calc(100cqh - 42px), 140px);
+        height: clamp(56px, calc(100cqh - 42px), 140px);
         border-radius: 50%; flex-shrink: 0;
         display: flex; align-items: center; justify-content: center;
-        font-size: clamp(1.8rem, 3.5vw, 3.6rem); font-weight: 800;
+        font-size: clamp(1.2rem, calc((100cqh - 42px) * 0.32), 3.6rem); font-weight: 800;
         box-shadow: 0 10px 36px rgba(0,0,0,0.14), 0 0 0 4px rgba(255,255,255,0.9);
         overflow: hidden;
       }
@@ -455,8 +473,8 @@
       .mp-detail-avatar-ring {
         position: relative; flex-shrink: 0;
         display: flex; align-items: center; justify-content: center;
-        width: calc(clamp(80px, 12vw, 140px) + 26px);
-        height: calc(clamp(80px, 12vw, 140px) + 26px);
+        width: calc(clamp(56px, calc(100cqh - 42px), 140px) + 26px);
+        height: calc(clamp(56px, calc(100cqh - 42px), 140px) + 26px);
       }
       .mp-detail-avatar-ring-svg {
         position: absolute; inset: 0; width: 100%; height: 100%;
@@ -476,7 +494,7 @@
       .mp-detail-avatar-ring-label {
         position: absolute; left: 50%; bottom: -10px; transform: translateX(-50%);
         display: inline-flex; align-items: center; gap: 4px;
-        font-size: clamp(0.66rem, 0.85vw, 0.76rem); font-weight: 800; color: #fff;
+        font-size: clamp(0.58rem, calc((100cqh - 42px) * 0.09), 0.76rem); font-weight: 800; color: #fff;
         background: linear-gradient(150deg, #f472b6, #db2777);
         border: 1.5px solid rgba(255,255,255,0.6);
         padding: 3px 11px 3px 9px; border-radius: 999px;
@@ -497,12 +515,12 @@
       }
 
       /* 나 아바타 + 관계 + 상대방 아바타 묶음 */
-      .mp-detail-pair { display: flex; align-items: center; gap: clamp(6px, 1vw, 14px); flex-shrink: 0; }
+      .mp-detail-pair { display: flex; align-items: center; gap: clamp(6px, 1cqw, 14px); flex-shrink: 0; }
       /* 상대방 이름/이메일(오른쪽)과 데칼코마니 대칭이 되도록 오른쪽 정렬 */
       .mp-detail-self-info { text-align: right; }
       .mp-detail-relation {
         position: relative; display: flex; align-items: center; justify-content: center;
-        width: clamp(56px, 7vw, 96px); flex-shrink: 0;
+        width: clamp(56px, 7cqw, 96px); flex-shrink: 0;
       }
       .mp-detail-relation-line {
         position: absolute; left: 0; right: 0; top: 50%; height: 2px;
@@ -512,76 +530,94 @@
       .mp-detail-relation-label {
         position: relative; z-index: 2;
         display: inline-flex; align-items: center; gap: 6px;
-        font-size: clamp(0.74rem, 0.95vw, 0.88rem); font-weight: 700; color: #0f6e56;
+        font-size: clamp(0.64rem, calc((100cqh - 42px) * 0.1), 0.88rem); font-weight: 700; color: #0f6e56;
         background: #fff; border: 1.5px solid rgba(38,185,154,0.4);
-        padding: 7px 16px; border-radius: 999px;
+        padding: clamp(4px, calc((100cqh - 42px) * 0.06), 7px) clamp(8px, calc((100cqh - 42px) * 0.14), 16px);
+        border-radius: 999px;
         box-shadow: 0 6px 16px rgba(38,185,154,0.18);
         white-space: nowrap;
       }
       .mp-detail-relation-label i { color: #26B99A; font-size: 0.85em; }
       .mp-detail-name {
-        font-size: clamp(1.1rem, 2.2vw, 2.1rem); font-weight: 800;
+        font-size: clamp(0.85rem, calc((100cqh - 42px) * 0.24), 2.1rem); font-weight: 800;
         background: linear-gradient(130deg, #0d3828 0%, #1a9e6e 100%);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         background-clip: text;
-        margin: 0 0 clamp(4px, 0.5vw, 8px); line-height: 1.2;
+        margin: 0 0 clamp(2px, calc((100cqh - 42px) * 0.05), 8px); line-height: 1.2;
       }
-      .mp-detail-email { font-size: clamp(0.7rem, 0.88vw, 0.86rem); color: #8aaa98; margin: 0; letter-spacing: 0.01em; }
+      .mp-detail-email { font-size: clamp(0.74rem, calc((100cqh - 42px) * 0.115), 1rem); color: #8aaa98; margin: 0; letter-spacing: 0.01em; }
 
       /* 탭 미니 버튼 그룹 (헤더 하단 경계선 바로 위 오른쪽) */
       .mp-detail-tab-group {
         position: absolute;
-        bottom: 10px; right: clamp(12px, 1.4vw, 20px);
+        bottom: clamp(6px, 1.2cqw, 10px); right: clamp(12px, 1.4cqw, 20px);
         z-index: 25;
-        display: flex; gap: 5px;
+        display: flex; gap: clamp(3px, 0.6cqw, 5px);
       }
       .mp-detail-tab-btn {
-        padding: 6px 20px;
+        box-sizing: border-box;
+        padding: clamp(5px, 0.5cqw, 7px) clamp(12px, 1.4cqw, 18px);
         border-radius: 20px;
         border: none;
         cursor: pointer;
-        font-size: 0.85rem; font-weight: 700;
+        font-size: clamp(0.66rem, 0.85cqw, 0.85rem); font-weight: 700;
         color: #fff; letter-spacing: 0.03em;
-        transition: opacity 0.15s, transform 0.15s;
+        text-align: center;
+        transition: opacity 0.15s;
         white-space: nowrap;
         background: #5a94e8;
       }
-      #mp-tab-stats { background: #26B99A; }
-      #mp-tab-desc  { background: #5a94e8; }
-      .mp-detail-tab-btn:hover { opacity: 0.82; transform: scale(1.04); }
+      #mp-tab-stats { background: #67CEB8; }
+      #mp-tab-desc  { background: #8CB4EF; }
+      .mp-detail-tab-btn:hover { opacity: 0.82; }
       .mp-detail-tab-btn.active-stats {
-        background: #26B99A; box-shadow: 0 2px 10px rgba(38,185,154,0.45);
+        background: #67CEB8; box-shadow: 0 2px 10px rgba(103,206,184,0.45);
       }
       .mp-detail-tab-btn.active-desc {
-        background: #5a94e8; box-shadow: 0 2px 10px rgba(90,148,232,0.45);
+        background: #8CB4EF; box-shadow: 0 2px 10px rgba(140,180,239,0.45);
       }
-      .mp-detail-tab-btn:not(.active-stats):not(.active-desc) { opacity: 0.45; }
+      .mp-detail-tab-btn.active-kw {
+        background: #B99EE9; box-shadow: 0 2px 10px rgba(185,158,233,0.45);
+      }
+      #mp-tab-kw { background: #B99EE9; }
+      .mp-detail-tab-btn:not(.active-stats):not(.active-desc):not(.active-kw) { opacity: 0.45; }
 
-      /* 본문 3열 — 친밀도는 내용만큼, 나머지 둘은 균등 */
+      /* 본문: 이메일 교환 하나만 남아 전체 폭을 사용. 헤더(아바타 영역)와 1:3 비율,
+         내용이 그 안에 꽉 차게 들어가서 스크롤이 생기지 않게 한다. */
       .mp-detail-body {
-        flex: 1; min-height: 0; overflow: hidden;
-        display: grid; grid-template-columns: auto 1fr 1fr;
-        background: linear-gradient(180deg, #f4faf8 0%, #f0f4fc 100%);
+        flex: 3; min-height: 0; overflow: hidden;
+        display: grid; grid-template-columns: 1fr;
+        background: linear-gradient(180deg, #f6fcf9 0%, #f0faf4 100%);
       }
+
+      /* 키워드 탭 패널 */
+      .mp-detail-kw {
+        display: none; flex: 3; min-height: 0; overflow-y: auto;
+        overscroll-behavior: contain;
+        background: linear-gradient(160deg, rgba(232,220,255,0.35) 0%, rgba(248,244,255,0.2) 100%);
+        padding: 14px clamp(20px, 3cqw, 48px) clamp(20px, 2.5cqw, 36px);
+        flex-direction: column; gap: clamp(10px, 1.2cqw, 16px);
+      }
+      .mp-detail-kw.show { display: flex; }
 
       /* 설명 탭 패널 */
       .mp-detail-desc {
-        display: none; flex: 1; min-height: 0; overflow-y: auto;
+        display: none; flex: 3; min-height: 0; overflow-y: auto;
         overscroll-behavior: contain;
         background: linear-gradient(160deg, #f4f8ff 0%, #f0faf8 100%);
-        padding: clamp(20px, 2.5vw, 36px) clamp(20px, 3vw, 48px);
+        padding: clamp(20px, 2.5cqw, 36px) clamp(20px, 3cqw, 48px);
         flex-direction: column;
       }
       .mp-detail-desc.show { display: flex; }
       #mp-desc-profile-content { display: flex; flex-direction: column; gap: 0; }
       .mp-desc-card {
         background: #fff; border-radius: 14px;
-        padding: clamp(12px, 1.6vw, 20px) clamp(14px, 2vw, 24px);
+        padding: clamp(12px, 1.6cqw, 20px) clamp(14px, 2cqw, 24px);
         border: 1.5px solid #d8e4ff;
         display: flex; flex-direction: column; gap: 10px;
       }
       .mp-desc-card-title {
-        font-size: clamp(0.68rem, 0.82vw, 0.82rem); font-weight: 700;
+        font-size: clamp(0.68rem, 0.82cqw, 0.82rem); font-weight: 700;
         color: #2a4bb8; letter-spacing: 0.06em; text-transform: uppercase;
       }
       .mp-desc-stat-row {
@@ -593,17 +629,17 @@
         border: 1px solid #dce7ff;
       }
       .mp-desc-stat-num {
-        font-size: clamp(1.1rem, 1.8vw, 1.6rem); font-weight: 800; line-height: 1;
+        font-size: clamp(1.1rem, 1.8cqw, 1.6rem); font-weight: 800; line-height: 1;
       }
       .mp-desc-stat-lbl {
-        font-size: clamp(0.6rem, 0.7vw, 0.7rem); color: #7a9ab8; margin-top: 4px; font-weight: 600;
+        font-size: clamp(0.6rem, 0.7cqw, 0.7rem); color: #7a9ab8; margin-top: 4px; font-weight: 600;
       }
       .mp-desc-kw-list {
         display: flex; flex-wrap: wrap; gap: 6px 8px;
       }
       .mp-desc-kw {
         display: inline-block; border-radius: 20px;
-        padding: 3px 10px; font-size: clamp(0.64rem, 0.76vw, 0.78rem); font-weight: 700;
+        padding: 3px 10px; font-size: clamp(0.64rem, 0.76cqw, 0.78rem); font-weight: 700;
         background: #e8eeff; color: #3a5bcc;
       }
       .mp-desc-affinity-bar {
@@ -619,14 +655,14 @@
       .mp-desc-profile-row:last-child { border-bottom: none; }
       .mp-desc-profile-key {
         flex-shrink: 0; min-width: 120px;
-        font-size: clamp(0.7rem, 0.82vw, 0.82rem); font-weight: 700;
+        font-size: clamp(0.7rem, 0.82cqw, 0.82rem); font-weight: 700;
         color: #3a5bcc; background: linear-gradient(135deg,#eef1ff,#e6ecff);
         border-radius: 20px; padding: 4px 14px;
         letter-spacing: 0.03em; text-align: center;
         box-shadow: 0 1px 4px rgba(90,120,220,0.1);
       }
       .mp-desc-profile-val {
-        font-size: clamp(0.78rem, 0.92vw, 0.94rem); color: #1e2e42;
+        font-size: clamp(0.78rem, 0.92cqw, 0.94rem); color: #1e2e42;
         line-height: 1.65; word-break: keep-all; padding-top: 3px;
       }
       .mp-desc-profile-empty {
@@ -635,15 +671,11 @@
       }
 
       .mp-detail-col {
-        padding: clamp(12px, 1.4vw, 18px) clamp(10px, 1.2vw, 16px);
-        border-right: 1px solid rgba(180,215,200,0.4);
-        display: flex; flex-direction: column; gap: clamp(6px, 0.8vw, 11px);
-        min-width: 0; overflow: hidden;
+        padding: clamp(12px, 1.4cqw, 18px) clamp(10px, 1.2cqw, 16px);
+        display: flex; flex-direction: column; gap: clamp(6px, 0.8cqw, 11px);
+        min-width: 0; min-height: 0; overflow: hidden;
+        background: linear-gradient(160deg, rgba(196,236,214,0.22) 0%, rgba(224,248,234,0.14) 100%);
       }
-      .mp-detail-col:nth-child(1) { background: linear-gradient(160deg, rgba(220,248,240,0.55) 0%, rgba(240,252,248,0.3) 100%); }
-      .mp-detail-col:nth-child(2) { background: linear-gradient(160deg, rgba(218,232,255,0.45) 0%, rgba(240,246,255,0.25) 100%); justify-content: center; }
-      .mp-detail-col:nth-child(3) { background: linear-gradient(160deg, rgba(232,220,255,0.45) 0%, rgba(248,244,255,0.25) 100%); }
-      .mp-detail-col:last-child { border-right: none; }
 
       /* 섹션 타이틀 — 필 태그 (글씨 길이만큼만) */
       .mp-detail-section-title {
@@ -652,85 +684,91 @@
         background: rgba(38,185,154,0.13);
         border: 1.5px solid rgba(38,185,154,0.3);
         border-radius: 20px;
-        padding: clamp(4px, 0.5vw, 6px) clamp(10px, 1.2vw, 16px);
-        font-size: clamp(0.7rem, 0.85vw, 0.86rem); font-weight: 700; color: #147a5c;
+        padding: clamp(4px, 0.5cqw, 6px) clamp(10px, 1.2cqw, 16px);
+        font-size: clamp(0.7rem, 0.85cqw, 0.86rem); font-weight: 700; color: #147a5c;
         letter-spacing: 0.05em; box-sizing: border-box;
         box-shadow: 0 1px 4px rgba(38,185,154,0.1);
       }
       .mp-detail-section-sub {
-        font-size: clamp(0.62rem, 0.72vw, 0.74rem); font-weight: 700;
+        font-size: clamp(0.62rem, 0.72cqw, 0.74rem); font-weight: 700;
         color: #26B99A; background: rgba(38,185,154,0.1);
         padding: 2px 8px; border-radius: 20px; letter-spacing: 0;
       }
 
-      /* 친밀도 링 */
-      .mp-aff-ring-wrap {
-        position: relative;
-        display: flex; align-items: center; justify-content: center;
-        flex: 1; padding: 10px 0;
-        filter: drop-shadow(0 6px 18px rgba(38,185,154,0.22));
-      }
-      .mp-aff-svg { width: 150px; height: 150px; }
-      .mp-aff-center {
-        position: absolute;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        pointer-events: none;
-      }
-      .mp-affinity-pct {
-        font-size: 2.3rem; font-weight: 800; line-height: 1;
-        color: #0f6648;
-      }
-      .mp-affinity-pct.zero { color: #b0ccc4; }
-      .mp-aff-label {
-        font-size: 0.6rem; color: #8ac8b4; margin-top: 6px;
-        text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700;
-      }
-
-      /* 세로 막대그래프 */
-      .mp-vchart-wrap { display: flex; gap: 4px; min-height: 0; align-items: flex-start; flex-shrink: 0; }
+      /* 세로 막대그래프 (이메일 교환) */
+      .mp-vchart-wrap { display: flex; gap: 6px; min-height: 0; align-items: stretch; flex: 1 1 0; }
       .mp-vchart-y {
         display: flex; flex-direction: column; justify-content: space-between;
-        padding-bottom: 29px; min-width: 24px; height: 160px; flex-shrink: 0;
+        /* padding-top: 연도 배지 행 높이만큼 띄워서 "최댓값" 라벨이 막대가 실제로
+           100% 채워지는 지점(배지 아래)과 정확히 맞도록 함 */
+        padding-top: 26px; padding-bottom: 34px; min-width: 28px; height: 100%; flex-shrink: 0;
       }
-      .mp-vchart-y span { font-size: 0.58rem; color: #aac4bc; text-align: right; line-height: 1; font-weight: 600; }
+      .mp-vchart-y span { font-size: 0.92rem; color: #9a8e7f; text-align: right; line-height: 1; font-weight: 700; letter-spacing: 0.02em; }
       .mp-vchart-area {
-        flex: 1; overflow-x: auto; height: 160px;
+        flex: 1; overflow-x: auto; height: 100%; min-height: 0;
         overscroll-behavior: contain;
         display: flex; align-items: flex-end;
-        border-left: 1.5px solid rgba(38,185,154,0.25);
-        border-bottom: 1.5px solid rgba(38,185,154,0.25);
+        border-left: 1.5px solid rgba(28,28,30,0.14);
+        border-bottom: 1.5px solid rgba(28,28,30,0.14);
         padding: 0;
         background: repeating-linear-gradient(
           180deg,
           transparent,
           transparent calc(100%/3 - 0.5px),
-          rgba(38,185,154,0.06) calc(100%/3 - 0.5px),
-          rgba(38,185,154,0.06) calc(100%/3)
+          rgba(28,28,30,0.035) calc(100%/3 - 0.5px),
+          rgba(28,28,30,0.035) calc(100%/3)
         );
-        border-radius: 0 4px 0 0;
+        border-radius: 0;
       }
       .mp-vchart-area::-webkit-scrollbar { height: 4px; }
-      .mp-vchart-area::-webkit-scrollbar-thumb { background: rgba(38,185,154,0.4); border-radius: 3px; }
-      .mp-vchart-area::-webkit-scrollbar-track { background: rgba(38,185,154,0.08); border-radius: 3px; }
+      .mp-vchart-area::-webkit-scrollbar-thumb { background: rgba(28,28,30,0.25); border-radius: 3px; }
+      .mp-vchart-area::-webkit-scrollbar-track { background: rgba(28,28,30,0.06); border-radius: 3px; }
       .mp-vchart-group {
-        display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0;
+        display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0;
+        height: 100%;
+        cursor: pointer; padding: 0 3px; border-radius: 4px;
+        transition: background 0.15s;
       }
-      .mp-vchart-bars { display: flex; align-items: flex-end; gap: 2px; height: 140px; }
+      .mp-vchart-group:hover { background: rgba(28,28,30,0.05); }
+      .mp-vchart-group.active { background: rgba(38,185,154,0.14); }
+      .mp-vchart-bars { display: flex; align-items: flex-end; gap: 4px; flex: 1; min-height: 0; }
       .mp-vchart-bar {
-        width: 10px; border-radius: 4px 4px 0 0; min-height: 2px;
-        transition: height 0.65s cubic-bezier(0.22,1,0.36,1);
+        width: 14px; border-radius: 2px 2px 0 0; min-height: 2px;
+        transition: height 0.65s cubic-bezier(0.22,1,0.36,1), opacity 0.15s;
       }
-      .mp-vchart-bar.sent { background: linear-gradient(0deg, #12886e, #26B99A, #3dd4b0); }
-      .mp-vchart-bar.recv { background: linear-gradient(0deg, #3a72d4, #6a9ef0, #9fc0f8); }
-      .mp-vchart-label { display: flex; flex-direction: column; align-items: center; line-height: 1.2; gap: 1px; }
-      .mp-vchart-month { font-size: 0.54rem; color: #aac4bc; white-space: nowrap; font-weight: 600; }
+      .mp-vchart-group:hover .mp-vchart-bar { opacity: 0.85; }
+      .mp-vchart-bar.sent { background: linear-gradient(0deg, #12886e, #26B99A); }
+      .mp-vchart-bar.recv { background: linear-gradient(0deg, #3a72d4, #6a9ef0); }
+      .mp-vchart-label { display: flex; flex-direction: column; align-items: center; line-height: 1.2; gap: 2px; }
+      .mp-vchart-month { font-size: 0.86rem; color: #8a8073; white-space: nowrap; font-weight: 700; }
       .mp-vchart-year {
-        font-size: 0.44rem; font-weight: 900; white-space: nowrap;
-        padding: 1px 3px; border-radius: 3px; color: #fff;
-        letter-spacing: 0.02em; line-height: 1.3;
+        font-size: 0.7rem; font-weight: 700; white-space: nowrap;
+        padding: 0; border-radius: 0; color: #a39a8d; background: transparent !important;
+        letter-spacing: 0.03em; line-height: 1.3;
       }
-      .mp-chart-legend { display: flex; gap: 10px; font-size: 0.7rem; font-weight: 600; flex-shrink: 0; color: #6a9a8c; align-items: center; }
-      .mp-year-legend { display: flex; gap: 4px; margin-left: auto; }
+
+      /* 이메일 목록 카드 (막대 클릭 시 오른쪽에 열리는 서랍) */
+      .mp-email-card {
+        background: #fff; border: 1px solid rgba(28,28,30,0.08); border-left-width: 3px;
+        border-radius: 4px; padding: 14px 16px;
+        display: flex; flex-direction: column; gap: 6px;
+        transition: border-color 0.15s, box-shadow 0.15s; flex-shrink: 0;
+        text-decoration: none; color: inherit; cursor: pointer;
+      }
+      .mp-email-card.sent { border-left-color: #12886e; }
+      .mp-email-card.received { border-left-color: #5a94e8; }
+      .mp-email-card:hover { border-color: rgba(38,185,154,0.5); box-shadow: 0 4px 16px rgba(28,28,30,0.06); }
+      .mp-email-card-top { display: flex; align-items: center; justify-content: space-between; }
+      .mp-email-tag {
+        font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+        padding: 3px 10px; border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+      }
+      .mp-email-tag.sent { background: rgba(38,185,154,0.12); color: #0f6e56; }
+      .mp-email-tag.received { background: rgba(90,148,232,0.14); color: #2952a3; }
+      .mp-email-date { font-size: 0.86rem; color: #8a8073; }
+      .mp-email-subject { font-size: 1.12rem; font-weight: 700; color: #1c1c1e; line-height: 1.4; }
+      .mp-email-snippet { font-size: 0.96rem; color: #6b6459; line-height: 1.5; }
+      .mp-email-from { font-size: 0.82rem; color: #a39a8d; }
 
       /* 워드 클라우드 */
       .mp-wc-wrap {
@@ -773,6 +811,7 @@
         z-index: 200;
         padding: 10px 28px 12px;
         display: flex; flex-direction: column; gap: 6px;
+        container-type: inline-size;
       }
 
       /* 날짜 텍스트 행 */
@@ -781,12 +820,12 @@
         align-items: center;
       }
       .mp-tl-date-label {
-        font-size: 0.78rem; font-weight: 700; color: #0f7a62;
+        font-size: clamp(0.68rem, 0.9cqw, 0.78rem); font-weight: 700; color: #0f7a62;
         background: #e6f7f2; padding: 3px 10px;
         border-radius: 20px; letter-spacing: 0.02em;
       }
       .mp-tl-selected {
-        font-size: 0.8rem; color: #4a9c80; font-weight: 500;
+        font-size: clamp(0.7rem, 0.95cqw, 0.8rem); color: #4a9c80; font-weight: 500;
         text-align: center; flex: 1;
       }
 
@@ -860,7 +899,7 @@
         background: #7ab8a4;
       }
       .mp-tl-tick-lbl {
-        font-size: 0.7rem; color: #4a8872; font-weight: 600;
+        font-size: clamp(0.6rem, 0.85cqw, 0.7rem); color: #4a8872; font-weight: 600;
         white-space: nowrap;
       }
 
@@ -938,7 +977,7 @@
                   <a href="mypeople.html" style="color:#26B99A;font-weight:700;">My People</a>
                   <a href="mytime.html">My Time</a>
                   <a href="recap.html">Recap</a>
-                  <a href="graph-viz.html">지식그래프</a>
+                  <a href="graph-viz.html">지식 그래프</a>
                 </div>
               </div>
               <a href="contacts.html" class="gw-tl">연락처</a>
@@ -1002,7 +1041,7 @@
               <div class="mp-graph-panel" id="mp-graph-panel">
                 <div class="mp-graph-panel-header">
                   <div class="mp-graph-panel-title">
-                    <i class="bi bi-diagram-3"></i> 지식그래프
+                    <i class="bi bi-diagram-3"></i> 지식 그래프
                   </div>
                   <div style="display:flex;gap:8px;align-items:center;">
                     <button id="mp-graph-fit-btn" class="mp-graph-close" style="background:rgba(38,185,154,0.12);color:#1a9e7f;">
@@ -1073,8 +1112,9 @@
                   </div>
                   <!-- 탭 미니 버튼 (경계선 바로 위 오른쪽 끝) -->
                   <div class="mp-detail-tab-group">
-                    <button class="mp-detail-tab-btn active-stats" id="mp-tab-stats" onclick="switchDetailTab('stats')">통계</button>
+                    <button class="mp-detail-tab-btn active-stats" id="mp-tab-stats" onclick="switchDetailTab('stats')">이메일 교환</button>
                     <button class="mp-detail-tab-btn" id="mp-tab-desc" onclick="switchDetailTab('desc')">설명</button>
+                    <button class="mp-detail-tab-btn" id="mp-tab-kw" onclick="switchDetailTab('kw')">키워드</button>
                   </div>
                 </div>
 
@@ -1085,62 +1125,48 @@
                   </div>
                 </div>
 
-                <!-- 본문: 3열 그리드 (스크롤 됨) -->
+                <!-- 키워드 탭 패널 -->
+                <div class="mp-detail-kw" id="mp-detail-kw">
+                  <div class="mp-wc-wrap" id="mp-detail-wc">
+                    <span style="color:#a0b8b0;font-size:0.82rem;">로딩 중...</span>
+                  </div>
+                </div>
+
+                <!-- 본문: 이메일 교환 (스크롤 됨) -->
                 <div class="mp-detail-body" id="mp-detail-body-stats">
 
-                  <!-- 열 1: 친밀도 링 -->
                   <div class="mp-detail-col">
-                    <div class="mp-detail-section-title">친밀도</div>
-                    <div class="mp-aff-ring-wrap">
-                      <svg class="mp-aff-svg" viewBox="0 0 120 120">
-                        <defs>
-                          <linearGradient id="affGrad" x1="0" y1="0" x2="1" y2="0">
-                            <stop offset="0%" stop-color="#26B99A"/>
-                            <stop offset="100%" stop-color="#1affcc"/>
-                          </linearGradient>
-                        </defs>
-                        <circle cx="60" cy="60" r="50" fill="none"
-                                stroke="#e8f0ec" stroke-width="12"/>
-                        <circle id="mp-aff-ring-fill" cx="60" cy="60" r="50" fill="none"
-                                stroke="url(#affGrad)" stroke-width="12"
-                                stroke-linecap="round"
-                                stroke-dasharray="314.16"
-                                stroke-dashoffset="314.16"
-                                transform="rotate(-90 60 60)"/>
-                      </svg>
-                      <div class="mp-aff-center">
-                        <span id="mp-affinity-pct" class="mp-affinity-pct">—</span>
-                        <span class="mp-aff-label">score</span>
+                    <div id="mp-echange-row" style="display:flex;gap:16px;flex:1;min-height:0;">
+                    <div id="mp-echange-chartview" style="display:flex;flex-direction:column;gap:inherit;flex:1 1 100%;min-width:0;min-height:0;transition:flex-basis 0.32s cubic-bezier(0.22,1,0.36,1);">
+                      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-shrink:0;padding-bottom:14px;">
+                        <div style="display:flex;align-items:baseline;gap:12px;">
+                          <div class="mp-detail-section-title" style="background:none;border:none;border-bottom:1.5px solid #128a6e;border-radius:0;box-shadow:none;padding:0 0 5px;font-size:1.28rem;letter-spacing:-0.01em;text-transform:none;color:#1c1c1e;">이메일 교환</div>
+                          <span id="mp-stats-total" style="font-size:0.86rem;font-weight:700;color:#6b6459;background:rgba(28,28,30,0.06);padding:4px 12px;border-radius:20px;white-space:nowrap;"></span>
+                        </div>
+                        <div style="display:flex;gap:18px;align-items:center;flex-shrink:0;">
+                          <span style="display:flex;align-items:center;gap:10px;font-size:0.92rem;font-weight:600;color:#4a4640;white-space:nowrap;flex-shrink:0;"><span style="width:9px;height:9px;border-radius:50%;background:#12886e;display:inline-block;flex-shrink:0;"></span>보낸 메일</span>
+                          <span style="display:flex;align-items:center;gap:10px;font-size:0.92rem;font-weight:600;color:#4a4640;white-space:nowrap;flex-shrink:0;"><span style="width:9px;height:9px;border-radius:50%;background:#5a94e8;display:inline-block;flex-shrink:0;"></span>받은 메일</span>
+                        </div>
+                      </div>
+                      <div class="mp-vchart-wrap">
+                        <div class="mp-vchart-y" id="mp-vchart-y">
+                          <span>—</span><span>—</span><span>0</span>
+                        </div>
+                        <div class="mp-vchart-area" id="mp-chart">
+                          <span style="color:#a0b8b0;font-size:0.82rem;">로딩 중...</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  <!-- 열 2: 세로 막대그래프 -->
-                  <div class="mp-detail-col">
-                    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                      <div class="mp-detail-section-title">이메일 교환</div>
-                      <span id="mp-stats-total" class="mp-detail-section-sub"></span>
-                    </div>
-                    <div class="mp-chart-legend">
-                      <span style="color:#26B99A;">● 보낸 메일</span>
-                      <span style="color:#5a94e8;">● 받은 메일</span>
-                      <div class="mp-year-legend" id="mp-year-legend"></div>
-                    </div>
-                    <div class="mp-vchart-wrap">
-                      <div class="mp-vchart-y" id="mp-vchart-y">
-                        <span>—</span><span>—</span><span>0</span>
+                    <div id="mp-echange-listview" style="display:flex;flex-direction:column;gap:10px;flex:0 0 0%;width:0;min-width:0;min-height:0;opacity:0;overflow:hidden;pointer-events:none;transition:flex-basis 0.32s cubic-bezier(0.22,1,0.36,1), opacity 0.2s, padding-left 0.32s;">
+                      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+                        <button id="mp-echange-back" onclick="closeEmailDrawer()" style="width:26px;height:26px;border-radius:50%;border:1px solid rgba(28,28,30,0.14);background:#fff;color:#4a4640;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0;"><i class="bi bi-arrow-left"></i></button>
+                        <div style="min-width:0;">
+                          <div class="mp-detail-section-title" id="mp-echange-list-title" style="background:none;border:none;border-radius:0;box-shadow:none;padding:0;font-size:0.95rem;letter-spacing:0;text-transform:none;color:#1c1c1e;">이메일 목록</div>
+                          <div class="mp-detail-section-sub" id="mp-echange-list-count" style="background:none;color:#8a8073;padding:0;"></div>
+                        </div>
                       </div>
-                      <div class="mp-vchart-area" id="mp-chart">
-                        <span style="color:#a0b8b0;font-size:0.82rem;">로딩 중...</span>
-                      </div>
+                      <div id="mp-echange-list-body" style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px;"></div>
                     </div>
-                  </div>
-
-                  <!-- 열 3: 키워드 워드클라우드 -->
-                  <div class="mp-detail-col">
-                    <div class="mp-detail-section-title">키워드</div>
-                    <div class="mp-wc-wrap" id="mp-detail-wc">
-                      <span style="color:#a0b8b0;font-size:0.82rem;">로딩 중...</span>
                     </div>
                   </div>
 
@@ -1202,19 +1228,19 @@
         const len = (name || '').length;
         const isKorean = /[가-힣]/.test(name || '');
         if (isKorean) {
-          if (len <= 4)  return 'clamp(0.9rem, 1.7vw, 1.7rem)';
-          if (len <= 6)  return 'clamp(0.82rem, 1.4vw, 1.4rem)';
-          if (len <= 9)  return 'clamp(0.72rem, 1.2vw, 1.2rem)';
-          if (len <= 15) return 'clamp(0.6rem,  1.0vw, 1.0rem)';
-          return             'clamp(0.5rem,  0.82vw, 0.88rem)';
+          if (len <= 4)  return 'clamp(0.9rem, 1.7cqw, 1.7rem)';
+          if (len <= 6)  return 'clamp(0.82rem, 1.4cqw, 1.4rem)';
+          if (len <= 9)  return 'clamp(0.72rem, 1.2cqw, 1.2rem)';
+          if (len <= 15) return 'clamp(0.6rem,  1.0cqw, 1.0rem)';
+          return             'clamp(0.5rem,  0.82cqw, 0.88rem)';
         }
         /* 영문/숫자는 글자 폭이 한글보다 좁으므로 같은 길이 구간이어도 더 크게 하되,
            최댓값(가장 짧은 구간)은 한글 3~4글자 구간 크기를 넘지 않도록 캡 */
-        if (len <= 5)  return 'clamp(0.88rem, 1.68vw, 1.68rem)';
-        if (len <= 8)  return 'clamp(0.8rem,  1.43vw, 1.43rem)';
-        if (len <= 12) return 'clamp(0.7rem,  1.2vw,  1.2rem)';
-        if (len <= 18) return 'clamp(0.58rem, 0.97vw, 0.97rem)';
-        return             'clamp(0.48rem, 0.8vw,  0.85rem)';
+        if (len <= 5)  return 'clamp(0.88rem, 1.68cqw, 1.68rem)';
+        if (len <= 8)  return 'clamp(0.8rem,  1.43cqw, 1.43rem)';
+        if (len <= 12) return 'clamp(0.7rem,  1.2cqw,  1.2rem)';
+        if (len <= 18) return 'clamp(0.58rem, 0.97cqw, 0.97rem)';
+        return             'clamp(0.48rem, 0.8cqw,  0.85rem)';
       }
 
       /* ── 발신 전용/브랜드 계정 판별 (표시 이름 추론 + 아바타 생성 대상 판별 공용) ──
@@ -1898,44 +1924,157 @@
         }
         const total = data.total || {sent: 0, received: 0};
         if (totalEl) totalEl.textContent = `총 ${total.sent + total.received}건`;
-        const CHART_H = 140;
         const maxVal = Math.max(...data.monthly.map(m => Math.max(m.sent, m.received)), 1);
         if (yEl) {
           const mid = Math.round(maxVal / 2);
           yEl.innerHTML = `<span>${maxVal}</span><span>${mid}</span><span>0</span>`;
         }
-        // 연도별 색상 배정
-        const YEAR_PALETTE = ['#f59e42','#a855f7','#ef4444','#3b82f6','#ec4899','#14b8a6'];
-        const years = [...new Set(data.monthly.map(m => m.month.split('-')[0]))].sort();
+        currentBarChartData = data;
+
+        const YEAR_COLORS = ['#12886e', '#5a94e8'];
+        const years = [...new Set(data.monthly.map(m => m.month.split('-')[0]))];
         const yearColorMap = {};
-        years.forEach((y, i) => { yearColorMap[y] = YEAR_PALETTE[i % YEAR_PALETTE.length]; });
+        years.forEach((y, i) => { yearColorMap[y] = YEAR_COLORS[i % YEAR_COLORS.length]; });
 
-        // 오른쪽 연도 범례 업데이트
-        const yearLegendEl = document.getElementById('mp-year-legend');
-        if (yearLegendEl) {
-          yearLegendEl.innerHTML = years.map(y =>
-            `<span style="background:${yearColorMap[y]};color:#fff;font-size:0.55rem;font-weight:900;padding:2px 6px;border-radius:8px;">${y}</span>`
-          ).join('');
-        }
+        // 월별 데이터를 연도별로 묶어 각 연도 블록에 색이 있는 배지와 은근한 배경을 준다
+        const yearGroups = [];
+        data.monthly.forEach(m => {
+          const year = m.month.split('-')[0];
+          let g = yearGroups[yearGroups.length - 1];
+          if (!g || g.year !== year) { g = { year, months: [] }; yearGroups.push(g); }
+          g.months.push(m);
+        });
 
-        const bars = data.monthly.map((m, i) => {
-          const sh = Math.max(2, Math.round((m.sent / maxVal) * CHART_H));
-          const rh = Math.max(2, Math.round((m.received / maxVal) * CHART_H));
-          const [year, mon] = m.month.split('-');
-          const prevYear = i > 0 ? data.monthly[i - 1].month.split('-')[0] : null;
-          const isYearStart = i === 0 || year !== prevYear;
-          const yColor = yearColorMap[year] || '#888';
-          // 연도 chip: 연도 시작이면 표시, 아니면 투명(공간 유지)
-          const yearSpan = `<span class="mp-vchart-year" style="background:${yColor};${isYearStart ? '' : 'visibility:hidden;'}">${year.slice(2)}</span>`;
-          return `<div class="mp-vchart-group">
-            <div class="mp-vchart-bars">
-              <div class="mp-vchart-bar sent" style="height:${sh}px" title="보낸: ${m.sent}"></div>
-              <div class="mp-vchart-bar recv" style="height:${rh}px" title="받은: ${m.received}"></div>
+        // 막대 높이는 JS로 픽셀을 계산하지 않고 %로 넘겨서 CSS 레이아웃이 실제 렌더링
+        // 시점의 진짜 높이를 기준으로 그리게 한다 — clientHeight를 읽는 타이밍에 따라
+        // 계산이 어긋나 막대가 컨테이너보다 커져버리는 문제를 원천적으로 없앤다.
+        const html = yearGroups.map(g => {
+          const yColor = yearColorMap[g.year];
+          const monthsHtml = g.months.map(m => {
+            const sentPct = Math.max(2, Math.round((m.sent / maxVal) * 100));
+            const recvPct = Math.max(2, Math.round((m.received / maxVal) * 100));
+            const mon = m.month.split('-')[1];
+            return `<div class="mp-vchart-group" data-month="${m.month}" data-sent="${m.sent}" data-recv="${m.received}" title="클릭하면 이 달의 메일 목록을 볼 수 있어요">
+              <div class="mp-vchart-bars">
+                <div class="mp-vchart-bar sent" style="height:${sentPct}%" title="보낸: ${m.sent}"></div>
+                <div class="mp-vchart-bar recv" style="height:${recvPct}%" title="받은: ${m.received}"></div>
+              </div>
+              <div class="mp-vchart-label"><span class="mp-vchart-month">${mon}</span></div>
+            </div>`;
+          }).join('');
+          return `<div style="display:flex;flex-direction:column;align-items:stretch;height:100%;background:${yColor}14;border-radius:8px;padding:0 6px;flex-shrink:0;">
+            <div style="text-align:center;padding:0 0 6px;flex-shrink:0;">
+              <span style="display:inline-block;font-size:0.74rem;font-weight:800;color:#fff;background:${yColor};padding:2px 11px;border-radius:8px;letter-spacing:0.02em;">${g.year}</span>
             </div>
-            <div class="mp-vchart-label"><span class="mp-vchart-month">${mon}</span>${yearSpan}</div>
+            <div style="display:flex;align-items:flex-end;gap:5px;flex:1;min-height:0;">${monthsHtml}</div>
           </div>`;
         }).join('');
-        chartArea.innerHTML = `<div style="display:inline-flex;align-items:flex-end;gap:5px;min-width:100%;justify-content:center;padding:0 8px;box-sizing:border-box;">${bars}</div>`;
+        chartArea.innerHTML = `<div style="display:inline-flex;align-items:stretch;gap:10px;min-width:100%;height:100%;justify-content:center;padding:0 8px;box-sizing:border-box;">${html}</div>`;
+      }
+
+      /* ── 막대 클릭 → 오른쪽 이메일 목록 창 (실제 /mail-person-emails 조회) ── */
+      let currentBarChartData = null;
+      let activeDrawerMonth = null;
+
+      document.getElementById('mp-chart').addEventListener('click', e => {
+        const group = e.target.closest('.mp-vchart-group');
+        if (!group) return;
+        document.querySelectorAll('.mp-vchart-group.active').forEach(g => g.classList.remove('active'));
+        group.classList.add('active');
+        openEmailDrawer(group.dataset.month, +group.dataset.sent, +group.dataset.recv);
+      });
+
+      function fmtMonthLabel(month) {
+        const [y, m] = month.split('-');
+        return `${y}년 ${parseInt(m)}월`;
+      }
+
+      /* "YYYY-MM-DD HH:MM:SS" → "5일 19:34" */
+      function fmtEmailDateTime(dateStr) {
+        const [datePart, timePart] = (dateStr || '').split(' ');
+        const day = parseInt((datePart || '').split('-')[2], 10) || '';
+        const time = (timePart || '').slice(0, 5);
+        return `${day}일 ${time}`;
+      }
+
+      /* 메일 ID로 Gmail 앱의 해당 메일 화면으로 바로 이동하는 딥링크를 만든다 */
+      function gmailMessageUrl(id) {
+        return `https://mail.google.com/mail/u/0/#all/${encodeURIComponent(id)}`;
+      }
+
+      function renderEmailDrawerList(emails) {
+        const listEl = document.getElementById('mp-echange-list-body');
+        if (!emails.length) {
+          listEl.innerHTML = '<p style="color:#b7ada0;font-size:0.85rem;text-align:center;padding:40px 0;">이 기간에는 주고받은 메일이 없어요.</p>';
+          return;
+        }
+        const myName = sessionStorage.getItem('gw_user_name') || '나';
+        const personName = currentDetailPerson ? resolveDisplayName(currentDetailPerson) : '';
+        listEl.innerHTML = emails.map(e => {
+          const from = e.direction === 'sent' ? myName : personName;
+          const to   = e.direction === 'sent' ? personName : myName;
+          return `
+          <a class="mp-email-card ${e.direction}" href="${e.gmailUrl || gmailMessageUrl(e.id)}" target="_blank" rel="noopener" title="Gmail에서 이 메일 열기">
+            <div class="mp-email-card-top">
+              <span class="mp-email-tag ${e.direction}">${e.direction === 'sent' ? '보낸 메일' : '받은 메일'}</span>
+              <span class="mp-email-date">${fmtEmailDateTime(e.date)}</span>
+            </div>
+            <div class="mp-email-subject">${esc(e.subject)}</div>
+            <div class="mp-email-snippet">${esc(e.snippet)}</div>
+            <div class="mp-email-from">${esc(from)} → ${esc(to)}</div>
+          </a>`;
+        }).join('');
+      }
+
+      async function openEmailDrawer(month, sentCount, recvCount) {
+        activeDrawerMonth = month;
+        const person = currentDetailPerson;
+        const personName = person ? resolveDisplayName(person) : '';
+        document.getElementById('mp-echange-list-title').textContent = fmtMonthLabel(month);
+        document.getElementById('mp-echange-list-count').textContent = `${personName} · 총 ${sentCount + recvCount}건 (보낸 ${sentCount} · 받은 ${recvCount})`;
+        document.getElementById('mp-echange-list-body').innerHTML = '<p style="color:#b7ada0;font-size:0.85rem;text-align:center;padding:40px 0;">불러오는 중...</p>';
+
+        const chartview = document.getElementById('mp-echange-chartview');
+        const listview = document.getElementById('mp-echange-listview');
+        chartview.style.flex = '1 1 54%';
+        listview.style.flex = '1 1 44%';
+        listview.style.width = '';
+        listview.style.opacity = '1';
+        listview.style.pointerEvents = 'auto';
+        listview.style.paddingLeft = '18px';
+        listview.style.borderLeft = '1px solid rgba(28,28,30,0.1)';
+
+        if (!person || !person.email) { renderEmailDrawerList([]); return; }
+
+        const [y, m] = month.split('-').map(Number);
+        const monthStart = `${month}-01`;
+        const monthEnd = `${month}-${String(new Date(y, m, 0).getDate()).padStart(2, '0')}`;
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+
+        try {
+          const res = await fetch('/mail-person-emails', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ gmail_id: gmailId, person_gmail_id: person.email, start_date: monthStart, end_date: monthEnd })
+          });
+          if (activeDrawerMonth !== month) return;  // 그 사이 다른 달을 클릭했으면 이 응답은 버림
+          renderEmailDrawerList(res.ok ? (await res.json()).data || [] : []);
+        } catch (e) {
+          console.error('메일 목록 조회 오류:', e);
+          if (activeDrawerMonth === month) renderEmailDrawerList([]);
+        }
+      }
+
+      function closeEmailDrawer() {
+        const chartview = document.getElementById('mp-echange-chartview');
+        const listview = document.getElementById('mp-echange-listview');
+        chartview.style.flex = '1 1 100%';
+        listview.style.flex = '0 0 0%';
+        listview.style.width = '0';
+        listview.style.opacity = '0';
+        listview.style.pointerEvents = 'none';
+        listview.style.paddingLeft = '0';
+        listview.style.borderLeft = 'none';
+        document.querySelectorAll('.mp-vchart-group.active').forEach(g => g.classList.remove('active'));
       }
 
       function renderWordCloud(keywords, targetId) {
@@ -2078,29 +2217,22 @@
       function switchDetailTab(tab) {
         const statsBody = document.getElementById('mp-detail-body-stats');
         const descBody  = document.getElementById('mp-detail-desc');
+        const kwBody    = document.getElementById('mp-detail-kw');
         const btnStats  = document.getElementById('mp-tab-stats');
         const btnDesc   = document.getElementById('mp-tab-desc');
-        if (tab === 'stats') {
-          statsBody.style.display = '';
-          descBody.classList.remove('show');
-          btnStats.className = 'mp-detail-tab-btn active-stats';
-          btnDesc.className  = 'mp-detail-tab-btn';
-        } else {
-          statsBody.style.display = 'none';
-          descBody.classList.add('show');
-          btnStats.className = 'mp-detail-tab-btn';
-          btnDesc.className  = 'mp-detail-tab-btn active-desc';
-        }
+        const btnKw     = document.getElementById('mp-tab-kw');
+
+        statsBody.style.display = tab === 'stats' ? '' : 'none';
+        descBody.classList.toggle('show', tab === 'desc');
+        kwBody.classList.toggle('show', tab === 'kw');
+        btnStats.className = 'mp-detail-tab-btn' + (tab === 'stats' ? ' active-stats' : '');
+        btnDesc.className  = 'mp-detail-tab-btn' + (tab === 'desc'  ? ' active-desc'  : '');
+        btnKw.className    = 'mp-detail-tab-btn' + (tab === 'kw'    ? ' active-kw'    : '');
       }
 
       async function refreshDetailStats(person) {
         const gmailId = localStorage.getItem('gw_gmail_id') || '';
-        const CIRC = 314.16;
-        const ringFill = document.getElementById('mp-aff-ring-fill');
-        const pctEl = document.getElementById('mp-affinity-pct');
 
-        if (ringFill) { ringFill.style.transition = 'none'; ringFill.style.strokeDashoffset = CIRC; }
-        if (pctEl) pctEl.textContent = '—';
         document.getElementById('mp-chart').innerHTML = '<span style="color:#a0b8b0;font-size:0.82rem;">로딩 중...</span>';
         document.getElementById('mp-detail-wc').innerHTML = '<span style="color:#a0b8b0;font-size:0.82rem;">로딩 중...</span>';
 
@@ -2112,29 +2244,11 @@
         };
         const post = body => ({ method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
 
-        // 친밀도 + 교환통계 + 키워드 동시 fetch
-        const [intimacyRes, statsRes, kwRes] = await Promise.allSettled([
-          fetch('/intimacy',              post(dateBody)),
+        // 교환통계 + 키워드 동시 fetch
+        const [statsRes, kwRes] = await Promise.allSettled([
           fetch('/mail-exchange-stats',   post(dateBody)),
           fetch('/keyword-by-person-date', post(dateBody))
         ]);
-
-        // 친밀도 링
-        if (intimacyRes.status === 'fulfilled' && intimacyRes.value.ok) {
-          const iData = await intimacyRes.value.json();
-          const eis = iData.data?.EIS_final ?? iData.data?.EIS ?? null;
-          const pct = eis != null ? Math.round(eis * 100) : null;
-          if (pctEl) {
-            pctEl.textContent = pct != null ? pct + '%' : '—';
-            pctEl.classList.toggle('zero', !pct);
-          }
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            if (ringFill) {
-              ringFill.style.transition = 'stroke-dashoffset 1s cubic-bezier(0.22,1,0.36,1)';
-              ringFill.style.strokeDashoffset = pct != null ? CIRC * (1 - pct / 100) : CIRC;
-            }
-          }));
-        }
 
         // 교환 그래프
         let statsData = null;
@@ -2156,6 +2270,8 @@
       async function openDetail(person, rowIndex) {
         const gmailId = localStorage.getItem('gw_gmail_id') || '';
         const detailDisplayName = resolveDisplayName(person);
+
+        closeEmailDrawer();  // 이전 사람의 메일 목록 서랍이 열려 있던 상태로 새 상세보기가 뜨지 않도록 초기화
 
         // 나 아바타 (페이지 로드 시 미리 생성된 캐시를 바로 사용, 아직 안 왔으면 도착 시 refreshSelfAvatarEl가 채워줌)
         const selfAvatarEl = document.getElementById('mp-detail-avatar-self');
