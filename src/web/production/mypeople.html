@@ -306,17 +306,12 @@
       .mp-card.c5:hover { box-shadow:0 12px 24px rgba(120,212,208,0.4); }
       .mp-card.c6:hover { box-shadow:0 12px 24px rgba(252,188,128,0.4); }
 
-      /* 친밀도 기반 카드 색상 */
-      .mp-card.ca-red    { background: linear-gradient(150deg,#ffd4d4,#ffabab); box-shadow:0 3px 14px rgba(255,120,120,0.28); }
-      .mp-card.ca-blue   { background: linear-gradient(150deg,#c0d8fc,#90bcf8); box-shadow:0 3px 14px rgba(138,182,244,0.28); }
-      .mp-card.ca-green  { background: linear-gradient(150deg,#b0ecd4,#74d4a4); box-shadow:0 3px 14px rgba(112,203,160,0.28); }
-      .mp-card.ca-yellow { background: linear-gradient(150deg,#feeab0,#fdd884); box-shadow:0 3px 14px rgba(251,208,128,0.28); }
-      .mp-card.ca-gray   { background: linear-gradient(150deg,#e4eae8,#ccd8d2); box-shadow:0 3px 14px rgba(180,200,190,0.2); }
-      .mp-card.ca-red:hover    { box-shadow:0 12px 24px rgba(255,120,120,0.4); }
-      .mp-card.ca-blue:hover   { box-shadow:0 12px 24px rgba(138,182,244,0.4); }
-      .mp-card.ca-green:hover  { box-shadow:0 12px 24px rgba(112,203,160,0.4); }
-      .mp-card.ca-yellow:hover { box-shadow:0 12px 24px rgba(251,208,128,0.4); }
-      .mp-card.ca-gray:hover   { box-shadow:0 12px 24px rgba(180,200,190,0.35); }
+      /* 친밀도 기반 카드 색상 — 친밀도 값에 따라 초록 계열 채도/명도가 연속적으로 변하는 그라데이션 */
+      .mp-card.ca-fade {
+        background: linear-gradient(150deg, var(--ca-light), var(--ca-dark));
+        box-shadow: 0 3px 14px var(--ca-shadow);
+      }
+      .mp-card.ca-fade:hover { box-shadow: 0 12px 24px var(--ca-shadow-hover); }
 
       .mp-avatar {
         width: 76%; height: auto; aspect-ratio: 1/1;
@@ -349,7 +344,7 @@
         letter-spacing: 0.01em; line-height: 1.6;
         pointer-events: none;
       }
-      .mp-period-badge.sent  { color: #1a6e4a; background: rgba(38,185,154,0.18); }
+      .mp-period-badge.sent  { color: #b91c1c; background: rgba(239,68,68,0.16); }
       .mp-period-badge.recv  { color: #1d4ed8; background: rgba(90,148,232,0.18); }
       .mp-empty {
         grid-column: 1 / -1; text-align: center;
@@ -1199,30 +1194,46 @@
         return local || '(알 수 없음)';
       }
 
-      /* ── 친밀도 기반 카드 색상 ── */
-      function affinityClass(aff) {
-        if (aff == null || aff === undefined) return 'ca-gray';
-        if (aff >= 0.90) return 'ca-red';
-        if (aff >= 0.70) return 'ca-blue';
-        if (aff >= 0.40) return 'ca-green';
-        if (aff >= 0.15) return 'ca-yellow';
-        return 'ca-gray';
+      /* ── 친밀도 기반 카드 색상 ── 하나의 초록 색조(hue)를 고정하고, 친밀도가 높을수록
+         채도·명도를 진하게 만들어 "친밀도가 낮으면 흐린 민트, 높으면 짙은 에메랄드"로
+         자연스럽게 이어지는 그라데이션을 만든다(구간별 다른 색이 아니라 연속값). */
+      const AFFINITY_HUE = 158;  // 친밀도: 초록 계열
+
+      /* 지정한 색조(hue)에 채도/명도 값을 직접 넣어 카드 그라데이션·그림자·글자색을 만드는 공용 함수.
+         밝은 쪽/어두운 쪽에 색조를 살짝 다르게 줘서(단색 명암 대비가 아니라) 더 입체적이고
+         디자인된 느낌의 그라데이션이 되도록 한다. */
+      function tierColor(hue, sat, lightHi, lightLo) {
+        const hueLight = hue + 9;   // 밝은 쪽은 살짝 따뜻하게
+        const hueDark = hue - 7;    // 어두운 쪽은 살짝 청록/차갑게
+        const textSat = Math.min(sat + 20, 85);
+        const textLight = Math.max(lightLo - 26, 10);
+        const shadowSat = Math.min(sat + 10, 70);
+        const shadowLight = Math.max(lightLo - 14, 22);
+        const shadowAlpha = 0.14 + (sat / 100) * 0.16;
+        return {
+          light: `hsl(${hueLight} ${sat}% ${lightHi}%)`,
+          dark: `hsl(${hueDark} ${sat}% ${lightLo}%)`,
+          gradient: `linear-gradient(150deg, hsl(${hueLight} ${sat}% ${lightHi}%), hsl(${hueDark} ${sat}% ${lightLo}%))`,
+          shadow: `hsl(${hueDark} ${shadowSat}% ${shadowLight}% / ${shadowAlpha.toFixed(2)})`,
+          shadowHover: `hsl(${hueDark} ${shadowSat}% ${shadowLight}% / ${(shadowAlpha + 0.16).toFixed(2)})`,
+          text: `hsl(${hueDark} ${textSat}% ${textLight}%)`,
+        };
       }
-      function affinityAvatarColor(aff) {
-        if (aff == null || aff === undefined) return '#5a7268';
-        if (aff >= 0.90) return '#b91c1c';
-        if (aff >= 0.70) return '#1d4ed8';
-        if (aff >= 0.40) return '#065f46';
-        if (aff >= 0.15) return '#92400e';
-        return '#4a5e56';
+
+      // 기존 5단계 친밀도 구간(90%/70%/40%/15%/그 이하)을 유지하되, 구간마다 채도·명도를
+      // 큰 폭으로 떨어뜨려 인접한 구간끼리도(예: 90%대 vs 70%대) 확실히 구분되게 한다.
+      const AFFINITY_TIERS = [
+        { min: 0.90, sat: 75, lightHi: 57, lightLo: 41 },   // 90%+: 선명한 에메랄드
+        { min: 0.70, sat: 55, lightHi: 77, lightLo: 61 },   // 70~90%: 채도를 크게 낮춘 중간 톤
+        { min: 0.40, sat: 35, lightHi: 87, lightLo: 75 },   // 40~70%: 옅은 파스텔
+        { min: 0.15, sat: 23, lightHi: 94, lightLo: 86 },   // 15~40%: 아주 옅은 민트
+        { min: -Infinity, sat: 7, lightHi: 98, lightLo: 93 }, // 15% 미만: 거의 흰색
+      ];
+      function affinityColor(aff) {
+        const raw = aff ?? -1;
+        const tier = AFFINITY_TIERS.find(tr => raw >= tr.min);
+        return tierColor(AFFINITY_HUE, tier.sat, tier.lightHi, tier.lightLo);
       }
-      const AFFINITY_BG = {
-        'ca-red':    'linear-gradient(150deg,#ffd4d4,#ffabab)',
-        'ca-blue':   'linear-gradient(150deg,#c0d8fc,#90bcf8)',
-        'ca-green':  'linear-gradient(150deg,#b0ecd4,#74d4a4)',
-        'ca-yellow': 'linear-gradient(150deg,#feeab0,#fdd884)',
-        'ca-gray':   'linear-gradient(150deg,#e4eae8,#ccd8d2)',
-      };
 
       /* ── 이니셜 ── */
       function initials(name) {
@@ -1392,9 +1403,13 @@
         const COLS = 7;
         const COLORS = ['c0','c1','c2','c3','c4','c5','c6'];
         const AVATAR_COLORS = ['#0f7a62','#1d55c4','#5b21b6','#b45309','#9d174d','#0f766e','#c2410c'];
+        const TEST_TIER_VALUES = [0.95, 0.80, 0.55, 0.25, 0.05];  // TEMP TEST
+        const TEST_BLOCK_SIZE = Math.ceil(list.length / TEST_TIER_VALUES.length);  // TEMP TEST — 전체를 5구간으로 한 번만 나눠 순서대로 내려가게
         grid.innerHTML = list.map((p, i) => {
-          const cls = affinityClass(p.affinity);
-          const clr = affinityAvatarColor(p.affinity);
+          const testAffinity = TEST_TIER_VALUES[Math.min(TEST_TIER_VALUES.length - 1, Math.floor(i / TEST_BLOCK_SIZE))];  // TEMP TEST — 이 줄을 지우고 아래 줄 주석을 해제하면 원래대로 복귀
+          // const testAffinity = p.affinity;
+          const ac = affinityColor(testAffinity);
+          const cardVars = `--ca-light:${ac.light};--ca-dark:${ac.dark};--ca-shadow:${ac.shadow};--ca-shadow-hover:${ac.shadowHover};`;
           const displayName = resolveDisplayName(p);
           const ps = periodStats[(p.email || '').toLowerCase()] || {};
           const em = (p.email || '').toLowerCase();
@@ -1406,7 +1421,7 @@
             : initials(displayName);
           let badge = '';
           if (sortMode === 'affinity') {
-            if (p.affinity != null) badge = `<div class="mp-period-badge">${Math.round(p.affinity * 100)}%</div>`;
+            if (testAffinity != null) badge = `<div class="mp-period-badge">${Math.round(testAffinity * 100)}%</div>`;
           } else if (sortMode === 'name') {
             badge = '';
           } else if (sortMode === 'sent') {
@@ -1420,8 +1435,8 @@
             if (totalCnt > 0) badge = `<div class="mp-period-badge">${totalCnt}건</div>`;
           }
           return `
-            <div class="mp-card ${cls}" data-idx="${i}" data-name="${p.name || ''}" data-email="${p.email || ''}" title="${p.email || ''}">
-              <div class="mp-avatar" style="color:${clr}">${avatarInner}</div>
+            <div class="mp-card ca-fade" style="${cardVars}" data-idx="${i}" data-name="${p.name || ''}" data-email="${p.email || ''}" title="${p.email || ''}">
+              <div class="mp-avatar" style="color:${ac.text}">${avatarInner}</div>
               <div class="mp-name" style="font-size:${nameFontSize(displayName)}">${displayName}</div>
               ${badge}
             </div>`;
@@ -1990,12 +2005,10 @@
       async function openDetail(person, rowIndex) {
         const gmailId = localStorage.getItem('gw_gmail_id') || '';
         const detailDisplayName = resolveDisplayName(person);
-        const affCls = affinityClass(person.affinity);
-        const bg = AFFINITY_BG[affCls];
-        const textColor = affinityAvatarColor(person.affinity);
+        const ac = affinityColor(person.affinity);
         const avatarEl = document.getElementById('mp-detail-avatar');
-        avatarEl.style.background = bg;
-        avatarEl.style.color = textColor;
+        avatarEl.style.background = ac.gradient;
+        avatarEl.style.color = ac.text;
         const detailPhoto = generatedAvatars[(person.email || '').toLowerCase()] || contactPhotos[(person.email || '').toLowerCase()];
         if (detailPhoto) {
           const detailBrandCls = isBrandSender(person) ? ' mp-brand-logo' : '';
