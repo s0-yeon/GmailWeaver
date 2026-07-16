@@ -199,8 +199,29 @@
         background: rgba(38,185,154,0.12); padding: 2px 8px;
         border-radius: 20px;
       }
+      /* ── 정렬 컨트롤 묶음(광고 제거 버튼 + 정렬 드롭다운) ── */
+      .mp-header-controls { display: flex; align-items: center; gap: 8px; }
+      .mp-brand-filter-btn {
+        box-sizing: border-box; appearance: none; -webkit-appearance: none;
+        font-family: inherit; line-height: inherit; margin: 0;
+        display: flex; align-items: center; gap: 6px;
+        background: rgba(255,255,255,0.8);
+        border: 1.5px solid rgba(200,230,215,0.9);
+        border-radius: 10px; padding: 6px 16px;
+        cursor: pointer; font-size: 0.85rem; font-weight: 600;
+        color: #2a3f35; backdrop-filter: blur(8px);
+        transition: border-color 0.15s, background 0.15s, color 0.15s;
+        white-space: nowrap; user-select: none;
+        margin-top: 20px;
+      }
+      .mp-brand-filter-btn:hover { border-color: #26B99A; background: #fff; }
+      .mp-brand-filter-btn.active {
+        background: #26B99A; border-color: #26B99A; color: #fff;
+        box-shadow: 0 4px 14px rgba(38,185,154,0.28);
+      }
+
       /* ── 노션식 드롭다운 토글 ── */
-      .mp-dropdown { position: relative; margin-top: 10px; }
+      .mp-dropdown { position: relative; margin-top: 20px; }
       .mp-dropdown-btn {
         display: flex; align-items: center; justify-content: space-between;
         gap: 24px;
@@ -305,6 +326,7 @@
         display: flex; align-items: center; justify-content: center;
         font-size: clamp(1.3rem, 4vw, 2rem); font-weight: 800;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex-shrink: 0;
+        overflow: hidden;
       }
       .mp-name {
         font-size: clamp(1.1rem, 3vw, 2.15rem); font-weight: 700;
@@ -424,6 +446,12 @@
         display: flex; align-items: center; justify-content: center;
         font-size: clamp(1.8rem, 3.5vw, 3.6rem); font-weight: 800;
         box-shadow: 0 10px 36px rgba(0,0,0,0.14), 0 0 0 4px rgba(255,255,255,0.9);
+        overflow: hidden;
+      }
+      /* 브랜드 로고 이미지는 원본에 여백이 많아 확대해서 원을 꽉 채움 */
+      .mp-avatar img.mp-brand-logo,
+      .mp-detail-avatar img.mp-brand-logo {
+        transform: scale(2.6);
       }
       .mp-detail-name {
         font-size: clamp(1.1rem, 2.2vw, 2.1rem); font-weight: 800;
@@ -879,17 +907,23 @@
                   <div class="mp-title">My <span>People</span></div>
                   <span class="mp-count" id="mp-count"></span>
                 </div>
-                <div class="mp-dropdown" id="mp-dropdown">
-                  <div class="mp-dropdown-btn" id="mp-dropdown-btn">
-                    <span id="mp-dropdown-label">친밀도</span>
-                    <i class="bi bi-chevron-down mp-dropdown-chevron"></i>
-                  </div>
-                  <div class="mp-dropdown-menu" id="mp-dropdown-menu">
-                    <div class="mp-dropdown-item selected" data-sort="affinity">친밀도</div>
-                    <div class="mp-dropdown-item" data-sort="name">이름</div>
-                    <div class="mp-dropdown-item" data-sort="total">송수신 횟수</div>
-                    <div class="mp-dropdown-item" data-sort="received">받은 메일수</div>
-                    <div class="mp-dropdown-item" data-sort="sent">보낸 메일수</div>
+                <div class="mp-header-controls">
+                  <button class="mp-brand-filter-btn" id="mp-brand-filter-btn" type="button">
+                    <i class="bi bi-megaphone"></i>
+                    <span id="mp-brand-filter-label">광고 제거</span>
+                  </button>
+                  <div class="mp-dropdown" id="mp-dropdown">
+                    <div class="mp-dropdown-btn" id="mp-dropdown-btn">
+                      <span id="mp-dropdown-label">친밀도</span>
+                      <i class="bi bi-chevron-down mp-dropdown-chevron"></i>
+                    </div>
+                    <div class="mp-dropdown-menu" id="mp-dropdown-menu">
+                      <div class="mp-dropdown-item selected" data-sort="affinity">친밀도</div>
+                      <div class="mp-dropdown-item" data-sort="name">이름</div>
+                      <div class="mp-dropdown-item" data-sort="total">송수신 횟수</div>
+                      <div class="mp-dropdown-item" data-sort="received">받은 메일수</div>
+                      <div class="mp-dropdown-item" data-sort="sent">보낸 메일수</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1101,6 +1135,48 @@
       function isBrandDisplayName(name) {
         return BRAND_DISPLAY_NAMES.has((name || '').trim().toLowerCase());
       }
+
+      /* ── 브랜드 로고 이미지의 실제 여백을 캔버스로 분석해, 원을 정확히 채우는 배율을 계산 ── */
+      function autoFitBrandLogo(img) {
+        try {
+          const w = img.naturalWidth, h = img.naturalHeight;
+          if (!w || !h) return;
+          const cvs = document.createElement('canvas');
+          cvs.width = w; cvs.height = h;
+          const ctx = cvs.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          const data = ctx.getImageData(0, 0, w, h).data;
+          const bgR = data[0], bgG = data[1], bgB = data[2], bgA = data[3];
+          const THRESH = 18;
+          let minX = w, minY = h, maxX = 0, maxY = 0, found = false;
+          for (let y = 0; y < h; y += 2) {
+            for (let x = 0; x < w; x += 2) {
+              const i = (y * w + x) * 4;
+              const a = data[i + 3];
+              if (a < 10) continue; // 완전 투명 = 배경
+              const dr = data[i] - bgR, dg = data[i + 1] - bgG, db = data[i + 2] - bgB, da = a - bgA;
+              if (Math.sqrt(dr * dr + dg * dg + db * db + da * da) > THRESH) {
+                found = true;
+                if (x < minX) minX = x; if (x > maxX) maxX = x;
+                if (y < minY) minY = y; if (y > maxY) maxY = y;
+              }
+            }
+          }
+          if (!found) return;
+          const fracW = (maxX - minX) / w, fracH = (maxY - minY) / h;
+          const frac = Math.min(fracW, fracH);
+          if (frac <= 0) return;
+          const scale = Math.max(1, Math.min(1 / frac, 3.4));
+          img.style.transform = `scale(${scale.toFixed(2)})`;
+        } catch (e) {
+          /* CORS 등으로 픽셀 분석 불가 시 CSS 기본 확대값 유지 */
+        }
+      }
+      function setupBrandLogo(img) {
+        if (!img) return;
+        if (img.complete && img.naturalWidth) autoFitBrandLogo(img);
+        else img.addEventListener('load', () => autoFitBrandLogo(img), { once: true });
+      }
       /* 발신 전용/브랜드 계정인지 (이름 필드를 사람 이름으로 신뢰할 수 없는 경우) */
       function isBrandSender(p) {
         if (!p.email) return false;
@@ -1121,12 +1197,6 @@
         // 일반 계정: 이름 있으면 이름, 없으면 @ 앞부분
         if (p.name && p.name.trim()) return p.name.trim();
         return local || '(알 수 없음)';
-      }
-
-      /* ── 실제 Gmail 표시명(이름)을 가진 사람인지 판별 (메일주소 @ 앞부분 대체나 브랜드 발신명이 아닌 경우만) ── */
-      function hasGmailDisplayName(p) {
-        if (!p.email || !(p.name && p.name.trim())) return false;
-        return !isBrandSender(p);
       }
 
       /* ── 친밀도 기반 카드 색상 ── */
@@ -1188,6 +1258,7 @@
       let generatedAvatars = {};  // email → GPT 생성 아바타 이미지 URL
       let avatarGenStarted = false;
       let sortMode = 'affinity';
+      let hideBrandAccounts = false;  // true면 기업/광고성 발신자 카드를 목록에서 숨김
       let sentStatsMap = {};      // email → 보낸 메일수
       let receivedStatsMap = {};  // email → 받은 메일수
       let currentDetailPerson = null;  // 현재 열린 상세보기 person 객체
@@ -1287,6 +1358,9 @@
         const grid = document.getElementById('mp-grid');
         let list = groupByEntityName(allPeople);
         console.log('[renderCards] loaded:', periodStatsLoaded, 'before filter:', list.length, 'periodStats keys:', Object.keys(periodStats).length);
+        if (hideBrandAccounts) {
+          list = list.filter(p => !isBrandSender(p));
+        }
         if (periodStatsLoaded) {
           list = list.filter(p => {
             const ps = periodStats[(p.email || '').toLowerCase()];
@@ -1326,17 +1400,22 @@
           const em = (p.email || '').toLowerCase();
           const total = (ps.sent || 0) + (ps.received || 0);
           const photo = generatedAvatars[em] || contactPhotos[em];
+          const brandCls = isBrandSender(p) ? ' mp-brand-logo' : '';
           const avatarInner = photo
-            ? `<img src="${photo}" alt="${displayName}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(displayName)}'">`
+            ? `<img src="${photo}" alt="${displayName}" class="${brandCls.trim()}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(displayName)}'">`
             : initials(displayName);
           let badge = '';
-          if (sortMode === 'sent') {
+          if (sortMode === 'affinity') {
+            if (p.affinity != null) badge = `<div class="mp-period-badge">${Math.round(p.affinity * 100)}%</div>`;
+          } else if (sortMode === 'name') {
+            badge = '';
+          } else if (sortMode === 'sent') {
             const cnt = sentStatsMap[em] || 0;
             if (cnt > 0) badge = `<div class="mp-period-badge sent">보낸 ${cnt}건</div>`;
           } else if (sortMode === 'received') {
             const cnt = receivedStatsMap[em] || 0;
             if (cnt > 0) badge = `<div class="mp-period-badge recv">받은 ${cnt}건</div>`;
-          } else {
+          } else if (sortMode === 'total') {
             const totalCnt = (sentStatsMap[em] || 0) + (receivedStatsMap[em] || 0) || total;
             if (totalCnt > 0) badge = `<div class="mp-period-badge">${totalCnt}건</div>`;
           }
@@ -1347,6 +1426,7 @@
               ${badge}
             </div>`;
         }).join('');
+        grid.querySelectorAll('.mp-avatar img.mp-brand-logo').forEach(setupBrandLogo);
       }
 
       /* ── 타임라인 초기화 ── */
@@ -1489,7 +1569,9 @@
         }
       }
 
-      /* ── Gmail 표시명이 있는 사람만 골라 GPT 이미지 API로 아바타 생성 (이미 생성된 사람은 서버에서 캐시로 건너뜀) ── */
+      /* ── 모든 사람/발신자에 대해 아바타 생성 (이미 생성된 사람은 서버에서 캐시로 건너뜀)
+         실제 기업/브랜드 발신자인지는 서버에서 LLM으로 판별해 로고 이미지를, 그 외에는
+         GPT 이미지 API로 일러스트 아바타를 생성한다. ── */
       async function startAvatarGeneration() {
         if (avatarGenStarted) return;
         avatarGenStarted = true;
@@ -1498,7 +1580,7 @@
         if (!gmailId) return;
 
         const candidates = groupByEntityName(allPeople)
-          .filter(p => hasGmailDisplayName(p) && !generatedAvatars[(p.email || '').toLowerCase()])
+          .filter(p => p.email && !generatedAvatars[(p.email || '').toLowerCase()])
           .map(p => ({ email: p.email, name: resolveDisplayName(p) }));
 
         if (!candidates.length) return;
@@ -1521,6 +1603,16 @@
           }
         }
       }
+
+      /* ── 광고(기업 발신자) 제거 토글 ── */
+      const brandFilterBtn = document.getElementById('mp-brand-filter-btn');
+      const brandFilterLabel = document.getElementById('mp-brand-filter-label');
+      brandFilterBtn.addEventListener('click', () => {
+        hideBrandAccounts = !hideBrandAccounts;
+        brandFilterBtn.classList.toggle('active', hideBrandAccounts);
+        brandFilterLabel.textContent = hideBrandAccounts ? '광고 표시' : '광고 제거';
+        renderCards();
+      });
 
       /* ── 드롭다운 토글 ── */
       const ddBtn = document.getElementById('mp-dropdown-btn');
@@ -1906,7 +1998,9 @@
         avatarEl.style.color = textColor;
         const detailPhoto = generatedAvatars[(person.email || '').toLowerCase()] || contactPhotos[(person.email || '').toLowerCase()];
         if (detailPhoto) {
-          avatarEl.innerHTML = `<img src="${detailPhoto}" alt="${detailDisplayName}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(detailDisplayName)}'">`;
+          const detailBrandCls = isBrandSender(person) ? ' mp-brand-logo' : '';
+          avatarEl.innerHTML = `<img src="${detailPhoto}" alt="${detailDisplayName}" class="${detailBrandCls.trim()}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(detailDisplayName)}'">`;
+          if (detailBrandCls) setupBrandLogo(avatarEl.querySelector('img.mp-brand-logo'));
         } else {
           avatarEl.textContent = initials(detailDisplayName);
         }

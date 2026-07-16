@@ -5,10 +5,11 @@ import json
 import base64
 import hashlib
 import threading
+import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 from openai import OpenAI
-from PIL import Image
+from PIL import Image, ImageChops
 
 from util.database.db_reader import get_person_descriptions
 
@@ -122,6 +123,120 @@ def _infer_gender_presentation(name: str) -> str:
     return "unknown"
 
 
+# 초대형 브랜드는 LLM 판별이 흔들릴 수 있어(도메인이 발송대행사인 경우 등) 확정 매핑을 우선 사용한다.
+_KNOWN_BRAND_DOMAINS = {
+    "instagram": "instagram.com", "pinterest": "pinterest.com", "google": "google.com",
+    "google play": "google.com", "mcafee": "mcafee.com", "twitter": "x.com", "x": "x.com",
+    "discord": "discord.com", "microsoft": "microsoft.com", "xbox": "xbox.com",
+    "neo4j": "neo4j.com", "the neo4j team": "neo4j.com", "facebook": "facebook.com",
+    "linkedin": "linkedin.com", "naver": "naver.com", "kakao": "kakaocorp.com",
+    "amazon": "amazon.com", "apple": "apple.com", "netflix": "netflix.com",
+    "youtube": "youtube.com", "spotify": "spotify.com", "slack": "slack.com",
+    "zoom": "zoom.us", "adobe": "adobe.com", "dropbox": "dropbox.com",
+    "paypal": "paypal.com", "ebay": "ebay.com", "samsung": "samsung.com",
+    "lg": "lg.com", "steam": "steampowered.com", "playstation": "playstation.com",
+    "nintendo": "nintendo.com", "airbnb": "airbnb.com", "uber": "uber.com",
+    "github": "github.com", "figma": "figma.com", "notion": "notion.so",
+}
+
+
+def _classify_sender(name: str, domain: str) -> str | None:
+    """
+    표시 이름/이메일 도메인만 보고 이 발신자가 실제로 존재하는 기업/서비스의
+    자동 발송(알림, 뉴스레터, 영수증 등) 계정인지 판별한다.
+    실제 기업이면 로고를 찾을 공식 웹사이트 도메인을 반환하고, 실제 개인이거나
+    어떤 기업인지 확실하지 않으면 None을 반환한다(→ 일러스트 아바타로 대체).
+    """
+    known = _KNOWN_BRAND_DOMAINS.get((name or "").strip().lower())
+    if known:
+        return known
+    try:
+        result = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "이메일 발신자 정보를 보고 이것이 실제로 존재하는 기업/서비스가 보낸 "
+                        "자동 발송 계정(알림, 뉴스레터, 영수증, 마케팅 메일 등)인지 판단하는 AI입니다. "
+                        "표시 이름이 유명 기업/서비스 이름과 일치하면, 이메일 도메인이 발송대행사 "
+                        "도메인(예: sendgrid.net, mailgun.org, amazonses.com 등)이라서 그 기업의 "
+                        "공식 도메인과 달라 보여도 표시 이름을 우선 신뢰해 그 기업으로 판단하세요. "
+                        "실제로 존재하는 기업/서비스라면 그 기업의 공식 웹사이트 도메인만 "
+                        "(예: google.com) 정확히 출력하세요. 실제 사람 개인 계정이거나 "
+                        "어느 기업인지 확실하지 않으면 정확히 'PERSON'이라고만 출력하세요."
+                    ),
+                },
+                {"role": "user", "content": f"표시 이름: {name}\n이메일 도메인: {domain}"},
+            ],
+            temperature=0,
+        )
+        answer = (result.choices[0].message.content or "").strip()
+        if not answer or answer.upper() == "PERSON":
+            return None
+        m = re.search(r"[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", answer)
+        return m.group(0).lower() if m else None
+    except Exception as e:
+        print(f"[AVATAR] 기업 판별 실패 ({name}): {e}")
+        return None
+
+
+def _trim_logo_padding(logo: Image.Image) -> Image.Image:
+    """로고 이미지에 내장된 투명/흰 여백을 실제 도형 경계 기준으로 정확히 잘라낸다.
+
+    단순히 `getbbox()`만 쓰면 눈에는 안 보이는 극히 옅은 알파(1~수십 수준)나
+    안티에일리어싱으로 생긴 아주 옅은 회색조 픽셀까지 "내용물"로 잡혀 bbox가
+    이미지 가장자리까지 부풀어버리고, 그 결과 크롭이 사실상 아무 효과가 없어
+    로고가 작게 남는 경우가 있었다(예: 파비콘처럼 큰 캔버스에 작은 아이콘만
+    담긴 소스). 실제로 눈에 뚜렷이 보이는 픽셀만 기준으로 삼도록 임계값을 둔다."""
+    w, h = logo.size
+    alpha = logo.split()[-1]
+    if alpha.getextrema()[0] < 250:  # 투명 배경이 있는 이미지 → 알파 기준으로 자름
+        mask = alpha.point(lambda a: 255 if a >= 32 else 0)
+    else:  # 불투명(흰 배경) 이미지 → 흰색과 뚜렷이 다른 영역 기준으로 자름
+        rgb = logo.convert("RGB")
+        diff = ImageChops.difference(rgb, Image.new("RGB", rgb.size, (255, 255, 255))).convert("L")
+        mask = diff.point(lambda d: 255 if d >= 24 else 0)
+    bbox = mask.getbbox()
+    if not bbox:
+        return logo
+    # 임계값 처리 과정에서 실제 형상 가장자리의 부드러운 픽셀 한두 줄이 잘려나갈 수 있으니
+    # 소폭 여유를 되돌려준다(과도한 크롭으로 로고 윤곽이 뭉개지는 것을 방지).
+    pad = max(1, round(max(w, h) * 0.01))
+    left, top, right, bottom = bbox
+    bbox = (max(0, left - pad), max(0, top - pad), min(w, right + pad), min(h, bottom + pad))
+    return logo.crop(bbox)
+
+
+def _pad_logo_square(image_bytes: bytes, canvas_size: int = 512, pad_ratio: float = 0.86) -> bytes:
+    """기업 로고를 원형 아바타 안을 최대한 채우도록(넘치지 않게) 흰 배경 정사각형에 배치한다."""
+    logo = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
+    logo = _trim_logo_padding(logo)
+    target = int(canvas_size * pad_ratio)
+    logo.thumbnail((target, target), Image.LANCZOS)
+    canvas = Image.new("RGBA", (canvas_size, canvas_size), (255, 255, 255, 255))
+    x, y = (canvas_size - logo.width) // 2, (canvas_size - logo.height) // 2
+    canvas.paste(logo, (x, y), logo)
+    out = io.BytesIO()
+    canvas.convert("RGB").save(out, format="PNG")
+    return out.getvalue()
+
+
+def _fetch_company_logo(domain: str) -> bytes | None:
+    """공개 로고 서비스에서 실제 기업 로고를 가져온다. 실패 시 None."""
+    for url in (
+        f"https://logo.clearbit.com/{domain}?size=256",
+        f"https://www.google.com/s2/favicons?sz=128&domain={domain}",
+    ):
+        try:
+            res = requests.get(url, timeout=8)
+            if res.status_code == 200 and res.content and len(res.content) > 200:
+                return _pad_logo_square(res.content)
+        except Exception as e:
+            print(f"[AVATAR] 로고 요청 실패 ({url}): {e}")
+    return None
+
+
 def _build_avatar_prompt(name: str, relationship_hint: str = "", seed_key: str = "") -> str:
     context_block = ""
     if relationship_hint:
@@ -173,7 +288,11 @@ def _ensure_margins(subject: Image.Image, min_top: float = 0.06, min_side: float
     """
     w, h = subject.size
     alpha = subject.split()[-1]
-    bbox = alpha.getbbox()
+    # 안티에일리어싱으로 생긴 흐릿한 알파 언저리는 실제로 눈에 보이지 않으므로
+    # bbox 기준에서 제외한다 — 그 언저리까지 "내용물"로 잡으면 실제 옷/몸이
+    # 바닥까지 채워지지 못하고 그 아래로 배경색 여백이 보이게 된다.
+    solid_alpha = alpha.point(lambda a: 255 if a >= 128 else 0)
+    bbox = solid_alpha.getbbox()
     if not bbox:
         return subject
     left, top, right, bottom = bbox
@@ -249,7 +368,9 @@ def get_cached_person_avatars(paths) -> dict:
 def generate_person_avatars_batch(paths, people: list) -> dict:
     """
     people: [{ "email": str, "name": str }, ...]
-    이미 캐시된 사람은 건너뛰고, 새로운 사람만 GPT 이미지 API로 생성한다.
+    이미 캐시된 사람은 건너뛰고, 새로운 발신자만 처리한다. 발신자별로 먼저 LLM에게
+    실제 존재하는 기업/서비스인지 물어보고, 기업이면 실제 로고 이미지를, 아니면(개인)
+    GPT 이미지 API로 생성한 일러스트 아바타를 사용한다.
     반환: { email_lower: "/person-avatar-image/<gmail_id>/<filename>" } (요청한 사람 전체에 대한 매핑)
     """
     os.makedirs(paths.AVATAR_IMAGES_DIR, exist_ok=True)
@@ -264,13 +385,19 @@ def generate_person_avatars_batch(paths, people: list) -> dict:
             continue
         seen.add(email)
         if email not in avatar_map:
-            targets.append((email, name))
+            domain = email.split("@", 1)[1] if "@" in email else ""
+            targets.append((email, name, domain))
 
     relationship_hints = _load_relationship_hints(paths.GMAIL_ID) if targets else {}
 
-    def _generate_one(email, name):
+    def _generate_one(email, name, domain):
         try:
-            image_bytes = generate_avatar_image_bytes(name, relationship_hints.get(email, ""), email)
+            brand_domain = _classify_sender(name, domain)
+            image_bytes = _fetch_company_logo(brand_domain) if brand_domain else None
+            is_logo = image_bytes is not None
+            if image_bytes is None:
+                image_bytes = generate_avatar_image_bytes(name, relationship_hints.get(email, ""), email)
+
             filename = _avatar_filename(email)
             filepath = os.path.join(paths.AVATAR_IMAGES_DIR, filename)
             with open(filepath, "wb") as f:
@@ -279,7 +406,7 @@ def generate_person_avatars_batch(paths, people: list) -> dict:
             with _map_lock:
                 avatar_map[email] = url
                 _save_avatar_map(paths, avatar_map)
-            print(f"[AVATAR] 생성 완료: {email} ({name})")
+            print(f"[AVATAR] 생성 완료: {email} ({name}){' [기업 로고]' if is_logo else ''}")
             return email, url
         except Exception as e:
             print(f"[AVATAR] 생성 실패 ({email}): {e}")
@@ -287,7 +414,7 @@ def generate_person_avatars_batch(paths, people: list) -> dict:
 
     if targets:
         with ThreadPoolExecutor(max_workers=min(len(targets), 3)) as executor:
-            futures = [executor.submit(_generate_one, email, name) for email, name in targets]
+            futures = [executor.submit(_generate_one, email, name, domain) for email, name, domain in targets]
             for future in as_completed(futures):
                 future.result()
 
