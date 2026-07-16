@@ -365,6 +365,36 @@ def get_cached_person_avatars(paths) -> dict:
     return _load_avatar_map(paths)
 
 
+_SELF_AVATAR_KEY = "__self__"
+
+
+def get_cached_self_avatar(paths):
+    """로그인한 사용자 본인의 아바타 캐시를 조회한다. 없으면 None."""
+    return _load_avatar_map(paths).get(_SELF_AVATAR_KEY)
+
+
+def generate_self_avatar(paths, name: str) -> str:
+    """로그인한 사용자 본인의 아바타를 (없으면) 한 번 생성해 캐시하고 URL을 반환한다.
+    사람 카드와 같은 일러스트 아바타 파이프라인을 그대로 재사용하되, 이메일이 아닌
+    고정 키(__self__)로 캐시해서 실제 연락처 이메일과 절대 충돌하지 않게 한다."""
+    avatar_map = _load_avatar_map(paths)
+    cached = avatar_map.get(_SELF_AVATAR_KEY)
+    if cached:
+        return cached
+
+    os.makedirs(paths.AVATAR_IMAGES_DIR, exist_ok=True)
+    image_bytes = generate_avatar_image_bytes(name or "나", "", paths.GMAIL_ID + ":self")
+    filename = _avatar_filename(_SELF_AVATAR_KEY + ":" + paths.GMAIL_ID)
+    filepath = os.path.join(paths.AVATAR_IMAGES_DIR, filename)
+    with open(filepath, "wb") as f:
+        f.write(image_bytes)
+    url = f"/person-avatar-image/{paths.GMAIL_ID}/{filename}"
+    with _map_lock:
+        avatar_map[_SELF_AVATAR_KEY] = url
+        _save_avatar_map(paths, avatar_map)
+    return url
+
+
 def generate_person_avatars_batch(paths, people: list) -> dict:
     """
     people: [{ "email": str, "name": str }, ...]

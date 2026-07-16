@@ -428,7 +428,7 @@
 
       /* 헤더 */
       .mp-detail-header {
-        display: flex; align-items: center; gap: clamp(14px, 2.2vw, 30px);
+        display: flex; align-items: center; justify-content: center; gap: clamp(14px, 2.2vw, 30px);
         padding: 22px 80px 20px clamp(20px, 2.8vw, 32px);
         flex-shrink: 0;
         background: linear-gradient(135deg, #ffffff 0%, #f2fbf7 55%, #edf4ff 100%);
@@ -448,6 +448,77 @@
       .mp-detail-avatar img.mp-brand-logo {
         transform: scale(2.6);
       }
+
+      /* 상대방 아바타 테두리를 감싸는 친밀도 원형 게이지.
+         아바타 자체 크기는 나 아바타와 완전히 동일하게 유지하고(안쪽으로 줄이지 않음),
+         링은 그 바깥에 후광처럼 얹어서 두 아바타의 크기·위치가 똑같이 보이게 한다. */
+      .mp-detail-avatar-ring {
+        position: relative; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        width: calc(clamp(80px, 12vw, 140px) + 26px);
+        height: calc(clamp(80px, 12vw, 140px) + 26px);
+      }
+      .mp-detail-avatar-ring-svg {
+        position: absolute; inset: 0; width: 100%; height: 100%;
+        transform: rotate(-90deg);  /* 12시 방향에서 시작해 시계방향으로 채움 */
+      }
+      /* 친밀도라는 게 한눈에 느껴지도록 초록 대신 핑크/하트 톤으로.
+         그라데이션 + 은은한 외곽 글로우 + 드롭섀도 필터로 관을 깎아놓은 듯한
+         볼록한 입체감(엠보싱)을 준다. */
+      .mp-detail-avatar-ring-bg { fill: none; stroke: url(#mpRingTrackGrad); stroke-width: 6; }
+      .mp-detail-avatar-ring-fill {
+        fill: none; stroke: url(#mpRingFillGrad); stroke-width: 6; stroke-linecap: round;
+        stroke-dasharray: 289.03;   /* 2 * PI * r(46) */
+        stroke-dashoffset: 289.03;
+        filter: url(#mpRingBevel);
+        transition: stroke-dashoffset 0.9s cubic-bezier(0.22,1,0.36,1);
+      }
+      .mp-detail-avatar-ring-label {
+        position: absolute; left: 50%; bottom: -10px; transform: translateX(-50%);
+        display: inline-flex; align-items: center; gap: 4px;
+        font-size: clamp(0.66rem, 0.85vw, 0.76rem); font-weight: 800; color: #fff;
+        background: linear-gradient(150deg, #f472b6, #db2777);
+        border: 1.5px solid rgba(255,255,255,0.6);
+        padding: 3px 11px 3px 9px; border-radius: 999px;
+        box-shadow: 0 5px 14px rgba(219,39,119,0.4), inset 0 1px 0 rgba(255,255,255,0.35);
+        white-space: nowrap;
+      }
+      @keyframes mp-heartbeat {
+        0%, 100% { transform: scale(1); }
+        25% { transform: scale(1.22); }
+        40% { transform: scale(1); }
+        55% { transform: scale(1.14); }
+        70% { transform: scale(1); }
+      }
+      .mp-detail-avatar-ring-label i {
+        position: relative; top: 1.5px; color: #fff; font-size: 0.9em;
+        filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15));
+        display: inline-block; animation: mp-heartbeat 1.8s ease-in-out infinite;
+      }
+
+      /* 나 아바타 + 관계 + 상대방 아바타 묶음 */
+      .mp-detail-pair { display: flex; align-items: center; gap: clamp(6px, 1vw, 14px); flex-shrink: 0; }
+      /* 상대방 이름/이메일(오른쪽)과 데칼코마니 대칭이 되도록 오른쪽 정렬 */
+      .mp-detail-self-info { text-align: right; }
+      .mp-detail-relation {
+        position: relative; display: flex; align-items: center; justify-content: center;
+        width: clamp(56px, 7vw, 96px); flex-shrink: 0;
+      }
+      .mp-detail-relation-line {
+        position: absolute; left: 0; right: 0; top: 50%; height: 2px;
+        transform: translateY(-50%); border-radius: 2px;
+        background: linear-gradient(90deg, rgba(38,185,154,0.05), rgba(38,185,154,0.5), rgba(38,185,154,0.05));
+      }
+      .mp-detail-relation-label {
+        position: relative; z-index: 2;
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: clamp(0.74rem, 0.95vw, 0.88rem); font-weight: 700; color: #0f6e56;
+        background: #fff; border: 1.5px solid rgba(38,185,154,0.4);
+        padding: 7px 16px; border-radius: 999px;
+        box-shadow: 0 6px 16px rgba(38,185,154,0.18);
+        white-space: nowrap;
+      }
+      .mp-detail-relation-label i { color: #26B99A; font-size: 0.85em; }
       .mp-detail-name {
         font-size: clamp(1.1rem, 2.2vw, 2.1rem); font-weight: 800;
         background: linear-gradient(130deg, #0d3828 0%, #1a9e6e 100%);
@@ -806,7 +877,7 @@
       .gw-tl.active { color: #26B99A; font-weight: 700; background: #e8f7f4; }
       .gw-tl-dropdown { position: relative; }
       .gw-tl-dd-menu {
-        display: none; position: absolute; top: calc(100% + 6px); left: 0;
+        display: none; position: absolute; top: 100%; left: 0; padding-top: 6px;
         background: #fff; border: 1px solid #e0e0e0; border-radius: 8px;
         box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 9999; min-width: 140px; padding: 6px 0;
       }
@@ -864,10 +935,10 @@
               <div class="gw-tl-dropdown">
                 <button class="gw-tl gw-tl-dd-btn active">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></button>
                 <div class="gw-tl-dd-menu">
-                  <a href="mypeople.html" style="color:#26B99A;font-weight:700;">MyPeople</a>
-                  <a href="graph-viz.html">Graph Viz</a>
-                  <a href="recap.html">Recap</a>
+                  <a href="mypeople.html" style="color:#26B99A;font-weight:700;">My People</a>
                   <a href="mytime.html">My Time</a>
+                  <a href="recap.html">Recap</a>
+                  <a href="graph-viz.html">지식그래프</a>
                 </div>
               </div>
               <a href="contacts.html" class="gw-tl">연락처</a>
@@ -956,7 +1027,46 @@
 
                 <!-- 헤더: 아바타 + 이름/메일 + 탭 버튼 -->
                 <div class="mp-detail-header" style="position:relative;">
-                  <div class="mp-detail-avatar" id="mp-detail-avatar"></div>
+                  <div class="mp-detail-pair">
+                    <div class="mp-detail-self-info">
+                      <h2 class="mp-detail-name" id="mp-detail-my-name"></h2>
+                      <p class="mp-detail-email" id="mp-detail-my-email"></p>
+                    </div>
+                    <div class="mp-detail-avatar mp-detail-avatar-self" id="mp-detail-avatar-self"></div>
+                    <div class="mp-detail-relation">
+                      <span class="mp-detail-relation-label" id="mp-detail-relation-label"></span>
+                      <div class="mp-detail-relation-line"></div>
+                    </div>
+                    <div class="mp-detail-avatar-ring">
+                      <svg class="mp-detail-avatar-ring-svg" viewBox="0 0 100 100">
+                        <defs>
+                          <linearGradient id="mpRingTrackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="100%" stop-color="#f6d3e6"/>
+                          </linearGradient>
+                          <linearGradient id="mpRingFillGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ffd3ea"/>
+                            <stop offset="45%" stop-color="#ff6fb0"/>
+                            <stop offset="100%" stop-color="#e0399b"/>
+                          </linearGradient>
+                          <filter id="mpRingBevel" x="-60%" y="-60%" width="220%" height="220%">
+                            <feGaussianBlur in="SourceAlpha" stdDeviation="2.4" result="blur"/>
+                            <feColorMatrix in="blur" type="matrix"
+                              values="0 0 0 0 1  0 0 0 0 0.35  0 0 0 0 0.68  0 0 0 0.55 0" result="glow"/>
+                            <feDropShadow in="SourceGraphic" dx="0" dy="1" stdDeviation="1" flood-color="#c23a86" flood-opacity="0.4" result="bevel"/>
+                            <feMerge>
+                              <feMergeNode in="glow"/>
+                              <feMergeNode in="bevel"/>
+                            </feMerge>
+                          </filter>
+                        </defs>
+                        <circle class="mp-detail-avatar-ring-bg" cx="50" cy="50" r="46"></circle>
+                        <circle class="mp-detail-avatar-ring-fill" id="mp-detail-avatar-ring-fill" cx="50" cy="50" r="46"></circle>
+                      </svg>
+                      <div class="mp-detail-avatar" id="mp-detail-avatar"></div>
+                      <span class="mp-detail-avatar-ring-label" id="mp-detail-avatar-ring-label"></span>
+                    </div>
+                  </div>
                   <div>
                     <h2 class="mp-detail-name" id="mp-detail-name"></h2>
                     <p class="mp-detail-email" id="mp-detail-email"></p>
@@ -1274,6 +1384,7 @@
       let receivedStatsMap = {};  // email → 받은 메일수
       let currentDetailPerson = null;  // 현재 열린 상세보기 person 객체
       let detailDebounceTimer = null;
+      let myAvatarUrl = null;  // 로그인한 사용자 본인의 아바타 이미지 URL (페이지 로드 시 1회 생성/캐시)
 
       async function fetchSentStats() {
         const gmailId = localStorage.getItem('gw_gmail_id') || '';
@@ -1574,6 +1685,7 @@
 
         renderCards();
         startAvatarGeneration();
+        initMyAvatar();
 
         if (dateRange) {
           initTimeline(new Date(dateRange.first_date).getTime(), new Date(dateRange.last_date).getTime());
@@ -1617,6 +1729,45 @@
             console.error('아바타 생성 오류:', e);
           }
         }
+      }
+
+      /* ── 로그인한 사용자 본인 아바타: 페이지 로드 시 1회 생성/캐시해두고,
+         상세보기를 열 때마다 다시 만들 필요 없이 바로 꺼내 쓴다. ── */
+      async function initMyAvatar() {
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        const myNameEl = document.getElementById('mp-detail-my-name');
+        const myEmailEl = document.getElementById('mp-detail-my-email');
+        if (myNameEl) myNameEl.textContent = sessionStorage.getItem('gw_user_name') || '나';
+        if (myEmailEl) myEmailEl.textContent = gmailId || '이메일 정보 없음';
+        if (!gmailId) return;
+        try {
+          const cacheRes = await fetch('/self-avatar', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ gmail_id: gmailId })
+          });
+          if (cacheRes.ok) {
+            const j = await cacheRes.json();
+            if (j.url) { myAvatarUrl = j.url; refreshSelfAvatarEl(); return; }
+          }
+          const myName = sessionStorage.getItem('gw_user_name') || '나';
+          const genRes = await fetch('/generate-self-avatar', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ gmail_id: gmailId, name: myName })
+          });
+          if (genRes.ok) {
+            const j = await genRes.json();
+            if (j.url) { myAvatarUrl = j.url; refreshSelfAvatarEl(); }
+          }
+        } catch (e) {
+          console.error('내 아바타 생성 오류:', e);
+        }
+      }
+
+      /* 상세보기가 이미 열려 있는 상태에서 내 아바타가 뒤늦게 도착하면 화면에 반영 */
+      function refreshSelfAvatarEl() {
+        const el = document.getElementById('mp-detail-avatar-self');
+        if (!el || !myAvatarUrl) return;
+        el.innerHTML = `<img src="${myAvatarUrl}" alt="나" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
       }
 
       /* ── 광고(기업 발신자) 제거 토글 ── */
@@ -2005,10 +2156,41 @@
       async function openDetail(person, rowIndex) {
         const gmailId = localStorage.getItem('gw_gmail_id') || '';
         const detailDisplayName = resolveDisplayName(person);
+
+        // 나 아바타 (페이지 로드 시 미리 생성된 캐시를 바로 사용, 아직 안 왔으면 도착 시 refreshSelfAvatarEl가 채워줌)
+        const selfAvatarEl = document.getElementById('mp-detail-avatar-self');
+        if (myAvatarUrl) {
+          selfAvatarEl.innerHTML = `<img src="${myAvatarUrl}" alt="나" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+        } else {
+          selfAvatarEl.innerHTML = '';
+          selfAvatarEl.textContent = '나';
+          selfAvatarEl.style.background = 'linear-gradient(150deg,#cfe9df,#a9d4c4)';
+          selfAvatarEl.style.color = '#1a6e4a';
+        }
+        // 관계 라벨: 실제 관계 추론 로직은 아직 없어서 임시로 고정값 표시 (추후 교체 예정)
+        document.getElementById('mp-detail-relation-label').innerHTML = '<i class="bi bi-people-fill"></i>친구';
+
         const ac = affinityColor(person.affinity);
         const avatarEl = document.getElementById('mp-detail-avatar');
         avatarEl.style.background = ac.gradient;
         avatarEl.style.color = ac.text;
+
+        // 친밀도 원형 게이지 (아바타 테두리를 감싸는 도넛)
+        const ringFill = document.getElementById('mp-detail-avatar-ring-fill');
+        const ringLabel = document.getElementById('mp-detail-avatar-ring-label');
+        const affPct = person.affinity != null ? Math.round(person.affinity * 100) : null;
+        if (ringFill) {
+          const circumference = 2 * Math.PI * 46;
+          // 채도 낮은 친밀도 티어 색(ac.dark) 대신 항상 선명한 핑크/하트 톤으로 고정해 "친밀도"라는 게 한눈에 보이게 함
+          ringFill.style.transition = 'none';
+          ringFill.style.strokeDashoffset = circumference;
+          ringFill.getBoundingClientRect();  // 강제 리플로우: 0%에서 다시 채워지는 애니메이션을 매번 보이게 함
+          ringFill.style.transition = '';
+          ringFill.style.strokeDashoffset = String(circumference * (1 - (affPct ?? 0) / 100));
+        }
+        if (ringLabel) {
+          ringLabel.innerHTML = `<i class="bi bi-heart-fill"></i>${affPct != null ? affPct + '%' : '-'}`;
+        }
         const detailPhoto = generatedAvatars[(person.email || '').toLowerCase()] || contactPhotos[(person.email || '').toLowerCase()];
         if (detailPhoto) {
           const detailBrandCls = isBrandSender(person) ? ' mp-brand-logo' : '';

@@ -46,7 +46,12 @@ from util.database.db_writer import (
     rebuild_keyword_mail,
 )
 from util.extract_statics import start_statics_pipeline_background
-from util.avatar_generator import get_cached_person_avatars, generate_person_avatars_batch
+from util.avatar_generator import (
+    get_cached_person_avatars,
+    generate_person_avatars_batch,
+    get_cached_self_avatar,
+    generate_self_avatar,
+)
 
 from util.sse_broadcaster import subscribe, unsubscribe
 
@@ -1845,6 +1850,28 @@ def generate_person_avatars():
 def person_avatar_image(gmail_id, filename):
     paths = UserPaths(BASE_DIR, gmail_id)
     return send_from_directory(paths.AVATAR_IMAGES_DIR, filename)
+
+
+@app.route("/self-avatar", methods=["POST"])
+def get_self_avatar():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    if not gmail_id:
+        return jsonify({}), 200
+    paths = UserPaths(BASE_DIR, gmail_id)
+    return jsonify({"url": get_cached_self_avatar(paths)})
+
+
+@app.route("/generate-self-avatar", methods=["POST"])
+def generate_self_avatar_route():
+    data = request.json or {}
+    gmail_id = data.get("gmail_id", "").strip()
+    name = data.get("name", "").strip()
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    paths = UserPaths(BASE_DIR, gmail_id)
+    url = generate_self_avatar(paths, name)
+    return jsonify({"url": url})
 
 
 @app.route("/high_affinity_person_stats", methods=["POST"])
