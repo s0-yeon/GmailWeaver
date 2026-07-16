@@ -156,7 +156,7 @@ function doPost(e) {
       ).setMimeType(ContentService.MimeType.JSON);
     } catch (err) {
       return ContentService.createTextOutput(
-        JSON.stringify({ ok: false, error: err.message }),
+        JSON.stringify({ ok: false, error: "[v3] " + err.message }),
       ).setMimeType(ContentService.MimeType.JSON);
     }
   }

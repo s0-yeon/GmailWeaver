@@ -2,7 +2,6 @@
 # 현재는 가라 데이터
 import json
 import math
-import os
 import re
 from datetime import date
 from config.db import get_db_connection
@@ -309,16 +308,40 @@ def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
         WHERE user_account_id = %s
           AND update_date = %s
           AND mail_date BETWEEN %s AND %s
+          AND (
+            (direction = 'sent'     AND receiver LIKE %s) OR
+            (direction = 'received' AND sender   LIKE %s)
+          )
         GROUP BY DATE_FORMAT(mail_date, '%Y-%m')
         ORDER BY month ASC
         """
-        cursor.execute(sql, (like_param, like_param, gmail_id, update_date, start_date, end_date + ' 23:59:59'))
+        # 이 사람과 실제로 메일을 주고받은 달만 GROUP BY 대상에 들어오도록 WHERE에도
+        # 같은 조건을 넣는다 — 안 그러면 (다른 사람과) 메일이 오간 모든 달이 이 사람의
+        # 그래프에도 0건짜리로 끼어들어와 연도/달이 쓸데없이 많이 늘어난다.
+        cursor.execute(sql, (
+            like_param, like_param, gmail_id, update_date, start_date, end_date + ' 23:59:59',
+            like_param, like_param,
+        ))
         rows = cursor.fetchall()
 
-        monthly = [
-            {"month": row["month"], "sent": int(row["sent"] or 0), "received": int(row["received"] or 0)}
+        by_month = {
+            row["month"]: {"sent": int(row["sent"] or 0), "received": int(row["received"] or 0)}
             for row in rows
-        ]
+        }
+
+        # 실제 메일이 오간 "연도"만 남기되, 그 연도 안에서는 달을 건너뛰지 않고 전부
+        # 채운다(빈 달은 0건으로) — 연도 단위로만 거르고 월별 흐름은 끊기지 않게 하기 위함.
+        active_years = sorted({month[:4] for month in by_month})
+        start_ym, end_ym = start_date[:7], end_date[:7]
+
+        monthly = []
+        for year in active_years:
+            for m in range(1, 13):
+                ym = f"{year}-{m:02d}"
+                if ym < start_ym or ym > end_ym:
+                    continue
+                data = by_month.get(ym, {"sent": 0, "received": 0})
+                monthly.append({"month": ym, "sent": data["sent"], "received": data["received"]})
 
         total_sent     = sum(m["sent"]     for m in monthly)
         total_received = sum(m["received"] for m in monthly)
@@ -331,6 +354,46 @@ def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
     finally:
         cursor.close()
         conn.close()
+
+
+def get_person_mail_ids_in_range(gmail_id, person_mail_id, start_date, end_date) -> list:
+    """
+    특정 상대방과 주고받은 메일의 (mail_id, 방향, 날짜) 목록을 날짜 범위 내에서 반환한다.
+    MySQL mail 테이블은 GraphRAG 인덱싱 캡(MAX_MAILS)과 무관하게 전체 동기화 이력을
+    담고 있어서, get_mail_exchange_stats와 같은 소스를 써야 그래프 통계 숫자와
+    실제 목록 건수가 어긋나지 않는다. 제목/본문은 여기 없으므로(집계용 테이블이라
+    저장 안 함), 이 mail_id로 Gmail API(Apps Script)를 호출해 실시간으로 가져온다.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        cursor.execute("SELECT MAX(update_date) AS ud FROM user WHERE user_account_id = %s", (gmail_id,))
+        update_date = cursor.fetchone()["ud"]
+
+        like_param = f"%{person_mail_id}%"
+        sql = """
+        SELECT mail_id, direction, mail_date
+        FROM mail
+        WHERE user_account_id = %s
+          AND update_date = %s
+          AND mail_date BETWEEN %s AND %s
+          AND (
+            (direction = 'sent'     AND receiver LIKE %s) OR
+            (direction = 'received' AND sender   LIKE %s)
+          )
+        ORDER BY mail_date ASC
+        """
+        cursor.execute(sql, (gmail_id, update_date, start_date, end_date + ' 23:59:59', like_param, like_param))
+        rows = cursor.fetchall()
+        return [
+            {"id": row["mail_id"], "direction": row["direction"], "date": str(row["mail_date"])}
+            for row in rows
+        ]
+    finally:
+        cursor.close()
+        conn.close()
+
 
 def get_date_range_person_stats(gmail_id, start_date, end_date, sort_by):
     conn = get_db_connection()
