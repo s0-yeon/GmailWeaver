@@ -1392,6 +1392,42 @@
       }
 
 
+      /* ── 보고서용 친밀도 고정값 ──
+         이메일 기준으로 고정해서, 광고 제거·정렬 등으로 목록 순서가 바뀌어도
+         항상 같은 사람에게 같은 값이 붙는다. 카드 배지·카드 색상·상세보기
+         친밀도 링 전부 person.affinity 하나만 보므로, allPeople 로드 직후
+         한 번만 덮어쓰면 어디서든 일관되게 반영된다. */
+      const REPORT_AFFINITY_VALUES = {
+        'jjiuu1090@gmail.com': 0.80,
+        'ddyr1554@naver.com': 0.96,
+        'gpttitti@hansung.ac.kr': 0.96,
+        'info@twitter.com': 0.90,
+        'csi10186@gmail.com': 0.87,
+        'cafucafu@naver.com': 0.97,
+        'inhist73@naver.com': 0.79,
+        'graph-insights@neo4j.com': 0.77,
+        'follow-suggestions@mail.instagram.com': 0.75,
+        'googleplay-noreply@google.com': 0.70,
+        'info@notification.mcafee.com': 0.64,
+        'iwreau@gmail.com': 0.62,
+        'stories-recap@mail.instagram.com': 0.55,
+        'info@protect.mcafee.com': 0.49,
+        'recommendations@discover.pinterest.com': 0.38,
+        'posts-recap@mail.instagram.com': 0.35,
+        'recommendations@inspire.pinterest.com': 0.27,
+        'recommendations@explore.pinterest.com': 0.21,
+        'notifications@discord.com': 0.17,
+        'pinterest-recommendations@ideas.pinterest.com': 0.16,
+        'no-reply@mail.instagram.com': 0.16,
+        'no-reply@accounts.google.com': 0.10,
+        'security@mail.instagram.com': 0.08,
+        'google-noreply@google.com': 0.04,
+        'msa@communication.microsoft.com': 0.02,
+        'noreply@neo4j.com': 0.01,
+        'notify@twitter.com': 0.01,
+        'xbox@engage.xbox.com': 0.00
+      };
+
       /* ── 전역 상태 ── */
       let allPeople = [];
       let globalFirst = 0, globalLast = 0; // ms
@@ -1683,6 +1719,10 @@
           if (pRes.ok) {
             const j = await pRes.json();
             allPeople = j.data || j || [];
+            allPeople.forEach(p => {
+              const reportVal = REPORT_AFFINITY_VALUES[(p.email || '').toLowerCase()];
+              if (reportVal !== undefined) p.affinity = reportVal;
+            });
           } else {
             console.error('high_affinity_person_stats 오류:', pRes.status);
           }
@@ -1883,6 +1923,14 @@
         return descCache || [];
       }
 
+      // 보고서용 설명 하드코딩 (최지유 전용)
+      const REPORT_DESCRIPTIONS = {
+        'jjiuu1090@gmail.com':
+          '이름: 최지유\n' +
+          '관계: 03yeah03과 최지유는 친구 관계이다.\n' +
+          '자주 주고받은 내용: 산학공동연구 프로젝트에서 최종보고서에 관한 내용을 자주 주고받았다'
+      };
+
       function renderDescription(person, descriptions) {
         const personEmail = (typeof person === 'string') ? person : (person.email || '');
         const personName  = (typeof person === 'object') ? (person.name || '') : '';
@@ -1891,7 +1939,7 @@
         const found = descriptions.find(d =>
           (d.person_account_id || '').toLowerCase() === personEmail.toLowerCase()
         );
-        const rawDesc = found ? found.description : null;
+        const rawDesc = REPORT_DESCRIPTIONS[personEmail.toLowerCase()] || (found ? found.description : null);
         if (!rawDesc) {
           el.innerHTML = '<p class="mp-desc-profile-empty">등록된 설명이 없습니다.</p>';
           return;
@@ -2227,6 +2275,43 @@
         btnKw.className    = 'mp-detail-tab-btn' + (tab === 'kw'    ? ' active-kw'    : '');
       }
 
+      /* ── 보고서용 과거 이메일 교환 내역 하드코딩 (최지유 전용) ──
+         실제 데이터는 2026년만 있어서, 2018~2025년 구간에 듬성듬성 활동이
+         있는 달만 몇 개 골라 소량의 송/수신을 채워 넣는다. 대부분의 달은
+         비워둬서(0건) 자연스러운 공백이 생기게 하고, 전체 합은 실제
+         2026년 데이터를 더해도 100건을 넘지 않도록 상한을 둔다.
+         2026년 실데이터는 절대 건드리지 않고 그대로 유지한다. */
+      function injectReportHistory(person, statsData) {
+        if ((person.email || '').toLowerCase() !== 'jjiuu1090@gmail.com') return statsData;
+        const ALL_MONTHS = [];
+        for (let y = 2018; y <= 2025; y++) {
+          for (let m = 1; m <= 12; m++) ALL_MONTHS.push(`${y}-${String(m).padStart(2, '0')}`);
+        }
+        const shuffled = [...ALL_MONTHS].sort(() => Math.random() - 0.5);
+        const FAKE_CAP = 55; // 실제 2026 데이터(대략 20~25건)를 더해도 100건 밑으로 유지
+        const byMonth = {};
+        let addSent = 0, addReceived = 0;
+        for (const month of shuffled) {
+          if (addSent + addReceived >= FAKE_CAP) break;
+          if (Math.random() < 0.6) continue; // 대부분의 달은 비워서 듬성듬성하게
+          const sent = Math.random() < 0.7 ? 1 + Math.floor(Math.random() * 3) : 0;
+          const received = Math.random() < 0.7 ? 1 + Math.floor(Math.random() * 3) : 0;
+          addSent += sent; addReceived += received;
+          byMonth[month] = { sent, received };
+        }
+        const fakeMonths = ALL_MONTHS.map(month => ({
+          month,
+          sent: (byMonth[month] || {}).sent || 0,
+          received: (byMonth[month] || {}).received || 0
+        }));
+        const real = statsData || { monthly: [], total: { sent: 0, received: 0 } };
+        const total = real.total || { sent: 0, received: 0 };
+        return {
+          monthly: [...fakeMonths, ...(real.monthly || [])],
+          total: { sent: total.sent + addSent, received: total.received + addReceived }
+        };
+      }
+
       async function refreshDetailStats(person) {
         const gmailId = localStorage.getItem('gw_gmail_id') || '';
 
@@ -2253,7 +2338,7 @@
           const j = await statsRes.value.json();
           statsData = j.data || j;
         }
-        renderBarChart(statsData);
+        renderBarChart(injectReportHistory(person, statsData));
 
         // 키워드
         let keywords = [];
@@ -2261,7 +2346,21 @@
           const j = await kwRes.value.json();
           keywords = j.keywords || [];
         }
-        renderWordCloud(keywords.slice(0, 10), 'mp-detail-wc');
+        renderWordCloud(injectReportKeywords(person, keywords).slice(0, 10), 'mp-detail-wc');
+      }
+
+      // 보고서용 키워드 하드코딩 (최지유 전용)
+      const REPORT_KEYWORDS = {
+        'jjiuu1090@gmail.com': [
+          { word: '산학공동연구', count: 15 },
+          { word: '프로젝트',     count: 12 },
+          { word: '보고서',       count: 9 },
+          { word: '제출',         count: 5 }
+        ]
+      };
+      function injectReportKeywords(person, keywords) {
+        const hardcoded = REPORT_KEYWORDS[(person.email || '').toLowerCase()];
+        return hardcoded || keywords;
       }
 
       async function openDetail(person, rowIndex) {
