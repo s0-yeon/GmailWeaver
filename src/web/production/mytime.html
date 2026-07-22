@@ -31,7 +31,7 @@
       @media(max-width:900px){.gw-top-links{display:none}}
 
       /* ── 페이지 ── */
-      .mt-page{max-width:1200px;margin:0 auto;padding:28px 40px 32px}
+      .mt-page{width:88vw;max-width:1700px;margin:0 auto;padding:28px clamp(20px,3vw,56px) 32px;box-sizing:border-box}
 
       /* 헤더 */
       .mt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
@@ -160,10 +160,26 @@
       /* ── 포인터 라인 ── */
       .mt-pointer-wrap{background:#fff;border-radius:12px;border:1px solid #e3ede8;padding:20px 52px 16px}
       .mt-pointer-label{font-size:.66rem;font-weight:600;color:#8fb5a9;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
-      .mt-pointer-track{position:relative;height:20px;cursor:pointer;user-select:none}
+      .mt-pointer-track{position:relative;height:30px;cursor:pointer;user-select:none}
       .mt-pointer-bg{position:absolute;left:0;right:0;top:50%;height:2px;background:#c0d4cc;transform:translateY(-50%)}
       .mt-pointer-window{position:absolute;top:50%;height:4px;transform:translateY(-50%);background:rgba(26,158,110,.52);border-radius:2px;pointer-events:none;transition:left .2s,width .2s}
-      .mt-pointer-cursor{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#1a9e6e;border:2px solid #fff;box-shadow:0 0 0 3px rgba(26,158,110,.3);pointer-events:none;z-index:3}
+      /* 타임라인 위를 이동하는 "나" 아바타 커서 */
+      .mt-pointer-cursor{
+        position:absolute;top:50%;transform:translate(-50%,-50%);
+        width:30px;height:30px;border-radius:50%;
+        background:#1a9e6e;border:2.5px solid #fff;
+        box-shadow:0 2px 8px rgba(26,158,110,.35),0 0 0 3px rgba(26,158,110,.25);
+        pointer-events:none;z-index:3;overflow:hidden;
+        display:flex;align-items:center;justify-content:center;
+        transition:left .2s;
+      }
+      .mt-pointer-cursor img{width:100%;height:100%;object-fit:cover;display:block}
+      .mt-pointer-cursor .mt-pointer-cursor-fallback{
+        width:100%;height:100%;border-radius:50%;
+        background:linear-gradient(150deg,#cfe9df,#a9d4c4);
+        color:#1a6e4a;font-size:.62rem;font-weight:800;
+        display:flex;align-items:center;justify-content:center;
+      }
       .mt-pm{position:absolute;top:50%;transform:translate(-50%,-50%);width:7px;height:7px;border-radius:50%;background:#8fb5a9;z-index:2;cursor:pointer;transition:transform .12s,background .12s}
       .mt-pm:hover{transform:translate(-50%,-50%) scale(1.8);background:#1a9e6e}
       .mt-pointer-axis{position:relative;height:16px;margin-top:4px}
@@ -253,7 +269,7 @@
               <div class="mt-pointer-track" id="pointerTrack">
                 <div class="mt-pointer-bg"></div>
                 <div class="mt-pointer-window" id="pointerWindow"></div>
-                <div class="mt-pointer-cursor" id="pointerCursor"></div>
+                <div class="mt-pointer-cursor" id="pointerCursor"><span class="mt-pointer-cursor-fallback">나</span></div>
               </div>
               <div class="mt-pointer-axis" id="pointerAxis"></div>
             </div>
@@ -373,7 +389,7 @@
         summary: '2025년 한 해 동안 최지유, gpttitti, cafucafu와(과) 자주 연락을 주고받으며 프로젝트와 일정 관련 메일을 다수 교환했다. '
           + '특히 상반기에는 회의 자료 공유와 세미나 참석 안내가 많았고, 하반기로 갈수록 보고서 제출과 협업 제안 관련 메일이 늘어났다. '
           + '봄에는 다음 분기 프로젝트 일정을 조율하는 메일이 잦았고, 여름에는 스터디 그룹과 강의 자료 공유 관련 연락이 이어졌다. '
-          + '가을 들어서는 인턴십 지원 서류나 채용 공고 안내처럼 진로와 관련된 메일도 몇 차례 오갔다. '
+          + '가을 들어서는   인턴십 지원 서류나 채용 공고 안내처럼 진로와 관련된 메일도 몇 차례 오갔다. '
           + '연말에는 최종 보고서 제출과 함께 협업을 마무리하는 감사 인사 메일도 주고받았다. ',
         contacts: ['jjiuu1090@gmail.com', 'gpttitti@hansung.ac.kr', 'cafucafu@naver.com']
       };
@@ -582,9 +598,41 @@
         updatePointerCursor(); render();
       });
 
+      /* ── 타임라인 커서에 쓸 "나" 아바타: My People과 동일하게 캐시 우선 조회 후 없으면 생성 ── */
+      async function initSelfAvatar() {
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        if (!gmailId) return;
+        const applyAvatar = url => {
+          const el = document.getElementById('pointerCursor');
+          if (el && url) el.innerHTML = `<img src="${url}" alt="나">`;
+        };
+        try {
+          const cacheRes = await fetch('/self-avatar', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ gmail_id: gmailId })
+          });
+          if (cacheRes.ok) {
+            const j = await cacheRes.json();
+            if (j.url) { applyAvatar(j.url); return; }
+          }
+          const myName = sessionStorage.getItem('gw_user_name') || '나';
+          const genRes = await fetch('/generate-self-avatar', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ gmail_id: gmailId, name: myName })
+          });
+          if (genRes.ok) {
+            const j = await genRes.json();
+            if (j.url) applyAvatar(j.url);
+          }
+        } catch (e) {
+          console.error('내 아바타 로드 오류:', e);
+        }
+      }
+
       /* ── 초기화 ── */
       buildPointer();
       render();
+      initSelfAvatar();
     })();
     </script>
   </body>
