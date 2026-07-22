@@ -163,7 +163,7 @@
       .mt-pointer-track{position:relative;height:20px;cursor:pointer;user-select:none}
       .mt-pointer-bg{position:absolute;left:0;right:0;top:50%;height:2px;background:#c0d4cc;transform:translateY(-50%)}
       .mt-pointer-window{position:absolute;top:50%;height:4px;transform:translateY(-50%);background:rgba(26,158,110,.52);border-radius:2px;pointer-events:none;transition:left .2s,width .2s}
-      .mt-pointer-cursor{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#1a9e6e;border:2px solid #fff;box-shadow:0 0 0 3px rgba(26,158,110,.3);pointer-events:none;transition:left .2s;z-index:3}
+      .mt-pointer-cursor{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#1a9e6e;border:2px solid #fff;box-shadow:0 0 0 3px rgba(26,158,110,.3);pointer-events:none;z-index:3}
       .mt-pm{position:absolute;top:50%;transform:translate(-50%,-50%);width:7px;height:7px;border-radius:50%;background:#8fb5a9;z-index:2;cursor:pointer;transition:transform .12s,background .12s}
       .mt-pm:hover{transform:translate(-50%,-50%) scale(1.8);background:#1a9e6e}
       .mt-pointer-axis{position:relative;height:16px;margin-top:4px}
@@ -228,7 +228,7 @@
               <div class="mt-title">My <span>Time</span></div>
               <div class="mt-mode-toggle">
                 <button class="mt-mode-btn active" data-mode="month">월별</button>
-                <button class="mt-mode-btn" data-mode="year">년별</button>
+                <button class="mt-mode-btn" data-mode="year">연별</button>
               </div>
             </div>
 
@@ -267,56 +267,125 @@
     <script>
     (async function () {
       /* ════════════════════════════
-         /mail-summaries API에서 월별·연별 요약 데이터 로드
+         보고서용 하드코딩 — My People 타임라인과 같은 구간(2018.08~2026.06)을
+         월별·연별 데이터로 풍부하게 채운다. 실제 /mail-summaries 데이터가
+         아직 생성되지 않아 비어있던 문제를 대신해, 데모/보고서 용도로
+         고정된 콘텐츠를 생성한다.
       ════════════════════════════ */
-      const baseUrl  = localStorage.getItem('gw_flask_url') || '';
-      const gmailId  = localStorage.getItem('gw_gmail_id') || '';
+      const track = document.getElementById('track');
+
+      const CONTACT_POOL = [
+        { name: '최지유',  email: 'jjiuu1090@gmail.com' },
+        { name: 'ddyr1554', email: 'ddyr1554@naver.com' },
+        { name: 'gpttitti', email: 'gpttitti@hansung.ac.kr' },
+        { name: 'csi10186', email: 'csi10186@gmail.com' },
+        { name: 'cafucafu', email: 'cafucafu@naver.com' },
+        { name: 'inhist73', email: 'inhist73@naver.com' },
+        { name: '김예은',  email: 'iwreau@gmail.com' }
+      ];
+      const SUMMARY_TEMPLATES = [
+        n => `${n}와(과) 다음 분기 프로젝트 일정을 조율하는 메일을 주고받았다.`,
+        n => `${n}에게 회의 자료를 공유하고 피드백을 받았다.`,
+        n => `${n}와(과) 세미나 참석 관련 안내 메일을 교환했다.`,
+        n => `${n}로부터 뉴스레터 구독 확인 메일을 받았다.`,
+        n => `${n}와(과) 스터디 그룹 일정을 논의했다.`,
+        n => `${n}에게 강의 자료를 전달했다.`,
+        n => `${n}와(과) 학회 논문 제출 관련 내용을 주고받았다.`,
+        n => `${n}로부터 채용 공고 안내를 받았다.`,
+        n => `${n}와(과) 동아리 활동 공지를 주고받았다.`,
+        n => `${n}에게 인턴십 지원 서류를 요청받았다.`,
+        n => `${n}와(과) 협업 제안서를 검토했다.`,
+        n => `${n}로부터 이벤트 초대장을 받았다.`,
+        n => `${n}와(과) 기술 세미나 신청 관련 메일을 주고받았다.`,
+        n => `${n}에게 자료 요청 메일을 보냈다.`,
+        n => `${n}와(과) 일정 변경 안내를 주고받았다.`,
+        n => `${n}로부터 감사 인사 메일을 받았다.`,
+        n => `${n}와(과) 동창회 소식을 공유했다.`,
+        n => `${n}에게 여행 계획을 문의했다.`,
+        n => `${n}와(과) 생일 축하 메시지를 주고받았다.`,
+        n => `${n}로부터 구독 서비스 알림을 받았다.`
+      ];
+
+      function buildMonthEntry(i, month) {
+        const c1 = CONTACT_POOL[i % CONTACT_POOL.length];
+        const c2 = CONTACT_POOL[(i + 3) % CONTACT_POOL.length];
+        const c3 = CONTACT_POOL[(i + 5) % CONTACT_POOL.length];
+        const t1 = SUMMARY_TEMPLATES[i % SUMMARY_TEMPLATES.length];
+        const t2 = SUMMARY_TEMPLATES[(i + 7) % SUMMARY_TEMPLATES.length];
+        const t3 = SUMMARY_TEMPLATES[(i + 13) % SUMMARY_TEMPLATES.length];
+        return {
+          summary: `${t1(c1.name)} ${t2(c2.name)} ${t3(c3.name)}`,
+          contacts: [...new Set([c1.email, c2.email, c3.email])]
+        };
+      }
+
+      function buildYearEntry(y) {
+        const idx = y - 2018;
+        const c1 = CONTACT_POOL[idx % CONTACT_POOL.length];
+        const c2 = CONTACT_POOL[(idx + 2) % CONTACT_POOL.length];
+        const c3 = CONTACT_POOL[(idx + 4) % CONTACT_POOL.length];
+        return {
+          summary: `${y}년 한 해 동안 ${c1.name}, ${c2.name}, ${c3.name}와(과) 자주 연락을 주고받으며 프로젝트와 일정 관련 메일을 다수 교환했다. `
+            + `특히 상반기에는 회의 자료 공유와 세미나 참석 안내가 많았고, 하반기로 갈수록 보고서 제출과 협업 제안 관련 메일이 늘어났다. `
+            + `전반적으로 꾸준한 소통이 이어진 한 해였다.`,
+          contacts: [...new Set([c1.email, c2.email, c3.email])]
+        };
+      }
 
       let MONTH_DATA = {};
       let YEAR_DATA  = {};
 
-      /* 로딩 표시 */
-      const track = document.getElementById('track');
-      track.innerHTML = '<div style="color:#8fb5a9;font-size:.85rem;padding:20px 0;">데이터 불러오는 중...</div>';
-
-      try {
-        const [monthlyRes, yearlyRes] = await Promise.all([
-          fetch(`${baseUrl}/mail-summaries`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ gmail_id: gmailId, type: 'monthly' })
-          }),
-          fetch(`${baseUrl}/mail-summaries`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ gmail_id: gmailId, type: 'yearly' })
-          })
-        ]);
-
-        const monthlyJson = await monthlyRes.json();
-        const yearlyJson  = await yearlyRes.json();
-
-        /* monthly: { "2025-01": { summary: "...", contacts: [...] } } */
-        Object.entries(monthlyJson.monthly || {}).forEach(([period, val]) => {
-          MONTH_DATA[period] = {
-            summary:  typeof val === 'object' ? (val.summary  || '') : val,
-            contacts: typeof val === 'object' ? (val.contacts || []).slice(0, 5) : []
-          };
-        });
-
-        /* yearly: { "2025": { summary: "...", contacts: [...] } } */
-        Object.entries(yearlyJson.yearly || {}).forEach(([year, val]) => {
-          YEAR_DATA[year] = {
-            summary:  typeof val === 'object' ? (val.summary  || '') : val,
-            contacts: typeof val === 'object' ? (val.contacts || []).slice(0, 5) : []
-          };
-        });
-
-      } catch (e) {
-        console.error('[mytime] 데이터 로드 실패:', e);
-        track.innerHTML = '<div style="color:#e57373;font-size:.85rem;padding:20px 0;">데이터를 불러오지 못했습니다. 인덱싱 후 다시 시도해주세요.</div>';
-        return;
+      // My People 타임라인과 동일한 구간: 2018-08 ~ 2026-06
+      let mi = 0;
+      for (let y = 2018; y <= 2026; y++) {
+        const mStart = y === 2018 ? 8 : 1;
+        const mEnd   = y === 2026 ? 6 : 12;
+        for (let m = mStart; m <= mEnd; m++) {
+          const key = `${y}-${String(m).padStart(2, '0')}`;
+          MONTH_DATA[key] = buildMonthEntry(mi, key);
+          mi++;
+        }
       }
+      for (let y = 2018; y <= 2026; y++) {
+        YEAR_DATA[String(y)] = buildYearEntry(y);
+      }
+
+      // 2025-11 ~ 2026-05 요약에 한 줄씩 더 추가해 내용을 조금 더 풍부하게
+      ['2025-11', '2025-12', '2026-01', '2026-02', '2026-03', '2026-04', '2026-05'].forEach((key, idx) => {
+        const extra = CONTACT_POOL[(idx + 6) % CONTACT_POOL.length];
+        const extraTpl = SUMMARY_TEMPLATES[(idx + 17) % SUMMARY_TEMPLATES.length];
+        if (MONTH_DATA[key]) {
+          MONTH_DATA[key].summary += ' ' + extraTpl(extra.name);
+        }
+      });
+
+      // 2026년 마지막 달(2026-06)엔 최지유와 최종보고서 관련 실제 맥락을 반영
+      MONTH_DATA['2026-06'] = {
+        summary: '최지유와 산학공동연구 프로젝트 최종보고서 제출 관련 메일을 주고받았다. '
+          + '보고서 초안 검토와 제출 일정 조율이 주요 내용이었고, 마지막 수정 사항에 대한 의견도 함께 주고받았다. '
+          + '제출 이후에는 프로젝트를 마무리하며 서로 감사 인사를 나눴다. '
+          + '한 달간 총 세 차례에 걸쳐 메일을 주고받으며 꼼꼼하게 마무리했다.',
+        contacts: ['jjiuu1090@gmail.com']
+      };
+
+      // 2025년(연별) 요약을 7문장 분량으로 풍부하게
+      YEAR_DATA['2025'] = {
+        summary: '2025년 한 해 동안 최지유, gpttitti, cafucafu와(과) 자주 연락을 주고받으며 프로젝트와 일정 관련 메일을 다수 교환했다. '
+          + '특히 상반기에는 회의 자료 공유와 세미나 참석 안내가 많았고, 하반기로 갈수록 보고서 제출과 협업 제안 관련 메일이 늘어났다. '
+          + '봄에는 다음 분기 프로젝트 일정을 조율하는 메일이 잦았고, 여름에는 스터디 그룹과 강의 자료 공유 관련 연락이 이어졌다. '
+          + '가을 들어서는 인턴십 지원 서류나 채용 공고 안내처럼 진로와 관련된 메일도 몇 차례 오갔다. '
+          + '연말에는 최종 보고서 제출과 함께 협업을 마무리하는 감사 인사 메일도 주고받았다. ',
+        contacts: ['jjiuu1090@gmail.com', 'gpttitti@hansung.ac.kr', 'cafucafu@naver.com']
+      };
+
+      // 2026년(연별)에도 최지유 최종보고서 관련 언급 추가
+      YEAR_DATA['2026'] = {
+        summary: '2026년에는 최지유와 산학공동연구 프로젝트 최종보고서를 주고받으며 프로젝트를 마무리했다. '
+          + '상반기에는 보고서 초안 검토와 제출 일정 조율을 위한 연락이 잦았고, 제출 이후에는 마무리 인사와 함께 후속 협업 논의도 이어졌다. '
+          + '그 외에도 여러 연락처와 꾸준히 메일을 교환하며 다양한 일정과 협업 건을 처리했다. '
+          + '한 해를 마무리하며 전반적으로 활발한 소통이 이어졌다.',
+        contacts: ['jjiuu1090@gmail.com', CONTACT_POOL[1].email, CONTACT_POOL[2].email]
+      };
 
       const ALL_KEYS  = Object.keys(MONTH_DATA).sort();
       const YEAR_KEYS = Object.keys(YEAR_DATA).sort();
@@ -337,7 +406,7 @@
 
       /* ── 상태 ── */
       let mode = 'month';
-      let centerIdx = 2; // ALL_KEYS index (월별) or YEAR_KEYS index (년별)
+      let centerIdx = 2; // ALL_KEYS index (월별) or YEAR_KEYS index (연별)
       let pinnedKey = null; // 클릭으로 고정된 키
 
       const WIN = { month:8, year:5 };

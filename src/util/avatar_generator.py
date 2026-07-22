@@ -6,6 +6,7 @@ import base64
 import hashlib
 import threading
 import requests
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -181,39 +182,132 @@ def _classify_sender(name: str, domain: str) -> str | None:
         return None
 
 
-def _trim_logo_padding(logo: Image.Image) -> Image.Image:
-    """로고 이미지에 내장된 투명/흰 여백을 실제 도형 경계 기준으로 정확히 잘라낸다.
+def _logo_content_mask(logo: Image.Image) -> Image.Image:
+    """로고 이미지에서 실제로 눈에 보이는 도형 픽셀만 표시하는 "L" 모드 마스크를 만든다.
 
-    단순히 `getbbox()`만 쓰면 눈에는 안 보이는 극히 옅은 알파(1~수십 수준)나
-    안티에일리어싱으로 생긴 아주 옅은 회색조 픽셀까지 "내용물"로 잡혀 bbox가
-    이미지 가장자리까지 부풀어버리고, 그 결과 크롭이 사실상 아무 효과가 없어
-    로고가 작게 남는 경우가 있었다(예: 파비콘처럼 큰 캔버스에 작은 아이콘만
-    담긴 소스). 실제로 눈에 뚜렷이 보이는 픽셀만 기준으로 삼도록 임계값을 둔다."""
-    w, h = logo.size
+    단순히 `alpha.getbbox()`만 쓰면 눈에는 안 보이는 극히 옅은 알파(1~수십 수준)나
+    안티에일리어싱으로 생긴 아주 옅은 회색조 픽셀까지 "내용물"로 잡혀 마스크가
+    이미지 가장자리까지 부풀어버리는 경우가 있었다. 실제로 눈에 뚜렷이 보이는
+    픽셀만 기준으로 삼도록 임계값을 둔다."""
     alpha = logo.split()[-1]
-    if alpha.getextrema()[0] < 250:  # 투명 배경이 있는 이미지 → 알파 기준으로 자름
-        mask = alpha.point(lambda a: 255 if a >= 32 else 0)
-    else:  # 불투명(흰 배경) 이미지 → 흰색과 뚜렷이 다른 영역 기준으로 자름
-        rgb = logo.convert("RGB")
-        diff = ImageChops.difference(rgb, Image.new("RGB", rgb.size, (255, 255, 255))).convert("L")
-        mask = diff.point(lambda d: 255 if d >= 24 else 0)
+    if alpha.getextrema()[0] < 250:  # 투명 배경이 있는 이미지 → 알파 기준
+        return alpha.point(lambda a: 255 if a >= 32 else 0)
+    # 불투명(흰 배경) 이미지 → 흰색과 뚜렷이 다른 영역 기준
+    rgb = logo.convert("RGB")
+    diff = ImageChops.difference(rgb, Image.new("RGB", rgb.size, (255, 255, 255))).convert("L")
+    return diff.point(lambda d: 255 if d >= 24 else 0)
+
+
+def _trim_logo_padding(logo: Image.Image) -> tuple[Image.Image, Image.Image] | tuple[None, None]:
+    """로고를 실제 도형 경계까지 크롭하고, 그 도형의 내용 마스크를 함께 반환한다."""
+    w, h = logo.size
+    mask = _logo_content_mask(logo)
     bbox = mask.getbbox()
     if not bbox:
-        return logo
+        return logo, mask
     # 임계값 처리 과정에서 실제 형상 가장자리의 부드러운 픽셀 한두 줄이 잘려나갈 수 있으니
     # 소폭 여유를 되돌려준다(과도한 크롭으로 로고 윤곽이 뭉개지는 것을 방지).
     pad = max(1, round(max(w, h) * 0.01))
     left, top, right, bottom = bbox
     bbox = (max(0, left - pad), max(0, top - pad), min(w, right + pad), min(h, bottom + pad))
-    return logo.crop(bbox)
+    return logo.crop(bbox), mask.crop(bbox)
 
 
-def _pad_logo_square(image_bytes: bytes, canvas_size: int = 512, pad_ratio: float = 0.86) -> bytes:
-    """기업 로고를 원형 아바타 안을 최대한 채우도록(넘치지 않게) 흰 배경 정사각형에 배치한다."""
+def _logo_badge_color(logo: Image.Image, mask: Image.Image) -> tuple[int, int, int] | None:
+    """
+    로고 도형이 이미 그 자체로 꽉 찬 색깔 배지(예: Pinterest의 빨간 원+흰 P, Discord의
+    블러플 원+흰 아이콘)인지, 아니면 배경 없이 심볼만 있는 얇은 단색 마크(예: McAfee의
+    방패)인지 판별한다. 후자라면 그 마크의 실제 색을 배지 배경색으로 뽑아 반환하고,
+    이미 배지 형태이거나 다색(Instagram/Google처럼)이면 None을 반환해 원본 그대로 둔다.
+    """
+    rgb = logo.convert("RGB")
+    pixels = list(rgb.getdata())
+    mask_data = list(mask.getdata())
+    content = [px for px, m in zip(pixels, mask_data) if m]
+    if not content:
+        return None
+
+    fill_ratio = len(content) / (logo.width * logo.height)
+    if fill_ratio >= 0.68:
+        # 이미 도형 자체가 원/사각형을 꽉 채운 배지 형태 → 그대로 사용
+        return None
+
+    # 색 다양성 검사: 양자화한 색상 버킷 중 하나가 압도적 비중이면 "단색 마크"로 본다.
+    buckets = Counter((r // 32, g // 32, b // 32) for r, g, b in content)
+    top_bucket, top_count = buckets.most_common(1)[0]
+    if top_count / len(content) < 0.75:
+        # Instagram/Google처럼 여러 색이 섞인 다색 로고 → 재색칠하지 않고 그대로 사용
+        return None
+
+    top_pixels = [
+        px for px, m in zip(pixels, mask_data)
+        if m and (px[0] // 32, px[1] // 32, px[2] // 32) == top_bucket
+    ]
+    r = sum(p[0] for p in top_pixels) // len(top_pixels)
+    g = sum(p[1] for p in top_pixels) // len(top_pixels)
+    b = sum(p[2] for p in top_pixels) // len(top_pixels)
+    return (r, g, b)
+
+
+def _pad_logo_square(image_bytes: bytes, canvas_size: int = 512) -> bytes:
+    """
+    Figma에서 원 프레임에 이미지를 채우기(Fill)하듯, 로고를 정사각형 캔버스에
+    여백 없이 꽉 채운다. 프론트엔드가 이 정사각형을 원형으로 마스킹해서 보여주므로,
+    캔버스 네 모서리는 어차피 원 밖이라 안 보인다 — "원 안에 다 들어가게" 크기를
+    역산할 필요 없이 그냥 캔버스를 완전히 채우기만 하면 결과적으로 원이 꽉 찬다.
+
+    도형만 있고 배경이 없는 얇은 단색 마크는 채워도 흐릿하게 떠 보이므로, 그 마크의
+    실제 색을 배경색으로 쓰고 마크 자체는 흰색으로 바꿔 배지 스타일로 통일한다.
+    이미 배지 형태이거나 다색(Instagram/Google 등)이면 원본 그대로 흰 배경에 채운다.
+    """
     logo = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
-    logo = _trim_logo_padding(logo)
-    target = int(canvas_size * pad_ratio)
-    logo.thumbnail((target, target), Image.LANCZOS)
+    logo, mask = _trim_logo_padding(logo)
+    badge_color = _logo_badge_color(logo, mask)
+
+    if badge_color is not None:
+        white_glyph = Image.new("RGBA", logo.size, (255, 255, 255, 255))
+        white_glyph.putalpha(mask)
+        logo = white_glyph
+        bg_rgba = badge_color + (255,)
+    else:
+        bg_rgba = (255, 255, 255, 255)
+
+    # cover(꽉 채우기): 짧은 변을 캔버스 크기에 맞춰 확대해 여백 없이 채운다.
+    # 파비콘처럼 아주 작은 원본을 큰 배율로 늘리면 뭉개져 보이므로 배율 자체에 상한을 둔다.
+    scale = min(max(canvas_size / logo.width, canvas_size / logo.height), 6.0)
+    new_size = (max(1, round(logo.width * scale)), max(1, round(logo.height * scale)))
+    logo = logo.resize(new_size, Image.LANCZOS)
+    canvas = Image.new("RGBA", (canvas_size, canvas_size), bg_rgba)
+    x, y = (canvas_size - logo.width) // 2, (canvas_size - logo.height) // 2
+    canvas.paste(logo, (x, y), logo)
+    out = io.BytesIO()
+    canvas.convert("RGB").save(out, format="PNG")
+    return out.getvalue()
+
+
+_BRAND_LOGOS_DIR = os.path.join(os.path.dirname(__file__), "brand_logos")
+
+# Clearbit/파비콘이 화질이 낮거나 배지 형태가 아닌 로고를 주는 브랜드는
+# 직접 준비한 원본 이미지를 우선 사용한다.
+_HARDCODED_LOGO_FILES = {
+    "pinterest.com": "pinterest.png",
+    "mcafee.com": "mcafee.png",
+    "neo4j.com": "neo4j.png",
+}
+
+
+def _place_hardcoded_logo(image_bytes: bytes, canvas_size: int = 512) -> bytes:
+    """
+    직접 고른 완성도 있는 로고 이미지를 위한 단순 배치. 배지 재색칠이나 꽉 채우기(cover)
+    크롭 없이, 여백만 다듬어 자르고 잘리지 않게 캔버스 안에 맞춘다(contain) — 이미
+    보기 좋은 이미지이므로 재해석하지 않고 그대로 살린다.
+    """
+    logo = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
+    logo, _ = _trim_logo_padding(logo)
+    target = int(canvas_size * 0.68)
+    scale = min(target / max(logo.width, logo.height), 6.0)
+    new_size = (max(1, round(logo.width * scale)), max(1, round(logo.height * scale)))
+    logo = logo.resize(new_size, Image.LANCZOS)
     canvas = Image.new("RGBA", (canvas_size, canvas_size), (255, 255, 255, 255))
     x, y = (canvas_size - logo.width) // 2, (canvas_size - logo.height) // 2
     canvas.paste(logo, (x, y), logo)
@@ -224,9 +318,16 @@ def _pad_logo_square(image_bytes: bytes, canvas_size: int = 512, pad_ratio: floa
 
 def _fetch_company_logo(domain: str) -> bytes | None:
     """공개 로고 서비스에서 실제 기업 로고를 가져온다. 실패 시 None."""
+    hardcoded = _HARDCODED_LOGO_FILES.get(domain)
+    if hardcoded:
+        filepath = os.path.join(_BRAND_LOGOS_DIR, hardcoded)
+        if os.path.exists(filepath):
+            with open(filepath, "rb") as f:
+                return _place_hardcoded_logo(f.read())
+
     for url in (
         f"https://logo.clearbit.com/{domain}?size=256",
-        f"https://www.google.com/s2/favicons?sz=128&domain={domain}",
+        f"https://www.google.com/s2/favicons?sz=256&domain={domain}",
     ):
         try:
             res = requests.get(url, timeout=8)

@@ -972,7 +972,7 @@
               <a href="index.html" class="gw-tl">홈</a>
               <a href="search.html" class="gw-tl">검색</a>
               <div class="gw-tl-dropdown">
-                <button class="gw-tl gw-tl-dd-btn active">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></button>
+                <a href="mylife.html" class="gw-tl gw-tl-dd-btn active">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></a>
                 <div class="gw-tl-dd-menu">
                   <a href="mypeople.html" style="color:#26B99A;font-weight:700;">My People</a>
                   <a href="mytime.html">My Time</a>
@@ -1428,6 +1428,64 @@
         'xbox@engage.xbox.com': 0.00
       };
 
+      /* ── 보고서용 로고 이미지 고정값 (Pinterest/neo4j/McAfee) ──
+         브랜드 로고 자동확대(setupBrandLogo/autoFitBrandLogo, transform:scale(2.6))를
+         타지 않고 이미지 그대로 들어가게 한다. REPORT_LOGO_SCALE 하나만 줄이면
+         전체(카드+상세보기) 로고 크기가 한 번에 축소된다. */
+      const REPORT_LOGO_IMAGES = {
+        'recommendations@discover.pinterest.com': '/assets/pinterest-logo.png',
+        'recommendations@inspire.pinterest.com': '/assets/pinterest-logo.png',
+        'recommendations@explore.pinterest.com': '/assets/pinterest-logo.png',
+        'pinterest-recommendations@ideas.pinterest.com': '/assets/pinterest-logo.png',
+        'graph-insights@neo4j.com': '/assets/neo4j-logo.png',
+        'noreply@neo4j.com': '/assets/neo4j-logo.png',
+        'info@notification.mcafee.com': '/assets/mcafee-logo.jpg',
+        'info@protect.mcafee.com': '/assets/mcafee-logo.jpg'
+      };
+      let REPORT_LOGO_SCALE = 1; // "축소해줘" 하면 이 값만 줄이면 됨 (예: 0.7)
+
+      /* ── 보고서용 송수신 건수 고정값 (recap.html과 동일) ──
+         "송수신 횟수"/"받은 메일수"/"보낸 메일수" 정렬 시 카드 배지가
+         recap.html의 순위·건수와 일치하도록 이메일 기준으로 고정한다.
+         recap에 없는 나머지(11위 이하)는 자연스럽게 이어지는 낮은 값으로 채움. */
+      const REPORT_MAIL_COUNTS = {
+        'gpttitti@hansung.ac.kr': { sent: 6,  received: 31 },
+        'jjiuu1090@gmail.com':    { sent: 15, received: 28 },
+        'csi10186@gmail.com':     { sent: 9,  received: 24 },
+        'info@twitter.com':       { sent: 0,  received: 20 },
+        'cafucafu@naver.com':     { sent: 27, received: 19 },
+        'follow-suggestions@mail.instagram.com': { sent: 0, received: 17 },
+        'googleplay-noreply@google.com':         { sent: 0, received: 14 },
+        'ddyr1554@naver.com':     { sent: 30, received: 13 },
+        'inhist73@naver.com':     { sent: 22, received: 11 },
+        'iwreau@gmail.com':       { sent: 18, received: 9 },
+        'info@notification.mcafee.com': { sent: 0, received: 8 },
+        'graph-insights@neo4j.com':     { sent: 0, received: 6 },
+        // 11위 이하 (recap.html에 없는 나머지 연락처)
+        'stories-recap@mail.instagram.com':             { sent: 0, received: 7 },
+        'info@protect.mcafee.com':                       { sent: 0, received: 6 },
+        'recommendations@discover.pinterest.com':        { sent: 0, received: 5 },
+        'posts-recap@mail.instagram.com':                { sent: 0, received: 5 },
+        'recommendations@inspire.pinterest.com':         { sent: 0, received: 4 },
+        'recommendations@explore.pinterest.com':         { sent: 0, received: 4 },
+        'notifications@discord.com':                     { sent: 0, received: 3 },
+        'pinterest-recommendations@ideas.pinterest.com': { sent: 0, received: 3 },
+        'no-reply@mail.instagram.com':                   { sent: 0, received: 2 },
+        'no-reply@accounts.google.com':                  { sent: 0, received: 2 },
+        'security@mail.instagram.com':                   { sent: 0, received: 2 },
+        'google-noreply@google.com':                     { sent: 0, received: 1 },
+        'msa@communication.microsoft.com':               { sent: 0, received: 1 },
+        'noreply@neo4j.com':                             { sent: 0, received: 1 },
+        'notify@twitter.com':                            { sent: 0, received: 1 },
+        'xbox@engage.xbox.com':                          { sent: 0, received: 1 }
+      };
+      function applyReportMailCounts(map, field) {
+        // 실제 fetch 값 위에 덮어쓰기만 하면 목록에 없는 다른 실제 연락처(예: 진짜
+        // 발신량이 큰 계정)가 순위를 어지럽힐 수 있어, 아예 통째로 교체한다.
+        Object.keys(map).forEach(k => { delete map[k]; });
+        Object.entries(REPORT_MAIL_COUNTS).forEach(([email, v]) => { map[email] = v[field]; });
+      }
+
       /* ── 전역 상태 ── */
       let allPeople = [];
       let globalFirst = 0, globalLast = 0; // ms
@@ -1461,6 +1519,7 @@
             (j.data || []).forEach(item => { sentStatsMap[(item.email||'').toLowerCase()] = item.sent || 0; });
           }
         } catch(e) { console.error('fetchSentStats 오류:', e); }
+        applyReportMailCounts(sentStatsMap, 'sent');
       }
 
       async function fetchReceivedStats() {
@@ -1476,6 +1535,7 @@
             (j.data || []).forEach(item => { receivedStatsMap[(item.email||'').toLowerCase()] = item.received || 0; });
           }
         } catch(e) { console.error('fetchReceivedStats 오류:', e); }
+        applyReportMailCounts(receivedStatsMap, 'received');
       }
 
       async function fetchPeriodStats() {
@@ -1584,10 +1644,13 @@
           const ps = periodStats[(p.email || '').toLowerCase()] || {};
           const em = (p.email || '').toLowerCase();
           const total = (ps.sent || 0) + (ps.received || 0);
-          const photo = generatedAvatars[em] || contactPhotos[em];
-          const brandCls = isBrandSender(p) ? ' mp-brand-logo' : '';
+          const reportLogo = REPORT_LOGO_IMAGES[em];
+          const photo = reportLogo || generatedAvatars[em] || contactPhotos[em];
+          const brandCls = reportLogo ? ' mp-report-logo' : (isBrandSender(p) ? ' mp-brand-logo' : '');
           const avatarInner = photo
-            ? `<img src="${photo}" alt="${displayName}" class="${brandCls.trim()}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(displayName)}'">`
+            ? (reportLogo
+                ? `<img src="${photo}" alt="${displayName}" class="mp-report-logo" style="width:100%;height:100%;border-radius:50%;object-fit:contain;transform:scale(${REPORT_LOGO_SCALE});" onerror="this.parentElement.textContent='${initials(displayName)}'">`
+                : `<img src="${photo}" alt="${displayName}" class="${brandCls.trim()}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(displayName)}'">`)
             : initials(displayName);
           let badge = '';
           if (sortMode === 'affinity') {
@@ -2283,32 +2346,42 @@
          2026년 실데이터는 절대 건드리지 않고 그대로 유지한다. */
       function injectReportHistory(person, statsData) {
         if ((person.email || '').toLowerCase() !== 'jjiuu1090@gmail.com') return statsData;
+        // 최지유 총 메일건수는 recap.html과 동일하게 보낸 15 · 받은 28(총 43)로 고정.
+        // 2026년 실데이터(드릴다운 클릭용)는 그대로 두고, 모자란 만큼만 2018~2025
+        // 몇 개 달에 나눠 담아 정확히 목표 합계가 되도록 한다.
+        const TARGET_SENT = 15, TARGET_RECEIVED = 28;
+        const real = statsData || { monthly: [], total: { sent: 0, received: 0 } };
+        const realTotal = real.total || { sent: 0, received: 0 };
+        const needSent = Math.max(0, TARGET_SENT - (realTotal.sent || 0));
+        const needReceived = Math.max(0, TARGET_RECEIVED - (realTotal.received || 0));
+
+        const SLOTS = [
+          '2018-11', '2019-06', '2020-03', '2020-09', '2021-05',
+          '2022-02', '2022-11', '2023-07', '2024-04', '2025-01', '2025-08'
+        ];
+        function distribute(total, n) {
+          const base = Math.floor(total / n);
+          const rem = total % n;
+          return Array.from({ length: n }, (_, i) => base + (i < rem ? 1 : 0));
+        }
+        const sentDist = distribute(needSent, SLOTS.length);
+        const recvDist = distribute(needReceived, SLOTS.length);
+        const byMonth = {};
+        SLOTS.forEach((m, i) => { byMonth[m] = { sent: sentDist[i], received: recvDist[i] }; });
+
         const ALL_MONTHS = [];
         for (let y = 2018; y <= 2025; y++) {
           for (let m = 1; m <= 12; m++) ALL_MONTHS.push(`${y}-${String(m).padStart(2, '0')}`);
-        }
-        const shuffled = [...ALL_MONTHS].sort(() => Math.random() - 0.5);
-        const FAKE_CAP = 55; // 실제 2026 데이터(대략 20~25건)를 더해도 100건 밑으로 유지
-        const byMonth = {};
-        let addSent = 0, addReceived = 0;
-        for (const month of shuffled) {
-          if (addSent + addReceived >= FAKE_CAP) break;
-          if (Math.random() < 0.6) continue; // 대부분의 달은 비워서 듬성듬성하게
-          const sent = Math.random() < 0.7 ? 1 + Math.floor(Math.random() * 3) : 0;
-          const received = Math.random() < 0.7 ? 1 + Math.floor(Math.random() * 3) : 0;
-          addSent += sent; addReceived += received;
-          byMonth[month] = { sent, received };
         }
         const fakeMonths = ALL_MONTHS.map(month => ({
           month,
           sent: (byMonth[month] || {}).sent || 0,
           received: (byMonth[month] || {}).received || 0
         }));
-        const real = statsData || { monthly: [], total: { sent: 0, received: 0 } };
-        const total = real.total || { sent: 0, received: 0 };
+
         return {
           monthly: [...fakeMonths, ...(real.monthly || [])],
-          total: { sent: total.sent + addSent, received: total.received + addReceived }
+          total: { sent: needSent + (realTotal.sent || 0), received: needReceived + (realTotal.received || 0) }
         };
       }
 
@@ -2358,8 +2431,22 @@
           { word: '제출',         count: 5 }
         ]
       };
+      // 타임슬라이더를 2025년 이전 구간으로 내렸을 때 최지유에게 보여줄 키워드
+      const REPORT_KEYWORDS_PRE_2025 = {
+        'jjiuu1090@gmail.com': [
+          { word: '애드온',     count: 13 },
+          { word: '연구노트',   count: 11 },
+          { word: '논문',       count: 8 },
+          { word: '라이프사이클', count: 6 },
+          { word: '분석',       count: 4 }
+        ]
+      };
       function injectReportKeywords(person, keywords) {
-        const hardcoded = REPORT_KEYWORDS[(person.email || '').toLowerCase()];
+        const email = (person.email || '').toLowerCase();
+        const isPre2025 = new Date(selMax).getFullYear() < 2025;
+        const hardcoded = isPre2025
+          ? REPORT_KEYWORDS_PRE_2025[email]
+          : REPORT_KEYWORDS[email];
         return hardcoded || keywords;
       }
 
@@ -2403,8 +2490,12 @@
         if (ringLabel) {
           ringLabel.innerHTML = `<i class="bi bi-heart-fill"></i>${affPct != null ? affPct + '%' : '-'}`;
         }
-        const detailPhoto = generatedAvatars[(person.email || '').toLowerCase()] || contactPhotos[(person.email || '').toLowerCase()];
-        if (detailPhoto) {
+        const detailEmail = (person.email || '').toLowerCase();
+        const detailReportLogo = REPORT_LOGO_IMAGES[detailEmail];
+        const detailPhoto = detailReportLogo || generatedAvatars[detailEmail] || contactPhotos[detailEmail];
+        if (detailReportLogo) {
+          avatarEl.innerHTML = `<img src="${detailReportLogo}" alt="${detailDisplayName}" class="mp-report-logo" style="width:100%;height:100%;border-radius:50%;object-fit:contain;transform:scale(${REPORT_LOGO_SCALE});" onerror="this.parentElement.textContent='${initials(detailDisplayName)}'">`;
+        } else if (detailPhoto) {
           const detailBrandCls = isBrandSender(person) ? ' mp-brand-logo' : '';
           avatarEl.innerHTML = `<img src="${detailPhoto}" alt="${detailDisplayName}" class="${detailBrandCls.trim()}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(detailDisplayName)}'">`;
           if (detailBrandCls) setupBrandLogo(avatarEl.querySelector('img.mp-brand-logo'));

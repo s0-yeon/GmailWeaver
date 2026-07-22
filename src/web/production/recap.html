@@ -1169,6 +1169,45 @@
         document.getElementById('rcRatingContent').style.display = '';
       }
 
+      /* ── 보고서용 하드코딩: My People과 같은 연락처 톤으로 발신/수신·키워드만 고정값으로 표시 ── */
+      const REPORT_MAIL_STATS = {
+        // 받은 메일 위주(학교/프로젝트 연락처, 알림성 계정)와 보낸 메일 위주(자주 먼저 연락하는 지인)를
+        // 서로 다른 사람이 상위에 오도록 sent/received를 의도적으로 엇갈리게 배치
+        'gpttitti@hansung.ac.kr':                { name: 'gpttitti', sent: 6,  received: 31 },
+        'jjiuu1090@gmail.com':                   { name: '최지유',   sent: 15, received: 28 },
+        'csi10186@gmail.com':                    { name: 'csi10186', sent: 9,  received: 24 },
+        'info@twitter.com':                      { name: 'Twitter',  sent: 0,  received: 20 },
+        'cafucafu@naver.com':                    { name: 'cafucafu', sent: 27, received: 19 },
+        'follow-suggestions@mail.instagram.com': { name: 'Instagram', sent: 0, received: 17 },
+        'googleplay-noreply@google.com':         { name: 'Google',   sent: 0,  received: 14 },
+        'ddyr1554@naver.com':                    { name: 'ddyr1554', sent: 30, received: 13 },
+        'inhist73@naver.com':                    { name: 'inhist73', sent: 22, received: 11 },
+        'iwreau@gmail.com':                      { name: '김예은',   sent: 18, received: 9 },
+        'info@notification.mcafee.com':          { name: 'McAfee',   sent: 0,  received: 8 },
+        'graph-insights@neo4j.com':              { name: 'Neo4j',    sent: 0,  received: 6 }
+      };
+      const REPORT_AFFINITY = [
+        { email: 'cafucafu@naver.com',       name: 'cafucafu', affinity: 0.97 },
+        { email: 'ddyr1554@naver.com',       name: 'ddyr1554', affinity: 0.96 },
+        { email: 'gpttitti@hansung.ac.kr',   name: 'gpttitti', affinity: 0.96 },
+        { email: 'info@twitter.com',         name: 'Twitter',  affinity: 0.90 },
+        { email: 'csi10186@gmail.com',       name: 'csi10186', affinity: 0.87 },
+        { email: 'jjiuu1090@gmail.com',      name: '최지유',   affinity: 0.80 },
+        { email: 'inhist73@naver.com',       name: 'inhist73', affinity: 0.79 }
+      ];
+      const REPORT_KEYWORDS = [
+        { word: '프로젝트',     count: 42 },
+        { word: '회의',         count: 35 },
+        { word: '보고서',       count: 28 },
+        { word: '일정',         count: 24 },
+        { word: '산학공동연구', count: 20 },
+        { word: '세미나',       count: 17 },
+        { word: '제출',         count: 14 },
+        { word: '협업',         count: 11 },
+        { word: '논문',         count: 9 },
+        { word: '자료',         count: 7 }
+      ];
+
       async function postStat(endpoint, gmailId) {
         const res = await fetch(endpoint, {
           method: 'POST',
@@ -1194,8 +1233,8 @@
           return;
         }
         
-        // 다섯 API 병렬 호출
-        const [senderResult, kwResult, afResult, syncResult, ratingResult] = await Promise.allSettled([
+        // 다섯 API 병렬 호출 (발신/수신·키워드·친밀도는 보고서용 하드코딩으로 대체하므로 결과는 무시)
+        const [, , , syncResult, ratingResult] = await Promise.allSettled([
           postStat('/mail-stats', gmailId),
           postStat('/keyword-stats', gmailId),
           postStat('/high_affinity_person_stats', gmailId),
@@ -1203,44 +1242,18 @@
           postStat('/user_rating_stats', gmailId),
         ]);
 
-        // ── 발신자/수신자 통계 ──
-        if (senderResult.status === 'fulfilled' && senderResult.value.data && Object.keys(senderResult.value.data).length > 0) {
-          renderSenderStats(senderResult.value.data);
-        } else {
-          document.getElementById('rcSenderLoading').style.display = 'none';
-          document.getElementById('rcMySentLoading').style.display = 'none';
-          const msg = senderResult.status === 'rejected'
-            ? '불러오기 실패: ' + senderResult.reason.message : '데이터가 없습니다.';
-          ['rcSenderError','rcMySentError'].forEach(id => {
-            const el = document.getElementById(id); el.style.display = ''; el.textContent = msg;
-          });
-        }
+        // ── 발신자/수신자 통계 (보고서용 하드코딩) ──
+        renderSenderStats(REPORT_MAIL_STATS);
 
-        // ── 키워드 통계 ──
+        // ── 키워드 통계 (보고서용 하드코딩) ──
         document.getElementById('rcKwLoading').style.display = 'none';
-        if (kwResult.status === 'fulfilled' && kwResult.value.data) {
-          renderKeywordStats(kwResult.value.data);
-          document.getElementById('rcKwContent').style.display = '';
-        } else {
-          const err = document.getElementById('rcKwError');
-          err.style.display = '';
-          err.textContent = kwResult.status === 'rejected'
-            ? '불러오기 실패: ' + kwResult.reason.message
-            : '데이터가 없습니다.';
-        }
+        renderKeywordStats({ keywords: REPORT_KEYWORDS });
+        document.getElementById('rcKwContent').style.display = '';
 
-        // ── 친밀도 통계 ──
+        // ── 친밀도 통계 (보고서용 하드코딩) ──
         document.getElementById('rcAfLoading').style.display = 'none';
-        if (afResult.status === 'fulfilled' && afResult.value.data) {
-          renderAffinityStats(afResult.value.data);
-          document.getElementById('rcAfContent').style.display = '';
-        } else {
-          const err = document.getElementById('rcAfError');
-          err.style.display = '';
-          err.textContent = afResult.status === 'rejected'
-            ? '불러오기 실패: ' + afResult.reason.message
-            : '데이터가 없습니다.';
-        }
+        renderAffinityStats(REPORT_AFFINITY);
+        document.getElementById('rcAfContent').style.display = '';
 
         // ── 동기화 통계 ──
         if (syncResult.status === 'fulfilled' && syncResult.value.data) {
