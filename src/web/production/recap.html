@@ -45,25 +45,26 @@
       .rc-hero-sub {
         font-size: 0.9rem; color: #b7e4c7; font-weight: 400;
       }
-      /* 히어로 오른쪽 배지들 */
-      .rc-hero-badges {
+      /* 히어로 오른쪽: 지식그래프 보기 버튼 */
+      .rc-hero-graph-link {
         position: absolute; right: 40px; top: 50%;
         transform: translateY(-50%);
-        display: flex; gap: 14px;
+        z-index: 3;
+        display: flex; align-items: center; gap: 6px;
+        background: #fff;
+        border: none;
+        border-radius: 999px; padding: 8px 16px;
+        color: #1b4332; text-decoration: none; font-weight: 700; font-size: 0.82rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        transition: transform .15s, box-shadow .15s;
+        white-space: nowrap;
       }
-      .rc-hero-badge {
-        background: rgba(255,255,255,0.12);
-        border: 1px solid rgba(255,255,255,0.2);
-        border-radius: 16px; padding: 14px 20px;
-        text-align: center; backdrop-filter: blur(6px);
-        min-width: 90px;
+      .rc-hero-graph-link:hover {
+        color: #1b4332; text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+        transform: translateY(-50%) translateX(-2px);
       }
-      .rc-hero-badge-num {
-        font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1;
-      }
-      .rc-hero-badge-label {
-        font-size: 0.7rem; color: #b7e4c7; margin-top: 4px; font-weight: 600;
-      }
+      .rc-hero-graph-arrow { font-size: 0.9rem; }
 
       /* ── 컨텐츠 영역 (히어로와 겹치게) ── */
       .rc-content {
@@ -462,7 +463,7 @@
       /* ── 반응형 ── */
       @media (max-width: 768px) {
         .rc-hero { padding: 28px 20px 70px; }
-        .rc-hero-badges { display: none; }
+        .rc-hero-graph-link { display: none; }
         .rc-content { padding: 0 16px 32px; }
         .rc-card { padding: 20px; }
         .rc-af-donut-wrap {
@@ -567,7 +568,6 @@
                   <a href="mypeople.html">My People</a>
                   <a href="mytime.html">My Time</a>
                   <a href="recap.html" style="color:#26B99A;font-weight:700;">Recap</a>
-                  <a href="graph-viz.html">지식 그래프</a>
                 </div>
               </div>
               <a href="contacts.html" class="gw-tl">연락처</a>
@@ -603,16 +603,10 @@
               <div class="rc-hero-title">📊 Recap</div>
               <div class="rc-hero-sub" id="rcHeroSub">내 메일함 통계 한눈에 보기</div>
             </div>
-            <div class="rc-hero-badges">
-              <div class="rc-hero-badge">
-                <div class="rc-hero-badge-num" id="rcHeroTotal">—</div>
-                <div class="rc-hero-badge-label">총 연락처</div>
-              </div>
-              <div class="rc-hero-badge">
-                <div class="rc-hero-badge-num" id="rcHeroTop">—</div>
-                <div class="rc-hero-badge-label">최다 수신</div>
-              </div>
-            </div>
+            <a href="graph-viz.html" class="rc-hero-graph-link">
+              <span>지식그래프 보기</span>
+              <span class="rc-hero-graph-arrow">→</span>
+            </a>
           </div>
 
           <!-- 컨텐츠 -->
@@ -864,10 +858,8 @@
         const max = sorted[0].count;
         const top = sorted[0];
 
-        // 히어로 배지 (received 기준으로만 업데이트)
+        // 히어로 서브타이틀 (received 기준으로만 업데이트)
         if (field === 'received') {
-          document.getElementById('rcHeroTotal').textContent = sorted.length;
-          document.getElementById('rcHeroTop').textContent = top.count + '통';
           document.getElementById('rcHeroSub').textContent = (name !== '-' ? name + '님의 ' : '') + '메일함 통계';
         }
 
@@ -1169,45 +1161,6 @@
         document.getElementById('rcRatingContent').style.display = '';
       }
 
-      /* ── 보고서용 하드코딩: My People과 같은 연락처 톤으로 발신/수신·키워드만 고정값으로 표시 ── */
-      const REPORT_MAIL_STATS = {
-        // 받은 메일 위주(학교/프로젝트 연락처, 알림성 계정)와 보낸 메일 위주(자주 먼저 연락하는 지인)를
-        // 서로 다른 사람이 상위에 오도록 sent/received를 의도적으로 엇갈리게 배치
-        'gpttitti@hansung.ac.kr':                { name: 'gpttitti', sent: 6,  received: 31 },
-        'jjiuu1090@gmail.com':                   { name: '최지유',   sent: 15, received: 28 },
-        'csi10186@gmail.com':                    { name: 'csi10186', sent: 9,  received: 24 },
-        'info@twitter.com':                      { name: 'Twitter',  sent: 0,  received: 20 },
-        'cafucafu@naver.com':                    { name: 'cafucafu', sent: 27, received: 19 },
-        'follow-suggestions@mail.instagram.com': { name: 'Instagram', sent: 0, received: 17 },
-        'googleplay-noreply@google.com':         { name: 'Google',   sent: 0,  received: 14 },
-        'ddyr1554@naver.com':                    { name: 'ddyr1554', sent: 30, received: 13 },
-        'inhist73@naver.com':                    { name: 'inhist73', sent: 22, received: 11 },
-        'iwreau@gmail.com':                      { name: '김예은',   sent: 18, received: 9 },
-        'info@notification.mcafee.com':          { name: 'McAfee',   sent: 0,  received: 8 },
-        'graph-insights@neo4j.com':              { name: 'Neo4j',    sent: 0,  received: 6 }
-      };
-      const REPORT_AFFINITY = [
-        { email: 'cafucafu@naver.com',       name: 'cafucafu', affinity: 0.97 },
-        { email: 'ddyr1554@naver.com',       name: 'ddyr1554', affinity: 0.96 },
-        { email: 'gpttitti@hansung.ac.kr',   name: 'gpttitti', affinity: 0.96 },
-        { email: 'info@twitter.com',         name: 'Twitter',  affinity: 0.90 },
-        { email: 'csi10186@gmail.com',       name: 'csi10186', affinity: 0.87 },
-        { email: 'jjiuu1090@gmail.com',      name: '최지유',   affinity: 0.80 },
-        { email: 'inhist73@naver.com',       name: 'inhist73', affinity: 0.79 }
-      ];
-      const REPORT_KEYWORDS = [
-        { word: '프로젝트',     count: 42 },
-        { word: '회의',         count: 35 },
-        { word: '보고서',       count: 28 },
-        { word: '일정',         count: 24 },
-        { word: '산학공동연구', count: 20 },
-        { word: '세미나',       count: 17 },
-        { word: '제출',         count: 14 },
-        { word: '협업',         count: 11 },
-        { word: '논문',         count: 9 },
-        { word: '자료',         count: 7 }
-      ];
-
       async function postStat(endpoint, gmailId) {
         const res = await fetch(endpoint, {
           method: 'POST',
@@ -1233,8 +1186,8 @@
           return;
         }
         
-        // 다섯 API 병렬 호출 (발신/수신·키워드·친밀도는 보고서용 하드코딩으로 대체하므로 결과는 무시)
-        const [, , , syncResult, ratingResult] = await Promise.allSettled([
+        // 다섯 API 병렬 호출
+        const [mailStatsResult, keywordResult, affinityResult, syncResult, ratingResult] = await Promise.allSettled([
           postStat('/mail-stats', gmailId),
           postStat('/keyword-stats', gmailId),
           postStat('/high_affinity_person_stats', gmailId),
@@ -1242,18 +1195,34 @@
           postStat('/user_rating_stats', gmailId),
         ]);
 
-        // ── 발신자/수신자 통계 (보고서용 하드코딩) ──
-        renderSenderStats(REPORT_MAIL_STATS);
+        // ── 발신자/수신자 통계 ──
+        renderSenderStats(mailStatsResult.status === 'fulfilled' ? (mailStatsResult.value.data || {}) : {});
 
-        // ── 키워드 통계 (보고서용 하드코딩) ──
-        document.getElementById('rcKwLoading').style.display = 'none';
-        renderKeywordStats({ keywords: REPORT_KEYWORDS });
-        document.getElementById('rcKwContent').style.display = '';
+        // ── 키워드 통계 ──
+        {
+          const kwData = keywordResult.status === 'fulfilled' ? keywordResult.value.data : null;
+          document.getElementById('rcKwLoading').style.display = 'none';
+          if (kwData && (kwData.keywords || []).length) {
+            renderKeywordStats(kwData);
+            document.getElementById('rcKwContent').style.display = '';
+          } else {
+            const err = document.getElementById('rcKwError');
+            err.style.display = ''; err.textContent = '데이터가 없습니다.';
+          }
+        }
 
-        // ── 친밀도 통계 (보고서용 하드코딩) ──
-        document.getElementById('rcAfLoading').style.display = 'none';
-        renderAffinityStats(REPORT_AFFINITY);
-        document.getElementById('rcAfContent').style.display = '';
+        // ── 친밀도 통계 ──
+        {
+          const afData = affinityResult.status === 'fulfilled' ? affinityResult.value.data : null;
+          document.getElementById('rcAfLoading').style.display = 'none';
+          if (Array.isArray(afData) && afData.length) {
+            renderAffinityStats(afData);
+            document.getElementById('rcAfContent').style.display = '';
+          } else {
+            const err = document.getElementById('rcAfError');
+            err.style.display = ''; err.textContent = '데이터가 없습니다.';
+          }
+        }
 
         // ── 동기화 통계 ──
         if (syncResult.status === 'fulfilled' && syncResult.value.data) {

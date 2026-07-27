@@ -33,13 +33,55 @@
       /* ── 페이지 ── */
       .mt-page{width:88vw;max-width:1700px;margin:0 auto;padding:28px clamp(20px,3vw,56px) 32px;box-sizing:border-box}
 
-      /* 헤더 */
-      .mt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+      /* 페이지 상단 헤더: My Time 로고 + 월별/연별 토글 (좌우 컬럼 밖, 전체 폭) */
+      .mt-page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
       .mt-title{font-size:2.6rem;font-weight:800;color:#1b2e22;letter-spacing:-.04em}
       .mt-title span{color:#1a9e6e}
       .mt-mode-toggle{display:flex;gap:3px;background:#e9efec;border-radius:8px;padding:3px}
       .mt-mode-btn{padding:6px 18px;border-radius:6px;border:none;font-size:.82rem;font-weight:600;cursor:pointer;background:transparent;color:#73879C;transition:all .15s;font-family:inherit}
       .mt-mode-btn.active{background:#fff;color:#1a9e6e;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+      /* 좌(아바타 3) : 우(요약/타임라인 7) 레이아웃 — 상단 헤더 아래, 두 컬럼 위/아래 선이 모두 맞도록 stretch */
+      .mt-layout{display:grid;grid-template-columns:3fr 7fr;gap:clamp(16px,2.4vw,32px);align-items:stretch}
+      .mt-col-main{min-width:0}
+      @media (max-width:860px){
+        .mt-layout{grid-template-columns:1fr}
+      }
+
+      /* ── 좌측: 나 아바타 + "{아이디}'s Time" ── */
+      .mt-side{
+        background:#fff;border-radius:16px;border:1px solid #e3ede8;
+        padding:28px 22px 24px;
+        display:flex;flex-direction:column;align-items:center;text-align:center;
+      }
+      .mt-side-title{font-size:1.35rem;font-weight:800;color:#1b2e22;letter-spacing:-.02em;margin-bottom:20px;word-break:break-word}
+      .mt-side-title span{color:#1a9e6e}
+      .mt-side-avatar{
+        width:96px;height:96px;border-radius:50%;overflow:hidden;flex-shrink:0;
+        box-shadow:0 4px 16px rgba(26,158,110,.18);
+        outline:3px solid #dff0e8;
+        margin-bottom:22px;
+      }
+      .mt-side-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+      .mt-side-avatar-fallback{
+        width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+        background:linear-gradient(150deg,#cfe9df,#a9d4c4);color:#1a6e4a;
+        font-size:1.3rem;font-weight:800;
+      }
+
+      .mt-side-stat{
+        width:100%;background:#f0f8f4;border:1px solid #cfe9df;border-radius:12px;
+        padding:14px 12px;margin-bottom:14px;
+      }
+      .mt-side-stat-label{font-size:.64rem;font-weight:700;color:#8fb5a9;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+      .mt-side-stat-value{font-size:1.12rem;font-weight:800;color:#14845c}
+
+      .mt-side-range{
+        width:100%;font-size:.74rem;color:#73879C;
+        display:flex;align-items:center;gap:6px;justify-content:center;
+        padding-top:14px;border-top:1px dashed #e3ede8;
+      }
+
 
       /* ── 메인 카드 ── */
       .mt-main{
@@ -213,7 +255,6 @@
                   <a href="mypeople.html">My People</a>
                   <a href="mytime.html" style="color:#26B99A;font-weight:700;">My Time</a>
                   <a href="recap.html">Recap</a>
-                  <a href="graph-viz.html">지식 그래프</a>
                 </div>
               </div>
               <a href="contacts.html" class="gw-tl">연락처</a>
@@ -240,7 +281,7 @@
         <main class="right_col" role="main">
           <div class="mt-page">
 
-            <div class="mt-header">
+            <div class="mt-page-header">
               <div class="mt-title">My <span>Time</span></div>
               <div class="mt-mode-toggle">
                 <button class="mt-mode-btn active" data-mode="month">월별</button>
@@ -248,32 +289,56 @@
               </div>
             </div>
 
-            <div class="mt-main" id="mainCard">
-              <div class="mt-track" id="track"></div>
-              <div class="mt-info-area">
-                <div class="mt-panel" id="infoPanel">
-                  <div class="mt-panel-top">
-                    <div class="mt-panel-period" id="panelPeriod"></div>
-                    <div class="mt-panel-count" id="panelCount"></div>
+            <div class="mt-layout">
+
+              <!-- 좌측: 나 아바타 + "{아이디}'s Time" -->
+              <aside class="mt-side">
+                <div class="mt-side-title" id="mtSideTitle">My <span>Time</span></div>
+
+                <div class="mt-side-avatar" id="mtSideAvatar">
+                  <span class="mt-side-avatar-fallback">나</span>
+                </div>
+
+                <div class="mt-side-stat">
+                  <div class="mt-side-stat-label">지금 보는 시점</div>
+                  <div class="mt-side-stat-value" id="mtSideNow">—</div>
+                </div>
+
+                <div class="mt-side-range">
+                  <i class="bi bi-clock-history"></i><span id="mtSideRange"></span>
+                </div>
+              </aside>
+
+              <!-- 우측: 타임라인 요약 + 슬라이더 -->
+              <div class="mt-col-main">
+                <div class="mt-main" id="mainCard">
+                  <div class="mt-track" id="track"></div>
+                  <div class="mt-info-area">
+                    <div class="mt-panel" id="infoPanel">
+                      <div class="mt-panel-top">
+                        <div class="mt-panel-period" id="panelPeriod"></div>
+                        <div class="mt-panel-count" id="panelCount"></div>
+                      </div>
+                      <div class="mt-panel-summary" id="panelSummary"></div>
+                      <div class="mt-panel-contacts-title">주요 연락처</div>
+                      <div class="mt-panel-contacts" id="panelContacts"></div>
+                    </div>
                   </div>
-                  <div class="mt-panel-summary" id="panelSummary"></div>
-                  <div class="mt-panel-contacts-title">주요 연락처</div>
-                  <div class="mt-panel-contacts" id="panelContacts"></div>
+                </div>
+
+                <!-- 포인터 -->
+                <div class="mt-pointer-wrap">
+                  <div class="mt-pointer-label">전체 타임라인 — 클릭으로 이동</div>
+                  <div class="mt-pointer-track" id="pointerTrack">
+                    <div class="mt-pointer-bg"></div>
+                    <div class="mt-pointer-window" id="pointerWindow"></div>
+                    <div class="mt-pointer-cursor" id="pointerCursor"><span class="mt-pointer-cursor-fallback">나</span></div>
+                  </div>
+                  <div class="mt-pointer-axis" id="pointerAxis"></div>
                 </div>
               </div>
-            </div>
 
-            <!-- 포인터 -->
-            <div class="mt-pointer-wrap">
-              <div class="mt-pointer-label">전체 타임라인 — 클릭으로 이동</div>
-              <div class="mt-pointer-track" id="pointerTrack">
-                <div class="mt-pointer-bg"></div>
-                <div class="mt-pointer-window" id="pointerWindow"></div>
-                <div class="mt-pointer-cursor" id="pointerCursor"><span class="mt-pointer-cursor-fallback">나</span></div>
-              </div>
-              <div class="mt-pointer-axis" id="pointerAxis"></div>
             </div>
-
           </div>
         </main>
         <footer></footer>
@@ -282,126 +347,27 @@
 
     <script>
     (async function () {
-      /* ════════════════════════════
-         보고서용 하드코딩 — My People 타임라인과 같은 구간(2018.08~2026.06)을
-         월별·연별 데이터로 풍부하게 채운다. 실제 /mail-summaries 데이터가
-         아직 생성되지 않아 비어있던 문제를 대신해, 데모/보고서 용도로
-         고정된 콘텐츠를 생성한다.
-      ════════════════════════════ */
       const track = document.getElementById('track');
+      const gmailId = localStorage.getItem('gw_gmail_id') || '';
 
-      const CONTACT_POOL = [
-        { name: '최지유',  email: 'jjiuu1090@gmail.com' },
-        { name: 'ddyr1554', email: 'ddyr1554@naver.com' },
-        { name: 'gpttitti', email: 'gpttitti@hansung.ac.kr' },
-        { name: 'csi10186', email: 'csi10186@gmail.com' },
-        { name: 'cafucafu', email: 'cafucafu@naver.com' },
-        { name: 'inhist73', email: 'inhist73@naver.com' },
-        { name: '김예은',  email: 'iwreau@gmail.com' }
-      ];
-      const SUMMARY_TEMPLATES = [
-        n => `${n}와(과) 다음 분기 프로젝트 일정을 조율하는 메일을 주고받았다.`,
-        n => `${n}에게 회의 자료를 공유하고 피드백을 받았다.`,
-        n => `${n}와(과) 세미나 참석 관련 안내 메일을 교환했다.`,
-        n => `${n}로부터 뉴스레터 구독 확인 메일을 받았다.`,
-        n => `${n}와(과) 스터디 그룹 일정을 논의했다.`,
-        n => `${n}에게 강의 자료를 전달했다.`,
-        n => `${n}와(과) 학회 논문 제출 관련 내용을 주고받았다.`,
-        n => `${n}로부터 채용 공고 안내를 받았다.`,
-        n => `${n}와(과) 동아리 활동 공지를 주고받았다.`,
-        n => `${n}에게 인턴십 지원 서류를 요청받았다.`,
-        n => `${n}와(과) 협업 제안서를 검토했다.`,
-        n => `${n}로부터 이벤트 초대장을 받았다.`,
-        n => `${n}와(과) 기술 세미나 신청 관련 메일을 주고받았다.`,
-        n => `${n}에게 자료 요청 메일을 보냈다.`,
-        n => `${n}와(과) 일정 변경 안내를 주고받았다.`,
-        n => `${n}로부터 감사 인사 메일을 받았다.`,
-        n => `${n}와(과) 동창회 소식을 공유했다.`,
-        n => `${n}에게 여행 계획을 문의했다.`,
-        n => `${n}와(과) 생일 축하 메시지를 주고받았다.`,
-        n => `${n}로부터 구독 서비스 알림을 받았다.`
-      ];
-
-      function buildMonthEntry(i, month) {
-        const c1 = CONTACT_POOL[i % CONTACT_POOL.length];
-        const c2 = CONTACT_POOL[(i + 3) % CONTACT_POOL.length];
-        const c3 = CONTACT_POOL[(i + 5) % CONTACT_POOL.length];
-        const t1 = SUMMARY_TEMPLATES[i % SUMMARY_TEMPLATES.length];
-        const t2 = SUMMARY_TEMPLATES[(i + 7) % SUMMARY_TEMPLATES.length];
-        const t3 = SUMMARY_TEMPLATES[(i + 13) % SUMMARY_TEMPLATES.length];
-        return {
-          summary: `${t1(c1.name)} ${t2(c2.name)} ${t3(c3.name)}`,
-          contacts: [...new Set([c1.email, c2.email, c3.email])]
-        };
-      }
-
-      function buildYearEntry(y) {
-        const idx = y - 2018;
-        const c1 = CONTACT_POOL[idx % CONTACT_POOL.length];
-        const c2 = CONTACT_POOL[(idx + 2) % CONTACT_POOL.length];
-        const c3 = CONTACT_POOL[(idx + 4) % CONTACT_POOL.length];
-        return {
-          summary: `${y}년 한 해 동안 ${c1.name}, ${c2.name}, ${c3.name}와(과) 자주 연락을 주고받으며 프로젝트와 일정 관련 메일을 다수 교환했다. `
-            + `특히 상반기에는 회의 자료 공유와 세미나 참석 안내가 많았고, 하반기로 갈수록 보고서 제출과 협업 제안 관련 메일이 늘어났다. `
-            + `전반적으로 꾸준한 소통이 이어진 한 해였다.`,
-          contacts: [...new Set([c1.email, c2.email, c3.email])]
-        };
-      }
-
-      let MONTH_DATA = {};
-      let YEAR_DATA  = {};
-
-      // My People 타임라인과 동일한 구간: 2018-08 ~ 2026-06
-      let mi = 0;
-      for (let y = 2018; y <= 2026; y++) {
-        const mStart = y === 2018 ? 8 : 1;
-        const mEnd   = y === 2026 ? 6 : 12;
-        for (let m = mStart; m <= mEnd; m++) {
-          const key = `${y}-${String(m).padStart(2, '0')}`;
-          MONTH_DATA[key] = buildMonthEntry(mi, key);
-          mi++;
+      /* ── 실제 /mail-summaries 결과를 그대로 사용 ── */
+      async function fetchSummaries(type) {
+        try {
+          const res = await fetch('/mail-summaries', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ gmail_id: gmailId, type })
+          });
+          if (!res.ok) return {};
+          const j = await res.json();
+          return j[type] || {};
+        } catch (e) {
+          console.error(`mail-summaries(${type}) 오류:`, e);
+          return {};
         }
       }
-      for (let y = 2018; y <= 2026; y++) {
-        YEAR_DATA[String(y)] = buildYearEntry(y);
-      }
 
-      // 2025-11 ~ 2026-05 요약에 한 줄씩 더 추가해 내용을 조금 더 풍부하게
-      ['2025-11', '2025-12', '2026-01', '2026-02', '2026-03', '2026-04', '2026-05'].forEach((key, idx) => {
-        const extra = CONTACT_POOL[(idx + 6) % CONTACT_POOL.length];
-        const extraTpl = SUMMARY_TEMPLATES[(idx + 17) % SUMMARY_TEMPLATES.length];
-        if (MONTH_DATA[key]) {
-          MONTH_DATA[key].summary += ' ' + extraTpl(extra.name);
-        }
-      });
-
-      // 2026년 마지막 달(2026-06)엔 최지유와 최종보고서 관련 실제 맥락을 반영
-      MONTH_DATA['2026-06'] = {
-        summary: '최지유와 산학공동연구 프로젝트 최종보고서 제출 관련 메일을 주고받았다. '
-          + '보고서 초안 검토와 제출 일정 조율이 주요 내용이었고, 마지막 수정 사항에 대한 의견도 함께 주고받았다. '
-          + '제출 이후에는 프로젝트를 마무리하며 서로 감사 인사를 나눴다. '
-          + '한 달간 총 세 차례에 걸쳐 메일을 주고받으며 꼼꼼하게 마무리했다.',
-        contacts: ['jjiuu1090@gmail.com']
-      };
-
-      // 2025년(연별) 요약을 7문장 분량으로 풍부하게
-      YEAR_DATA['2025'] = {
-        summary: '2025년 한 해 동안 최지유, gpttitti, cafucafu와(과) 자주 연락을 주고받으며 프로젝트와 일정 관련 메일을 다수 교환했다. '
-          + '특히 상반기에는 회의 자료 공유와 세미나 참석 안내가 많았고, 하반기로 갈수록 보고서 제출과 협업 제안 관련 메일이 늘어났다. '
-          + '봄에는 다음 분기 프로젝트 일정을 조율하는 메일이 잦았고, 여름에는 스터디 그룹과 강의 자료 공유 관련 연락이 이어졌다. '
-          + '가을 들어서는   인턴십 지원 서류나 채용 공고 안내처럼 진로와 관련된 메일도 몇 차례 오갔다. '
-          + '연말에는 최종 보고서 제출과 함께 협업을 마무리하는 감사 인사 메일도 주고받았다. ',
-        contacts: ['jjiuu1090@gmail.com', 'gpttitti@hansung.ac.kr', 'cafucafu@naver.com']
-      };
-
-      // 2026년(연별)에도 최지유 최종보고서 관련 언급 추가
-      YEAR_DATA['2026'] = {
-        summary: '2026년에는 최지유와 산학공동연구 프로젝트 최종보고서를 주고받으며 프로젝트를 마무리했다. '
-          + '상반기에는 보고서 초안 검토와 제출 일정 조율을 위한 연락이 잦았고, 제출 이후에는 마무리 인사와 함께 후속 협업 논의도 이어졌다. '
-          + '그 외에도 여러 연락처와 꾸준히 메일을 교환하며 다양한 일정과 협업 건을 처리했다. '
-          + '한 해를 마무리하며 전반적으로 활발한 소통이 이어졌다.',
-        contacts: ['jjiuu1090@gmail.com', CONTACT_POOL[1].email, CONTACT_POOL[2].email]
-      };
+      const MONTH_DATA = await fetchSummaries('monthly');
+      const YEAR_DATA  = await fetchSummaries('yearly');
 
       const ALL_KEYS  = Object.keys(MONTH_DATA).sort();
       const YEAR_KEYS = Object.keys(YEAR_DATA).sort();
@@ -482,12 +448,14 @@
               document.getElementById('infoPanel').classList.remove('pinned');
               hidePanel();
             } else {
-              // 새 노드 클릭 → 고정
+              // 새 노드 클릭 → 고정 (지금 보는 시점 · 슬라이더 커서 · 좌측 메일 목록도 함께 동기화)
               pinnedKey = k;
               document.querySelectorAll('.mt-node-col').forEach(c => c.classList.remove('pinned'));
               col.classList.add('pinned');
               showPanel(col, k, d);
               document.getElementById('infoPanel').classList.add('pinned');
+              centerIdx = (mode==='month' ? ALL_KEYS : YEAR_KEYS).indexOf(k);
+              updatePointerCursor();
             }
           });
         });
@@ -573,6 +541,11 @@
         const k = keys[Math.max(0,Math.min(keys.length-1,centerIdx))];
         const pct = mode==='month' ? monthToPct(k)*100 : yearToPct(k)*100;
         document.getElementById('pointerCursor').style.left = Math.max(0,Math.min(100,pct))+'%';
+
+        const nowEl = document.getElementById('mtSideNow');
+        if (nowEl) {
+          nowEl.textContent = mode==='month' ? `${k.slice(0,4)}년 ${k.slice(5)}월` : `${k}년`;
+        }
       }
 
       function updatePointerWindow() {
@@ -598,13 +571,30 @@
         updatePointerCursor(); render();
       });
 
-      /* ── 타임라인 커서에 쓸 "나" 아바타: My People과 동일하게 캐시 우선 조회 후 없으면 생성 ── */
+      /* ── 좌측 사이드바: "{아이디}'s Time" 타이틀 + 전체 타임라인 기간 ── */
+      function initSideProfile() {
+        const myName  = sessionStorage.getItem('gw_user_name') || '나';
+        const titleEl = document.getElementById('mtSideTitle');
+        if (titleEl) titleEl.innerHTML = `${myName}<span> Time</span>`;
+
+        const rangeEl = document.getElementById('mtSideRange');
+        if (rangeEl && ALL_KEYS.length) {
+          const fmt = k => `${k.slice(0,4)}.${k.slice(5)}`;
+          rangeEl.textContent = `전체 타임라인 ${fmt(ALL_KEYS[0])} ~ ${fmt(ALL_KEYS[ALL_KEYS.length-1])}`;
+        }
+      }
+
+      /* ── "나" 아바타: My People과 동일하게 캐시 우선 조회 후 없으면 생성.
+         타임슬라이더 커서와 우측 사이드바 프로필, 두 군데에 동시에 채워 넣는다. ── */
       async function initSelfAvatar() {
         const gmailId = localStorage.getItem('gw_gmail_id') || '';
         if (!gmailId) return;
         const applyAvatar = url => {
-          const el = document.getElementById('pointerCursor');
-          if (el && url) el.innerHTML = `<img src="${url}" alt="나">`;
+          if (!url) return;
+          const cursorEl = document.getElementById('pointerCursor');
+          const sideEl   = document.getElementById('mtSideAvatar');
+          if (cursorEl) cursorEl.innerHTML = `<img src="${url}" alt="나">`;
+          if (sideEl)   sideEl.innerHTML   = `<img src="${url}" alt="나">`;
         };
         try {
           const cacheRes = await fetch('/self-avatar', {
@@ -632,6 +622,7 @@
       /* ── 초기화 ── */
       buildPointer();
       render();
+      initSideProfile();
       initSelfAvatar();
     })();
     </script>

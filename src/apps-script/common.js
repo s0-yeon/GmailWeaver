@@ -17,7 +17,7 @@ function onGmailMessage(e) {
 // 공통 유틸
 function _webpageBtn() {
   return CardService.newTextButton()
-    .setText("ㅤㅤㅤ🌐 웹페이지 보기ㅤㅤㅤㅤ")
+    .setText("ㅤㅤㅤㅤ🌐 웹 앱 보기ㅤㅤㅤㅤ")
     .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
     .setBackgroundColor(OLIVE)
     .setOpenLink(
