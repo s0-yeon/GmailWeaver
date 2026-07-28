@@ -12,11 +12,11 @@ models:
     model: ${GRAPHRAG_LLM_MODEL}
     api_key: ${GRAPHRAG_API_KEY}
     model_supports_json: true # JSON 출력 여부 지원
-    # concurrent_requests: 50 # 동시에 보낼 수 있는 최대 요청 수. API Limit 주의
+    concurrent_requests: 50 # 동시에 보낼 수 있는 최대 요청 수. API Limit 주의
     async_mode: threaded # 멀티스레딩 방식으로 비동기 처리
     retry_strategy: native # 요청 실패 시 재시도 전략. 서버 응답에 따라 최적으로 자동 재시도
     max_retries: -1 # set to -1 for dynamic retry logic (most optimal setting based on server response)
-    # tokens_per_minute: 180000   # 분당 토큰/요청 제한
+    tokens_per_minute: 180000 # 분당 토큰/요청 제한
     # requests_per_minute: 0
     temperature: 0 # 답변의 일관성과 재현성 확보 (RAG에서는 보통 0을 권장)
 
@@ -25,11 +25,11 @@ models:
     model: ${GRAPHRAG_EMBEDDING_MODEL}
     api_key: ${GRAPHRAG_API_KEY}
     model_supports_json: true
-    # concurrent_requests: 50
+    concurrent_requests: 50
     async_mode: threaded
     retry_strategy: native
     max_retries: -1
-    # tokens_per_minute: 180000
+    tokens_per_minute: 180000
     # requests_per_minute: 0
 
 vector_store:
@@ -89,7 +89,7 @@ extract_graph:
   chat_model_id: default_chat_model
   prompt: "prompts/entity_extraction.txt"
   entity_types: [Email, Person, Organization, Topic, Label, Event, Attachment] # 추출하고자 하는 핵심 도메인 개체 정의
-  max_gleanings: 1 # 0에서 상향
+  max_gleanings: 0 # 0에서 상향
 
 summarize_descriptions:
   chat_model_id: default_chat_model
@@ -101,7 +101,7 @@ extract_claims:
   enabled: false
   prompt: "prompts/claim_extraction.txt"
   description: "Any claims or facts that could be relevant to information discovery."
-  max_gleanings: 1
+  max_gleanings: 0
 
 community_reports:
   chat_model_id: default_chat_model

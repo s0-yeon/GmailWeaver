@@ -34,34 +34,44 @@
 
       /* ── 페이지 ── */
       .ml-page{
-        max-width:1100px;width:100%;margin:0 auto;
-        padding:80px 48px 60px;
+        max-width:1500px;width:100%;height:100%;margin:0 auto;
+        padding:clamp(20px,4cqh,40px) clamp(24px,3.2cqw,48px) clamp(16px,3cqh,24px)!important;
         display:flex;flex-direction:column;
+        container-type:size;
       }
 
-      .ml-header{margin-bottom:52px}
-      .ml-title{font-size:3rem;font-weight:800;color:#1b2e22;letter-spacing:-.04em;line-height:1.1}
+      .ml-header{margin-bottom:clamp(56px,16.25cqh,130px);flex-shrink:0}
+      .ml-title{font-size:clamp(1.5rem,3cqw,2.8rem);font-weight:800;color:#1b2e22;letter-spacing:-.04em;line-height:1.1}
       .ml-title span{color:#1a9e6e}
-      .ml-sub{margin-top:12px;font-size:1rem;color:#73879C}
+      .ml-sub{margin-top:clamp(4px,1cqh,8px);font-size:clamp(.78rem,1.1cqw,1rem);color:#73879C}
 
       /* ── 카드 그리드 ── */
       .ml-grid{
+        flex:1;min-height:0;
         display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:32px;
-        align-items:stretch;
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+        gap:clamp(16px,4cqw,64px);
+        align-items:start;
+        align-content:start;
+        container-type:inline-size;
+      }
+      @container (max-width:640px){
+        .ml-grid{grid-template-columns:1fr}
       }
 
       .ml-card{
         background:#fff;
         border:1.5px solid #e3ede8;
-        border-radius:24px;
-        padding:64px 52px 56px;
+        border-radius:clamp(14px,1.6cqw,24px);
+        padding:clamp(16px,2.1cqw,32px) clamp(14px,1.9cqw,28px) clamp(14px,1.7cqw,26px);
         text-decoration:none;
         color:inherit;
         display:flex;flex-direction:column;
-        gap:24px;
-        min-height:420px;
+        gap:clamp(8px,1.1cqw,16px);
+        aspect-ratio:1/1;
+        max-width:440px;
+        margin-inline:auto;
+        width:100%;
         transition:border-color .2s, box-shadow .2s, transform .2s;
         cursor:pointer;
         position:relative;
@@ -82,26 +92,28 @@
       }
 
       .ml-card-icon{
-        width:64px;height:64px;
+        width:clamp(36px,4cqw,60px);height:clamp(36px,4cqw,60px);
         background:#e8f7f1;
-        border-radius:18px;
+        border-radius:clamp(10px,1.1cqw,16px);
         display:flex;align-items:center;justify-content:center;
-        font-size:1.8rem;
+        font-size:clamp(1rem,1.8cqw,1.7rem);
+        flex-shrink:0;
       }
       .ml-card-title{
-        font-size:1.9rem;font-weight:800;color:#1b2e22;
+        font-size:clamp(1.05rem,1.65cqw,1.55rem);font-weight:800;color:#1b2e22;
         letter-spacing:-.03em;
       }
       .ml-card-title span{color:#1a9e6e}
       .ml-card-desc{
-        font-size:.92rem;color:#73879C;line-height:1.7;
+        font-size:clamp(.76rem,1cqw,.92rem);color:#73879C;line-height:1.65;
         flex:1;
+        word-break:keep-all;
       }
       .ml-card-arrow{
-        font-size:.85rem;color:#b0c4bc;font-weight:600;
+        font-size:clamp(.7rem,.95cqw,.85rem);color:#b0c4bc;font-weight:600;
         letter-spacing:.04em;
         display:flex;align-items:center;gap:6px;
-        margin-top:8px;
+        margin-top:4px;
         transition:color .15s,gap .15s;
       }
       .ml-card:hover .ml-card-arrow{color:#1a9e6e;gap:10px}
@@ -134,7 +146,6 @@
                   <a href="mypeople.html">My People</a>
                   <a href="mytime.html">My Time</a>
                   <a href="recap.html">Recap</a>
-                  <a href="graph-viz.html">지식 그래프</a>
                 </div>
               </div>
               <a href="contacts.html" class="gw-tl">연락처</a>
@@ -184,8 +195,27 @@
                 <div class="ml-card-title">My <span>Time</span></div>
                 <div class="ml-card-desc">
                   시간 흐름에 따른 이메일 활동을 타임라인으로 돌아봅니다.<br>
-                  월별·연별로 어떤 주제가 중심이었는지 살펴보세요.
+                  월별과 연별로 어떤 주제가 중심이었는지 살펴보세요.
                 </div>
                 <div class="ml-card-arrow">바로가기 →</div>
               </a>
-            
+
+              <!-- Recap -->
+              <a href="recap.html" class="ml-card">
+                <div class="ml-card-icon">📋</div>
+                <div class="ml-card-title"><span>Recap</span></div>
+                <div class="ml-card-desc">
+                  지난 기간의 메일 활동을 요약해서 돌아봅니다.<br>
+                  놓친 흐름은 없었는지, 핵심만 빠르게 확인해보세요.
+                </div>
+                <div class="ml-card-arrow">바로가기 →</div>
+              </a>
+
+            </div>
+          </div>
+        </main>
+        <footer></footer>
+      </div>
+    </div>
+  </body>
+</html>

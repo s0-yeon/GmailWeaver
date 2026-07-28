@@ -31,15 +31,57 @@
       @media(max-width:900px){.gw-top-links{display:none}}
 
       /* ── 페이지 ── */
-      .mt-page{max-width:1200px;margin:0 auto;padding:28px 40px 32px}
+      .mt-page{width:88vw;max-width:1700px;margin:0 auto;padding:28px clamp(20px,3vw,56px) 32px;box-sizing:border-box}
 
-      /* 헤더 */
-      .mt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+      /* 페이지 상단 헤더: My Time 로고 + 월별/연별 토글 (좌우 컬럼 밖, 전체 폭) */
+      .mt-page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
       .mt-title{font-size:2.6rem;font-weight:800;color:#1b2e22;letter-spacing:-.04em}
       .mt-title span{color:#1a9e6e}
       .mt-mode-toggle{display:flex;gap:3px;background:#e9efec;border-radius:8px;padding:3px}
       .mt-mode-btn{padding:6px 18px;border-radius:6px;border:none;font-size:.82rem;font-weight:600;cursor:pointer;background:transparent;color:#73879C;transition:all .15s;font-family:inherit}
       .mt-mode-btn.active{background:#fff;color:#1a9e6e;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+      /* 좌(아바타 3) : 우(요약/타임라인 7) 레이아웃 — 상단 헤더 아래, 두 컬럼 위/아래 선이 모두 맞도록 stretch */
+      .mt-layout{display:grid;grid-template-columns:3fr 7fr;gap:clamp(16px,2.4vw,32px);align-items:stretch}
+      .mt-col-main{min-width:0}
+      @media (max-width:860px){
+        .mt-layout{grid-template-columns:1fr}
+      }
+
+      /* ── 좌측: 나 아바타 + "{아이디}'s Time" ── */
+      .mt-side{
+        background:#fff;border-radius:16px;border:1px solid #e3ede8;
+        padding:28px 22px 24px;
+        display:flex;flex-direction:column;align-items:center;text-align:center;
+      }
+      .mt-side-title{font-size:1.35rem;font-weight:800;color:#1b2e22;letter-spacing:-.02em;margin-bottom:20px;word-break:break-word}
+      .mt-side-title span{color:#1a9e6e}
+      .mt-side-avatar{
+        width:96px;height:96px;border-radius:50%;overflow:hidden;flex-shrink:0;
+        box-shadow:0 4px 16px rgba(26,158,110,.18);
+        outline:3px solid #dff0e8;
+        margin-bottom:22px;
+      }
+      .mt-side-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+      .mt-side-avatar-fallback{
+        width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+        background:linear-gradient(150deg,#cfe9df,#a9d4c4);color:#1a6e4a;
+        font-size:1.3rem;font-weight:800;
+      }
+
+      .mt-side-stat{
+        width:100%;background:#f0f8f4;border:1px solid #cfe9df;border-radius:12px;
+        padding:14px 12px;margin-bottom:14px;
+      }
+      .mt-side-stat-label{font-size:.64rem;font-weight:700;color:#8fb5a9;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+      .mt-side-stat-value{font-size:1.12rem;font-weight:800;color:#14845c}
+
+      .mt-side-range{
+        width:100%;font-size:.74rem;color:#73879C;
+        display:flex;align-items:center;gap:6px;justify-content:center;
+        padding-top:14px;border-top:1px dashed #e3ede8;
+      }
+
 
       /* ── 메인 카드 ── */
       .mt-main{
@@ -160,10 +202,26 @@
       /* ── 포인터 라인 ── */
       .mt-pointer-wrap{background:#fff;border-radius:12px;border:1px solid #e3ede8;padding:20px 52px 16px}
       .mt-pointer-label{font-size:.66rem;font-weight:600;color:#8fb5a9;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
-      .mt-pointer-track{position:relative;height:20px;cursor:pointer;user-select:none}
+      .mt-pointer-track{position:relative;height:30px;cursor:pointer;user-select:none}
       .mt-pointer-bg{position:absolute;left:0;right:0;top:50%;height:2px;background:#c0d4cc;transform:translateY(-50%)}
       .mt-pointer-window{position:absolute;top:50%;height:4px;transform:translateY(-50%);background:rgba(26,158,110,.52);border-radius:2px;pointer-events:none;transition:left .2s,width .2s}
-      .mt-pointer-cursor{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#1a9e6e;border:2px solid #fff;box-shadow:0 0 0 3px rgba(26,158,110,.3);pointer-events:none;transition:left .2s;z-index:3}
+      /* 타임라인 위를 이동하는 "나" 아바타 커서 */
+      .mt-pointer-cursor{
+        position:absolute;top:50%;transform:translate(-50%,-50%);
+        width:30px;height:30px;border-radius:50%;
+        background:#1a9e6e;border:2.5px solid #fff;
+        box-shadow:0 2px 8px rgba(26,158,110,.35),0 0 0 3px rgba(26,158,110,.25);
+        pointer-events:none;z-index:3;overflow:hidden;
+        display:flex;align-items:center;justify-content:center;
+        transition:left .2s;
+      }
+      .mt-pointer-cursor img{width:100%;height:100%;object-fit:cover;display:block}
+      .mt-pointer-cursor .mt-pointer-cursor-fallback{
+        width:100%;height:100%;border-radius:50%;
+        background:linear-gradient(150deg,#cfe9df,#a9d4c4);
+        color:#1a6e4a;font-size:.62rem;font-weight:800;
+        display:flex;align-items:center;justify-content:center;
+      }
       .mt-pm{position:absolute;top:50%;transform:translate(-50%,-50%);width:7px;height:7px;border-radius:50%;background:#8fb5a9;z-index:2;cursor:pointer;transition:transform .12s,background .12s}
       .mt-pm:hover{transform:translate(-50%,-50%) scale(1.8);background:#1a9e6e}
       .mt-pointer-axis{position:relative;height:16px;margin-top:4px}
@@ -197,7 +255,6 @@
                   <a href="mypeople.html">My People</a>
                   <a href="mytime.html" style="color:#26B99A;font-weight:700;">My Time</a>
                   <a href="recap.html">Recap</a>
-                  <a href="graph-viz.html">지식 그래프</a>
                 </div>
               </div>
               <a href="contacts.html" class="gw-tl">연락처</a>
@@ -224,40 +281,64 @@
         <main class="right_col" role="main">
           <div class="mt-page">
 
-            <div class="mt-header">
+            <div class="mt-page-header">
               <div class="mt-title">My <span>Time</span></div>
               <div class="mt-mode-toggle">
                 <button class="mt-mode-btn active" data-mode="month">월별</button>
-                <button class="mt-mode-btn" data-mode="year">년별</button>
+                <button class="mt-mode-btn" data-mode="year">연별</button>
               </div>
             </div>
 
-            <div class="mt-main" id="mainCard">
-              <div class="mt-track" id="track"></div>
-              <div class="mt-info-area">
-                <div class="mt-panel" id="infoPanel">
-                  <div class="mt-panel-top">
-                    <div class="mt-panel-period" id="panelPeriod"></div>
-                    <div class="mt-panel-count" id="panelCount"></div>
+            <div class="mt-layout">
+
+              <!-- 좌측: 나 아바타 + "{아이디}'s Time" -->
+              <aside class="mt-side">
+                <div class="mt-side-title" id="mtSideTitle">My <span>Time</span></div>
+
+                <div class="mt-side-avatar" id="mtSideAvatar">
+                  <span class="mt-side-avatar-fallback">나</span>
+                </div>
+
+                <div class="mt-side-stat">
+                  <div class="mt-side-stat-label">지금 보는 시점</div>
+                  <div class="mt-side-stat-value" id="mtSideNow">—</div>
+                </div>
+
+                <div class="mt-side-range">
+                  <i class="bi bi-clock-history"></i><span id="mtSideRange"></span>
+                </div>
+              </aside>
+
+              <!-- 우측: 타임라인 요약 + 슬라이더 -->
+              <div class="mt-col-main">
+                <div class="mt-main" id="mainCard">
+                  <div class="mt-track" id="track"></div>
+                  <div class="mt-info-area">
+                    <div class="mt-panel" id="infoPanel">
+                      <div class="mt-panel-top">
+                        <div class="mt-panel-period" id="panelPeriod"></div>
+                        <div class="mt-panel-count" id="panelCount"></div>
+                      </div>
+                      <div class="mt-panel-summary" id="panelSummary"></div>
+                      <div class="mt-panel-contacts-title">주요 연락처</div>
+                      <div class="mt-panel-contacts" id="panelContacts"></div>
+                    </div>
                   </div>
-                  <div class="mt-panel-summary" id="panelSummary"></div>
-                  <div class="mt-panel-contacts-title">주요 연락처</div>
-                  <div class="mt-panel-contacts" id="panelContacts"></div>
+                </div>
+
+                <!-- 포인터 -->
+                <div class="mt-pointer-wrap">
+                  <div class="mt-pointer-label">전체 타임라인 — 클릭으로 이동</div>
+                  <div class="mt-pointer-track" id="pointerTrack">
+                    <div class="mt-pointer-bg"></div>
+                    <div class="mt-pointer-window" id="pointerWindow"></div>
+                    <div class="mt-pointer-cursor" id="pointerCursor"><span class="mt-pointer-cursor-fallback">나</span></div>
+                  </div>
+                  <div class="mt-pointer-axis" id="pointerAxis"></div>
                 </div>
               </div>
-            </div>
 
-            <!-- 포인터 -->
-            <div class="mt-pointer-wrap">
-              <div class="mt-pointer-label">전체 타임라인 — 클릭으로 이동</div>
-              <div class="mt-pointer-track" id="pointerTrack">
-                <div class="mt-pointer-bg"></div>
-                <div class="mt-pointer-window" id="pointerWindow"></div>
-                <div class="mt-pointer-cursor" id="pointerCursor"></div>
-              </div>
-              <div class="mt-pointer-axis" id="pointerAxis"></div>
             </div>
-
           </div>
         </main>
         <footer></footer>
@@ -266,57 +347,27 @@
 
     <script>
     (async function () {
-      /* ════════════════════════════
-         /mail-summaries API에서 월별·연별 요약 데이터 로드
-      ════════════════════════════ */
-      const baseUrl  = localStorage.getItem('gw_flask_url') || '';
-      const gmailId  = localStorage.getItem('gw_gmail_id') || '';
-
-      let MONTH_DATA = {};
-      let YEAR_DATA  = {};
-
-      /* 로딩 표시 */
       const track = document.getElementById('track');
-      track.innerHTML = '<div style="color:#8fb5a9;font-size:.85rem;padding:20px 0;">데이터 불러오는 중...</div>';
+      const gmailId = localStorage.getItem('gw_gmail_id') || '';
 
-      try {
-        const [monthlyRes, yearlyRes] = await Promise.all([
-          fetch(`${baseUrl}/mail-summaries`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ gmail_id: gmailId, type: 'monthly' })
-          }),
-          fetch(`${baseUrl}/mail-summaries`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ gmail_id: gmailId, type: 'yearly' })
-          })
-        ]);
-
-        const monthlyJson = await monthlyRes.json();
-        const yearlyJson  = await yearlyRes.json();
-
-        /* monthly: { "2025-01": { summary: "...", contacts: [...] } } */
-        Object.entries(monthlyJson.monthly || {}).forEach(([period, val]) => {
-          MONTH_DATA[period] = {
-            summary:  typeof val === 'object' ? (val.summary  || '') : val,
-            contacts: typeof val === 'object' ? (val.contacts || []).slice(0, 5) : []
-          };
-        });
-
-        /* yearly: { "2025": { summary: "...", contacts: [...] } } */
-        Object.entries(yearlyJson.yearly || {}).forEach(([year, val]) => {
-          YEAR_DATA[year] = {
-            summary:  typeof val === 'object' ? (val.summary  || '') : val,
-            contacts: typeof val === 'object' ? (val.contacts || []).slice(0, 5) : []
-          };
-        });
-
-      } catch (e) {
-        console.error('[mytime] 데이터 로드 실패:', e);
-        track.innerHTML = '<div style="color:#e57373;font-size:.85rem;padding:20px 0;">데이터를 불러오지 못했습니다. 인덱싱 후 다시 시도해주세요.</div>';
-        return;
+      /* ── 실제 /mail-summaries 결과를 그대로 사용 ── */
+      async function fetchSummaries(type) {
+        try {
+          const res = await fetch('/mail-summaries', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ gmail_id: gmailId, type })
+          });
+          if (!res.ok) return {};
+          const j = await res.json();
+          return j[type] || {};
+        } catch (e) {
+          console.error(`mail-summaries(${type}) 오류:`, e);
+          return {};
+        }
       }
+
+      const MONTH_DATA = await fetchSummaries('monthly');
+      const YEAR_DATA  = await fetchSummaries('yearly');
 
       const ALL_KEYS  = Object.keys(MONTH_DATA).sort();
       const YEAR_KEYS = Object.keys(YEAR_DATA).sort();
@@ -337,7 +388,7 @@
 
       /* ── 상태 ── */
       let mode = 'month';
-      let centerIdx = 2; // ALL_KEYS index (월별) or YEAR_KEYS index (년별)
+      let centerIdx = 2; // ALL_KEYS index (월별) or YEAR_KEYS index (연별)
       let pinnedKey = null; // 클릭으로 고정된 키
 
       const WIN = { month:8, year:5 };
@@ -397,12 +448,14 @@
               document.getElementById('infoPanel').classList.remove('pinned');
               hidePanel();
             } else {
-              // 새 노드 클릭 → 고정
+              // 새 노드 클릭 → 고정 (지금 보는 시점 · 슬라이더 커서 · 좌측 메일 목록도 함께 동기화)
               pinnedKey = k;
               document.querySelectorAll('.mt-node-col').forEach(c => c.classList.remove('pinned'));
               col.classList.add('pinned');
               showPanel(col, k, d);
               document.getElementById('infoPanel').classList.add('pinned');
+              centerIdx = (mode==='month' ? ALL_KEYS : YEAR_KEYS).indexOf(k);
+              updatePointerCursor();
             }
           });
         });
@@ -488,6 +541,11 @@
         const k = keys[Math.max(0,Math.min(keys.length-1,centerIdx))];
         const pct = mode==='month' ? monthToPct(k)*100 : yearToPct(k)*100;
         document.getElementById('pointerCursor').style.left = Math.max(0,Math.min(100,pct))+'%';
+
+        const nowEl = document.getElementById('mtSideNow');
+        if (nowEl) {
+          nowEl.textContent = mode==='month' ? `${k.slice(0,4)}년 ${k.slice(5)}월` : `${k}년`;
+        }
       }
 
       function updatePointerWindow() {
@@ -513,9 +571,59 @@
         updatePointerCursor(); render();
       });
 
+      /* ── 좌측 사이드바: "{아이디}'s Time" 타이틀 + 전체 타임라인 기간 ── */
+      function initSideProfile() {
+        const myName  = sessionStorage.getItem('gw_user_name') || '나';
+        const titleEl = document.getElementById('mtSideTitle');
+        if (titleEl) titleEl.innerHTML = `${myName}<span> Time</span>`;
+
+        const rangeEl = document.getElementById('mtSideRange');
+        if (rangeEl && ALL_KEYS.length) {
+          const fmt = k => `${k.slice(0,4)}.${k.slice(5)}`;
+          rangeEl.textContent = `전체 타임라인 ${fmt(ALL_KEYS[0])} ~ ${fmt(ALL_KEYS[ALL_KEYS.length-1])}`;
+        }
+      }
+
+      /* ── "나" 아바타: My People과 동일하게 캐시 우선 조회 후 없으면 생성.
+         타임슬라이더 커서와 우측 사이드바 프로필, 두 군데에 동시에 채워 넣는다. ── */
+      async function initSelfAvatar() {
+        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        if (!gmailId) return;
+        const applyAvatar = url => {
+          if (!url) return;
+          const cursorEl = document.getElementById('pointerCursor');
+          const sideEl   = document.getElementById('mtSideAvatar');
+          if (cursorEl) cursorEl.innerHTML = `<img src="${url}" alt="나">`;
+          if (sideEl)   sideEl.innerHTML   = `<img src="${url}" alt="나">`;
+        };
+        try {
+          const cacheRes = await fetch('/self-avatar', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ gmail_id: gmailId })
+          });
+          if (cacheRes.ok) {
+            const j = await cacheRes.json();
+            if (j.url) { applyAvatar(j.url); return; }
+          }
+          const myName = sessionStorage.getItem('gw_user_name') || '나';
+          const genRes = await fetch('/generate-self-avatar', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ gmail_id: gmailId, name: myName })
+          });
+          if (genRes.ok) {
+            const j = await genRes.json();
+            if (j.url) applyAvatar(j.url);
+          }
+        } catch (e) {
+          console.error('내 아바타 로드 오류:', e);
+        }
+      }
+
       /* ── 초기화 ── */
       buildPointer();
       render();
+      initSideProfile();
+      initSelfAvatar();
     })();
     </script>
   </body>

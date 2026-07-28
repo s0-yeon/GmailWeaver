@@ -972,12 +972,11 @@
               <a href="index.html" class="gw-tl">홈</a>
               <a href="search.html" class="gw-tl">검색</a>
               <div class="gw-tl-dropdown">
-                <button class="gw-tl gw-tl-dd-btn active">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></button>
+                <a href="mylife.html" class="gw-tl gw-tl-dd-btn active">My Life <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:2px;"></i></a>
                 <div class="gw-tl-dd-menu">
                   <a href="mypeople.html" style="color:#26B99A;font-weight:700;">My People</a>
                   <a href="mytime.html">My Time</a>
                   <a href="recap.html">Recap</a>
-                  <a href="graph-viz.html">지식 그래프</a>
                 </div>
               </div>
               <a href="contacts.html" class="gw-tl">연락처</a>
@@ -1390,6 +1389,7 @@
         const m = d.getMonth() + 1;
         return m === 1 ? `${d.getFullYear()}` : `${d.getFullYear()}.${String(m).padStart(2,'0')}`;
       }
+
 
 
       /* ── 전역 상태 ── */
@@ -2304,7 +2304,8 @@
         if (ringLabel) {
           ringLabel.innerHTML = `<i class="bi bi-heart-fill"></i>${affPct != null ? affPct + '%' : '-'}`;
         }
-        const detailPhoto = generatedAvatars[(person.email || '').toLowerCase()] || contactPhotos[(person.email || '').toLowerCase()];
+        const detailEmail = (person.email || '').toLowerCase();
+        const detailPhoto = generatedAvatars[detailEmail] || contactPhotos[detailEmail];
         if (detailPhoto) {
           const detailBrandCls = isBrandSender(person) ? ' mp-brand-logo' : '';
           avatarEl.innerHTML = `<img src="${detailPhoto}" alt="${detailDisplayName}" class="${detailBrandCls.trim()}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.parentElement.textContent='${initials(detailDisplayName)}'">`;
