@@ -570,8 +570,8 @@
                   <a href="recap.html" style="color:#26B99A;font-weight:700;">Recap</a>
                 </div>
               </div>
-              <a href="contacts.html" class="gw-tl">연락처</a>
-              <a href="calendar.html" class="gw-tl">캘린더</a>
+              <a href="imap-collect.html" class="gw-tl">메일 수집</a>
+              <a href="graph-viz.html" class="gw-tl">지식그래프</a>
             </nav>
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
@@ -603,6 +603,9 @@
               <div class="rc-hero-title">📊 Recap</div>
               <div class="rc-hero-sub" id="rcHeroSub">내 메일함 통계 한눈에 보기</div>
             </div>
+            <select id="account-picker" style="padding:8px 12px;border-radius:8px;border:1px solid #dde3ea;font-size:0.85rem;background:#fff;margin-right:10px;">
+              <option>계정 불러오는 중...</option>
+            </select>
             <a href="graph-viz.html" class="rc-hero-graph-link">
               <span>지식그래프 보기</span>
               <span class="rc-hero-graph-arrow">→</span>
@@ -807,7 +810,7 @@
     </div>
 
     <script>
-      // 이름/gmail_id 처리
+      // 이름/user_id 처리
       const params = new URLSearchParams(window.location.search);
       const nameParam = params.get('name');
       const name = nameParam
@@ -815,8 +818,8 @@
         : (sessionStorage.getItem('gw_user_name') || '-');
       if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
 
-      const gmailIdParam = params.get('gmail_id');
-      if (gmailIdParam) localStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+      const userIdParam = params.get('user_id');
+      if (userIdParam) localStorage.setItem('gw_user_id', decodeURIComponent(userIdParam));
 
       document.getElementById('google-profile-name').textContent = name;
 
@@ -1161,38 +1164,85 @@
         document.getElementById('rcRatingContent').style.display = '';
       }
 
-      async function postStat(endpoint, gmailId) {
+      async function postStat(endpoint, userId) {
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }, //내가 보내는게 json이야~
-          body: JSON.stringify({ gmail_id: gmailId }) // json 객체 생성
+          body: JSON.stringify({ user_id: userId }) // json 객체 생성
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
       }
 
-      document.addEventListener('DOMContentLoaded', async () => {
-        const gmailId = localStorage.getItem('gw_gmail_id');
+      // 저장된 gw_user_id가 실제 존재하는 계정인지 /accounts로 확인하고,
+      // 아니면(비어있거나 예전 값이면) 첫 번째 계정으로 교정한다.
+      // 계정 선택 드롭다운(#account-picker)도 같이 채워서, 사용자가 직접 계정을 바꾸면
+      // (다시 불러오는 방식으로) 그 계정의 분석 결과를 볼 수 있게 한다.
+      async function resolveActiveUserId() {
+        const current = localStorage.getItem('gw_user_id') || '';
+        const select = document.getElementById('account-picker');
+        let effective = current;
 
-        if (!gmailId) {
+        try {
+          const res = await fetch('/accounts');
+          const data = await res.json();
+          const accounts = data.accounts || [];
+
+          if (select) {
+            select.innerHTML = '';
+            if (accounts.length === 0) {
+              const opt = document.createElement('option');
+              opt.textContent = '인덱싱된 계정 없음';
+              select.appendChild(opt);
+            } else {
+              const hasCurrent = accounts.some(acc => acc.user_id === current);
+              effective = hasCurrent ? current : accounts[0].user_id;
+              accounts.forEach(acc => {
+                const opt = document.createElement('option');
+                opt.value = acc.user_id;
+                opt.textContent = acc.user_id + (acc.indexed ? '' : ' (인덱싱 중)');
+                if (acc.user_id === effective) opt.selected = true;
+                select.appendChild(opt);
+              });
+              select.onchange = () => {
+                localStorage.setItem('gw_user_id', select.value);
+                location.reload();
+              };
+            }
+          } else if (accounts.length > 0) {
+            const hasCurrent = accounts.some(acc => acc.user_id === current);
+            effective = hasCurrent ? current : accounts[0].user_id;
+          }
+        } catch (err) {
+          console.error('[accounts] 로드 실패:', err);
+        }
+
+        localStorage.setItem('gw_user_id', effective);
+        return effective;
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        const userId = await resolveActiveUserId();
+
+        if (!userId) {
           ['rcSenderLoading','rcKwLoading','rcAfLoading'].forEach(id => {
             document.getElementById(id).style.display = 'none';
           });
           ['rcSenderError','rcKwError','rcAfError'].forEach(id => {
             const el = document.getElementById(id);
             el.style.display = '';
-            el.textContent = 'gmail_id가 없습니다. 먼저 로그인해주세요.';
+            el.textContent = 'user_id가 없습니다. 먼저 로그인해주세요.';
           });
           return;
         }
         
         // 다섯 API 병렬 호출
         const [mailStatsResult, keywordResult, affinityResult, syncResult, ratingResult] = await Promise.allSettled([
-          postStat('/mail-stats', gmailId),
-          postStat('/keyword-stats', gmailId),
-          postStat('/high_affinity_person_stats', gmailId),
-          postStat('/mail_sync_stats', gmailId),
-          postStat('/user_rating_stats', gmailId),
+          postStat('/mail-stats', userId),
+          postStat('/keyword-stats', userId),
+          postStat('/high_affinity_person_stats', userId),
+          postStat('/mail_sync_stats', userId),
+          postStat('/user_rating_stats', userId),
         ]);
 
         // ── 발신자/수신자 통계 ──

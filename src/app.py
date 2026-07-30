@@ -15,6 +15,10 @@ import shutil
 import zlib
 import traceback
 import urllib.parse     # import missing 해결
+import imaplib
+import email
+from email.header import decode_header
+from email.utils import getaddresses, parsedate_to_datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from util.date_query import run_date_range_query
@@ -117,7 +121,7 @@ def _run_graphrag(message, resMethod, raw_message, paths, resType):
     elapsed = time.time() - start_time
     print(f'execution_time : {elapsed}')
     try:
-        save_query_to_db(paths.GMAIL_ID, raw_message, elapsed, resMethod)
+        save_query_to_db(paths.USER_ID, raw_message, elapsed, resMethod)
     except Exception as e:
         print(f"[WARN] query DB 저장 실패 (무시): {e}")
 
@@ -342,6 +346,340 @@ def _save_attachment_from_base64(file_info: dict, save_dir: str) -> tuple[str, s
         f.write(file_bytes)
 
     return saved_path, original_name
+
+# ============================================================
+# IMAP 수집 유틸
+# 다른 메일 서비스(네이버/다음/Outlook 등)에서 IMAP으로 메일을 가져와
+# Apps Script(gmail.js _buildMessageText)와 동일한 포맷의 메일 블록 텍스트로 변환한다.
+# 변환된 텍스트/첨부파일은 기존 /upload 파이프라인(중복 체크, GraphRAG 인덱싱)에 그대로 넘긴다.
+# ============================================================
+IMAP_SUPPORTED_ATT_EXTS = {".pdf", ".docx", ".hwp", ".pptx", ".xlsx", ".csv", ".txt"}
+IMAP_MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024  # 10MB
+
+# IMAP 폴더명(RFC 3501 Modified UTF-7)에 한글 등 비-ASCII 문자가 있을 때 인코딩
+def _imap_utf7_encode_folder(folder: str) -> str:
+    result = bytearray()
+    i, n = 0, len(folder)
+    while i < n:
+        ch = folder[i]
+        if ch == "&":
+            result.extend(b"&-")
+            i += 1
+            continue
+        if 0x20 <= ord(ch) <= 0x7e:
+            result.append(ord(ch))
+            i += 1
+            continue
+        j = i
+        while j < n and not (0x20 <= ord(folder[j]) <= 0x7e):
+            j += 1
+        chunk = folder[i:j]
+        b64 = base64.b64encode(chunk.encode("utf-16-be")).decode("ascii")
+        b64 = b64.rstrip("=").replace("/", ",")
+        result.extend(b"&" + b64.encode("ascii") + b"-")
+        i = j
+    return result.decode("ascii")
+
+# IMAP 폴더명(RFC 3501 Modified UTF-7) 디코딩 - 위 인코딩의 역변환
+def _imap_utf7_decode_folder(name: str) -> str:
+    result = []
+    i, n = 0, len(name)
+    while i < n:
+        ch = name[i]
+        if ch != "&":
+            result.append(ch)
+            i += 1
+            continue
+        j = name.find("-", i)
+        if j == -1:
+            j = n
+        b64 = name[i + 1:j]
+        if b64 == "":
+            result.append("&")
+        else:
+            b64 = b64.replace(",", "/")
+            b64 += "=" * ((-len(b64)) % 4)
+            try:
+                result.append(base64.b64decode(b64).decode("utf-16-be"))
+            except Exception:
+                result.append(name[i:j + 1])
+        i = j + 1
+    return "".join(result)
+
+# IMAP LIST 응답 한 줄에서 실제 폴더명을 추출 ("(플래그) "구분자" 폴더명" 형식)
+def _imap_parse_list_line(line: bytes):
+    try:
+        text = line.decode("utf-8", errors="replace").strip()
+    except Exception:
+        return None
+
+    m = re.match(r'^\(([^)]*)\)\s+(?:"([^"]*)"|NIL)\s+(.+)$', text)
+    if not m:
+        return None
+
+    flags = m.group(1)
+    if "\\Noselect" in flags:
+        return None  # 선택 불가능한(자식만 있는) 폴더는 제외
+
+    raw_name = m.group(3).strip()
+    if raw_name.startswith('"') and raw_name.endswith('"'):
+        raw_name = raw_name[1:-1]
+
+    return _imap_utf7_decode_folder(raw_name)
+
+# 메일 헤더(Subject 등) MIME 인코딩 디코딩
+def _imap_decode_header_str(raw) -> str:
+    if not raw:
+        return ""
+    decoded = ""
+    for text, enc in decode_header(raw):
+        if isinstance(text, bytes):
+            try:
+                decoded += text.decode(enc or "utf-8", errors="replace")
+            except (LookupError, UnicodeDecodeError):
+                decoded += text.decode("utf-8", errors="replace")
+        else:
+            decoded += text
+    return decoded.strip()
+
+# 발신/수신인 "이름 <계정>" 포맷 (gmail.js _formatPerson과 동일한 규칙)
+def _imap_format_person(name: str, addr: str) -> str:
+    name = (name or "").strip()
+    addr = (addr or "").strip().lower()
+    if not addr:
+        return "없음"
+    if name and name.lower() != addr:
+        return f"{name} <{addr}>"
+    return f"<{addr}>"
+
+def _imap_parse_person_list(raw_header) -> list[tuple[str, str]]:
+    if not raw_header:
+        return []
+    people = []
+    for name, addr in getaddresses([raw_header]):
+        addr = (addr or "").strip()
+        if addr:
+            people.append((_imap_decode_header_str(name), addr))
+    return people
+
+# 본문 추출: text/plain 우선, 없으면 text/html에서 태그 제거
+def _imap_extract_body(msg) -> str:
+    body = ""
+    if msg.is_multipart():
+        for part in msg.walk():
+            disp = str(part.get("Content-Disposition") or "")
+            if part.get_content_type() == "text/plain" and "attachment" not in disp.lower():
+                charset = part.get_content_charset() or "utf-8"
+                payload = part.get_payload(decode=True) or b""
+                try:
+                    body = payload.decode(charset, errors="replace")
+                except (LookupError, UnicodeDecodeError):
+                    body = payload.decode("utf-8", errors="replace")
+                break
+        if not body:
+            for part in msg.walk():
+                disp = str(part.get("Content-Disposition") or "")
+                if part.get_content_type() == "text/html" and "attachment" not in disp.lower():
+                    charset = part.get_content_charset() or "utf-8"
+                    payload = part.get_payload(decode=True) or b""
+                    try:
+                        html = payload.decode(charset, errors="replace")
+                    except (LookupError, UnicodeDecodeError):
+                        html = payload.decode("utf-8", errors="replace")
+                    body = re.sub(r"<[^>]+>", " ", html)
+                    break
+    else:
+        charset = msg.get_content_charset() or "utf-8"
+        payload = msg.get_payload(decode=True)
+        if payload:
+            try:
+                body = payload.decode(charset, errors="replace")
+            except (LookupError, UnicodeDecodeError):
+                body = payload.decode("utf-8", errors="replace")
+
+    body = body.replace("\r\n", "\n")
+    body = re.sub(r"[ \t]+", " ", body)
+    body = re.sub(r"\n{3,}", "\n\n", body)
+    return body.strip()
+
+# 첨부파일 메타정보 + (지원되는 파일만) 원본 바이트 수집
+def _imap_collect_attachments(msg) -> tuple[list[dict], list[dict]]:
+    infos, payloads = [], []
+    if not msg.is_multipart():
+        return infos, payloads
+
+    idx = 0
+    for part in msg.walk():
+        disp = str(part.get("Content-Disposition") or "")
+        if "attachment" not in disp.lower():
+            continue
+        idx += 1
+        filename = _imap_decode_header_str(part.get_filename()) or f"attachment_{idx}"
+        mime = part.get_content_type() or "application/octet-stream"
+        data = part.get_payload(decode=True) or b""
+        size = len(data)
+        ext = os.path.splitext(filename)[-1].lower()
+        supported = ext in IMAP_SUPPORTED_ATT_EXTS
+
+        if not supported:
+            status = "제외: 형식 미지원"
+        elif size > IMAP_MAX_ATTACHMENT_SIZE:
+            status = "제외: 용량 초과"
+        else:
+            status = "포함"
+
+        infos.append({"name": filename, "mime": mime, "size": size, "status": status})
+        if supported and size <= IMAP_MAX_ATTACHMENT_SIZE:
+            payloads.append({"name": filename, "mime": mime, "data": data})
+
+    return infos, payloads
+
+# 메일 1건을 gmail.js _buildMessageText와 동일한 포맷의 텍스트 블록으로 변환
+def _imap_build_block(mail_index: int, mail_id: str, msg, folder: str, my_email: str) -> tuple[str, list[dict]]:
+    subject = _imap_decode_header_str(msg.get("Subject")) or "(제목 없음)"
+
+    from_list = _imap_parse_person_list(msg.get("From"))
+    from_name, from_addr = from_list[0] if from_list else ("", "")
+    direction = "발신" if from_addr.lower() == my_email.strip().lower() else "수신"
+
+    to_list = _imap_parse_person_list(msg.get("To"))
+    cc_list = _imap_parse_person_list(msg.get("Cc"))
+
+    try:
+        dt = parsedate_to_datetime(msg.get("Date"))
+        if dt.tzinfo is not None:
+            dt = dt.astimezone().replace(tzinfo=None)
+        date_str = dt.strftime("%Y-%m-%d %H:%M:%S")
+    except Exception:
+        date_str = ""
+
+    att_infos, att_payloads = _imap_collect_attachments(msg)
+    if att_infos:
+        attachment_info = "\n".join(
+            f"- {a['name']} ({a['size']/1024:.1f} KB) [{a['status']}]" for a in att_infos
+        )
+    else:
+        attachment_info = "없음"
+
+    body = _imap_extract_body(msg)
+
+    block_text = "\n".join([
+        MAIL_BLOCK_SEP,
+        f"[메일 {mail_index}]",
+        "",
+        f"ID: {mail_id}",
+        f"제목: {subject}",
+        f"구분: {direction}",
+        f"날짜: {date_str}",
+        "",
+        f"발신인: {_imap_format_person(from_name, from_addr)}",
+        "수신인: " + (", ".join(_imap_format_person(n, a) for n, a in to_list) if to_list else "없음"),
+        "참조(CC): " + (", ".join(_imap_format_person(n, a) for n, a in cc_list) if cc_list else "없음"),
+        "",
+        "[라벨 정보]",
+        folder,
+        "",
+        "[첨부파일 정보]",
+        attachment_info,
+        "",
+        "[메일 본문]",
+        body,
+        MAIL_BLOCK_SEP,
+    ])
+
+    attachments_payload = [
+        {
+            "mail_id": mail_id,
+            "name": a["name"],
+            "mime": a["mime"],
+            "data_base64": base64.b64encode(a["data"]).decode("ascii"),
+        }
+        for a in att_payloads
+    ]
+
+    return block_text, attachments_payload
+
+# IMAP 서버에 접속해서 선택한 폴더들의 메일을 가져와 (메일 블록 텍스트, 첨부파일 payload) 반환
+def _imap_fetch_content(host: str, port: int, use_ssl: bool, user: str, password: str,
+                         folders: list[str], limit: int, my_email: str) -> tuple[str, list[dict]]:
+    conn = imaplib.IMAP4_SSL(host, port) if use_ssl else imaplib.IMAP4(host, port)
+
+    try:
+        conn.login(user, password)
+
+        all_blocks: list[str] = []
+        all_attachments: list[dict] = []
+        mail_index = 0
+
+        for folder in folders:
+            encoded_folder = _imap_utf7_encode_folder(folder)
+            status, _resp = conn.select(f'"{encoded_folder}"', readonly=True)
+            if status != "OK":
+                status, _resp = conn.select(encoded_folder, readonly=True)
+            if status != "OK":
+                print(f"[IMAP] 폴더 선택 실패, 스킵: {folder}")
+                continue
+
+            # 시퀀스 번호(search/fetch) 대신 UID 기반(uid search/uid fetch) 사용.
+            # 일부 서버(iCloud 등)의 FETCH 응답 형식과 imaplib의 시퀀스 기반 파싱 조합에서
+            # 내부 파싱 오류('int' object has no attribute 'decode')가 나는 경우가 있어 회피.
+            status, data = conn.uid("search", None, "ALL")
+            if status != "OK" or not data or not data[0]:
+                continue
+
+            uids = data[0].split()
+            uids.reverse()  # 최신 메일부터
+            if limit and limit > 0:
+                uids = uids[:limit]
+
+            for uid in uids:
+                uid_str = uid.decode(errors="ignore") if isinstance(uid, bytes) else str(uid)
+                try:
+                    # RFC822는 \Seen 플래그를 암묵적으로 세팅하는데, 읽기 전용(readonly=True)으로 연
+                    # 폴더에서는 플래그 변경이 금지되어 있어 일부 서버(iCloud 등)가 본문 없이 UID만
+                    # 돌려주는 경우가 있다. BODY.PEEK[]는 동일하게 전체 메일을 가져오되 플래그를 건드리지 않음.
+                    status, msg_data = conn.uid("fetch", uid_str, "(BODY.PEEK[])")
+                    if status != "OK" or not msg_data:
+                        continue
+
+                    # 응답 항목 중 실제 (응답줄, 본문 literal) 튜플만 찾는다.
+                    # 본문이 NIL이거나 특이 응답이면 항목이 튜플이 아니라 순수 bytes만 오는 경우가 있어서,
+                    # msg_data[0]이 무조건 튜플이라고 가정하면 안 됨(서버/메일에 따라 다름).
+                    raw_email = None
+                    for part in msg_data:
+                        if isinstance(part, tuple) and len(part) >= 2 and isinstance(part[1], (bytes, bytearray)):
+                            raw_email = part[1]
+                            break
+
+                    if raw_email is None:
+                        print(f"[IMAP] RFC822 본문 없음, 스킵: uid={uid_str}")
+                        continue
+
+                    msg = email.message_from_bytes(raw_email)
+                except Exception as e:
+                    print(f"[IMAP] 메일 파싱 오류, 스킵: uid={uid} / {e}")
+                    traceback.print_exc()
+                    continue
+
+                message_id = (msg.get("Message-ID") or "").strip().strip("<>")
+                if not message_id:
+                    message_id = f"{folder}-{uid_str}"
+
+                mail_index += 1
+                block_text, attachments_payload = _imap_build_block(mail_index, message_id, msg, folder, my_email)
+                all_blocks.append(block_text)
+                all_attachments.extend(attachments_payload)
+
+        content = "\n\n".join(all_blocks).strip()
+        if content:
+            content += "\n"
+        return content, all_attachments
+
+    finally:
+        try:
+            conn.logout()
+        except Exception:
+            pass
 
 # 메일 블록에서 'ID: ...' 값을 추출
 def _extract_mail_id_from_block(block: str) -> str | None:
@@ -578,7 +916,7 @@ def _run_attachment_pipeline(job_id: str, paths, attachments: list, env: dict, i
         else:
             print(f"[JOB][attachment] 중간 배치 → GraphRAG update 생략, 누적 중")
             _delete_old_update_files(paths)
-            mark_attachments_as_processed(paths.GMAIL_ID, attachments)
+            mark_attachments_as_processed(paths.USER_ID, attachments)
             update_job(job_id, status="done", message="첨부파일 누적 완료 (중간 배치)")
             return
 
@@ -586,7 +924,7 @@ def _run_attachment_pipeline(job_id: str, paths, attachments: list, env: dict, i
         _delete_old_update_files(paths)
 
         # [추가] 7) 처리 완료된 첨부파일 DB에 기록 (다음 트리거에서 중복 방지)
-        mark_attachments_as_processed(paths.GMAIL_ID, attachments)
+        mark_attachments_as_processed(paths.USER_ID, attachments)
 
         update_job(job_id, progress=100, status="done", message="첨부파일 인덱싱 완료")
         print(f"[JOB][attachment] SUCCESS job_id={job_id}")
@@ -832,16 +1170,16 @@ def run_query_async():
     message = request.json.get('message', '')
     resMethod = request.json.get('resMethod', 'local')
     resType = request.json.get('resType', 'text')
-    gmail_id = data.get('gmail_id', '').strip()
+    user_id = data.get('user_id', '').strip()
 
     if not str(message).strip():
         return jsonify({'error': 'message가 비어있습니다.'}), 400
 
-    if not gmail_id:
-        return jsonify({'error': 'gmail_id가 비어있습니다.'}), 400
+    if not user_id:
+        return jsonify({'error': 'user_id가 비어있습니다.'}), 400
 
     print("[DEBUG] message =", repr(message))
-    print("[DEBUG] gmail_id =", repr(gmail_id))
+    print("[DEBUG] user_id =", repr(user_id))
 
     job_id = str(uuid.uuid4())[:8]
     create_job(job_id, job_type="query")
@@ -851,9 +1189,9 @@ def run_query_async():
     def _worker():  # 백그라운드 스레드에서 실행되는 실제 작업 함수
         from util.graphrag_query import run_graphrag_query
         try:
-            paths = UserPaths(BASE_DIR, gmail_id)
+            paths = UserPaths(BASE_DIR, user_id)
             env = os.environ.copy()
-            env["GMAIL_ID"] = gmail_id
+            env["USER_ID"] = user_id
 
 
 
@@ -961,7 +1299,7 @@ def run_query():
     message = data.get('message', '')
     resMethod = data.get('resMethod', 'local')
     resType = data.get('resType', 'text')
-    gmail_id = (data.get('gmail_id') or '').strip().lower()
+    user_id = (data.get('user_id') or '').strip().lower()
 
     print(f'message: {message}')
     print(f'resMethod: {resMethod}')
@@ -969,10 +1307,10 @@ def run_query():
 
     if not str(message).strip():
         return jsonify({'error': 'message가 비어있습니다.'}), 400
-    if not gmail_id:
-        return jsonify({'error': 'gmail_id가 비어있습니다.'}), 400
+    if not user_id:
+        return jsonify({'error': 'user_id가 비어있습니다.'}), 400
 
-    paths = UserPaths(BASE_DIR, gmail_id)
+    paths = UserPaths(BASE_DIR, user_id)
     message += " 영어 말고 한국어로 답변해줘."
 
     try:
@@ -1000,18 +1338,18 @@ def upload():
     content = data.get("content") or ""
     attachments = data.get("attachment") or []
     requested_mode = data.get("syncmode", "append")
-    gmail_id = (data.get("gmail_id") or "").strip().lower()
+    user_id = (data.get("user_id") or "").strip().lower()
     is_last = data.get("is_last", True)
     batch_offset = data.get("batch_offset", 0)
 
-    paths = UserPaths(BASE_DIR, gmail_id)
+    paths = UserPaths(BASE_DIR, user_id)
 
     if not str(content).strip():
         return jsonify({"ok": False, "error": "content가 비어있습니다."}), 400
-    if not gmail_id:
-        return jsonify({"ok": False, "error": "gmail_id가 비어있습니다."}), 400
+    if not user_id:
+        return jsonify({"ok": False, "error": "user_id가 비어있습니다."}), 400
 
-    print("user gmail id =", gmail_id)
+    print("user gmail id =", user_id)
     print(f"[UPLOAD] is_last={is_last}, batch_offset={batch_offset}")
 
     # append인데 기존 인덱스가 없으면 rewrite로 전환
@@ -1058,7 +1396,7 @@ def upload():
 
         try:
             from util.database.db_writer import get_latest_user_record
-            latest_user = get_latest_user_record(gmail_id)
+            latest_user = get_latest_user_record(user_id)
             if latest_user:
                 conn = get_db_connection()
                 cursor = conn.cursor()
@@ -1069,7 +1407,7 @@ def upload():
                 conn.commit()
                 cursor.close()
                 conn.close()
-            print(f"[CLEAN] processed_attachments DB 초기화 완료 (gmail_id={gmail_id})")
+            print(f"[CLEAN] processed_attachments DB 초기화 완료 (user_id={user_id})")
         except Exception as e:
             print(f"[CLEAN] processed_attachments DB 초기화 실패 (무시): {e}")
 
@@ -1147,7 +1485,7 @@ def upload():
         _delete_incremental_files(paths)
 
     if batch_offset == 0:  # rewrite/append 공통으로 밖으로 꺼냄
-        batch_job_id = "batch_" + gmail_id
+        batch_job_id = "batch_" + user_id
         create_job(batch_job_id, job_type="batch")
         update_job(batch_job_id, status="running", message="배치 진행 중")
         print(f"[UPLOAD] 배치 시작 job 생성: {batch_job_id}")
@@ -1237,7 +1575,7 @@ def upload():
         })
 
     # 마지막 배치: GraphRAG 파이프라인 실행
-    batch_job_id = "batch_" + gmail_id
+    batch_job_id = "batch_" + user_id
     update_job(batch_job_id, status="done", message="배치 완료")
     print(f"[UPLOAD] 배치 완료 job 닫기: {batch_job_id}")
 
@@ -1298,18 +1636,190 @@ def upload():
         "failed_attachments": failed_attachments,
     })
 
+# ============================================================
+# 엔드포인트: POST /imap-list-folders
+# 호스트/계정/비밀번호로 실제 IMAP 서버에 로그인해서 그 계정에 존재하는
+# 폴더 목록을 그대로 가져온다. 서비스마다 폴더명이 달라서(Gmail의 "[Gmail]/보낸편지함" 등)
+# 하드코딩 대신 실시간 조회로 대체하기 위한 용도.
+# ============================================================
+@app.route("/imap-list-folders", methods=["POST"])
+def imap_list_folders():
+    data = request.json or {}
+    host = (data.get("host") or "").strip()
+    user = (data.get("user") or "").strip()
+    password = data.get("password") or ""
+    use_ssl = data.get("ssl", True)
+
+    try:
+        port = int(data.get("port") or 993)
+    except (TypeError, ValueError):
+        port = 993
+
+    if not host:
+        return jsonify({"ok": False, "error": "IMAP 호스트가 비어있습니다."}), 400
+    if not user:
+        return jsonify({"ok": False, "error": "이메일 주소가 비어있습니다."}), 400
+    if not password:
+        return jsonify({"ok": False, "error": "앱 비밀번호가 비어있습니다."}), 400
+
+    conn = None
+    try:
+        conn = imaplib.IMAP4_SSL(host, port) if use_ssl else imaplib.IMAP4(host, port)
+        conn.login(user, password)
+
+        status, list_data = conn.list()
+        if status != "OK":
+            return jsonify({"ok": False, "error": "폴더 목록을 가져오지 못했습니다."}), 400
+
+        folders = []
+        for line in list_data or []:
+            if not line:
+                continue
+            name = _imap_parse_list_line(line)
+            if name and name not in folders:
+                folders.append(name)
+
+        return jsonify({"ok": True, "folders": folders})
+
+    except imaplib.IMAP4.error as e:
+        return jsonify({"ok": False, "error": f"IMAP 로그인/연결 오류: {e}"}), 400
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"ok": False, "error": f"폴더 조회 중 오류: {e}"}), 500
+    finally:
+        if conn is not None:
+            try:
+                conn.logout()
+            except Exception:
+                pass
+
+# ============================================================
+# 엔드포인트: POST /imap-collect
+# IMAP으로 외부 메일 서버(네이버/다음/Outlook 등)에 접속해 메일을 가져온 뒤
+# 기존 /upload 파이프라인(중복 체크, mail_latest.txt 저장, GraphRAG 인덱싱)에 그대로 위임한다.
+# ============================================================
+@app.route("/imap-collect", methods=["POST"])
+def imap_collect():
+    data = request.json or {}
+    host = (data.get("host") or "").strip()
+    user = (data.get("user") or "").strip()
+    password = data.get("password") or ""
+    folders = data.get("folders") or []
+    use_ssl = data.get("ssl", True)
+    sync_mode = data.get("sync_mode") or "append"
+    user_id = (data.get("user_id") or user or "").strip().lower()
+
+    try:
+        port = int(data.get("port") or 993)
+    except (TypeError, ValueError):
+        port = 993
+    # limit=0은 "전체 수집"을 의미하므로 `or` 단락 평가로 100에 덮어써지지 않도록 None만 걸러낸다
+    limit_raw = data.get("limit")
+    try:
+        limit = int(limit_raw) if limit_raw not in (None, "") else 100
+    except (TypeError, ValueError):
+        limit = 100
+
+    if not host:
+        return jsonify({"ok": False, "error": "IMAP 호스트가 비어있습니다."}), 400
+    if not user:
+        return jsonify({"ok": False, "error": "이메일 주소가 비어있습니다."}), 400
+    if not password:
+        return jsonify({"ok": False, "error": "앱 비밀번호가 비어있습니다."}), 400
+    if not folders:
+        return jsonify({"ok": False, "error": "수집할 폴더가 비어있습니다."}), 400
+    if not user_id:
+        return jsonify({"ok": False, "error": "user_id가 비어있습니다."}), 400
+
+    print(f"[IMAP-COLLECT] host={host}:{port} ssl={use_ssl} user={user} folders={folders} limit={limit} mode={sync_mode}")
+
+    try:
+        content, attachments = _imap_fetch_content(host, port, use_ssl, user, password, folders, limit, user)
+    except imaplib.IMAP4.error as e:
+        return jsonify({"ok": False, "error": f"IMAP 로그인/연결 오류: {e}"}), 400
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"ok": False, "error": f"IMAP 수집 중 오류: {e}"}), 500
+
+    if not content.strip():
+        return jsonify({"ok": True, "added_count": 0, "skipped_count": 0, "message": "수집된 메일이 없습니다."})
+
+    filename = f"imap_{datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S')}.txt"
+
+    # 변환된 텍스트/첨부파일을 기존 /upload 엔드포인트 로직에 그대로 위임 (label-route와 동일한 패턴)
+    with app.test_request_context(
+        "/upload", method="POST",
+        json={
+            "filename": filename,
+            "content": content,
+            "attachment": attachments,
+            "syncmode": sync_mode,
+            "user_id": user_id,
+            "is_last": True,
+            "batch_offset": 0,
+        },
+        content_type="application/json",
+    ):
+        result = upload()
+
+    if isinstance(result, tuple):
+        body, status_code = result[0], result[1]
+    else:
+        body, status_code = result, 200
+
+    return body, status_code
+
+# 엔드포인트: GET /accounts
+# user_data/ 밑의 계정 폴더들을 훑어서 지금까지 인덱싱된 계정 목록을 반환한다.
+# 한 사람이 여러 계정(Gmail/네이버/다음 등)을 수집했을 때, 그래프 화면 등에서
+# 계정을 선택해 전환할 수 있게 하기 위한 용도.
+@app.route("/accounts", methods=["GET"])
+def list_accounts():
+    user_data_dir = os.path.join(BASE_DIR, "user_data")
+    accounts = []
+
+    if os.path.isdir(user_data_dir):
+        for dir_name in sorted(os.listdir(user_data_dir)):
+            dir_path = os.path.join(user_data_dir, dir_name)
+            if not os.path.isdir(dir_path):
+                continue
+
+            meta_path = os.path.join(dir_path, "account.json")
+            user_id = None
+            if os.path.exists(meta_path):
+                try:
+                    with open(meta_path, "r", encoding="utf-8") as f:
+                        user_id = (json.load(f).get("user_id") or "").strip()
+                except (OSError, json.JSONDecodeError):
+                    user_id = None
+
+            if not user_id:
+                # 메타 파일이 아직 없는 계정(이 기능 추가 이전에 만들어진 폴더) →
+                # 폴더명에서 최선으로 역추정만 하고, 파일에 쓰지는 않는다.
+                # (진짜 user_id는 다른 엔드포인트가 실제 값으로 호출되는 순간
+                #  UserPaths가 자동으로 account.json을 채워넣는다.)
+                user_id = dir_name.replace("_at_", "@", 1).replace("_", ".")
+
+            paths = UserPaths(BASE_DIR, user_id)
+            accounts.append({
+                "user_id": user_id,
+                "indexed": _is_index_ready(paths),
+            })
+
+    return jsonify({"accounts": accounts})
+
 # 엔드포인트: GET /graph-data
 @app.route("/graph-data", methods=["GET", "OPTIONS"])
 def graph_data():
     if request.method == "OPTIONS":
         return "", 200
 
-    gmail_id = (request.args.get("gmail_id") or "").strip().lower()
+    user_id = (request.args.get("user_id") or "").strip().lower()
 
-    if not gmail_id:
-        return jsonify({"ok": False, "error": "gmail_id가 비어있습니다."}), 400
+    if not user_id:
+        return jsonify({"ok": False, "error": "user_id가 비어있습니다."}), 400
 
-    paths = UserPaths(BASE_DIR, gmail_id)
+    paths = UserPaths(BASE_DIR, user_id)
 
     if not os.path.exists(paths.GRAPH_JSON_PATH):
         return jsonify({"nodes": [], "edges": [], "error": "graph json not found"}), 200
@@ -1343,10 +1853,10 @@ def graph_render_js():
 # 엔드포인트: GET /index-status
 @app.route("/index-status", methods=["GET"])
 def index_status():
-    gmail_id = (request.args.get("gmail_id") or "").strip().lower()
-    if not gmail_id:
-        return jsonify({"error": "gmail_id가 비어있습니다."}), 400
-    paths = UserPaths(BASE_DIR, gmail_id)
+    user_id = (request.args.get("user_id") or "").strip().lower()
+    if not user_id:
+        return jsonify({"error": "user_id가 비어있습니다."}), 400
+    paths = UserPaths(BASE_DIR, user_id)
     return jsonify({"indexed": _is_index_ready(paths)})
 
 # 엔드포인트: GET /init  — localStorage에 flask_url 자동 저장 후 대시보드로 이동
@@ -1362,6 +1872,17 @@ def init_storage():
 </script>
 <p>설정 중... 자동으로 이동합니다.</p>
 </body></html>""", 200, {{'Content-Type': 'text/html; charset=utf-8'}}
+
+# 엔드포인트: GET /imap-start
+# 애드온 없이 브라우저로 바로 들어오는 IMAP 사용자용 진입점.
+# vite 빌드 대상이 아닌 정적 파일(web/production/imap-start.html)을 그대로 서빙하며,
+# 그 파일이 flask_url을 저장하고 /dashboard/imap-collect.html로 리다이렉트한다.
+@app.route('/imap-start')
+def imap_start():
+    return send_from_directory(
+        os.path.join(os.path.dirname(__file__), 'web', 'production'),
+        'imap-start.html'
+    )
 
 # 엔드포인트: GET /dashboard/
 @app.route('/dashboard/', defaults={'path': 'production/index.html'})
@@ -1626,25 +2147,25 @@ def label_query():
 # 엔드포인트: POST /upload-attachments
 # [수정] 중복 처리 방지 로직 추가
 # 기존: 10분마다 전체 첨부파일을 무조건 처리
-# 변경: DB 조회로 이미 처리된 (gmail_id, mail_id, filename) 조합 필터링 후 처리
+# 변경: DB 조회로 이미 처리된 (user_id, mail_id, filename) 조합 필터링 후 처리
 #       처리 완료 후 DB에 기록 → 다음 트리거에서 중복 처리 방지
 # ============================================================
 @app.route("/upload-attachments", methods=["POST"])
 def upload_attachments():
     # 1) 데이터 수신
     data = request.json or {}
-    gmail_id = (data.get("gmail_id") or "").strip().lower()
+    user_id = (data.get("user_id") or "").strip().lower()
     attachments = data.get("attachments") or []
 
-    if not gmail_id:
-        return jsonify({"ok": False, "error": "gmail_id가 비어있습니다."}), 400
+    if not user_id:
+        return jsonify({"ok": False, "error": "user_id가 비어있습니다."}), 400
     
     if not attachments:
         # attachments 없이 is_last=true만 온 경우 → GraphRAG update 트리거
         is_last = data.get("is_last", False)
         if is_last:
             # 이미 누적된 attachment_latest.csv로 GraphRAG update 실행
-            paths = UserPaths(BASE_DIR, gmail_id)
+            paths = UserPaths(BASE_DIR, user_id)
             if os.path.exists(os.path.join(paths.MAIL_DIR, "attachment_latest.csv")):
                 job_id = str(uuid.uuid4())[:8]
                 create_job(job_id, job_type="attachment")
@@ -1661,7 +2182,7 @@ def upload_attachments():
                 return jsonify({"ok": True, "message": "finish signal received"})
         return jsonify({"ok": False, "error": "attachments가 비어있습니다."}), 400
     
-    paths = UserPaths(BASE_DIR, gmail_id)
+    paths = UserPaths(BASE_DIR, user_id)
 
     # 2) 메일 인덱스가 준비되지 않았으면 거절
     # 메일 본문 인덱싱 완료 전에 첨부파일 처리하면 불완전한 그래프에 update가 붙는 문제 방지
@@ -1681,7 +2202,7 @@ def upload_attachments():
 
     # [추가] 4) 이미 처리된 첨부파일 필터링
     is_last = data.get("is_last", True)
-    unprocessed = filter_unprocessed_attachments(gmail_id, attachments)
+    unprocessed = filter_unprocessed_attachments(user_id, attachments)
 
     if not unprocessed:
         print(f"[upload-attachments] 모두 이미 처리된 첨부파일 → 스킵")
@@ -1729,49 +2250,49 @@ def upload_attachments():
 @app.route("/mail-stats", methods=["POST"])
 def send_mail_stats():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    paths = UserPaths(BASE_DIR, gmail_id)
-    print(f"[MAIL_STATS] gmail_id={gmail_id}")
+    user_id = data.get("user_id", "").strip()
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    paths = UserPaths(BASE_DIR, user_id)
+    print(f"[MAIL_STATS] user_id={user_id}")
     print(f"[MAIL_STATS] path={paths.USER_ROOT}")
-    return jsonify({"gmail_id": gmail_id, "data": get_mail_stats(paths)})
+    return jsonify({"user_id": user_id, "data": get_mail_stats(paths)})
 
 @app.route("/mail-date-range", methods=["POST"])
 def send_mail_date_range():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    return jsonify({"gmail_id": gmail_id, "data": get_mail_date_range(gmail_id)})
+    user_id = data.get("user_id", "").strip()
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    return jsonify({"user_id": user_id, "data": get_mail_date_range(user_id)})
 
 @app.route("/keyword-stats", methods=["POST"])
 def send_keyword_stats():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    paths = UserPaths(BASE_DIR, gmail_id)
-    return jsonify({"gmail_id": gmail_id, "data": get_keyword_stats(paths)})
+    user_id = data.get("user_id", "").strip()
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    paths = UserPaths(BASE_DIR, user_id)
+    return jsonify({"user_id": user_id, "data": get_keyword_stats(paths)})
 
 @app.route("/keyword-by-person-date", methods=["POST"]) # 각 사람마다 주고받은 메일의 키위드 리턴
 def keyword_by_person_date():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    person_gmail_id = data.get("person_gmail_id", "").strip()
+    user_id = data.get("user_id", "").strip()
+    person_user_id = data.get("person_user_id", "").strip()
     # 시간 범위 내에 있는 메일의 키워드들을 추출
     start_date = data.get("start_date", "").strip()
     end_date = data.get("end_date", "").strip()
 
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    if not person_gmail_id:
-        return jsonify({"error": "person_gmail_id is required"}), 400
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    if not person_user_id:
+        return jsonify({"error": "person_user_id is required"}), 400
     if not start_date or not end_date:
         return jsonify({"error": "start_date and end_date are required"}), 400
 
     try:
-        keywords = get_keywords_by_person_date(gmail_id, person_gmail_id, start_date, end_date)
+        keywords = get_keywords_by_person_date(user_id, person_user_id, start_date, end_date)
         return jsonify({"keywords": keywords})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -1780,10 +2301,10 @@ def keyword_by_person_date():
 @app.route("/rebuild-keyword-mail", methods=["POST"])
 def rebuild_keyword_mail_route():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    paths = UserPaths(BASE_DIR, gmail_id)
+    user_id = data.get("user_id", "").strip()
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    paths = UserPaths(BASE_DIR, user_id)
     try:
         rebuild_keyword_mail(paths)
         return jsonify({"ok": True, "message": "keyword_mail 테이블 재구성 완료"})
@@ -1794,13 +2315,13 @@ def rebuild_keyword_mail_route():
 @app.route("/upload-photos", methods=["POST"])
 def upload_contact_photos():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
+    user_id = data.get("user_id", "").strip()
     photos   = data.get("photos", {})
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
     if not isinstance(photos, dict) or not photos:
         return jsonify({"ok": True, "message": "사진 없음"}), 200
-    paths = UserPaths(BASE_DIR, gmail_id)
+    paths = UserPaths(BASE_DIR, user_id)
     os.makedirs(paths.MAIL_STATICS_PATH, exist_ok=True)
     existing = {}
     if os.path.exists(paths.MAIL_PHOTOS_PATH):
@@ -1815,10 +2336,10 @@ def upload_contact_photos():
 @app.route("/contact-photos", methods=["POST"])
 def get_contact_photos():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
+    user_id = data.get("user_id", "").strip()
+    if not user_id:
         return jsonify({}), 200
-    paths = UserPaths(BASE_DIR, gmail_id)
+    paths = UserPaths(BASE_DIR, user_id)
     if not os.path.exists(paths.MAIL_PHOTOS_PATH):
         return jsonify({}), 200
     with open(paths.MAIL_PHOTOS_PATH, "r", encoding="utf-8") as f:
@@ -1828,49 +2349,49 @@ def get_contact_photos():
 @app.route("/person-avatars", methods=["POST"])
 def get_person_avatars():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
+    user_id = data.get("user_id", "").strip()
+    if not user_id:
         return jsonify({}), 200
-    paths = UserPaths(BASE_DIR, gmail_id)
+    paths = UserPaths(BASE_DIR, user_id)
     return jsonify(get_cached_person_avatars(paths))
 
 
 @app.route("/generate-person-avatars", methods=["POST"])
 def generate_person_avatars():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
+    user_id = data.get("user_id", "").strip()
     people = data.get("people", [])
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    paths = UserPaths(BASE_DIR, gmail_id)
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    paths = UserPaths(BASE_DIR, user_id)
     result = generate_person_avatars_batch(paths, people)
-    return jsonify({"gmail_id": gmail_id, "data": result})
+    return jsonify({"user_id": user_id, "data": result})
 
 
-@app.route("/person-avatar-image/<gmail_id>/<filename>")
-def person_avatar_image(gmail_id, filename):
-    paths = UserPaths(BASE_DIR, gmail_id)
+@app.route("/person-avatar-image/<user_id>/<filename>")
+def person_avatar_image(user_id, filename):
+    paths = UserPaths(BASE_DIR, user_id)
     return send_from_directory(paths.AVATAR_IMAGES_DIR, filename)
 
 
 @app.route("/self-avatar", methods=["POST"])
 def get_self_avatar():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
+    user_id = data.get("user_id", "").strip()
+    if not user_id:
         return jsonify({}), 200
-    paths = UserPaths(BASE_DIR, gmail_id)
+    paths = UserPaths(BASE_DIR, user_id)
     return jsonify({"url": get_cached_self_avatar(paths)})
 
 
 @app.route("/generate-self-avatar", methods=["POST"])
 def generate_self_avatar_route():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
+    user_id = data.get("user_id", "").strip()
     name = data.get("name", "").strip()
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    paths = UserPaths(BASE_DIR, gmail_id)
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    paths = UserPaths(BASE_DIR, user_id)
     url = generate_self_avatar(paths, name)
     return jsonify({"url": url})
 
@@ -1878,46 +2399,46 @@ def generate_self_avatar_route():
 @app.route("/high_affinity_person_stats", methods=["POST"])
 def send_high_affinity_person_stats():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    paths = UserPaths(BASE_DIR, gmail_id)
-    return jsonify({"gmail_id": gmail_id, "data": get_high_affinity_person_stats(paths)})
+    user_id = data.get("user_id", "").strip()
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    paths = UserPaths(BASE_DIR, user_id)
+    return jsonify({"user_id": user_id, "data": get_high_affinity_person_stats(paths)})
 
 @app.route("/user_rating_stats", methods=["POST"])
 def send_user_rating_stats():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    paths = UserPaths(BASE_DIR, gmail_id)
-    return jsonify({"gmail_id": gmail_id, "data": get_user_rating_stats()})
+    user_id = data.get("user_id", "").strip()
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    paths = UserPaths(BASE_DIR, user_id)
+    return jsonify({"user_id": user_id, "data": get_user_rating_stats()})
 
 @app.route("/mail_sync_stats", methods=["POST"])
 def send_mail_sync_stats():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    paths = UserPaths(BASE_DIR, gmail_id)
-    return jsonify({"gmail_id": gmail_id, "data": get_mail_sync_stats(paths)})
+    user_id = data.get("user_id", "").strip()
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    paths = UserPaths(BASE_DIR, user_id)
+    return jsonify({"user_id": user_id, "data": get_mail_sync_stats(paths)})
 
 @app.route("/mail-exchange-stats", methods=["POST"])
 def send_mail_exchange_stats():
     data = request.json or {}
-    gmail_id       = data.get("gmail_id", "").strip()
-    person_mail_id = data.get("person_gmail_id", "").strip()
+    user_id       = data.get("user_id", "").strip()
+    person_mail_id = data.get("person_user_id", "").strip()
     start_date     = data.get("start_date", "").strip()
     end_date       = data.get("end_date", "").strip()
 
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
     if not person_mail_id:
-        return jsonify({"error": "person_gmail_id is required"}), 400
+        return jsonify({"error": "person_user_id is required"}), 400
     if not start_date or not end_date:
         return jsonify({"error": "start_date and end_date are required"}), 400
 
-    return jsonify({"data": get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date)})
+    return jsonify({"data": get_mail_exchange_stats(user_id, person_mail_id, start_date, end_date)})
 
 
 _mail_message_cache_lock = threading.Lock()
@@ -1940,27 +2461,27 @@ def _save_mail_message_cache(paths, cache):
 @app.route("/mail-person-emails", methods=["POST"])
 def send_person_emails_in_range():
     data = request.json or {}
-    gmail_id       = data.get("gmail_id", "").strip()
-    person_mail_id = data.get("person_gmail_id", "").strip()
+    user_id       = data.get("user_id", "").strip()
+    person_mail_id = data.get("person_user_id", "").strip()
     start_date     = data.get("start_date", "").strip()
     end_date       = data.get("end_date", "").strip()
 
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
     if not person_mail_id:
-        return jsonify({"error": "person_gmail_id is required"}), 400
+        return jsonify({"error": "person_user_id is required"}), 400
     if not start_date or not end_date:
         return jsonify({"error": "start_date and end_date are required"}), 400
 
     # 1) MySQL mail 테이블에서 이 기간에 오간 메일 ID 목록을 가져온다(GraphRAG 인덱싱
     #    캡과 무관하게 전체 동기화 이력을 담고 있어서, 통계 그래프 숫자와 실제 목록
     #    건수가 어긋나지 않는다).
-    mail_refs = get_person_mail_ids_in_range(gmail_id, person_mail_id, start_date, end_date)
+    mail_refs = get_person_mail_ids_in_range(user_id, person_mail_id, start_date, end_date)
 
     # 2) 제목/본문은 MySQL에 없으므로(집계용 테이블), 메일 ID별로 파일 캐시부터 확인하고
     #    캐시에 없을 때만 Apps Script의 getMessage 액션으로 Gmail에서 가져온다. 메일
     #    내용은 사실상 안 바뀌는 데이터라 한 번 가져오면 영구히 재사용해도 된다.
-    paths = UserPaths(BASE_DIR, gmail_id)
+    paths = UserPaths(BASE_DIR, user_id)
     mail_cache = _load_mail_message_cache(paths)
 
     def _fetch_one(ref):
@@ -2010,57 +2531,57 @@ def send_person_emails_in_range():
 @app.route("/mail-person-sent-stats", methods=["POST"])
 def send_mail_person_sent_stats():
     data = request.json or {}
-    gmail_id   = data.get("gmail_id", "").strip()
+    user_id   = data.get("user_id", "").strip()
     start_date = data.get("start_date", "").strip()
     end_date   = data.get("end_date", "").strip()
 
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
     if not start_date or not end_date:
         return jsonify({"error": "start_date and end_date are required"}), 400
 
-    return jsonify({"gmail_id": gmail_id, "data": get_date_range_person_stats(gmail_id, start_date, end_date, "sent")})
+    return jsonify({"user_id": user_id, "data": get_date_range_person_stats(user_id, start_date, end_date, "sent")})
 
 @app.route("/mail-person-received-stats", methods=["POST"])
 def send_mail_person_received_stats():
     data = request.json or {}
-    gmail_id   = data.get("gmail_id", "").strip()
+    user_id   = data.get("user_id", "").strip()
     start_date = data.get("start_date", "").strip()
     end_date   = data.get("end_date", "").strip()
 
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
     if not start_date or not end_date:
         return jsonify({"error": "start_date and end_date are required"}), 400
 
-    return jsonify({"gmail_id": gmail_id, "data": get_date_range_person_stats(gmail_id, start_date, end_date, "received")})
+    return jsonify({"user_id": user_id, "data": get_date_range_person_stats(user_id, start_date, end_date, "received")})
 
 @app.route("/intimacy", methods=["POST"])
 def send_intimacy():
     data = request.json or {}
-    gmail_id        = data.get("gmail_id", "").strip()
-    person_gmail_id = data.get("person_gmail_id", "").strip()
+    user_id        = data.get("user_id", "").strip()
+    person_user_id = data.get("person_user_id", "").strip()
     start_date      = data.get("start_date", "").strip()
     end_date        = data.get("end_date", "").strip()
 
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    if not person_gmail_id:
-        return jsonify({"error": "person_gmail_id is required"}), 400
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    if not person_user_id:
+        return jsonify({"error": "person_user_id is required"}), 400
     if not start_date or not end_date:
         return jsonify({"error": "start_date and end_date are required"}), 400
 
     result = calculate_eis(
-        user_account_id=gmail_id,
-        person_account_id=person_gmail_id,
+        user_account_id=user_id,
+        person_account_id=person_user_id,
         start_date=start_date,
         end_date=end_date,
         apply_volume_correction=False,
         apply_time_decay=False,
     )
     return jsonify({
-        "gmail_id":        gmail_id,
-        "person_gmail_id": person_gmail_id,
+        "user_id":        user_id,
+        "person_user_id": person_user_id,
         "start_date":      start_date,
         "end_date":        end_date,
         "data":            result,
@@ -2070,23 +2591,23 @@ def send_intimacy():
 @app.route("/person-descriptions", methods=["POST"])
 def send_person_descriptions():
     data = request.json or {}
-    gmail_id = data.get("gmail_id", "").strip()
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
-    return jsonify({"gmail_id": gmail_id, "data": get_person_descriptions(gmail_id)})
+    user_id = data.get("user_id", "").strip()
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+    return jsonify({"user_id": user_id, "data": get_person_descriptions(user_id)})
 
 @app.route("/mail-summaries", methods=["POST"])
 def send_mail_summaries():
     data = request.json or {}
-    gmail_id     = data.get("gmail_id", "").strip()
+    user_id     = data.get("user_id", "").strip()
     summary_type = data.get("type", "").strip()
 
-    if not gmail_id:
-        return jsonify({"error": "gmail_id is required"}), 400
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
     if summary_type not in ("monthly", "yearly"):
         return jsonify({"error": "type must be 'monthly' or 'yearly'"}), 400
 
-    paths = UserPaths(BASE_DIR, gmail_id)
+    paths = UserPaths(BASE_DIR, user_id)
     if not os.path.exists(paths.MAIL_SUMMARIES_PATH):
         return jsonify({"error": "summaries not generated yet"}), 404
 
@@ -2100,12 +2621,12 @@ def send_mail_summaries():
 def contacts_proxy():
     data = request.get_json() or {}
     action = data.get('action', '')
-    gmail_id = (data.get('gmail_id') or '').strip().lower()
+    user_id = (data.get('user_id') or '').strip().lower()
 
-    if not gmail_id:
-        return jsonify({'ok': False, 'error': 'gmail_id가 비어있습니다.'}), 400
+    if not user_id:
+        return jsonify({'ok': False, 'error': 'user_id가 비어있습니다.'}), 400
 
-    paths = UserPaths(BASE_DIR, gmail_id)
+    paths = UserPaths(BASE_DIR, user_id)
 
     if action == 'getFrequentContacts':
         max_results = int(data.get('maxResults', 100))

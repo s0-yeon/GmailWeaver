@@ -491,8 +491,8 @@
                   <a href="recap.html">Recap</a>
                 </div>
               </div>
-              <a href="contacts.html" class="gw-tl">연락처</a>
-              <a href="calendar.html" class="gw-tl">캘린더</a>
+              <a href="imap-collect.html" class="gw-tl">메일 수집</a>
+              <a href="graph-viz.html" class="gw-tl">지식그래프</a>
             </nav>
             <!-- 유저 프로필 드롭다운 -->
             <nav class="nav navbar-nav ms-auto">
@@ -608,8 +608,8 @@
         : (sessionStorage.getItem('gw_user_name') || '-');
       if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
 
-      const gmailIdParam = params.get('gmail_id');
-      if (gmailIdParam) localStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+      const userIdParam = params.get('user_id');
+      if (userIdParam) localStorage.setItem('gw_user_id', decodeURIComponent(userIdParam));
       const flaskUrlParam = params.get('flask_url');
       if (flaskUrlParam) localStorage.setItem('gw_flask_url', decodeURIComponent(flaskUrlParam));
 
@@ -1475,14 +1475,14 @@
       // GraphRAG local search → 텍스트 답변 반환
       // labelCtx: 라벨 목록 컨텍스트 (라벨 관련 질문에 GraphRAG가 알 수 없는 메타데이터 보완)
       async function lqRunGraphRag(query, labelCtx = '') {
-        const gmailId = localStorage.getItem('gw_gmail_id') || '';
+        const userId = localStorage.getItem('gw_user_id') || '';
         const fullMessage = labelCtx
           ? `${labelCtx}\n\n위 정보와 메일 내용을 참고해서 한국어로 답변해줘:\n${query}`
           : `${query} 영어 말고 한국어로 답변해줘.`;
         const startRes = await fetch(`${FLASK_URL}/run-query-async`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: fullMessage, resMethod: 'local', resType: 'text', gmail_id: gmailId })
+          body: JSON.stringify({ message: fullMessage, resMethod: 'local', resType: 'text', user_id: userId })
         });
         const startData = await startRes.json();
         if (!startData.jobId) throw new Error('GraphRAG 요청 실패');

@@ -128,7 +128,7 @@ def build_graph_json(job_id, paths, env):
         sys.executable, "-u", "-X", "utf8", 
         paths.GRAPH_BUILD_SCRIPT,
         "--base-dir", paths.BASE_DIR,
-        "--gmail-id", paths.GMAIL_ID
+        "--user-id", paths.USER_ID
         ]
     print(f"[JOB][mail2json] CMD={cmd}")
 
@@ -391,13 +391,13 @@ def run_graph_pipeline(job_id, paths, env, attachment_texts_by_mail=None, added_
         target_update_date = time_result["ended_at"]
 
         create_user(
-                user_account_id=paths.GMAIL_ID,
+                user_account_id=paths.USER_ID,
                 ended_at=target_update_date,
                 index_time=formatted_time,
                 my_mail_count=added_count
             )
         indexing_stats = collect_indexing_stats(paths)
-        update_user_indexing_stats(paths.GMAIL_ID, None, indexing_stats)
+        update_user_indexing_stats(paths.USER_ID, None, indexing_stats)
         db_threads = [
             threading.Thread(target=save_person_stats_to_db, args=(paths, target_update_date)),
             threading.Thread(target=save_label_to_db, args=(paths, target_update_date)),
@@ -440,7 +440,7 @@ def run_graph_update_pipeline(job_id, paths, env):
 
         _extract_statics_pipeline(paths, mode='append')
         indexing_stats = collect_indexing_stats(paths)
-        update_user_indexing_stats(paths.GMAIL_ID, None, indexing_stats)
+        update_user_indexing_stats(paths.USER_ID, None, indexing_stats)
         db_threads = [
             threading.Thread(target=save_person_stats_to_db, args=(paths,)),
             threading.Thread(target=save_mail_to_db, args=(paths,)),

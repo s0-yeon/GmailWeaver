@@ -257,8 +257,8 @@
                   <a href="recap.html">Recap</a>
                 </div>
               </div>
-              <a href="contacts.html" class="gw-tl">연락처</a>
-              <a href="calendar.html" class="gw-tl">캘린더</a>
+              <a href="imap-collect.html" class="gw-tl">메일 수집</a>
+              <a href="graph-viz.html" class="gw-tl">지식그래프</a>
             </nav>
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
@@ -283,6 +283,9 @@
 
             <div class="mt-page-header">
               <div class="mt-title">My <span>Time</span></div>
+              <select id="account-picker" style="padding:7px 12px;border-radius:8px;border:1px solid #dde3ea;font-size:0.85rem;background:#fff;">
+                <option>계정 불러오는 중...</option>
+              </select>
               <div class="mt-mode-toggle">
                 <button class="mt-mode-btn active" data-mode="month">월별</button>
                 <button class="mt-mode-btn" data-mode="year">연별</button>
@@ -346,16 +349,63 @@
     </div>
 
     <script>
+    // 저장된 gw_user_id가 실제 존재하는 계정인지 /accounts로 확인하고,
+    // 아니면(비어있거나 예전 값이면) 첫 번째 계정으로 교정한다.
+    // 계정 선택 드롭다운(#account-picker)도 같이 채워서, 사용자가 직접 계정을 바꾸면
+    // (다시 불러오는 방식으로) 그 계정의 분석 결과를 볼 수 있게 한다.
+    async function resolveActiveUserId() {
+      const current = localStorage.getItem('gw_user_id') || '';
+      const select = document.getElementById('account-picker');
+      let effective = current;
+
+      try {
+        const res = await fetch('/accounts');
+        const data = await res.json();
+        const accounts = data.accounts || [];
+
+        if (select) {
+          select.innerHTML = '';
+          if (accounts.length === 0) {
+            const opt = document.createElement('option');
+            opt.textContent = '인덱싱된 계정 없음';
+            select.appendChild(opt);
+          } else {
+            const hasCurrent = accounts.some(acc => acc.user_id === current);
+            effective = hasCurrent ? current : accounts[0].user_id;
+            accounts.forEach(acc => {
+              const opt = document.createElement('option');
+              opt.value = acc.user_id;
+              opt.textContent = acc.user_id + (acc.indexed ? '' : ' (인덱싱 중)');
+              if (acc.user_id === effective) opt.selected = true;
+              select.appendChild(opt);
+            });
+            select.onchange = () => {
+              localStorage.setItem('gw_user_id', select.value);
+              location.reload();
+            };
+          }
+        } else if (accounts.length > 0) {
+          const hasCurrent = accounts.some(acc => acc.user_id === current);
+          effective = hasCurrent ? current : accounts[0].user_id;
+        }
+      } catch (err) {
+        console.error('[accounts] 로드 실패:', err);
+      }
+
+      localStorage.setItem('gw_user_id', effective);
+      return effective;
+    }
+
     (async function () {
       const track = document.getElementById('track');
-      const gmailId = localStorage.getItem('gw_gmail_id') || '';
+      const userId = await resolveActiveUserId();
 
       /* ── 실제 /mail-summaries 결과를 그대로 사용 ── */
       async function fetchSummaries(type) {
         try {
           const res = await fetch('/mail-summaries', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ gmail_id: gmailId, type })
+            body: JSON.stringify({ user_id: userId, type })
           });
           if (!res.ok) return {};
           const j = await res.json();
@@ -587,8 +637,8 @@
       /* ── "나" 아바타: My People과 동일하게 캐시 우선 조회 후 없으면 생성.
          타임슬라이더 커서와 우측 사이드바 프로필, 두 군데에 동시에 채워 넣는다. ── */
       async function initSelfAvatar() {
-        const gmailId = localStorage.getItem('gw_gmail_id') || '';
-        if (!gmailId) return;
+        const userId = await resolveActiveUserId();
+        if (!userId) return;
         const applyAvatar = url => {
           if (!url) return;
           const cursorEl = document.getElementById('pointerCursor');
@@ -599,7 +649,7 @@
         try {
           const cacheRes = await fetch('/self-avatar', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ gmail_id: gmailId })
+            body: JSON.stringify({ user_id: userId })
           });
           if (cacheRes.ok) {
             const j = await cacheRes.json();
@@ -608,7 +658,7 @@
           const myName = sessionStorage.getItem('gw_user_name') || '나';
           const genRes = await fetch('/generate-self-avatar', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ gmail_id: gmailId, name: myName })
+            body: JSON.stringify({ user_id: userId, name: myName })
           });
           if (genRes.ok) {
             const j = await genRes.json();

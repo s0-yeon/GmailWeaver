@@ -160,7 +160,10 @@ export default defineConfig({
         mytime: 'production/mytime.html',
 
         // 나의 사람들
-        mypeople: 'production/mypeople.html'
+        mypeople: 'production/mypeople.html',
+
+        // IMAP 메일 수집
+        imap_collect: 'production/imap-collect.html'
       }
     },
     minify: 'terser',

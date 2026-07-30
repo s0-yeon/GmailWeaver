@@ -140,15 +140,15 @@
               <a href="index.html" class="gw-tl">홈</a>
               <a href="search.html" class="gw-tl">검색</a>
               <div class="gw-tl-dropdown">
-                <a href="mylife.html" class="gw-tl gw-tl-dd-btn active">My Life <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:4px;"></i></a>
+                <a href="mylife.html" class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:4px;"></i></a>
                 <div class="gw-tl-dd-menu">
                   <a href="mypeople.html">My People</a>
                   <a href="mytime.html">My Time</a>
                   <a href="recap.html">Recap</a>
                 </div>
               </div>
-              <a href="contacts.html" class="gw-tl">연락처</a>
-              <a href="calendar.html" class="gw-tl">캘린더</a>
+              <a href="imap-collect.html" class="gw-tl">메일 수집</a>
+              <a href="graph-viz.html" class="gw-tl active">지식그래프</a>
             </nav>
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
@@ -171,6 +171,11 @@
         <!-- Page Content -->
         <main class="right_col" role="main" style="padding:0;">
           <div id="graph-section">
+            <div id="account-picker-wrap" style="position:absolute; top:14px; left:14px; z-index:10;">
+              <select id="account-picker" style="padding:8px 12px;border-radius:8px;border:1px solid #dde3ea;font-size:0.85rem;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,0.08);">
+                <option>계정 불러오는 중...</option>
+              </select>
+            </div>
             <svg id="graph" width="100%" height="100%"></svg>
             <div id="tooltip"></div>
           </div>
@@ -187,7 +192,7 @@
     </div>
 
     <script>
-      // 이름/gmail_id 처리
+      // 이름/user_id 처리
       const params = new URLSearchParams(window.location.search);
       const nameParam = params.get('name');
       const name = nameParam
@@ -195,8 +200,8 @@
         : (sessionStorage.getItem('gw_user_name') || '-');
       if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
 
-      const gmailIdParam = params.get('gmail_id');
-      if (gmailIdParam) localStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+      const userIdParam = params.get('user_id');
+      if (userIdParam) localStorage.setItem('gw_user_id', decodeURIComponent(userIdParam));
       const flaskUrlParam = params.get('flask_url');
       if (flaskUrlParam) localStorage.setItem('gw_flask_url', decodeURIComponent(flaskUrlParam));
 
@@ -211,16 +216,76 @@
         });
       }
 
-      window.addEventListener('load', function() {
-        var gmailId = localStorage.getItem('gw_gmail_id') || '';
-        _loadScript('https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js')
-          .then(function() { return _loadScript('/graph-render.js'); })
-          .then(function() {
-            return fetch('/graph-data?gmail_id=' + encodeURIComponent(gmailId));
-          })
+      // d3 + graph-render.js는 계정 목록 조회와 병렬로 미리 로드 (렌더링 직전에만 대기)
+      var rendererReady = _loadScript('https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js')
+        .then(function() { return _loadScript('/graph-render.js'); });
+
+      // user_id를 받아 해당 계정의 그래프 데이터를 불러와 그린다 (계정 전환 시 재사용)
+      function loadGraphData(userId) {
+        if (!userId) {
+          console.warn('[graph] user_id 없음 → 그래프 로드 생략');
+          return Promise.resolve();
+        }
+        var svg = document.getElementById('graph');
+        return fetch('/graph-data?user_id=' + encodeURIComponent(userId))
           .then(function(res) { return res.json(); })
-          .then(function(data) { renderGraph(document.getElementById('graph'), data); })
+          .then(function(data) {
+            if (!data || !Array.isArray(data.nodes)) {
+              console.warn('[graph] 그래프 데이터 없음:', data && data.error);
+              svg.innerHTML = '';
+              return;
+            }
+            return rendererReady.then(function() {
+              svg.innerHTML = '';
+              renderGraph(svg, data);
+            });
+          })
           .catch(function(err) { console.error('[graph] 로드 실패:', err); });
+      }
+
+      // /accounts를 불러와 드롭다운을 채운다.
+      // currentUserId가 목록에 없으면(비어있거나 예전 값) 목록의 첫 계정을 대신 선택해서
+      // 화면이 항상 "선택된 계정 = 실제로 그려지는 그래프"가 되도록 한다.
+      function populateAccountPicker(currentUserId) {
+        var select = document.getElementById('account-picker');
+        if (!select) return Promise.resolve(currentUserId);
+        return fetch('/accounts')
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            var accounts = data.accounts || [];
+            select.innerHTML = '';
+            if (accounts.length === 0) {
+              var opt = document.createElement('option');
+              opt.textContent = '인덱싱된 계정 없음';
+              select.appendChild(opt);
+              return '';
+            }
+            var hasCurrent = accounts.some(function(acc) { return acc.user_id === currentUserId; });
+            var effective = hasCurrent ? currentUserId : accounts[0].user_id;
+
+            accounts.forEach(function(acc) {
+              var opt = document.createElement('option');
+              opt.value = acc.user_id;
+              opt.textContent = acc.user_id + (acc.indexed ? '' : ' (인덱싱 중)');
+              if (acc.user_id === effective) opt.selected = true;
+              select.appendChild(opt);
+            });
+            select.onchange = function() {
+              localStorage.setItem('gw_user_id', select.value);
+              loadGraphData(select.value);
+            };
+
+            localStorage.setItem('gw_user_id', effective);
+            return effective;
+          })
+          .catch(function(err) { console.error('[accounts] 로드 실패:', err); return currentUserId; });
+      }
+
+      window.addEventListener('load', function() {
+        var userId = localStorage.getItem('gw_user_id') || '';
+        populateAccountPicker(userId).then(function(effectiveUserId) {
+          return loadGraphData(effectiveUserId);
+        });
       });
     </script>
   </body>

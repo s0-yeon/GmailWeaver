@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:* https://*.ngrok-free.dev https://*.ngrok-free.app https://*.ngrok.io; frame-src 'none'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="rgb(42, 63, 84)">
+    <title>메일 수집 | GmailWeaver</title>
+    <script type="module" src="/src/main-minimal.js"></script>
+    <style>
+      /* ── 공통 ── */
+      .site_title_text {
+        font-size: 1.2rem; font-weight: 700; color: #fff;
+        letter-spacing: 0.5px; text-decoration: none;
+        display: flex; align-items: center; gap: 8px;
+      }
+      .site_title_text i { font-size: 1.3rem; color: #26B99A; }
+
+      /* ── 상단 페이지 네비게이션 (사이드바 대신) ── */
+      .gw-top-links { display: flex; align-items: center; gap: 2px; margin-left: 16px; }
+      .gw-tl {
+        display: inline-flex; align-items: center; padding: 6px 14px;
+        border-radius: 6px; font-size: 0.88rem; font-weight: 500; color: #73879C;
+        text-decoration: none; border: none; background: transparent;
+        cursor: pointer; transition: background 0.15s, color 0.15s; white-space: nowrap;
+        font-family: inherit; line-height: 1.4;
+      }
+      .gw-tl:hover { background: #f4f6f8; color: #2A3F54; text-decoration: none; }
+      .gw-tl.active { color: #26B99A; font-weight: 700; background: #e8f7f4; }
+      .gw-tl-dropdown { position: relative; }
+      .gw-tl-dd-menu {
+        display: none; position: absolute; top: 100%; left: 0; padding-top: 6px;
+        background: #fff; border: 1px solid #e0e0e0; border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 9999; min-width: 140px; padding: 6px 0;
+      }
+      .gw-tl-dropdown:hover .gw-tl-dd-menu { display: block; }
+      .gw-tl-dd-menu a { display: block; padding: 8px 16px; font-size: 0.84rem; color: #2A3F54; text-decoration: none; }
+      .gw-tl-dd-menu a:hover { background: #f4f6f8; color: #26B99A; }
+      @media (max-width: 900px) { .gw-top-links { display: none; } }
+      .left_col, .nav_title { display: none !important; }
+      .right_col { margin-left: 0 !important; }
+      .top_nav { margin-left: 0 !important; }
+      .nav.toggle { display: none !important; }
+      footer { display: none !important; }
+
+      /* ── 레이아웃 ── */
+      .gw-collect-wrap {
+        padding: 28px 32px;
+        max-width: 860px;
+      }
+
+      .gw-page-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2A3F54;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .gw-page-title i { color: #26B99A; }
+      .gw-page-subtitle {
+        font-size: 0.875rem;
+        color: #73879C;
+        margin-bottom: 28px;
+      }
+
+      /* ── 카드 ── */
+      .gw-card {
+        background: #fff;
+        border: 1px solid #e8ecef;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+      }
+      .gw-card-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #2A3F54;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 12px;
+      }
+      .gw-card-title i { color: #26B99A; }
+
+      /* ── 폼 요소 ── */
+      .gw-form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .gw-form-grid.cols-3 { grid-template-columns: 2fr 1fr 1fr; }
+      .gw-form-group { display: flex; flex-direction: column; gap: 5px; }
+      .gw-form-group.full { grid-column: 1 / -1; }
+
+      .gw-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #73879C;
+        letter-spacing: 0.03em;
+      }
+      .gw-input {
+        padding: 9px 13px;
+        border: 1.5px solid #dde3ea;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: #2A3F54;
+        background: #fafbfc;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .gw-input:focus {
+        border-color: #26B99A;
+        box-shadow: 0 0 0 3px rgba(38,185,154,0.12);
+        background: #fff;
+      }
+      .gw-input::placeholder { color: #b0bec5; }
+
+      .gw-select {
+        padding: 9px 13px;
+        border: 1.5px solid #dde3ea;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: #2A3F54;
+        background: #fafbfc;
+        outline: none;
+        cursor: pointer;
+        transition: border-color 0.2s;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2373879C' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 32px;
+      }
+      .gw-select:focus { border-color: #26B99A; box-shadow: 0 0 0 3px rgba(38,185,154,0.12); }
+
+      /* ── 프리셋 칩 ── */
+      .gw-presets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+      .gw-preset-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1.5px solid #dde3ea;
+        background: #fafbfc;
+        color: #73879C;
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .gw-preset-chip:hover {
+        border-color: #26B99A;
+        color: #26B99A;
+        background: #f0faf7;
+      }
+      .gw-preset-chip.active {
+        border-color: #26B99A;
+        background: #26B99A;
+        color: #fff;
+      }
+
+      /* ── 폴더 체크박스 ── */
+      .gw-folder-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .gw-folder-item {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 14px;
+        border: 1.5px solid #dde3ea;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.15s;
+        background: #fafbfc;
+        user-select: none;
+      }
+      .gw-folder-item:hover { border-color: #26B99A; background: #f0faf7; }
+      .gw-folder-item.checked {
+        border-color: #26B99A;
+        background: #f0faf7;
+        color: #1a9e6e;
+        font-weight: 600;
+      }
+      .gw-folder-item input[type="checkbox"] { display: none; }
+      .gw-folder-item i { font-size: 0.95rem; color: #73879C; }
+      .gw-folder-item.checked i { color: #26B99A; }
+      .gw-folder-label { font-size: 0.87rem; color: #2A3F54; }
+      .gw-folder-empty { color: #aaa; font-size: 0.85rem; }
+
+      /* ── 전체 선택 버튼 (폴더 칩과는 다른 모양) ── */
+      .gw-select-all-btn {
+        padding: 5px 13px;
+        border-radius: 6px;
+        border: 1.5px solid #dde3ea;
+        background: #fafbfc;
+        color: #73879C;
+        font-size: 0.78rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .gw-select-all-btn:hover {
+        border-color: #26B99A;
+        color: #1a9e6e;
+        background: #f0faf7;
+      }
+
+      /* ── 수집 버튼 ── */
+      .gw-collect-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 13px 32px;
+        background: linear-gradient(135deg, #26B99A 0%, #1a9e6e 100%);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.15s, box-shadow 0.15s;
+        box-shadow: 0 4px 16px rgba(38,185,154,0.35);
+      }
+      .gw-collect-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 22px rgba(38,185,154,0.45);
+      }
+      .gw-collect-btn:active { transform: scale(0.98); }
+      .gw-collect-btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* ── 진행상황 패널 ── */
+      .gw-log-panel {
+        display: none;
+        margin-top: 20px;
+      }
+      .gw-log-panel.visible { display: block; }
+
+      .gw-log-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
+        background: #f0f7f3;
+        border: 1px solid #d8ebe3;
+        border-radius: 10px 10px 0 0;
+      }
+      .gw-log-header-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #2A3F54;
+      }
+      .gw-status-badge {
+        font-size: 0.75rem;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .gw-status-badge.running { background: rgba(38,185,154,0.12); color: #1a9e6e; }
+      .gw-status-badge.done    { background: #eaf3de; color: #3b6d11; }
+      .gw-status-badge.failed  { background: #fcebeb; color: #a32d2d; }
+      .gw-status-badge.idle    { background: #f4f4f4; color: #888; }
+
+      .gw-status-dot {
+        width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+      }
+      .gw-status-dot.running { animation: dot-pulse 1.2s ease-in-out infinite; }
+      @keyframes dot-pulse {
+        0%,100% { opacity: 0.8; transform: scale(1); }
+        50%      { opacity: 1;   transform: scale(1.4); }
+      }
+
+      .gw-progress-bar-wrap { height: 3px; background: #d8ebe3; }
+      .gw-progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #26B99A, #34d399);
+        width: 0%;
+        transition: width 0.5s ease;
+        border-radius: 0 2px 2px 0;
+      }
+
+      .gw-log-body {
+        border: 1px solid #d8ebe3;
+        border-top: none;
+        border-radius: 0 0 10px 10px;
+        height: 220px;
+        overflow-y: auto;
+        padding: 12px 16px;
+        font-size: 0.82rem;
+        line-height: 1.8;
+        scrollbar-width: thin;
+        scrollbar-color: #d8ebe3 transparent;
+        background: #fff;
+      }
+      .gw-log-body::-webkit-scrollbar { width: 4px; }
+      .gw-log-body::-webkit-scrollbar-thumb { background: #d8ebe3; border-radius: 4px; }
+
+      .gw-log-line {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        padding: 1px 0;
+        animation: line-in 0.18s ease;
+      }
+      @keyframes line-in {
+        from { opacity: 0; transform: translateY(3px); }
+        to   { opacity: 1; transform: none; }
+      }
+      .gw-log-ts   { color: #b0c4bc; font-size: 0.75rem; flex-shrink: 0; padding-top: 2px; }
+      .gw-log-msg  { color: #333; word-break: break-word; }
+      .gw-log-msg.success { color: #1a9e6e; font-weight: 600; }
+      .gw-log-msg.error   { color: #a32d2d; }
+      .gw-log-msg.info    { color: #73879C; }
+
+      .gw-log-empty {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #aaa;
+        font-size: 0.82rem;
+        gap: 6px;
+      }
+
+      /* ── 결과 요약 ── */
+      .gw-result-row {
+        display: flex;
+        gap: 14px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+      .gw-result-chip {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: #f0faf7;
+        border: 1px solid #d8ebe3;
+        color: #1a9e6e;
+      }
+      .gw-result-chip i { font-size: 1rem; }
+      .gw-result-chip span { font-weight: 400; color: #73879C; margin-left: 2px; }
+
+      /* ── 스피너 ── */
+      .gw-spinner {
+        width: 18px; height: 18px;
+        border: 2.5px solid rgba(255,255,255,0.4);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: none;
+      }
+      .gw-spinner.visible { display: inline-block; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+
+        <!-- ── 상단 네비 (사이드바 없음) ── -->
+        <div class="top_nav">
+          <div class="nav_menu d-flex align-items-center justify-content-between">
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fas fa-bars"></i></a>
+            </div>
+            <nav class="gw-top-links">
+              <a href="index.html" class="gw-tl">홈</a>
+              <a href="search.html" class="gw-tl">검색</a>
+              <a href="imap-collect.html" class="gw-tl active">메일 수집</a>
+              <div class="gw-tl-dropdown">
+                <a href="mylife.html" class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:4px;"></i></a>
+                <div class="gw-tl-dd-menu">
+                  <a href="mypeople.html">My People</a>
+                  <a href="mytime.html">My Time</a>
+                  <a href="recap.html">Recap</a>
+                </div>
+              </div>
+              <a href="graph-viz.html" class="gw-tl">지식그래프</a>
+            </nav>
+            <nav class="nav navbar-nav ms-auto">
+              <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
+                <li>
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown">
+                    <i class="bi bi-person-circle" style="font-size:1.4rem;"></i>
+                    <span id="nav-profile-name" style="margin-left:6px;">-</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        <!-- ── 본문 ── -->
+        <div class="right_col" role="main">
+          <div class="gw-collect-wrap">
+
+            <div class="gw-page-title">
+              <i class="bi bi-inbox-fill"></i>
+              메일 수집
+            </div>
+            <p class="gw-page-subtitle">IMAP으로 메일 서버에 연결해 메일을 가져옵니다. 수집된 메일은 GraphRAG 인덱싱에 사용됩니다.</p>
+
+            <!-- ── 카드 1: IMAP 서버 설정 ── -->
+            <div class="gw-card">
+              <div class="gw-card-title">
+                <i class="bi bi-server"></i>
+                서버 설정
+              </div>
+
+              <!-- 프리셋 -->
+              <div class="gw-presets">
+                <div class="gw-preset-chip active" data-host="imap.gmail.com" data-port="993" data-domain="gmail.com" onclick="applyPreset(this)">
+                  <i class="bi bi-google"></i> Gmail
+                </div>
+                <div class="gw-preset-chip" data-host="imap.naver.com" data-port="993" data-domain="naver.com" onclick="applyPreset(this)">
+                  <i class="bi bi-envelope"></i> 네이버
+                </div>
+                <div class="gw-preset-chip" data-host="imap.mail.me.com" data-port="993" data-domain="icloud.com" onclick="applyPreset(this)">
+                  <i class="bi bi-apple"></i> iCloud
+                </div>
+                <div class="gw-preset-chip" data-host="" data-port="993" data-domain="" onclick="applyPreset(this)">
+                  <i class="bi bi-gear"></i> 직접 입력
+                </div>
+              </div>
+
+              <div class="gw-form-grid cols-3">
+                <div class="gw-form-group">
+                  <label class="gw-label">IMAP 호스트</label>
+                  <input id="imap-host" class="gw-input" type="text" value="imap.gmail.com" placeholder="imap.example.com">
+                </div>
+                <div class="gw-form-group">
+                  <label class="gw-label">포트</label>
+                  <input id="imap-port" class="gw-input" type="number" value="993" placeholder="993">
+                </div>
+                <div class="gw-form-group">
+                  <label class="gw-label">SSL</label>
+                  <select id="imap-ssl" class="gw-select">
+                    <option value="true" selected>사용 (993)</option>
+                    <option value="false">미사용 (143)</option>
+                  </select>
+                </div>
+                <div class="gw-form-group">
+                  <label class="gw-label">이메일 주소</label>
+                  <input id="imap-user" class="gw-input" type="text" placeholder="you@example.com" value="@gmail.com">
+                </div>
+                <div class="gw-form-group">
+                  <label class="gw-label">앱 비밀번호</label>
+                  <input id="imap-pass" class="gw-input" type="password" placeholder="앱 전용 비밀번호">
+                </div>
+              </div>
+
+              <div style="margin-top:16px;display:flex;align-items:center;gap:12px;">
+                <button type="button" class="gw-preset-chip" id="list-folders-btn" onclick="listFolders()" style="cursor:pointer;">
+                  <i class="bi bi-arrow-clockwise"></i> 폴더 불러오기
+                </button>
+                <span id="folder-list-hint" style="font-size:0.8rem;color:#73879C;"></span>
+              </div>
+            </div>
+
+            <!-- ── 카드 2: 수집 옵션 ── -->
+            <div class="gw-card">
+              <div class="gw-card-title">
+                <i class="bi bi-sliders"></i>
+                수집 옵션
+              </div>
+
+              <!-- 폴더 선택 ("폴더 불러오기" 버튼으로 동적으로 채워짐) -->
+              <div class="gw-form-group" style="margin-bottom:18px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                  <label class="gw-label" style="margin-bottom:0;">수집 폴더</label>
+                  <button type="button" class="gw-select-all-btn" id="select-all-btn" onclick="toggleSelectAll()" style="display:none;">전체 선택</button>
+                </div>
+                <div class="gw-folder-list" id="folder-list">
+                  <span class="gw-folder-empty">"폴더 불러오기"를 눌러 수집할 폴더를 선택하세요.</span>
+                </div>
+              </div>
+
+              <div class="gw-form-grid">
+                <div class="gw-form-group">
+                  <label class="gw-label">수집 개수 (폴더당)</label>
+                  <select id="collect-limit" class="gw-select" onchange="toggleCustomLimit()">
+                    <option value="50">50개</option>
+                    <option value="100">100개</option>
+                    <option value="200">200개</option>
+                    <option value="500">500개</option>
+                    <option value="0" selected>전체</option>
+                    <option value="custom">사용자 지정</option>
+                  </select>
+                  <input type="number" id="collect-limit-custom" class="gw-input" placeholder="개수 입력" min="1" style="display:none; margin-top:8px;">
+                </div>
+                <div class="gw-form-group">
+                  <label class="gw-label">동기 모드</label>
+                  <select id="sync-mode" class="gw-select">
+                    <option value="append" selected>증분 (새 메일만)</option>
+                    <option value="rewrite">전체 재수집</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── 수집 버튼 ── -->
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+              <button class="gw-collect-btn" id="collect-btn" onclick="startCollect()">
+                <div class="gw-spinner" id="collect-spinner"></div>
+                <i class="bi bi-download" id="collect-icon"></i>
+                메일 수집 시작
+              </button>
+              <span id="collect-hint" style="font-size:0.82rem;color:#73879C;"></span>
+            </div>
+
+            <!-- ── 진행상황 패널 ── -->
+            <div class="gw-log-panel" id="log-panel">
+              <div class="gw-log-header">
+                <div class="gw-log-header-left">
+                  <i class="bi bi-terminal" style="color:#26B99A;"></i>
+                  수집 로그
+                </div>
+                <div class="gw-status-badge idle" id="log-status-badge">
+                  <span class="gw-status-dot" id="log-status-dot"></span>
+                  <span id="log-status-text">대기 중</span>
+                </div>
+              </div>
+              <div class="gw-progress-bar-wrap">
+                <div class="gw-progress-bar-fill" id="log-progress-bar"></div>
+              </div>
+              <div class="gw-log-body" id="log-body">
+                <div class="gw-log-empty" id="log-empty">
+                  <i class="bi bi-clock-history" style="font-size:1.2rem;"></i>
+                  수집을 시작하면 여기에 로그가 표시됩니다.
+                </div>
+              </div>
+
+              <!-- 결과 요약 -->
+              <div class="gw-result-row" id="result-row" style="display:none;">
+                <div class="gw-result-chip">
+                  <i class="bi bi-envelope-check"></i>
+                  <strong id="result-added">0</strong>
+                  <span>개 수집</span>
+                </div>
+                <div class="gw-result-chip">
+                  <i class="bi bi-skip-forward"></i>
+                  <strong id="result-skipped">0</strong>
+                  <span>개 중복 스킵</span>
+                </div>
+                <button class="gw-collect-btn" id="goto-dashboard-btn" style="padding:8px 20px;font-size:0.85rem;box-shadow:none;" onclick="location.href='/dashboard/'">
+                  <i class="bi bi-arrow-right-circle"></i>
+                  대시보드로 이동
+                </button>
+              </div>
+            </div>
+
+          </div><!-- /.gw-collect-wrap -->
+        </div><!-- /.right_col -->
+
+        <footer></footer>
+      </div>
+    </div>
+
+    <script>
+      // ── 유틸 ──
+      function getFlaskUrl() {
+        return (localStorage.getItem('gw_flask_url') || '').replace(/\/$/, '');
+      }
+
+      function now() {
+        return new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      }
+
+      // ── 수집 개수 "사용자 지정" 선택 시 입력칸 노출 ──
+      function toggleCustomLimit() {
+        const select = document.getElementById('collect-limit');
+        const customInput = document.getElementById('collect-limit-custom');
+        customInput.style.display = select.value === 'custom' ? '' : 'none';
+      }
+
+      // ── 프리셋 적용 ──
+      function applyPreset(el) {
+        document.querySelectorAll('.gw-preset-chip').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+
+        const host = el.dataset.host;
+        const port = el.dataset.port;
+        const domain = el.dataset.domain || '';
+        document.getElementById('imap-host').value = host;
+        document.getElementById('imap-port').value = port;
+
+        // 이메일 칸: 다른 프리셋으로 바꾸면 이전에 입력한 아이디는 지우고 "@도메인"만 새로 채움
+        const userInput = document.getElementById('imap-user');
+        if (domain) {
+          userInput.value = '@' + domain;
+          userInput.focus();
+          // focus() 직후 브라우저가 자체적으로 커서를 맨 뒤로 보내는 경우가 있어서,
+          // 그 동작이 끝난 다음 틱에 커서 위치를 다시 맨 앞으로 강제 설정함
+          setTimeout(() => userInput.setSelectionRange(0, 0), 0);
+        } else {
+          userInput.value = '';
+        }
+
+        // 다른 서비스로 바꾸면 이전 계정용 비밀번호는 의미가 없으니 같이 비움
+        document.getElementById('imap-pass').value = '';
+      }
+
+      // ── 폴더 토글 ──
+      function toggleFolder(checkbox) {
+        const item = checkbox.closest('.gw-folder-item');
+        if (checkbox.checked) {
+          item.classList.add('checked');
+        } else {
+          item.classList.remove('checked');
+        }
+      }
+
+      // ── 선택된 폴더 목록 반환 ──
+      function getSelectedFolders() {
+        return Array.from(document.querySelectorAll('.gw-folder-item input[type="checkbox"]:checked'))
+          .map(cb => cb.value);
+      }
+
+      // ── 폴더 목록 렌더링 (서버가 실제 조회한 폴더명으로 체크박스 생성) ──
+      function renderFolderList(folders) {
+        const container = document.getElementById('folder-list');
+        const selectAllBtn = document.getElementById('select-all-btn');
+        container.innerHTML = '';
+
+        if (!folders || folders.length === 0) {
+          const empty = document.createElement('span');
+          empty.className = 'gw-folder-empty';
+          empty.textContent = '폴더를 찾을 수 없습니다.';
+          container.appendChild(empty);
+          selectAllBtn.style.display = 'none';
+          return;
+        }
+
+        folders.forEach(folder => {
+          const isInbox = folder.toUpperCase() === 'INBOX';
+
+          const label = document.createElement('label');
+          label.className = 'gw-folder-item';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.value = folder;
+          checkbox.checked = false;
+          checkbox.onchange = function () { toggleFolder(this); };
+
+          const icon = document.createElement('i');
+          icon.className = isInbox ? 'bi bi-inbox' : 'bi bi-folder';
+
+          const span = document.createElement('span');
+          span.className = 'gw-folder-label';
+          span.textContent = folder;
+
+          label.appendChild(checkbox);
+          label.appendChild(icon);
+          label.appendChild(span);
+          container.appendChild(label);
+        });
+
+        selectAllBtn.style.display = '';
+        selectAllBtn.textContent = '전체 선택';
+      }
+
+      // ── 폴더 전체 선택/해제 토글 ──
+      function toggleSelectAll() {
+        const checkboxes = document.querySelectorAll('#folder-list input[type="checkbox"]');
+        if (checkboxes.length === 0) return;
+
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        checkboxes.forEach(cb => {
+          cb.checked = !allChecked;
+          toggleFolder(cb);
+        });
+
+        document.getElementById('select-all-btn').textContent = allChecked ? '전체 선택' : '전체 해제';
+      }
+
+      // ── 실제 IMAP 서버에 로그인해서 폴더 목록 조회 ──
+      async function listFolders() {
+        const flaskUrl = getFlaskUrl();
+        const host = document.getElementById('imap-host').value.trim();
+        const port = parseInt(document.getElementById('imap-port').value) || 993;
+        const ssl  = document.getElementById('imap-ssl').value === 'true';
+        const user = document.getElementById('imap-user').value.trim();
+        const pass = document.getElementById('imap-pass').value;
+
+        const btn  = document.getElementById('list-folders-btn');
+        const hint = document.getElementById('folder-list-hint');
+
+        if (!host) { alert('IMAP 호스트를 입력하세요.'); return; }
+        if (!user) { alert('이메일 주소를 입력하세요.'); return; }
+        if (!pass) { alert('앱 비밀번호를 입력하세요.'); return; }
+        if (!flaskUrl) { alert('Flask 서버 URL이 설정되지 않았습니다.\n/init 페이지를 먼저 방문하세요.'); return; }
+
+        btn.disabled = true;
+        hint.style.color = '#73879C';
+        hint.textContent = '폴더 목록을 불러오는 중...';
+
+        try {
+          const res = await fetch(`${flaskUrl}/imap-list-folders`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ host, port, ssl, user, password: pass })
+          });
+
+          const data = await res.json();
+
+          if (!res.ok || !data.ok) {
+            throw new Error(data.error || `서버 오류 (${res.status})`);
+          }
+
+          renderFolderList(data.folders || []);
+          hint.style.color = '#1a9e6e';
+          hint.textContent = `${data.folders.length}개 폴더를 찾았습니다.`;
+
+        } catch (err) {
+          hint.style.color = '#a32d2d';
+          hint.textContent = `❌ ${err.message}`;
+          console.error('[imap-list-folders]', err);
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      // ── 로그 추가 ──
+      function addLog(msg, type = '') {
+        const body = document.getElementById('log-body');
+        const empty = document.getElementById('log-empty');
+        if (empty) empty.remove();
+
+        const line = document.createElement('div');
+        line.className = 'gw-log-line';
+        line.innerHTML = `
+          <span class="gw-log-ts">${now()}</span>
+          <span class="gw-log-msg ${type}">${msg}</span>
+        `;
+        body.appendChild(line);
+        body.scrollTop = body.scrollHeight;
+      }
+
+      // ── 상태 배지 업데이트 ──
+      function setStatus(status, label) {
+        const badge = document.getElementById('log-status-badge');
+        const dot   = document.getElementById('log-status-dot');
+        const text  = document.getElementById('log-status-text');
+        badge.className = `gw-status-badge ${status}`;
+        dot.className   = `gw-status-dot ${status === 'running' ? 'running' : ''}`;
+        text.textContent = label;
+      }
+
+      function setProgress(pct) {
+        document.getElementById('log-progress-bar').style.width = pct + '%';
+      }
+
+      // ── 수집 시작 ──
+      async function startCollect() {
+        const flaskUrl = getFlaskUrl();
+        const host     = document.getElementById('imap-host').value.trim();
+        const port     = parseInt(document.getElementById('imap-port').value) || 993;
+        const ssl      = document.getElementById('imap-ssl').value === 'true';
+        const user     = document.getElementById('imap-user').value.trim();
+        const pass     = document.getElementById('imap-pass').value;
+        // "0"(전체)은 falsy라서 `|| 100`으로 처리하면 100으로 덮어써지는 버그가 있었음 → 명시적으로 분기
+        const limitRaw = document.getElementById('collect-limit').value;
+        const limit    = limitRaw === 'custom'
+          ? (parseInt(document.getElementById('collect-limit-custom').value) || 0)
+          : (limitRaw === '' ? 100 : parseInt(limitRaw));
+        const syncMode = document.getElementById('sync-mode').value;
+        const folders  = getSelectedFolders();
+
+        // 입력 검증
+        if (!host) { alert('IMAP 호스트를 입력하세요.'); return; }
+        if (!user) { alert('이메일 주소를 입력하세요.'); return; }
+        if (!pass) { alert('앱 비밀번호를 입력하세요.'); return; }
+        if (limitRaw === 'custom' && limit <= 0) { alert('수집 개수를 입력하세요.'); return; }
+        if (folders.length === 0) { alert('수집할 폴더를 하나 이상 선택하세요.'); return; }
+        if (!flaskUrl) { alert('Flask 서버 URL이 설정되지 않았습니다.\n/init 페이지를 먼저 방문하세요.'); return; }
+
+        // UI: 수집 중 상태
+        const btn     = document.getElementById('collect-btn');
+        const spinner = document.getElementById('collect-spinner');
+        const icon    = document.getElementById('collect-icon');
+        const hint    = document.getElementById('collect-hint');
+
+        btn.disabled = true;
+        spinner.classList.add('visible');
+        icon.style.display = 'none';
+        hint.textContent = '서버에 연결 중...';
+
+        // 로그 패널 표시
+        document.getElementById('log-panel').classList.add('visible');
+        document.getElementById('result-row').style.display = 'none';
+
+        // 로그 초기화
+        const body = document.getElementById('log-body');
+        body.innerHTML = '';
+        setStatus('running', '수집 중');
+        setProgress(5);
+
+        addLog(`IMAP 연결 시작: ${host}:${port} (SSL: ${ssl})`);
+        addLog(`계정: ${user}`);
+        addLog(`폴더: ${folders.join(', ')}`);
+        addLog(`수집 개수: ${limit === 0 ? '전체' : limit + '개'} / 모드: ${syncMode}`);
+
+        try {
+          setProgress(20);
+          addLog('Flask 서버에 수집 요청 전송 중...');
+
+          const res = await fetch(`${flaskUrl}/imap-collect`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              host, port, ssl, user, password: pass,
+              folders, limit, sync_mode: syncMode,
+              user_id: user
+            })
+          });
+
+          setProgress(60);
+
+          if (!res.ok) {
+            const err = await res.text();
+            throw new Error(`서버 오류 (${res.status}): ${err.slice(0, 200)}`);
+          }
+
+          const data = await res.json();
+
+          if (!data.ok) {
+            throw new Error(data.error || '알 수 없는 오류');
+          }
+
+          // 애드온의 doGet()이 하던 일(로그인 계정 저장)을 이 페이지가 대신 수행.
+          // 이후 대시보드(index.html 등)가 이 값을 user_id로 사용한다.
+          localStorage.setItem('gw_user_id', user);
+
+          setProgress(100);
+          setStatus('done', '완료');
+          addLog(`✅ 수집 완료`, 'success');
+          addLog(`수집: ${data.added_count}개 / 중복 스킵: ${data.skipped_count}개`, 'success');
+          if (data.job_id) {
+            addLog(`인덱싱 job_id: ${data.job_id} — 인덱싱이 백그라운드에서 실행됩니다.`, 'info');
+          }
+
+          // 결과 요약 표시
+          document.getElementById('result-added').textContent   = data.added_count ?? 0;
+          document.getElementById('result-skipped').textContent = data.skipped_count ?? 0;
+          document.getElementById('result-row').style.display   = 'flex';
+
+          hint.textContent = `완료: ${data.added_count}개 수집됨`;
+
+        } catch (err) {
+          setStatus('failed', '실패');
+          setProgress(0);
+          addLog(`❌ ${err.message}`, 'error');
+          hint.textContent = '수집 실패. 로그를 확인하세요.';
+          console.error('[imap-collect]', err);
+        } finally {
+          btn.disabled = false;
+          spinner.classList.remove('visible');
+          icon.style.display = '';
+        }
+      }
+
+      // ── 초기화 ──
+      window.addEventListener('DOMContentLoaded', () => {
+        // URL 파라미터에서 user_id 저장
+        const params = new URLSearchParams(location.search);
+        const gid = params.get('user_id');
+        if (gid) {
+          localStorage.setItem('gw_user_id', gid);
+          document.getElementById('imap-user').value = gid;
+        }
+
+        const flaskUrl = params.get('flask_url');
+        if (flaskUrl) localStorage.setItem('gw_flask_url', decodeURIComponent(flaskUrl));
+
+        // gw_user_id는 이제 "마지막으로 조회한 계정"이라는 의미로 쓰이므로(계정 선택기 도입),
+        // 새 계정을 추가하는 이 화면의 로그인 입력칸을 이 값으로 자동 채우지 않는다.
+        // (예전엔 gw_user_id == 내 Gmail 계정 하나였을 때 쓰던 자동완성 로직)
+        const savedId = localStorage.getItem('gw_user_id');
+        if (savedId) {
+          const nameEl = document.getElementById('google-profile-name');
+          const navEl  = document.getElementById('nav-profile-name');
+          const name   = savedId.split('@')[0];
+          if (nameEl) nameEl.textContent = name;
+          if (navEl)  navEl.textContent  = name;
+        }
+
+        // 기본 활성 프리셋(Gmail)의 "@gmail.com"도 클릭했을 때와 동일하게 커서를 맨 앞에 둠
+        const userInput = document.getElementById('imap-user');
+        if (userInput.value.startsWith('@')) {
+          userInput.focus();
+          setTimeout(() => userInput.setSelectionRange(0, 0), 0);
+        }
+      });
+    </script>
+  </body>
+</html>

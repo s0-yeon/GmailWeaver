@@ -220,7 +220,7 @@ def get_keyword_stats(paths): # 메일 키워드 수
 
 # 친밀한 사람 친밀도 수치 (볼륨 보정·시간 감쇠 없이 EIS 기반)
 def get_high_affinity_person_stats(paths):
-    latest = get_latest_user_record(paths.GMAIL_ID)
+    latest = get_latest_user_record(paths.USER_ID)
     if not latest:
         return []
     update_date = latest["update_date"]
@@ -230,7 +230,7 @@ def get_high_affinity_person_stats(paths):
     try:
         cursor.execute(
             "SELECT person_account_id, person_name FROM person WHERE user_account_id = %s AND update_date = %s",
-            (paths.GMAIL_ID, update_date),
+            (paths.USER_ID, update_date),
         )
         persons = cursor.fetchall()
     finally:
@@ -240,7 +240,7 @@ def get_high_affinity_person_stats(paths):
     result = []
     for person in persons:
         eis = calculate_eis(
-            user_account_id=paths.GMAIL_ID,
+            user_account_id=paths.USER_ID,
             person_account_id=person["person_account_id"],
             update_date=update_date,
             apply_volume_correction=False,
@@ -256,7 +256,7 @@ def get_high_affinity_person_stats(paths):
     return result
 
 
-def get_keywords_by_person_date(gmail_id: str, person_gmail_id: str, start_date: str, end_date: str) -> list:
+def get_keywords_by_person_date(user_id: str, person_user_id: str, start_date: str, end_date: str) -> list:
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     try:
@@ -269,7 +269,7 @@ def get_keywords_by_person_date(gmail_id: str, person_gmail_id: str, start_date:
             GROUP BY keyword_name, mail_date
             ORDER BY mail_date
         """
-        cursor.execute(sql, (gmail_id, person_gmail_id, start_date, end_date))
+        cursor.execute(sql, (user_id, person_user_id, start_date, end_date))
         rows = cursor.fetchall()
 
         keyword_map = {}
@@ -290,12 +290,12 @@ def get_keywords_by_person_date(gmail_id: str, person_gmail_id: str, start_date:
 def get_user_rating_stats(): # 모든 유저의 Olive 만족도
     return {"total_rating" : 99}
 
-def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
+def get_mail_exchange_stats(user_id, person_mail_id, start_date, end_date):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
     try:
-        cursor.execute("SELECT MAX(update_date) AS ud FROM user WHERE user_account_id = %s", (gmail_id,))
+        cursor.execute("SELECT MAX(update_date) AS ud FROM user WHERE user_account_id = %s", (user_id,))
         update_date = cursor.fetchone()["ud"]
 
         like_param = f"%{person_mail_id}%"
@@ -319,7 +319,7 @@ def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
         # 같은 조건을 넣는다 — 안 그러면 (다른 사람과) 메일이 오간 모든 달이 이 사람의
         # 그래프에도 0건짜리로 끼어들어와 연도/달이 쓸데없이 많이 늘어난다.
         cursor.execute(sql, (
-            like_param, like_param, gmail_id, update_date, start_date, end_date + ' 23:59:59',
+            like_param, like_param, user_id, update_date, start_date, end_date + ' 23:59:59',
             like_param, like_param,
         ))
         rows = cursor.fetchall()
@@ -356,7 +356,7 @@ def get_mail_exchange_stats(gmail_id, person_mail_id, start_date, end_date):
         conn.close()
 
 
-def get_person_mail_ids_in_range(gmail_id, person_mail_id, start_date, end_date) -> list:
+def get_person_mail_ids_in_range(user_id, person_mail_id, start_date, end_date) -> list:
     """
     특정 상대방과 주고받은 메일의 (mail_id, 방향, 날짜) 목록을 날짜 범위 내에서 반환한다.
     MySQL mail 테이블은 GraphRAG 인덱싱 캡(MAX_MAILS)과 무관하게 전체 동기화 이력을
@@ -368,7 +368,7 @@ def get_person_mail_ids_in_range(gmail_id, person_mail_id, start_date, end_date)
     cursor = conn.cursor(dictionary=True)
 
     try:
-        cursor.execute("SELECT MAX(update_date) AS ud FROM user WHERE user_account_id = %s", (gmail_id,))
+        cursor.execute("SELECT MAX(update_date) AS ud FROM user WHERE user_account_id = %s", (user_id,))
         update_date = cursor.fetchone()["ud"]
 
         like_param = f"%{person_mail_id}%"
@@ -384,7 +384,7 @@ def get_person_mail_ids_in_range(gmail_id, person_mail_id, start_date, end_date)
           )
         ORDER BY mail_date ASC
         """
-        cursor.execute(sql, (gmail_id, update_date, start_date, end_date + ' 23:59:59', like_param, like_param))
+        cursor.execute(sql, (user_id, update_date, start_date, end_date + ' 23:59:59', like_param, like_param))
         rows = cursor.fetchall()
         return [
             {"id": row["mail_id"], "direction": row["direction"], "date": str(row["mail_date"])}
@@ -395,12 +395,12 @@ def get_person_mail_ids_in_range(gmail_id, person_mail_id, start_date, end_date)
         conn.close()
 
 
-def get_date_range_person_stats(gmail_id, start_date, end_date, sort_by):
+def get_date_range_person_stats(user_id, start_date, end_date, sort_by):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
     try:
-        cursor.execute("SELECT MAX(update_date) AS ud FROM user WHERE user_account_id = %s", (gmail_id,))
+        cursor.execute("SELECT MAX(update_date) AS ud FROM user WHERE user_account_id = %s", (user_id,))
         update_date = cursor.fetchone()["ud"]
 
         direction_filter = "sent" if sort_by == "sent" else "received"
@@ -412,7 +412,7 @@ def get_date_range_person_stats(gmail_id, start_date, end_date, sort_by):
           AND mail_date BETWEEN %s AND %s
           AND direction = %s
         """
-        cursor.execute(sql, (gmail_id, update_date, start_date, end_date + ' 23:59:59', direction_filter))
+        cursor.execute(sql, (user_id, update_date, start_date, end_date + ' 23:59:59', direction_filter))
         rows = cursor.fetchall()
 
         email_pattern = re.compile(r'[\w.+\-]+@[\w.\-]+')
@@ -422,7 +422,7 @@ def get_date_range_person_stats(gmail_id, start_date, end_date, sort_by):
             field = row["receiver"] if sort_by == "sent" else row["sender"]
             for email in email_pattern.findall(field or ""):
                 email = email.lower()
-                if email == gmail_id.lower():
+                if email == user_id.lower():
                     continue
                 counts[email] = counts.get(email, 0) + 1
 
@@ -438,7 +438,7 @@ def get_date_range_person_stats(gmail_id, start_date, end_date, sort_by):
         conn.close()
 
 
-def get_mail_date_range(gmail_id):
+def get_mail_date_range(user_id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
@@ -451,7 +451,7 @@ def get_mail_date_range(gmail_id):
               SELECT MAX(update_date) FROM user WHERE user_account_id = %s
           )
         """
-        cursor.execute(sql, (gmail_id, gmail_id))
+        cursor.execute(sql, (user_id, user_id))
         row = cursor.fetchone()
 
         return {
@@ -475,7 +475,7 @@ def get_mail_sync_stats(paths): # 메일 동기화시 동기화된 메일 수, �
         ORDER BY update_date DESC
         LIMIT 1
         """
-        cursor.execute(sql, (paths.GMAIL_ID,))
+        cursor.execute(sql, (paths.USER_ID,))
         row = cursor.fetchone()
 
         if not row:
@@ -502,8 +502,8 @@ def get_mail_sync_stats(paths): # 메일 동기화시 동기화된 메일 수, �
         conn.close()
 
 
-def get_person_descriptions(gmail_id: str) -> list:
-    latest_user = get_latest_user_record(gmail_id)
+def get_person_descriptions(user_id: str) -> list:
+    latest_user = get_latest_user_record(user_id)
     if not latest_user:
         return []
 

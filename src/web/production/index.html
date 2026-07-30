@@ -572,8 +572,8 @@
       @keyframes kf3{0%,100%{transform:translate(-50%,calc(-50% + 0px))}50%{transform:translate(-50%,calc(-50% - 18px))}}
       #kn-search   { animation: kf0 3.8s ease-in-out infinite; }
       #kn-mylife   { animation: kf1 4.2s ease-in-out infinite 0.7s; }
-      #kn-contacts { animation: kf2 3.5s ease-in-out infinite 1.4s; }
-      #kn-calendar { animation: kf3 4.0s ease-in-out infinite 1.0s; }
+      #kn-collect  { animation: kf2 3.5s ease-in-out infinite 1.4s; }
+      #kn-graph    { animation: kf3 4.0s ease-in-out infinite 1.0s; }
     </style>
   </head>
 
@@ -635,6 +635,7 @@
             <nav class="gw-top-links">
               <a href="index.html" class="gw-tl active">홈</a>
               <a href="search.html" class="gw-tl">검색</a>
+              <a href="imap-collect.html" class="gw-tl">메일 수집</a>
               <div class="gw-tl-dropdown">
                 <a href="mylife.html" class="gw-tl gw-tl-dd-btn">My Life <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:4px;"></i></a>
                 <div class="gw-tl-dd-menu">
@@ -643,8 +644,7 @@
                   <a href="recap.html">Recap</a>
                 </div>
               </div>
-              <a href="contacts.html" class="gw-tl">연락처</a>
-              <a href="calendar.html" class="gw-tl">캘린더</a>
+              <a href="graph-viz.html" class="gw-tl">지식그래프</a>
             </nav>
             <nav class="nav navbar-nav ms-auto">
               <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
@@ -739,10 +739,10 @@
 
             <div class="gw-kgraph gw-anim" id="kgraph" style="transition-delay:0.3s">
               <svg id="kg-svg" aria-hidden="true"></svg>
-              <a href="search.html"    class="gw-knode kn-search"   id="kn-search">  <div class="gw-knode-blob"><i class="gw-knode-icon bi bi-search"></i>검색</div></a>
-              <a href="mylife.html" class="gw-knode kn-mylife"   id="kn-mylife">  <div class="gw-knode-blob"><i class="gw-knode-icon bi bi-stars"></i>My Life</div></a>
-              <a href="contacts.html"  class="gw-knode kn-contacts" id="kn-contacts"><div class="gw-knode-blob"><i class="gw-knode-icon bi bi-people-fill"></i>연락처</div></a>
-              <a href="calendar.html"  class="gw-knode kn-calendar" id="kn-calendar"><div class="gw-knode-blob"><i class="gw-knode-icon bi bi-calendar3"></i>캘린더</div></a>
+              <a href="search.html"      class="gw-knode kn-search"  id="kn-search">  <div class="gw-knode-blob"><i class="gw-knode-icon bi bi-search"></i>검색</div></a>
+              <a href="mylife.html"      class="gw-knode kn-mylife"  id="kn-mylife">  <div class="gw-knode-blob"><i class="gw-knode-icon bi bi-stars"></i>My Life</div></a>
+              <a href="imap-collect.html" class="gw-knode kn-collect" id="kn-collect"><div class="gw-knode-blob"><i class="gw-knode-icon bi bi-inbox-fill"></i>메일 수집</div></a>
+              <a href="graph-viz.html"   class="gw-knode kn-graph"   id="kn-graph">  <div class="gw-knode-blob"><i class="gw-knode-icon bi bi-diagram-3"></i>지식그래프</div></a>
             </div>
           </div>
         </main>
@@ -764,8 +764,8 @@
         const nameParam = params.get('name');
         const name = nameParam ? decodeURIComponent(nameParam) : (sessionStorage.getItem('gw_user_name') || '-');
         if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
-        const gmailIdParam = params.get('gmail_id');
-        if (gmailIdParam) localStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+        const userIdParam = params.get('user_id');
+        if (userIdParam) localStorage.setItem('gw_user_id', decodeURIComponent(userIdParam));
       const flaskUrlParam = params.get('flask_url');
       if (flaskUrlParam) localStorage.setItem('gw_flask_url', decodeURIComponent(flaskUrlParam));
       // Flask에서 직접 열릴 때 자동으로 ngrok URL 저장
@@ -802,10 +802,10 @@
         const W = container.offsetWidth, H = container.offsetHeight;
 
         const nodes = [
-          {id:'kn-search',   px:0.10, py:0.34, color:'#26B99A'},
-          {id:'kn-mylife',   px:0.38, py:0.74, color:'#26B99A'},
-          {id:'kn-contacts', px:0.65, py:0.16, color:'#26B99A'},
-          {id:'kn-calendar', px:0.88, py:0.60, color:'#26B99A'}
+          {id:'kn-search',  px:0.10, py:0.34, color:'#26B99A'},
+          {id:'kn-mylife',  px:0.38, py:0.74, color:'#26B99A'},
+          {id:'kn-collect', px:0.65, py:0.16, color:'#26B99A'},
+          {id:'kn-graph',   px:0.88, py:0.60, color:'#26B99A'}
         ];
 
         const pos = {};
@@ -821,7 +821,7 @@
         svg.innerHTML = '';
 
         const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
-        const chain = ['kn-search','kn-mylife','kn-contacts','kn-calendar'];
+        const chain = ['kn-search','kn-mylife','kn-collect','kn-graph'];
 
         /* 엣지별 선형 그라데이션 정의 */
         for(let i = 0; i < chain.length - 1; i++) {

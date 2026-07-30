@@ -1,6 +1,9 @@
 import re,os
+import json
 from config.settings import GRAPHRAG_SETTINGS_DIR, GRAPHRAG_PROMPTS_DIR
 import shutil
+
+ACCOUNT_META_FILENAME = "account.json"
 
 _MAX_MAILS_CONFIG = {
     "ddyr1554@gmail.com": 200,
@@ -10,8 +13,8 @@ _MAX_MAILS_CONFIG = {
     "03yeah03@gmail.com": 300,
 }
 
-def _gmail_to_dir_name(gmail_id: str) -> str:
-    s = gmail_id.strip().lower()
+def _gmail_to_dir_name(user_id: str) -> str:
+    s = user_id.strip().lower()
     s = s.replace("@", "_at_")
     s = s.replace(".", "_")
     s = s.replace("+", "_plus_")
@@ -19,11 +22,11 @@ def _gmail_to_dir_name(gmail_id: str) -> str:
     return s
 
 class UserPaths:
-    def __init__(self, base_dir: str, gmail_id: str):
+    def __init__(self, base_dir: str, user_id: str):
         self.BASE_DIR = base_dir
-        self.GMAIL_ID = gmail_id
+        self.USER_ID = user_id
 
-        dir_name = _gmail_to_dir_name(gmail_id)
+        dir_name = _gmail_to_dir_name(user_id)
 
         self.USER_ROOT = os.path.join(base_dir, "user_data", dir_name)
         self.GRAPHRAG_ROOT = os.path.join(self.USER_ROOT, "parquet")
@@ -51,7 +54,23 @@ class UserPaths:
         self.AVATAR_IMAGES_DIR  = os.path.join(self.MAIL_STATICS_PATH, "avatars")
         self.MAIL_MESSAGE_CACHE_PATH = os.path.join(self.MAIL_STATICS_PATH, "mail_message_cache.json")
         self.UPDATE_DIR = os.path.join(self.GRAPHRAG_ROOT, "update_output")
-        self.MAX_MAILS = _MAX_MAILS_CONFIG.get(gmail_id, None)
+        self.MAX_MAILS = _MAX_MAILS_CONFIG.get(user_id, None)
+
+        self.ACCOUNT_META_PATH = os.path.join(self.USER_ROOT, ACCOUNT_META_FILENAME)
+        _ensure_account_meta(self)
+
+
+# 계정 폴더가 이미 존재하는 경우에만 원본 user_id를 메타 파일로 남겨서
+# 나중에 폴더명(디렉터리 sanitize로 인해 원본 문자열이 손실됨)만으로도
+# 실제 계정 목록을 복원할 수 있게 한다. (/accounts 엔드포인트에서 사용)
+def _ensure_account_meta(paths: "UserPaths"):
+    if not os.path.isdir(paths.USER_ROOT) or os.path.exists(paths.ACCOUNT_META_PATH):
+        return
+    try:
+        with open(paths.ACCOUNT_META_PATH, "w", encoding="utf-8") as f:
+            json.dump({"user_id": paths.USER_ID}, f, ensure_ascii=False)
+    except OSError:
+        pass
 
 
 

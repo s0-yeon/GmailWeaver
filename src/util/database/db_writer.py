@@ -67,14 +67,14 @@ def save_person_stats_to_db(paths, update_date=None):
 
     try:
         if update_date is None:
-            latest_user = get_latest_user_record(paths.GMAIL_ID)
+            latest_user = get_latest_user_record(paths.USER_ID)
             if not latest_user:
-                print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
+                print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.USER_ID}")
                 return
             user_account_id = latest_user["user_account_id"]
             update_date     = latest_user["update_date"]
         else:
-            user_account_id = paths.GMAIL_ID
+            user_account_id = paths.USER_ID
 
         with open(paths.MAIL_CONTACTS_PATH, "r", encoding="utf-8") as f:
             stats = json.load(f)
@@ -234,12 +234,12 @@ def collect_indexing_stats(paths) -> dict:
     }
 
 
-def update_user_indexing_stats(gmail_id: str, update_date, stats: dict):
+def update_user_indexing_stats(user_id: str, update_date, stats: dict):
     """user 테이블의 인덱싱 통계 컬럼을 업데이트"""
     if update_date is None:
-        latest = get_latest_user_record(gmail_id)
+        latest = get_latest_user_record(user_id)
         if not latest:
-            print(f"[WARN] update_user_indexing_stats: user 없음 {gmail_id}")
+            print(f"[WARN] update_user_indexing_stats: user 없음 {user_id}")
             return
         update_date = latest["update_date"]
 
@@ -268,12 +268,12 @@ def update_user_indexing_stats(gmail_id: str, update_date, stats: dict):
                 stats["embed_tokens"],
                 stats["embed_model"],
                 stats["cost_usd"],
-                gmail_id,
+                user_id,
                 update_date,
             ),
         )
         conn.commit()
-        print(f"[DB] user 인덱싱 통계 저장 완료: {gmail_id} cost=${stats['cost_usd']:.6f}")
+        print(f"[DB] user 인덱싱 통계 저장 완료: {user_id} cost=${stats['cost_usd']:.6f}")
     except Exception as e:
         conn.rollback()
         print(f"[ERROR] update_user_indexing_stats 실패: {e}")
@@ -284,7 +284,7 @@ def update_user_indexing_stats(gmail_id: str, update_date, stats: dict):
 
 
 def save_query_to_db(
-    gmail_id: str,
+    user_id: str,
     context: str,
     response_time: float,
     method: str = "",
@@ -292,9 +292,9 @@ def save_query_to_db(
     input_tokens: int = None,
     output_tokens: int = None,
 ):
-    latest_user = get_latest_user_record(gmail_id)
+    latest_user = get_latest_user_record(user_id)
     if not latest_user:
-        print(f"[WARN] save_query_to_db: user 테이블에 {gmail_id} 없음, 저장 생략")
+        print(f"[WARN] save_query_to_db: user 테이블에 {user_id} 없음, 저장 생략")
         return
 
     cost_usd = None
@@ -326,7 +326,7 @@ def save_query_to_db(
             )
         )
         conn.commit()
-        print(f"[DB] query 저장 완료: {gmail_id} / {response_time:.2f}s / {method} / {model_name} / in={input_tokens} out={output_tokens} cost=${cost_usd}")
+        print(f"[DB] query 저장 완료: {user_id} / {response_time:.2f}s / {method} / {model_name} / in={input_tokens} out={output_tokens} cost=${cost_usd}")
     except Exception as e:
         conn.rollback()
         print(f"[ERROR] save_query_to_db 실패: {e}")
@@ -337,7 +337,7 @@ def save_query_to_db(
 
 def save_keyword_stats_to_db(paths,update_date=None):
     """
-    1. user 테이블에서 paths.GMAIL_ID에 해당하는 가장 최근 row 조회
+    1. user 테이블에서 paths.USER_ID에 해당하는 가장 최근 row 조회
     2. keyword json 파일 읽기
     3. keyword 테이블에 없으면 INSERT, 있으면 UPDATE
     """
@@ -347,16 +347,16 @@ def save_keyword_stats_to_db(paths,update_date=None):
         return
 
     if update_date is None:
-        latest_user = get_latest_user_record(paths.GMAIL_ID)
+        latest_user = get_latest_user_record(paths.USER_ID)
 
         if not latest_user:
-            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
+            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.USER_ID}")
             return
 
         user_account_id = latest_user["user_account_id"]
         update_date = latest_user["update_date"]
     else:
-        user_account_id = paths.GMAIL_ID
+        user_account_id = paths.USER_ID
 
     with open(paths.MAIL_KEYWORDS_PATH, "r", encoding="utf-8") as f:
         stats = json.load(f)
@@ -450,9 +450,9 @@ def rebuild_keyword_mail(paths, update_date=None):
         return
 
     if update_date is None:
-        latest_user = get_latest_user_record(paths.GMAIL_ID)
+        latest_user = get_latest_user_record(paths.USER_ID)
         if not latest_user:
-            print(f"[WARN] user 없음: {paths.GMAIL_ID}")
+            print(f"[WARN] user 없음: {paths.USER_ID}")
             return
         update_date = latest_user["update_date"]
 
@@ -476,7 +476,7 @@ def rebuild_keyword_mail(paths, update_date=None):
         return m.group(1).strip().lower() if m else value.strip().lower()
 
     keyword_person_date_map = {}
-    gmail_lower = paths.GMAIL_ID.lower()
+    gmail_lower = paths.USER_ID.lower()
 
     for _, row in df.iterrows():
         text = str(row.get('text', ''))
@@ -565,7 +565,7 @@ def init_processed_attachments_table():
         print(f"[DB] processed_attachments 테이블 초기화 실패 (무시): {e}")
 
 
-def filter_unprocessed_attachments(gmail_id: str, attachments: list) -> list:
+def filter_unprocessed_attachments(user_id: str, attachments: list) -> list:
     """
     이미 처리된 첨부파일 필터링
     (user_account_id, update_date, mail_id, filename) 조합으로 중복 체크
@@ -574,9 +574,9 @@ def filter_unprocessed_attachments(gmail_id: str, attachments: list) -> list:
     if not attachments:
         return []
 
-    latest_user = get_latest_user_record(gmail_id)
+    latest_user = get_latest_user_record(user_id)
     if not latest_user:
-        print(f"[WARN] filter_unprocessed_attachments: user 테이블에 {gmail_id} 없음, 전체 처리")
+        print(f"[WARN] filter_unprocessed_attachments: user 테이블에 {user_id} 없음, 전체 처리")
         return attachments
 
     user_account_id = latest_user["user_account_id"]
@@ -617,7 +617,7 @@ def filter_unprocessed_attachments(gmail_id: str, attachments: list) -> list:
         return attachments
 
 
-def mark_attachments_as_processed(gmail_id: str, attachments: list):
+def mark_attachments_as_processed(user_id: str, attachments: list):
     """
     처리 완료된 첨부파일 DB에 기록
     IGNORE: 중복 INSERT 시 오류 없이 무시
@@ -625,9 +625,9 @@ def mark_attachments_as_processed(gmail_id: str, attachments: list):
     if not attachments:
         return
 
-    latest_user = get_latest_user_record(gmail_id)
+    latest_user = get_latest_user_record(user_id)
     if not latest_user:
-        print(f"[WARN] mark_attachments_as_processed: user 테이블에 {gmail_id} 없음, 기록 생략")
+        print(f"[WARN] mark_attachments_as_processed: user 테이블에 {user_id} 없음, 기록 생략")
         return
 
     user_account_id = latest_user["user_account_id"]
@@ -659,14 +659,14 @@ def save_mail_summarize_to_db(paths, update_date=None):
         return
 
     if update_date is None:
-        latest_user = get_latest_user_record(paths.GMAIL_ID)
+        latest_user = get_latest_user_record(paths.USER_ID)
         if not latest_user:
-            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
+            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.USER_ID}")
             return
         user_account_id = latest_user["user_account_id"]
         update_date = latest_user["update_date"]
     else:
-        user_account_id = paths.GMAIL_ID
+        user_account_id = paths.USER_ID
 
     with open(paths.MAIL_SUMMARIES_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -724,14 +724,14 @@ def save_label_to_db(paths, update_date=None):
     import pandas as pd, re, os
 
     if update_date is None:
-        latest_user = get_latest_user_record(paths.GMAIL_ID)
+        latest_user = get_latest_user_record(paths.USER_ID)
         if not latest_user:
-            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
+            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.USER_ID}")
             return
         user_account_id = latest_user["user_account_id"]
         update_date = latest_user["update_date"]
     else:
-        user_account_id = paths.GMAIL_ID
+        user_account_id = paths.USER_ID
 
     text_units_path = paths.RELATIONSHIPS_PATH.replace("relationships.parquet", "text_units.parquet")
     df = pd.read_parquet(text_units_path)
@@ -769,14 +769,14 @@ def save_mail_to_db(paths, update_date=None):
     import pandas as pd, re, os, datetime
 
     if update_date is None:
-        latest_user = get_latest_user_record(paths.GMAIL_ID)
+        latest_user = get_latest_user_record(paths.USER_ID)
         if not latest_user:
-            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.GMAIL_ID}")
+            print(f"[WARN] user 테이블에 해당 유저가 없습니다: {paths.USER_ID}")
             return
         user_account_id = latest_user["user_account_id"]
         update_date = latest_user["update_date"]
     else:
-        user_account_id = paths.GMAIL_ID
+        user_account_id = paths.USER_ID
 
     text_units_path = paths.RELATIONSHIPS_PATH.replace("relationships.parquet", "text_units.parquet")
     df = pd.read_parquet(text_units_path)

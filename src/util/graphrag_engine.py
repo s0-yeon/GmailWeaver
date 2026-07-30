@@ -132,7 +132,7 @@ class DirectOpenAIEmbedder(EmbeddingModel):
         )
         return response.data[0].embedding # 첫번째 결과의 임베딩 벡터 반환
 
-# 유저별 엔진 캐시 (유저마다 별도의 graphrag 인덱스 가지고 있어서 gmail_id를 키로 해서 캐시 가짐. 구조: { gmail_id: { "local": LocalSearch객체, "global": GlobalSearch객체, "mtime": float } })
+# 유저별 엔진 캐시 (유저마다 별도의 graphrag 인덱스 가지고 있어서 user_id를 키로 해서 캐시 가짐. 구조: { user_id: { "local": LocalSearch객체, "global": GlobalSearch객체, "mtime": float } })
 _engine_cache: dict = {}
 
 # entities.parquet 마지막 수정시간 (전체 갱신이나 update 하면 entities.parquet 파일이 수정되니 캐시된 mtime과 비교해서 인덱싱 갱신 여부 감지)
@@ -289,7 +289,7 @@ def _build_global_engine(output_dir: str, graphrag_root: str) -> tuple[GlobalSea
     return engine, model
 
 # 유저별 캐시된 엔진 반환
-def get_engines(gmail_id: str, output_dir: str, graphrag_root: str) -> tuple[LocalSearch, GlobalSearch]:
+def get_engines(user_id: str, output_dir: str, graphrag_root: str) -> tuple[LocalSearch, GlobalSearch]:
     mtime = _get_output_mtime(output_dir)
 
     # 인덱스가 아직 생성되지 않은 상태._is_index_ready()로 이미 걸러지지만 방어적으로 한 번 더 체크
@@ -297,30 +297,30 @@ def get_engines(gmail_id: str, output_dir: str, graphrag_root: str) -> tuple[Loc
         raise RuntimeError(f"인덱스가 아직 생성되지 않았습니다: {output_dir}")
 
     with _cache_lock:  # 동시 접근 방지
-        cached = _engine_cache.get(gmail_id)
+        cached = _engine_cache.get(user_id)
 
         if cached and cached["mtime"] == mtime:
             return cached["local"], cached["global"]
 
         # 캐시 miss 또는 인덱스 갱신 감지 (index/update 실행 후 mtime 변경): 새로 빌드
-        print(f"[ENGINE] 빌드 시작: {gmail_id}")
+        print(f"[ENGINE] 빌드 시작: {user_id}")
         local_engine,  local_model  = _build_local_engine(output_dir, graphrag_root)
         global_engine, global_model = _build_global_engine(output_dir, graphrag_root)
-        _engine_cache[gmail_id] = {
+        _engine_cache[user_id] = {
             "local":         local_engine,
             "global":        global_engine,
             "local_model":   local_model,
             "global_model":  global_model,
             "mtime":         mtime,
         }
-        print(f"[ENGINE] 빌드 완료: {gmail_id}")
+        print(f"[ENGINE] 빌드 완료: {user_id}")
         return local_engine, global_engine
 
 
-def get_and_reset_usage(gmail_id: str, method: str) -> dict:
+def get_and_reset_usage(user_id: str, method: str) -> dict:
     """검색 완료 후 해당 엔진의 누적 토큰 사용량을 반환하고 초기화한다."""
     with _cache_lock:
-        cached = _engine_cache.get(gmail_id)
+        cached = _engine_cache.get(user_id)
         if not cached:
             return {"model_name": None, "input_tokens": 0, "output_tokens": 0}
         key = "local_model" if method == "local" else "global_model"
