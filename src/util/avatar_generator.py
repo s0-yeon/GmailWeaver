@@ -448,11 +448,11 @@ def generate_avatar_image_bytes(name: str, relationship_hint: str = "", seed_key
     return _composite_on_color(raw_bytes, attrs["bg_rgb"])
 
 
-def _load_relationship_hints(gmail_id: str) -> dict:
+def _load_relationship_hints(user_id: str) -> dict:
     """person.description에서 이메일별 '관계' 한 줄만 뽑아 캐시 없이 즉시 조회한다."""
     hints = {}
     try:
-        for row in get_person_descriptions(gmail_id):
+        for row in get_person_descriptions(user_id):
             email = (row.get("person_account_id") or "").strip().lower()
             hint = _extract_relationship_hint(row.get("description") or "")
             if email and hint:
@@ -484,12 +484,12 @@ def generate_self_avatar(paths, name: str) -> str:
         return cached
 
     os.makedirs(paths.AVATAR_IMAGES_DIR, exist_ok=True)
-    image_bytes = generate_avatar_image_bytes(name or "나", "", paths.GMAIL_ID + ":self")
-    filename = _avatar_filename(_SELF_AVATAR_KEY + ":" + paths.GMAIL_ID)
+    image_bytes = generate_avatar_image_bytes(name or "나", "", paths.USER_ID + ":self")
+    filename = _avatar_filename(_SELF_AVATAR_KEY + ":" + paths.USER_ID)
     filepath = os.path.join(paths.AVATAR_IMAGES_DIR, filename)
     with open(filepath, "wb") as f:
         f.write(image_bytes)
-    url = f"/person-avatar-image/{paths.GMAIL_ID}/{filename}"
+    url = f"/person-avatar-image/{paths.USER_ID}/{filename}"
     with _map_lock:
         avatar_map[_SELF_AVATAR_KEY] = url
         _save_avatar_map(paths, avatar_map)
@@ -502,7 +502,7 @@ def generate_person_avatars_batch(paths, people: list) -> dict:
     이미 캐시된 사람은 건너뛰고, 새로운 발신자만 처리한다. 발신자별로 먼저 LLM에게
     실제 존재하는 기업/서비스인지 물어보고, 기업이면 실제 로고 이미지를, 아니면(개인)
     GPT 이미지 API로 생성한 일러스트 아바타를 사용한다.
-    반환: { email_lower: "/person-avatar-image/<gmail_id>/<filename>" } (요청한 사람 전체에 대한 매핑)
+    반환: { email_lower: "/person-avatar-image/<user_id>/<filename>" } (요청한 사람 전체에 대한 매핑)
     """
     os.makedirs(paths.AVATAR_IMAGES_DIR, exist_ok=True)
     avatar_map = _load_avatar_map(paths)
@@ -519,7 +519,7 @@ def generate_person_avatars_batch(paths, people: list) -> dict:
             domain = email.split("@", 1)[1] if "@" in email else ""
             targets.append((email, name, domain))
 
-    relationship_hints = _load_relationship_hints(paths.GMAIL_ID) if targets else {}
+    relationship_hints = _load_relationship_hints(paths.USER_ID) if targets else {}
 
     def _generate_one(email, name, domain):
         try:
@@ -533,7 +533,7 @@ def generate_person_avatars_batch(paths, people: list) -> dict:
             filepath = os.path.join(paths.AVATAR_IMAGES_DIR, filename)
             with open(filepath, "wb") as f:
                 f.write(image_bytes)
-            url = f"/person-avatar-image/{paths.GMAIL_ID}/{filename}"
+            url = f"/person-avatar-image/{paths.USER_ID}/{filename}"
             with _map_lock:
                 avatar_map[email] = url
                 _save_avatar_map(paths, avatar_map)

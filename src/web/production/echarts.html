@@ -432,13 +432,13 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', async () => {
-        const gmailId = sessionStorage.getItem('gw_gmail_id');
-        if (!gmailId) return;
+        const userId = sessionStorage.getItem('gw_user_id');
+        if (!userId) return;
         try {
           const res = await fetch('/mail-stats', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ gmail_id: gmailId })
+            body: JSON.stringify({ user_id: userId })
           });
           if (!res.ok) return;
           const json = await res.json();

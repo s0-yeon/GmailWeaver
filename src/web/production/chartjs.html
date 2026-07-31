@@ -391,9 +391,9 @@
     </div>
     <script>
       document.addEventListener('DOMContentLoaded', async () => {
-        const gmailId = sessionStorage.getItem('gw_gmail_id');
-        if (!gmailId) {
-          console.warn('[mail-stats] gw_gmail_id가 sessionStorage에 없습니다.');
+        const userId = sessionStorage.getItem('gw_user_id');
+        if (!userId) {
+          console.warn('[mail-stats] gw_user_id가 sessionStorage에 없습니다.');
           return;
         }
 
@@ -401,7 +401,7 @@
           const res = await fetch('/mail-stats', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ gmail_id: gmailId })
+            body: JSON.stringify({ user_id: userId })
           });
 
           if (!res.ok) {

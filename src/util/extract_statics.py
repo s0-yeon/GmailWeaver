@@ -193,7 +193,7 @@ def _save_mail_contact_stats(paths, mode: str = "rewrite"):
     sent_to_count = rel_df[rel_df['description'].str.contains('SENT_TO')].groupby('target').size()
 
     all_contacts = set(sent_by_count.index) | set(sent_to_count.index)
-    all_contacts.discard(paths.GMAIL_ID.upper())   # 본인 제외
+    all_contacts.discard(paths.USER_ID.upper())   # 본인 제외
 
     # 이름 맵: entities.parquet Person 엔티티에서 파싱 (대문자 키)
     name_map = {}
@@ -276,7 +276,7 @@ def _save_mail_keyword_stats(paths, mode: str = "rewrite"):
         receiver_match = re.search(r'^수신인:\s*(.+)$', text, re.MULTILINE)
         receiver = parse_email(receiver_match.group(1)) if receiver_match else None
 
-        person = receiver if sender == paths.GMAIL_ID else sender
+        person = receiver if sender == paths.USER_ID else sender
 
         body_match = re.search(r'\[메일 본문\]\s*\n(.*?)(?:\n=+|\Z)', text, re.DOTALL)
         body = body_match.group(1).strip() if body_match else ''
@@ -392,7 +392,7 @@ def generate_person_descriptions(paths) -> dict:
     from concurrent.futures import ThreadPoolExecutor, as_completed
 
     descriptions: dict[str, str] = {}
-    my_email = paths.GMAIL_ID.lower()
+    my_email = paths.USER_ID.lower()
 
     # 프롬프트 데이터 수집
     person_prompts = []

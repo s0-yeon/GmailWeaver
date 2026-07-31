@@ -21,7 +21,7 @@ def run_graphrag_query(message: str, original_message: str, paths, method: str =
         try:
             async def _search(): # 실제 검색 로직 담은 함수
                 output_dir = os.path.join(paths.GRAPHRAG_ROOT, "output")
-                local_engine, global_engine = get_engines(paths.GMAIL_ID, output_dir, paths.GRAPHRAG_ROOT) # 유저별 캐싱된 local + global 엔진 둘 다 가져오기 (캐시에서 재사용)
+                local_engine, global_engine = get_engines(paths.USER_ID, output_dir, paths.GRAPHRAG_ROOT) # 유저별 캐싱된 local + global 엔진 둘 다 가져오기 (캐시에서 재사용)
                 engine = local_engine if method == "local" else global_engine
                 result = await engine.search(message) # cli subprocess 대신 엔진 객체 함수 호출 (subprocess 생성이나 종료가 없어서 속도 빨라짐)
                 answer = result.response # 검색 결과 객체에서 답변 텍스트 추출
@@ -75,9 +75,9 @@ def run_graphrag_query(message: str, original_message: str, paths, method: str =
     print(f"[ENGINE] 답변: {answer}")
     print(f"[ENGINE] source_ids: {source_ids}")
     try:
-        usage = get_and_reset_usage(paths.GMAIL_ID, method)
+        usage = get_and_reset_usage(paths.USER_ID, method)
         save_query_to_db(
-            paths.GMAIL_ID, original_message, elapsed, method,
+            paths.USER_ID, original_message, elapsed, method,
             model_name=usage["model_name"],
             input_tokens=usage["input_tokens"],
             output_tokens=usage["output_tokens"],

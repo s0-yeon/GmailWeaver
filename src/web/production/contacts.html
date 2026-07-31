@@ -844,8 +844,8 @@
                 </div>
 
           </div>
-          <a href="contacts.html" class="gw-tl active">연락처</a>
-          <a href="calendar.html" class="gw-tl">캘린더</a>
+          <a href="imap-collect.html" class="gw-tl">메일 수집</a>
+          <a href="graph-viz.html" class="gw-tl">지식그래프</a>
         </nav>
         <nav class="nav navbar-nav ms-auto">
           <ul class="navbar-right d-flex align-items-center gap-3 pe-3">
@@ -1064,11 +1064,11 @@ const FLASK_URL = localStorage.getItem('gw_flask_url') || window.location.origin
 let contacts = JSON.parse(localStorage.getItem('olive_contacts') || '[]');
 
 async function callContactsProxy(action, extra = {}) {
-    const gmail_id = localStorage.getItem('gw_gmail_id') || '';
+    const user_id = localStorage.getItem('gw_user_id') || '';
     const res = await fetch(`${FLASK_URL}/contacts-proxy`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, gmail_id, ...extra }),
+        body: JSON.stringify({ action, user_id, ...extra }),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return res.json();
@@ -1542,8 +1542,8 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
     ? decodeURIComponent(nameParam)
     : (sessionStorage.getItem('gw_user_name') || '-');
   if (nameParam) sessionStorage.setItem('gw_user_name', decodeURIComponent(nameParam));
-  const gmailIdParam = params.get('gmail_id');
-  if (gmailIdParam) localStorage.setItem('gw_gmail_id', decodeURIComponent(gmailIdParam));
+  const userIdParam = params.get('user_id');
+  if (userIdParam) localStorage.setItem('gw_user_id', decodeURIComponent(userIdParam));
       const flaskUrlParam = params.get('flask_url');
       if (flaskUrlParam) localStorage.setItem('gw_flask_url', decodeURIComponent(flaskUrlParam));
 

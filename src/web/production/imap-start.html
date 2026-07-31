@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GmailWeaver로 이동 중...</title>
+  </head>
+  <body>
+    <p>홈 화면으로 이동 중...</p>
+    <script>
+      // 이 페이지를 서빙한 주소를 그대로 백엔드(Flask) 주소로 저장한다.
+      // 애드온 없이 브라우저로 직접 들어오는 사용자를 위한 진입점.
+      localStorage.setItem('gw_flask_url', location.origin);
+      location.replace('/dashboard/');
+    </script>
+  </body>
+</html>
