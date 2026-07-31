@@ -16,9 +16,6 @@ import zlib
 import traceback
 import urllib.parse     # import missing 해결
 import imaplib
-import email
-from email.header import decode_header
-from email.utils import getaddresses, parsedate_to_datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from util.date_query import run_date_range_query
@@ -59,6 +56,7 @@ from util.avatar_generator import (
 )
 
 from util.sse_broadcaster import subscribe, unsubscribe
+from util.imap_connect import _imap_parse_list_line, _imap_fetch_content
 
 from config.db import get_db_connection
 
@@ -347,339 +345,11 @@ def _save_attachment_from_base64(file_info: dict, save_dir: str) -> tuple[str, s
 
     return saved_path, original_name
 
-# ============================================================
-# IMAP 수집 유틸
-# 다른 메일 서비스(네이버/다음/Outlook 등)에서 IMAP으로 메일을 가져와
-# Apps Script(gmail.js _buildMessageText)와 동일한 포맷의 메일 블록 텍스트로 변환한다.
-# 변환된 텍스트/첨부파일은 기존 /upload 파이프라인(중복 체크, GraphRAG 인덱싱)에 그대로 넘긴다.
-# ============================================================
-IMAP_SUPPORTED_ATT_EXTS = {".pdf", ".docx", ".hwp", ".pptx", ".xlsx", ".csv", ".txt"}
-IMAP_MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024  # 10MB
 
-# IMAP 폴더명(RFC 3501 Modified UTF-7)에 한글 등 비-ASCII 문자가 있을 때 인코딩
-def _imap_utf7_encode_folder(folder: str) -> str:
-    result = bytearray()
-    i, n = 0, len(folder)
-    while i < n:
-        ch = folder[i]
-        if ch == "&":
-            result.extend(b"&-")
-            i += 1
-            continue
-        if 0x20 <= ord(ch) <= 0x7e:
-            result.append(ord(ch))
-            i += 1
-            continue
-        j = i
-        while j < n and not (0x20 <= ord(folder[j]) <= 0x7e):
-            j += 1
-        chunk = folder[i:j]
-        b64 = base64.b64encode(chunk.encode("utf-16-be")).decode("ascii")
-        b64 = b64.rstrip("=").replace("/", ",")
-        result.extend(b"&" + b64.encode("ascii") + b"-")
-        i = j
-    return result.decode("ascii")
 
-# IMAP 폴더명(RFC 3501 Modified UTF-7) 디코딩 - 위 인코딩의 역변환
-def _imap_utf7_decode_folder(name: str) -> str:
-    result = []
-    i, n = 0, len(name)
-    while i < n:
-        ch = name[i]
-        if ch != "&":
-            result.append(ch)
-            i += 1
-            continue
-        j = name.find("-", i)
-        if j == -1:
-            j = n
-        b64 = name[i + 1:j]
-        if b64 == "":
-            result.append("&")
-        else:
-            b64 = b64.replace(",", "/")
-            b64 += "=" * ((-len(b64)) % 4)
-            try:
-                result.append(base64.b64decode(b64).decode("utf-16-be"))
-            except Exception:
-                result.append(name[i:j + 1])
-        i = j + 1
-    return "".join(result)
 
-# IMAP LIST 응답 한 줄에서 실제 폴더명을 추출 ("(플래그) "구분자" 폴더명" 형식)
-def _imap_parse_list_line(line: bytes):
-    try:
-        text = line.decode("utf-8", errors="replace").strip()
-    except Exception:
-        return None
 
-    m = re.match(r'^\(([^)]*)\)\s+(?:"([^"]*)"|NIL)\s+(.+)$', text)
-    if not m:
-        return None
 
-    flags = m.group(1)
-    if "\\Noselect" in flags:
-        return None  # 선택 불가능한(자식만 있는) 폴더는 제외
-
-    raw_name = m.group(3).strip()
-    if raw_name.startswith('"') and raw_name.endswith('"'):
-        raw_name = raw_name[1:-1]
-
-    return _imap_utf7_decode_folder(raw_name)
-
-# 메일 헤더(Subject 등) MIME 인코딩 디코딩
-def _imap_decode_header_str(raw) -> str:
-    if not raw:
-        return ""
-    decoded = ""
-    for text, enc in decode_header(raw):
-        if isinstance(text, bytes):
-            try:
-                decoded += text.decode(enc or "utf-8", errors="replace")
-            except (LookupError, UnicodeDecodeError):
-                decoded += text.decode("utf-8", errors="replace")
-        else:
-            decoded += text
-    return decoded.strip()
-
-# 발신/수신인 "이름 <계정>" 포맷 (gmail.js _formatPerson과 동일한 규칙)
-def _imap_format_person(name: str, addr: str) -> str:
-    name = (name or "").strip()
-    addr = (addr or "").strip().lower()
-    if not addr:
-        return "없음"
-    if name and name.lower() != addr:
-        return f"{name} <{addr}>"
-    return f"<{addr}>"
-
-def _imap_parse_person_list(raw_header) -> list[tuple[str, str]]:
-    if not raw_header:
-        return []
-    people = []
-    for name, addr in getaddresses([raw_header]):
-        addr = (addr or "").strip()
-        if addr:
-            people.append((_imap_decode_header_str(name), addr))
-    return people
-
-# 본문 추출: text/plain 우선, 없으면 text/html에서 태그 제거
-def _imap_extract_body(msg) -> str:
-    body = ""
-    if msg.is_multipart():
-        for part in msg.walk():
-            disp = str(part.get("Content-Disposition") or "")
-            if part.get_content_type() == "text/plain" and "attachment" not in disp.lower():
-                charset = part.get_content_charset() or "utf-8"
-                payload = part.get_payload(decode=True) or b""
-                try:
-                    body = payload.decode(charset, errors="replace")
-                except (LookupError, UnicodeDecodeError):
-                    body = payload.decode("utf-8", errors="replace")
-                break
-        if not body:
-            for part in msg.walk():
-                disp = str(part.get("Content-Disposition") or "")
-                if part.get_content_type() == "text/html" and "attachment" not in disp.lower():
-                    charset = part.get_content_charset() or "utf-8"
-                    payload = part.get_payload(decode=True) or b""
-                    try:
-                        html = payload.decode(charset, errors="replace")
-                    except (LookupError, UnicodeDecodeError):
-                        html = payload.decode("utf-8", errors="replace")
-                    body = re.sub(r"<[^>]+>", " ", html)
-                    break
-    else:
-        charset = msg.get_content_charset() or "utf-8"
-        payload = msg.get_payload(decode=True)
-        if payload:
-            try:
-                body = payload.decode(charset, errors="replace")
-            except (LookupError, UnicodeDecodeError):
-                body = payload.decode("utf-8", errors="replace")
-
-    body = body.replace("\r\n", "\n")
-    body = re.sub(r"[ \t]+", " ", body)
-    body = re.sub(r"\n{3,}", "\n\n", body)
-    return body.strip()
-
-# 첨부파일 메타정보 + (지원되는 파일만) 원본 바이트 수집
-def _imap_collect_attachments(msg) -> tuple[list[dict], list[dict]]:
-    infos, payloads = [], []
-    if not msg.is_multipart():
-        return infos, payloads
-
-    idx = 0
-    for part in msg.walk():
-        disp = str(part.get("Content-Disposition") or "")
-        if "attachment" not in disp.lower():
-            continue
-        idx += 1
-        filename = _imap_decode_header_str(part.get_filename()) or f"attachment_{idx}"
-        mime = part.get_content_type() or "application/octet-stream"
-        data = part.get_payload(decode=True) or b""
-        size = len(data)
-        ext = os.path.splitext(filename)[-1].lower()
-        supported = ext in IMAP_SUPPORTED_ATT_EXTS
-
-        if not supported:
-            status = "제외: 형식 미지원"
-        elif size > IMAP_MAX_ATTACHMENT_SIZE:
-            status = "제외: 용량 초과"
-        else:
-            status = "포함"
-
-        infos.append({"name": filename, "mime": mime, "size": size, "status": status})
-        if supported and size <= IMAP_MAX_ATTACHMENT_SIZE:
-            payloads.append({"name": filename, "mime": mime, "data": data})
-
-    return infos, payloads
-
-# 메일 1건을 gmail.js _buildMessageText와 동일한 포맷의 텍스트 블록으로 변환
-def _imap_build_block(mail_index: int, mail_id: str, msg, folder: str, my_email: str) -> tuple[str, list[dict]]:
-    subject = _imap_decode_header_str(msg.get("Subject")) or "(제목 없음)"
-
-    from_list = _imap_parse_person_list(msg.get("From"))
-    from_name, from_addr = from_list[0] if from_list else ("", "")
-    direction = "발신" if from_addr.lower() == my_email.strip().lower() else "수신"
-
-    to_list = _imap_parse_person_list(msg.get("To"))
-    cc_list = _imap_parse_person_list(msg.get("Cc"))
-
-    try:
-        dt = parsedate_to_datetime(msg.get("Date"))
-        if dt.tzinfo is not None:
-            dt = dt.astimezone().replace(tzinfo=None)
-        date_str = dt.strftime("%Y-%m-%d %H:%M:%S")
-    except Exception:
-        date_str = ""
-
-    att_infos, att_payloads = _imap_collect_attachments(msg)
-    if att_infos:
-        attachment_info = "\n".join(
-            f"- {a['name']} ({a['size']/1024:.1f} KB) [{a['status']}]" for a in att_infos
-        )
-    else:
-        attachment_info = "없음"
-
-    body = _imap_extract_body(msg)
-
-    block_text = "\n".join([
-        MAIL_BLOCK_SEP,
-        f"[메일 {mail_index}]",
-        "",
-        f"ID: {mail_id}",
-        f"제목: {subject}",
-        f"구분: {direction}",
-        f"날짜: {date_str}",
-        "",
-        f"발신인: {_imap_format_person(from_name, from_addr)}",
-        "수신인: " + (", ".join(_imap_format_person(n, a) for n, a in to_list) if to_list else "없음"),
-        "참조(CC): " + (", ".join(_imap_format_person(n, a) for n, a in cc_list) if cc_list else "없음"),
-        "",
-        "[라벨 정보]",
-        folder,
-        "",
-        "[첨부파일 정보]",
-        attachment_info,
-        "",
-        "[메일 본문]",
-        body,
-        MAIL_BLOCK_SEP,
-    ])
-
-    attachments_payload = [
-        {
-            "mail_id": mail_id,
-            "name": a["name"],
-            "mime": a["mime"],
-            "data_base64": base64.b64encode(a["data"]).decode("ascii"),
-        }
-        for a in att_payloads
-    ]
-
-    return block_text, attachments_payload
-
-# IMAP 서버에 접속해서 선택한 폴더들의 메일을 가져와 (메일 블록 텍스트, 첨부파일 payload) 반환
-def _imap_fetch_content(host: str, port: int, use_ssl: bool, user: str, password: str,
-                         folders: list[str], limit: int, my_email: str) -> tuple[str, list[dict]]:
-    conn = imaplib.IMAP4_SSL(host, port) if use_ssl else imaplib.IMAP4(host, port)
-
-    try:
-        conn.login(user, password)
-
-        all_blocks: list[str] = []
-        all_attachments: list[dict] = []
-        mail_index = 0
-
-        for folder in folders:
-            encoded_folder = _imap_utf7_encode_folder(folder)
-            status, _resp = conn.select(f'"{encoded_folder}"', readonly=True)
-            if status != "OK":
-                status, _resp = conn.select(encoded_folder, readonly=True)
-            if status != "OK":
-                print(f"[IMAP] 폴더 선택 실패, 스킵: {folder}")
-                continue
-
-            # 시퀀스 번호(search/fetch) 대신 UID 기반(uid search/uid fetch) 사용.
-            # 일부 서버(iCloud 등)의 FETCH 응답 형식과 imaplib의 시퀀스 기반 파싱 조합에서
-            # 내부 파싱 오류('int' object has no attribute 'decode')가 나는 경우가 있어 회피.
-            status, data = conn.uid("search", None, "ALL")
-            if status != "OK" or not data or not data[0]:
-                continue
-
-            uids = data[0].split()
-            uids.reverse()  # 최신 메일부터
-            if limit and limit > 0:
-                uids = uids[:limit]
-
-            for uid in uids:
-                uid_str = uid.decode(errors="ignore") if isinstance(uid, bytes) else str(uid)
-                try:
-                    # RFC822는 \Seen 플래그를 암묵적으로 세팅하는데, 읽기 전용(readonly=True)으로 연
-                    # 폴더에서는 플래그 변경이 금지되어 있어 일부 서버(iCloud 등)가 본문 없이 UID만
-                    # 돌려주는 경우가 있다. BODY.PEEK[]는 동일하게 전체 메일을 가져오되 플래그를 건드리지 않음.
-                    status, msg_data = conn.uid("fetch", uid_str, "(BODY.PEEK[])")
-                    if status != "OK" or not msg_data:
-                        continue
-
-                    # 응답 항목 중 실제 (응답줄, 본문 literal) 튜플만 찾는다.
-                    # 본문이 NIL이거나 특이 응답이면 항목이 튜플이 아니라 순수 bytes만 오는 경우가 있어서,
-                    # msg_data[0]이 무조건 튜플이라고 가정하면 안 됨(서버/메일에 따라 다름).
-                    raw_email = None
-                    for part in msg_data:
-                        if isinstance(part, tuple) and len(part) >= 2 and isinstance(part[1], (bytes, bytearray)):
-                            raw_email = part[1]
-                            break
-
-                    if raw_email is None:
-                        print(f"[IMAP] RFC822 본문 없음, 스킵: uid={uid_str}")
-                        continue
-
-                    msg = email.message_from_bytes(raw_email)
-                except Exception as e:
-                    print(f"[IMAP] 메일 파싱 오류, 스킵: uid={uid} / {e}")
-                    traceback.print_exc()
-                    continue
-
-                message_id = (msg.get("Message-ID") or "").strip().strip("<>")
-                if not message_id:
-                    message_id = f"{folder}-{uid_str}"
-
-                mail_index += 1
-                block_text, attachments_payload = _imap_build_block(mail_index, message_id, msg, folder, my_email)
-                all_blocks.append(block_text)
-                all_attachments.extend(attachments_payload)
-
-        content = "\n\n".join(all_blocks).strip()
-        if content:
-            content += "\n"
-        return content, all_attachments
-
-    finally:
-        try:
-            conn.logout()
-        except Exception:
-            pass
 
 # 메일 블록에서 'ID: ...' 값을 추출
 def _extract_mail_id_from_block(block: str) -> str | None:
@@ -1636,12 +1306,7 @@ def upload():
         "failed_attachments": failed_attachments,
     })
 
-# ============================================================
-# 엔드포인트: POST /imap-list-folders
-# 호스트/계정/비밀번호로 실제 IMAP 서버에 로그인해서 그 계정에 존재하는
-# 폴더 목록을 그대로 가져온다. 서비스마다 폴더명이 달라서(Gmail의 "[Gmail]/보낸편지함" 등)
-# 하드코딩 대신 실시간 조회로 대체하기 위한 용도.
-# ============================================================
+# 호스트/계정/비밀번호 받아서 로그인하여 실제 서버의 폴더 목록 반환
 @app.route("/imap-list-folders", methods=["POST"])
 def imap_list_folders():
     data = request.json or {}
@@ -1693,11 +1358,7 @@ def imap_list_folders():
             except Exception:
                 pass
 
-# ============================================================
-# 엔드포인트: POST /imap-collect
-# IMAP으로 외부 메일 서버(네이버/다음/Outlook 등)에 접속해 메일을 가져온 뒤
-# 기존 /upload 파이프라인(중복 체크, mail_latest.txt 저장, GraphRAG 인덱싱)에 그대로 위임한다.
-# ============================================================
+# 메일 수집 요청
 @app.route("/imap-collect", methods=["POST"])
 def imap_collect():
     data = request.json or {}
@@ -1769,10 +1430,7 @@ def imap_collect():
 
     return body, status_code
 
-# 엔드포인트: GET /accounts
-# user_data/ 밑의 계정 폴더들을 훑어서 지금까지 인덱싱된 계정 목록을 반환한다.
-# 한 사람이 여러 계정(Gmail/네이버/다음 등)을 수집했을 때, 그래프 화면 등에서
-# 계정을 선택해 전환할 수 있게 하기 위한 용도.
+# 지금까지 인덱싱된 유저 반환
 @app.route("/accounts", methods=["GET"])
 def list_accounts():
     user_data_dir = os.path.join(BASE_DIR, "user_data")
@@ -1873,10 +1531,7 @@ def init_storage():
 <p>설정 중... 자동으로 이동합니다.</p>
 </body></html>""", 200, {{'Content-Type': 'text/html; charset=utf-8'}}
 
-# 엔드포인트: GET /imap-start
-# 애드온 없이 브라우저로 바로 들어오는 IMAP 사용자용 진입점.
-# vite 빌드 대상이 아닌 정적 파일(web/production/imap-start.html)을 그대로 서빙하며,
-# 그 파일이 flask_url을 저장하고 /dashboard/imap-collect.html로 리다이렉트한다.
+# 정적 파일을 vite 빌드 없이 소스에서 직접 서빙하는 라우트. 브라우저가 들어오면 flask+url을 localStorage에 저장 및 홈화면으로 리다이렉트
 @app.route('/imap-start')
 def imap_start():
     return send_from_directory(
