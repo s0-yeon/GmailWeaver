@@ -33,3 +33,25 @@ node_modules/
 .venv/
 __pycache__/
 *.pyc
+
+# 파인튜닝/모델 관련 (용량이 크고 이 브랜치의 목적과 무관 — Flask 앱 코드만 추적)
+merged_model/
+merged_model_v2/
+lora_adapter/
+lora_adapter_v2/
+*.jsonl
+merge_adapter.py
+merge_adapter_v2.py
+merge_datasets.py
+build_finetune_dataset.py
+finetune_local.py
+generate_qa_data.py
+unsloth_compiled_cache/
+src.bak/
+run.log
+test.py
+test_inference.py
+test_inference2.py
+mailgrapher-llama-venv/
+mailgrapher-server-venv/
+vllm-venv/

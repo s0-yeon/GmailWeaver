@@ -253,11 +253,11 @@ def run_date_range_query(message: str, paths) -> str:
         )
     context = "\n\n".join(lines)
 
-    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
+    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"), base_url="http://localhost:8002/v1")
 
     # 이메일 목록을 context로 넘겨서 LLM이 자연어로 답변 생성
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="mailgrapher-llama-v2",
         messages=[
             {
                 "role": "system",

@@ -43,10 +43,10 @@ def _summarize_attachment_text(text: str,paths, filename: str) -> str:
     with open(prompt_path, "r", encoding="utf-8") as f:
         prompt = f.read().strip()
 
-    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
+    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"), base_url="http://localhost:8002/v1")
     try:
         response = client.chat.completions.create(
-            model="gpt-5.4-mini",
+            model="mailgrapher-llama-v2",
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": f"파일명: {filename}\n\n{text}"}

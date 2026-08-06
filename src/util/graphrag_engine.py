@@ -55,7 +55,7 @@ class _ModelResponse:
 # OpenAI API를 직접 호출하도록 만든 커스텀 클래스
 class DirectOpenAIChatModel(ChatModel):
     def __init__(self, api_key: str, model: str):
-        self._client = openai.AsyncOpenAI(api_key=api_key) # 비동기 OpenAI 클라이언트
+        self._client = openai.AsyncOpenAI(api_key=api_key, base_url="http://localhost:8002/v1") # 비동기 OpenAI 클라이언트
         self._model = model # 사용할 모델명
         self._input_tokens = 0
         self._output_tokens = 0
@@ -122,7 +122,7 @@ class DirectOpenAIChatModel(ChatModel):
 # OpenAI 임베딩 API를 직접 호출하도록 만든 커스텀 클래스
 class DirectOpenAIEmbedder(EmbeddingModel):
     def __init__(self, api_key: str, model: str):
-        self._client = openai.OpenAI(api_key=api_key) # 동기 OpenAI 클라이언트
+        self._client = openai.OpenAI(api_key=api_key, base_url="http://localhost:8001/v1") # 동기 OpenAI 클라이언트
         self._model = model # 사용할 임베딩 모델명
 
     def embed(self, text: str, **kwargs) -> list[float]: # 텍스트 한 건을 받아서 float 벡터로 변환해서 반환함
@@ -147,7 +147,7 @@ def _build_local_engine(output_dir: str, graphrag_root: str) -> tuple[LocalSearc
     #setting.yaml에서 설정 가져옴
     config = load_config(Path(graphrag_root))
 
-    # settings.yaml의 models.default_chat_model (gpt-5.4-mini)
+    # settings.yaml의 models.default_chat_model (gpt-4o-mini)
     llm_config = config.models["default_chat_model"]
     # settings.yaml의 models.default_embedding_model (text=embedding-3-small)
     emb_config = config.models["default_embedding_model"]
@@ -157,7 +157,7 @@ def _build_local_engine(output_dir: str, graphrag_root: str) -> tuple[LocalSearc
     # LLM: 최종 답변 생성용
     model = DirectOpenAIChatModel(
         api_key=os.environ["GRAPHRAG_API_KEY"],
-        model=llm_config.model  # gpt-5.4-mini
+        model=llm_config.model  # gpt-4o-mini
     )
     text_embedder = DirectOpenAIEmbedder(
         api_key=os.environ["GRAPHRAG_API_KEY"],

@@ -4,10 +4,10 @@ import shutil
 
 _MAX_MAILS_CONFIG = {
     "ddyr1554@gmail.com": 200,
-    "inhist44@gmail.com": 1000,
+    "inhist44@gmail.com": 100,
     "cjiyou1090@gmail.com": 1500,
     "csi10186@gmail.com": 500,
-    "03yeah03@gmail.com": 100,
+    "03yeah03@gmail.com": 50,
 }
 
 def _gmail_to_dir_name(gmail_id: str) -> str:

@@ -139,6 +139,7 @@ def save_person_stats_to_db(paths, update_date=None):
 
 _MODEL_COST_PER_1M = {
     "gpt-4o-mini": {"input": 0.150, "output": 0.600},
+    "mailgrapher-llama": {"input": 0.0, "output": 0.0},
     "gpt-4o":      {"input": 2.50,  "output": 10.00},
 }
 

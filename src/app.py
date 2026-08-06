@@ -134,10 +134,10 @@ def _run_graphrag(message, resMethod, raw_message, paths, resType):
 
 # 텍스트 → 캘린더 JSON 변환
 def _convert_to_calendar_json(text):
-    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
+    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"), base_url="http://localhost:8002/v1")
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="mailgrapher-llama-v2",
             response_format={"type": "json_object"},
             messages=[
                 {
@@ -173,10 +173,10 @@ def _summarize_attachment(text: str, filename: str) -> str:
     with open(prompt_path, "r", encoding="utf-8") as f:
         prompt = f.read().strip()
 
-    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
+    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"), base_url="http://localhost:8002/v1")
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="mailgrapher-llama-v2",
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": f"파일명: {filename}\n\n{text}"}
@@ -788,10 +788,10 @@ def _classify_query_method(message: str) -> str:
 
                 질문: {message}"""
 
-    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
+    client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"), base_url="http://localhost:8002/v1")
 
     res = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="mailgrapher-llama-v2",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=10,
         temperature=0
@@ -1572,9 +1572,9 @@ def label_query():
     ]
 
     try:
-        client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"))
+        client = openai.OpenAI(api_key=os.environ.get("GRAPHRAG_API_KEY"), base_url="http://localhost:8002/v1")
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="mailgrapher-llama-v2",
             messages=[
                 {"role": "system", "content": system_content},
                 {"role": "user",   "content": user_input}

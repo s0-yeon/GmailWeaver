@@ -25,6 +25,36 @@ def run_graphrag_query(message: str, original_message: str, paths, method: str =
                 engine = local_engine if method == "local" else global_engine
                 result = await engine.search(message) # cli subprocess 대신 엔진 객체 함수 호출 (subprocess 생성이나 종료가 없어서 속도 빨라짐)
                 answer = result.response # 검색 결과 객체에서 답변 텍스트 추출
+                # ---디버그: context_data 구조 확인용 (나중에 지울 것)---
+                try:
+                    cd = result.context_data
+                    print(f"[DEBUG] context_data keys: {list(cd.keys()) if isinstance(cd, dict) else type(cd)}")
+                    if isinstance(cd, dict):
+                        for k, v in cd.items():
+                            try:
+                                print(f"[DEBUG] {k} columns: {list(v.columns)}")
+                                print(f"[DEBUG] {k} head:\n{v.head(3)}")
+                            except Exception as e2:
+                                print(f"[DEBUG] {k} (표 아님): {str(v)[:300]}")
+                except Exception as e3:
+                    print(f"[DEBUG] context_data 확인 실패: {e3}")
+                # ---디버그 끝---
+
+                # ---디버그: context_data 구조 확인용 (나중에 지울 것)---
+                try:
+                    cd = result.context_data
+                    print(f"[DEBUG] context_data keys: {list(cd.keys()) if isinstance(cd, dict) else type(cd)}")
+                    if isinstance(cd, dict):
+                        for k, v in cd.items():
+                            try:
+                                print(f"[DEBUG] {k} columns: {list(v.columns)}")
+                                print(f"[DEBUG] {k} head:\n{v.head(3)}")
+                            except Exception as e2:
+                                print(f"[DEBUG] {k} (표 아님): {str(v)[:300]}")
+                except Exception as e3:
+                    print(f"[DEBUG] context_data 확인 실패: {e3}")
+                # ---디버그 끝---
+
                 answer = re.sub(r'\[Data:.*?\]|\[데이터:.*?\]', '', answer) # graphrag가 답변에 삽입하는 출처 태그 제거
                 answer = re.sub(r'\*+|#+', '', answer) # 마크다운 강조 기호 제거 (**, ## 등)
                 answer = answer.strip() # 앞뒤 공백 제거
@@ -32,7 +62,7 @@ def run_graphrag_query(message: str, original_message: str, paths, method: str =
                 # 1차: 답변 텍스트에서 ID 추출
                 found = re.findall(r'ID:\s*([0-9a-fA-F]{16})', answer)
 
-                # 2차: LLM이 답변에 ID를 직접 안 썼을 때 → context_text(LLM에 넘긴 원본 청크)에서 추출
+                # 2차: LLM이 답변에 ID를 직접 안 썼을 때(or 답변 자체가 비었을 때) → context_text(LLM에 넘긴 원본 청크)에서 추출
                 if not found:
                     ctx = result.context_text
                     if isinstance(ctx, list):
@@ -40,13 +70,23 @@ def run_graphrag_query(message: str, original_message: str, paths, method: str =
                     if isinstance(ctx, str):
                         found = re.findall(r'ID:\s*([0-9a-fA-F]{16})', ctx)
 
-                # 순서 유지하면서 중복 제거
+                # 순서 유지하면서 중복 제거 (상위 10개까지만)
                 seen = set()
                 source_ids = []
                 for id in found:
                     if id not in seen:
                         seen.add(id)
                         source_ids.append(id)
+                    if len(source_ids) >= 10:
+                        break
+
+                if not answer:
+                    # GraphRAG가 LLM 에러(컨텍스트 초과 등)를 삼키고 빈 응답을 반환한 경우
+                    # 검색(관련 메일 찾기) 자체는 성공했을 수 있으므로 source_ids는 유지
+                    if source_ids:
+                        answer = "요약 답변을 만들지 못했지만, 관련 있을 것으로 보이는 메일은 아래와 같이 찾았습니다."
+                    else:
+                        answer = "죄송합니다, 이번 질문에 대한 답변을 만들지 못했습니다. 질문을 더 구체적으로 다시 시도해 주세요."
 
                 return answer, source_ids # 답변 텍스트와 근거 메일 ID 목록을 튜플로 반환
 

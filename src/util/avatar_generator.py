@@ -14,7 +14,8 @@ from util.database.db_reader import get_person_descriptions
 
 load_dotenv("src/parquet/.env")
 
-client = OpenAI(api_key=os.getenv("GRAPHRAG_API_KEY"))
+text_client = OpenAI(api_key=os.getenv("GRAPHRAG_API_KEY"), base_url="http://localhost:8002/v1")
+image_client = OpenAI(api_key=os.getenv("GRAPHRAG_API_KEY"))
 
 AVATAR_MODEL = "gpt-image-1"
 AVATAR_SIZE = "1024x1024"
@@ -98,8 +99,8 @@ def _infer_gender_presentation(name: str) -> str:
     반환: 'female' | 'male' | 'unknown'
     """
     try:
-        result = client.chat.completions.create(
-            model="gpt-4o-mini",
+        result = text_client.chat.completions.create(
+            model="mailgrapher-llama-v2",
             messages=[
                 {
                     "role": "system",
@@ -214,7 +215,7 @@ def _composite_on_color(image_bytes: bytes, bg_rgb: tuple) -> bytes:
 
 def generate_avatar_image_bytes(name: str, relationship_hint: str = "", seed_key: str = "") -> bytes:
     attrs = _pick_style_attributes(seed_key or name)
-    result = client.images.generate(
+    result = image_client.images.generate(
         model=AVATAR_MODEL,
         prompt=_build_avatar_prompt(name, relationship_hint, seed_key),
         size=AVATAR_SIZE,
