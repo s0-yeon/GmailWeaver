@@ -7,7 +7,7 @@ _MAX_MAILS_CONFIG = {
     "inhist44@gmail.com": 1000,
     "cjiyou1090@gmail.com": 1500,
     "csi10186@gmail.com": 500,
-    "03yeah03@gmail.com": 300,
+    "03yeah03@gmail.com": 3000,
 }
 
 def _gmail_to_dir_name(gmail_id: str) -> str:
@@ -50,6 +50,7 @@ class UserPaths:
         self.MAIL_AVATARS_PATH  = os.path.join(self.MAIL_STATICS_PATH, "person_avatars.json")
         self.AVATAR_IMAGES_DIR  = os.path.join(self.MAIL_STATICS_PATH, "avatars")
         self.MAIL_MESSAGE_CACHE_PATH = os.path.join(self.MAIL_STATICS_PATH, "mail_message_cache.json")
+        self.PERIOD_MAILS_CACHE_PATH = os.path.join(self.MAIL_STATICS_PATH, "period_mails_cache.json")
         self.UPDATE_DIR = os.path.join(self.GRAPHRAG_ROOT, "update_output")
         self.MAX_MAILS = _MAX_MAILS_CONFIG.get(gmail_id, None)
 

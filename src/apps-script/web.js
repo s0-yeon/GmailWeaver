@@ -226,6 +226,50 @@ function doPost(e) {
     }
   }
 
+  // ── My Time: 특정 기간(월/연)에 오간 메일 목록 조회 ──
+  if (action === "getMessagesInRange") {
+    const startDate = (data.startDate || "").trim(); // YYYY-MM-DD
+    const endDate = (data.endDate || "").trim();     // YYYY-MM-DD (포함)
+    if (!startDate || !endDate) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: false, error: "startDate/endDate가 필요합니다." }),
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+    try {
+      const myEmail = Session.getActiveUser().getEmail();
+      // Gmail 검색의 before:는 해당 날짜를 포함하지 않으므로 endDate 다음 날로 지정한다.
+      const endExclusive = new Date(endDate + "T00:00:00");
+      endExclusive.setDate(endExclusive.getDate() + 1);
+      const fmt = d => Utilities.formatDate(d, Session.getScriptTimeZone(), "yyyy/MM/dd");
+      const query = `after:${startDate.replace(/-/g, "/")} before:${fmt(endExclusive)}`;
+
+      const threads = GmailApp.search(query, 0, 200);
+      const messages = [];
+      threads.forEach(function (thread) {
+        thread.getMessages().forEach(function (msg) {
+          const from = msg.getFrom() || "";
+          messages.push({
+            id: msg.getId(),
+            subject: msg.getSubject() || "(제목 없음)",
+            snippet: (msg.getPlainBody() || "").replace(/\s+/g, " ").trim().substring(0, 160),
+            date: msg.getDate().toISOString(),
+            direction: from.indexOf(myEmail) !== -1 ? "sent" : "received",
+            gmailUrl: "https://mail.google.com/mail/u/0/#all/" + msg.getId(),
+          });
+        });
+      });
+      messages.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: true, messages: messages }),
+      ).setMimeType(ContentService.MimeType.JSON);
+    } catch (err) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: false, error: err.message }),
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+  }
+
   // ── 라벨 특화 질의: 선택된 메일에 라벨 적용 ──
   if (action === "applyLabelToSelected") {
     const labelName = (data.labelName || "").trim();

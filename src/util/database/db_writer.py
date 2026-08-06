@@ -521,7 +521,7 @@ def init_keyword_mail_table():
             CREATE TABLE IF NOT EXISTS keyword_mail (
                 keyword_name      VARCHAR(50)  NOT NULL,
                 user_account_id   VARCHAR(50)  NOT NULL,
-                person_account_id VARCHAR(200) NOT NULL,
+                person_account_id VARCHAR(255) NOT NULL,
                 mail_date         DATE         NOT NULL,
                 update_date       DATETIME     NOT NULL,
                 daily_count       INT          NOT NULL DEFAULT 1,

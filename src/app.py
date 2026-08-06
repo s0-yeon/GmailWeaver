@@ -1937,6 +1937,58 @@ def _save_mail_message_cache(paths, cache):
         json.dump(cache, f, ensure_ascii=False, indent=2)
 
 
+def _fetch_mail_contents(paths, mail_refs, log_tag="mail-fetch"):
+    """
+    메일 ID 목록(mail_refs: [{id, direction, date}, ...])에 제목/스니펫/Gmail 링크를
+    채워서 반환한다. 제목/본문은 MySQL에 없으므로(집계용 테이블), 메일 ID별로 파일
+    캐시부터 확인하고 캐시에 없을 때만 Apps Script의 getMessage 액션으로 Gmail에서
+    가져온다. 메일 내용은 사실상 안 바뀌는 데이터라 한 번 가져오면 영구히 재사용한다.
+    """
+    mail_cache = _load_mail_message_cache(paths)
+
+    def _fetch_one(ref):
+        cached = mail_cache.get(ref["id"])
+        if cached:
+            return {**cached, "id": ref["id"], "direction": ref["direction"], "date": ref["date"]}
+        try:
+            res = requests.post(
+                WEBAPP_URL, json={"action": "getMessage", "messageId": ref["id"]}, timeout=15
+            )
+            try:
+                j = res.json()
+            except ValueError:
+                print(f"[{log_tag}] getMessage 응답이 JSON이 아님 ({ref['id']}, status={res.status_code}): {res.text[:200]!r}")
+                return None
+            if not j.get("ok"):
+                print(f"[{log_tag}] getMessage 실패 응답 ({ref['id']}): {j.get('error')}")
+                return None
+            msg = j.get("message") or {}
+            body = re.sub(r"\s+", " ", msg.get("body") or "").strip()
+            content = {
+                "subject": msg.get("subject") or "(제목 없음)",
+                "snippet": body[:160],
+                "gmailUrl": msg.get("gmailUrl") or f"https://mail.google.com/mail/u/0/#all/{ref['id']}",
+            }
+            with _mail_message_cache_lock:
+                mail_cache[ref["id"]] = content
+                _save_mail_message_cache(paths, mail_cache)
+            return {**content, "id": ref["id"], "direction": ref["direction"], "date": ref["date"]}
+        except Exception as e:
+            print(f"[{log_tag}] getMessage 실패 ({ref['id']}): {e}")
+            return None
+
+    emails = []
+    if mail_refs:
+        with ThreadPoolExecutor(max_workers=min(len(mail_refs), 6)) as executor:
+            futures = [executor.submit(_fetch_one, ref) for ref in mail_refs]
+            for future in as_completed(futures):
+                result = future.result()
+                if result:
+                    emails.append(result)
+    emails.sort(key=lambda e: e["date"])
+    return emails
+
+
 @app.route("/mail-person-emails", methods=["POST"])
 def send_person_emails_in_range():
     data = request.json or {}
@@ -1952,59 +2004,84 @@ def send_person_emails_in_range():
     if not start_date or not end_date:
         return jsonify({"error": "start_date and end_date are required"}), 400
 
-    # 1) MySQL mail 테이블에서 이 기간에 오간 메일 ID 목록을 가져온다(GraphRAG 인덱싱
-    #    캡과 무관하게 전체 동기화 이력을 담고 있어서, 통계 그래프 숫자와 실제 목록
-    #    건수가 어긋나지 않는다).
+    # MySQL mail 테이블에서 이 기간에 오간 메일 ID 목록을 가져온다(GraphRAG 인덱싱
+    # 캡과 무관하게 전체 동기화 이력을 담고 있어서, 통계 그래프 숫자와 실제 목록
+    # 건수가 어긋나지 않는다).
     mail_refs = get_person_mail_ids_in_range(gmail_id, person_mail_id, start_date, end_date)
-
-    # 2) 제목/본문은 MySQL에 없으므로(집계용 테이블), 메일 ID별로 파일 캐시부터 확인하고
-    #    캐시에 없을 때만 Apps Script의 getMessage 액션으로 Gmail에서 가져온다. 메일
-    #    내용은 사실상 안 바뀌는 데이터라 한 번 가져오면 영구히 재사용해도 된다.
     paths = UserPaths(BASE_DIR, gmail_id)
-    mail_cache = _load_mail_message_cache(paths)
-
-    def _fetch_one(ref):
-        cached = mail_cache.get(ref["id"])
-        if cached:
-            return {**cached, "id": ref["id"], "direction": ref["direction"], "date": ref["date"]}
-        try:
-            res = requests.post(
-                WEBAPP_URL, json={"action": "getMessage", "messageId": ref["id"]}, timeout=15
-            )
-            try:
-                j = res.json()
-            except ValueError:
-                print(f"[mail-person-emails] getMessage 응답이 JSON이 아님 ({ref['id']}, status={res.status_code}): {res.text[:200]!r}")
-                return None
-            if not j.get("ok"):
-                print(f"[mail-person-emails] getMessage 실패 응답 ({ref['id']}): {j.get('error')}")
-                return None
-            msg = j.get("message") or {}
-            body = re.sub(r"\s+", " ", msg.get("body") or "").strip()
-            content = {
-                "subject": msg.get("subject") or "(제목 없음)",
-                "snippet": body[:160],
-                "gmailUrl": msg.get("gmailUrl") or f"https://mail.google.com/mail/u/0/#all/{ref['id']}",
-            }
-            with _mail_message_cache_lock:
-                mail_cache[ref["id"]] = content
-                _save_mail_message_cache(paths, mail_cache)
-            return {**content, "id": ref["id"], "direction": ref["direction"], "date": ref["date"]}
-        except Exception as e:
-            print(f"[mail-person-emails] getMessage 실패 ({ref['id']}): {e}")
-            return None
-
-    emails = []
-    if mail_refs:
-        with ThreadPoolExecutor(max_workers=min(len(mail_refs), 6)) as executor:
-            futures = [executor.submit(_fetch_one, ref) for ref in mail_refs]
-            for future in as_completed(futures):
-                result = future.result()
-                if result:
-                    emails.append(result)
-    emails.sort(key=lambda e: e["date"])
+    emails = _fetch_mail_contents(paths, mail_refs, log_tag="mail-person-emails")
 
     return jsonify({"data": emails})
+
+
+_period_mails_cache_lock = threading.Lock()
+
+def _load_period_mails_cache(paths):
+    if not os.path.exists(paths.PERIOD_MAILS_CACHE_PATH):
+        return {}
+    try:
+        with open(paths.PERIOD_MAILS_CACHE_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+def _save_period_mails_cache(paths, cache):
+    os.makedirs(paths.MAIL_STATICS_PATH, exist_ok=True)
+    with open(paths.PERIOD_MAILS_CACHE_PATH, "w", encoding="utf-8") as f:
+        json.dump(cache, f, ensure_ascii=False, indent=2)
+
+
+@app.route("/period-mails", methods=["POST"])
+def send_period_mails():
+    """
+    My Time에서 특정 월/연 구간을 클릭했을 때, 그 요약에 참고된 실제 메일 목록을 반환한다.
+    상대방 구분 없이 기간 전체를 봐야 하고 MySQL의 mail 집계 테이블은 이 용도에 맞지
+    않아서(계정 전체 동기화 이력 기준이라 GraphRAG 인덱싱 캡과 어긋날 수 있음), Apps
+    Script의 GmailApp으로 해당 기간을 직접 검색해 실제 Gmail 데이터를 그대로 가져온다.
+
+    같은 (start_date, end_date) 구간은 파일 캐시(period_mails_cache.json)에 통째로
+    저장해두고, 다시 요청이 오면 Apps Script/Gmail을 다시 호출하지 않고 캐시에서
+    바로 돌려준다. 이미 지난 기간의 메일은 다시 조회해도 결과가 바뀌지 않으므로,
+    한 번 조회한 뒤로는 클릭할 때마다 매번 GmailApp.search()를 새로 도는 대신
+    즉시 응답할 수 있다.
+    """
+    data = request.json or {}
+    gmail_id   = data.get("gmail_id", "").strip()
+    start_date = data.get("start_date", "").strip()
+    end_date   = data.get("end_date", "").strip()
+
+    if not gmail_id:
+        return jsonify({"error": "gmail_id is required"}), 400
+    if not start_date or not end_date:
+        return jsonify({"error": "start_date and end_date are required"}), 400
+
+    paths = UserPaths(BASE_DIR, gmail_id)
+    cache_key = f"{start_date}_{end_date}"
+    cache = _load_period_mails_cache(paths)
+    if cache_key in cache:
+        return jsonify({"data": cache[cache_key]})
+
+    try:
+        res = requests.post(
+            WEBAPP_URL,
+            json={"action": "getMessagesInRange", "startDate": start_date, "endDate": end_date},
+            timeout=20,
+        )
+        j = res.json()
+    except Exception as e:
+        print(f"[period-mails] getMessagesInRange 호출 실패: {e}")
+        return jsonify({"data": []})
+
+    if not j.get("ok"):
+        print(f"[period-mails] getMessagesInRange 오류 응답: {j.get('error')}")
+        return jsonify({"data": []})
+
+    messages = j.get("messages", [])
+    with _period_mails_cache_lock:
+        cache[cache_key] = messages
+        _save_period_mails_cache(paths, cache)
+
+    return jsonify({"data": messages})
 
 
 @app.route("/mail-person-sent-stats", methods=["POST"])
